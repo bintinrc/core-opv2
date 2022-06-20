@@ -77,8 +77,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator filter with following data on Shipment Management Page")
   public void operatorFilerWithData(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       Map<String, String> resolvedKeyValue = resolveKeyValues(mapOfData);
       String shipmentStatus = resolvedKeyValue.get("shipmentStatus");
       String lastInboundHub = resolvedKeyValue.get("lastInboundHub");
@@ -98,11 +97,9 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator search shipments by given Ids on Shipment Management page:")
   public void fillSearchShipmentsByIds(List<String> ids) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       try {
-        List<Long> shipmentIds = ids.stream()
-            .map(id -> Long.valueOf(resolveValue(id)))
+        List<Long> shipmentIds = ids.stream().map(id -> Long.valueOf(resolveValue(id)))
             .collect(Collectors.toList());
         shipmentManagementPage.searchByShipmentIds(shipmentIds);
       } catch (Throwable ex) {
@@ -174,8 +171,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
   @When("^Operator create Shipment on Shipment Management page using data below:$")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       try {
         final Map<String, String> finalData = resolveKeyValues(mapOfData);
         List<Order> listOfOrders;
@@ -241,11 +237,13 @@ public class ShipmentManagementSteps extends AbstractSteps {
         shipmentInfo.setComments(resolvedMapOfData.get("comments"));
         break;
       case "EDA & ETA":
-        shipmentInfo
-            .setArrivalDatetime(resolvedMapOfData.get("EDA") + " " + resolvedMapOfData.get("ETA"));
+        shipmentInfo.setArrivalDatetime(
+            resolvedMapOfData.get("EDA") + " " + resolvedMapOfData.get("ETA"));
         break;
       case "mawb":
-        shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1) );
+        shipmentInfo.setMawb(
+            "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get(
+                "mawb").substring(1));
         break;
       case "non-mawb":
         shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
@@ -440,15 +438,14 @@ public class ShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
-    shipmentManagementPage
-        .verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
+    shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(),
+        order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }
 
   @Then("^Operator verify shipment event on Shipment Details page using data below:$")
   public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       try {
         final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
@@ -481,10 +478,8 @@ public class ShipmentManagementSteps extends AbstractSteps {
     final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
     List<Shipments> lists = get(KEY_LIST_OF_CREATED_SHIPMENT);
 
-    lists.forEach(shipment ->
-    {
-      retryIfAssertionErrorOccurred(() ->
-      {
+    lists.forEach(shipment -> {
+      retryIfAssertionErrorOccurred(() -> {
         verifyShipmentEventData(shipment.getShipment().getId(), finalMapOfData);
       }, "retry shipment details event", 5000, 10);
     });
@@ -496,13 +491,10 @@ public class ShipmentManagementSteps extends AbstractSteps {
       navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
           TestConstants.COUNTRY_CODE, shipmentId));
       shipmentManagementPage.waitUntilPageLoaded();
-      List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable
-          .readFirstEntities(1);
-      ShipmentEvent actualEvent = events.stream()
-          .filter(event -> StringUtils
-              .equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-          .findFirst()
-          .orElseThrow(() -> new AssertionError(
+      List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
+      ShipmentEvent actualEvent = events.stream().filter(
+              event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+          .findFirst().orElseThrow(() -> new AssertionError(
               f("There is no [%s] shipment event on Shipment Details page",
                   expectedEvent.getSource())));
       expectedEvent.compareWithActual(actualEvent);
@@ -522,20 +514,17 @@ public class ShipmentManagementSteps extends AbstractSteps {
       String shipmentIdAsString, Map<String, String> mapOfData) {
     final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
     Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       try {
         ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
         navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
             TestConstants.COUNTRY_CODE, shipmentId));
         shipmentManagementPage.waitUntilPageLoaded();
-        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable
-            .readFirstEntities(1);
-        ShipmentEvent actualEvent = events.stream()
-            .filter(
+        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(
+            1);
+        ShipmentEvent actualEvent = events.stream().filter(
                 event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-            .findFirst()
-            .orElseThrow(() -> new AssertionError(
+            .findFirst().orElseThrow(() -> new AssertionError(
                 f("There is no [%s] shipment event on Shipment Details page",
                     expectedEvent.getSource())));
         expectedEvent.compareWithActual(actualEvent);
@@ -549,8 +538,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
   @Then("^Operator open shipment detail and verify shipment event on Shipment Details page using data below:$")
   public void operatorOpenShipmentDetailAndVerifyShipmentEventOnEditOrderPage(
       Map<String, String> mapOfData) {
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       try {
         ShipmentInfo shipmentInfo;
 
@@ -580,8 +568,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @Then("Operator verify movement event on Shipment Details page using data below:")
   public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
       MovementEvent expectedEvent = new MovementEvent(finalMapOfData);
       try {
@@ -676,8 +663,8 @@ public class ShipmentManagementSteps extends AbstractSteps {
     List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
     int numberOfOrder = orders.size();
-    shipmentManagementPage
-        .createAndUploadCsv(orders, fileName, true, true, numberOfOrder, shipmentInfo);
+    shipmentManagementPage.createAndUploadCsv(orders, fileName, true, true, numberOfOrder,
+        shipmentInfo);
   }
 
   @And("^Operator create CSV \"([^\"]*)\" file which has invalid Tracking ID in it and upload the CSV$")
@@ -796,12 +783,13 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator bulk MAWB update shipment with data below:")
   public void operatorBulkMawbUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
-    shipmentManagementPage.bulkMawbUpdateShipment(resolveKeyValues(mapOfData), get(KEY_LIST_OF_CREATED_SHIPMENT_ID));
+    shipmentManagementPage.bulkMawbUpdateShipment(resolveKeyValues(mapOfData),
+        get(KEY_LIST_OF_CREATED_SHIPMENT_ID));
   }
+
   @Then("Operator verify the following parameters of shipment with id {string} on Shipment Management page:")
   public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
-      String shipmentIdAsString,
-      Map<String, String> mapOfData) {
+      String shipmentIdAsString, Map<String, String> mapOfData) {
     String resolvedShipmentId = resolveValue(shipmentIdAsString);
     Long shipmentId = Long.valueOf(resolvedShipmentId);
     Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);

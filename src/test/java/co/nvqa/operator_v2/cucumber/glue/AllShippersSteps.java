@@ -51,6 +51,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
@@ -1360,7 +1361,6 @@ public class AllShippersSteps extends AbstractSteps {
     Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
     Boolean isDisableDriverAppReschedule = Boolean
         .parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
-    Boolean isCorporateReturn = Boolean.parseBoolean(mapOfData.get("isCorporateReturn"));
     String ocVersion = mapOfData.get("ocVersion");
     String servicesTemp = mapOfData.get("services");
     String trackingType = mapOfData.get("trackingType");
@@ -1384,7 +1384,8 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
     orderCreate
         .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
-    orderCreate.setIsCorporateReturn(isCorporateReturn);
+    orderCreate.setIsCorporateReturn(Boolean.parseBoolean(mapOfData.get("isCorporateReturn")));
+    orderCreate.setIsCorporateDocument(Boolean.parseBoolean(mapOfData.get("isCorporateDocument")));
     shipper.setOrderCreate(orderCreate);
 
     DistributionPoint distributionPoint = new DistributionPoint();
@@ -1466,8 +1467,16 @@ public class AllShippersSteps extends AbstractSteps {
   @When("Operator set service type {string} to {string} on edit shipper page")
   public void setServiceTypeOnShipperEditOrCreatePage(
       String serviceType, String value) {
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
     allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
+  @When("Operator set service type {string} to {string} on Sub shippers Default Setting tab edit shipper page")
+  public void setServiceTypeOnSubShippersDefaultSettingTab(
+      String serviceType, String value) {
+    String model = "ctrl.data.marketplace.serviceType[key]";
+    allShippersPage.allShippersCreateEditPage
+        .clickToggleButtonByLabelAndModel(serviceType, model, value);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
   }
 
@@ -1679,9 +1688,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws
       IOException {
     uploadFileBulkCreateCorporateSubShipper(data);
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-      page.createSubShipperAccount.click();
-    });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .inFrame(page -> page.createSubShipperAccount.click());
   }
 
   @When("Operator upload bulk create corporate sub shippers file with data below:")
@@ -1753,7 +1761,8 @@ public class AllShippersSteps extends AbstractSteps {
           }
           while (!isSubShipperExist && !isNextPageDisabled);
 
-          assertTrue(isSubShipperExist);
+          Assertions.assertThat(isSubShipperExist)
+              .as("Sub shipper exist with id: " + expectedSellerId).isTrue();
         })
     );
   }
@@ -1874,9 +1883,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator downloads error log on b2b management page")
   public void downloadErrorLog() {
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-      page.downloadErrorLog.click();
-    });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .inFrame(page -> page.downloadErrorLog.click());
   }
 
   @Then("bulk shipper creation error log file contains data:")
@@ -2014,5 +2022,18 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"),
           actualText);
     }
+  }
+
+  @And("Operator Edit Shipper Page of created b2b sub shipper")
+  public void operatorGetDataOfCreatedBBSubShipper() {
+    String externalRefCreatedShipper = get(KEY_SUB_SHIPPER_SELLER_ID);
+    List<Shipper> exsistingCorporateSubShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+    Optional<Shipper> createdSubShipper = exsistingCorporateSubShipper.stream()
+        .filter(subShipper -> subShipper.getExternalRef().equals(externalRefCreatedShipper))
+        .findFirst();
+    Assertions.assertThat(createdSubShipper.isPresent()).as("Created sub shipper is exist")
+        .isTrue();
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    openSpecificShipperEditPage(String.valueOf(createdSubShipper.get().getLegacyId()));
   }
 }

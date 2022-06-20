@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -186,7 +185,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void fillShipmentId(Object value) {
-    shipmentIdInput.setValue(String.valueOf(value) + Keys.ENTER);
+    shipmentIdInput.setValue(String.valueOf(value));
   }
 
   public void checkSessionScan(String shipmentId) {

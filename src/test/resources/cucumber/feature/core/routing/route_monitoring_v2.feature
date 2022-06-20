@@ -787,7 +787,6 @@ Feature: Route Monitoring V2
       | zone       | {zone-name}                             |
       | hub        | {hub-name}                              |
       | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
-      | vehicle    | {vehicle-name}                          |
       | comments   | Route has been edited by automated test |
     And Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded

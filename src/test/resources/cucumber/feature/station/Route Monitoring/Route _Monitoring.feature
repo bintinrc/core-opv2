@@ -424,7 +424,7 @@ Feature: Route Monitoring V2
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator fails reservation with failure Reason
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason | Cannot Make It (CMI) - Hyperlocal |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID in the Route filter
@@ -443,7 +443,7 @@ Feature: Route Monitoring V2
     And Operator selects the timeslot "3pm - 6pm" in the table
     Then Operator verify value in the "Invalid Failed Reservations" table for the "RESERVATION_ID" column value is equal to "{KEY_CREATED_RESERVATION_ID}"
     Then Operator verify value in the "Invalid Failed Reservations" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
-    Then Operator verify value in the "Invalid Failed Reservations" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
+#    Then Operator verify value in the "Invalid Failed Reservations" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
     Then Operator verify value in the "Invalid Failed Reservations" table for the "TIME_SLOT" column value is equal to "3pm - 6pm"
 #    Then Operator verify value in the "Invalid Failed Reservations" table for the "CONTACT" column contains "{KEY_SHIPPER_CONTACT}"
     And Operator verifies that Shipper Pickup page is opened on clicking Reservation ID "{KEY_CREATED_RESERVATION_ID}" table "Invalid Failed Reservations"
@@ -462,13 +462,14 @@ Feature: Route Monitoring V2
     Then API Shipper tags multiple parcels as per the below tag
       | orderTag | {order-tag-prior-id} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details
       | Failure Reason | Cannot Make It (CMI) - ODP |
     And Operator fail waypoint from Route Manifest page with following details
@@ -488,11 +489,14 @@ Feature: Route Monitoring V2
       | {KEY_CREATED_ORDER_TRACKING_ID} | {KEY_SHIPPER_NAME} |
     And Operator selects the timeslot "3pm - 6pm" in the table
     Then Operator verify value in the "Invalid Failed Pickups" table for the Tags column value is equal to "PRIOR"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "RESERVATION_ID" column value is equal to "{KEY_CREATED_ORDER_TRACKING_ID}"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "TIME_SLOT" column value is equal to "3pm - 6pm"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_CREATED_ORDER_TRACKING_ID}"
+#    Then Operator verify value in the "Invalid Failed Pickups" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
+#    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
     And Operator verifies that Edit Order page is opened on clicking tracking id in table "Invalid Failed Pickups"
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
