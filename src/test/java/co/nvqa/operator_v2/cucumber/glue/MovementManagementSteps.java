@@ -341,6 +341,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       List<Map<String, String>> data) {
     data = resolveListOfMaps(data);
+    Boolean isSameWave = false;
     movementManagementPage.stationsTab.click();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
@@ -348,6 +349,11 @@ public class MovementManagementSteps extends AbstractSteps {
       Map<String, String> map = data.get(i);
       StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(map);
       if (i > 0) {
+        Map<String,String> item1 = map;
+        Map<String,String> item2 = data.get(i-1);
+        item1.remove("daysOfWeek");
+        item2.remove("daysOfWeek");
+        if (item1.equals(item2)) isSameWave = true;
         movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
         movementManagementPage.addStationMovementScheduleModal.fillAnother(stationMovementSchedule,
             String.valueOf(i));
@@ -355,7 +361,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule,
             String.valueOf(i));
       }
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+      if(!isSameWave) putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
     }
     movementManagementPage.addStationMovementScheduleModal.create.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
@@ -894,7 +900,7 @@ public class MovementManagementSteps extends AbstractSteps {
       stationMovementSchedules.get(i).setDuration((Integer) null);
       stationMovementSchedules.get(i).compareWithActual(actual);
     }
-    movementManagementPage.verifyListDriver(middleMileDrivers);
+    if (middleMileDrivers !=null) movementManagementPage.verifyListDriver(middleMileDrivers);
   }
 
   @Then("Operator verify all station schedules are correct")
@@ -1051,5 +1057,48 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
     movementManagementPage.verifyInvalidItem(name, value,0);
+  }
+
+  @When("Operator updates created station schedule with filter using data below:")
+  public void operatorUpdatesCreatedStationScheduleWithFilter(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String crossdockHub = data.get("crossdockHub");
+    String originHub = data.get("originHub");
+    String destinationHub = data.get("destinationHub");
+    movementManagementPage.modify.click();
+    movementManagementPage.EditFilter(crossdockHub, originHub, destinationHub);
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+            .verifyNotificationWithMessage("1 schedule(s) have been updated");
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
+    hubRelations.get(0).getSchedules().get(0)
+            .setComment("This schedule has been updated by Automation Test");
+  }
+
+  @When("Operator cancels Update Schedules on Movement Schedule page")
+  public void operatorCancelsUpdateSchedule() {
+    movementManagementPage.modify.click();
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.close.click();
+  }
+
+  @Then("Operator verifies dialog confirm with message {string} show on Movement Schedules page")
+  public void operatorVerifiesConfirmMessage(String message){
+    movementManagementPage.verifyConfirmDialog(message);
+  }
+
+  @When("Operator click on OK button")
+  public void operatorClickOKbutton(){
+    movementManagementPage.OK.click();
   }
 }
