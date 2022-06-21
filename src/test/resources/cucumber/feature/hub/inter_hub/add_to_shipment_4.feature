@@ -13,7 +13,7 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force created order status to Completed
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -31,7 +31,7 @@ Feature: Add To Shipment 4
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -58,7 +58,7 @@ Feature: Add To Shipment 4
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -87,7 +87,7 @@ Feature: Add To Shipment 4
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -131,7 +131,7 @@ Feature: Add To Shipment 4
       | creatorUserNameId       | 39                          |
       | creatorUserEmailId      | 66                          |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
