@@ -330,7 +330,7 @@ public class GlobalInboundPage extends SimpleReactPage {
     antNotificationMessage.waitUntilVisible();
     String actualNotificationMessage = antNotificationMessage.getText();
     Assertions.assertThat(actualNotificationMessage)
-        .as(f("Failed Tagging Notification message"))
+        .as("Notification message is the same")
         .isEqualTo(message);
   }
 }
