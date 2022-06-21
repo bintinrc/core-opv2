@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -328,7 +329,8 @@ public class GlobalInboundPage extends SimpleReactPage {
   public void verifyFailedTaggingToast(String message) {
     antNotificationMessage.waitUntilVisible();
     String actualNotificationMessage = antNotificationMessage.getText();
-    assertThat("Notification message is the same", actualNotificationMessage,
-        equalTo(message));
+    Assertions.assertThat(actualNotificationMessage)
+        .as(f("Notification message is the same"))
+        .isEqualTo(message);
   }
 }
