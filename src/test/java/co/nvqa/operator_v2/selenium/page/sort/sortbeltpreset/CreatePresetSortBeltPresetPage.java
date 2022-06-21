@@ -43,14 +43,18 @@ public class CreatePresetSortBeltPresetPage extends
 
   public static class CriteriaCard extends PageElement {
 
-    public static String SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' ant-select logic-selection-field')]";
+    public static String SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),'logic-selection-field')]";
     public static String INCLUDE_SELECTOR_XPATH = ".//form[.//label[text()='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' ant-select ')][1]";
+    public static final String FILTER_OPTION = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@ data-testid ='%s']";
+
     @FindBy(css = "[data-testid='criteria-description']")
     public TextBox description;
     @FindBy(css = "[data-testid='add-filter-button']")
     public AntMenu addFilterMenu;
     @FindBy(css = ".remove-button")
     public Button clearBtn;
+    @FindBy(xpath = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@ data-testid ='%s']")
+    public AntMenu filterOption;
 
     public CriteriaCard(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -60,6 +64,43 @@ public class CreatePresetSortBeltPresetPage extends
     public CriteriaCard(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
       super(webDriver, searchContext, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public String getFilterTestId(String fields) {
+      String filterDataId = null;
+      switch (fields) {
+        case "Order Tag":
+          filterDataId = "menu-tags";
+          break;
+        case "DP IDs":
+          filterDataId = "menu-dp_ids";
+          break;
+        case "Zones":
+          filterDataId = "menu-zones";
+          break;
+        case "Destination Hub":
+          filterDataId = "menu-dest_hub_ids";
+          break;
+        case "Granular Status":
+          filterDataId = "menu-granular_statuses";
+          break;
+        case "RTS":
+          filterDataId = "menu-rts";
+          break;
+        case "Service Level":
+          filterDataId = "menu-service_levels";
+          break;
+        case "Shipper":
+          filterDataId = "menu-shipper_ids";
+          break;
+        case "Master Shipper":
+          filterDataId = "menu-master_shipper_ids";
+          break;
+        case "Transaction End Day":
+          filterDataId = "menu-txn_end_in_days";
+          break;
+      }
+      return filterDataId;
     }
 
 
