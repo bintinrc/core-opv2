@@ -45,6 +45,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
   public PageElement routeId;
 
+  @FindBy(xpath = "//*[text()='Tracking ID(s)']/parent::th//input")
+  public PageElement trackingIDFilter;
+
   @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
   public ConfirmationDialog confirmationDialog;
 
@@ -208,10 +211,11 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
   }
 
-  public void failWaypointWithFailureDetails(Map<String, String> mapOfData) {
+  public void failWaypointWithFailureDetails(Map<String, String> mapOfData, String trackingID) {
     String failureReason = mapOfData.get("Failure Reason");
     String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
     String failureReasonDetail2 = mapOfData.get("Failure Reason Detail 2");
+    trackingIDFilter.clearAndSendKeys(trackingID);
     clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
     pause1s();

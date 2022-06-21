@@ -95,7 +95,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   private static final String TRACKINGID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link']";
   private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='reservation-link' and text()='%s']";
   private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//div[@class='cell-wrapper']//span[1]";
-
+  private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//h3[text()='%s']";
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
@@ -105,7 +105,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
   public AntSelect2 zones;
 
-  @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
   public List<PageElement> modalHubSelection;
 
   @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
@@ -159,7 +159,11 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
 
   public void selectHub(String hubName) {
     switchToStationRouteMonitoringFrame();
-    waitUntilVisibilityOfElementLocated(hubs.getWebElement());
+    //waitUntilInvisibilityOfElementLocated(webDriver.findElement(By.xpath("//span[@class='ant-spin-dot ant-spin-dot-spin']")));
+    if (modalHubSelection.size() == 0) {
+      refreshPage_v1();
+      pause9s();
+    }
     hubs.enterSearchTerm(hubName);
     pause3s();
     hubDropdownValues.click();
@@ -181,6 +185,10 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     String invalidFailedDeliveriesCount = mapOfData.get("INVALID_FAILED_DELIVERIES");
     String invalidFailedPickupsCount = mapOfData.get("INVALID_FAILED_PICKUPS");
     String invalidFailedReservationCount = mapOfData.get("INVALID_FAILED_RESERVATIONS");
+    String pendingPriorityDeliveriesCount = mapOfData.get("PENDING_PRIORITY_DELIVERIES");
+    String pendingPriorityPickupCount = mapOfData.get("PENDING_PRIORITY_PICKUPS");
+    waitUntilInvisibilityOfElementLocated(
+        webDriver.findElement(By.xpath("//span[@class='ant-spin-dot ant-spin-dot-spin']")));
     pause5s();
 
     if (StringUtils.isNotBlank(invalidFailedDeliveriesCount)) {
@@ -189,16 +197,26 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
                   invalidFailedDeliveriesCount))).isDisplayed())
           .as("Validation of Invalid Failed Deliveries count").isTrue();
     }
-    if (StringUtils.isNotBlank(invalidFailedDeliveriesCount)) {
+    if (StringUtils.isNotBlank(invalidFailedPickupsCount)) {
       Assertions.assertThat(
               getWebDriver().findElement(By.xpath(f(PARCELS_COUNT_XPATH, "Invalid Failed Pickups",
                   invalidFailedPickupsCount))).isDisplayed())
           .as("Validation of Invalid Failed Pickups count").isTrue();
     }
-    if (StringUtils.isNotBlank(invalidFailedDeliveriesCount)) {
+    if (StringUtils.isNotBlank(invalidFailedReservationCount)) {
       Assertions.assertThat(getWebDriver().findElement(By.xpath(
               f(PARCELS_COUNT_XPATH, "Invalid Failed Reservations", invalidFailedReservationCount)))
           .isDisplayed()).as("Validation of Invalid Failed Reservations count").isTrue();
+    }
+    if (StringUtils.isNotBlank(pendingPriorityDeliveriesCount)) {
+      Assertions.assertThat(getWebDriver().findElement(By.xpath(
+              f(PARCELS_COUNT_XPATH, "Pending Priority Deliveries", pendingPriorityDeliveriesCount)))
+          .isDisplayed()).as("Validation of Pending Priority Deliveries count").isTrue();
+    }
+    if (StringUtils.isNotBlank(pendingPriorityPickupCount)) {
+      Assertions.assertThat(getWebDriver().findElement(By.xpath(
+              f(PARCELS_COUNT_XPATH, "Pending Priority Pickup", pendingPriorityPickupCount)))
+          .isDisplayed()).as("Validation of Pending Priority Pickup count").isTrue();
     }
   }
 
@@ -206,30 +224,50 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     String invalidFailedDeliveriesCount = mapOfData.get("INVALID_FAILED_DELIVERIES");
     String invalidFailedPickupsCount = mapOfData.get("INVALID_FAILED_PICKUPS");
     String invalidFailedReservationCount = mapOfData.get("INVALID_FAILED_RESERVATIONS");
+    String pendingPriorityDeliveriesCount = mapOfData.get("PENDING_PRIORITY_DELIVERIES");
+    String pendingPriorityPickupCount = mapOfData.get("PENDING_PRIORITY_PICKUPS");
     pause5s();
 
-    if (invalidFailedDeliveriesCount.equalsIgnoreCase("YES")) {
+    if (StringUtils.isNotBlank(invalidFailedDeliveriesCount)
+        && invalidFailedDeliveriesCount.equalsIgnoreCase("YES")) {
       Assertions.assertThat(getWebDriver().findElement(
                   By.xpath(f(NO_RESULTS_FOUND_XPATH, "Invalid Failed Deliveries")))
               .isDisplayed()).as("Validation of Invalid Failed Deliveries No Results Found text")
           .isTrue();
     }
-    if (invalidFailedPickupsCount.equalsIgnoreCase("YES")) {
+    if (StringUtils.isNotBlank(invalidFailedPickupsCount)
+        && invalidFailedPickupsCount.equalsIgnoreCase("YES")) {
       Assertions.assertThat(
               getWebDriver().findElement(By.xpath(f(NO_RESULTS_FOUND_XPATH, "Invalid Failed Pickups")))
                   .isDisplayed()).as("Validation of Invalid Failed Pickups No Results Found text")
           .isTrue();
     }
-    if (invalidFailedReservationCount.equalsIgnoreCase("YES")) {
+    if (StringUtils.isNotBlank(invalidFailedReservationCount)
+        && invalidFailedReservationCount.equalsIgnoreCase("YES")) {
       Assertions.assertThat(getWebDriver().findElement(
                   By.xpath(f(NO_RESULTS_FOUND_XPATH, "Invalid Failed Reservations")))
               .isDisplayed()).as("Validation of Invalid Failed Reservations No Results Found text")
+          .isTrue();
+    }
+    if (StringUtils.isNotBlank(pendingPriorityDeliveriesCount)
+        && pendingPriorityDeliveriesCount.equalsIgnoreCase("YES")) {
+      Assertions.assertThat(getWebDriver().findElement(
+                  By.xpath(f(NO_RESULTS_FOUND_XPATH, "Pending Priority Deliveries")))
+              .isDisplayed()).as("Validation of Pending Priority Deliveries No Results Found text")
+          .isTrue();
+    }
+    if (StringUtils.isNotBlank(pendingPriorityPickupCount)
+        && pendingPriorityPickupCount.equalsIgnoreCase("YES")) {
+      Assertions.assertThat(getWebDriver().findElement(
+                  By.xpath(f(NO_RESULTS_FOUND_XPATH, "Pending Priority Pickup")))
+              .isDisplayed()).as("Validation of Pending Priority Pickup No Results Found text")
           .isTrue();
     }
   }
 
   public void applyFilters(String table, Map<String, String> filters) {
     waitWhilePageIsLoading();
+    switchToStationRouteMonitoringFrame();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterXpath = f(MODAL_TABLE_FILTER_XPATH, table, filter.getKey());
       if (StringUtils.isNotBlank(filterXpath)) {
@@ -281,13 +319,15 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     closeAllWindows(windowHandle);
   }
 
-  public void validateNavigationOfTrackingIDLink(String table) {
+  public void validateNavigationOfTrackingIDLink(String trackingID, String table) {
     String windowHandle = getWebDriver().getWindowHandle();
     getWebDriver().findElement(By.xpath(f(TRACKINGID_XPATH, table))).click();
     switchToNewWindow();
     waitWhilePageIsLoading();
-    pause3s();
-    Assertions.assertThat(getWebDriver().getCurrentUrl()).endsWith("/trackingID");
+    pause5s();
+    Assertions.assertThat(
+            getWebDriver().findElements(By.xpath(f(EDIT_ORDER_TRACKING_ID_XPATH, trackingID))))
+        .as("Assertion for Navigation on clicking Tracking ID").isNotEmpty();
     closeAllWindows(windowHandle);
   }
 
