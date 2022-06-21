@@ -14,9 +14,9 @@ Feature: Add To Shipment
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -63,9 +63,9 @@ Feature: Add To Shipment
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
     And Operator removes the parcel from the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -113,9 +113,9 @@ Feature: Add To Shipment
       | OPV2AUTO2 |
       | OPV2AUTO3 |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -141,10 +141,10 @@ Feature: Add To Shipment
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
 #    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
-    When Operator add to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
+    When Operator add to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator removes the parcel from the shipment with error alert
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -192,9 +192,9 @@ Feature: Add To Shipment
       | OPV2AUTO2 |
       | OPV2AUTO3 |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is blue highlighted
     And Operator removes the parcel from the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
