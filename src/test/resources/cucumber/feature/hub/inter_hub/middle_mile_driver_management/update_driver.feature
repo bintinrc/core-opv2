@@ -13,6 +13,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
@@ -29,13 +30,14 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "id" with value "{KEY_LIST_OF_CREATED_DRIVERS[1].id}"
     When Operator clicks edit button on the middle mile driver page
-    And Operator edit "contactNumber" on edit driver dialog with value "52568567180"
-    Then DB Operator verifies driver "contactNumber" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "52568567180" is updated
+    And Operator edit "contactNumber" on edit driver dialog with value "{default-phone-number}"
+    Then DB Operator verifies driver "contactNumber" with username "{KEY_LIST_OF_CREATED_DRIVERS[1].username}" and value "{default-phone-number}" is updated
 
   @DeleteDriver
   Scenario: Update Driver Details - Hub (uid:1892577e-d469-45dc-8ad5-48cbb0ddbf2a)
@@ -45,6 +47,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
@@ -61,6 +64,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
@@ -77,6 +81,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
@@ -93,6 +98,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
@@ -109,6 +115,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose {gradle-next-0-day-yyyy-MM-dd}","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     When Operator selects the hub on the Middle Mile Drivers Page with value "{hub-name}"
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
