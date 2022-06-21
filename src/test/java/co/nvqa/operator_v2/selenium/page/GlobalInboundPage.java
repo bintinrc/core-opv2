@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -92,6 +93,9 @@ public class GlobalInboundPage extends SimpleReactPage {
 
   @FindBy(xpath = "//span[@data-testid='save-text']")
   public Button saveChanges;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
 
   public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[@class='order-tag']";
   public static String XPATH_CONTAINER = "//div[contains(@class, 'middle panel')]";
@@ -315,6 +319,7 @@ public class GlobalInboundPage extends SimpleReactPage {
 
   public void addTag(List<String> orderTags) {
     settings.click();
+    selectTag.click();
     for (String tag : orderTags) {
       selectTag.selectValue(tag);
     }
@@ -322,6 +327,10 @@ public class GlobalInboundPage extends SimpleReactPage {
   }
 
   public void verifyFailedTaggingToast(String message) {
-    waitUntilVisibilityOfToast(message);
+    antNotificationMessage.waitUntilVisible();
+    String actualNotificationMessage = antNotificationMessage.getText();
+    Assertions.assertThat(actualNotificationMessage)
+        .as("Notification message is the same")
+        .isEqualTo(message);
   }
 }
