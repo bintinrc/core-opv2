@@ -1169,7 +1169,6 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   }
 
   public void updateDaysOfWeek(Set<String> daysOfWeek, int index){
-   // String weekdaysXpath = "//td[@class='ant-table-cell day']//input[@value='%d']";
     String weekdaysXpath = "(//td[contains(@class,'ant-table-cell day')]//input[@value='%d'])[%d]";
     WebElement day = findElementByXpath(f(MS_PAGE_DAY_OF_WEEK_XPATH,1));
     executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",day );
