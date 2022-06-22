@@ -60,6 +60,9 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
 
   private static final String MS_PAGE_DRIVERS_COLUMN_XPATH = "//td[contains(@class,'ant-table-cell drivers')]";
+  private static final String MS_PAGE_CONFIRM_DIALOG_XPATH = "//div[@class='ant-modal-confirm-content']";
+  private static final String MS_PAGE_DAY_OF_WEEK_XPATH = "//td[contains(@class,'ant-table-cell day')]//input[@value='%d']";
+
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -207,6 +210,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   @FindBy(xpath = "//td[@class='comment']")
   public List<TextBox> comments;
+
+  @FindBy(xpath = "(//span[text()='OK'])[last()]")
+  public Button OK;
+
   //endregion
   public String stationsCrossdockHub = "crossdockHub";
   public SchedulesTable schedulesTable;
@@ -254,6 +261,32 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     Assertions.assertThat(loadSchedules.isEnabled()).as("Load Schedules button is enable and clickable").isTrue();
     loadSchedules.click();
     originCrossdockHubFilter.waitUntilClickable();
+  }
+
+  public void EditFilter(String crossdockHubValue, String originHub, String destinationHub) {
+    pause1s();
+    if (StringUtils.isNotBlank(crossdockHubValue)) {
+      this.crossdockHub.selectValue(crossdockHubValue, crossdockHub.getWebElement());
+      pause1s();
+
+      if (StringUtils.isNotBlank(originHub)) {
+        originStationHub.selectValue(originHub, originStationHub.getWebElement());
+      }
+
+      if (StringUtils.isNotBlank(destinationHub)) {
+        destinationStationHub.selectValue(destinationHub, destinationStationHub.getWebElement());
+      }
+    } else {
+      if (StringUtils.isNotBlank(originHub)) {
+        originCrossdockHub.selectValue(originHub, originCrossdockHub.getWebElement());
+      }
+
+      if (StringUtils.isNotBlank(destinationHub)) {
+        destinationCrossdockHub.selectValue(destinationHub,
+                destinationCrossdockHub.getWebElement());
+      }
+    }
+    OK.click();
   }
 
   public void clickAssignDriverIcon() {
@@ -1135,6 +1168,33 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   }
 
+  public void updateDaysOfWeek(Set<String> daysOfWeek, int index){
+    String weekdaysXpath = "(//td[contains(@class,'ant-table-cell day')]//input[@value='%d'])[%d]";
+    WebElement day = findElementByXpath(f(MS_PAGE_DAY_OF_WEEK_XPATH,1));
+    executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",day );
+    if (!daysOfWeek.contains("monday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,1,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("tuesday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,2,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("wednesday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,3,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("thursday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,4,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("friday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,5,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("saturday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,6,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("sunday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,7,index), "xpath", getWebDriver());
+    }
+  }
+
   public String getValueInLastItem(String xpath,String attribute){
     switch (xpath){
       case "start time":
@@ -1248,4 +1308,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     });
     return ExpectedList;
   }
+
+  public void verifyConfirmDialog(String expectedMessage){
+    waitUntilVisibilityOfElementLocated(MS_PAGE_CONFIRM_DIALOG_XPATH);
+    String actualMessage = findElementByXpath(MS_PAGE_CONFIRM_DIALOG_XPATH).getText();
+    Assertions.assertThat(actualMessage).as(f("Message %s display",expectedMessage)).isEqualToIgnoringCase(expectedMessage);
+  }
+
 }

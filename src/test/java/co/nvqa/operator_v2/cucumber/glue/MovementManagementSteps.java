@@ -20,6 +20,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -341,6 +342,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       List<Map<String, String>> data) {
     data = resolveListOfMaps(data);
+    Boolean isSameWave = false;
     movementManagementPage.stationsTab.click();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
@@ -348,6 +350,11 @@ public class MovementManagementSteps extends AbstractSteps {
       Map<String, String> map = data.get(i);
       StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(map);
       if (i > 0) {
+        Map<String,String> item1 = map;
+        Map<String,String> item2 = data.get(i-1);
+        item1.remove("daysOfWeek");
+        item2.remove("daysOfWeek");
+        if (item1.equals(item2)) isSameWave = true;
         movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
         movementManagementPage.addStationMovementScheduleModal.fillAnother(stationMovementSchedule,
             String.valueOf(i));
@@ -355,7 +362,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule,
             String.valueOf(i));
       }
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+      if(!isSameWave) putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
     }
     movementManagementPage.addStationMovementScheduleModal.create.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
@@ -894,7 +901,7 @@ public class MovementManagementSteps extends AbstractSteps {
       stationMovementSchedules.get(i).setDuration((Integer) null);
       stationMovementSchedules.get(i).compareWithActual(actual);
     }
-    movementManagementPage.verifyListDriver(middleMileDrivers);
+    if (middleMileDrivers !=null) movementManagementPage.verifyListDriver(middleMileDrivers);
   }
 
   @Then("Operator verify all station schedules are correct")
@@ -1051,5 +1058,89 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
     movementManagementPage.verifyInvalidItem(name, value,0);
+  }
+
+  @When("Operator updates created station schedule with filter using data below:")
+  public void operatorUpdatesCreatedStationScheduleWithFilter(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String crossdockHub = data.get("crossdockHub");
+    String originHub = data.get("originHub");
+    String destinationHub = data.get("destinationHub");
+    movementManagementPage.modify.click();
+    movementManagementPage.EditFilter(crossdockHub, originHub, destinationHub);
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+            .verifyNotificationWithMessage("1 schedule(s) have been updated");
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
+    hubRelations.get(0).getSchedules().get(0)
+            .setComment("This schedule has been updated by Automation Test");
+  }
+
+  @When("Operator cancels Update Schedules on Movement Schedule page")
+  public void operatorCancelsUpdateSchedule() {
+    movementManagementPage.modify.click();
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.close.click();
+  }
+
+  @Then("Operator verifies dialog confirm with message {string} show on Movement Schedules page")
+  public void operatorVerifiesConfirmMessage(String message){
+    movementManagementPage.verifyConfirmDialog(message);
+  }
+
+  @When("Operator click on OK button")
+  public void operatorClickOKbutton(){
+    movementManagementPage.OK.click();
+  }
+
+  @When("Operator upgrades new Station Movement Schedules on Movement Management page:")
+  public void operatorUpdatesScheduleOnMovementPage(List<Map<String, String>> data){
+    data = resolveListOfMaps(data);
+    String UpdatedStartTime ="";
+    String UpdatedDurationTime ="";
+
+    movementManagementPage.modify.click();
+    if(data.get(0).get("departureTime").equalsIgnoreCase("SAMEWAVE")){
+      UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+      UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+      for (int i = 0; i < data.size(); i++){
+        data.get(i).put("departureTime",UpdatedStartTime);
+        data.get(i).put("endTime",UpdatedDurationTime);
+      }
+    }
+    for (int i = 0; i < data.size(); i++) {
+      Map<String, String> map = data.get(i);
+      movementManagementPage.UpdatesdepartureTime(map.get("departureTime"), i);
+      movementManagementPage.UpdatesdurationTime(map.get("endTime"), i);
+      Set<String> test = new HashSet<String>();
+      String[] days = map.get("daysOfWeek").split(",");
+      test= Arrays.stream(days).map(day -> day.trim().toLowerCase()).collect(Collectors.toSet());
+      movementManagementPage.updateDaysOfWeek(test,i+1);
+      if (i>0){
+        Map<String,String> item1 = map;
+        Map<String,String> item2 = data.get(i-1);
+        item1.remove("daysOfWeek");
+        item2.remove("daysOfWeek");
+        if (item1.equals(item2)) {
+          List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+          remove(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+          putInList(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP,hubRelations.get(hubRelations.size()-1));
+        }
+      }
+    }
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+            .verifyNotificationWithMessage("2 schedule(s) have been updated");
   }
 }
