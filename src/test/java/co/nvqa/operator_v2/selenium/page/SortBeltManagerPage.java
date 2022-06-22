@@ -42,7 +42,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String SUB_PAGE_HEADER_XPATH = "//div[@class='section-header']//div[text()='%s']";
   public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class='ant-select-item-option-content' and text()='%s']";
   public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[text()='%s']";
-  public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][%d]";
+  public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][%d]";
   public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
   public static final String ADD_RULE_XPATH = "//button[@data-testid='add-rule-button']";
   public static final String DELETE_RULE_XPATH = "//span[contains(@data-testid,'delete-icon')]";
@@ -53,11 +53,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String FORM_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//input[@id='unassignedParcelArm']/parent::span/following-sibling::span";
   public static final String FORM_RULE_ALL_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[@class='rule-number']";
   public static final String FORM_RULE_NUMBER_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//span[@class='rule-number']";
-  public static final String FORM_RULE_ARM_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][1]/div";
-  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2]/div";
-  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d]/div";
-  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d+1]/div";
-  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[@class='ant-table-cell'][2+%d+2]/div";
+  public static final String FORM_RULE_ARM_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][1+1]/div";
+  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+1]/div";
+  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+1]/div";
+  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+1+1]/div";
+  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+2+1]/div";
 
   public static final String CHECK_LOGIC_NAME_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block category-title']";
   public static final String CHECK_LOGIC_DESCRIPTION_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][1]";
@@ -315,11 +315,12 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       List<String> keyList = new ArrayList<>(ruleAsList.get(i).keySet());
       // Loop through filters
       for (int j = 0; j < keyList.size(); j++) {
-        String columnXpath = String.format(COLUMN_MAPPING_XPATH, i + 1, j + 1);
+        String columnXpath = String.format(COLUMN_MAPPING_XPATH, i + 1, j + 2);
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
           waitUntilElementIsClickable(columnXpath);
           click(columnXpath);
-          Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
+          waitUntilVisibilityOfElementLocated(columnXpath + "//input");
+          // Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
         }, "Clicking until input field exists", 1000, 5);
 
         pause1s();
@@ -612,7 +613,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
         .isFalse();
 
     // Try to input value
-    String columnXpath = String.format(COLUMN_MAPPING_XPATH, 1, 1);
+    String columnXpath = String.format(COLUMN_MAPPING_XPATH, 1, 2);
     findElementByXpath(columnXpath).click();
     pause200ms();
     WebElement columnInput = findElementByXpath(columnXpath + "//input");
