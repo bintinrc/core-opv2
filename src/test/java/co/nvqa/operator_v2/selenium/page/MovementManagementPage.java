@@ -130,9 +130,6 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//input[@aria-label='input-hub_name']")
   public TextBox stationFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'ant-spin ant-spin-spinning')]")
-  public PageElement pageLoading;
-
   //region Stations tab
   @FindBy(xpath = "//label[starts-with(.,'Station')]")
   public PageElement stationsTab;
