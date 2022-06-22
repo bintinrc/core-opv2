@@ -169,7 +169,7 @@ public class MovementManagementSteps extends AbstractSteps {
         }
         operatorSelectTabOnMovementManagementPage("Relations");
         operatorSelectTabOnMovementManagementPage(tabName);
-        pause10s();pause10s();pause10s();pause10s();pause10s();
+        pause(50000);
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
         if (movementManagementPage.relationsTable.rows.size()==0 || !movementManagementPage.relationsTable.rows.get(0).editRelations.isDisplayed()) {
