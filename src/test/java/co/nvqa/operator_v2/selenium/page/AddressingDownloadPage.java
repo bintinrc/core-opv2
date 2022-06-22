@@ -84,7 +84,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public PageElement deletePresetButton;
 
   // Searching by Tracking IDs
-  @FindBy(xpath = "//button[@class='ant-btn']")
+  @FindBy(xpath = "//button[@data-testid='load-tracking-ids-button']")
   public Button loadTrackingIds;
 
   @FindBy(xpath = "//span[contains(@class,'affix')]/textarea")
