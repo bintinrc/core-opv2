@@ -98,7 +98,7 @@ Feature: Station to Station Under Same Crossdock
     And Operator adds new relation on Movement Management page using data below:
       | station        | {hub-station-name-2}                |
       | crossdockHub   | {hub-relation-destination-hub-name} |
-      | stationId      | {hub-station-id-2}                          |
+      | stationId      | {hub-station-id-2}                  |
       | crossdockHubId | {hub-relation-destination-hub-id}   |
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

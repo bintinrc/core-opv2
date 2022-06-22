@@ -132,7 +132,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
   public PageElement inputOfPendingTab;
 
-  @FindBy(xpath = "//input[@data-testid='column-search-field-hub-name']")
+  @FindBy(xpath = "//input[@aria-label='input-hub_name']")
   public TextBox stationFilter;
 
   //region Stations tab

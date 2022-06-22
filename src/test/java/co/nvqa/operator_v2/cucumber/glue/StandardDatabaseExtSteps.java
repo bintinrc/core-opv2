@@ -1349,7 +1349,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long driverId = driverData.getId();
         String actualContactNumber = getDriverJdbc().getLatestDriverContactNumber(driverId);
         Assertions.assertThat(actualContactNumber)
-                .as("Updated name is the same")
+                .as("Updated contact number is the same")
                 .contains(resolvedUpdatedValue);
         break;
       case "hub":
