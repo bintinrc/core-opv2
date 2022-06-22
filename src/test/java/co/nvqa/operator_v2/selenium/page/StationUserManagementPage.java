@@ -27,7 +27,7 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
   private static final String ADD_USER_SUCCESS_MESSAGE = "//*[contains(text(),'Successfully added user for %s!')]";
   private static final String REMOVE_USER_SUCCESS_MESSAGE = "//*[contains(text(),'Successfully removed user %s!')]";
   private static final String FILTER_RESULT_IN_LIST_OF_USERS = "//div[@data-datakey='email']//mark[contains(text(),'%s')]";
-  private static final String STATION_USER_MANAGEMENT_PAGE_TITLE = "//h4[text()='%s']";
+  private static final String STATION_USER_MANAGEMENT_PAGE_TITLE = "//*[text()='%s']";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row base-row'][1]//div[@data-datakey='%s']";
 
   public StationUserManagementPage(WebDriver webDriver) {

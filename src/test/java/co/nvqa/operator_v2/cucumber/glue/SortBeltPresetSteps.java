@@ -175,14 +175,21 @@ public class SortBeltPresetSteps extends AbstractSteps {
     CriteriaCard criteriaElement = createPresetSortBeltPresetPage.cards.get(
         createPresetSortBeltPresetPage.cards.size() - 1);
     criteriaElement.description.sendKeys(description);
+
     for (int i = 0; i < fields.size(); i++) {
-      criteriaElement.addFilterMenu.selectOption(fields.get(i));
+      criteriaElement.addFilterMenu.click();
+      pause1s();
+      criteriaElement.findElement(
+          By.xpath(f(CriteriaCard.FILTER_OPTION, criteriaElement.getFilterTestId(fields.get(i)))))
+          .click();
+
       List<String> vals;
       if (fields.get(i).equalsIgnoreCase("Shipper")) {
         List<String> include = Arrays.asList(values.get(i).split(":"));
         vals = Arrays.asList(include.get(1).split("\\."));
         AntSelect select = new AntSelect(getWebDriver(),
-            criteriaElement.findElement(By.xpath(f(CriteriaCard.INCLUDE_SELECTOR_XPATH, "Shipper"))));
+            criteriaElement
+                .findElement(By.xpath(f(CriteriaCard.INCLUDE_SELECTOR_XPATH, "Shipper"))));
         select.selectValue(include.get(0));
       } else {
         vals = Arrays.asList(values.get(i).split("\\."));

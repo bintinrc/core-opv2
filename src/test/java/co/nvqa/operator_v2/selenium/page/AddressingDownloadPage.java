@@ -59,16 +59,16 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]/preceding-sibling::label[contains(text(), 'RTS')]/following-sibling::div")
   public PageElement filterDropDownRTS;
 
-  @FindBy(xpath = "//div[@label='Verified']")
+  @FindBy(xpath = "//div[@title='Verified']")
   public PageElement verifiedOption;
 
-  @FindBy(xpath = "//div[@label='Unverified']")
+  @FindBy(xpath = "//div[@title='Unverified']")
   public PageElement unverifiedOption;
 
-  @FindBy(xpath = "//div[@label='Yes']")
+  @FindBy(xpath = "//div[@title='Yes']")
   public PageElement yesRtsOption;
 
-  @FindBy(xpath = "//div[@label='No']")
+  @FindBy(xpath = "//div[@title='No']")
   public PageElement noRtsOption;
 
   @FindBy(xpath = "//div[contains(@class,'select-filter')]//input[contains(@id,'rc_select')]")
@@ -84,7 +84,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   public PageElement deletePresetButton;
 
   // Searching by Tracking IDs
-  @FindBy(xpath = "//button[@class='ant-btn']")
+  @FindBy(xpath = "//button[@data-testid='load-tracking-ids-button']")
   public Button loadTrackingIds;
 
   @FindBy(xpath = "//span[contains(@class,'affix')]/textarea")
@@ -110,7 +110,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   private static final String EXISTED_PRESET_SELECTION_XPATH = "//div[contains(@class,'select-preset')]//input[contains(@id,'rc_select')]";
   private static final String DROP_DOWN_PRESET_XPATH = "//ul[contains(@class,'dropdown-menu-root')]";
-  private static final String DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
+  private static final String DIALOG_XPATH = "//div[@class='ant-modal-title' and contains(@id,'rc_unique')]";
   private static final String PRESET_SELECTION_XPATH = "//li[contains(@data-testid,'%s')]";
   private static final String RANDOM_CLICK_XPATH = "//div[contains(@class,'select-filters-holder')]/div[@class='section-header']";
   private static final String PRESET_TO_BE_SELECTED_XPATH = "//div[@title='%s']";

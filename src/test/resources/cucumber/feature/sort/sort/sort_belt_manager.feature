@@ -185,6 +185,9 @@ Feature: Sort Belt Manager V2
       | armFilters    | Granular Statuses,RTS,Service Levels,Tags |
       | unassignedArm | 15                                        |
     And Operator make sure can not select arm filters anymore
+    When Operator clicks cancel button in create logic
+    And Operator confirms on cancel creating logic
+    Then Operator make sure redirected to Sort Belt Manager main page
 
   Scenario: SBMV2UI Create/Edit Logic Section - Empty Mandatory Fields
     Given Operator go to menu Sort -> Sort Belt Manager

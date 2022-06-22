@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_ID_ON_TABLE;
+import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_NAME_ON_TABLE;
 
@@ -244,20 +245,27 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
   }
 
-  @Then("^Operator verify Active Script data is correct$")
+  @Then("Operator verify Active Script data is correct")
+  public void operatorVerifyActiveScriptDataIsCorrect() {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    verifyScriptDetailsInActiveScriptPage(pricingScriptsV2Page, script);
+  }
+
+  @Then("Operator verify Draft Script data is correct")
   public void operatorVerifyDraftScriptDataIsCorrect() {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
-    verifyScriptDetails(pricingScriptsV2Page, script);
+    verifyScriptDetailsInDraftScriptPage(pricingScriptsV2Page, script);
   }
 
   @Then("Operator search according to {string} and verify search result")
   public void operatorSearch(String searchType) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
-    verifyScriptDetails(pricingScriptsV2Page, script);
+    verifyScriptDetailsInActiveScriptPage(pricingScriptsV2Page, script);
   }
 
-  private void verifyScriptDetails(PricingScriptsV2Page pricingScriptsV2Page, Script script) {
+  private void verifyScriptDetailsInActiveScriptPage(PricingScriptsV2Page pricingScriptsV2Page,
+      Script script) {
     SoftAssertions softAssertions = new SoftAssertions();
     String actualId = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
         COLUMN_CLASS_DATA_ID_ON_TABLE);
@@ -279,6 +287,45 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     ScriptVersion scriptVersion = get(KEY_PRICING_SCRIPT_LATEST_VERSION_DETAILS);
     softAssertions.assertThat(lastModified).as("Last Modified date is correct")
         .isEqualTo(DateUtil.getDefaultDateTimeFromUTC(scriptVersion.getCreatedAt()));
+
+    String lastModifiedBy = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
+        COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE);
+    softAssertions.assertThat(lastModifiedBy).as("Last Modified By date is correct")
+        .isEqualTo(scriptVersion.getLastModifiedUser() + " (" + scriptVersion.getLastModifiedEmail()
+            + ")");
+
+    softAssertions.assertAll();
+  }
+
+  private void verifyScriptDetailsInDraftScriptPage(PricingScriptsV2Page pricingScriptsV2Page,
+      Script script) {
+    SoftAssertions softAssertions = new SoftAssertions();
+    String actualId = pricingScriptsV2Page.getTextOnTableDrafts(1,
+        COLUMN_CLASS_DATA_ID_ON_TABLE);
+    softAssertions.assertThat(actualId).as("Script ID is empty. Script is not created.")
+        .isNotNull();
+
+    String actualScriptName = pricingScriptsV2Page.getTextOnTableDrafts(1,
+        COLUMN_CLASS_DATA_NAME_ON_TABLE);
+    softAssertions.assertThat(actualScriptName).as("Script Name is correct")
+        .isEqualTo(script.getName());
+
+    String actualDescription = pricingScriptsV2Page.getTextOnTableDrafts(1,
+        COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE);
+    softAssertions.assertThat(actualDescription).as("Script Description is correct")
+        .isEqualTo(script.getDescription());
+
+    String lastModified = pricingScriptsV2Page.getTextOnTableDrafts(1,
+        COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE);
+    ScriptVersion scriptVersion = get(KEY_PRICING_SCRIPT_LATEST_VERSION_DETAILS);
+    softAssertions.assertThat(lastModified).as("Last Modified date is correct")
+        .isEqualTo(DateUtil.getDefaultDateTimeFromUTC(scriptVersion.getCreatedAt()));
+
+    String lastModifiedBy = pricingScriptsV2Page.getTextOnTableDrafts(1,
+        COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE);
+    softAssertions.assertThat(lastModifiedBy).as("Last Modified By date is correct")
+        .isEqualTo(scriptVersion.getLastModifiedUser() + " (" + scriptVersion.getLastModifiedEmail()
+            + ")");
 
     softAssertions.assertAll();
   }

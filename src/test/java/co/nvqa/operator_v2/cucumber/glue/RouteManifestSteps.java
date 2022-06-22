@@ -94,6 +94,13 @@ public class RouteManifestSteps extends AbstractSteps {
     put(KEY_SELECTED_FAILURE_REASON, failureReason);
   }
 
+  @When("Operator fail waypoint from Route Manifest page with following details")
+  public void operatorFailWaypointFromRouteManifestPageWithFollowingDetails(
+      Map<String, String> mapOfData) {
+    routeManifestPage.failWaypointWithFailureDetails(mapOfData);
+    takesScreenshot();
+  }
+
   @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
   public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType) {
     switch (waypointType) {

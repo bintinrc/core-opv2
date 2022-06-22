@@ -1,10 +1,11 @@
-@OperatorV2 @Utilities @NinjaPackTrackingIdGenerator
+@MileZero @Utilities
 Feature: Ninja Pack Tracking ID Generator
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CleanDownloadFolder
   Scenario: Ninja pack tid generator - success generate (uid:cf4880a4-0023-4526-9930-df9bba15a128)
     When Operator go to menu Utilities -> Ninja Pack Tracking ID Generator
     And Operator enters 2 quantity on Ninja Pack Tracking ID Generator page

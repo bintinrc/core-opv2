@@ -5,6 +5,7 @@ Feature: Shipper Billing
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CleanDownloadFolder
   Scenario: Loyalty - download template (uid:e32a44e2-2d73-40c5-9108-62357e9ef4bd)
     When Operator go to menu Shipper -> Loyalty Creation
     And Operator click Download template button for loyalty creation
@@ -14,6 +15,7 @@ Feature: Shipper Billing
     | 111,childshipper@abc.com,name of child shipper,2020-01-10 00:12:22,91841923,123 |
     And Operator refresh page
 
+  @CleanDownloadFolder
   Scenario: Loyalty - download error file (uid:cf920d88-9ab8-4179-b21e-625bd82d1f77)
     When Operator go to menu Shipper -> Loyalty Creation
     And Operator add shipper to csv file for loyalty creation with data below:
