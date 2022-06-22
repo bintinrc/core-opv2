@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @Stations @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @Stations
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1063,7 +1063,7 @@ Feature: Stations
     Then Operator verifies "Existing Schedule" error message
     And Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Update Schedule with Filter to Modify Schedules (uid:13242caf-dc23-4fbc-992c-4d041ae26696)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -1105,7 +1105,7 @@ Feature: Stations
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Cancel Update Schedules (uid:6462774b-38c7-4581-a7de-7f3e00562076)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -1142,7 +1142,7 @@ Feature: Stations
     When Operator click on OK button
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Failed Update Schedule (uid:449f4a8b-4839-4754-839d-dcbecdf21603)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -1180,7 +1180,7 @@ Feature: Stations
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Update Schedule with Existing Schedules (uid:a4e0873e-05dc-4b97-b150-038d67ccf3c9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -1218,7 +1218,7 @@ Feature: Stations
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Update Duplicate Schedules (uid:67dc1bfc-ba81-4121-9a2e-b92b19500f93)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -1256,7 +1256,7 @@ Feature: Stations
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Merged into Same Wave (uid:b8cdd252-c029-41a2-a3ad-a3d70a74707b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
