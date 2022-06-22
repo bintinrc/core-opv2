@@ -319,8 +319,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
           waitUntilElementIsClickable(columnXpath);
           click(columnXpath);
-          waitUntilVisibilityOfElementLocated(columnXpath + "//input");
-          // Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
+          Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
         }, "Clicking until input field exists", 1000, 5);
 
         pause1s();
