@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @Stations @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @Stations
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -121,7 +121,7 @@ Feature: Stations
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Station Schedule - Show All Station Schedule under Selected Crossdock Hub and Origin Hub (uid:f48928db-7800-4859-aac2-79418f68111d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
@@ -153,7 +153,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify all station schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: View Station Schedule - Show All Station Schedule under Selected Crossdock Hub and Destination Hub (uid:6b0b0756-1ce9-4c1b-bff0-44f90ef05817)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
