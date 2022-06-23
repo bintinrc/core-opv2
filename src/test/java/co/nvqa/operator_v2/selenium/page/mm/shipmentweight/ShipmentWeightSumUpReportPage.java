@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.mm.AntConfirmModal;
+import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -28,6 +29,9 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
 
   @FindBy(css = "[data-testid='showing-x-report-section']")
   public PageElement showingXReportText;
+
+  @FindBy(xpath = "//div[@class='ant-message-notice']")
+  public AntNotice notice;
 
 
   @FindBy(css = ".ant-modal-confirm")

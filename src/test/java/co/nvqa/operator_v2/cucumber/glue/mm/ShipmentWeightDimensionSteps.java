@@ -13,15 +13,19 @@ import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensi
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionPage.ShipmentWeightState;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage.Column;
+import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionUpdateMawbPage;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightSumUpReportPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,12 +48,13 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   private static final String STATE_KEY = "state";
   private static final String MESSAGE_KEY = "message";
   private static final String STATUS_KEY = "shipment status";
+  private static final String FILE_NAME = " Sum Up Report - Shipment Weight Dimension.csv";
 
   // page object
   ShipmentWeightDimensionPage shipmentWeightDimensionPage;
   ShipmentWeightDimensionAddPage shipmentWeightDimensionAddPage;
   ShipmentWeightDimensionTablePage shipmentWeightDimensionTablePage;
-
+  ShipmentWeightDimensionUpdateMawbPage shipmentWeightDimensionUpdateMawbPage;
   ShipmentWeightSumUpReportPage shipmentWeightSumUpreport;
 
   @Override
@@ -58,6 +63,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     shipmentWeightDimensionTablePage = new ShipmentWeightDimensionTablePage(getWebDriver());
     shipmentWeightDimensionAddPage = new ShipmentWeightDimensionAddPage(getWebDriver());
     shipmentWeightSumUpreport = new ShipmentWeightSumUpReportPage(getWebDriver());
+    shipmentWeightDimensionUpdateMawbPage = new ShipmentWeightDimensionUpdateMawbPage(getWebDriver());
   }
 
   @Then("Operator verify Shipment Weight Dimension page UI")
@@ -447,7 +453,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @Then("Operator verify Sum up button on Shipment Weight Dimension Table have {string} as counter")
   public void operatorVerifySumUpButtonOnShipmentWeightDimensionTableHaveAsCounter(String counter) {
     Assertions.assertThat(shipmentWeightDimensionTablePage.sumUpButton.getText())
-        .as("sum up button counter is increased").isEqualTo("Sum up & Update MAWB (%s)", counter);
+        .as("sum up button counter is increased").isEqualTo("Sum up (%s)", counter);
   }
 
   @And("Operator click edit button on Shipment Weight Dimension table")
@@ -542,6 +548,20 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .as("Shipment status select is shown").isTrue();
   }
 
+  @Then("Operator verify disabled Selected Filter card on Shipment Weight Dimension Filter UI")
+  public void operatorVerifyDisabledSelectedFilterCardOnShipmentWeightDimensionFilterUI() {
+    Assertions.assertThat(shipmentWeightDimensionPage.deletePresetButton.isDisplayed())
+        .as("Delete button is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledShipmentTypeSelect.isDisplayed())
+        .as("Shipment Type select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledStartHubSelect.isDisplayed())
+        .as("Start Hub select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledEndHubSelect.isDisplayed())
+        .as("End Hub select is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.disabledShipmentStatusSelect.isDisplayed())
+        .as("Shipment status select is shown").isTrue();
+  }
+
   @Then("Operator fill Shipment Weight Dimension Filter UI with data")
   public void operatorFillShipmentWeightDimensionFilterUIWithData(Map<String,String> dataTable) {
     Map<String,String> map = resolveKeyValues(dataTable);
@@ -613,13 +633,15 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     List<ShipmentDimensionResponse> dimensions = get(KEY_UPDATED_SHIPMENTS_DIMENSIONS);
     DecimalFormat df = new DecimalFormat("#.##");
 
-    List<Long> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
+    List<String> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
         .rows
         .stream()
-        .map( s -> Long.valueOf(!s.shipmentId.getText().isEmpty()? s.shipmentId.getText(): "0"))
+        .map( s -> s.shipmentId.getText())
         .collect(Collectors.toList());
+
+    put(KEY_LIST_SELECTED_SHIPMENT_IDS, selectedShipmentIds);
     List<ShipmentDimensionResponse> selectedDimension = dimensions.stream()
-        .filter(s -> selectedShipmentIds.contains(s.getShipment().getId()))
+        .filter(s -> selectedShipmentIds.contains(String.valueOf(s.getShipment().getId())))
         .collect(
         Collectors.toList());
 
@@ -706,10 +728,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorVerifyTheDownloadedCSVSumUpReportFileIsContainsTheCorrectValues(Map<String, String> dataTable) {
     String headers = dataTable.get("header");
     String title = shipmentWeightSumUpreport.sumUpReportTitle.getText().trim();
-    String dateFromTitle = title.substring(0, title.length() - 13);
-    ZonedDateTime date = DateUtil.getDate(dateFromTitle, DateUtil.DATE_TIME_FORMATTER);
+    String dateFromTitle = title.substring(0, title.length() - 14);
+
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss");
-    String fileNameFormat = date.format(dtf);
+    LocalDateTime date = LocalDateTime.parse(dateFromTitle, DateUtil.DATE_TIME_FORMATTER);
+
+    String fileNameFormat = date.format(dtf) + FILE_NAME;
 
     shipmentWeightSumUpreport.verifyFileDownloadedSuccessfully(
           fileNameFormat, headers);
@@ -747,6 +771,142 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     Assertions.assertThat(
         shipmentWeightSumUpreport.shipmentSumUpReportNvTable.isDisplayed()
     ).as("Shipment Weight Sum Up Report table is not displayed").isFalse();
+  }
+
+  @When("Operator click update MAWB button on Shipment Weight Sum Up page")
+  public void operatorClickUpdateMAWBButtonOnShipmentWeightSumUpPage() {
+    //add the selected shipment ids
+    List<String> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
+            .rows.stream().map(r -> r.shipmentId.getText()).collect(Collectors.toList());
+    put(KEY_LIST_SELECTED_SHIPMENT_IDS, selectedShipmentIds);
+    shipmentWeightSumUpreport.updateMawbBtn.click();
+  }
+
+  @Then("Operator verify Shipment Weight Update MAWB page UI")
+  public void operatorVerifyShipmentWeightUpdateMAWBPageUI() {
+    shipmentWeightDimensionUpdateMawbPage.waitUntilLoaded();
+    List<String> selectedShipmentIds = get(KEY_LIST_SELECTED_SHIPMENT_IDS, new ArrayList<>());
+    //verify the table
+    if (selectedShipmentIds.size()!=0) {
+      shipmentWeightDimensionUpdateMawbPage.shipmentWeightNvTable.rows.forEach( row -> {
+        Assertions.assertThat(selectedShipmentIds.contains(row.shipmentId.getText()))
+            .as(f("Shipment id %s is selected from previous page", row.shipmentId.getText()))
+            .isTrue();
+      });
+    }
+
+
+    //verify UI component
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.backButton.isDisplayed())
+        .as("Back button is displayed")
+        .isTrue();
+
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.isDisplayed())
+        .as("Update MAWB button is displayed")
+        .isTrue();
+
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbInput.isDisplayed())
+        .as("MAWB input is displayed")
+        .isTrue();
+
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.vendorSelect.isDisplayed())
+        .as("Vendor input is displayed")
+        .isTrue();
+
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.originAirportSelect.isDisplayed())
+        .as("Origin Airport input is displayed")
+        .isTrue();
+
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.destAirportSelect.isDisplayed())
+        .as("Destination Airport input is displayed")
+        .isTrue();
+
+  }
+
+  @When("Operator update MAWB information on shipment weight dimension page with following data")
+  public void operatorUpdateMAWBInformationOnShipmentWeightDimensionPageWithFollowingData(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String mawb = dataTable.get("mawb");
+    //filling the form
+    if (mawb.equalsIgnoreCase("random")) {
+      mawb = "000-"+ RandomStringUtils.randomNumeric(8, 9);
+    } else if (mawb.equalsIgnoreCase("invalid")) {
+      mawb = "000-123456";
+    } else if (mawb.equalsIgnoreCase("alfabet")) {
+      mawb ="abcdefg?";
+    } else if (mawb.equalsIgnoreCase("empty")) {
+      mawb = "";
+    }
+    put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+
+    shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
+    shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
+    shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("origin"));
+    shipmentWeightDimensionUpdateMawbPage.destAirportSelect.selectValue(dataTable.get("destination"));
+  }
+
+  @Then("Operator click update button on shipment weight update mawb page")
+  public void operatorClickUpdateButtonOnShipmentWeightUpdateMawbPage() {
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled"))
+        .as("Update button is enabled")
+        .isNull();
+
+    shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
+    shipmentWeightSumUpreport.waitUntilLoaded();
+  }
+
+  @And("Operator verify Shipment Weight Update MAWB page UI updated with new MAWB")
+  public void operatorVerifyShipmentWeightUpdateMAWBPageUIUpdatedWithNewMAWB() {
+    String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+    shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+        row -> {
+          Assertions.assertThat(row.mawb.getText())
+              .as("MAWB is updated with new value")
+              .isEqualTo(newMawb);
+        }
+    );
+  }
+
+  @Given("Operator take note of the existing mawb")
+  public void operatorTakeNoteOfTheExistingMawb() {
+    String mawb = get(KEY_SHIPMENT_AWB);
+    put(KEY_EXISTING_SHIPMENT_AWB, mawb);
+    put(KEY_SHIPMENT_AWB, null);
+    put(KEY_LIST_OF_CREATED_SHIPMENT_IDS, null);
+  }
+
+  @And("Operator click confirm on the Shipment weight update confirm dialog")
+  public void operatorClickConfirmOnTheShipmentWeightUpdateConfirmDialog() {
+    shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.confirm();
+    shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.waitUntilInvisible();
+  }
+
+  @Then("Operator verify Shipment Weight Update MAWB page UI has error")
+  public void operatorVerifyShipmentWeightUpdateMAWBPageUIHasError(Map<String, String> dataTable) {
+    String errorMessage = dataTable.get("message");
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled"))
+        .as("Update mawb button is disabled")
+        .isNotNull();
+    if (errorMessage != null && !errorMessage.isEmpty()) {
+      Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbErrorInfo.isDisplayed())
+          .as("MAWB input has error message")
+          .isTrue();
+      Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbErrorInfo.getText())
+          .as("Show correct error message")
+          .isEqualTo(errorMessage);
+    }
+  }
+
+  @And("Operator click cancel on the Shipment weight update confirm dialog")
+  public void operatorClickCancelOnTheShipmentWeightUpdateConfirmDialog() {
+    shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.waitUntilVisible();
+    shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.cancel();
+    shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.waitUntilInvisible();
+  }
+
+  @When("Operator click update MAWB button on Shipment Weight Dimension page")
+  public void operatorClickUpdateMAWBButtonOnShipmentWeightDimensionPage() {
+    shipmentWeightDimensionTablePage.updateMawbButton.click();
   }
 }
 

@@ -5,7 +5,7 @@ Feature: Indonesian
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Indonesian Tooltip for COD Collected from Countries (uid:08fc8df3-d730-4506-973c-5be0c69a6eee)
+  Scenario Outline: Indonesian Tooltip for COD Collected from Courier
     Given Operator loads Operator portal home page
     And Operator opens profile and navigates to settings screen
     When Operator selects language as "<Language>"

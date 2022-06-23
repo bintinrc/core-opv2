@@ -14,7 +14,6 @@ Feature: Route Logs
       | zone       | {zone-name}                      |
       | hub        | {hub-name}                       |
       | driverName | {ninja-driver-name}              |
-      | vehicle    | {vehicle-name}                   |
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -29,7 +28,6 @@ Feature: Route Logs
       | comments       | {KEY_CREATED_ROUTE.comments}     |
       | tags           | {route-tag-name}                 |
 
-
   @DeleteOrArchiveRoute
   Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -41,7 +39,6 @@ Feature: Route Logs
       | zone          | {zone-name}                      |
       | hub           | {hub-name}                       |
       | driverName    | {ninja-driver-name}              |
-      | vehicle       | {vehicle-name}                   |
     And Operator set filter using data below and click 'Load Selection'
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
@@ -51,33 +48,33 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator bulk edits details of created routes using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
-      | hub        | {hub-name}                              |
-      | driverName | {ninja-driver-2-name}                   |
-      | vehicle    | {vehicle-name}                          |
-      | comments   | Route has been edited by automated test |
-    Then Operator verifies that success react notification displayed:
-      | top                | 2 Route(s) Updated |
-      | waitUntilInvisible | true               |
-    Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
+#    TODO DISABLED
+#  @DeleteOrArchiveRoute
+#  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
+#    Given Operator go to menu Utilities -> QRCode Printing
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    When Operator go to menu Routing -> Route Logs
+#    And Operator set filter using data below and click 'Load Selection'
+#      | routeDateFrom | YESTERDAY  |
+#      | routeDateTo   | TODAY      |
+#      | hubName       | {hub-name} |
+#    And Operator bulk edits details of created routes using data below:
+#      | date       | {gradle-current-date-yyyy-MM-dd}        |
+#      | tags       | {route-tag-name}                        |
+#      | zone       | {zone-name}                             |
+#      | hub        | {hub-name}                              |
+#      | driverName | {ninja-driver-2-name}                   |
+#      | comments   | Route has been edited by automated test |
+#    Then Operator verifies that success react notification displayed:
+#      | top                | 2 Route(s) Updated |
+#      | waitUntilInvisible | true               |
+#    Then Operator verify routes details on Route Logs page using data below:
+#      | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
+#      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
+#      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Multiple Routes from Route Logs Page (uid:03e47864-aa13-4dc3-8775-27f07257320b)
@@ -159,35 +156,36 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | tags       | {route-tag-name}                        |
-      | hub        | {hub-name-2}                            |
-      | driverName | {ninja-driver-2-name}                   |
-      | comments   | Route has been edited by automated test |
-    Then Operator verifies that success react notification displayed:
-      | top                | 1 Route(s) Updated |
-      | waitUntilInvisible | true               |
-    Then Operator verify route details on Route Logs page using data below:
-      | date           | {gradle-current-date-yyyy-MM-dd}        |
-      | id             | {KEY_CREATED_ROUTE_ID}                  |
-      | status         | PENDING                                 |
-      | driverName     | {ninja-driver-2-name}                   |
-      | hub            | {hub-name-2}                            |
-      | zone           | {zone-name}                             |
-      | driverTypeName | {driver-type-name-2}                    |
-      | comments       | Route has been edited by automated test |
-      | tags           | {route-tag-name}                        |
+#    TODO DISABLED
+#  @DeleteOrArchiveRoute
+#  Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
+#    Given Operator go to menu Utilities -> QRCode Printing
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And Operator go to menu Routing -> Route Logs
+#    When Operator set filter using data below and click 'Load Selection'
+#      | routeDateFrom | YESTERDAY  |
+#      | routeDateTo   | TODAY      |
+#      | hubName       | {hub-name} |
+#    And Operator edits details of created route using data below:
+#      | date       | {gradle-current-date-yyyy-MM-dd}        |
+#      | tags       | {route-tag-name}                        |
+#      | hub        | {hub-name-2}                            |
+#      | driverName | {ninja-driver-2-name}                   |
+#      | comments   | Route has been edited by automated test |
+#    Then Operator verifies that success react notification displayed:
+#      | top                | 1 Route(s) Updated |
+#      | waitUntilInvisible | true               |
+#    Then Operator verify route details on Route Logs page using data below:
+#      | date           | {gradle-current-date-yyyy-MM-dd}        |
+#      | id             | {KEY_CREATED_ROUTE_ID}                  |
+#      | status         | PENDING                                 |
+#      | driverName     | {ninja-driver-2-name}                   |
+#      | hub            | {hub-name-2}                            |
+#      | zone           | {zone-name}                             |
+#      | driverTypeName | {driver-type-name-2}                    |
+#      | comments       | Route has been edited by automated test |
+#      | tags           | {route-tag-name}                        |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Tag to a Single Route on Route Logs Page (uid:47e4dfc2-b5e3-470a-a832-b99c85905f8a)
@@ -368,6 +366,75 @@ Feature: Route Logs
     And Operator open Route Manifest of created route from Route Logs page
     Then Operator verifies route details on Route Manifest page:
       | routeId | {KEY_CREATED_ROUTE_ID} |
+
+  Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And DB Operator find drivers with ended employment
+    When Operator go to menu Routing -> Route Logs
+    And Operator clicks Create Route on Route Logs page
+    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
+
+  @DeleteDriver
+  Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator clicks Create Route on Route Logs page
+    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
+
+  @DeleteDriver
+  Scenario: Operator Allowed To See Driver List on Create Route if Driver Has No Employment Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password"}} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator clicks Create Route on Route Logs page
+    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
+
+  @DeleteOrArchiveRoute @DeleteDriver
+  Scenario: Operator Allowed To See Driver List on Update Route if Driver Employment End Date => Today's Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
+    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Edit Route Details modal on Route Logs page
+
+  @DeleteOrArchiveRoute @DeleteDriver
+  Scenario: Operator Allowed To See Driver List on Update Route if Driver Has No Employment Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password"}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
+    Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Edit Route Details modal on Route Logs page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Not Allowed To See Driver List on Update Route if Driver Employment End Date < Today's Date
+    Given Operator go to menu Utilities -> QRCode Printing
+    And DB Operator find drivers with ended employment
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
+    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -18,7 +18,11 @@ Feature: Add To Shipment 3
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    And API Driver failed the C2C/Return order pickup using data below:
+      | orderNumber            | 1           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     Then API Operator verify order info after pickup "PICKUP_FAILED"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}

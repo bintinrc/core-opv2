@@ -858,6 +858,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_DB_FOUND_DRIVERS, drivers);
   }
 
+  @Given("DB Operator find drivers with ended employment")
+  public void findDriversWithEndedEmployment() {
+    List<Driver> drivers = getDriverJdbc().findDriversWithEndedEmployment();
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
   @Given("DB Operator find drivers by {string} driver type name")
   public void findDriversByDriverTypeName(String driverTypeName) {
     List<Driver> drivers = getDriverJdbc()
@@ -1342,7 +1348,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case "contactNumber":
         Long driverId = driverData.getId();
         String actualContactNumber = getDriverJdbc().getLatestDriverContactNumber(driverId);
-        assertThat("Updated name is the same", actualContactNumber, equalTo(resolvedUpdatedValue));
+        Assertions.assertThat(actualContactNumber)
+                .as("Updated contact number is the same")
+                .contains(resolvedUpdatedValue);
         break;
       case "hub":
         String actualHubId = String.valueOf(driverData.getHubId());
@@ -1911,7 +1919,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyTheNewCodSoftDeleted() {
     CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
-        Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
+        Matchers.startsWith(DateUtil.getUTCTodayDate()));
   }
 
   @Then("DB Operator verify loyalty point for completed order is {string}")
@@ -2069,4 +2077,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
     put(KEY_WAYPOINT_DETAILS, waypoint);
   }
+
+
+  @Then("DB Operator verifies that {int} row(s) is/are added for the change type: {string} in account_audit_logs table in driver db")
+  public void dbOperatorVerifiesTheRowIsAddedForTheChangeTypeInAccountAuditLogsTableInDriverDb(int records, String changeType) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    int totalRecord = getDriverJdbc().getAccountAuditTotal(driverInfo.getId(), changeType);
+    Assertions.assertThat(totalRecord)
+        .as("Total number of records with change type = %s", changeType)
+        .isEqualTo(records);
+  }
+
 }

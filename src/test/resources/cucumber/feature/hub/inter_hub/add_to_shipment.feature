@@ -143,7 +143,7 @@ Feature: Add To Shipment
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-#    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+#    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator add to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator removes the parcel from the shipment with error alert
     And Operator refresh page

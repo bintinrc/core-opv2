@@ -20,13 +20,13 @@ Feature: All Orders
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verifies pricing information on Edit Order page:
-      | total        | 10.593 |
-      | deliveryFee  | 9      |
+      | total        | 11.717 |
+      | deliveryFee  | 10.5   |
       | codFee       | -      |
       | insuranceFee | 2.4    |
       | handlingFee  | 1.2    |
-      | rtsFee       | -2.7   |
-      | gst          | 0.693  |
+      | rtsFee       | -3.15  |
+      | gst          | 0.767  |
       | insuredValue | 120    |
 
   Scenario: Operator Check Parcel Fees and Total Tax in Edit Order Page - Order is Not RTS (uid:54939c63-2079-416f-b58d-2dbffb0e59bb)

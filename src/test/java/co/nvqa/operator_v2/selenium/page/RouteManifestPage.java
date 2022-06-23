@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -200,6 +201,28 @@ public class RouteManifestPage extends OperatorV2SimplePage {
           .selectFailureReasonDetails(i, childFailureReason.getDescription());
     }
 
+    chooseAnOutcomeForTheWaypointDialog.update.click();
+    confirmationDialog.waitUntilVisible();
+    confirmationDialog.proceed.click();
+    confirmationDialog.waitUntilInvisible();
+    chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
+  }
+
+  public void failWaypointWithFailureDetails(Map<String, String> mapOfData) {
+    String failureReason = mapOfData.get("Failure Reason");
+    String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
+    String failureReasonDetail2 = mapOfData.get("Failure Reason Detail 2");
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+    chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
+    pause1s();
+    chooseAnOutcomeForTheWaypointDialog.failure.click();
+    chooseAnOutcomeForTheWaypointDialog.chooseFailureReason.selectValue(failureReason);
+    if (StringUtils.isNotBlank(failureReasonDetail1)) {
+      chooseAnOutcomeForTheWaypointDialog.selectFailureReasonDetails(1, failureReasonDetail1);
+    }
+    if (StringUtils.isNotBlank(failureReasonDetail2)) {
+      chooseAnOutcomeForTheWaypointDialog.selectFailureReasonDetails(2, failureReasonDetail2);
+    }
     chooseAnOutcomeForTheWaypointDialog.update.click();
     confirmationDialog.waitUntilVisible();
     confirmationDialog.proceed.click();

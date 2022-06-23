@@ -1,22 +1,31 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_DESCRIPTION;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_HUB_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_ID;
+import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_LATITUDE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHORT_NAME;
 
@@ -59,7 +68,7 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyTheNewZoneIsCreatedSuccessfully() {
     zonesPage.inFrame(page -> {
       Zone expected = get(KEY_CREATED_ZONE);
-      zonesPage.findZone(expected);
+      zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
       put(KEY_CREATED_ZONE_ID, actual.getId());
@@ -82,6 +91,20 @@ public class ZonesSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies zone details on Zones page:")
+  public void operatorVerifiesZoneDetails(Map<String, String> data) {
+    Zone expected = new Zone(resolveKeyValues(data));
+    zonesPage.inFrame(page -> {
+      zonesPage.findZone(expected.getName());
+      Zone actual = zonesPage.zonesTable.readEntity(1);
+      if (StringUtils.equals(expected.getName(), actual.getName())) {
+        put(KEY_CREATED_ZONE_ID, actual.getId());
+        putInList(KEY_LIST_OF_CREATED_ZONES_ID, actual.getId());
+      }
+      expected.compareWithActual(actual);
+    });
+  }
+
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
     Zone zone = get(KEY_CREATED_ZONE);
@@ -94,11 +117,11 @@ public class ZonesSteps extends AbstractSteps {
     zoneEdited.setHubName(zone.getHubName());
     zoneEdited.setDescription(zone.getDescription() + " [EDITED]");
 
-    put("zoneEdited", zoneEdited);
+    put(KEY_EDITED_ZONE, zoneEdited);
 
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       zonesPage.editZoneDialog.waitUntilVisible();
       zonesPage.editZoneDialog.name.setValue(zoneEdited.getName());
@@ -124,7 +147,7 @@ public class ZonesSteps extends AbstractSteps {
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       zonesPage.editZoneDialog.waitUntilVisible();
       zonesPage.editZoneDialog.rts.click();
@@ -146,7 +169,7 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyTheNewZoneIsUpdatedSuccessfully() {
     Zone expected = get("zoneEdited");
     zonesPage.inFrame(page -> {
-      zonesPage.findZone(expected);
+      zonesPage.findZone(expected.getName());
       Zone actual = zonesPage.zonesTable.readEntity(1);
       expected.compareWithActual(actual);
       takesScreenshot();
@@ -157,23 +180,29 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorDeleteTheNewZone() {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilPageLoaded();
-      zonesPage.findZone(zone);
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
       zonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
       zonesPage.confirmDeleteDialog.waitUntilVisible();
       zonesPage.confirmDeleteDialog.confirm.click();
     });
   }
 
+  @When("Operator find {value} zone on Zones page")
+  public void findZone(String zoneName) {
+    zonesPage.inFrame(page -> {
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zoneName);
+    });
+  }
+
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-    Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
+    Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.clickRefreshCache();
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
           .as("Zone " + zone.getName() + " were deleted").isTrue();
-      takesScreenshot();
     });
   }
 
@@ -182,28 +211,58 @@ public class ZonesSteps extends AbstractSteps {
     Zone zone = get(KEY_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
+      zonesPage.waitUntilLoaded();
+      zonesPage.findZone(zone.getName());
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
+      List<String> values = zonesPage.zonesTable.readColumn(COLUMN_ID);
+      assertThat("ID filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
+
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
-      List<String> values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
+      values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
       assertThat("Short Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
       assertThat("Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
       assertThat("Hub Name filter results", values,
           Matchers.everyItem(Matchers.containsString(zone.getHubName())));
-      takesScreenshot();
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
+      values = zonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
+      assertThat("Latitude/Longitude filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
+
+      zonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
+      values = zonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
+      assertThat("Description filter results", values,
+          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      zonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
 
   @When("Operator download Zone CSV file")
   public void operatorDownloadZoneCsvFile() {
+    zonesPage.inFrame(page -> zonesPage.downloadCsvFile.click());
+  }
+
+  @When("Operator reload zone cash on Zones page")
+  public void reloadZoneCash() {
     zonesPage.inFrame(page -> {
-      zonesPage.downloadCsvFile.click();
+      zonesPage.waitUntilLoaded();
+      zonesPage.refreshCash();
     });
   }
 
@@ -211,8 +270,9 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
     Zone zone = get(KEY_CREATED_ZONE);
     zonesPage.inFrame(page -> {
-      zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
-      takesScreenshot();
+      String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
+          zone.getHubName());
+      page.verifyFileDownloadedSuccessfully(ZonesPage.CSV_FILENAME, expectedText);
     });
   }
 
@@ -277,7 +337,7 @@ public class ZonesSteps extends AbstractSteps {
             new Date()));
 
     zonesPage.inFrame(page -> {
-      page.waitUntilPageLoaded();
+      page.waitUntilLoaded();
       page.addZone.click();
       page.addZoneDialog.waitUntilVisible();
       page.addZoneDialog.name.setValue(zone.getName());
@@ -297,5 +357,141 @@ public class ZonesSteps extends AbstractSteps {
       page.addZoneDialog.waitUntilInvisible();
     });
     put(KEY_CREATED_ZONE, zone);
+  }
+
+  /* ======================= Bulk Edit Zone Polygon ======================= */
+
+  @And("Zones page is loaded")
+  public void zonesPageIsLoaded() {
+    zonesPage.waitUntilPageLoaded();
+    zonesPage.pageFrame.waitUntilVisible();
+    zonesPage.switchTo();
+    zonesPage.bulkEditPolygons.waitUntilVisible();
+  }
+
+  @When("Operator clicks Bulk Edit Polygons button")
+  public void operatorClicksBulkEditPolygonsButton() {
+    zonesPage.bulkEditPolygons.waitUntilClickable();
+    zonesPage.bulkEditPolygons.click();
+  }
+
+  @Then("Operator make sure Bulk Edit Polygons dialog shows up")
+  public void operatorMakeSureBulkEditPolygonsDialogShowsUp() {
+    zonesPage.bulkEditPolygonsDialog.waitUntilVisible();
+    Assertions.assertThat(zonesPage.bulkEditPolygonsDialog.isDisplayed())
+        .as("Bulk Edit Polygons dialog shows up")
+        .isTrue();
+  }
+
+  @When("Operator successfully upload a KML file {string}")
+  public void operatorSuccessfullyUploadAKMLFile(String fileName) {
+    // Retry mechanism in case the KML file is not correctly read (a.k.a. vertex = 0)
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      if (zonesSelectedPolygonsPage.sideToolbar.isDisplayed()) {
+        NvAssertions.LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
+        backToPreviousPage();
+      } else {
+        NvAssertions.LOGGER.info("Refreshing on main page...");
+        zonesPage.refreshPage_v1();
+      }
+      zonesPageIsLoaded();
+      operatorClicksBulkEditPolygonsButton();
+      operatorMakeSureBulkEditPolygonsDialogShowsUp();
+      operatorUploadAKMLFile(fileName);
+      operatorMakeSureIsRedirectedToZoneDrawingPage();
+      operatorMakeSureKMLFileIsReadCorrectly();
+    }, "Retrying until KML file is read correctly");
+  }
+
+  @When("Operator upload a KML file {string}")
+  public void operatorUploadAKMLFile(String fileName) {
+    final String kmlFileName = "kml/" + fileName;
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File kmlFile = new File(
+        Objects.requireNonNull(classLoader.getResource(kmlFileName)).getFile());
+
+    zonesPage.uploadKmlFile(kmlFile);
+  }
+
+  @Then("Operator make sure is redirected to Zone Drawing page")
+  public void operatorMakeSureIsRedirectedToZoneDrawingPage() {
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.sideToolbar.waitUntilVisible();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    Assertions.assertThat(
+            zonesSelectedPolygonsPage.zoneDrawingHeader.isDisplayed() &&
+                zonesSelectedPolygonsPage.saveZoneDrawingButton.isDisplayed()
+        )
+        .as("Zone Drawing page is loaded")
+        .isTrue();
+  }
+
+  @And("Operator make sure KML file is read correctly")
+  public void operatorMakeSureKMLFileIsReadCorrectly() {
+    Assertions.assertThat(zonesSelectedPolygonsPage.isKmlFileReadCorrectly())
+        .as("KML file is read CORRECTLY")
+        .isTrue();
+  }
+
+  @Then("Operator make sure zones from KML file are listed correctly")
+  public void operatorMakeSureZonesFromKMLFileAreListedCorrectly(
+      Map<String, String> dataTableAsMap) {
+    Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
+
+    String zonesAsJson = inputMap.get("zones");
+    List<Map<String, Object>> zoneList = fromJsonToList(zonesAsJson, Object.class).stream()
+        .map(o -> convertValueToMap(o, String.class, Object.class))
+        .collect(Collectors.toList());
+
+    List<Long> ids = zoneList.stream()
+        .map(z -> convertValue(z.get("id"), Long.class)).collect(Collectors.toList());
+    List<String> names = zoneList.stream()
+        .map(z -> convertValue(z.get("name"), String.class)).collect(Collectors.toList());
+
+    Assertions.assertThat(zonesSelectedPolygonsPage.hasZonesListed(ids, names))
+        .as("All zones are listed correctly")
+        .isTrue();
+
+    List<Object> zonesAsObject = zoneList.stream()
+        .map(zone -> convertValue(zone, Object.class))
+        .collect(Collectors.toList());
+    Map<String, Object> inputMapAsObject = new HashMap<>();
+    inputMapAsObject.put("zones", zonesAsObject);
+
+    put(KEY_ZONE_POLYGONS_AS_JSON, inputMapAsObject);
+    put(KEY_LIST_OF_SUCCESSFUL_KML_ZONES, convertValue(zonesAsObject, Object.class));
+    put(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, names);
+  }
+
+  @And("Operator clicks save button in zone drawing page")
+  public void operatorClicksSaveButtonInZoneDrawingPage() {
+    List<String> names = get(KEY_LIST_OF_ZONES_POLYGON_ZONE_NAMES, new ArrayList<>());
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialog.waitUntilVisible();
+    Assertions.assertThat(zonesSelectedPolygonsPage.saveConfirmationDialog.isDisplayed())
+        .as("Save confirmation dialog shows up")
+        .isTrue();
+    Assertions.assertThat(zonesSelectedPolygonsPage.hasZonesListedInSaveConfirmationDialog(names))
+        .as("All zones are listed in save confirmation dialog")
+        .isTrue();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.waitUntilClickable();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+  }
+
+  @Then("Operator make sure error popup on zones page shows up: {string}")
+  public void operatorMakeSureErrorPopupOnZonesPageShowsUp(String message) {
+    Assertions.assertThat(zonesPage.isNotificationShowUp(message))
+        .as(String.format("Error notification shows up: %s", message))
+        .isTrue();
+  }
+
+  @Then("Operator make sure dialog shows error: {string}")
+  public void operatorMakeSureDialogShowsError(String errorTitle) {
+    Assertions.assertThat(
+            zonesPage.isElementExist(String.format(ZonesPage.BULK_ZONE_UPDATE_ERROR_TITLE, errorTitle)))
+        .as(String.format("Update dialog shows correct error title: %s", errorTitle))
+        .isTrue();
   }
 }

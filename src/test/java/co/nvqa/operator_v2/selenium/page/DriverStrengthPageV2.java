@@ -14,8 +14,11 @@ import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,6 +36,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   public static final String LOCATOR_DELETE_BUTTON = "//button/span[.='Delete']";
+  private static final String DRIVER_STRENGTH_COLUMN_NAME_XPATH = "//div[contains(@class,'th')]/*[1]";
 
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public AddDriverDialog addDriverDialog;
@@ -60,10 +64,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public Button addNewDriver;
 
   @FindBy(name = "zones")
-  public AntSelect2 zonesFilter;
+  public AntSelect zonesFilter;
 
   @FindBy(name = "driverTypes")
-  public AntSelect2 driverTypesFilter;
+  public AntSelect driverTypesFilter;
 
 //  @FindBy(className = "//span[.='All']")
   @FindBy(xpath = "//div[contains(@class, 'ant-select') and @name='resigned']")
@@ -114,6 +118,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public void addNewDriver(DriverInfo driverInfo) {
     waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
     clickAddNewDriver();
+    pause3s();
     addDriverDialog.fillForm(driverInfo);
     addDriverDialog.submitForm();
   }
@@ -212,6 +217,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(xpath = "//span[.='At least one zone preference required.']")
     public PageElement zoneHints;
 
+    @FindBy(xpath = "//span[.='Please input a valid mobile phone number (e.g. 8123 4567)']")
+    public PageElement validContactNumber;
+
     @FindBy(id = "firstName")
     public ForceClearTextBox firstName;
 
@@ -222,10 +230,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public ForceClearTextBox driverLicenseNumber;
 
     @FindBy(name = "type")
-    public AntSelect2 type;
+    public AntSelect type;
 
     @FindBy(id = "maxOnDemandWaypoints")
     public PageElement maximumOnDemandWaypoints;
+
+    @FindBy(id = "dpmsId")
+    public PageElement dpmsId;
 
     @FindBy(id = "codLimit")
     public TextBox codLimit;
@@ -271,7 +282,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       }
 
       @FindBy(css = "div[name*='vehicleType']")
-      public AntSelect2 vehicleType;
+      public AntSelect vehicleType;
 
       @FindBy(css = "input[name*='vehicleNo']")
       public ForceClearTextBox vehicleLicenseNumber;
@@ -310,7 +321,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       }
 
       @FindBy(css = "div[name*='zone']")
-      public AntSelect2 zoneName;
+      public AntSelect zoneName;
 
       @FindBy(css = "input[name*='minWaypoints']")
       public ForceClearTextBox min;
@@ -385,6 +396,16 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       maximumOnDemandWaypoints.sendKeys(param);
     }
 
+    public void setDpmsId(String dpmsIdValue){
+      if(dpmsId.isDisplayed()){
+        dpmsId.click();
+        for(char key : dpmsIdValue.toCharArray()){
+          dpmsId.sendKeys(Keys.BACK_SPACE);
+        }
+        dpmsId.sendKeys(dpmsIdValue);
+      }
+    }
+
     public AddDriverDialog addVehicle(String vehicleType, String licenseNumber, Integer capacity) {
       addMoreVehicles.click();
       VehicleSettingsForm form = vehicleSettingsForm.get(vehicleSettingsForm.size() - 1);
@@ -401,31 +422,8 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public AddDriverDialog addContact(String contactType, String contact) {
       addMoreContacts.click();
       ContactsSettingsForm form = contactsSettingsForms.get(contactsSettingsForms.size() - 1);
-
-      if (contact != null) {
-        final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
-        switch (country) {
-          case "SG":
-            form.contact.setValue("31594329");
-            break;
-          case "ID":
-            form.contact.setValue("+6282188881593");
-            break;
-          case "MY":
-            form.contact.setValue("+6066567878");
-            break;
-          case "PH":
-            form.contact.setValue("+639285554697");
-            break;
-          case "TH":
-            form.contact.setValue("+66955573510");
-            break;
-          case "VN":
-            form.contact.setValue("+0812345678");
-            break;
-          default:
-            break;
-        }
+      if(contact != null) {
+        form.contact.setValue(contact + Keys.TAB);
       }
       return this;
     }
@@ -482,6 +480,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
       setType(driverInfo.getType());
       setMaximumOnDemandWaypoint(10l);
+      setDpmsId(driverInfo.getDpmsId());
       setCodLimit(driverInfo.getCodLimit());
       setHub(driverInfo.getHub());
       setEmploymentStartDate(driverInfo.getEmploymentStartDate());
@@ -590,29 +589,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         form.contactType.selectValue(contactType);
       }
       if (contact != null) {
-        final String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
-        switch (country) {
-          case "SG":
-            form.contact.setValue("31594329");
-            break;
-          case "ID":
-            form.contact.setValue("82188881593");
-            break;
-          case "MY":
-            form.contact.setValue("66567878");
-            break;
-          case "PH":
-            form.contact.setValue("9285554697");
-            break;
-          case "TH":
-            form.contact.setValue("955573510");
-            break;
-          case "VN":
-            form.contact.setValue("12345678");
-            break;
-          default:
-            break;
-        }
+        form.contact.setValue(contact + Keys.TAB);
       }
       return this;
     }
@@ -639,6 +616,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
+      setDpmsId(driverInfo.getDpmsId());
       setCodLimit(driverInfo.getCodLimit());
       if (driverInfo.hasVehicleInfo()) {
         if (vehicleSettingsForm.size() > 0) {
@@ -694,7 +672,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
           .put("name", "4")
           .put("hub", "5")
           .put(COLUMN_TYPE, "6")
-          .put("dpms_id", "7")
+          .put("dpmsId", "7")
           .put("vehicleType", "8")
           .put("vehicleOwn", "9")
           .put(COLUMN_ZONE, "10")
@@ -735,5 +713,18 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public boolean verifyNoDataOnTable(){
     final WebElement noData = findElementByXpath("//div[@class='ant-empty ant-empty-normal']/p[.='No Data']");
     return noData.getText().equals("No Data");
+  }
+
+  public List<String> getAllColumnsInResultGrid(String userName) {
+    filterBy(COLUMN_USERNAME, userName);
+    waitUntilTableLoaded();
+    List<String> actualColumns = new ArrayList<String>();
+    List<WebElement> tableColumns = getWebDriver().findElements(
+        By.xpath(DRIVER_STRENGTH_COLUMN_NAME_XPATH));
+    tableColumns.forEach((tableColumn) -> {
+      scrollIntoView(tableColumn);
+      actualColumns.add(tableColumn.getText().trim());
+    });
+    return actualColumns;
   }
 }

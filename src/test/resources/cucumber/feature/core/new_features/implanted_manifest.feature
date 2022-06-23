@@ -16,7 +16,7 @@ Feature: Implanted Manifest
     Then Operator verifies the file is downloaded successfully and contains all scanned orders with correct info
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page (uid:fb17a389-4f54-45b7-b5f1-c12a830d6aa8)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -26,7 +26,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove Scanned Order by Scanning (uid:ca1314b5-661a-4dc7-b144-8b897e4d54b0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -37,7 +37,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is removed from the Manifest table
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by Remove All Button (uid:5284e3dc-43ab-4336-b395-6ee7c46be8ed)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -48,7 +48,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is removed from the Manifest table
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by X Button (uid:b18d3f25-98d9-4d76-bb5b-3c92c8e9bada)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -59,7 +59,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is removed from the Manifest table
 
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Id (uid:28477458-a062-40b7-b512-1d9acff22efa)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -72,7 +72,7 @@ Feature: Implanted Manifest
     Then Operator verifies that "Reservation ID not found! Please enter another Reservation ID" error toast message is displayed
 
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Pending Reservation (uid:f88b803e-3992-4c04-8cf7-de10e37aaa9e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -99,7 +99,7 @@ Feature: Implanted Manifest
 
   @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Failed Reservation (uid:8365b0e2-1c23-4b1f-a560-0f3f49f8f645)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new shipper address V2 using data below:
@@ -136,7 +136,7 @@ Feature: Implanted Manifest
 
   @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup (uid:1b598216-2d81-4ad9-8d40-7852ae149df0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -178,7 +178,7 @@ Feature: Implanted Manifest
 
   @DeleteOrArchiveRoute
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Total Scanned Orders != Total of POD (uid:995601b8-52cc-4d28-b1b1-3bf4f1e33a57)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 1                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -213,7 +213,7 @@ Feature: Implanted Manifest
 
   @DeleteOrArchiveRoute
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD (uid:9840426a-a1f5-4864-8ecf-3747f7b55e52)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -268,7 +268,7 @@ Feature: Implanted Manifest
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID (uid:027dfab6-19b3-4157-af2e-7e924ed45660)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -280,7 +280,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Using Prefix - Multiple TID (uid:8ef03b8e-c48f-458a-8755-84a9dafc4ae7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

@@ -12,7 +12,8 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Successfully Creates Multiple Sales Persons by Uploading CSV Contains Multiple Sales Person on Sales Page (uid:bcbfc882-3e1e-4423-b9d8-3c8ad973c204)
-    Given Operator go to menu Shipper -> Sales
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Shipper -> Sales
     When Operator upload CSV contains multiple Sales Persons on Sales page using data below:
       | numberOfSalesPerson | 2 |
     When Operator refresh page
@@ -20,7 +21,7 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Verifies All filters on Sales Page Works Fine (uid:550e3406-2ed8-4c41-9ffb-f73e4307384c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create sales person:
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |
@@ -29,7 +30,7 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Creates Sales Person by Uploading CSV With Duplicate Code (uid:5504e1c8-78c0-44aa-a30d-8eb3c7051d56)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create sales person:
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |
@@ -45,7 +46,7 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Update a Sales Person (uid:735c72d2-e24a-4fde-81bb-817aad5c840f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create sales person:
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |
@@ -56,7 +57,7 @@ Feature: Sales
 
   @DeleteSalesPerson
   Scenario: Operator Delete an Exist Sales Person (uid:3a01d8f0-9275-4193-be30-f05d08e05fb7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create sales person:
       | code | DSP-{uniqueString}   |
       | name | Dummy-{uniqueString} |

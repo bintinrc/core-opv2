@@ -59,6 +59,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]/following-sibling::span";
   public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
   public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//form[.='Scan Shipment to Inbound']/following-sibling::div[@class='message']";
+
+  public static final String XPATH_SCANTEXT_MESSAGE = "//h2[@class='scan-state-text']";
   public static final String XPATH_STATUS_CARD_BOX = "//div[@class='ant-row']//div[3]//div";
   public static final String XPATH_ZONE_CARD_BOX = "//div[@class='ant-row']//div[4]//div";
   private static String antNotificationMessage = "";
@@ -533,7 +535,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     noGoBack.waitUntilClickable();
     noGoBack.click();
-    antNotificationMessage = getAntNotificationMessage();
+    //antNotificationMessage = getAntNotificationMessage();
+  }
+
+  public void clickYesContinueInInboundScanningDialog() {
+    yesContinue.waitUntilClickable();
+    yesContinue.click();
   }
 
   public String getAntNotificationMessage(){
@@ -743,6 +750,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         waitUntilVisibilityOfElementLocated(XPATH_SMALL_SUCCESS_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
         assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+      } catch (Throwable ex) {
+        NvLogger.error(ex.getMessage());
+        throw ex;
+      }
+    }, getCurrentMethodName());
+  }
+
+  public void verifyScanTextAppearsInScanShipmentBox(String expectedSuccessMessage) {
+    retryIfAssertionErrorOccurred(() -> {
+      try {
+        String[] expected = expectedSuccessMessage.split("\n");
+        waitUntilVisibilityOfElementLocated(XPATH_SCANTEXT_MESSAGE);
+        String actualSuccessMessage = findElementByXpath(XPATH_SCANTEXT_MESSAGE).getText();
+        assertThat("ScanText message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;

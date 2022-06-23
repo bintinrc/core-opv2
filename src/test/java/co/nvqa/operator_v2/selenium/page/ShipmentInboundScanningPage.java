@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -63,7 +62,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
-  @FindBy(xpath = "//div[@class='message']")
+  @FindBy(css = "[data-testid='scan-box-container'] div.message")
   public PageElement scanAlertMessage;
 
   @FindBy(xpath = "//md-card[contains(@class,'scan-status-card')]")
@@ -83,7 +82,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(css = "h2.scan-state-text")
   public PageElement scannedState;
 
-  @FindBy(xpath = "//h1[@data-testid='scan-state-command']")
+  @FindBy(xpath = "//h1[@*='scan-state-command']")
   public PageElement scannedMessage;
 
   @FindBy(css = "div.scanned-shipping-id")
@@ -98,11 +97,19 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//input[@value='SHIPMENT_HUB_INBOUND']")
   public PageElement intoHub;
 
+  @FindBy(xpath = "//iframe")
+  public PageElement frame;
+
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void inboundScanning(long shipmentId, String label, String hub) {
+    inboundScanningShipment(shipmentId, label, hub);
+    checkSessionScan(String.valueOf(shipmentId));
+  }
+
+  public void inboundScanningShipment(long shipmentId, String label, String hub) {
     pause2s();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
@@ -114,7 +121,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     }
     startInboundButton.click();
     fillShipmentId(shipmentId);
-    checkSessionScan(String.valueOf(shipmentId));
   }
 
   public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub) {
@@ -179,7 +185,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void fillShipmentId(Object value) {
-    shipmentIdInput.setValue(String.valueOf(value) + Keys.ENTER);
+    shipmentIdInput.setValue(String.valueOf(value));
   }
 
   public void checkSessionScan(String shipmentId) {

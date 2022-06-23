@@ -116,6 +116,8 @@ Feature: Edit Pricing Script
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {result.delivery_fee = 5;} else {result.delivery_fee = 3;}if (params.size == "S") {result.delivery_fee += 2.1;} else if (params.size == "M") {result.delivery_fee += 2.2;} else if (params.size == "L") {result.delivery_fee += 3.3;} else if (params.size == "XL") {result.delivery_fee += 4.4;} else if (params.size == "XXL") {result.delivery_fee += 5.5;} else {throw "Unknown size.";}if (params.weight <= 3) {result.delivery_fee += 6.6} else if (params.weight > 3) {result.delivery_fee += 7.7}return result;} |
     And Operator clicks Check Syntax and Verify Draft
     Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Edit Active Script - Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
@@ -139,6 +141,8 @@ Feature: Edit Pricing Script
     And Operator edit the created Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {result.delivery_fee = 5;} else {result.delivery_fee = 3;}if (params.size == "S") {result.delivery_fee += 2.1;} else if (params.size == "M") {result.delivery_fee += 2.2;} else if (params.size == "L") {result.delivery_fee += 3.3;} else if (params.size == "XL") {result.delivery_fee += 4.4;} else if (params.size == "XXL") {result.delivery_fee += 5.5;} else {throw "Unknown size.";}if (params.weight <= 3) {result.delivery_fee += 6.6} else if (params.weight > 3) {result.delivery_fee += 7.7}return result;} |
     Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Edit Draft Script - Syntax Error (uid:4daf468e-2dc4-46cf-9a5e-2b0bda48668e)

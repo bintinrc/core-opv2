@@ -1,9 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common_selenium.page.SimplePage;
-import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -27,13 +24,15 @@ import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,7 +45,8 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
 
 /**
  * @author Lanang Jati
@@ -82,6 +82,26 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
+
+  private static final String XPATH_SHIPMENTWEIGHTANDDIMENSION = "//button[.='Shipment Weight & Dimension page']";
+
+  private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
+
+  @FindBy(id = "search-by-sid_searchIds")
+  public PageElement sidsTextArea;
+
+  @FindBy(xpath = "//input[@class='ant-checkbox-input']")
+  public CheckBox selectAllCheckbox;
+
+  @FindBy(xpath = "//input[@id='updateMAWBForm_mawb']")
+  public PageElement inputUpdateMawb;
+
+  @FindBy(xpath = "//input[@id='updateMAWBForm_vendor_id']")
+  public PageElement inputUpdateMawbVendor;
+
+  public String inputUpdateMawbOriginAirport = "//input[@id='updateMAWBForm_origin_airport_id']";
+
+  public String inputUpdateMawbDestinationAirport = "//input[@id='updateMAWBForm_destination_airport_id']";
 
   public ShipmentsTable shipmentsTable;
   public ShipmentEventsTable shipmentEventsTable;
@@ -180,7 +200,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (!isMawb) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
     } else {
-      sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
+      sendKeysAndEnter("//input[@ng-model='search' and contains(@id,'input')]", value);
     }
     pause1s();
   }
@@ -401,18 +421,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() ->
     {
       try {
-        List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
-        shipmentList.stream()
-            .filter(shipment -> shipment.getId().equals(shipmentId))
-            .findFirst()
-            .orElseThrow(
-                () -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:").isEqualTo(shipmentId);
       } catch (AssertionError ex) {
         clickEditSearchFilterButton();
         clickButtonLoadSelection();
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, "retry Inbounded Shipment Exist", 500, 10);
   }
 
   public void clearAllFilters() {
@@ -570,7 +586,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     click(XPATH_SEARCH_SHIPMENT_BUTTON);
   }
 
-  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo) {
+  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData) {
     clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
     editShipmentDialog.waitUntilVisible();
     if ("Start Hub".equals(editType)) {
@@ -595,9 +611,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       editShipmentDialog.comments.setValue(shipmentInfo.getComments());
     }
     if ("mawb".equals(editType)) {
-      editShipmentDialog.mawb.sendKeys(shipmentInfo.getMawb());
-      editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
-      return;
+      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, "");
     }
     if ("cancelled".equals(editType)) {
       editShipmentDialog.saveChanges.click();
@@ -739,7 +753,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     }
   }
 
-  public void bulkUpdateShipment(Map<String, String> resolvedMapOfData) {
+  public void bulkUpdateShipment(Map<String, String> resolvedMapOfData, List<Long> shipmentIds) {
     if (resolvedMapOfData.get("shipmentType") != null) {
       String shipmentType = resolvedMapOfData.get("shipmentType");
       bulkUpdateShipmentDialog.shipmentTypeEnable.check();
@@ -769,9 +783,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       bulkUpdateShipmentDialog.etaSelectMinute.selectValue(etaMinute);
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      String mawb = resolvedMapOfData.get("mawb");
-      bulkUpdateShipmentDialog.mawbEnable.check();
-      bulkUpdateShipmentDialog.mawbInput.sendKeys(mawb);
+      ShipmentInfo shipmentInfo = new ShipmentInfo();
+      String ids = "";
+      for(Long shipmentId : shipmentIds){
+        ids = ids + shipmentId + "\n";
+      }
+      shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1));
+      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, ids.trim());
     }
     if (resolvedMapOfData.get("comments") != null) {
       String comments = resolvedMapOfData.get("comments");
@@ -779,6 +797,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       bulkUpdateShipmentDialog.commentsInput.sendKeys(comments);
     }
     bulkUpdateShipmentDialog.applyToSelected.click();
+  }
+
+  public void bulkMawbUpdateShipment(Map<String, String> resolvedMapOfData, List<Long> shipmentIds) {
+    if (resolvedMapOfData.get("mawb") != null) {
+      ShipmentInfo shipmentInfo = new ShipmentInfo();
+      String ids = "";
+      for(Long shipmentId : shipmentIds){
+        ids = ids + shipmentId + "\n";
+      }
+      shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1));
+      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, ids.trim());
+    }
   }
 
   public void verifyShipmentToBeUpdatedData(List<Long> shipmentIds,
@@ -876,7 +906,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     confirmBulkUpdateDialog.proceed.click();
     confirmBulkUpdateDialog.waitUntilInvisible();
 
-    pause1s();
+    pause3s();
     String fieldInfo = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(": ")[0];
     assertThat("Field info is correct", fieldInfo, equalTo("Field successfully updated"));
     for (PageElement checkListExistence : shipmentToBeUpdatedTable.checkLists) {
@@ -914,8 +944,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     }
     if (resolvedMapOfData.get("mawb") != null) {
       String mawb = actualShipmentInfo.getMawb().toLowerCase();
-      assertThat("MAWB is the same", mawb,
-          equalTo(resolvedMapOfData.get("mawb").toLowerCase()));
+      String expected = "12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1);
+      assertThat("MAWB is the same", mawb, equalTo(expected));
     }
     if (resolvedMapOfData.get("comments") != null) {
       String comments = actualShipmentInfo.getComments().toLowerCase();
@@ -928,9 +958,56 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     uncheckedShipmentCheckBox.click();
     showSelectedShipmentsDropdown.click();
     showSelectedShipments.click();
+    pause3s();
 
     List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
     assertThat("Selected shipments count is true", shipmentList.size(), equalTo(3));
+  }
+
+  public void editMawbInShipmentManagement(ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData, String bulkIds) {
+    waitUntilVisibilityOfElementLocated(XPATH_SHIPMENTWEIGHTANDDIMENSION);
+    click(XPATH_SHIPMENTWEIGHTANDDIMENSION);
+    waitUntilNewWindowOrTabOpened();
+    switchToOtherWindow();
+    switchTo();
+    if(bulkIds.equals("")){
+      searchMawbByShipmentId(String.valueOf(shipmentInfo.getId()));
+    }else {
+      searchMawbByShipmentId(bulkIds);
+    }
+    updateMawbDetails(shipmentInfo, resolvedMapOfData);
+    closeShipmentDimentionAndMoveToShipmentManagement();
+  }
+
+  public void searchMawbByShipmentId(String shipmentId) {
+    waitUntilVisibilityOfElementLocated("//textarea[@id='search-by-sid_searchIds']");
+    sidsTextArea.sendKeys(shipmentId);
+    waitUntilVisibilityOfElementLocated(XPATH_SEARCHBYSIDSUBMIT);
+    click(XPATH_SEARCHBYSIDSUBMIT);
+    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
+    click("//button[@data-testid='result-error-close-button']");
+  }
+
+  public void updateMawbDetails(ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData) {
+    selectAllCheckbox.click();
+    pause2s();
+    click("//button[contains(.,'Update MAWB')]");
+    inputUpdateMawb.sendKeys(shipmentInfo.getMawb());
+    TestUtils.findElementAndClick("//input[@id='updateMAWBForm_vendor_id']", "xpath", getWebDriver());
+    sendKeysAndEnter("//input[@id='updateMAWBForm_vendor_id']", resolvedMapOfData.get("mawbVendor"));
+    TestUtils.findElementAndClick(inputUpdateMawbOriginAirport, "xpath", getWebDriver());
+    sendKeysAndEnter(inputUpdateMawbOriginAirport, resolvedMapOfData.get("MawbOrigin"));
+    TestUtils.findElementAndClick(inputUpdateMawbDestinationAirport, "xpath", getWebDriver());
+    sendKeysAndEnter(inputUpdateMawbDestinationAirport, resolvedMapOfData.get("MawbDestination"));
+    click("//button[@data-testid='mawb-update-submit-button']");
+    waitUntilVisibilityOfElementLocated("//div[@class='ant-message-notice'][last()]");
+  }
+
+  public void closeShipmentDimentionAndMoveToShipmentManagement() {
+    getWebDriver().close();
+    for (String handle1 : getWebDriver().getWindowHandles()) {
+      getWebDriver().switchTo().window(handle1).switchTo();
+    }
   }
 
   /**
@@ -941,6 +1018,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public static final String MD_VIRTUAL_REPEAT = "shipment in getTableData()";
     public static final String COLUMN_SHIPMENT_TYPE = "shipmentType";
     public static final String COLUMN_SHIPMENT_ID = "id";
+    public static final String COLUMN_USER_ID = "userId";
+    public static final String COLUMN_ENTRY_SOURCE = "entrySource";
     public static final String COLUMN_CREATION_DATE_TIME = "createdAt";
     public static final String COLUMN_TRANSIT_DATE_TIME = "transitAt";
     public static final String COLUMN_STATUS = "status";
@@ -964,6 +1043,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_SHIPMENT_TYPE, "shipment_type")
           .put(COLUMN_SHIPMENT_ID, "id")
+          .put(COLUMN_USER_ID, "user_id")
+          .put(COLUMN_ENTRY_SOURCE, "shipment_entry_source")
           .put(COLUMN_CREATION_DATE_TIME, "created_at")
           .put(COLUMN_TRANSIT_DATE_TIME, "transit_at")
           .put(COLUMN_STATUS, "status")
@@ -1247,7 +1328,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//i[.='check']")
     public List<PageElement> checkLists;
 
-    @FindBy(css = "[aria-label='Back to Shipment Management']")
+    @FindBy(css = "[aria-label='Done']")
     public Button backButton;
 
     public ShipmentToBeUpdatedTable(WebDriver webDriver, WebElement webElement) {

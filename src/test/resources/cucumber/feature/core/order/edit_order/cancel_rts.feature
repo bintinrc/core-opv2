@@ -7,7 +7,7 @@ Feature: Cancel RTS
 
   @DeleteOrArchiveRoute
   Scenario: Operator Cancel RTS from Edit Order Page (uid:d4419364-fa79-41db-8b2f-2367864463fb)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -38,7 +38,7 @@ Feature: Cancel RTS
 
   @DeleteOrArchiveRoute
   Scenario: Operator Cancel RTS For Routed Marketplace Sort Order via Edit Order Page (uid:7b95e8ec-e000-4c2b-93ae-d62063c3dd4d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
@@ -70,7 +70,7 @@ Feature: Cancel RTS
     And DB Operator verifies route_monitoring_data record
 
   Scenario: Operator Cancel RTS For Unrouted Marketplace Sort Order via Edit Order Page (uid:40ce5b0f-8d71-42f9-af4d-08b0c8c25f52)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
@@ -88,15 +88,18 @@ Feature: Cancel RTS
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
-    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | REVERT RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
   @DeleteOrArchiveRoute
   Scenario: Do not Allow Cancel RTS for Marketplace Sort Order (uid:2334f294-1959-4add-8278-a6c3b2a55e29)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
       | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
@@ -125,9 +128,12 @@ Feature: Cancel RTS
       | top                | The RTS has been cancelled |
       | waitUntilInvisible | true                       |
     Then Operator verifies RTS tag is hidden in delivery details box on Edit Order page
-    And Operator verifies Latest Event is "REVERT RTS" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | REVERT RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
