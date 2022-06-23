@@ -1,0 +1,1150 @@
+
+> Configure project :
+===============================================================================
+gradle.gradleHomeDir           : C:\Users\sha6\.gradle\wrapper\dists\gradle-5.4.1-bin\e75iq110yv9r9wt1a6619x2xm\gradle-5.4.1
+projectDir                     : C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2
+project.sourceCompatibility    : 1.8
+project.targetCompatibility    : 1.8
+sourceCompatibility            : 1.8
+targetCompatibility            : 1.8
+===============================================================================
+
+> Task :clean
+> Task :common-selenium:clean
+> Task :commons:clean
+> Task :compileJava NO-SOURCE
+> Task :processResources NO-SOURCE
+> Task :classes UP-TO-DATE
+> Task :common-selenium:compileJava
+> Task :commons:compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :compileTestJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :processTestResources
+[GRADLE_INFO] Resource is filtered and replaced using this properties file: C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2\src\test\resources/local-config.properties
+[GRADLE_INFO] Environment Configuration File: C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2\src\test\resources\local-config.properties
+[GRADLE_INFO] Default Configuration File: C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2\src\test\resources\default-config.properties
+[GRADLE_INFO] Please take note, the value from "Environment Configuration" file will hide (override) the value from "Default Configuration" file if the key is same.
+[GRADLE_INFO] Running loadFailedScenarios ...
+[GRADLE_INFO] This project is not run on Bamboo. No need to read the failed scenarios from database.
+
+> Task :testClasses
+> Task :common-selenium:processResources NO-SOURCE
+> Task :common-selenium:classes
+> Task :common-selenium:jar
+> Task :commons:processResources
+> Task :commons:classes
+> Task :commons:jar
+
+> Task :runCucumber
+[GRADLE_INFO] System Properties on runCucumber:
+{
+    "action.aware.typeAhead": "false",
+    "allure.results.directory": "build/allure-results",
+    "disableJbScreenMenuBar": "true",
+    "ide.native.launcher": "true",
+    "java.runtime.name": "OpenJDK Runtime Environment",
+    "java.runtime.version": "1.8.0_291-b10",
+    "kotlinx.coroutines.debug": "off",
+    "line.separator": "\r\n",
+    "nv.api.base.url": "https://api-qa.ninjavan.co",
+    "nv.api.system.id": "",
+    "nv.buildId": "2022-06-23_10-32-55.109",
+    "nv.db.environment": "qa",
+    "nv.db.host": "10.80.0.33",
+    "nv.db.key": null,
+    "nv.db.pass": "Jz43S0xG852hcxmG3BAbrs7YWml6x5c4",
+    "nv.db.port": "6333",
+    "nv.db.systemId": "",
+    "nv.db.user": "qa_automation",
+    "nv.dbQa.pass": "Jz43S0xG852hcxmG3BAbrs7YWml6x5c4",
+    "nv.dbQa.url": "jdbc:mysql://mysql-6333.qa.db.nv:6333/qa_automation?characterEncoding=UTF-8",
+    "nv.dbQa.user": "qa_automation",
+    "nv.defaultScenarioManager": "co.nvqa.operator_v2.cucumber.glue.ScenarioManager",
+    "nv.job.name": "@CWF and (@RT or @ShouldAlwaysRun)",
+    "nv.reportHtmlOutputDir": "build/reports/cucumber-junit/htmloutput",
+    "nv.resourceId": 1,
+    "nv.runParallel": false,
+    "nv.selenium.driver": "CHROME",
+    "nv.selenium.driverVersion": "102",
+    "nv.selenium.headless": "False",
+    "nv.system.id": "sg",
+    "nv.testOrderOutputDir": "build/reports/test-reports",
+    "os.arch": "amd64",
+    "os.name": "Windows 10",
+    "os.version": "10.0",
+    "path.separator": ";",
+    "splash": "true",
+    "user.dir": "C:\\Users\\sha6\\OneDrive - DXC Production\\GIT\\operator-v2",
+    "user.home": "C:\\Users\\sha6",
+    "user.name": "sha6",
+    "user.script": "",
+    "user.timezone": "Asia/Bangkok",
+    "winp.folder.preferred": "C:\\Users\\sha6\\AppData\\Local\\JetBrains\\IdeaIC2021.3/tmp"
+}
+[GRADLE_INFO] JavaExec args on runCucumber:
+[
+  --monochrome,
+  --snippets, camelcase,
+  --plugin, pretty,
+  --plugin, junit:build/reports/cucumber-junit/cucumber.xml,
+  --plugin, co.nvqa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed.txt,
+  --plugin, co.nvqa.commons.cucumber.formatter.CustomNvReporter,
+  --plugin, io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm,
+  --plugin, co.nvqa.commons.cucumber.formatter.NvReportPortalReporter,
+  --glue, co.nvqa.operator_v2.cucumber.glue,
+  --glue, classpath:co.nvqa.commons.cucumber.glue,
+  --glue, classpath:co.nvqa.common_selenium.cucumber.glue,
+  --tags, @CWF and (@RT or @ShouldAlwaysRun),
+  C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2\build\resources\test/cucumber/feature
+]
+Jun 23, 2022 9:34:01 AM io.cucumber.core.plugin.PluginFactory convert
+SEVERE: The co.nvqa.commons.cucumber.formatter.FailedReporter plugin class takes a java.lang.Appendable in its constructor, which is deprecated and will be removed in the next major release. It should be changed to accept one of java.lang.String, java.io.File, java.net.URI, java.net.URL, java.io.OutputStream
+09:34:01,386 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+09:34:01,386 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/logback.xml]
+09:34:01,386 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+09:34:01,386 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/commons/build/libs/commons-2.0.10.jar!/logback.xml]
+09:34:01,386 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/logback.xml]
+09:34:01,475 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+09:34:01,478 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+09:34:01,488 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+09:34:01,498 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+09:34:01,546 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [com.epam.reportportal.logback.appender.ReportPortalAppender]
+09:34:01,548 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [RP]
+09:34:01,548 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [binary_data_logger] to TRACE
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [binary_data_logger] to false
+09:34:01,548 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [RP] to Logger[binary_data_logger]
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.epam.reportportal.service] to WARN
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.epam.reportportal.utils] to WARN
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [co.nvqa.commons.client.BaseApiClient.NvRequestLogger] to DEBUG
+09:34:01,548 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.apache] to WARN
+09:34:01,556 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [httpclient] to WARN
+09:34:01,556 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [io.restassured.internal] to WARN
+09:34:01,556 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
+09:34:01,556 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [RP] to Logger[ROOT]
+09:34:01,556 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+09:34:01,556 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+09:34:01,556 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@3d921e20 - Registering current configuration as safe fallback point
+
+09:34:01.680 INFO  c.n.c.u.StandardTestConstants - main - Environment Configuration File: /C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/local-config.properties
+09:34:01.852 INFO  c.n.c.u.StandardTestConstants - main - Default Configuration File: /C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/default-config.properties
+09:34:01.852 INFO  c.n.c.u.StandardTestConstants - main - Please take note, the value from "Environment Configuration" file will hide (override) the value from "Default Configuration" file if the key is same.
+09:34:01.931 INFO  c.n.c.u.StandardTestConstants - main - db user: qa_automation
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - db pass: Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/events_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/hub_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/billing_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/lighthouse_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/ticketing_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/control_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/core_qa_sg?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/addressing_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/shipper_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/route_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/dp_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/dpms_qa_sg?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/dp_analytics_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/notifications_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/driver_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/auth_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/overwatch_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/direct_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/direct_order_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.933 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/links_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/lighthouse_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/3pl_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/xb_ops_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/ocreate_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/script_engine_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/sns_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/dwh_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/sort_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/epi_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/loyalty_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/vault_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/wallet_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/notifications_v2_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/aaa_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/dash_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/station_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://10.80.0.33:6333/sort_vendor_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/sort_search_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:01.941 INFO  c.n.c.u.StandardTestConstants - main - prepare Db Url: jdbc:mysql://tidb-4000.qa.db.nv:4000/fdm_qa_gl?characterEncoding=UTF-8&useSSL=false
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_RUN_TEST_ID (default): 563047
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_PROJECT_ID (default): 208364
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_ENV (default): Default
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_ACCESS_TOKEN (default): 
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_CLIENT_ID (default): 
+09:34:02.438 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_UID (default): 
+09:34:02.446 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_CUCUMBER_REPORT_USE_API (default): false
+09:34:02.446 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - BUILD_RESULT_KEY (default): default-0
+09:34:02.446 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - BAMBOO_SHORT_JOB_NAME (default): DEFAULT
+09:34:02.446 INFO  c.n.c.c.Env - main - [QA ENV VAR CONFIG] - QA_TAGS (default): 
+09:34:02.813 WARN  c.e.r.s.ReportPortal - main - Base url for Report Portal server is not set!
+09:34:17.213 INFO  c.n.c.c.g.NvModule - main - ==================== Configure Custom Guice NvModule ====================
+Default Scenario Manager = co.nvqa.operator_v2.cucumber.glue.ScenarioManager
+Bind "class co.nvqa.commons.cucumber.StandardScenarioManager" to "class co.nvqa.operator_v2.cucumber.glue.ScenarioManager".
+Bind "class co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager" to "class co.nvqa.operator_v2.cucumber.glue.ScenarioManager".
+Class with name "co.nvqa.common_appium.cucumber.glue.CommonAppiumScenarioManager" not found in classpath. NvModule will ignore this ScenarioManager.
+=========================================================================
+
+09:34:21.587 WARN  c.n.c.s.TestCaseService - main - cucumber report use api: FALSE
+
+@MiddleMile @Hub @InterHub @MovementSchedules @StationsAddMultipleSchedule @CWF @LaunchBrowser @ShouldAlwaysRun
+Scenario: Login to Operator Portal V2                                                # build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:5
+09:34:24.749 INFO  c.n.c.c.g.StandardCommonSeleniumSteps - main - Launching browser.
+09:34:24.756 INFO  c.n.c.u.CommonSeleniumTestConstants - main - Using SELENIUM_CHROME_BINARY_PATH from "System Environment" variable. [bamboo_capability_system_builder_command_google_chrome = 'null']
+09:34:24.757 INFO  c.n.c.u.CommonSeleniumTestConstants - main - Selenium Chrome Binary Path = null
+09:34:24.923 DEBUG i.g.b.w.WebDriverManager - main - Driver chromedriver 102 found in cache
+09:34:24.924 INFO  i.g.b.w.WebDriverManager - main - Exporting webdriver.chrome.driver as C:\Users\sha6\.m2\repository\webdriver\chromedriver\win32\102\chromedriver.exe
+Starting ChromeDriver 102.0.5005.61 (0e59bcc00cc4985ce39ad31c150065f159d95ad3-refs/branch-heads/5005@{#819}) on port 44533
+Only local connections are allowed.
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+ChromeDriver was started successfully.
+Jun 23, 2022 10:34:28 AM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFO: Detected dialect: W3C
+09:34:34.782 INFO  c.n.o.s.p.LoginPage - main - FORCE LOGIN BY INJECTING COOKIES TO BROWSER
+09:34:34.783 INFO  c.n.o.s.p.LoginPage - main - ninja_access_token = 4C3Zc2CggCrlyPaGuN88uxv8fCpUP0ED
+09:34:34.784 INFO  c.n.o.s.p.LoginPage - main - user = %7B%22thirdPartyId%22%3A%22102080157553112167908%22%2C%22firstName%22%3A%22QA%22%2C%22lastName%22%3A%22Ninja%22%2C%22email%22%3A%22qa%40ninjavan.co%22%2C%22timezone%22%3A%22Asia%2FSingapore%22%2C%22language%22%3A%22en%22%2C%22serviceId%22%3A%22sg%2Cid%2Cth%2Cvn%2Cmy%2Cph%22%2C%22cookieDomain%22%3A%22.ninjavan.co%22%7D
+09:34:38.208 WARN  c.n.c.p.SimplePage - main - Failed to find the element by XPath. XPath: //button[@aria-label='login.sign-in-button']
+  Given Operator login with username = "qa@ninjavan.co" and password = "Ninjitsu@89" # co.nvqa.operator_v2.cucumber.glue.LoginSteps.loginToOperatorV2(java.lang.String,java.lang.String)
+09:34:42.545 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:42.550 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Authenticate
+==================== REQUEST ====================
+Request Name: Authenticate
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/aaa/2.0/oauth/access_token
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "client_id": "AUTOMATION",
+    "client_secret": "95h]BWjRYg27og4gt5n_4T8D5L1v2u",
+    "grant_type": "client_credentials"
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : Authenticate
+Execution Time : 2s 
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 529
+Connection: keep-alive
+x-nv-request-id: 54437bdb-6e6f-40f2-addb-63c82a97eadb
+date: Thu, 23 Jun 2022 02:34:32 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{"access_token":"4C3Zc2CggCrlyPaGuN88uxv8fCpUP0ED","token_type":"bearer","expires":1655994873,"expires_in":43200,"oauthClient":{"accountStatus":"","active":true,"clientId":"AUTOMATION","createdAt":"2020-06-26T09:30:41Z","deletedAt":null,"emailId":"qa@ninjavan.co","extraData":{"language":"en","timezone":"","expirationPeriod":"43200"},"firstName":"AUTOMATION","grantType":"CLIENT_CREDENTIALS","id":397,"isHashed":"YES","lastName":"EDITED","ownerInfo":[],"updatedAt":"2020-06-26T09:30:46Z"},"mfa":{"created":false,"active":false}}
+==================================================
+
+09:34:42.631 INFO  c.n.c.u.CsvUtils - main - Parent folder C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2/build/reports/test-reports/TEST_ORDER.csv created.
+09:34:42.636 INFO  c.n.c.u.CsvUtils - main - File C:\Users\sha6\OneDrive - DXC Production\GIT\operator-v2/build/reports/test-reports/TEST_ORDER.csv created.
+09:34:42.645 INFO  c.n.c.c.g.StandardCommonSteps - main - Assertion errors for scenario: Login to Operator Portal V2
+09:34:42.646 WARN  c.n.c.s.TestCaseService - main - cucumber report use api: FALSE
+
+@MiddleMile @Hub @InterHub @MovementSchedules @StationsAddMultipleSchedule @CWF @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+Scenario: Create Station Schedule - Create with Single Driver (uid:68c0da7a-14dc-45e7-8068-40bba8d570d6)              # build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:9
+09:34:46.877 INFO  c.n.o.s.p.MainPage - Thread-3 - clickNavigation: Current URL = [https://operatorv2-qa.ninjavan.co/#/sg/blocked-dates] - Expected URL Ends With = [blocked-dates]
+
+    Embedding Screenshot [image/png 112784 bytes]
+
+  Given Operator go to menu Shipper Support -> Blocked Dates                                                          # co.nvqa.operator_v2.cucumber.glue.MainSteps.operatorGoToMenuWithoutQuote(java.lang.String,java.lang.String)
+09:34:47.299 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:48.331 INFO  c.n.c.c.g.a.StandardApiHubClientSteps - main - Created hub with id 437863 and name HUB DO NOT USE 20220623103447339
+  And API Operator creates new Hub using data below:                                                                  # co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps.apiOperatorCreatesNewHubUsingDataBelow(java.util.Map<java.lang.String, java.lang.String>)
+09:34:48.347 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:48.347 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Authenticate
+==================== REQUEST ====================
+Request Name: Authenticate
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/aaa/2.0/oauth/access_token
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "client_id": "AUTOMATION",
+    "client_secret": "95h]BWjRYg27og4gt5n_4T8D5L1v2u",
+    "grant_type": "client_credentials"
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : Authenticate
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 529
+Connection: keep-alive
+x-nv-request-id: 4e253646-fd91-4019-b2ee-d9b981a306a7
+date: Thu, 23 Jun 2022 02:34:46 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{"access_token":"PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73","token_type":"bearer","expires":1655994887,"expires_in":43200,"oauthClient":{"accountStatus":"","active":true,"clientId":"AUTOMATION","createdAt":"2020-06-26T09:30:41Z","deletedAt":null,"emailId":"qa@ninjavan.co","extraData":{"language":"en","timezone":"","expirationPeriod":"43200"},"firstName":"AUTOMATION","grantType":"CLIENT_CREDENTIALS","id":397,"isHashed":"YES","lastName":"EDITED","ownerInfo":[],"updatedAt":"2020-06-26T09:30:46Z"},"mfa":{"created":false,"active":false}}
+==================================================
+
+09:34:48.347 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Hub Client - Create New hub
+==================== REQUEST ====================
+Request Name: Hub Client - Create New hub
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/sort/2.0/hubs
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "created_at": "2022-06-23T09:34:47Z",
+    "name": "HUB DO NOT USE 20220623103447339",
+    "short_name": "Hub DNS 20220623103447339",
+    "country": "SG",
+    "city": "Sg",
+    "latitude": 1.3691595,
+    "longitude": 103.9087363,
+    "facility_type": "CROSSDOCK",
+    "region": "JKB",
+    "facility_type_display": "Hub - Crossdock"
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Create New hub
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 344
+Connection: keep-alive
+x-b3-spanid: e85de7acc6c91831
+x-b3-sampled: 0
+x-b3-traceid: 6af1bf5c34146c7015911e1166d13a89
+x-request-id: 8497e75e-9f8c-4f67-83c6-53b30af082b1
+x-nv-system-id: sg
+x-nv-request-id: 882270fa-6ad5-4dd3-be65-7b586f28a6a1
+x-b3-parentspanid: 15911e1166d13a89
+date: Thu, 23 Jun 2022 02:34:47 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{
+    "id": 437863,
+    "name": "HUB DO NOT USE 20220623103447339",
+    "short_name": "Hub DNS 20220623103447339",
+    "country": "SG",
+    "city": "Sg",
+    "latitude": 1.3691595,
+    "longitude": 103.9087363,
+    "region": "JKB",
+    "area": "",
+    "active": true,
+    "sort_hub": false,
+    "facility_type": "CROSSDOCK",
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "virtual_hub": false,
+    "parent_hub": null
+}
+==================================================
+
+09:34:48.777 INFO  c.n.c.c.g.a.StandardApiHubClientSteps - main - Created hub with id 437864 and name HUB DO NOT USE 20220623103448347
+  And API Operator creates new Hub using data below:                                                                  # co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps.apiOperatorCreatesNewHubUsingDataBelow(java.util.Map<java.lang.String, java.lang.String>)
+09:34:48.785 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:48.787 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Hub Client - Create New hub
+==================== REQUEST ====================
+Request Name: Hub Client - Create New hub
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/sort/2.0/hubs
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "created_at": "2022-06-23T09:34:48Z",
+    "name": "HUB DO NOT USE 20220623103448347",
+    "short_name": "Hub DNS 20220623103448347",
+    "country": "SG",
+    "city": "Sg",
+    "latitude": 1.3691595,
+    "longitude": 103.9087363,
+    "facility_type": "STATION",
+    "region": "JKB",
+    "facility_type_display": "Station"
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Create New hub
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 342
+Connection: keep-alive
+x-b3-spanid: 387b9e48148803b1
+x-b3-sampled: 0
+x-b3-traceid: d3df0d50f8b7cd465dd570d784acf6be
+x-request-id: 826f7b8a-a114-4866-83ec-ce6f3682d061
+x-nv-system-id: sg
+x-nv-request-id: 484629ca-b6aa-44c8-a531-5bad7cfbfab3
+x-b3-parentspanid: 5dd570d784acf6be
+date: Thu, 23 Jun 2022 02:34:47 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{
+    "id": 437864,
+    "name": "HUB DO NOT USE 20220623103448347",
+    "short_name": "Hub DNS 20220623103448347",
+    "country": "SG",
+    "city": "Sg",
+    "latitude": 1.3691595,
+    "longitude": 103.9087363,
+    "region": "JKB",
+    "area": "",
+    "active": true,
+    "sort_hub": false,
+    "facility_type": "STATION",
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "virtual_hub": false,
+    "parent_hub": null
+}
+==================================================
+
+  And API Operator reloads hubs cache                                                                                 # co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps.apiOperatorReloadsHubsCache()
+09:34:49.495 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:49.503 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Hub Client - Reload Hubs
+==================== REQUEST ====================
+Request Name: Hub Client - Reload Hubs
+Request method:	GET
+Request URI:	https://api-qa.ninjavan.co/sg/sort/hubs/reload
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Reload Hubs
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Length: 0
+Connection: keep-alive
+x-b3-spanid: 8c09168c8ece553e
+x-b3-sampled: 0
+x-b3-traceid: 6a290b9e10fe9bed3832c53db97431a2
+x-request-id: 6a98de97-486b-4e66-93f6-973c1f915659
+x-nv-system-id: sg
+x-nv-request-id: 4d346201-9abc-4bcc-88f1-59e8bc012084
+x-b3-parentspanid: 3832c53db97431a2
+date: Thu, 23 Jun 2022 02:34:48 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+==================================================
+
+  And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}" # co.nvqa.commons.cucumber.glue.api.StandardApiHubClientSteps.apiOperatorCreateRelationFor(java.lang.String,java.lang.String)
+09:34:49.934 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:49.934 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Hub Client - Assign crossdock-station relation
+==================== REQUEST ====================
+Request Name: Hub Client - Assign crossdock-station relation
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/hub/1.0/hub-crossdock-details
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "hub_id": 437864,
+    "hub_system_id": "sg",
+    "crossdock_hub_system_id": "sg",
+    "crossdock_hub_id": 437863
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Assign crossdock-station relation
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 210
+Connection: keep-alive
+x-b3-spanid: 6e7a39d14d7ddbe1
+x-b3-sampled: 0
+x-b3-traceid: 4231de85a11b695cafa124eeae060594
+x-request-id: bd184345-1512-4757-9e90-b09412317ecc
+x-nv-system-id: sg
+x-nv-request-id: 42315d76-1d7d-421c-8a4a-98a2f71dbc9a
+x-b3-parentspanid: afa124eeae060594
+date: Thu, 23 Jun 2022 02:34:48 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{
+    "id": 1641099,
+    "hub_id": 437864,
+    "hub_system_id": "sg",
+    "hub_name": "HUB DO NOT USE 20220623103448347",
+    "crossdock_hub_id": 437863,
+    "crossdock_hub_system_id": "sg",
+    "crossdock_hub_name": "HUB DO NOT USE 20220623103447339"
+}
+==================================================
+
+  And API Operator create 1 new Driver using data below:                                                              # co.nvqa.operator_v2.cucumber.glue.ApiOperatorPortalExtSteps.apiOperatorCreateMultiNewDriverUsingDataBelow(java.lang.Integer,java.util.Map<java.lang.String, java.lang.String>)
+09:34:51.646 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:34:51.648 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+DRIVER CLIENT - CREATE DRIVER
+==================== REQUEST ====================
+Request Name: DRIVER CLIENT - CREATE DRIVER
+Request method:	POST
+Request URI:	https://api-qa.ninjavan.co/sg/driver/2.0/drivers
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "driver": {
+        "firstName": "Driver-2206231034499",
+        "lastName": "",
+        "licenseNumber": "D2206231034499",
+        "licenseExpiryDate": "2022-06-26",
+        "driverType": "Middle-Mile-Driver",
+        "availability": false,
+        "username": "D2206231034499",
+        "password": "password",
+        "comments": "This driver is created by \"Automation Test\" for testing purpose.",
+        "hub": "OPV2-SG-HUB",
+        "hubId": 381,
+        "contacts": [
+            {
+                "active": true,
+                "type": "Mobile Phone",
+                "details": "64986498"
+            }
+        ],
+        "employmentStartDate": "2022-06-23",
+        "employmentEndDate": "2022-06-26",
+        "employmentType": "Full-time / Contract",
+        "licenseType": "Class 5",
+        "mobilePhoneContact": {
+            "active": true,
+            "type": "Mobile Phone",
+            "details": "64986498"
+        },
+        "mobilePhone": "64986498"
+    }
+}
+=================================================
+==================== RESPONSE ====================
+Response Name  : DRIVER CLIENT - CREATE DRIVER
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 79
+Connection: keep-alive
+x-b3-spanid: a7676b36173f7323
+x-b3-sampled: 0
+x-b3-traceid: 1bd271255a3ea93130d576d619668b82
+x-request-id: d50297e3-8e2a-46d1-9d9b-98bf5e0b22a9
+x-nv-system-id: sg
+x-nv-request-id: 1f831425-c3b0-42ea-9602-232219d46738
+x-b3-parentspanid: 30d576d619668b82
+date: Thu, 23 Jun 2022 02:34:49 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{
+    "nv": true,
+    "data": {
+        "uuid": "e82c0881-6fc5-4df2-b864-dc29bda16676",
+        "id": 1163620
+    }
+}
+==================================================
+
+09:34:54.953 INFO  c.n.o.s.p.MainPage - Thread-4 - clickNavigation: Current URL = [https://operatorv2-qa.ninjavan.co/#/sg/movement-schedules] - Expected URL Ends With = [movement-schedules]
+
+    Embedding Screenshot [image/png 77894 bytes]
+
+  When Operator go to menu Inter-Hub -> Movement Schedules                                                            # co.nvqa.operator_v2.cucumber.glue.MainSteps.operatorGoToMenuWithoutQuote(java.lang.String,java.lang.String)
+09:34:55.178 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+  And Movement Management page is loaded                                                                              # co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.movementManagementPageIsLoaded()
+09:35:06.026 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+  When Operator select "Stations" tab on Movement Management page                                                     # co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorSelectTabOnMovementManagementPage(java.lang.String)
+09:35:06.682 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+Load Schedules Button is disable
+
+  And Operator load schedules on Movement Management page using data below:                                           # co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorLoadSchedulesOnMovementManagementPageUsingDataBelow(java.util.Map<java.lang.String, java.lang.String>)
+09:35:17.463 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+Load Schedules button is enable and clickable
+
+09:35:28.250 INFO  c.n.c.u.NvAssertions - main - Assert true: duration days input is wrong
+09:35:28.256 INFO  c.n.c.u.NvLogger - main - [success] assertTrue with message = [duration days input is wrong]
+09:35:46.245 ERROR c.n.o.c.g.MovementManagementSteps - main - no such element: Unable to locate element: {"method":"xpath","selector":"//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'D2206231034499')]"}
+  (Session info: chrome=102.0.5005.115)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+*** Element info: {Using=xpath, value=//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'D2206231034499')]}
+09:35:46.245 INFO  c.n.o.c.g.MovementManagementSteps - main - Searched element is not found, retrying after 2 seconds...
+09:36:18.354 ERROR c.n.o.c.g.MovementManagementSteps - main - no such element: Unable to locate element: {"method":"xpath","selector":"//button[.='Add Schedule']"}
+  (Session info: chrome=102.0.5005.115)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+*** Element info: {Using=xpath, value=//button[.='Add Schedule']}
+09:36:18.355 INFO  c.n.o.c.g.MovementManagementSteps - main - Searched element is not found, retrying after 2 seconds...
+09:36:50.384 ERROR c.n.o.c.g.MovementManagementSteps - main - no such element: Unable to locate element: {"method":"xpath","selector":"//button[.='Add Schedule']"}
+  (Session info: chrome=102.0.5005.115)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+*** Element info: {Using=xpath, value=//button[.='Add Schedule']}
+09:36:50.384 INFO  c.n.o.c.g.MovementManagementSteps - main - Searched element is not found, retrying after 2 seconds...
+  And Operator adds new Station Movement Schedule on Movement Management page using data below:                       # co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(java.util.Map<java.lang.String, java.lang.String>)
+      org.openqa.selenium.NoSuchElementException: class org.openqa.selenium.NoSuchElementException still occurred after trying 3 times.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at co.nvqa.commons.util.NvRetry.buildThrowable(NvRetry.java:577)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:560)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:223)
+	at co.nvqa.commons.util.NvRetry.retryIfRuntimeExceptionOccurred(NvRetry.java:36)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(MovementManagementSteps.java:250)
+	at ?.Operator adds new Station Movement Schedule on Movement Management page using data below:(file:///C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:40)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//label[starts-with(.,'Station')]"}
+  (Session info: chrome=102.0.5005.115)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+*** Element info: {Using=xpath, value=//label[starts-with(.,'Station')]}
+	at sun.reflect.GeneratedConstructorAccessor49.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at org.openqa.selenium.support.pagefactory.DefaultElementLocator.findElement(DefaultElementLocator.java:69)
+	at co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator$LocatingElementHandler.invoke(CustomFieldDecorator.java:205)
+	at com.sun.proxy.$Proxy45.getTagName(Unknown Source)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.getWebElement(PageElement.java:137)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.scrollIntoView(PageElement.java:173)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.scrollIntoView(PageElement.java:169)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.click(PageElement.java:63)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.lambda$operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow$8(MovementManagementSteps.java:294)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:499)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:223)
+	at co.nvqa.commons.util.NvRetry.retryIfRuntimeExceptionOccurred(NvRetry.java:36)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(MovementManagementSteps.java:250)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:92)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:64)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:104)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:73)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$5(Runtime.java:110)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:117)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$6(Runtime.java:110)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at io.cucumber.core.runtime.Runtime$SameThreadExecutorService.execute(Runtime.java:233)
+	at java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:112)
+	at io.cucumber.core.runtime.Runtime.lambda$run$2(Runtime.java:86)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.SliceOps$1$1.accept(SliceOps.java:204)
+	at java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1361)
+	at java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:126)
+	at java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:499)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:486)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at io.cucumber.core.runtime.Runtime.run(Runtime.java:87)
+	at io.cucumber.core.cli.Main.run(Main.java:92)
+	at io.cucumber.core.cli.Main.main(Main.java:34)
+
+09:37:07.443 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+  Then Operator verify all station schedules are correct from UI                                                      # co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorVerifyAllStationSchedulesAreCorrectFromUI()
+09:37:07.474 WARN  c.n.c.c.g.a.StandardApiHubClientHooks - main - Archiving Hub: 437863
+09:37:07.991 WARN  c.n.c.c.g.a.StandardApiHubClientHooks - main - Archiving Hub: 437864
+
+    Embedding Screenshot [image/png 83096 bytes]
+
+09:37:08.656 WARN  c.n.c.c.g.CommonSeleniumScenarioManager - main - Failed print browser log. Cause: invalid argument: log type 'performance' not found
+  (Session info: chrome=102.0.5005.115)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+org.openqa.selenium.InvalidArgumentException: invalid argument: log type 'performance' not found
+  (Session info: chrome=102.0.5005.115)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteExecuteMethod.execute(RemoteExecuteMethod.java:35)
+	at org.openqa.selenium.remote.RemoteLogs.getRemoteEntries(RemoteLogs.java:81)
+	at org.openqa.selenium.remote.RemoteLogs.get(RemoteLogs.java:77)
+	at co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager.printBrowserNetwork(CommonSeleniumScenarioManager.java:69)
+	at co.nvqa.common_selenium.cucumber.glue.StandardCommonSeleniumSteps.teardown(StandardCommonSeleniumSteps.java:68)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaHookDefinition.execute(JavaHookDefinition.java:59)
+	at io.cucumber.core.runner.CoreHookDefinition.execute(CoreHookDefinition.java:46)
+	at io.cucumber.core.runner.HookDefinitionMatch.runStep(HookDefinitionMatch.java:21)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:92)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:64)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:110)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:73)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$5(Runtime.java:110)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:117)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$6(Runtime.java:110)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at io.cucumber.core.runtime.Runtime$SameThreadExecutorService.execute(Runtime.java:233)
+	at java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:112)
+	at io.cucumber.core.runtime.Runtime.lambda$run$2(Runtime.java:86)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.SliceOps$1$1.accept(SliceOps.java:204)
+	at java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1361)
+	at java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:126)
+	at java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:499)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:486)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at io.cucumber.core.runtime.Runtime.run(Runtime.java:87)
+	at io.cucumber.core.cli.Main.run(Main.java:92)
+	at io.cucumber.core.cli.Main.main(Main.java:34)
+09:37:08.656 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:34:57+0800 [WARNING]
+09:37:08.656 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:34:57+0800 [WARNING]
+09:37:08.671 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:35:48+0800 [WARNING]
+09:37:08.671 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:35:49+0800 [WARNING]
+09:37:08.671 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:36:20+0800 [WARNING]
+09:37:08.671 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:36:20+0800 [WARNING]
+09:37:08.687 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:36:52+0800 [WARNING]
+09:37:08.687 INFO  c.n.c.c.g.CommonSeleniumScenarioManager - main - CONSOLE LOG - 23-Jun-2022 10:36:52+0800 [WARNING]
+09:37:09.215 DEBUG c.n.c.c.g.StandardCommonSeleniumSteps - main - Last HTML page source: java.io.ByteArrayInputStream@13047d3d
+09:37:09.231 INFO  c.n.c.c.g.StandardApiOperatorPortalHooks - main - Deleting Driver with ID : 1163620
+09:37:09.733 INFO  c.n.c.c.g.StandardCommonSteps - main - Assertion errors for scenario: Create Station Schedule - Create with Single Driver (uid:68c0da7a-14dc-45e7-8068-40bba8d570d6)
+09:37:09.733 INFO  c.n.c.c.g.StandardDatabaseHooks - main - =============== DELETING HUBS IN SORT VIA DATABASE ===============
+09:37:09.733 INFO  c.n.c.c.g.StandardDatabaseHooks - main - Deleting hub in sort with Name: HUB DO NOT USE 20220623103448347
+09:37:09.733 INFO  c.n.c.d.SortJdbc - main - SQL: DELETE FROM hubs WHERE name = 'HUB DO NOT USE 20220623103448347'
+09:37:09.748 INFO  c.n.c.s.j.JdbcHelper - main - JDBC Driver Manager Login Timeout: 5s
+09:37:10.536 INFO  c.n.c.d.SortJdbc - main - Affected Row: 1
+09:37:10.536 INFO  c.n.c.c.g.StandardDatabaseHooks - main - Deleting hub in sort with Name: HUB DO NOT USE 20220623103447339
+09:37:10.536 INFO  c.n.c.d.SortJdbc - main - SQL: DELETE FROM hubs WHERE name = 'HUB DO NOT USE 20220623103447339'
+09:37:11.137 INFO  c.n.c.d.SortJdbc - main - Affected Row: 1
+09:37:11.137 INFO  c.n.c.c.g.StandardDatabaseHooks - main - ==================================================
+09:37:11.137 WARN  c.n.c.s.TestCaseService - main - cucumber report use api: FALSE
+
+@MiddleMile @Hub @InterHub @MovementSchedules @StationsAddMultipleSchedule @CWF @KillBrowser @ShouldAlwaysRun
+Scenario: Kill Browser # build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:733
+  Given no-op          # co.nvqa.commons.cucumber.glue.StandardCommonSteps.noOperation()
+09:37:11.375 INFO  c.n.c.c.g.StandardCommonSteps - main - Passed Assertions:
+
+09:37:11.385 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Hub Client - Disable hub
+==================== REQUEST ====================
+Request Name: Hub Client - Disable hub
+Request method:	DELETE
+Request URI:	https://api-qa.ninjavan.co/sg/sort/2.0/hubs/437863
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	hubId=437863
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Disable hub
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 401
+Connection: keep-alive
+x-b3-spanid: 2319b12194390516
+x-b3-sampled: 0
+x-b3-traceid: bd05923c04143b6e50b17b2c29b3979a
+x-request-id: 19249325-64cf-44c4-86b1-8f0a895ccc2e
+x-nv-system-id: sg
+x-nv-request-id: 230b9a9d-686f-4cf6-9c12-cfa1797658eb
+x-b3-parentspanid: 50b17b2c29b3979a
+date: Thu, 23 Jun 2022 02:37:06 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+[
+    {
+        "id": 437863,
+        "name": "HUB DO NOT USE 20220623103447339",
+        "short_name": "Hub DNS 20220623103447339",
+        "country": "SG",
+        "city": "Sg",
+        "latitude": 1.3691595,
+        "longitude": 103.9087363,
+        "region": "JKB",
+        "area": "",
+        "active": false,
+        "sort_hub": false,
+        "facility_type": "CROSSDOCK",
+        "created_at": "2022-06-23T02:34:47Z",
+        "updated_at": "2022-06-23T02:34:47Z",
+        "deleted_at": "2022-06-23T02:37:07Z",
+        "virtual_hub": false,
+        "parent_hub": null
+    }
+]
+==================================================
+==================== REQUEST ====================
+Request Name: Hub Client - Disable hub
+Request method:	DELETE
+Request URI:	https://api-qa.ninjavan.co/sg/sort/2.0/hubs/437864
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	hubId=437864
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+=================================================
+==================== RESPONSE ====================
+Response Name  : Hub Client - Disable hub
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 399
+Connection: keep-alive
+x-b3-spanid: efa52c62ff5c5df1
+x-b3-sampled: 0
+x-b3-traceid: 4a0e45de60e4e134b5848904dc76194b
+x-request-id: 6344a8bf-943e-4416-b4b4-53b9a04324d9
+x-nv-system-id: sg
+x-nv-request-id: 96d07a24-4df3-4785-9d6d-937d29e2225c
+x-b3-parentspanid: b5848904dc76194b
+date: Thu, 23 Jun 2022 02:37:07 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+[
+    {
+        "id": 437864,
+        "name": "HUB DO NOT USE 20220623103448347",
+        "short_name": "Hub DNS 20220623103448347",
+        "country": "SG",
+        "city": "Sg",
+        "latitude": 1.3691595,
+        "longitude": 103.9087363,
+        "region": "JKB",
+        "area": "",
+        "active": false,
+        "sort_hub": false,
+        "facility_type": "STATION",
+        "created_at": "2022-06-23T02:34:47Z",
+        "updated_at": "2022-06-23T02:34:47Z",
+        "deleted_at": "2022-06-23T02:37:07Z",
+        "virtual_hub": false,
+        "parent_hub": null
+    }
+]
+==================================================
+
+09:37:11.385 DEBUG c.n.c.c.BaseApiClient$NvRequestLogger - main - 
+Delete Driver
+==================== REQUEST ====================
+Request Name: Delete Driver
+Request method:	DELETE
+Request URI:	https://api-qa.ninjavan.co/sg/driver/2.1/drivers/1163620
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	driverId=1163620
+Headers:		timezone=Asia/Singapore
+				Authorization=Bearer PNsKQdD06b2AmRcLqfOAoVsOK6jP9r73
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+=================================================
+==================== RESPONSE ====================
+Response Name  : Delete Driver
+Execution Time : 0s 
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 2
+Connection: keep-alive
+x-b3-spanid: 7e0ad35b0dcfb76b
+x-b3-sampled: 0
+x-b3-traceid: 94ade21395f1a4973a2e11ad13f0d84b
+x-request-id: 10b82445-4507-4783-9f65-fdf3c81597ec
+x-nv-system-id: sg
+x-nv-request-id: dc045414-d252-4b29-afba-9c7a53e79815
+x-b3-parentspanid: 3a2e11ad13f0d84b
+date: Thu, 23 Jun 2022 02:37:08 GMT
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: x-nv-total-count,ETag,If-None-Match,Date,x-nv-request-id,Content-Disposition
+
+{
+    
+}
+==================================================
+
+09:37:11.395 INFO  c.n.c.c.g.StandardCommonSteps - main - Assertion errors for scenario: Kill Browser
+09:37:11.395 WARN  c.n.c.s.TestCaseService - main - cucumber report use api: FALSE
+09:37:11.395 INFO  c.n.c.c.g.StandardCommonSeleniumSteps - main - Kill browser.
+09:37:11.395 INFO  c.n.c.u.SeleniumUtils - main - Closing WebDriver...
+09:37:11.624 INFO  c.n.c.u.SeleniumUtils - main - WebDriver is closed.
+09:37:11.624 INFO  c.n.c.u.SeleniumUtils - main - Quiting WebDriver...
+09:37:12.400 INFO  c.n.c.u.SeleniumUtils - main - WebDriver is quit.
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - ========================================
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - Bamboo Build Result Key = 
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - DB Driver               = com.mysql.cj.jdbc.Driver
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - DB URL QA Automation    = jdbc:mysql://mysql-6333.qa.db.nv:6333/qa_automation?characterEncoding=UTF-8
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - DB QA User              = qa_automation
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - DB QA Pass              = Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
+09:37:12.500 INFO  c.n.c.c.f.FailedReporter - main - ========================================
+09:37:12.500 WARN  c.n.c.c.f.FailedReporter - main - Cannot write failed scenarios on each feature files to database. To be able to write the failed scenarios on each feature files, you need to run the automation on Bamboo and set JDBC properties.
+
+Failed scenarios:
+file:///C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:9 # Create Station Schedule - Create with Single Driver (uid:68c0da7a-14dc-45e7-8068-40bba8d570d6)
+
+3 Scenarios (1 failed, 2 passed)
+14 Steps (1 failed, 1 skipped, 12 passed)
+3m9.393s
+
+
+org.openqa.selenium.NoSuchElementException: class org.openqa.selenium.NoSuchElementException still occurred after trying 3 times.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at co.nvqa.commons.util.NvRetry.buildThrowable(NvRetry.java:577)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:560)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:223)
+	at co.nvqa.commons.util.NvRetry.retryIfRuntimeExceptionOccurred(NvRetry.java:36)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(MovementManagementSteps.java:250)
+	at ?.Operator adds new Station Movement Schedule on Movement Management page using data below:(file:///C:/Users/sha6/OneDrive%20-%20DXC%20Production/GIT/operator-v2/build/resources/test/cucumber/feature/hub/inter_hub/movement_schedules/stations_add_multiple_schedules.feature:40)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//label[starts-with(.,'Station')]"}
+  (Session info: chrome=102.0.5005.115)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'VN-PF1D7N0B', ip: '10.1.54.107', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_291'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 102.0.5005.115, chrome: {chromedriverVersion: 102.0.5005.61 (0e59bcc00cc4..., userDataDir: C:\Users\sha6\AppData\Local...}, goog:chromeOptions: {debuggerAddress: localhost:54865}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: none, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0f013c4b3b05f19c50e6d3269b5ce62e
+*** Element info: {Using=xpath, value=//label[starts-with(.,'Station')]}
+	at sun.reflect.GeneratedConstructorAccessor49.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at org.openqa.selenium.support.pagefactory.DefaultElementLocator.findElement(DefaultElementLocator.java:69)
+	at co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator$LocatingElementHandler.invoke(CustomFieldDecorator.java:205)
+	at com.sun.proxy.$Proxy45.getTagName(Unknown Source)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.getWebElement(PageElement.java:137)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.scrollIntoView(PageElement.java:173)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.scrollIntoView(PageElement.java:169)
+	at co.nvqa.operator_v2.selenium.elements.PageElement.click(PageElement.java:63)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.lambda$operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow$8(MovementManagementSteps.java:294)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:499)
+	at co.nvqa.commons.util.NvRetry.retryIfExpectedExceptionOccurred(NvRetry.java:223)
+	at co.nvqa.commons.util.NvRetry.retryIfRuntimeExceptionOccurred(NvRetry.java:36)
+	at co.nvqa.operator_v2.cucumber.glue.MovementManagementSteps.operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(MovementManagementSteps.java:250)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at io.cucumber.java.Invoker.doInvoke(Invoker.java:66)
+	at io.cucumber.java.Invoker.invoke(Invoker.java:24)
+	at io.cucumber.java.AbstractGlueDefinition.invokeMethod(AbstractGlueDefinition.java:47)
+	at io.cucumber.java.JavaStepDefinition.execute(JavaStepDefinition.java:29)
+	at io.cucumber.core.runner.CoreStepDefinition.execute(CoreStepDefinition.java:66)
+	at io.cucumber.core.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:63)
+	at io.cucumber.core.runner.ExecutionMode$1.execute(ExecutionMode.java:10)
+	at io.cucumber.core.runner.TestStep.executeStep(TestStep.java:92)
+	at io.cucumber.core.runner.TestStep.run(TestStep.java:64)
+	at io.cucumber.core.runner.PickleStepTestStep.run(PickleStepTestStep.java:51)
+	at io.cucumber.core.runner.TestCase.run(TestCase.java:104)
+	at io.cucumber.core.runner.Runner.runPickle(Runner.java:73)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$5(Runtime.java:110)
+	at io.cucumber.core.runtime.CucumberExecutionContext.runTestCase(CucumberExecutionContext.java:117)
+	at io.cucumber.core.runtime.Runtime.lambda$execute$6(Runtime.java:110)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at io.cucumber.core.runtime.Runtime$SameThreadExecutorService.execute(Runtime.java:233)
+	at java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:112)
+	at io.cucumber.core.runtime.Runtime.lambda$run$2(Runtime.java:86)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.stream.SliceOps$1$1.accept(SliceOps.java:204)
+	at java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1361)
+	at java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:126)
+	at java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:499)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:486)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:499)
+	at io.cucumber.core.runtime.Runtime.run(Runtime.java:87)
+	at io.cucumber.core.cli.Main.run(Main.java:92)
+	at io.cucumber.core.cli.Main.main(Main.java:34)
+
+
+
+> Task :runCucumber FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':runCucumber'.
+> Process 'command 'C:\Program Files\Java\jdk1.8.0_291\bin\java.exe'' finished with non-zero exit value 1
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 4m 18s
+11 actionable tasks: 11 executed
