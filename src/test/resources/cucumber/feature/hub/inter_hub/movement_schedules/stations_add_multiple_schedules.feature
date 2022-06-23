@@ -1,11 +1,11 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @StationsAddMultipleSchedule @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @StationsAddMultipleSchedule
 Feature: Stations
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create Station Schedule - Create with Single Driver (uid:68c0da7a-14dc-45e7-8068-40bba8d570d6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
