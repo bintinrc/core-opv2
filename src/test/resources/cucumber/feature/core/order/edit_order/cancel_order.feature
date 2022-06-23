@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @CancelOrder
+@OperatorV2 @Core @Order @EditOrder @CancelOrder @EditOrder1
 Feature: Cancel Order
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @Reschedule
+@OperatorV2 @Core @Order @EditOrder @Reschedule @EditOrder1
 Feature: Reschedule & RTS
 
   @LaunchBrowser @ShouldAlwaysRun

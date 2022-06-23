@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @TagAndUntagDP
+@OperatorV2 @Core @Order @EditOrder @TagAndUntagDP @EditOrder2
 Feature: Tag & Untag DP
 
   @LaunchBrowser @ShouldAlwaysRun

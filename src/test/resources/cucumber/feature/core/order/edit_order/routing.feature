@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @EditOrderRouting
+@OperatorV2 @Core @Order @EditOrder @EditOrderRouting @EditOrder1
 Feature: Routing
 
   @LaunchBrowser @ShouldAlwaysRun
