@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @RecoveryAndTicketing
+@OperatorV2 @Core @Order @EditOrder @RecoveryAndTicketing @EditOrder2
 Feature: Recovery & Ticketing
 
   @LaunchBrowser @ShouldAlwaysRun
