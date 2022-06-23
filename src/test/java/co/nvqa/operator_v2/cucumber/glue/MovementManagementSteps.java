@@ -291,6 +291,7 @@ public class MovementManagementSteps extends AbstractSteps {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
         navigateRefresh();
+        movementManagementPage.switchTo();
         movementManagementPage.stationsTab.click();
         movementManagementPage.addSchedule.click();
         movementManagementPage.addSchedule.waitUntilClickable(60);
