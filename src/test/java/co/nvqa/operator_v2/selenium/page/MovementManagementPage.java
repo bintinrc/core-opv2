@@ -615,11 +615,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
           TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
-          pause2s();
+          pause1s();
           TestUtils.findElementAndClick(
               "//div[contains(@text," + stationMovementSchedule.getDuration() + ")]", "xpath",
               getWebDriver());
-          pause2s();
+          pause500ms();
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + stationMovementSchedule.getDuration() + "']")).isDisplayed());
         }, 3);
@@ -681,10 +681,14 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
-        TestUtils.findElementAndClick(
-            "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"
-                + stationMovementSchedule.getDuration() + "']", "xpath", getWebDriver());
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        {
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          pause500ms();
+          TestUtils.findElementAndClick(
+                  "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"
+                          + stationMovementSchedule.getDuration() + "']", "xpath", getWebDriver());
+        },3);
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
