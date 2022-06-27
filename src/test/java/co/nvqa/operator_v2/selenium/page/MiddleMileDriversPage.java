@@ -48,6 +48,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='No']";
     private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='Yes']";
     private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'ant-table-selection')]";
+    private static final String SELECT_ALL_CHECKBOX_XPATH = "//div[@class='ant-table-selection']//input[@class='ant-checkbox-input']";
     private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
     private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
@@ -616,7 +617,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void clickBulkAvailabilityMode(String mode) {
-        click(DROP_DOWN_ON_TABLE_XPATH);
+        if(!findElementByXpath(SELECT_ALL_CHECKBOX_XPATH).isSelected()){
+            click(DROP_DOWN_ON_TABLE_XPATH);
+        }
         click(APPLY_ACTION_DROP_DOWN_XPATH);
 
         if (YES.equalsIgnoreCase(mode)) {
