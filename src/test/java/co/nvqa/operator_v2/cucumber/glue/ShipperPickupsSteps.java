@@ -549,6 +549,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
       Map<String, String> dataTableAsMap) {
     reservationID = resolveValue(reservationID);
     shipperPickupsPage.finishReservationWithFailureReason(dataTableAsMap, reservationID);
+    takesScreenshot();
   }
 
   @And("^Operator finish reservation with success")
