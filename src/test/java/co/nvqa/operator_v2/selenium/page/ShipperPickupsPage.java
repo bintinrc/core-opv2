@@ -97,6 +97,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
   public FinishReservationDialog finishReservationDialog;
 
+  @FindBy(xpath = "//*[text()='Reservation ID']/parent::th//input")
+  public PageElement reservationFilter;
+
   @FindBy(css = "md-dialog")
   public OperationResultsDialog operationResultsDialog;
 
@@ -392,9 +395,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     finishReservationDialog.proceedWithFailureInConfirmationPopUp();
   }
 
-  public void finishReservationWithFailureReason(Map<String, String> mapOfData) {
+  public void finishReservationWithFailureReason(Map<String, String> mapOfData,
+      String reservationID) {
     String failureReason = mapOfData.get("Failure Reason");
     String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
+    reservationFilter.clearAndSendKeys(reservationID);
     reservationsTable.clickActionButton(1, ACTION_BUTTON_FINISH);
     finishReservationDialog.selectFailureAsReason();
     finishReservationDialog.selectFailureReason(failureReason);

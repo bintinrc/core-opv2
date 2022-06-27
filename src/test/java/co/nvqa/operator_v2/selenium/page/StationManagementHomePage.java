@@ -957,7 +957,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         By.xpath(titleXpath));
     pause1s();
     moveToElement(tileTitle);
-    pause1s();
+    pause5s();
     Assert.assertTrue(f("Assert that the title %s is displayed", title),
         mouseOverText.size() > 0);
   }
