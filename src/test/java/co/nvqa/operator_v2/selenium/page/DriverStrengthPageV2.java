@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -8,10 +7,10 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.driver_strength.DriverStrengthAntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
@@ -37,6 +36,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   public static final String LOCATOR_DELETE_BUTTON = "//button/span[.='Delete']";
   private static final String DRIVER_STRENGTH_COLUMN_NAME_XPATH = "//div[contains(@class,'th')]/*[1]";
+  private static final String DRIVER_STRENGTH_BUTTONS_XPATH = "//*[@role='button' or @type][starts-with(normalize-space(.),'%s')]";
+  private static final String DOWNLOAD_OPTS_HAMBURGER_XPATH = "//div[contains(@class,'ant-dropdown')][not(contains(@class,'ant-dropdown-hidden'))]//li[.='%s']";
+  private static final String UPDATE_DRIVER_MODAL_UI_XPATH = "//div[@class='ant-modal-body']//span[normalize-space(.)=\"%s\"]";
+  private static final String ALERT_MESSAGE_XPATH = "//*[@class='ant-message-notice' or @class='ant-alert-message'][normalize-space(.)=\"%s\"]";
 
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public AddDriverDialog addDriverDialog;
@@ -57,14 +60,41 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(xpath = "//button[.='Clear Selection']")
   public Button clearSelection;
 
+  @FindBy(xpath = "//button[.='Download All Shown']")
+  public Button downloadAllShown;
+
+  @FindBy(xpath = "//button[.='Download CSV Template']")
+  public Button downloadCsvTemplate;
+
+  @FindBy(xpath = "//button[.='Download Failure Reasons']")
+  public Button downloadFailureReasons;
+
+  @FindBy(id = "bulk-update-driver-csv")
+  public PageElement bulkUploadDrivers;
+
+  @FindBy(xpath = "//button[.='Update Driver Details']")
+  public Button updateDriverDetails;
+
+  @FindBy(xpath = "//button[.='Download All Shown']/following-sibling::button")
+  public Button downloadHamburgerIcon;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-dropdown')][not(contains(@class,'ant-dropdown-hidden'))]//li")
+  public List<PageElement> downloadOptions;
+
   @FindBy(name = "container.driver-strength.load-everything")
   public NvIconTextButton loadEverything;
+
+  @FindBy(css = "table input[type='checkbox']")
+  public PageElement recordCheckbox;
 
   @FindBy(xpath = "//button[.='Add New Driver']")
   public Button addNewDriver;
 
   @FindBy(name = "zones")
   public AntSelect zonesFilter;
+
+  @FindBy(name = "hubs")
+  public AntSelect hubsFilter;
 
   @FindBy(name = "driverTypes")
   public AntSelect driverTypesFilter;
@@ -727,4 +757,47 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     });
     return actualColumns;
   }
+
+  public boolean verifyButtonsDisplayed(String buttonName) {
+    String buttonXpath = f(DRIVER_STRENGTH_BUTTONS_XPATH, buttonName);
+    List<WebElement> labels = getWebDriver().findElements(By.xpath(buttonXpath));
+    boolean isDisplayed = labels.size() > 0;
+    return isDisplayed;
+  }
+
+  public boolean verifyUpdateDriverModalUiDisplayed(String element) {
+    String buttonXpath = f(UPDATE_DRIVER_MODAL_UI_XPATH, element);
+    waitUntilPageLoaded();
+    List<WebElement> labels = getWebDriver().findElements(By.xpath(buttonXpath));
+    boolean isDisplayed = labels.size() > 0;
+    return isDisplayed;
+  }
+
+  public List<String> getAllDownloadOptions(){
+    waitUntilPageLoaded();
+    downloadHamburgerIcon.click();
+    pause2s();
+    List<String> options = new ArrayList<String>();
+    for(PageElement option : downloadOptions){
+      options.add(option.getText());
+    }
+    return options;
+  }
+
+  public void verifyFileDownloadForUpdate(String downloadOption){
+    waitUntilPageLoaded();
+    downloadHamburgerIcon.click();
+    String downloadOptionXpath = f(DOWNLOAD_OPTS_HAMBURGER_XPATH, downloadOption);
+    WebElement downloadToUpdate = getWebDriver().findElement(By.xpath(downloadOptionXpath));
+    downloadToUpdate.click();
+  }
+
+  public boolean verifyNoticeDisplayed(String notice){
+    String noticeXpath = f(ALERT_MESSAGE_XPATH, notice);
+    waitUntilVisibilityOfElementLocated(noticeXpath);
+    List<WebElement> message = getWebDriver().findElements(By.xpath(noticeXpath));
+    boolean isDisplayed = message.size() > 0;
+    return isDisplayed;
+  }
+
 }
