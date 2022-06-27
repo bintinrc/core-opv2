@@ -463,7 +463,6 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
-        //movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
