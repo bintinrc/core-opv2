@@ -43,6 +43,8 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
   public PageElement antNotificationMessage;
   @FindBy(css = ".ant-spin-spinning")
   public PageElement loadingSpinner;
+  @FindBy(xpath = "//form[contains(@class, 'ant-form-vertical')]/div[2]//span")
+  public PageElement formErrorMessage;
   @FindBy(xpath = "//div[contains(@class,' ant-form-item-control') and .//input[@id='weight'] ]")
   public AntInputText weightInput;
   @FindBy(xpath = "//div[contains(@class,' ant-form-item-control') and .//input[@id='length'] ]")
@@ -77,6 +79,11 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
       case ERROR:
         Assertions.assertThat(shipmentIdInput.isError()).as("Shipment ID Input is show error").isTrue();
         Assertions.assertThat(shipmentIdInput.getErrorText()).as("Shipment ID input error message is correct")
+            .isEqualTo(message);
+        break;
+      case CANCELLEDCOMPLETED:
+        Assertions.assertThat(formErrorMessage.isDisplayed()).as("Form show error message").isTrue();
+        Assertions.assertThat(formErrorMessage.getText()).as(f("Form showing correct error message as %s",message))
             .isEqualTo(message);
         break;
       case INITIAL:
@@ -239,6 +246,7 @@ public class ShipmentWeightDimensionAddPage extends SimpleReactPage<ShipmentWeig
     INITIAL("initial"),
     VALID("valid"),
     ERROR("error"),
+    CANCELLEDCOMPLETED("cancelled_completed"),
     HAS_DIMENSION("has dimension");
 
 
