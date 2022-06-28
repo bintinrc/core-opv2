@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 
+import java.time.DayOfWeek;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -365,10 +366,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = ".//button[.='Add another schedule']")
     public Button addAnotherSchedule;
 
-    @FindBy(xpath = ".//button[.='OK']")
+    @FindBy(xpath = "//button[.='OK']")
     public Button create;
 
-    @FindBy(css = "div.has-error")
+    @FindBy(xpath = "//div[contains(@class,'ant-form-item-explain-error')]")
     public PageElement errorMessage;
 
     @FindBy(xpath = ".//button[.='Cancel']")
@@ -443,13 +444,15 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       public String scheduleDestinationHubId = "schedules_%s_destinationHub";
       public String scheduleMovementTypeId = "schedules_%s_movementType";
       public String scheduleStartTimeId = "schedules_%s_startTime";
-      public String scheduleDepartureTimeXpath = "//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
+      public String scheduleDepartureTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
       public String scheduleDurationDayId = "schedules_%s_durationDay";
       public String scheduleDurationTimeId = "schedules_%s_durationTime";
       public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";
       public String scheduleDaysId = "schedules_%s_days";
       public String scheduleDriversId = "schedules_%s_drivers";
       public String scheduleCommentId = "schedules_%s_comment";
+      public String antpickerdropdownhidden = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]";
+      public String daysOfWeekXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
 
       public void callJavaScriptExecutor(String argument, WebElement element) {
         JavascriptExecutor jse = ((JavascriptExecutor) getWebDriver());
@@ -471,17 +474,18 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         if (StringUtils.isNotBlank(schedule.getDepartureTime())) {
           String[] hourtime = schedule.getDepartureTime().split(":");
           TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+          pause1s();
           String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
           String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
-          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
+          moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
           TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
-          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
+          moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
           TestUtils.findElementAndClick(time, "xpath", getWebDriver());
-          TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
+          TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']", "xpath", getWebDriver());
         }
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
-          setDurationDays(schedule);
+          setDurationDays(schedule, scheduleNo);
         }, 3);
         if (StringUtils.isNotBlank(schedule.getDurationTime())) {
           String[] hourtime = schedule.getDurationTime().split(":");
@@ -494,11 +498,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           moveToElementWithXpath(time);
           TestUtils.findElementAndClick(time, "xpath", getWebDriver());
           TestUtils.findElementAndClick(
-              "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']",
+                  antpickerdropdownhidden + "//span[text()='Ok']",
               "xpath", getWebDriver());
         }
         if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek())) {
-          setDaysOfWeek(schedule.getDaysOfWeek());
+          setDaysOfWeek(schedule.getDaysOfWeek(), scheduleNo);
         }
         if (StringUtils.isNotBlank(schedule.getComment())) {
           WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
@@ -510,24 +514,22 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         }
       }
 
-      public void setDurationDays(MovementSchedule.Schedule schedule) {
+      public void setDurationDays(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (schedule.getDurationDays() != null) {
-          durationDays.click();
+          TestUtils.findElementAndClick("//input[@id='" + f(scheduleDurationDayId, scheduleNo) + "']","xpath", getWebDriver());
           pause1s();
-          click("//div[contains(@text," + schedule.getDurationDays() + ")]");
+          TestUtils.findElementAndClick("//div[@id='schedules_" + scheduleNo + "_durationDay_list']/following-sibling::div//div[contains(@text," + schedule.getDurationDays() + ")]","xpath", getWebDriver());
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + schedule.getDurationDays() + "']")).isDisplayed());
         }
       }
 
-      public void setDaysOfWeek(Set<String> daysOfWeek) {
-        monday.setValue(daysOfWeek.contains("monday"));
-        tuesday.setValue(daysOfWeek.contains("tuesday"));
-        wednesday.setValue(daysOfWeek.contains("wednesday"));
-        thursday.setValue(daysOfWeek.contains("thursday"));
-        friday.setValue(daysOfWeek.contains("friday"));
-        saturday.setValue(daysOfWeek.contains("saturday"));
-        sunday.setValue(daysOfWeek.contains("sunday"));
+      public void setDaysOfWeek(Set<String> daysOfWeek, int scheduleNo) {
+        List list = new ArrayList(daysOfWeek);
+        for(String day: daysOfWeek){
+          int dayNo = DayOfWeek.valueOf(day.toUpperCase()).getValue();
+          TestUtils.findElementAndClick(f(daysOfWeekXpath, scheduleNo, dayNo), "xpath", getWebDriver());
+        }
       }
     }
   }

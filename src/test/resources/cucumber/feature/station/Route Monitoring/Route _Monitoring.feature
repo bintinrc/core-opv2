@@ -208,7 +208,7 @@ Feature: Route Monitoring V2
     And API Operator Van Inbound parcel
     And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
       | Failure Reason          | Failure due to customer/shipper - Normal                  |
       | Failure Reason Detail 1 | Address is correct but customer is not available - Normal |
       | Failure Reason Detail 2 | Residential address, but no one to receive - Normal       |
@@ -243,7 +243,7 @@ Feature: Route Monitoring V2
     And API Operator Van Inbound parcel
     And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
       | Failure Reason          | Parcel Unattempted - Normal                                    |
       | Failure Reason Detail 1 | I had insufficient time to complete all my deliveries - Normal |
     When Operator loads Operator portal Station Route Monitoring page
@@ -270,7 +270,7 @@ Feature: Route Monitoring V2
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
       | Failure Reason | No parcels to pick up at all - ODP |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -296,7 +296,7 @@ Feature: Route Monitoring V2
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
       | Failure Reason | Cannot Make It (CMI) - ODP |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -327,7 +327,7 @@ Feature: Route Monitoring V2
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
-    And Operator fails reservation with failure Reason
+    And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
       | Failure Reason | No parcels to pick up at all - ODP |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -359,7 +359,7 @@ Feature: Route Monitoring V2
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
-    And Operator fails reservation with failure Reason
+    And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
       | Failure Reason | Cannot Make It (CMI) - ODP |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -391,11 +391,11 @@ Feature: Route Monitoring V2
     And Operator enters routeID in the Route filter
     Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 0
     When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
-    Then Operator verifies Invalid Failed WP pop up modal is showing correct total parcels
+    Then Operator verifies pop up modal is showing correct total parcels
       | INVALID_FAILED_DELIVERIES   | 0 |
       | INVALID_FAILED_PICKUPS      | 0 |
       | INVALID_FAILED_RESERVATIONS | 0 |
-    Then Operator verifies Invalid Failed WP pop up modal is showing No Results Found
+    Then Operator verifies pop up modal is showing No Results Found
       | INVALID_FAILED_DELIVERIES   | YES |
       | INVALID_FAILED_PICKUPS      | YES |
       | INVALID_FAILED_RESERVATIONS | YES |
@@ -423,7 +423,7 @@ Feature: Route Monitoring V2
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
-    And Operator fails reservation with failure Reason
+    And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
       | Failure Reason | Cannot Make It (CMI) - Hyperlocal |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -431,7 +431,7 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 1
     When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
-    Then Operator verifies Invalid Failed WP pop up modal is showing correct total parcels
+    Then Operator verifies pop up modal is showing correct total parcels
       | INVALID_FAILED_DELIVERIES   | 0 |
       | INVALID_FAILED_PICKUPS      | 0 |
       | INVALID_FAILED_RESERVATIONS | 1 |
@@ -470,9 +470,9 @@ Feature: Route Monitoring V2
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
       | Failure Reason | Cannot Make It (CMI) - ODP |
-    And Operator fail waypoint from Route Manifest page with following details
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
       | Failure Reason | Cannot Make It (CMI) - ODP |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
@@ -480,23 +480,377 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
     Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 2
     When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
-    Then Operator verifies Invalid Failed WP pop up modal is showing correct total parcels
+    Then Operator verifies pop up modal is showing correct total parcels
       | INVALID_FAILED_DELIVERIES   | 0 |
       | INVALID_FAILED_PICKUPS      | 2 |
       | INVALID_FAILED_RESERVATIONS | 0 |
     When Operator Filters the records in the "Invalid Failed Pickups" by applying the following filters:
-      | Reservation ID                  | Pickup Name        |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | {KEY_SHIPPER_NAME} |
-    And Operator selects the timeslot "3pm - 6pm" in the table
+      | Tracking ID                                | Customer Name                                     | Order Tags | Address                                     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
     Then Operator verify value in the "Invalid Failed Pickups" table for the Tags column value is equal to "PRIOR"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_CREATED_ORDER_TRACKING_ID}"
-#    Then Operator verify value in the "Invalid Failed Pickups" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
-#    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
-    And Operator verifies that Edit Order page is opened on clicking tracking id in table "Invalid Failed Pickups"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Pickups"
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order with NO Tags
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+      | Failure Reason | Cannot Make It (CMI) - ODP |
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+      | Failure Reason | Cannot Make It (CMI) - ODP |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 2
+    When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | INVALID_FAILED_DELIVERIES   | 0 |
+      | INVALID_FAILED_PICKUPS      | 2 |
+      | INVALID_FAILED_RESERVATIONS | 0 |
+    When Operator Filters the records in the "Invalid Failed Pickups" by applying the following filters:
+      | Tracking ID                                | Customer Name                                     | Address                                     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Pickups"
 
     Examples:
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels on NON-PRIOR Waypoints
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    When Operator clicks on the "PENDING_PRIORITY_PARCELS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | PENDING_PRIORITY_DELIVERIES | 0 |
+      | PENDING_PRIORITY_PICKUPS    | 0 |
+    Then Operator verifies pop up modal is showing No Results Found
+      | PENDING_PRIORITY_DELIVERIES | YES |
+      | PENDING_PRIORITY_PICKUPS    | YES |
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Then API Shipper tags multiple parcels as per the below tag
+      | orderTag | {order-tag-prior-id} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 2
+    When Operator clicks on the "PENDING_PRIORITY_PARCELS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | PENDING_PRIORITY_DELIVERIES | 2 |
+      | PENDING_PRIORITY_PICKUPS    | 0 |
+    When Operator Filters the records in the "Pending Priority Deliveries" by applying the following filters:
+      | Tracking ID                                | Customer Name                                   | Order Tags | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]} |
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the Tags column value is equal to "PRIOR"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Pending Priority Deliveries"
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Then API Shipper tags multiple parcels as per the below tag
+      | orderTag | {order-tag-prior-id} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 2
+    When Operator clicks on the "PENDING_PRIORITY_PARCELS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | PENDING_PRIORITY_DELIVERIES | 0 |
+      | PENDING_PRIORITY_PICKUPS    | 2 |
+    When Operator Filters the records in the "Pending Priority Pickup" by applying the following filters:
+      | Tracking ID                                | Customer Name                                     | Order Tags | Address                                     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
+    Then Operator verify value in the "Pending Priority Pickup" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the Tags column value is equal to "PRIOR"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Pending Priority Pickup"
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup & Delivery Under the Same Route
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Then API Shipper tags multiple parcels as per the below tag
+      | orderTag | {order-tag-prior-id} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 2
+    When Operator clicks on the "PENDING_PRIORITY_PARCELS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | PENDING_PRIORITY_DELIVERIES | 1 |
+      | PENDING_PRIORITY_PICKUPS    | 1 |
+    When Operator Filters the records in the "Pending Priority Pickup" by applying the following filters:
+      | Tracking ID                                | Customer Name                                     | Order Tags | Address                                     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
+    Then Operator verify value in the "Pending Priority Pickup" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    Then Operator verify value in the "Pending Priority Pickup" table for the Tags column value is equal to "PRIOR"
+    When Operator Filters the records in the "Pending Priority Deliveries" by applying the following filters:
+      | Tracking ID                                | Customer Name                                   | Order Tags | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[2]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[2]} |
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[2]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[2]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the Tags column value is equal to "PRIOR"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" in table "Pending Priority Deliveries"
+
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Then API Shipper tags multiple parcels as per the below tag
+      | orderTag | {order-tag-prior-id} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+      | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+      | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 2
+    When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | INVALID_FAILED_DELIVERIES   | 2 |
+      | INVALID_FAILED_PICKUPS      | 0 |
+      | INVALID_FAILED_RESERVATIONS | 0 |
+    When Operator Filters the records in the "Invalid Failed Deliveries" by applying the following filters:
+      | Tracking ID                                | Customer Name                                   | Order Tags | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]} |
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the Tags column value is equal to "PRIOR"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Deliveries"
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order with NO Tags
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+      | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+      | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 2
+    When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | INVALID_FAILED_DELIVERIES   | 2 |
+      | INVALID_FAILED_PICKUPS      | 0 |
+      | INVALID_FAILED_RESERVATIONS | 0 |
+    When Operator Filters the records in the "Invalid Failed Deliveries" by applying the following filters:
+      | Tracking ID                                | Customer Name                                   | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]} | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]} |
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]}"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Deliveries"
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {shipper-v4-legacy-id}           |
+      | status      | ROUTED                           |
+    And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
+      | Failure Reason | Cannot Make It (CMI) - ODP |
+    When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+      | Failure Reason | Cannot Make It (CMI) - ODP |
+    And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+      | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 3
+    When Operator clicks on the "INVALID_FAILED_WAYPOINTS" column value link
+    Then Operator verifies pop up modal is showing correct total parcels
+      | INVALID_FAILED_DELIVERIES   | 1 |
+      | INVALID_FAILED_PICKUPS      | 1 |
+      | INVALID_FAILED_RESERVATIONS | 1 |
+    When Operator Filters the records in the "Invalid Failed Pickups" by applying the following filters:
+      | Tracking ID                                | Customer Name                                     | Address                                     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Pickups"
+    When Operator Filters the records in the "Invalid Failed Deliveries" by applying the following filters:
+      | Tracking ID                                | Customer Name                                   | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[2]} | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[2]} |
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[2]}"
+    Then Operator verify value in the "Invalid Failed Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[2]}"
+    And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" in table "Invalid Failed Deliveries"
+    When Operator Filters the records in the "Invalid Failed Reservations" by applying the following filters:
+      | Reservation ID               | Pickup Name        |
+      | {KEY_CREATED_RESERVATION_ID} | {KEY_SHIPPER_NAME} |
+    And Operator selects the timeslot "3pm - 6pm" in the table
+    Then Operator verify value in the "Invalid Failed Reservations" table for the "RESERVATION_ID" column value is equal to "{KEY_CREATED_RESERVATION_ID}"
+    Then Operator verify value in the "Invalid Failed Reservations" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
+    Then Operator verify value in the "Invalid Failed Reservations" table for the "TIME_SLOT" column value is equal to "3pm - 6pm"
+    And Operator verifies that Shipper Pickup page is opened on clicking Reservation ID "{KEY_CREATED_RESERVATION_ID}" table "Invalid Failed Reservations"
+
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

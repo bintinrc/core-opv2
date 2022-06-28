@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +81,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @Then("Operator verify Shipment Weight Dimension Add UI")
   public void operatorVerifyShipmentWeightDimensionAddUI(Map<String, Object> dataTable) {
+    pause1s(); // give time for ui to load
     String stateString = (String) dataTable.get(STATE_KEY);
     String messageString = (String) dataTable.get(MESSAGE_KEY);
+    String shipmentIdKey = (String) dataTable.get("shipmentIdKey");
     ShipmentWeightAddState state = ShipmentWeightAddState.fromLabel(stateString);
     ShipmentWeightDimensionAddInfo uiInfo = new ShipmentWeightDimensionAddInfo();
     switch (state) {
@@ -94,8 +97,11 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         break;
       case VALID:
       case HAS_DIMENSION:
-        Shipment shipmentData = ((Shipments) getScenarioStorage().get(KEY_CREATED_SHIPMENT))
-            .getShipment();
+        Shipment shipmentData = get(KEY_CREATED_SHIPMENT) != null? ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment() : null;
+        Shipment updatedShipment = ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment();
+        if (updatedShipment != null) {
+          shipmentData = updatedShipment;
+        }
         String shipmentStatus = (String) Optional.ofNullable(dataTable.get(STATUS_KEY))
             .orElse(shipmentData.getStatus());
         uiInfo.setStartHub(shipmentData.getOrigHubName());
@@ -124,7 +130,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else if (shipmentId.equalsIgnoreCase("JSON")) {
       shipmentIdToSend = createShipmentJson(getString("KEY_CREATED_SHIPMENT_ID"));
     } else {
-      shipmentIdToSend = getString("KEY_CREATED_SHIPMENT_ID");
+      shipmentIdToSend = resolveValue(shipmentId);
     }
 
     shipmentWeightDimensionAddPage.enterShipmentId(shipmentIdToSend);
@@ -631,6 +637,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     ZonedDateTime date = get(KEY_GENERATED_SHIPMENT_WEIGHT_SUM_UP_REPORT_TIMESTAMP);
     List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
     List<ShipmentDimensionResponse> dimensions = get(KEY_UPDATED_SHIPMENTS_DIMENSIONS);
+    if (dimensions == null) {
+      dimensions = Collections.singletonList(get(KEY_UPDATED_SHIPMENT_DIMENSIONS));
+    }
     DecimalFormat df = new DecimalFormat("#.##");
 
     List<String> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
