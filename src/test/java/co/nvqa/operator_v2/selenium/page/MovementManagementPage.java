@@ -63,6 +63,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_CONFIRM_DIALOG_XPATH = "//div[@class='ant-modal-confirm-content']";
   private static final String MS_PAGE_DAY_OF_WEEK_XPATH = "//td[contains(@class,'ant-table-cell day')]//input[@value='%d']";
 
+  public static List<Driver> middleMileDrivers;
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -503,11 +504,17 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
           element.sendKeys(schedule.getComment());
         }
+        if (schedule.getNumberOfDrivers()!=null && schedule.getNumberOfDrivers()>0){
+          System.out.println("Debug Driver: "+schedule.getNumberOfDrivers());
+          MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
+          movementPage.assignDrivers(middleMileDrivers.size(),middleMileDrivers,0);
+        }
       }
 
       public void setDurationDays(MovementSchedule.Schedule schedule) {
         if (schedule.getDurationDays() != null) {
           durationDays.click();
+          pause1s();
           click("//div[contains(@text," + schedule.getDurationDays() + ")]");
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + schedule.getDurationDays() + "']")).isDisplayed());
@@ -807,6 +814,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     public static final String COLUMN_DURATION = "durationDays";
     public static final String COLUMN_DURATION_TIME = "durationTime";
     public static final String COLUMN_DAYS_OF_WEEK = "daysOfWeek";
+    public static final String COLUMN_DRIVERS = "numberOfDrivers";
 
     public SchedulesTable(WebDriver webDriver) {
       super(webDriver);
@@ -818,6 +826,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           .put(COLUMN_DURATION, "duration")
           .put(COLUMN_DURATION_TIME, "duration")
           .put(COLUMN_DAYS_OF_WEEK, "day")
+          .put(COLUMN_DRIVERS,"drivers")
           .put("comment", "comments")
           .build()
       );
@@ -831,7 +840,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           {
             Matcher m = DURATION_PATTERN.matcher(value);
             return m.matches() ? m.group(2) + ":" + m.group(3) : null;
-          }
+          },
+          COLUMN_DRIVERS    , value ->
+              {
+                String[] values = value.split(",");
+                return Integer.toString(values.length);
+
+              }
       ));
       setColumnReaders(ImmutableMap.of(COLUMN_DAYS_OF_WEEK, this::getDaysOfWeek));
       setEntityClass(MovementSchedule.Schedule.class);
