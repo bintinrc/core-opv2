@@ -6,6 +6,7 @@ Feature: Early Pickup
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -33,7 +34,7 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Send To Doorstep"
+    And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -41,6 +42,7 @@ Feature: Early Pickup
     And Operator verifies the delivery address is doorstep address "51 Lengkok Bahru" and "Redhill MRT"
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -68,7 +70,7 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Return To Sender"
+    And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -76,6 +78,7 @@ Feature: Early Pickup
     Then Operator verifies the delivery address is rts
 
   Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -110,14 +113,14 @@ Feature: Early Pickup
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
     When DB Operator gets the reservation date details for created order
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Send To Doorstep"
+    And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
     When API Operator get order details by saved Order ID
-    And Operator verifies the delivery address is doorstep address "51 Lengkok Bahru" and "Redhill MRT"
 
   Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Return to Sender
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -152,7 +155,7 @@ Feature: Early Pickup
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
     When DB Operator gets the reservation date details for created order
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Return To Sender"
+    And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -160,6 +163,7 @@ Feature: Early Pickup
     Then Operator verifies the delivery address is rts
 
   Scenario: Driver Drop Off - Trigger Earlier Pickup - After Pickup Date
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -183,15 +187,16 @@ Feature: Early Pickup
     And API Driver get pickup/delivery waypoint of the created order
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
+    And API Operator do the DP Success for From Driver Flow
     Given API Driver v5 success dp drop off
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
-    Given DB Operator set pickup date of DP reservation to yesterday from Hibernate
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Send To Doorstep"
+    And Operator apply Early pickup action and chooses "Send To Doorstep" with "date"
     Then Downloaded csv file contains correct orders and message "Requested early pickup_date is after scheduled pickup date"
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Driver Collect
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -219,7 +224,7 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Send To Doorstep"
+    And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -242,6 +247,7 @@ Feature: Early Pickup
     Then Operator verifies the order status is "TRANSIT" and granular status is "ENROUTE_TO_SORTING_HUB"
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Driver Collect
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -269,7 +275,7 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Return To Sender"
+    And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -292,6 +298,7 @@ Feature: Early Pickup
     Then Operator verifies the order status is "TRANSIT" and granular status is "ENROUTE_TO_SORTING_HUB"
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Customer Collect
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -319,7 +326,7 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Send To Doorstep"
+    And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
@@ -331,6 +338,7 @@ Feature: Early Pickup
     Then Operator verifies the data on the database for Customer Collect scenarios are all right
 
   Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Customer Collect
+    Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
       | shipperClientSecret | {opv2-dp-order-creation-shipper-client-secret}                                                                                                                                                                                                                                                                                                  |
@@ -358,13 +366,13 @@ Feature: Early Pickup
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
-    And Operator apply Early pickup action and chooses "Return To Sender"
+    And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
     And DB operator verifies pickup date is today
     And DB operator verifies collect job is created
     When API Operator get order details by saved Order ID
     Then Operator verifies the delivery address is rts
     Given DB Operator gets Customer Unlock Code Based on Tracking ID
-    And API DP do the Customer Collection from dp with ID = "{dp-id-full-cap-full-buffer}"
+    And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
     When DB Operator gets all the data input for Customer Collection Order from database
     Then Operator verifies the data on the database for Customer Collect scenarios are all right

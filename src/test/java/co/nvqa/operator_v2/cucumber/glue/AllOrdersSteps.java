@@ -920,10 +920,10 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.verifyDownloadedCsv(trackingId, message);
   }
 
-  @Then("Operator apply Early pickup action and chooses {string}")
-  public void operatorChoosesAndClicksSubmit(String action) {
+  @Then("Operator apply Early pickup action and chooses {string} with {string}")
+  public void operatorChoosesAndClicksSubmit(String action, String date) {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-    allOrdersPage.choosePickupActionAndClickSubmit(trackingId, action);
+    allOrdersPage.choosePickupActionAndClickSubmit(trackingId, action, date);
   }
 
   @And("Operator verifies the delivery address is doorstep address {string} and {string}")
