@@ -525,7 +525,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       }
 
       public void setDaysOfWeek(Set<String> daysOfWeek, int scheduleNo) {
-        List list = new ArrayList(daysOfWeek);
+        List list = new ArrayList<>(daysOfWeek);
         for(String day: daysOfWeek){
           int dayNo = DayOfWeek.valueOf(day.toUpperCase()).getValue();
           TestUtils.findElementAndClick(f(daysOfWeekXpath, scheduleNo, dayNo), "xpath", getWebDriver());
