@@ -481,7 +481,6 @@ public class MovementManagementSteps extends AbstractSteps {
 
     if (drivers.size()>0){
       movementManagementPage.middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
-      System.out.println("Dreiver test: "+ drivers);
     }
 
         movementManagementPage.addMovementScheduleModal.fill(movementSchedule);

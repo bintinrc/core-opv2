@@ -505,7 +505,6 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           element.sendKeys(schedule.getComment());
         }
         if (schedule.getNumberOfDrivers()!=null && schedule.getNumberOfDrivers()>0){
-          System.out.println("Debug Driver: "+schedule.getNumberOfDrivers());
           MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
           movementPage.assignDrivers(middleMileDrivers.size(),middleMileDrivers,0);
         }
