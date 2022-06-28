@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @Reschedule
+@OperatorV2 @Core @Order @EditOrder @Reschedule @EditOrder1
 Feature: Reschedule & RTS
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -85,7 +85,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -154,7 +154,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery - Latest Scan = Driver Inbound Scan (uid:066c5598-129c-4fe0-bd9a-0af449703f33)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -378,7 +378,7 @@ Feature: Reschedule & RTS
 
   @DeleteOrArchiveRoute
   Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -491,18 +491,84 @@ Feature: Reschedule & RTS
     And Operator verify Delivery details on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify order events on Edit order page using data below:
-      | tags           | name                |
-      | PICKUP, SCAN   | DRIVER PICKUP SCAN  |
-      | PICKUP         | PICKUP SUCCESS      |
-      | SORT, SCAN     | HUB INBOUND SCAN    |
-      | MANUAL ACTION  | ADD TO ROUTE        |
-      | SCAN, DELIVERY | DRIVER INBOUND SCAN |
-      | MANUAL ACTION  | DRIVER START ROUTE  |
-      | DELIVERY       | DELIVERY FAILURE    |
-      | MANUAL ACTION  | RESCHEDULE          |
-      | SYSTEM ACTION  | PRICING CHANGE      |
-      | DELIVERY       | DELIVERY SUCCESS    |
+      | tags            | name                |
+      | #l#PICKUP, SCAN | DRIVER PICKUP SCAN  |
+      | PICKUP          | PICKUP SUCCESS      |
+      | SORT, SCAN      | HUB INBOUND SCAN    |
+      | MANUAL ACTION   | ADD TO ROUTE        |
+      | SCAN, DELIVERY  | DRIVER INBOUND SCAN |
+      | MANUAL ACTION   | DRIVER START ROUTE  |
+      | DELIVERY        | DELIVERY FAILURE    |
+      | MANUAL ACTION   | RESCHEDULE          |
+      | SYSTEM ACTION   | PRICING CHANGE      |
+      | DELIVERY        | DELIVERY SUCCESS    |
 
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Operator Reschedule Fail Delivery - Failure Reason Code Id 13
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 13          |
+      | failureReasonIndexMode | FIRST       |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Delivery Fail" on Edit Order page
+    And Operator verify order granular status is "Pending Reschedule" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | FAIL |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    When Operator click Order Settings -> Reschedule Order on Edit Order page
+    And Operator reschedule Delivery on Edit Order Page
+      | recipientName    | test recipient name       |
+      | recipientContact | +9727894434               |
+      | recipientEmail   | test@mail.com             |
+      | internalNotes    | test internalNotes        |
+      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
+      | deliveryTimeslot | 9AM - 12PM                |
+      | country          | Singapore                 |
+      | city             | Singapore                 |
+      | address1         | 116 Keng Lee Rd           |
+      | address2         | 15                        |
+      | postalCode       | 308402                    |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    And DB Operator verifies transactions after reschedule
+      | number_of_txn       | 3       |
+      | old_delivery_status | Fail    |
+      | new_delivery_status | Pending |
+      | new_delivery_type   | DD      |
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    Then DB Operator verify Jaro Scores:
+      | waypointId        | archived |
+      | {KEY_WAYPOINT_ID} | 0        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -2,10 +2,12 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.translate.CsvTranslators;
 
@@ -35,6 +37,10 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
   private String comments;
 
   public ReservationInfo() {
+  }
+
+  public ReservationInfo(Map<String, ?> data) {
+    super(data);
   }
 
   public ReservationInfo(ReservationInfo reservationInfo) {
@@ -123,6 +129,7 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
     return Date.from(getReadyByDateTime().toInstant());
   }
 
+  @JsonIgnore
   public ZonedDateTime getReadyByDateTime() {
     if (readyBy == null) {
       return null;
@@ -145,6 +152,7 @@ public class ReservationInfo extends DataEntity<ReservationInfo> {
     return Date.from(getLatestByDateTime().toInstant());
   }
 
+  @JsonIgnore
   public ZonedDateTime getLatestByDateTime() {
     if (latestBy == null) {
       return null;

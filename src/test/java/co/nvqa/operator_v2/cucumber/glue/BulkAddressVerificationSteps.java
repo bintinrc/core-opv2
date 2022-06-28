@@ -5,8 +5,6 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
-import co.nvqa.commons.util.NvGenerator;
-import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -16,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,19 +161,26 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
     }
 
     put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
-    bulkAddressVerificationPage.uploadWaypointsData(jaroScores);
+
+    bulkAddressVerificationPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.uploadWaypointsData(jaroScores);
+    });
   }
 
   @When("^Operator download sample CSV file on Bulk Address Verification page$")
   public void operatorDownloadSampleCsvFile() {
-    bulkAddressVerificationPage.downloadSampleCsv.click();
+    bulkAddressVerificationPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.downloadSampleCsv.click();
+    });
   }
 
   @Then("^sample CSV file on Bulk Address Verification page is downloaded successfully$")
   public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
     retryIfAssertionErrorOccurred(() -> {
       bulkAddressVerificationPage.verifyFileDownloadedSuccessfully("sample_csv.csv",
-          "\"waypoint\",\"latitude\",\"longitude\"\n"
+          "waypoint,latitude,longitude\n"
               + "5259518,1.32323,103.1212");
     }, "verify csv file downloaded successfully");
 
@@ -186,6 +189,7 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
   @And("^Operator verifies waypoints are assigned to \"([^\"]*)\" rack sector upon bulk address verification$")
   public void operatorVerifiesWaypointsAreAssignedToRackSectorUponBulkAddressVerification(
       String sector) {
+    bulkAddressVerificationPage.switchTo();
     boolean isRts = sector.equals("RTS");
     List<JaroScore> listOfJaroScore = get(KEY_LIST_OF_CREATED_JARO_SCORES);
     List<JaroScore> listOfValidJaroScore = listOfJaroScore.stream()
@@ -199,5 +203,11 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
   public void operatorUpdateSuccessfullyMatchedWaypointsUponBulkAddressVerification() {
     List<JaroScore> listOfJaroScore = get(KEY_LIST_OF_CREATED_JARO_SCORES);
     bulkAddressVerificationPage.updateSuccessfulMatches(listOfJaroScore.size());
+  }
+
+  @Then("Operator clicks Update successful matched on Bulk Address Verification page")
+  public void operatorUpdateSuccessfullyMatched() {
+    bulkAddressVerificationPage.inFrame(page ->
+        bulkAddressVerificationPage.updateSuccessfulMatches.click());
   }
 }

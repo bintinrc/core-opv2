@@ -18,7 +18,6 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
@@ -86,8 +85,8 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
   @FindBy(xpath = "//div[contains(@class,'ant-card')][.//span[.='Shipment Filters']]")
   public ShipmentFiltersForm shipmentFiltersForm;
 
-  @FindBy(name = "Download CSV File")
-  public NvApiIconButton downloadCsvFile;
+  @FindBy(css = "button[data-pa-label='Download CSV']")
+  public Button downloadCsvFile;
 
   @FindBy(xpath = "//button[normalize-space(.)='Preset Actions']")
   public AntMenu presetActions;

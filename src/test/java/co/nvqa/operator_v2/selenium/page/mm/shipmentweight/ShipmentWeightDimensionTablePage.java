@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 
 import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
@@ -29,6 +30,9 @@ public class ShipmentWeightDimensionTablePage extends
   public Button backButton;
   @FindBy(xpath = "//button[span[contains(text(),'Sum up')]]")
   public Button sumUpButton;
+
+  @FindBy(xpath = "//button[span[contains(text(),'Update MAWB')]]")
+  public Button updateMawbButton;
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightRow> shipmentWeightNvTable;
   @FindBy(xpath = "//div[contains(text(), 'Showing')]")
@@ -150,6 +154,16 @@ public class ShipmentWeightDimensionTablePage extends
     scrollAndClear(shipmentTypeFilter);
   }
 
+  public void selectSomeRows(int numOfRows) {
+    if (numOfRows > shipmentWeightNvTable.rows.size()-1) {
+      throw new NvTestRuntimeException("Number of rows less than the requested");
+    }
+
+    shipmentWeightNvTable.rows.subList(0, numOfRows).forEach( row -> {
+      row.selectCheckbox.check();
+    });
+  }
+
   /**
    * alternative method for table filter clear
    *
@@ -187,36 +201,38 @@ public class ShipmentWeightDimensionTablePage extends
 
   public static class ShipmentWeightRow extends NvTable.NvRow {
 
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell index')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell index')]")
     public PageElement index;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell shipment-id')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell shipment-id')]")
     public PageElement shipmentId;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell status')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell status')]")
     public PageElement status;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell destination-hub-name')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell destination-hub-name')]")
     public PageElement destinationHub;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell created-at')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell created-at')]")
     public PageElement createdAt;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell mawb')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell mawb')]")
     public PageElement mawb;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell weight')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell weight')]")
     public PageElement weight;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell length')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell length')]")
     public PageElement length;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell width')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell width')]")
     public PageElement width;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell height')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell height')]")
     public PageElement height;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell kgv')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell kgv')]")
     public PageElement kgv;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell no-of-parcels')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell no-of-parcels')]")
     public PageElement noOfParcels;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell comments')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell comments')]")
     public PageElement comments;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell origin-hub-name')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell origin-hub-name')]")
     public PageElement originHubName;
-    @FindBy(xpath = "//td[contains(@class,'ant-table-cell shipmentType')]")
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell shipmentType')]")
     public PageElement shipmentType;
+    @FindBy(xpath = "./td[contains(@class,'ant-table-cell selection')]//input")
+    public CheckBox selectCheckbox;
     @FindBy(css = ".actions .edit-dimension-btn")
     public Button editButton;
 

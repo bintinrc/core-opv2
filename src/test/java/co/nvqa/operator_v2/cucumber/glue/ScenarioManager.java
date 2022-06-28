@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
 import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -9,6 +10,9 @@ import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import java.io.File;
+import java.util.Optional;
+import java.util.stream.Stream;
 import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -83,6 +87,13 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
     } catch (Throwable th) {
       LOGGER.warn("Failed to 'Close new windows'.", th);
     }
+  }
+
+  @After("@CleanDownloadFolder")
+  public void cleanDownloadFolder() {
+    File parentDir = new File(StandardTestConstants.TEMP_DIR);
+    Optional<File> optionalFile = Optional.of(parentDir);
+    optionalFile.flatMap(dir -> Optional.ofNullable(dir.listFiles())).ifPresent(files -> Stream.of(files).forEach(File::delete));
   }
 
   @After

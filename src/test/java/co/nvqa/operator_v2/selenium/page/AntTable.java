@@ -2,9 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -25,7 +26,7 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   protected String getTextOnTable(int rowNumber, String columnDataClass) {
     String xpath = f(".//tbody/tr[%d]/td[@class='%s']", rowNumber, columnDataClass);
-    if (!isElementExistFast(xpath)) {
+    if (!isElementVisible(xpath, 1)) {
       xpath = f(".//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
     }
     return getText(xpath);
@@ -40,9 +41,10 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public int getRowsCount() {
     if (StringUtils.isNotBlank(tableLocator)) {
-      return executeInContext(tableLocator, () -> getElementsCount(".//tbody/tr"));
+      return executeInContext(tableLocator,
+          () -> getElementsCount(".//tr[contains(@class,'ant-table-row')]"));
     } else {
-      return getElementsCount(".//tbody/tr");
+      return getElementsCount("//tr[contains(@class,'ant-table-row')]");
     }
   }
 
@@ -58,26 +60,11 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = f("//th[contains(@class,' %s')]//input", getColumnLocators().get(columnId));
-    if (StringUtils.isNotBlank(tableLocator)) {
-      xpath = tableLocator + xpath;
-    }
-    if (!isElementExistFast(xpath)) {
-      xpath = f("//th[contains(@class,'%s')]//input", getColumnLocators().get(columnId));
-      if (StringUtils.isNotBlank(tableLocator)) {
-        xpath = tableLocator + xpath;
-      }
-    }
-    String currentValue = getValue(xpath);
-    if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
-      StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < currentValue.length(); i++) {
-        sb.append(Keys.BACK_SPACE);
-      }
-      sb.append(value);
-      sendKeys(xpath, sb.toString());
-    } else if (StringUtils.isEmpty(currentValue)) {
-      sendKeys(xpath, value);
+    ForceClearTextBox textBox = getHeaderInput(columnId);
+    String currentValue = textBox.getValue();
+    if (!currentValue.equals(value)) {
+      textBox.setValue(value);
+      pause400ms();
     }
     return this;
   }
@@ -104,5 +91,29 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public String getRowLocator(int index) {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void clearColumnFilter(String columnId) {
+    Preconditions.checkArgument(StringUtils.isNotBlank(columnId),
+        "'columnId' cannot be null or blank string.");
+    getHeaderInput(columnId).forceClear();
+    pause400ms();
+  }
+
+  private ForceClearTextBox getHeaderInput(String columnId) {
+    String xpath = f("//th[contains(@class,' %s')]//input", getColumnLocators().get(columnId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    if (isElementVisible(xpath, 0)) {
+      return new ForceClearTextBox(getWebDriver(), xpath);
+    }
+
+    xpath = f("//th[contains(@class,'%s')]//input", getColumnLocators().get(columnId));
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    return new ForceClearTextBox(getWebDriver(), xpath);
   }
 }

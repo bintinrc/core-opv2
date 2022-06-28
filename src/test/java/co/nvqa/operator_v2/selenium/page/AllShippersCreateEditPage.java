@@ -46,6 +46,7 @@ import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -92,6 +93,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   @FindBy(css = "form[name='ctrl.moreForm'] [name='container.shippers.add-new-service']")
   public NvIconTextButton moreSettingsAddNewService;
 
+  @FindBy(name = "container.shippers.milkrun")
+  public NvIconTextButton milkrun;
+
   //endregion
 
   //region MARKETPLACE
@@ -135,6 +139,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ErrorSaveDialog errorSaveDialog;
   @FindBy(css = "md-dialog")
   public WarningDialog warningDialog;
+  @FindBy(css = "md-dialog")
+  public UnsetAsMilkrunDialog unsetAsMilkrunDialog;
   @FindBy(xpath = "//md-dialog/md-toolbar")
   public PageElement dialogHeader;
 
@@ -179,7 +185,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(60);
+    shipperInformation.waitUntilClickable(120);
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
@@ -358,6 +364,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     basicSettingsForm.corporate.selectValue(orderCreate.getIsCorporate());
     basicSettingsForm.corporateReturn.selectValue(orderCreate.getIsCorporateReturn());
     basicSettingsForm.corporateManualAWB.selectValue(orderCreate.getIsCorporateManualAWB());
+    basicSettingsForm.corporateDocument.selectValue(orderCreate.getIsCorporateDocument());
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
@@ -715,10 +722,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
-    settings.setBulky(basicSettingsForm.bulky.isOn());
     settings.setCorporate(basicSettingsForm.corporate.isOn());
     settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
     settings.setCorporateManualAWB(basicSettingsForm.corporateManualAWB.isOn());
+    settings.setCorporateDocument(basicSettingsForm.corporateDocument.isOn());
     settings.setAvailableServiceLevels(basicSettingsForm.serviceLevel.getValue());
     return settings;
   }
@@ -762,13 +769,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
           .forEach(address ->
           {
             searchTableCustom1("contact", address.getContact());
-            clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
-            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
-            fillMilkrunReservationSettings(address);
-            clickNvApiTextButtonByName("commons.save-changes");
-            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
-
-            verifyPickupAddress(address);
+            milkrun.click();
+            unsetAsMilkrunDialog.waitUntilVisible();
+            unsetAsMilkrunDialog.delete.click();
+            unsetAsMilkrunDialog.waitUntilInvisible();
+            pause1s();
           });
     }
     clickNvIconTextButtonByName("Save Changes");
@@ -930,6 +935,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
     clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
     waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+    pause1s();
     click("//span[.='Milkrun Reservations']");
     waitUntilVisibilityOfElementLocated(
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
@@ -1310,7 +1316,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void goToTabCorporateSubShipper() {
     tabs.selectTab("Corporate sub shippers");
-    b2bManagementPage.onDisplay();
+    waitUntilPageLoaded();
+    b2bManagementPage.iframe.isDisplayedFast();
     b2bManagementPage.backToSubShipperTable();
   }
 
@@ -1446,12 +1453,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       }
     }
     String country = COUNTRY_CODE;
-    if ((country.equalsIgnoreCase("TH") || country.equalsIgnoreCase("PH")
-        || country.equalsIgnoreCase("ID"))) {
+    if (!(country.equalsIgnoreCase("SG") || country.equalsIgnoreCase("VN"))) {
       String billingWeight = pricing.getBillingWeight().getCode();
       if (Objects.isNull(billingWeight)) {
         newPricingProfileDialog.billingWeight.selectValue("Standard");
-      } else if(!billingWeight.equalsIgnoreCase("empty")){
+      } else if (!billingWeight.equalsIgnoreCase("empty")) {
         newPricingProfileDialog.billingWeight.selectValue(billingWeight);
       }
     }
@@ -1966,5 +1972,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public String searchMarketplaceSubshipperAndGetLegacyId(String searchKey, String searchValue) {
     sendKeysAndEnter(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB, searchKey), searchValue);
     return getText(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB_LEGACY_ID, searchValue));
+  }
+
+  public static class UnsetAsMilkrunDialog extends MdDialog {
+
+    @FindBy(css = "[aria-label='Delete']")
+    public Button delete;
+
+    public UnsetAsMilkrunDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

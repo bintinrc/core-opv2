@@ -1418,6 +1418,7 @@ Feature: Priority Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -1472,7 +1473,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-8} | {hub-id-8} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder
   Scenario Outline: Filter Parcels by Committed ETA (uid:c3b04170-37eb-4f15-9597-41f22ef4521a)
@@ -2181,6 +2182,7 @@ Feature: Priority Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
+    And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
     And Operator get the count from the tile: "<TileName>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -2202,16 +2204,17 @@ Feature: Priority Parcel in Hub
       | parcelLocation          | DAMAGED RACK       |
       | liability               | Recovery           |
       | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | orderOutcomeDamaged     | <OrderOutcome>     |
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator updates recovery ticket on Edit Order page:
-      | status          | <Status>       |
-      | outcome         | <OrderOutcome> |
-      | assignTo        | NikoSusanto    |
-      | newInstructions | GENERATED      |
+      | status                  | <Status>                  |
+      | outcome                 | <OrderOutcome>            |
+      | keepCurrentOrderOutcome | <KeepCurrentOrderOutcome> |
+      | assignTo                | NikoSusanto               |
+      | newInstructions         | GENERATED                 |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -2236,8 +2239,8 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status   | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome          | KeepCurrentOrderOutcome | Status   | TileName                | ModalName               | FSRModalTitle                                |
+      | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | No                      | RESOLVED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold
@@ -3263,11 +3266,15 @@ Feature: Priority Parcel in Hub
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId1>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId1>                        |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId2>" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId2>                        |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page
@@ -3305,7 +3312,10 @@ Feature: Priority Parcel in Hub
     And API Shipper tags multiple parcels as per the below tag
       | orderTag | 5570 |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId1>" } |
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId1>                        |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId2>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -3314,8 +3324,9 @@ Feature: Priority Parcel in Hub
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"<HubId2>" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId2>                        |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName2>" and proceed
     And Operator closes the modal: "<FSRModalTitle>" if it is displayed on the page

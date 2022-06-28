@@ -54,7 +54,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.DATE_TIME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
 import static org.apache.commons.lang3.StringUtils.equalsAnyIgnoreCase;
@@ -113,6 +112,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//label[text()='Weight']/following-sibling::p")
   public PageElement weight;
+
+  @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
+  public PageElement dimensions;
 
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
@@ -747,6 +749,42 @@ public class EditOrderPage extends OperatorV2SimplePage {
     return weight;
   }
 
+  public Double getLength() {
+    Double length = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      length = Double.parseDouble(temp.split(" ")[2]);
+    }
+
+    return length;
+  }
+
+  public Double getWidth() {
+    Double width = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      width = Double.parseDouble(temp.split(" ")[0]);
+    }
+
+    return width;
+  }
+
+  public Double getHeighth() {
+    Double height = null;
+    String actualText = this.dimensions.getText();
+
+    if (!actualText.contains("(L) x (B) x (H) cm")) {
+      String temp = actualText.replaceAll("[^-?0-9]+", " ");
+      height = Double.parseDouble(temp.split(" ")[1]);
+    }
+
+    return height;
+  }
+
   @SuppressWarnings("unused")
   public Double getCashOnDelivery() {
     Double cod = null;
@@ -798,7 +836,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void waitUntilInvisibilityOfLoadingOrder() {
     waitUntilInvisibilityOfElementLocated(
-        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]");
+        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]", 60);
     pause100ms();
   }
 
@@ -2126,24 +2164,26 @@ public class EditOrderPage extends OperatorV2SimplePage {
     switch (ticketType) {
       case RecoveryTicketsPage.TICKET_TYPE_DAMAGED: {
         //Damaged Details
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
-        createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
-        createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
-        createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        if (StringUtils.isNotBlank(recoveryTicket.getLiability())) {
+          createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getParcelLocation())) {
+          createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getDamageDescription())) {
+          createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        }
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_MISSING: {
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeMissing());
-        createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_PARCEL_EXCEPTION: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
@@ -2161,12 +2201,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
       case RecoveryTicketsPage.TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
+      }
+      case RecoveryTicketsPage.TICKET_TYPE_SELF_COLLECTION: {
+        createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcome());
+        break;
       }
     }
 
@@ -2184,7 +2227,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
       }
     });
 
-    createTicketDialog.createTicket.clickAndWaitUntilDone();
+    createTicketDialog.createTicket.clickAndWaitUntilDone(60);
     waitUntilInvisibilityOfToast("Ticket created");
   }
 

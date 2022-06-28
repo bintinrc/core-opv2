@@ -39,7 +39,6 @@ Feature: Unverified Address Assignment
     And Operator assign address "{KEY_CREATED_ORDER.buildCommaSeparatedToAddress}" to zone "{zone-name}" on Unverified Address Assignment page
     Then Operator verifies that success react notification displayed:
       | top                | 1 address assigned |
-      | waitUntilInvisible | true               |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verifies Zone is "{zone-short-name}" on Edit Order page
     When DB operator gets details for delivery transactions by order id

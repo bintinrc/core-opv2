@@ -121,16 +121,16 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
-      | origin_balance | -83.41                 |
+      | origin_balance | -81.81                 |
       | total_remitted | -10.00                 |
-      | balance        | -73.41                 |
+      | balance        | -71.81                 |
       | status         | In Progress            |
       | status_logs    | Open,Ready,In Progress |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>      |
-      | overall_balance | -73.41        |
-      | logs            | -83.41,-73.41 |
+      | overall_balance | -71.81        |
+      | logs            | -81.81,-71.81 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
@@ -186,16 +186,16 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
-      | origin_balance | -83.41               |
-      | total_remitted | -83.41               |
+      | origin_balance | -81.81               |
+      | total_remitted | -81.81               |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>     |
-      | overall_balance | 16.59        |
-      | logs            | -83.41,16.59 |
+      | overall_balance | 18.19        |
+      | logs            | -81.81,18.19 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 100.0  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
@@ -314,16 +314,16 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value         |
-      | origin_balance | -83.41                 |
+      | origin_balance | -81.81                 |
       | total_remitted | -10.00                 |
-      | balance        | -73.41                 |
+      | balance        | -71.81                 |
       | status         | In Progress            |
       | status_logs    | Open,Ready,In Progress |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>      |
-      | overall_balance | -73.41        |
-      | logs            | -83.41,-73.41 |
+      | overall_balance | -71.81        |
+      | logs            | -81.81,-71.81 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
@@ -366,6 +366,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | source          | <source>         |
       | account_id      | <account_id_2>   |
       | overall_balance | 0.00             |
+      #Create Payment
     Then Operator waits for 5 seconds
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -424,7 +425,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | <amount_2> |
     Examples:
       | source   | account_id                                       | amount | account_id_2                                       | amount_2 | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 83.41  | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 83.41    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 81.81    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Shipper Legacy ID From Different Account ID (uid:c549dd65-ca71-4b2f-854e-4d07bac3acc0)

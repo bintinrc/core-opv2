@@ -3,19 +3,18 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_COMMENT;
-import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.ACTION_FLAG;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_COMMENTS;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_OUTBOUND_STATUS;
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.COLUMN_ROUTE_ID;
@@ -50,7 +49,6 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   public NvIconTextButton pullOut;
 
 
-
   public OutboundMonitoringPage(WebDriver webDriver) {
     super(webDriver);
     outboundBreakroutePage = new OutboundBreakroutePage(getWebDriver());
@@ -72,10 +70,6 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   public void verifyStatusComplete() {
     String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
     assertEquals("Route ID is not found.", "Complete", actualStatus);
-  }
-
-  public void clickFlagButton() {
-    routesTable.clickActionButton(1, ACTION_FLAG);
   }
 
   public void verifyStatusMarked() {
@@ -105,13 +99,60 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
     outboundBreakroutePage.waitUntilElementDisplayed();
   }
 
+  public static class RouteInfo extends DataEntity<RouteInfo> {
+
+    String id;
+    String unscannedInternal;
+    String outboundStatus;
+    String comments;
+
+    public RouteInfo() {
+    }
+
+    public RouteInfo(Map<String, ?> data) {
+      super(data);
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getUnscannedInternal() {
+      return unscannedInternal;
+    }
+
+    public void setUnscannedInternal(String unscannedInternal) {
+      this.unscannedInternal = unscannedInternal;
+    }
+
+    public String getOutboundStatus() {
+      return outboundStatus;
+    }
+
+    public void setOutboundStatus(String outboundStatus) {
+      this.outboundStatus = outboundStatus;
+    }
+
+    public String getComments() {
+      return comments;
+    }
+
+    public void setComments(String comments) {
+      this.comments = comments;
+    }
+  }
+
   /**
    * Accessor for Routes table
    */
-  public static class RoutesTable extends MdVirtualRepeatTable<DataEntity<?>> {
+  public static class RoutesTable extends MdVirtualRepeatTable<RouteInfo> {
 
-    public static final String COLUMN_ROUTE_ID = "route-id";
-    public static final String COLUMN_OUTBOUND_STATUS = "outbound-status";
+    public static final String COLUMN_ROUTE_ID = "id";
+    public static final String COLUMN_OUTBOUND_STATUS = "outboundStatus";
     public static final String COLUMN_COMMENTS = "comments";
     public static final String ACTION_FLAG = "flag";
     public static final String ACTION_COMMENT = "comment";
@@ -119,8 +160,11 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
 
     public RoutesTable(WebDriver webDriver) {
       super(webDriver);
+      setMdVirtualRepeat("data in getTableData()");
+      setEntityClass(RouteInfo.class);
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_ROUTE_ID, "route-id")
+          .put("unscannedInternal", "unscanned-internal")
           .put(COLUMN_OUTBOUND_STATUS, "outbound-status")
           .put(COLUMN_COMMENTS, "comments")
           .build()

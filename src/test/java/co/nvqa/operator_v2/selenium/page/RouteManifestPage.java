@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -43,6 +44,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "div.route-detail:nth-of-type(1)>div:nth-of-type(2)")
   public PageElement routeId;
+
+  @FindBy(xpath = "//*[text()='Tracking ID(s)']/parent::th//input")
+  public PageElement trackingIDFilter;
 
   @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
   public ConfirmationDialog confirmationDialog;
@@ -200,6 +204,29 @@ public class RouteManifestPage extends OperatorV2SimplePage {
           .selectFailureReasonDetails(i, childFailureReason.getDescription());
     }
 
+    chooseAnOutcomeForTheWaypointDialog.update.click();
+    confirmationDialog.waitUntilVisible();
+    confirmationDialog.proceed.click();
+    confirmationDialog.waitUntilInvisible();
+    chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
+  }
+
+  public void failWaypointWithFailureDetails(Map<String, String> mapOfData, String trackingID) {
+    String failureReason = mapOfData.get("Failure Reason");
+    String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
+    String failureReasonDetail2 = mapOfData.get("Failure Reason Detail 2");
+    trackingIDFilter.clearAndSendKeys(trackingID);
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+    chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
+    pause1s();
+    chooseAnOutcomeForTheWaypointDialog.failure.click();
+    chooseAnOutcomeForTheWaypointDialog.chooseFailureReason.selectValue(failureReason);
+    if (StringUtils.isNotBlank(failureReasonDetail1)) {
+      chooseAnOutcomeForTheWaypointDialog.selectFailureReasonDetails(1, failureReasonDetail1);
+    }
+    if (StringUtils.isNotBlank(failureReasonDetail2)) {
+      chooseAnOutcomeForTheWaypointDialog.selectFailureReasonDetails(2, failureReasonDetail2);
+    }
     chooseAnOutcomeForTheWaypointDialog.update.click();
     confirmationDialog.waitUntilVisible();
     confirmationDialog.proceed.click();

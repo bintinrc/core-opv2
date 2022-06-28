@@ -405,7 +405,7 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
 
   public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId) {
     refreshPage();
-    waitWhilePageIsLoading();
+    waitWhilePageIsLoading(120);
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
     assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId),
         failedDeliveriesTable.isEmpty());

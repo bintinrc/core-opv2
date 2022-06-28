@@ -33,6 +33,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "name";
   public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE = "description";
   public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE = "last-modified";
+  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE = "last-modified-by";
   public static final String ACTION_BUTTON_EDIT_ON_TABLE = "container.pricing-scripts.edit-script";
 
   private static final String MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS = "script in getTableData()";
@@ -188,6 +189,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyDraftScriptIsReleased(Script script) {
+    refreshPage();
     clickTabItem(TAB_ACTIVE_SCRIPTS);
 
     retryIfAssertionErrorOccurred(() ->

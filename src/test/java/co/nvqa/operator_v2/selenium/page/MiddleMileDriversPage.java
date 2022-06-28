@@ -48,12 +48,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='No']";
     private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='Yes']";
     private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'ant-table-selection')]";
+    private static final String SELECT_ALL_CHECKBOX_XPATH = "//div[@class='ant-table-selection']//input[@class='ant-checkbox-input']";
     private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
     private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
     private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
-    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title' and text()='%s']";
+    private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
@@ -95,6 +96,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String LICENSE_STATUS = "license status";
     private static final String ACTIVE_STATUS = "Active";
     private static final String INACTIVE_STATUS = "Inactive";
+
+    public static final String XPATH_EMPLOYMENTTYPE = "//div[contains(@class, ' ant-select')][.//input[@id='employmentType']]";
 
     private static final String YES = "yes";
     private static final String NO = "no";
@@ -144,6 +147,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
 
+    @FindBy(xpath = "//div[@class='ant-empty-description']")
+    public PageElement listEmptyData;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -181,6 +186,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void selectHubFilter(String hubName) {
         loadDrivers.waitUntilClickable();
+        listEmptyData.waitUntilInvisible();
+        hubSearchFilter.click();
         hubSearchFilter.selectValue(hubName);
     }
 
@@ -556,7 +563,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.selectLicenseType(value);
                 break;
             case "employmentType":
-                editDriverDialog.employmentType.selectValue(value);
+                editDriverDialog.employmentType.click();
+                click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
                 editDriverDialog.employmentStartDate.sendDate(value);
@@ -582,20 +590,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesDataInViewModalIsTheSame(Driver middleMileDriver) {
-        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(),
-                viewDriverDialog.name.getValue());
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(),
-                viewDriverDialog.hub.getValue());
-        assertEquals("Contact number is not the same : ", middleMileDriver.getMobilePhone(),
-                viewDriverDialog.contactNumber.getValue());
-        assertEquals("License Number is not the same : ", middleMileDriver.getLicenseNumber(),
-                viewDriverDialog.licenseNumber.getValue());
-        assertEquals("Expiry Date is not the same : ", middleMileDriver.getLicenseExpiryDate(),
-                viewDriverDialog.licenseExpiryDate.getValue());
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(),
-                viewDriverDialog.username.getValue());
-        assertEquals("Comments is not the same : ", middleMileDriver.getComments(),
-                viewDriverDialog.comments.getValue());
+        Assertions.assertThat(middleMileDriver.getFirstName()).
+            as("Name is as expected").isEqualTo(viewDriverDialog.name.getValue());
+        Assertions.assertThat(middleMileDriver.getHub()).
+            as("Hub is as expected").isEqualTo(viewDriverDialog.hub.getValue());
+        Assertions.assertThat(viewDriverDialog.contactNumber.getValue()).
+            as("Contact number is as expected").endsWith(middleMileDriver.getMobilePhone());
+        Assertions.assertThat(middleMileDriver.getLicenseNumber()).
+            as("License number is as expected").isEqualTo(viewDriverDialog.licenseNumber.getValue());
+        Assertions.assertThat(middleMileDriver.getLicenseExpiryDate()).
+            as("Expiry Date is as expected").isEqualTo(viewDriverDialog.licenseExpiryDate.getValue());
+        Assertions.assertThat(middleMileDriver.getUsername()).
+            as("Username is as expected").isEqualTo(viewDriverDialog.username.getValue());
+        Assertions.assertThat(middleMileDriver.getComments()).
+            as("Comments is as expected").isEqualTo(viewDriverDialog.comments.getValue());
     }
 
     public void clickAvailabilityMode(String mode) {
@@ -609,7 +617,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void clickBulkAvailabilityMode(String mode) {
-        click(DROP_DOWN_ON_TABLE_XPATH);
+        if(!findElementByXpath(SELECT_ALL_CHECKBOX_XPATH).isSelected()){
+            click(DROP_DOWN_ON_TABLE_XPATH);
+        }
         click(APPLY_ACTION_DROP_DOWN_XPATH);
 
         if (YES.equalsIgnoreCase(mode)) {
@@ -645,6 +655,36 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         waitWhilePageIsLoading();
         String sortColumnXpath = f(TABLE_FILTER_SORT_XPATH, columnName);
         //scrollIntoView(sortColumnXpath);
+        String body_class_name = "name";
+        switch (columnName){
+            case "ID":
+                body_class_name ="id";
+                break;
+            case "Username":
+                body_class_name ="username";
+                break;
+            case "Hub":
+                body_class_name ="hub-name";
+                break;
+            case "Employment Type":
+                body_class_name ="employment-type";
+                break;
+            case "Employment Status":
+                body_class_name ="employment-status";
+                break;
+            case "License Type":
+                body_class_name ="license-type";
+                break;
+            case "License Status":
+                body_class_name ="license-status";
+                break;
+            case "Comments":
+                body_class_name ="comments";
+                break;
+        }
+
+        WebElement TableBody = findElementByXpath(f("(//div[contains(@class,'ant-table-container')]//div[contains(@class,'ant-table-body')]//td[contains(@class,'%s')])[1]",body_class_name));
+        executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});", TableBody);
         List<WebElement> sortFields = getWebDriver().findElements(By.xpath(sortColumnXpath));
         if (sortFields.size() == 0) {
             Assertions.assertThat(sortFields.size()).as(f("Assert that the column %s to be sorted is displayed on the screen", columnName)).isGreaterThan(0);
@@ -868,7 +908,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         public TextBox contactNumber;
         @FindBy(id = "licenseNumber")
         public TextBox licenseNumber;
-        @FindBy(xpath = "//div[contains(@class,'ant-picker')][not(contains(@class,'ant-picker-input'))][.//input[@id='licenseExpiryDate']]")
+        @FindBy(id = "licenseExpiryDate")
         public PageElement licenseExpiryDate;
         @FindBy(id = "username")
         public TextBox username;

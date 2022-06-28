@@ -4,8 +4,10 @@ import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -27,6 +29,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @FindBy(css = "div.caret-down-icon > button")
   public PageElement openMenu;
+  @FindBy(css = ".ant-dropdown-trigger > button")
+  public PageElement openMenu2;
 
   @FindBy(xpath = ".//span[.='Select All Shown']")
   public PageElement selectAllShown;
@@ -38,9 +42,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   protected String getTextOnTable(int rowNumber, String columnDataClass) {
-    String xpath = columnDataClass.startsWith("/") ?
-        f(columnDataClass, rowNumber) :
-        f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
+    String xpath = columnDataClass.startsWith("/") ? f(columnDataClass, rowNumber)
+        : f(CELL_LOCATOR_PATTERN, rowNumber, columnDataClass);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
@@ -50,9 +53,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   @Override
   public void clickActionButton(int rowNumber, String actionId) {
     String actionButtonLocator = getActionButtonsLocators().get(actionId);
-    String xpath = actionButtonLocator.startsWith("/") ?
-        f(actionButtonLocator, rowNumber) :
-        f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
+    String xpath = actionButtonLocator.startsWith("/") ? f(actionButtonLocator, rowNumber)
+        : f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
@@ -148,12 +150,16 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public String getRowLocator(int index) {
-    throw new UnsupportedOperationException();
+    return f("//div[@class='BaseTable__body']//div[@role='row'][%d]", index);
   }
 
   public void selectAllShown() {
     if (!selectAllShown.isDisplayedFast()) {
-      openMenu.click();
+      if (openMenu2.isDisplayedFast()) {
+        openMenu2.click();
+      } else {
+        openMenu.click();
+      }
       selectAllShown.click();
     }
   }
@@ -167,5 +173,20 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     while (!isElementExistFast(xpath)) {
       button.click();
     }
+  }
+
+  @Override
+  public void clearColumnFilter(String columnId) {
+    Preconditions.checkArgument(StringUtils.isNotBlank(columnId),
+        "'columnId' cannot be null or blank string.");
+    String columnLocator = columnLocators.get(columnId);
+    Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator),
+        "Locator for columnId [" + columnId + "] was not defined.");
+    new TextBox(getWebDriver(),
+        f(".//div[@data-headerkey='%s']//input", columnLocator)).forceClear();
+  }
+
+  public void waitIsNotEmpty(int timeoutInSeconds) {
+    waitUntil(() -> !isEmpty(), timeoutInSeconds * 1000, "Table is empty");
   }
 }

@@ -58,13 +58,13 @@ public class TagManagementSteps extends AbstractSteps {
   @Then("^Operator verifies tag on Tag Management page:$")
   public void verifyNewTagCreatedSuccessfully(Map<String, String> data) {
     tagManagementPage.inFrame(page -> {
-      Tag tag = new Tag(resolveKeyValues(data));
-      page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
+      Tag expected = new Tag(resolveKeyValues(data));
+      page.tagsTable.filterByColumn(COLUMN_NAME, expected.getName());
       Assertions.assertThat(page.tagsTable.isEmpty())
           .as("Tags Table is empty")
           .isFalse();
       Tag actual = page.tagsTable.readEntity(1);
-      tag.compareWithActual(actual);
+      expected.compareWithActual(actual);
     });
   }
 

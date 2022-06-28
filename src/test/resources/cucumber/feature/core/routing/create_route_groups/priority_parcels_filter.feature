@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
 Feature: Create Route Groups - Priority Parcel Filters
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -12,10 +12,9 @@ Feature: Create Route Groups - Priority Parcel Filters
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"<serviceLevel>","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
-      | serviceLevel     | <serviceLevel>                 |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
+      | serviceLevel | <serviceLevel>        |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
@@ -49,10 +48,9 @@ Feature: Create Route Groups - Priority Parcel Filters
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}                           |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}                           |
-      | shipper          | {filter-shipper-name}                                    |
-      | excludedShipper  | {filter-shipper-name},{shipper-v4-marketplace-legacy-id} |
+      | creationTime    | today                                                    |
+      | shipper         | {filter-shipper-name}                                    |
+      | excludedShipper | {filter-shipper-name},{shipper-v4-marketplace-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies that error react notification displayed:
@@ -71,10 +69,9 @@ Feature: Create Route Groups - Priority Parcel Filters
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}     |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}     |
-      | shipper          | {filter-shipper-name}              |
-      | excludedShipper  | {shipper-v4-marketplace-legacy-id} |
+      | creationTime    | today                              |
+      | shipper         | {filter-shipper-name}              |
+      | excludedShipper | {shipper-v4-marketplace-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction record on Create Route Groups page using data below:
@@ -122,31 +119,8 @@ Feature: Create Route Groups - Priority Parcel Filters
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | hubInboundUser   | {vendor-name}                  |
-    And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
-    And Operator click Load Selection on Create Route Groups page
-    And Operator verifies Transaction record on Create Route Groups page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER[1].trackingId}                |
-      | type       | DELIVERY Transaction                                     |
-      | shipper    | {KEY_LIST_OF_CREATED_ORDER[1].fromName}                  |
-      | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
-      | status     | Arrived at Sorting Hub                                   |
-
-  Scenario: Operator Filter Hub Inbound User with Order Creation Time on Create Route Groups
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator global inbounds the order belongs to specific Hub Inbound User:
-      | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Groups' page is loaded
-    And Operator removes all General Filters except following on Create Route Groups page: "Creation Time, Hub Inbound User"
-    And Operator add following filters on General Filters section on Create Route Groups page:
-      | Creation Time    | Today         |
-      | Hub Inbound User | {vendor-name} |
+      | creationTime   | today         |
+      | hubInboundUser | {vendor-name} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     And Operator verifies Transaction record on Create Route Groups page using data below:
@@ -165,8 +139,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom       | {gradle-next-0-day-yyyy-MM-dd}   |
-      | creationTimeTo         | {gradle-next-1-day-yyyy-MM-dd}   |
+      | creationTime           | today                            |
       | shipper                | {filter-shipper-name}            |
       | hubInboundDatetimeFrom | {gradle-current-date-yyyy-MM-dd} |
       | hubInboundDatetimeTo   | {gradle-next-1-day-yyyy-MM-dd}   |
@@ -213,13 +186,12 @@ Feature: Create Route Groups - Priority Parcel Filters
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator global inbounds the order belongs to specific Hub Inbound User:
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
-    When Operator go to menu Routing -> 1.1. Create Route Groups V1.5
-    And Operator wait until 'Create Route Groups' page is loaded
-    And Operator removes all General Filters except following on Create Route Groups page: "Creation Time, Shipper, Hub Inbound Datetime"
-    And Operator add following filters on General Filters section on Create Route Groups page:
-      | Creation Time      | Today                                                                         |
-      | Shipper            | {filter-shipper-name}                                                         |
-      | Orig Trxn End Time | {gradle-current-date-yyyy-MM-dd} 00:00,{gradle-current-date-yyyy-MM-dd} 23:30 |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    And Operator set General Filters on Create Route Groups page:
+      | creationTime                   | today                            |
+      | shipper                        | {filter-shipper-name}            |
+      | originalTransactionEndTimeFrom | {gradle-current-date-yyyy-MM-dd} |
+      | originalTransactionEndTimeTo   | {gradle-next-1-day-yyyy-MM-dd}   |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     Given Operator add following filters on Transactions Filters section on Create Route Groups page:
       | granularOrderStatus | Arrived at Sorting Hub |

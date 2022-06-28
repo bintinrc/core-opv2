@@ -150,9 +150,9 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_ROUTE_ID |
       | fetchByValue | 123456            |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 404 Unknown                     |
-      | errorCode    | 103019                          |
-      | errorMessage | Route with id=123456 not found! |
+      | status       | 404 Unknown                   |
+      | errorCode    | 103019                        |
+      | errorMessage | Route for id=123456 not found |
 
   @DeleteOrArchiveRoute
   Scenario: Get Route Details by Route ID - Route not Assigned to a Driver (uid:09c660de-0c62-4171-bcf1-3c0a4b93560b)

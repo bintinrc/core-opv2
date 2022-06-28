@@ -7,7 +7,7 @@ Feature: Waypoint Performance
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Pending Waypoints on Route Inbound Page (uid:03937ea4-5e56-4c4a-98aa-6b99057d7908)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new shipper address V2 using data below:
@@ -67,7 +67,7 @@ Feature: Waypoint Performance
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Success Waypoints on Route Inbound Page (uid:a00f892a-08e9-4a73-b458-2b8a32172261)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create V4 order using data below:
@@ -123,7 +123,7 @@ Feature: Waypoint Performance
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Failed Waypoints on Route Inbound Page (uid:744d1e16-b4a7-4036-bf21-c7a7ab94afb7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Shipper create V4 order using data below:
@@ -179,7 +179,7 @@ Feature: Waypoint Performance
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Total Waypoints on Route Inbound Page (uid:40fd6a8f-ba66-4b5e-a036-fcd8b6af95ea)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
 #    Add  order to success
@@ -257,20 +257,20 @@ Feature: Waypoint Performance
       | {shipper-v4-name} | 1       | 5     |
     When Operator click 'View orders or reservations' button for shipper #1 in Total Waypoints dialog
     Then Operator verify Reservations table in Total Waypoints dialog using data below:
-      | reservationId                            | location                   | readyToLatestTime              | approxVolume                   | status  | receivedParcels |
-      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | GET_FROM_CREATED_ADDRESS_1 | GET_FROM_CREATED_RESERVATION_1 | GET_FROM_CREATED_RESERVATION_1 | Success | 1               |
-      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | GET_FROM_CREATED_ADDRESS_2 | GET_FROM_CREATED_RESERVATION_2 | GET_FROM_CREATED_RESERVATION_2 | Pending | 0               |
+      | reservationId                            | location                                                        | readyToLatestTime              | approxVolume                                       | status  | receivedParcels |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_LIST_OF_CREATED_ADDRESSES[1].getFullSpaceSeparatedAddress} | GET_FROM_CREATED_RESERVATION_1 | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | Success | 1               |
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | {KEY_LIST_OF_CREATED_ADDRESSES[2].getFullSpaceSeparatedAddress} | GET_FROM_CREATED_RESERVATION_2 | {KEY_LIST_OF_CREATED_RESERVATIONS[2].approxVolume} | Pending | 0               |
     Then Operator verify Orders table in Total Waypoints dialog using data below:
-      | trackingId                                 | stampId | location                   | type                  | status  | cmiCount | routeInboundStatus |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |         | GET_FROM_CREATED_ORDER_1   | Delivery (Normal)     | Success | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ADDRESS_1 | Pick Up (Reservation) | Success | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |         | GET_FROM_CREATED_ORDER_2   | Delivery (Normal)     | Pending | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |         | GET_FROM_CREATED_ORDER_3   | Delivery (Normal)     | Failed  | 0        |                    |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |         | GET_FROM_CREATED_ORDER_4   | Delivery (Return)     | Pending | 0        | Inbounded          |
+      | trackingId                                 | stampId | location                                                        | type                  | status  | cmiCount | routeInboundStatus |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | null    | {KEY_LIST_OF_CREATED_ORDER[1].getFullSpaceSeparatedToAddress}   | Delivery (Normal)     | Success | 0        | null               |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | null    | {KEY_LIST_OF_CREATED_ADDRESSES[1].getFullSpaceSeparatedAddress} | Pick Up (Reservation) | Success | 0        | null               |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | null    | {KEY_LIST_OF_CREATED_ORDER[2].getFullSpaceSeparatedToAddress}   | Delivery (Normal)     | Pending | 0        | null               |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | null    | {KEY_LIST_OF_CREATED_ORDER[3].getFullSpaceSeparatedToAddress}   | Delivery (Normal)     | Failed  | 0        | null               |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | null    | {KEY_LIST_OF_CREATED_ORDER[4].getFullSpaceSeparatedToAddress}   | Delivery (Return)     | Pending | 0        | Inbounded          |
 
   @DeleteOrArchiveRoute
   Scenario: View Waypoint Performance of Partial Waypoints on Route Inbound Page (uid:285f51f0-3c99-4be9-bea9-11d47f73e313)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Shipper create V4 order using data below:

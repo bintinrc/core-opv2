@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound
+@OperatorV2 @Core @Inbounding @RouteInbound @InboundCOD
 Feature: Inbound COD & COP
 
   @LaunchBrowser @ShouldAlwaysRun

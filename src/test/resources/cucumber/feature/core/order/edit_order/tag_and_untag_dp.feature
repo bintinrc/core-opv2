@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @TagAndUntagDP
+@OperatorV2 @Core @Order @EditOrder @TagAndUntagDP @EditOrder2
 Feature: Tag & Untag DP
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -44,7 +44,7 @@ Feature: Tag & Untag DP
 
   Scenario: Operator Untag/Remove Order from DP (uid:cc4e3098-6bdd-48ea-9488-579535af8722)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -76,9 +76,9 @@ Feature: Tag & Untag DP
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Shipper create V4 order using data below:
-      | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                         |
-      | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                         |
-      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -105,7 +105,6 @@ Feature: Tag & Untag DP
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
     And DB Operator verifies all route_monitoring_data records
 
   @DeleteOrArchiveRoute @routing-refactor
@@ -113,7 +112,7 @@ Feature: Tag & Untag DP
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
@@ -132,14 +131,14 @@ Feature: Tag & Untag DP
     Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
     And DB Operator verifies all route_monitoring_data records
 
   @routing-refactor
   Scenario: Untag DP Order that is merged and not routed (uid:cea0056a-d4e8-4d54-8b7d-28fc786ee3db)
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And Operator get multiple "DELIVERY" transactions with status "PENDING"

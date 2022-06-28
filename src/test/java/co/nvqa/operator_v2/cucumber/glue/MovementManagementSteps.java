@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
@@ -7,6 +8,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.MovementSchedule.Schedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -17,12 +19,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +62,8 @@ public class MovementManagementSteps extends AbstractSteps {
     {
       try {
         final String finalHubName = resolveValue(hubName);
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub
-            .selectValue(finalHubName);
+        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(
+            finalHubName);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info(
@@ -101,6 +103,7 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
+    pause10s();
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
@@ -167,9 +170,10 @@ public class MovementManagementSteps extends AbstractSteps {
         }
         operatorSelectTabOnMovementManagementPage("Relations");
         operatorSelectTabOnMovementManagementPage(tabName);
+        pause(50000);
         movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
-        if (!movementManagementPage.relationsTable.rows.get(0).editRelations.isDisplayed()) {
+        if (movementManagementPage.relationsTable.rows.size()==0 || !movementManagementPage.relationsTable.rows.get(0).editRelations.isDisplayed()) {
           tabName = "All";
           operatorSelectTabOnMovementManagementPage(tabName);
         }
@@ -186,6 +190,7 @@ public class MovementManagementSteps extends AbstractSteps {
           movementManagementPage.successCreateRelation.waitUntilInvisible();
         }
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
+        pause5s();
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying...");
@@ -194,7 +199,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.relationsTab.waitUntilClickable(60);
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 3);
   }
 
   @Then("Operator search for Pending relation on Movement Management page using data below:")
@@ -241,15 +246,73 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
+    movementManagementPage.waitForLoadingIconDisappear();
     retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Map<String, String> finalData = resolveKeyValues(data);
+        if(finalData.get("departureTime").equalsIgnoreCase("EXISTED")){
+          movementManagementPage.modify.click();
+          String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+          String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+          finalData.put("departureTime",UpdatedStartTime);
+          finalData.put("endTime",UpdatedDurationTime);
+          movementManagementPage.close.click();
+          movementManagementPage.StartTime = UpdatedStartTime;
+        }
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+        if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
+          List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+          int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
+          movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers,0);
+        }
+        putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+        if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
+          movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
+          StationMovementSchedule secondStationMovementSchedule = new StationMovementSchedule(
+              finalData);
+          secondStationMovementSchedule.setDepartureTime("21:01");
+          movementManagementPage.addStationMovementScheduleModal.fillAnother(
+              secondStationMovementSchedule, "1");
+          if (StringUtils.isNotBlank(finalData.get("assignDrivers"))){
+            List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            int numberOfDrivers = Integer.parseInt(finalData.get("assignDrivers"));
+            movementManagementPage.assignDrivers(numberOfDrivers,middleMileDrivers,1);
+          }
+          putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, secondStationMovementSchedule);
+        }
+
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+      } catch (Exception ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        movementManagementPage.switchTo();
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addSchedule.waitUntilClickable(60);
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 3);
+
+  }
+
+  @Then("Operator try adds new Station Movement Schedule on Movement Management page using data below:")
+  public void operatorTryAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
+      Map<String, String> data) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
     {
       try {
         final Map<String, String> finalData = resolveKeyValues(data);
         StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
         movementManagementPage.stationsTab.click();
-        movementManagementPage.addSchedule.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
+          movementManagementPage.addSchedule.click();
+          movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+          movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule, "0");
         putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
         if (StringUtils.isNotBlank(finalData.get("addAnother"))) {
           movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
@@ -262,6 +325,7 @@ public class MovementManagementSteps extends AbstractSteps {
         }
         movementManagementPage.addStationMovementScheduleModal.create.click();
         movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+        pause6s();
       } catch (Exception ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
@@ -271,7 +335,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addSchedule.waitUntilClickable(60);
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 2);
+    }, 3);
 
   }
 
@@ -279,6 +343,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(
       List<Map<String, String>> data) {
     data = resolveListOfMaps(data);
+    Boolean isSameWave = false;
     movementManagementPage.stationsTab.click();
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
@@ -286,6 +351,11 @@ public class MovementManagementSteps extends AbstractSteps {
       Map<String, String> map = data.get(i);
       StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(map);
       if (i > 0) {
+        Map<String,String> item1 = map;
+        Map<String,String> item2 = data.get(i-1);
+        item1.remove("daysOfWeek");
+        item2.remove("daysOfWeek");
+        if (item1.equals(item2)) isSameWave = true;
         movementManagementPage.addStationMovementScheduleModal.addAnotherSchedule.click();
         movementManagementPage.addStationMovementScheduleModal.fillAnother(stationMovementSchedule,
             String.valueOf(i));
@@ -293,8 +363,10 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule,
             String.valueOf(i));
       }
-      putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
+      if(!isSameWave) putInList(KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE, stationMovementSchedule);
     }
+    movementManagementPage.addStationMovementScheduleModal.create.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
   }
 
   @And("Operator load schedules on Movement Management page using data below:")
@@ -326,6 +398,37 @@ public class MovementManagementSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, 10);
+  }
+
+  @And("Operator load schedules and verifies on Movement Management page with retry using data below:")
+  public void operatorLoadSchedulesAndVerifiesOnMovementManagementPageWithRetryUsingDataBelow(
+      Map<String, String> inputData) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+    {
+      try {
+        final Map<String, String> data = resolveKeyValues(inputData);
+        String crossdockHub = data.get("crossdockHub");
+        String originHub = data.get("originHub");
+        String destinationHub = data.get("destinationHub");
+        movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
+
+        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+        assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(),
+            movementManagementPage.schedulesTable.getRowsCount());
+        for (int i = 0; i < movementSchedule.getSchedules().size(); i++) {
+          MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(
+              i + 1);
+          movementSchedule.getSchedule(i).compareWithActual(actual);
+        }
+
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        movementManagementPage.refreshPage();
+        movementManagementPageIsLoaded();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 3);
   }
 
   @And("Operator load schedules on Movement Management page")
@@ -360,7 +463,6 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
-        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
@@ -386,7 +488,13 @@ public class MovementManagementSteps extends AbstractSteps {
         if (existed == null) {
           put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
         } else {
-          existed.getSchedules().addAll(movementSchedule.getSchedules());
+          Optional<Schedule> scheduleExist = existed.getSchedules().stream()
+              .filter((schedule) -> schedule.getDepartureTime()
+                  .equals(movementSchedule.getSchedule(0).getDepartureTime())).findFirst();
+
+          if (!scheduleExist.isPresent()) {
+            existed.getSchedules().addAll(movementSchedule.getSchedules());
+          }
         }
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
@@ -411,7 +519,7 @@ public class MovementManagementSteps extends AbstractSteps {
     assertNull("Movement Type value",
         movementManagementPage.addMovementScheduleModal.getScheduleForm(
             1).movementType.getValue());
-    assertEquals("Comment value", "",
+    assertEquals("Comment value", null,
         movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue());
   }
 
@@ -492,7 +600,7 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
   public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage() {
-    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
+    movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted");
   }
 
   @Deprecated
@@ -535,6 +643,7 @@ public class MovementManagementSteps extends AbstractSteps {
         break;
       case "stations":
         movementManagementPage.stationsTab.click();
+        Assertions.assertThat(movementManagementPage.loadSchedules.isEnabled()).as("Load Schedules Button is disable").isFalse();
         break;
       case "relations":
         movementManagementPage.relationsTab.click();
@@ -733,10 +842,14 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.modify.click();
     String displayTime = DateUtil
         .displayTime(DateUtil.getDate(ZoneId.of("UTC")).plusHours(7), true);
-    movementManagementPage.departureTimeInputs.get(0).setValue(displayTime);
-    movementManagementPage.departureTimeInputs.get(1).setValue(displayTime);
-    movementManagementPage.durationInputs.get(0).setValue("00:45");
-    movementManagementPage.durationInputs.get(1).setValue("00:45");
+    movementManagementPage.departureTimeInputs.get(0).sendKeys(displayTime);
+    movementManagementPage.departureTimeInputs.get(0).sendKeys(Keys.RETURN);
+    movementManagementPage.departureTimeInputs.get(1).sendKeys(displayTime);
+    movementManagementPage.departureTimeInputs.get(1).sendKeys(Keys.RETURN);
+    movementManagementPage.durationInputs.get(0).sendKeys("00:45");
+    movementManagementPage.durationInputs.get(0).sendKeys(Keys.RETURN);
+    movementManagementPage.durationInputs.get(1).sendKeys("00:45");
+    movementManagementPage.durationInputs.get(1).sendKeys(Keys.RETURN);
     movementManagementPage.commentInputs.get(0)
         .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.commentInputs.get(1)
@@ -774,9 +887,11 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verify all station schedules are correct from UI")
   public void operatorVerifyAllStationSchedulesAreCorrectFromUI() {
+    movementManagementPage.waitForLoadingIconDisappear();
     List<StationMovementSchedule> stationMovementSchedules = get(
         KEY_LIST_OF_CREATED_STATION_MOVEMENT_SCHEDULE);
-    Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount() - 1)
+    List<Driver> middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+    Assertions.assertThat(movementManagementPage.stationMovementSchedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(stationMovementSchedules.size());
     for (int i = 0; i < stationMovementSchedules.size(); i++) {
       StationMovementSchedule actual = movementManagementPage.stationMovementSchedulesTable
@@ -786,12 +901,14 @@ public class MovementManagementSteps extends AbstractSteps {
       stationMovementSchedules.get(i).setDuration((Integer) null);
       stationMovementSchedules.get(i).compareWithActual(actual);
     }
+    if (middleMileDrivers !=null) movementManagementPage.verifyListDriver(middleMileDrivers);
   }
 
   @Then("Operator verify all station schedules are correct")
   public void operatorVerifyAllStationSchedulesAreCorrect() {
+    movementManagementPage.waitForLoadingIconDisappear();
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount() - 1)
+    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
         .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
     for (int i = 0; i < hubRelations.size(); i++) {
       HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
@@ -803,37 +920,227 @@ public class MovementManagementSteps extends AbstractSteps {
           .setOriginHubName(hubRelations.get(i).getOriginHubName());
       hubRelations.get(i).getSchedules().get(i)
           .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
-      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual);
+      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual, "drivers");
     }
   }
 
   @When("Operator updates created station schedule")
   public void operatorUpdatesCreatedStationSchedule() {
     movementManagementPage.modify.click();
-    movementManagementPage.departureTimeInputs.get(0).setValue("21:15");
-    movementManagementPage.durationInputs.get(0).setValue("00:45");
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
     movementManagementPage.commentInputs.get(0)
         .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.save.click();
     movementManagementPage.modalUpdateButton.click();
     movementManagementPage
-        .verifyNotificationWithMessage("1 schedule(s) have been updated.");
-    movementManagementPage.closeButton.click();
+        .verifyNotificationWithMessage("1 schedule(s) have been updated");
     List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
-    hubRelations.get(0).getSchedules().get(0).setDuration("00:00:45");
-    hubRelations.get(0).getSchedules().get(0).setStartTime("21:15");
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
     hubRelations.get(0).getSchedules().get(0)
         .setComment("This schedule has been updated by Automation Test");
   }
 
-  @When("Operator deletes {int} schedule fro Edit Schedule dialog")
+  @When("Operator deletes schedule {int} from Edit Schedule dialog")
   public void operatorDeletesCreatedStationSchedule(int index) {
+    movementManagementPage.closeNotificationMessage();
+    movementManagementPage.deleteMovementSchedule(index);
+    movementManagementPage
+        .verifyNotificationWithMessage("1 schedule(s) have been deleted");
+  }
+
+  @When("Operator updates all created station schedules using same values")
+  public void operatorUpdatesAllCreatedStationSchedules() {
     movementManagementPage.modify.click();
-    movementManagementPage.deleteSchedule.get(index).click();
+    movementManagementPage.UpdatesdepartureTime("21:00");
+    movementManagementPage.UpdatesdurationTime("01:00");
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+  }
+
+  @When("Operator updates Station Schedule to Duplicate and Existing Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToDuplicateAndExistingShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+    String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime);
+    errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime+" already exists");
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator updates Station Schedule to Duplicate Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToDuplicateShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = "00:01";
+    String UpdatedDurationTime = "00:01";
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime);
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator updates Station Schedule to Existing Schedule and verifies error messages")
+  public void operatorUpdatesCreatedStationSchedulesToExistingShcedule(){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    movementManagementPage.modify.click();
+    String UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+    String UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+    movementManagementPage.UpdatesdepartureTime(UpdatedStartTime);
+    movementManagementPage.UpdatesdurationTime(UpdatedDurationTime);
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+
+    List<String> errorMessageList = new ArrayList<String>();
+    errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+            lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+UpdatedStartTime+" already exists");
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @Then("Operator verifies {string} error message")
+  public void OperatorVerifiesErrorMessage(String errorType){
+    HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    List<String> errorMessageList = new ArrayList<String>();
+    System.out.println("Debug Start time: "+movementManagementPage.StartTime);
+    switch (errorType){
+      case "Existing Schedule":
+        errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime+" already exists");
+        break;
+      case "Duplicate Schedule":
+        errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime);
+        break;
+      case "Duplicate and Existing Schedule":
+        errorMessageList.add("duplicate schedule in the request: from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime);
+        errorMessageList.add("schedule from origin "+lastCreatedHub.getOriginHubName()+" to destination "+
+                lastCreatedHub.getDestinationHubName()+" for LAND_HAUL on MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY at "+movementManagementPage.StartTime+" already exists");
+        break;
+    }
+
+    movementManagementPage.verifyNotificationWithMessage(errorMessageList);
+  }
+
+  @When("Operator clicks Error Message close icon")
+  public void operatorCloseMessage(){
+    movementManagementPage.closeNotificationMessage();
+  }
+
+  @Then("Operator verifies page is back to view mode")
+  public void operatorVerifiesPageIsViewMode(){
+    movementManagementPage.verifyPageInViewMode();
+  }
+
+  @Then("Operator verifies {string} with value {string} is not shown on Movement Schedules page")
+  public void operatorVerifiesInvalidDriver(String name, String value){
+    movementManagementPage.stationsTab.click();
+    movementManagementPage.addSchedule.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+    movementManagementPage.verifyInvalidItem(name, value,0);
+  }
+
+  @When("Operator updates created station schedule with filter using data below:")
+  public void operatorUpdatesCreatedStationScheduleWithFilter(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String crossdockHub = data.get("crossdockHub");
+    String originHub = data.get("originHub");
+    String destinationHub = data.get("destinationHub");
+    movementManagementPage.modify.click();
+    movementManagementPage.EditFilter(crossdockHub, originHub, destinationHub);
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
     movementManagementPage.save.click();
     movementManagementPage.modalUpdateButton.click();
     movementManagementPage
-        .verifyNotificationWithMessage("1 schedule(s) have been updated.");
-    movementManagementPage.closeButton.click();
+            .verifyNotificationWithMessage("1 schedule(s) have been updated");
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
+    hubRelations.get(0).getSchedules().get(0)
+            .setComment("This schedule has been updated by Automation Test");
+  }
+
+  @When("Operator cancels Update Schedules on Movement Schedule page")
+  public void operatorCancelsUpdateSchedule() {
+    movementManagementPage.modify.click();
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.close.click();
+  }
+
+  @Then("Operator verifies dialog confirm with message {string} show on Movement Schedules page")
+  public void operatorVerifiesConfirmMessage(String message){
+    movementManagementPage.verifyConfirmDialog(message);
+  }
+
+  @When("Operator click on OK button")
+  public void operatorClickOKbutton(){
+    movementManagementPage.OK.click();
+  }
+
+  @When("Operator upgrades new Station Movement Schedules on Movement Management page:")
+  public void operatorUpdatesScheduleOnMovementPage(List<Map<String, String>> data){
+    data = resolveListOfMaps(data);
+    String UpdatedStartTime ="";
+    String UpdatedDurationTime ="";
+
+    movementManagementPage.modify.click();
+    if(data.get(0).get("departureTime").equalsIgnoreCase("SAMEWAVE")){
+      UpdatedStartTime = movementManagementPage.getValueInLastItem("start time", "value");
+      UpdatedDurationTime = movementManagementPage.getValueInLastItem("duration", "value");
+      for (int i = 0; i < data.size(); i++){
+        data.get(i).put("departureTime",UpdatedStartTime);
+        data.get(i).put("endTime",UpdatedDurationTime);
+      }
+    }
+    for (int i = 0; i < data.size(); i++) {
+      Map<String, String> map = data.get(i);
+      movementManagementPage.UpdatesdepartureTime(map.get("departureTime"), i);
+      movementManagementPage.UpdatesdurationTime(map.get("endTime"), i);
+      Set<String> test = new HashSet<String>();
+      String[] days = map.get("daysOfWeek").split(",");
+      test= Arrays.stream(days).map(day -> day.trim().toLowerCase()).collect(Collectors.toSet());
+      movementManagementPage.updateDaysOfWeek(test,i+1);
+      if (i>0){
+        Map<String,String> item1 = map;
+        Map<String,String> item2 = data.get(i-1);
+        item1.remove("daysOfWeek");
+        item2.remove("daysOfWeek");
+        if (item1.equals(item2)) {
+          List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+          remove(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+          putInList(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP,hubRelations.get(hubRelations.size()-1));
+        }
+      }
+    }
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+            .verifyNotificationWithMessage("2 schedule(s) have been updated");
   }
 }

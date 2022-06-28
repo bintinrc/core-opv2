@@ -54,6 +54,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Outbound/Route Load Monitoring", "outbound-monitoring");
     MAP_OF_END_URL.put("Outbound Load Monitoring", "outbound-monitoring");
     MAP_OF_END_URL.put("Ninja Pack Tracking ID Generator", "ninja-pack-tid-generator");
+    MAP_OF_END_URL.put("Pack TID Generator (sku)", "pregen-tid-sku");
     MAP_OF_END_URL.put("Update Delivery Address with CSV", "order-delivery-update");
     MAP_OF_END_URL.put("Route Monitoring V2", "route-monitoring-paged");
     MAP_OF_END_URL.put("Invoiced Orders Search", "invoiced-orders");
@@ -64,7 +65,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Beranda Manajemen Stasiun", "station-homepage");
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
     MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
-    MAP_OF_END_URL.put("User Management", "admin/hubs");
+    MAP_OF_END_URL.put("Station User Management", "admin/hubs");
   }
 
   public MainPage(WebDriver webDriver) {

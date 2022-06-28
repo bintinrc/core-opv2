@@ -27,8 +27,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {mm-driver-hub-name-id} | {default-phone-number}   | RANDOM        | FULL_TIME      | RANDOM   |
+      | name   | hub                     | contactNumber               | licenseNumber | employmentType | username |
+      | RANDOM | {mm-driver-hub-name-id} | {default-phone-number-id}   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
@@ -41,8 +41,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {mm-driver-hub-name-th} | {default-phone-number}   | RANDOM        | FULL_TIME      | RANDOM   |
+      | name   | hub                     | contactNumber               | licenseNumber | employmentType | username |
+      | RANDOM | {mm-driver-hub-name-th} | {default-phone-number-th}   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
@@ -55,8 +55,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {mm-driver-hub-name-my} | {default-phone-number}   | RANDOM        | FULL_TIME      | RANDOM   |
+      | name   | hub                     | contactNumber               | licenseNumber | employmentType | username |
+      | RANDOM | {mm-driver-hub-name-my} | {default-phone-number-my}   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
@@ -69,8 +69,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {mm-driver-hub-name-vn} | {default-phone-number}   | RANDOM        | FULL_TIME      | RANDOM   |
+      | name   | hub                     | contactNumber               | licenseNumber | employmentType | username |
+      | RANDOM | {mm-driver-hub-name-vn} | {default-phone-number-vn}   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
@@ -83,8 +83,8 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Middle Mile Driver with details:
-      | name   | hub                     | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {mm-driver-hub-name-ph} | {default-phone-number}   | RANDOM        | FULL_TIME      | RANDOM   |
+      | name   | hub                     | contactNumber               | licenseNumber | employmentType | username |
+      | RANDOM | {mm-driver-hub-name-ph} | {default-phone-number-ph}   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username

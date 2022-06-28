@@ -45,9 +45,27 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       try {
         Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
         final String finalHub = resolveValue(hub);
-        scanningPage.inFrame(page -> {
-          scanningPage.inboundScanning(shipmentId, label, finalHub);
-        });
+        scanningPage.switchTo();
+        scanningPage.inboundScanning(shipmentId, label, finalHub);
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
+        scanningPage.refreshPage();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 5);
+  }
+
+  @SuppressWarnings("unchecked")
+  @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) in Shipment Inbound Scanning page$")
+  public void inboundScanningShipment(String label, String hub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        Long shipmentId = getLong(KEY_CREATED_SHIPMENT_ID);
+        final String finalHub = resolveValue(hub);
+        scanningPage.switchTo();
+        scanningPage.inboundScanningShipment(shipmentId, label, finalHub);
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Element in Shipment inbound scanning not found, retrying...");
@@ -92,13 +110,15 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }
   }
 
+  @SuppressWarnings("unchecked")
   @When("^Operator check alert message on Shipment Inbound Scanning page using data below:$")
   public void checkAlertOnShipmentInboundScanningPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String alert = data.get("alert");
-
-    scanningPage.scanAlertMessage.waitUntilVisible();
-    assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
+    scanningPage.inFrame(page -> {
+      scanningPage.scanAlertMessage.waitUntilVisible();
+      assertEquals("Inbound Scan Alert Message", alert, scanningPage.scanAlertMessage.getText());
+    });
   }
 
   @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB$")
@@ -141,7 +161,10 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
       try {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         final String resolvedHub = resolveValue(hub);
-        scanningPage.inboundScanningNegativeScenario(shipmentId, label, resolvedHub, condition);
+        scanningPage.inFrame(page -> {
+          scanningPage.inboundScanningNegativeScenario(shipmentId, label, resolvedHub, condition);
+        });
+
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         scanningPage.refreshPage();
@@ -256,15 +279,18 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @Then("Operator verify hub {string} not found on Shipment Inbound Scanning page")
   public void operatorVerifyHubNotFoundOnShipmentInboundScanningPage(String hubName) {
     String hubNameResolved = resolveValue(hubName);
-    scanningPage.inboundHub.searchValue(hubNameResolved);
-    assertThat("value does not exist", scanningPage.inboundHub.isValueExist(hubNameResolved),
-        equalTo(false));
+    scanningPage.switchTo();
+    TestUtils.findElementAndClick(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, "xpath", getWebDriver());
+    scanningPage.sendKeysAndEnter(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, hubNameResolved);
+    Assertions.assertThat(scanningPage.findElementByXpath(ShipmentInboundScanningPage.XPATH_INBOUND_HUB).getText())
+            .as("value does not exist").isEqualTo("");
   }
 
   @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")
   public void operatorInboundScanningWrongShipmentIntoVanInHub(Long errorShipmentId,
       String hubName) {
     String resolvedHubName = resolveValue(hubName);
+    scanningPage.switchTo();
     scanningPage.inboundScanning(errorShipmentId, "Into Van", resolvedHubName);
   }
 
@@ -282,20 +308,25 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.checkSessionScanResult(Long.valueOf(resolvedShipmentId), condition);
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the following messages display on the card after inbounding")
   public void operator_verifies_that_the_following_messages_display_on_the_card_after_inbounding(
       Map<String, String> messages) {
     messages = resolveKeyValues(messages);
-    Assertions.assertThat(scanningPage.scannedState.getText())
-        .as(f("Assert that scanned state is %s", messages.get("scanState")))
-        .isEqualTo(messages.get("scanState"));
-    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
-        .as(f("Assert that scanned message is %s", messages.get("scanMessage")))
-        .isEqualTo(messages.get("scanMessage"));
-    Assertions.assertThat(scanningPage.scannedShipmentId.getText())
-        .as(f("Assert that scanned shipment message is %s", messages.get("scannedShipmentId")))
-        .isEqualTo(messages.get("scannedShipmentId"));
-    takesScreenshot();
+    Map<String, String> finalMessages = messages;
+    scanningPage.inFrame(page -> {
+      Assertions.assertThat(scanningPage.scannedState.getText())
+          .as(f("Assert that scanned state is %s", finalMessages.get("scanState")))
+          .isEqualTo(finalMessages.get("scanState"));
+      Assertions.assertThat(scanningPage.scannedMessage.getText())
+          .as(f("Assert that scanned message is %s", finalMessages.get("scanMessage")))
+          .isEqualTo(finalMessages.get("scanMessage"));
+      Assertions.assertThat(scanningPage.scannedShipmentId.getText())
+          .as(f("Assert that scanned shipment message is %s",
+              finalMessages.get("scannedShipmentId")))
+          .isEqualTo(finalMessages.get("scannedShipmentId"));
+      takesScreenshot();
+    });
 
 
   }

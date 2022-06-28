@@ -893,14 +893,10 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_ALL_ORDERS_FILTERS_PRESET_ID, presetId);
   }
 
-  @When("Operator selects {string} Filter Preset on All Orders page")
+  @When("Operator selects {value} Filter Preset on All Orders page")
   public void selectPresetName(String value) {
     allOrdersPage.waitUntilPageLoaded();
-    allOrdersPage.filterPreset.searchAndSelectValue(resolveValue(value));
-    if (allOrdersPage.halfCircleSpinner.waitUntilVisible(3)) {
-      allOrdersPage.halfCircleSpinner.waitUntilInvisible();
-    }
-    pause1s();
+    allOrdersPage.selectFilterPreset(value);
   }
 
   @When("Operator clicks Clear All Selections and Load Selection button on All Orders Page")

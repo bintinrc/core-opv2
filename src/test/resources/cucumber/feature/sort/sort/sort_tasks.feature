@@ -11,11 +11,13 @@ Feature: Sort Task
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
+      | hubId   | {hub-id}  |
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIERDONOTUSE{gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verifies that "New Middle Tier Created" success notification is displayed
+    And Operator select region on Sort Task page
+        |regionName| {region-name}|
     And Operator verify new middle tier is created
       | hubName  | {hub-name}  |
       | sortType | MIDDLE TIER |
@@ -31,6 +33,8 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     When Operator delete the middle tier
     Then Operator verifies that "Middle Tier Deleted" success notification is displayed
     And Operator verify middle tier is deleted
@@ -46,6 +50,8 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -65,6 +71,8 @@ Feature: Sort Task
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
     And Operator select a sort task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
@@ -181,7 +189,7 @@ Feature: Sort Task
     When Operator switch to View Sort Structure window
     And Operator refresh diagram on View Sort Structure page
     Then Operator verifies graph contains exactly following Middle Tier nodes:
-      | {mid-tier-name}                      |
+      | {mid-tier-name}                |
       | {KEY_CREATED_MIDDLE_TIER_NAME} |
 
   @CloseNewWindows @DeleteNodes
@@ -217,19 +225,17 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
+      | hubName | {hub-name-8} |
     And Operator click View Sort Structure on Sort Tasks page
     When Operator search for "SORT-SG-2-HUB" node on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-8}    |
       | SORT-SG-2-HUB   |
-      | {hub-name-4}    |
-      | {mid-tier-name} |
     When Operator reset view on View Sort Structure page
     Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-8}    |
       | SORT-SG-2-HUB   |
-      | {hub-name-4}    |
-      | {mid-tier-name} |
-      | SORT-1          |
+      | SORTSGMIDDLETIER|
 
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
@@ -246,13 +252,127 @@ Feature: Sort Task
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
-      | hubName | {hub-name-4} |
-    And Operator search for "{mid-tier-name}" node on Sort Tasks page
+      | hubName | {hub-name-9} |
+    And Operator search for "SORT-1" node on Sort Tasks page
     Then Operator verify displayed nodes on Sort Tasks page:
-      | {hub-name-4}    |
+      | {hub-name-9}    |
       | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
+      | SORT-1          |
     And Operator verify following nodes are highlighted on Sort Tasks page:
+      | SORT-1          |
+
+  @CloseNewWindows @DeleteNodes
+  Scenario: Removing and adding a sort task (uid:f4b78675-b8b7-4e28-bbcd-45b38477f732)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create Middle Tier sort node:
+      | hub_id | {hub-id}                                             |
+      | name   | MIDTIERDONOTUSE{gradle-current-date-yyyyMMddHHmmsss} |
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+      | hubId   | {hub-id}   |
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
+    And Operator select a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    Then Operator verify added outputs appears on tree list
+    When Operator open the sidebar menu on Sort Tasks page
+    And Operator remove selection of a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
+    Then Operator verify removed outputs removed on tree list
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name}|
+    And Operator select a sort task
+    Then Operator verifies that "{hub-name} modified" success notification is displayed
+    When Operator select hub on Sort Tasks page:
+      | hubName | {hub-name} |
+    And Operator refresh table on Sort Tasks page
+    Then Operator verify added outputs appears on tree list
+
+  @CloseNewWindows
+  Scenario: Add a sort task - RTS Zone (uid:094b5d46-1a8c-4658-868c-20ebb695a14d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-6} |
+      | hubId   | {hub-id-6}   |
+    And Operator open the sidebar menu on Sort Tasks page
+    And Operator select region on Sort Task page
+      |regionName| {region-name-6}|
+    And Operator select a RTS zone
+      | rtsZone | RTS-SORT-SG-3-HUB|
+    Then Operator verifies that "{hub-name-6} modified" success notification is displayed
+    Then Operator verify RTS zone appears on tree list
+      | rtsZone | RTS-SORT-SG-3-HUB |
+    When Operator open the sidebar menu on Sort Tasks page
+    And Operator remove selection of RTS zone
+      | rtsZone | RTS-SORT-SG-3-HUB|
+    Then Operator verifies that "{hub-name-6} modified" success notification is displayed
+
+  @CloseNewWindows
+  Scenario: Load Sort Entity List - No Children (uid:814f21d2-73bf-4705-896d-f9fd7e795d67)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-6} |
+      | hubId   | {hub-id-6}   |
+    Then Operator verify output on tree list
+      | noOutput |
+
+  @CloseNewWindows
+  Scenario: Load Sort Entity List - Has Children (uid:928312c2-6375-48dc-8108-cd91dc70735b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-8} |
+      | hubId   | {hub-id-8}   |
+    Then Operator verify displayed nodes on Sort Tasks page:
+      | {hub-name-8}    |
+      | SORT-SG-2-HUB   |
+      | SORTSGMIDDLETIER|
+
+  @CloseNewWindows
+  Scenario: Search sort nodes on Sort Structure Page - RTS zone (uid:4776cda5-157a-4345-b7d6-b9c3cc776691)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Sort -> Sort Tasks
+    And Sort Belt Tasks page is loaded
+    And Operator select hub on Sort Tasks page:
+      | hubName | {hub-name-7} |
+    And Operator click View Sort Structure on Sort Tasks page
+    Then Operator verifies graph contains following Hub nodes:
+      | {hub-name-7}  |
+      | SORT-SG-2-HUB |
+    And Operator verifies graph contains following Middle Tier nodes:
       | {mid-tier-name} |
+    And Operator verifies graph contains following Zone nodes:
+      | SORT-1             |
+      | RTS-SORT-SG-1-ZONE |
+    And Operator verifies graph contains following duplicated nodes:
+      | label  | count |
+      | SORT-1 | 2     |
+    When Operator search for "{mid-tier-name}" node on View Sort Structure page
+    Then Operator verifies graph contains exactly following nodes:
+      | {hub-name-7}    |
+      | {mid-tier-name} |
+      | SORT-SG-2-HUB   |
+      | SORT-1          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroupsV1.5
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
 Feature: Create Route Groups - Reservation Filters
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -14,9 +14,8 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume": "<pickupSize>", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
       | pickUpSize | <pickupSize> |
@@ -43,9 +42,8 @@ Feature: Create Route Groups - Reservation Filters
     And Update status reservation to Cancelled
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
       | reservationStatus | CANCEL |
@@ -73,9 +71,8 @@ Feature: Create Route Groups - Reservation Filters
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
       | reservationStatus | FAIL |
@@ -113,9 +110,8 @@ Feature: Create Route Groups - Reservation Filters
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
       | reservationStatus | SUCCESS |
@@ -133,9 +129,8 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
       | reservationStatus | PENDING |
@@ -153,9 +148,8 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "pickup_service_level":"<pickup_service_level>", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     And Operator set General Filters on Create Route Groups page:
-      | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
-      | shipper          | {filter-shipper-name}          |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Groups page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator add following filters on Reservation Filters section on Create Route Groups page:

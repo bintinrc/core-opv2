@@ -5,6 +5,7 @@ Feature: Shipper Billing
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CleanDownloadFolder
   Scenario: Loyalty - download template (uid:e32a44e2-2d73-40c5-9108-62357e9ef4bd)
     When Operator go to menu Shipper -> Loyalty Creation
     And Operator click Download template button for loyalty creation
@@ -14,6 +15,22 @@ Feature: Shipper Billing
     | 111,childshipper@abc.com,name of child shipper,2020-01-10 00:12:22,91841923,123 |
     And Operator refresh page
 
+  @CleanDownloadFolder
+  Scenario: Loyalty - download error file (uid:cf920d88-9ab8-4179-b21e-625bd82d1f77)
+    When Operator go to menu Shipper -> Loyalty Creation
+    And Operator add shipper to csv file for loyalty creation with data below:
+      | legacyId           | 1                             |
+      | shipperName        | dash-test-loyalty             |
+      | shipperEmail       | dash-test-loyalty@ninjavan.co |
+      | shipperPhoneNumber | 081322221111                  |
+    And Operator upload csv file for loyalty creation
+    And Operator loyalty creation confirmation
+    Then Operator check result message "Membership account creation was only partially successful" displayed
+    When Operator click download error CSV button
+    Then Operator verifies loyalty creation csv template downloaded with data below:
+      | Legacy Shipper Not Found |
+    And Operator refresh page
+
   Scenario: Loyalty - upload file failed - required file empty (uid:480e920e-5cb9-4393-8a68-48012243ea35)
     When Operator go to menu Shipper -> Loyalty Creation
     And Operator create csv file for loyalty creation header only
@@ -21,7 +38,7 @@ Feature: Shipper Billing
     Then Operator check result message "We've detected some errors in the file. Please correct them and upload" displayed
     And Operator refresh page
 
-  @ShouldAlwaysRun @DeleteShipper
+  @DeleteShipper
   Scenario: Loyalty - upload file - parent account (uid:8c396265-31e2-4b3d-9566-384d84326837)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -49,15 +66,22 @@ Feature: Shipper Billing
 
   Scenario: Loyalty - upload file failed - phone number not unique (uid:49df0ad4-0bfe-4ccd-a656-3c006d369d00)
     When Operator go to menu Shipper -> Loyalty Creation
+    And Operator add shipper to csv file for loyalty creation with data below:
+    | legacyId           | 1                             |
+    | shipperName        | dash-test-loyalty             |
+    | shipperEmail       | dash-test-loyalty@ninjavan.co |
+    | shipperPhoneNumber | aaaaaa                 |
     And Operator upload csv file for loyalty creation
-    And Operator loyalty creation confirmation
-    Then Operator check result message "Membership account creation was only partially successful" displayed
+    Then Operator check result message "Incorrectly formatted phone number" displayed
 
   Scenario: Loyalty - upload file failed - email is not unique (uid:4d47fe81-d45c-43f3-a356-7236665b63c5)
     When Operator go to menu Shipper -> Loyalty Creation
+    And Operator add shipper to csv file for loyalty creation with data below:
+      | legacyId     | 1                             |
+      | shipperName  | dash-test-loyalty             |
+      | shipperEmail | dash-test-loyalty@ninjavan.co |
     And Operator upload csv file for loyalty creation
-    And Operator loyalty creation confirmation
-    Then Operator check result message "Membership account creation was only partially successful" displayed
+    Then Operator check result message "No duplicate emails are allowed." displayed
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

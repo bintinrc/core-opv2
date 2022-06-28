@@ -77,6 +77,9 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ClearAllTagsDialog clearAllTagsDialog;
 
+  @FindBy(css = "md-progress-linear")
+  public PageElement loadingBar;
+
   public OrdersTable ordersTable;
   public TaggedOrdersTable taggedOrdersTable;
 
@@ -94,9 +97,7 @@ public class OrderTagManagementPage extends OperatorV2SimplePage {
   public void addTag(List<String> orderTags) {
     actionsMenu.selectOption("Add Tags");
     addTagsDialog.waitUntilVisible();
-    for (String tag : orderTags) {
-      addTagsDialog.selectTag.selectValue(tag);
-    }
+    addTagsDialog.selectTag.selectValues(orderTags);
     addTagsDialog.save.click();
     addTagsDialog.waitUntilInvisible();
   }

@@ -40,7 +40,7 @@ Feature: Van Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds with Invalid Tracking ID (uid:fd5c0c47-7a31-44f7-b2dd-d07bd9a0645f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -50,7 +50,7 @@ Feature: Van Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds with Empty Tracking ID (uid:d04f2df6-82f8-455a-a1a5-91db0fc6962a)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -60,6 +60,7 @@ Feature: Van Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels (uid:836ad450-1dd6-4ea9-80af-123a1723c379)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -96,6 +97,7 @@ Feature: Van Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -148,6 +150,7 @@ Feature: Van Inbound
 
   @DeleteOrArchiveRoute
   Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
