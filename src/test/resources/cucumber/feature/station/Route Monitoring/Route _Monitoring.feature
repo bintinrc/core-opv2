@@ -487,9 +487,8 @@ Feature: Route Monitoring V2
     When Operator Filters the records in the "Invalid Failed Pickups" by applying the following filters:
       | Tracking ID                                | Customer Name                                     | Order Tags | Address                                     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
-    And Operator selects the timeslot "3pm - 6pm" in the table
     Then Operator verify value in the "Invalid Failed Pickups" table for the Tags column value is equal to "PRIOR"
-    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_CREATED_ORDER_TRACKING_ID}"
+    Then Operator verify value in the "Invalid Failed Pickups" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
     Then Operator verify value in the "Invalid Failed Pickups" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
     Then Operator verify value in the "Invalid Failed Pickups" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
     And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Invalid Failed Pickups"
@@ -592,11 +591,11 @@ Feature: Route Monitoring V2
       | PENDING_PRIORITY_DELIVERIES | 2 |
       | PENDING_PRIORITY_PICKUPS    | 0 |
     When Operator Filters the records in the "Pending Priority Deliveries" by applying the following filters:
-      | Tracking ID                                | Customer Name                                     | Order Tags | Address                                     |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]} |
+      | Tracking ID                                | Customer Name                                   | Order Tags | Address                                   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | {KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]} | PRIOR      | {KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]} |
     Then Operator verify value in the "Pending Priority Deliveries" table for the "TRACKING_ID" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-    Then Operator verify value in the "Pending Priority Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_FROM_NAME[1]}"
-    Then Operator verify value in the "Pending Priority Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_FROM_ADDRESS[1]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "CUSTOMER_NAME" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_CUSTOMER_TO_NAME[1]}"
+    Then Operator verify value in the "Pending Priority Deliveries" table for the "ADDRESS" column value is equal to "{KEY_LIST_OF_CREATED_ORDER_TO_ADDRESS[1]}"
     Then Operator verify value in the "Pending Priority Deliveries" table for the Tags column value is equal to "PRIOR"
     And Operator verifies that Edit Order page is opened on clicking tracking id "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" in table "Pending Priority Deliveries"
 
@@ -775,7 +774,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows @Debug
+  @ForceSuccessOrder @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
     Given Operator loads Operator portal home page
     And API Operator create new route using data below:
