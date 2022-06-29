@@ -754,7 +754,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void clickResetPassword() {
-    waitUntilVisibilityOfElementLocated(XPATH_RESET_PASSWORD_BUTTON);
+    pause3s();
     moveToElementWithXpath(XPATH_RESET_PASSWORD_BUTTON);
     click(XPATH_RESET_PASSWORD_BUTTON);
   }

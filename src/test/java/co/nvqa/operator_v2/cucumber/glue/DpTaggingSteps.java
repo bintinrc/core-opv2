@@ -126,6 +126,7 @@ public class DpTaggingSteps extends AbstractSteps {
 
   @Then("Operator verifies that all the details for ninja collect driver drop off confirmed status are right")
   public void OperatorVerifiesThatAllTheDetailsForNinjaCollectDriverDropOffConfirmedStatusAreRight() {
+    pause5s();
     DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus dbCheckingResult = get(
         KEY_DATABASE_CHECKING_NINJA_COLLECT_DRIVER_DROP_OFF_CONFIRMED);
     String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
