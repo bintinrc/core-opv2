@@ -103,23 +103,11 @@ public class MovementManagementSteps extends AbstractSteps {
   @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
   public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
-    pause10s();
-    retryIfRuntimeExceptionOccurred(() ->
-    {
-      try {
-        operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
-        operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("OK");
-        pause6s();
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage());
-        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
-        navigateRefresh();
-        movementManagementPage.switchTo();
-        movementManagementPage.addSchedule.waitUntilClickable(60);
-        throw new NvTestRuntimeException(ex.getCause());
-      }
-    }, 10);
+      pause5s();
+      operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
+      operatorFillAddMovementScheduleFormUsingDataBelow(data);
+      operatorClickButtonOnAddMovementScheduleDialog("OK");
+      pause6s();
   }
 
   @When("Operator clicks on assign_driver icon on the action column in movement schedule page")
@@ -222,7 +210,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.relationsTab.waitUntilClickable(60);
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 3);
   }
 
   @Then("Operator verify relations table on Movement Management page using data below:")
@@ -393,6 +381,7 @@ public class MovementManagementSteps extends AbstractSteps {
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.info(ex.getMessage());
         movementManagementPage.refreshPage();
         movementManagementPageIsLoaded();
         throw new NvTestRuntimeException(ex.getCause());
@@ -450,6 +439,7 @@ public class MovementManagementSteps extends AbstractSteps {
       MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(i + 1);
       movementSchedule.getSchedule(i).compareWithActual(actual);
     }
+    if (movementManagementPage.middleMileDrivers !=null) movementManagementPage.verifyListDriver(movementManagementPage.middleMileDrivers);
   }
 
   @And("Operator opens Add Movement Schedule modal on Movement Management page")
@@ -463,6 +453,7 @@ public class MovementManagementSteps extends AbstractSteps {
     switch (StringUtils.normalizeSpace(buttonName.toLowerCase())) {
       case "ok":
         movementManagementPage.addMovementScheduleModal.create.click();
+        pause5s();
         break;
       case "cancel":
         movementManagementPage.addMovementScheduleModal.cancel.click();
@@ -482,6 +473,16 @@ public class MovementManagementSteps extends AbstractSteps {
             .replaceDataTableTokens(resolveKeyValues(data));
         MovementSchedule movementSchedule = new MovementSchedule();
         movementSchedule.fromMap(finalData);
+        List<String> drivers =
+                finalData.keySet().stream()
+                        .filter(key -> key.contains("numberOfDrivers"))
+                        .map(finalData::get)
+                        .collect(Collectors.toList());
+
+    if (drivers.size()>0){
+      movementManagementPage.middleMileDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+    }
+
         movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
 
         MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
@@ -499,6 +500,7 @@ public class MovementManagementSteps extends AbstractSteps {
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        LOGGER.info(ex.getMessage());
         navigateRefresh();
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
@@ -506,7 +508,7 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.addMovementScheduleModal.waitUntilVisible();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 10);
+    }, 3);
   }
 
   @Then("Operator verify Add Movement Schedule form is empty")
@@ -1142,5 +1144,12 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.modalUpdateButton.click();
     movementManagementPage
             .verifyNotificationWithMessage("2 schedule(s) have been updated");
+  }
+
+  @Then("Operator verifies {string} with value {string} is not shown on Crossdock page")
+  public void operatorVerifiesInvalidDriverOnCrossdocke(String name, String value){
+    movementManagementPage.addSchedule.click();
+    movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+    movementManagementPage.verifyInvalidItem(name, value,0);
   }
 }
