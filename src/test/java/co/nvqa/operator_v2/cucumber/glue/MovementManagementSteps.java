@@ -104,10 +104,10 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(
       Map<String, String> data) {
       pause5s();
-        operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
-        operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("OK");
-        pause6s();
+      operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
+      operatorFillAddMovementScheduleFormUsingDataBelow(data);
+      operatorClickButtonOnAddMovementScheduleDialog("OK");
+      pause6s();
   }
 
   @When("Operator clicks on assign_driver icon on the action column in movement schedule page")
