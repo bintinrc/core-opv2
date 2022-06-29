@@ -733,6 +733,7 @@ Feature: Path Management - Create Manual Path
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     And Operator click "view" hyperlink button
     Then Operator verify created manual path data in path detail empty schedule with following data:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
