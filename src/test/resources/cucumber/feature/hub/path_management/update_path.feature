@@ -27,7 +27,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "view" hyperlink button
     Then Operator verify shown "manual paths" path details modal data
     When Operator click "edit" button in path details
@@ -59,7 +59,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[3].name}" as transit hub in edit path modal
     And Operator clicks "next" button in edit path modal
@@ -88,7 +88,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "" as transit hub in edit path modal
     And Operator clicks "next" button in edit path modal
@@ -116,7 +116,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "" as transit hub in edit path modal
     When API Operator deletes movement schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" from "{KEY_LIST_OF_CREATED_HUBS[1].id}" to "{KEY_LIST_OF_CREATED_HUBS[2].id}" with facility type "CROSSDOCK"
@@ -145,7 +145,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[3].name}" as transit hub in edit path modal
     Then Operator verify it cannot edit manual path "no schedules between transit hubs" with data:
@@ -173,7 +173,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[3].name}" as transit hub in edit path modal
     Then Operator verify it cannot edit manual path "no schedules between transit hubs" with data:
@@ -200,7 +200,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "" as transit hub in edit path modal
     And Operator clicks "next" button in edit path modal
@@ -231,7 +231,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[3].name}" as transit hub in edit path modal
     And Operator clicks "next" button in edit path modal
@@ -262,7 +262,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects following transit hubs in edit path modal:
       | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -296,7 +296,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
       | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     When Operator click "edit" hyperlink button
     And Operator remove "first" transit hub
@@ -334,7 +334,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
       | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | {KEY_LIST_OF_CREATED_HUBS[5].name} |
@@ -374,7 +374,7 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table with following transit hubs:
       | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | {KEY_LIST_OF_CREATED_HUBS[5].name} |
@@ -407,11 +407,11 @@ Feature: Update Path
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
     And Operator selects "Manual Path" in "Path Type" filter
     And Operator clicks load selection button
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     When Operator click "edit" hyperlink button
     And Operator selects "{KEY_LIST_OF_CREATED_HUBS[3].name}" as transit hub in edit path modal
     And Operator clicks "cancel" button in edit path modal
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -71,7 +71,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" → "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
