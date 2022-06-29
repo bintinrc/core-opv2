@@ -224,8 +224,6 @@ public class DpTaggingPage extends OperatorV2SimplePage {
         "CONFIRMED");
     assertTrue("Received At is not the same : ",
         result.getReceivedAt().toString().contains(formatter.format(today)));
-    assertEquals("DP Reservation Event Name is not the same : ",
-        result.getDpReservationEventName(), "DRIVER_DROPPED_OFF");
     assertEquals("DP Job Order Status is not the same : ", result.getDpJobOrderStatus(), "SUCCESS");
   }
 }

@@ -401,9 +401,9 @@ Feature: DP Administration - DP Bulk Update
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Distribution Points -> DP Bulk Update
     Given DB Operator changes all columns available for dp bulk update to 0 for dps:
-      | dpId                                 |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
     Then Operator verifies that the DP Bulk Update is loaded completely
     When Operator clicks on Select DP ID Button
     And Operator inputs DP with "same_partner_3_dps" condition into the textbox
@@ -417,12 +417,11 @@ Feature: DP Administration - DP Bulk Update
     Then Operator download CSV for bulk update
     Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
     When DB Operator verifies all dp details from bulk update are "Enabled"
-      | dpId                                 |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
     And DB Operator verifies pick dp capacity from bulk update for "XS"
       | dpId                                 |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
       | {imda-pick-bulk-update-opv2-dp-1-id} |
 
   Scenario: Select DP IDs - Set Public and download CSV (uid:417eb9a4-e7ee-4ea4-b40e-07d21d3e6e64)
