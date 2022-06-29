@@ -478,17 +478,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void searchTableActiveScripts(String searchBy, String scriptName) {
-    sendKeys(f(
-            "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
-            searchBy),
-        scriptName);
+    sendKeys(
+        f("//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
+            searchBy), scriptName);
   }
 
   public void searchTableDraftScripts(String searchBy, String scriptName) {
-    sendKeys(f(
-            "//nv-table[@param='ctrl.draftScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
-            searchBy),
-        scriptName);
+    sendKeys(
+        f("//nv-table[@param='ctrl.draftScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
+            searchBy), scriptName);
   }
 
   public String getTextOnTableActiveScripts(int rowNumber, String columnDataClass) {
