@@ -287,9 +287,9 @@ public class PathManagementSteps extends AbstractSteps {
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
     String transitHubName = resolvedMapOfData.get("transitHubName");
 
-    String path = originHubName + " → ";
+    String path = originHubName + " "+resolvedMapOfData.get("path")+" ";
     if (transitHubName != null) {
-      path += transitHubName + " → ";
+      path += transitHubName + " "+resolvedMapOfData.get("path")+" ";
     }
     path += destinationHubName;
 
