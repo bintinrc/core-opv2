@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @CashCollection
+@OperatorV2 @Core @Order @EditOrder @CashCollection @EditOrder2
 Feature: Cash Collection
 
   @LaunchBrowser @ShouldAlwaysRun

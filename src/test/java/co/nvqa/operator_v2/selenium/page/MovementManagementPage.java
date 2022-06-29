@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 
+import java.time.DayOfWeek;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +61,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   private static final String MS_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
 
   private static final String MS_PAGE_DRIVERS_COLUMN_XPATH = "//td[contains(@class,'ant-table-cell drivers')]";
+  private static final String MS_PAGE_CONFIRM_DIALOG_XPATH = "//div[@class='ant-modal-confirm-content']";
+  private static final String MS_PAGE_DAY_OF_WEEK_XPATH = "//td[contains(@class,'ant-table-cell day')]//input[@value='%d']";
+
+  public static List<Driver> middleMileDrivers;
 
   @FindBy(xpath = "//button[.='Close']")
   public Button closeButton;
@@ -129,7 +134,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   @FindBy(xpath = "//label[starts-with(.,'Pending')]")
   public PageElement inputOfPendingTab;
 
-  @FindBy(xpath = "//input[@data-testid='column-search-field-hub-name']")
+  @FindBy(xpath = "//input[@aria-label='input-hub_name']")
   public TextBox stationFilter;
 
   //region Stations tab
@@ -207,6 +212,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   @FindBy(xpath = "//td[@class='comment']")
   public List<TextBox> comments;
+
+  @FindBy(xpath = "(//span[text()='OK'])[last()]")
+  public Button OK;
+
   //endregion
   public String stationsCrossdockHub = "crossdockHub";
   public SchedulesTable schedulesTable;
@@ -254,6 +263,32 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     Assertions.assertThat(loadSchedules.isEnabled()).as("Load Schedules button is enable and clickable").isTrue();
     loadSchedules.click();
     originCrossdockHubFilter.waitUntilClickable();
+  }
+
+  public void EditFilter(String crossdockHubValue, String originHub, String destinationHub) {
+    pause1s();
+    if (StringUtils.isNotBlank(crossdockHubValue)) {
+      this.crossdockHub.selectValue(crossdockHubValue, crossdockHub.getWebElement());
+      pause1s();
+
+      if (StringUtils.isNotBlank(originHub)) {
+        originStationHub.selectValue(originHub, originStationHub.getWebElement());
+      }
+
+      if (StringUtils.isNotBlank(destinationHub)) {
+        destinationStationHub.selectValue(destinationHub, destinationStationHub.getWebElement());
+      }
+    } else {
+      if (StringUtils.isNotBlank(originHub)) {
+        originCrossdockHub.selectValue(originHub, originCrossdockHub.getWebElement());
+      }
+
+      if (StringUtils.isNotBlank(destinationHub)) {
+        destinationCrossdockHub.selectValue(destinationHub,
+                destinationCrossdockHub.getWebElement());
+      }
+    }
+    OK.click();
   }
 
   public void clickAssignDriverIcon() {
@@ -331,10 +366,10 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = ".//button[.='Add another schedule']")
     public Button addAnotherSchedule;
 
-    @FindBy(xpath = ".//button[.='OK']")
+    @FindBy(xpath = "//button[.='OK']")
     public Button create;
 
-    @FindBy(css = "div.has-error")
+    @FindBy(xpath = "//div[contains(@class,'ant-form-item-explain-error')]")
     public PageElement errorMessage;
 
     @FindBy(xpath = ".//button[.='Cancel']")
@@ -409,13 +444,15 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       public String scheduleDestinationHubId = "schedules_%s_destinationHub";
       public String scheduleMovementTypeId = "schedules_%s_movementType";
       public String scheduleStartTimeId = "schedules_%s_startTime";
-      public String scheduleDepartureTimeXpath = "//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
+      public String scheduleDepartureTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
       public String scheduleDurationDayId = "schedules_%s_durationDay";
       public String scheduleDurationTimeId = "schedules_%s_durationTime";
       public String scheduleDurationTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//ul[%s]//div[text()= '%s']";
       public String scheduleDaysId = "schedules_%s_days";
       public String scheduleDriversId = "schedules_%s_drivers";
       public String scheduleCommentId = "schedules_%s_comment";
+      public String antpickerdropdownhidden = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]";
+      public String daysOfWeekXpath = "//div[@id='schedules_%s_days']//input[@type='checkbox'][@value='%s']";
 
       public void callJavaScriptExecutor(String argument, WebElement element) {
         JavascriptExecutor jse = ((JavascriptExecutor) getWebDriver());
@@ -437,17 +474,18 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         if (StringUtils.isNotBlank(schedule.getDepartureTime())) {
           String[] hourtime = schedule.getDepartureTime().split(":");
           TestUtils.findElementAndClick(f(scheduleStartTimeId, scheduleNo), "id", getWebDriver());
+          pause1s();
           String hour = f(scheduleDepartureTimeXpath, 1, hourtime[0]);
           String time = f(scheduleDepartureTimeXpath, 2, hourtime[1]);
-          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[1]");
+          moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
           TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
-          moveToElementWithXpath("//div[@class='ant-picker-content']//ul[2]");
+          moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
           TestUtils.findElementAndClick(time, "xpath", getWebDriver());
-          TestUtils.findElementAndClick("ant-picker-ok", "class", getWebDriver());
+          TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']", "xpath", getWebDriver());
         }
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
-          setDurationDays(schedule);
+          setDurationDays(schedule, scheduleNo);
         }, 3);
         if (StringUtils.isNotBlank(schedule.getDurationTime())) {
           String[] hourtime = schedule.getDurationTime().split(":");
@@ -460,35 +498,38 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           moveToElementWithXpath(time);
           TestUtils.findElementAndClick(time, "xpath", getWebDriver());
           TestUtils.findElementAndClick(
-              "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//span[text()='Ok']",
+                  antpickerdropdownhidden + "//span[text()='Ok']",
               "xpath", getWebDriver());
         }
         if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek())) {
-          setDaysOfWeek(schedule.getDaysOfWeek());
+          setDaysOfWeek(schedule.getDaysOfWeek(), scheduleNo);
         }
         if (StringUtils.isNotBlank(schedule.getComment())) {
           WebElement element = getWebDriver().findElement(By.id(f(scheduleCommentId, scheduleNo)));
           element.sendKeys(schedule.getComment());
         }
+        if (schedule.getNumberOfDrivers()!=null && schedule.getNumberOfDrivers()>0){
+          MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
+          movementPage.assignDrivers(middleMileDrivers.size(),middleMileDrivers,0);
+        }
       }
 
-      public void setDurationDays(MovementSchedule.Schedule schedule) {
+      public void setDurationDays(MovementSchedule.Schedule schedule, int scheduleNo) {
         if (schedule.getDurationDays() != null) {
-          durationDays.click();
-          click("//div[contains(@text," + schedule.getDurationDays() + ")]");
+          TestUtils.findElementAndClick("//input[@id='" + f(scheduleDurationDayId, scheduleNo) + "']","xpath", getWebDriver());
+          pause1s();
+          TestUtils.findElementAndClick("//div[@id='schedules_" + scheduleNo + "_durationDay_list']/following-sibling::div//div[contains(@text," + schedule.getDurationDays() + ")]","xpath", getWebDriver());
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + schedule.getDurationDays() + "']")).isDisplayed());
         }
       }
 
-      public void setDaysOfWeek(Set<String> daysOfWeek) {
-        monday.setValue(daysOfWeek.contains("monday"));
-        tuesday.setValue(daysOfWeek.contains("tuesday"));
-        wednesday.setValue(daysOfWeek.contains("wednesday"));
-        thursday.setValue(daysOfWeek.contains("thursday"));
-        friday.setValue(daysOfWeek.contains("friday"));
-        saturday.setValue(daysOfWeek.contains("saturday"));
-        sunday.setValue(daysOfWeek.contains("sunday"));
+      public void setDaysOfWeek(Set<String> daysOfWeek, int scheduleNo) {
+        List list = new ArrayList<>(daysOfWeek);
+        for(String day: daysOfWeek){
+          int dayNo = DayOfWeek.valueOf(day.toUpperCase()).getValue();
+          TestUtils.findElementAndClick(f(daysOfWeekXpath, scheduleNo, dayNo), "xpath", getWebDriver());
+        }
       }
     }
   }
@@ -582,11 +623,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
           TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
-          pause2s();
+          pause1s();
           TestUtils.findElementAndClick(
               "//div[contains(@text," + stationMovementSchedule.getDuration() + ")]", "xpath",
               getWebDriver());
-          pause2s();
+          pause500ms();
           assertTrue("duration days input is wrong", findElement(
               By.xpath("//span[@title='" + stationMovementSchedule.getDuration() + "']")).isDisplayed());
         }, 3);
@@ -648,10 +689,14 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       }
 
       if (stationMovementSchedule.getDuration() != null) {
-        TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
-        TestUtils.findElementAndClick(
-            "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"
-                + stationMovementSchedule.getDuration() + "']", "xpath", getWebDriver());
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        {
+          TestUtils.findElementAndClick(f(scheduleDurationDayId, scheduleNo), "id", getWebDriver());
+          pause500ms();
+          TestUtils.findElementAndClick(
+                  "//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[@title='"
+                          + stationMovementSchedule.getDuration() + "']", "xpath", getWebDriver());
+        },3);
       }
 
       if (StringUtils.isNotBlank(stationMovementSchedule.getEndTime())) {
@@ -770,6 +815,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     public static final String COLUMN_DURATION = "durationDays";
     public static final String COLUMN_DURATION_TIME = "durationTime";
     public static final String COLUMN_DAYS_OF_WEEK = "daysOfWeek";
+    public static final String COLUMN_DRIVERS = "numberOfDrivers";
 
     public SchedulesTable(WebDriver webDriver) {
       super(webDriver);
@@ -781,6 +827,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           .put(COLUMN_DURATION, "duration")
           .put(COLUMN_DURATION_TIME, "duration")
           .put(COLUMN_DAYS_OF_WEEK, "day")
+          .put(COLUMN_DRIVERS,"drivers")
           .put("comment", "comments")
           .build()
       );
@@ -794,7 +841,13 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
           {
             Matcher m = DURATION_PATTERN.matcher(value);
             return m.matches() ? m.group(2) + ":" + m.group(3) : null;
-          }
+          },
+          COLUMN_DRIVERS    , value ->
+              {
+                String[] values = value.split(",");
+                return Integer.toString(values.length);
+
+              }
       ));
       setColumnReaders(ImmutableMap.of(COLUMN_DAYS_OF_WEEK, this::getDaysOfWeek));
       setEntityClass(MovementSchedule.Schedule.class);
@@ -1135,6 +1188,33 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
 
   }
 
+  public void updateDaysOfWeek(Set<String> daysOfWeek, int index){
+    String weekdaysXpath = "(//td[contains(@class,'ant-table-cell day')]//input[@value='%d'])[%d]";
+    WebElement day = findElementByXpath(f(MS_PAGE_DAY_OF_WEEK_XPATH,1));
+    executeScript("arguments[0].scrollIntoView({block: \"center\",inline: \"center\"});",day );
+    if (!daysOfWeek.contains("monday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,1,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("tuesday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,2,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("wednesday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,3,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("thursday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,4,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("friday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,5,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("saturday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,6,index), "xpath", getWebDriver());
+    }
+    if (!daysOfWeek.contains("sunday")) {
+      TestUtils.findElementAndClick(f(weekdaysXpath,7,index), "xpath", getWebDriver());
+    }
+  }
+
   public String getValueInLastItem(String xpath,String attribute){
     switch (xpath){
       case "start time":
@@ -1248,4 +1328,11 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     });
     return ExpectedList;
   }
+
+  public void verifyConfirmDialog(String expectedMessage){
+    waitUntilVisibilityOfElementLocated(MS_PAGE_CONFIRM_DIALOG_XPATH);
+    String actualMessage = findElementByXpath(MS_PAGE_CONFIRM_DIALOG_XPATH).getText();
+    Assertions.assertThat(actualMessage).as(f("Message %s display",expectedMessage)).isEqualToIgnoringCase(expectedMessage);
+  }
+
 }

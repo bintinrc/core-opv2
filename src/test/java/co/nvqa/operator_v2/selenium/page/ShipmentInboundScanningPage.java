@@ -62,6 +62,8 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
+  private static String XPATH_SHIPMENTID_INPUT = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']";
+
   @FindBy(css = "[data-testid='scan-box-container'] div.message")
   public PageElement scanAlertMessage;
 
@@ -185,7 +187,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   }
 
   public void fillShipmentId(Object value) {
-    shipmentIdInput.setValue(String.valueOf(value));
+    sendKeysAndEnter(XPATH_SHIPMENTID_INPUT, value.toString());
   }
 
   public void checkSessionScan(String shipmentId) {

@@ -30,12 +30,14 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -64,11 +66,12 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -195,12 +198,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -210,12 +215,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[4].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[4].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -223,6 +230,7 @@ Feature: Path Management - Create Manual Path
     And Operator verifies path management page is loaded
     And Operator click "view" hyperlink button
     Then Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |

@@ -279,9 +279,11 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @Then("Operator verify hub {string} not found on Shipment Inbound Scanning page")
   public void operatorVerifyHubNotFoundOnShipmentInboundScanningPage(String hubName) {
     String hubNameResolved = resolveValue(hubName);
-    scanningPage.inboundHub.searchValue(hubNameResolved);
-    assertThat("value does not exist", scanningPage.inboundHub.isValueExist(hubNameResolved),
-        equalTo(false));
+    scanningPage.switchTo();
+    TestUtils.findElementAndClick(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, "xpath", getWebDriver());
+    scanningPage.sendKeysAndEnter(ShipmentInboundScanningPage.XPATH_INBOUND_HUB, hubNameResolved);
+    Assertions.assertThat(scanningPage.findElementByXpath(ShipmentInboundScanningPage.XPATH_INBOUND_HUB).getText())
+            .as("value does not exist").isEqualTo("");
   }
 
   @When("Operator inbound scanning wrong Shipment {long} Into Van in hub {string} on Shipment Inbound Scanning page")

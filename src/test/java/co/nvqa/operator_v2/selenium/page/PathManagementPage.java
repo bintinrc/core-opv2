@@ -64,7 +64,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//tr[2]//td[3]//span[@class='ant-tag']")
   public TextBox pathTagFirstRow;
 
-  @FindBy(xpath = "//tr[2]//td[3]//span[2]")
+  @FindBy(xpath = "//tr[2]//td[3]//span")
   public TextBox pathFirstRow;
 
   @FindBy(xpath = "//tr[2]//td[4]")
@@ -253,12 +253,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyPathDataAppearInPathTable(String expectedOriginHub,
-      String expectedDestinationHub, List<String> passedHub) {
+      String expectedDestinationHub, List<String> passedHub, String arrow) {
     String originHubName = originHubFirstRow.getText();
     String destinationHubName = destinationHubFirstRow.getText();
     String path = pathFirstRow.getText();
 
-    String expectedPath = String.join(" → ", passedHub);
+    String expectedPath = String.join(arrow.equals("")? " → " : " " + arrow + " ", passedHub);
 
     assertThat("Origin Hub is equal", originHubName, equalTo(expectedOriginHub));
     assertThat("Destination Hub is equal", destinationHubName, equalTo(expectedDestinationHub));

@@ -94,10 +94,11 @@ public class RouteManifestSteps extends AbstractSteps {
     put(KEY_SELECTED_FAILURE_REASON, failureReason);
   }
 
-  @When("Operator fail waypoint from Route Manifest page with following details")
+  @When("Operator fail waypoint from Route Manifest page with following details in the row {string}")
   public void operatorFailWaypointFromRouteManifestPageWithFollowingDetails(
-      Map<String, String> mapOfData) {
-    routeManifestPage.failWaypointWithFailureDetails(mapOfData);
+      String trackingID, Map<String, String> mapOfData) {
+    trackingID = resolveValue(trackingID);
+    routeManifestPage.failWaypointWithFailureDetails(mapOfData, trackingID);
     takesScreenshot();
   }
 

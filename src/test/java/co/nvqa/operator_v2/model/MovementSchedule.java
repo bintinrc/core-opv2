@@ -49,6 +49,7 @@ public class MovementSchedule extends DataEntity<MovementSchedule> {
     private String departureTime;
     private Integer durationDays;
     private String durationTime;
+    private Integer numberOfDrivers;
     private String comment;
 
     public String getOriginHub() {
@@ -127,5 +128,9 @@ public class MovementSchedule extends DataEntity<MovementSchedule> {
     public void setDurationTime(String durationTime) {
       this.durationTime = durationTime;
     }
+
+    public Integer getNumberOfDrivers(){return numberOfDrivers;}
+
+    public void setNumberOfDrivers(Integer numberOfDrivers){this.numberOfDrivers = numberOfDrivers>4 ? 4:numberOfDrivers;}
   }
 }

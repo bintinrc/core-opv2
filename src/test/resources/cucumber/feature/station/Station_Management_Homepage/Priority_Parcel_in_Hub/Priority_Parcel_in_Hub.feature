@@ -1473,7 +1473,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-8} | {hub-id-8} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder
   Scenario Outline: Filter Parcels by Committed ETA (uid:c3b04170-37eb-4f15-9597-41f22ef4521a)

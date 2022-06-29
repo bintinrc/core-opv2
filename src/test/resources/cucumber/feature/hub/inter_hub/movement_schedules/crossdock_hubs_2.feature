@@ -45,7 +45,7 @@ Feature: Crossdock Hubs
       | schedules[2].durationTime   | 16:30                                                         |
       | schedules[2].daysOfWeek     | all                                                           |
       | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    And Operator click "Create" button on Add Movement Schedule dialog
+    And Operator click "ok" button on Add Movement Schedule dialog
     Then Operator verify "Schedule already exists" error Message is displayed in Add Crossdock Movement Schedule dialog
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
