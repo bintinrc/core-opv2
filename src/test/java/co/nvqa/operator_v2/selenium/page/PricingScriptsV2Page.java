@@ -189,6 +189,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyDraftScriptIsReleased(Script script) {
+    waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
     refreshPage();
     clickTabItem(TAB_ACTIVE_SCRIPTS);
 
@@ -223,12 +224,48 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         case "id":
           searchTableActiveScripts(searchWay, (script.getId() + ""));
           break;
+        case "last-modified-by":
+          searchTableActiveScripts(searchWay, script.getLastModifiedUser());
+          searchTableActiveScripts("id", (script.getId() + ""));
+          break;
       }
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
+  }
+
+  public void searchInDraftScript(Script script, String searchWay) {
+    refreshPage();
+    clickTabItem(TAB_DRAFTS);
+    retryIfAssertionErrorOccurred(() ->
+    {
+      switch (searchWay) {
+        case "name":
+          searchTableDraftScripts(searchWay, script.getName());
+          break;
+        case "description":
+          searchTableDraftScripts(searchWay, script.getDescription());
+          searchTableDraftScripts("id", (script.getId() + ""));
+          break;
+        case "last-modified":
+          searchTableDraftScripts(searchWay, script.getUpdatedAt());
+          searchTableDraftScripts("id", (script.getId() + ""));
+          break;
+        case "id":
+          searchTableDraftScripts(searchWay, (script.getId() + ""));
+          break;
+        case "last-modified-by":
+          searchTableDraftScripts(searchWay, script.getLastModifiedUser());
+          searchTableDraftScripts("id", (script.getId() + ""));
+          break;
+      }
+      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+        refreshPage();
+        fail("Data still not loaded");
+      }
+    }, String.format("Draft script found "));
   }
 
   public void searchAccordingScriptId(Script script) {
@@ -442,8 +479,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void searchTableActiveScripts(String searchBy, String scriptName) {
     sendKeys(f(
-        "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
-        searchBy),
+            "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
+            searchBy),
+        scriptName);
+  }
+
+  public void searchTableDraftScripts(String searchBy, String scriptName) {
+    sendKeys(f(
+            "//nv-table[@param='ctrl.draftScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
+            searchBy),
         scriptName);
   }
 

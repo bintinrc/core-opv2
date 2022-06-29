@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -40,6 +41,15 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   @FindBy(id = "button-pick-csv")
   public NvButtonFilePicker importCsv;
 
+  @FindBy(name = "Save Draft")
+  public NvApiTextButton saveDraftBtn;
+
+  @FindBy(name = "container.pricing-scripts.check-syntax")
+  public NvApiTextButton checkSyntaxBtn;
+
+  @FindBy(name = "container.pricing-scripts.run-check")
+  public NvApiTextButton runCheckBtn;
+
   private final DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
 
   protected static final int ACTION_SAVE = 1;
@@ -69,10 +79,16 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   private void setScriptInfo(Script script) {
     clickTabItem("Script Info");
-    sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.name"),
-        script.getName());
-    sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.description"),
-        script.getDescription());
+    String name = script.getName();
+    String description = script.getDescription();
+    if (!name.equalsIgnoreCase("empty")) {
+      sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.name"),
+          script.getName());
+    }
+    if (!description.equalsIgnoreCase("empty")) {
+      sendKeys(f("//md-input-container[@model='%s']//input", "ctrl.data.script.description"),
+          script.getDescription());
+    }
   }
 
   private void setWriteScript(Script script) {
@@ -96,13 +112,10 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
   }
 
   public void checkSuccessfulSyntax() {
-    checkSyntax();
+    checkSyntaxBtn.clickAndWaitUntilDone();
     checkSyntaxHeader("No errors found. You may proceed to verify or save the draft.");
   }
 
-  public void checkSyntax() {
-    clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
-  }
 
   public void checkSyntaxHeader(String message) {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
@@ -116,7 +129,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   public void saveDraft() {
     pause2s();
-    clickNvApiTextButtonByNameAndWaitUntilDone("Save Draft");
+    saveDraftBtn.clickAndWaitUntilDone();
   }
 
   public void validateDraft() {
@@ -153,6 +166,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   public void runCheck(Script script, RunCheckParams runCheckParams) {
     waitUntilPageLoaded(buildScriptUrl(script));
+    checkSyntaxBtn.clickAndWaitUntilDone();
     waitUntilVisibilityOfElementLocated(
         "//p[text()='No errors found. You may proceed to verify or save the draft.']");
     clickTabItem("Check Script");
@@ -233,8 +247,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
             runCheckParams.getDestinationPricingZone());
       }
     }
-    clickNvApiTextButtonByNameAndWaitUntilDone(
-        "container.pricing-scripts.run-check"); //Button Run Check
+    runCheckBtn.clickAndWaitUntilDone();
   }
 
   public void verifyErrorMessage(String errorMessage, String status) {
