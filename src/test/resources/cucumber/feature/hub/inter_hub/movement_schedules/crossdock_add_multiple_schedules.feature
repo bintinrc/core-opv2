@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubsAddMultipleSchedules @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubsAddMultipleSchedules
 Feature: Crossdock Hubs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -125,7 +125,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Create with Inactive License Status Driver (uid:b8e5456a-2a83-4606-913a-d19df430f306)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -161,7 +161,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Create with Inactive Employment Status Driver (uid:c803b569-759a-4ca9-89cb-c74be22c933d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
