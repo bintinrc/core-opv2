@@ -79,8 +79,11 @@ public class GlobalInboundPage extends SimpleReactPage {
   @FindBy(xpath = "//div[@class='order-tag']")
   public PageElement dpTag;
 
-  @FindBy(xpath = "//span[contains(@class,'nv-tag md-nvBlue-theme')]")
+  @FindBy(xpath = "//h5[@data-testid='prior-title']")
   public PageElement priorTag;
+
+  @FindBy(xpath = "//h5[@data-testid='rts']")
+  public PageElement rtsTag;
 
   @FindBy(xpath = "//button[@aria-label='Use order tagging']")
   public Button useOrderTagging;
@@ -315,6 +318,11 @@ public class GlobalInboundPage extends SimpleReactPage {
   public void verifiesPriorTag() {
     String actualTag = priorTag.getText();
     assertEquals("Prior tag", "PRIOR", actualTag);
+  }
+
+  public void verifiesRtsTag() {
+    String actualTag = rtsTag.getText();
+    assertEquals("RTS tag", "RTS", actualTag);
   }
 
   public void addTag(List<String> orderTags) {
