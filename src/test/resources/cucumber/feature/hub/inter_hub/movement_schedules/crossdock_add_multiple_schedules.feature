@@ -197,7 +197,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with Single Driver (uid:58995063-2777-4d7c-8d00-7de3d45155ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -239,7 +239,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with Multiple Drivers (uid:58995063-2777-4d7c-8d00-7de3d45155ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -281,7 +281,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with 4 Drivers (uid:36f10f8f-ba71-4e25-bbe2-c4e9033430a8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
@@ -323,7 +323,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Create New Crossdock Movement Schedule - Add Multiple Schedules with >4 Drivers (uid:37166d72-193c-4f1b-97e9-4087efaeec3a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
