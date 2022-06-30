@@ -1,5 +1,5 @@
 @Hub @E2EShipmentWeightDimension
-Feature: Parcel Sweeper Live
+Feature: Shipment Weight Dimension E2E
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
