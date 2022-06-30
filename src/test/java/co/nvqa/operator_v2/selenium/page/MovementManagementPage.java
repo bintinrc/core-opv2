@@ -510,7 +510,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
         }
         if (schedule.getNumberOfDrivers()!=null && schedule.getNumberOfDrivers()>0){
           MovementManagementPage movementPage = new MovementManagementPage(getWebDriver());
-          movementPage.assignDrivers(middleMileDrivers.size(),middleMileDrivers,0);
+          movementPage.assignDrivers(middleMileDrivers.size(),middleMileDrivers,scheduleNo);
         }
       }
 
