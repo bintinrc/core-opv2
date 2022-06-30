@@ -52,7 +52,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -83,7 +83,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -116,7 +116,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -148,7 +148,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
