@@ -6,7 +6,7 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Inbound Parcel With Weight, Size, Dimensions Changes - AV status unverified
+  Scenario: Inbound Parcel With Weight, Size, Dimensions Changes - AV status unverified (uid:af00df65-c10f-4c7d-bdff-f7ca6abf6a38)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -40,7 +40,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel With Prior Tag, Priority Level, RTS, and Order Tags - AV status verified
+  Scenario: Inbound Parcel With Prior Tag, Priority Level, RTS, and Order Tags - AV status unverified (uid:8242ec27-33a5-46ac-a039-da41ce1c0250)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -76,7 +76,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel With Prior Tag, Priority Level, RTS, and Order Tags - AV status verified
+  Scenario: Inbound Parcel With Prior Tag, Priority Level, RTS, and Order Tags - AV status verified (uid:f98adaba-cae8-46ac-84b2-95ee6ca3815b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder  | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
