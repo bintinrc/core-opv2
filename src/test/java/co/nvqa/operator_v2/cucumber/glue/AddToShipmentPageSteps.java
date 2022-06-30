@@ -85,6 +85,7 @@ public class AddToShipmentPageSteps extends AbstractSteps {
       page.closeShipment.click();
       page.confirmCloseShipmentModal.waitUntilVisible();
       page.confirmCloseShipmentModal.closeShipment.click();
+      page.confirmCloseShipmentModal.waitUntilInvisible();
     });
   }
 
