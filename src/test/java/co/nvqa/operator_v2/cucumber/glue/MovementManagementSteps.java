@@ -1150,6 +1150,7 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorVerifiesInvalidDriverOnCrossdocke(String name, String value){
     movementManagementPage.addSchedule.click();
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+    pause1s();
     movementManagementPage.verifyInvalidItem(name, value,0);
   }
 }
