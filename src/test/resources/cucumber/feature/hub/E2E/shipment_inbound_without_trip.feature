@@ -1,5 +1,5 @@
 @Hub @E2EShipmentInboundWithoutTrip
-Feature: Without Trip
+Feature: E2E Without Trip
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
