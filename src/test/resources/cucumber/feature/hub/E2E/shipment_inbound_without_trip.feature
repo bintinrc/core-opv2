@@ -1,4 +1,4 @@
-@Hub @E2EShipmentInboundWithoutTrip @CWF
+@Hub @E2EShipmentInboundWithoutTrip
 Feature: Without Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -787,7 +787,7 @@ Feature: Without Trip
     And Operator verify order granular status is "Completed" on Edit Order page
 
 
-  @DeleteShipment @ForceSuccessOrder @RT
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Inbound Parcel In Completed Shipment In Shipment Destination Hub - Add to New Route - Reversion Failed Delivery to Success - e2e
     When API Operator create new shipper address V2 using data below:
       | shipperId       | 82602           |
