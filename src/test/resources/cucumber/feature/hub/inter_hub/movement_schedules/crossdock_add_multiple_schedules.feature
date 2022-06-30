@@ -152,10 +152,10 @@ Feature: Crossdock Hubs
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].numberOfDrivers| 1                                                             |
     And Operator click "OK" button on Add Movement Schedule dialog
-    Then Operator verifies "driver" with value "{inactive-driver-username}" is not shown on Crossdock page
-    And Operator click "Cancel" button on Add Movement Schedule dialog
     And Operator refresh page
     And Movement Management page is loaded
+    Then Operator verifies "driver" with value "{inactive-driver-username}" is not shown on Crossdock page
+    And Operator click "Cancel" button on Add Movement Schedule dialog
     And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
