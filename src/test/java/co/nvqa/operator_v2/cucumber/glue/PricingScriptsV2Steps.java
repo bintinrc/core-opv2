@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
@@ -70,10 +71,17 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String dateUniqueString = generateDateUniqueString();
 
     String createdDate = CREATED_DATE_SDF.format(new Date());
-    String name = "Dummy Script #" + dateUniqueString;
-    String description = f(
-        "This script is created for testing purpose only. Ignore this script. Created at %s.",
-        createdDate);
+    String name = mapOfData.get("name");
+    String description = mapOfData.get("description");
+
+    if (StringUtils.isEmpty(name)) {
+      name = "Dummy Script #" + dateUniqueString;
+    }
+    if (StringUtils.isEmpty(description)) {
+      description = f(
+          "This script is created for testing purpose only. Ignore this script. Created at %s.",
+          createdDate);
+    }
     LOGGER.info("Created Pricing Script Name :" + name);
 
     Script script = new Script();
@@ -260,9 +268,23 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @Then("Operator search according to {string} and verify search result")
   public void operatorSearch(String searchType) {
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    Script dbScript = get(KEY_PRICING_SCRIPT_DETAILS);
+    script.setLastModifiedUser(dbScript.getLastModifiedUser());
+    script.setLastModifiedEmail(dbScript.getLastModifiedEmail());
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
     verifyScriptDetailsInActiveScriptPage(pricingScriptsV2Page, script);
   }
+
+  @Then("Operator search according to {string} and verify search result in Draft Script page")
+  public void operatorSearchDraftScript(String searchType) {
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    Script dbScript = get(KEY_PRICING_SCRIPT_DETAILS);
+    script.setLastModifiedUser(dbScript.getLastModifiedUser());
+    script.setLastModifiedEmail(dbScript.getLastModifiedEmail());
+    pricingScriptsV2Page.searchInDraftScript(script, searchType);
+    verifyScriptDetailsInDraftScriptPage(pricingScriptsV2Page, script);
+  }
+
 
   private void verifyScriptDetailsInActiveScriptPage(PricingScriptsV2Page pricingScriptsV2Page,
       Script script) {
@@ -537,6 +559,13 @@ public class PricingScriptsV2Steps extends AbstractSteps {
         .isTrue();
   }
 
+  @When("Operator verifies Save Draft button is inactive")
+  public void operatorVerifiesSaveDraftButtonIsInactive() {
+    Assertions.assertThat(pricingScriptsV2CreateEditDraftPage.saveDraftBtn.isDisabled())
+        .as("Save Btn is disabled")
+        .isTrue();
+  }
+
   @When("Operator link Script to Shipper with ID and Name = {string} and undo the changes")
   public void operatorLinkScriptToShipperWithIDAndNameAndUndoTheChanges(String shipperIdAndName) {
     shipperIdAndName = resolveValue(shipperIdAndName);
@@ -554,13 +583,19 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @Then("Operator clicks Check Syntax")
   public void operatorClicksCheckScript() {
-    pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    pricingScriptsV2CreateEditDraftPage.checkSyntaxBtn.clickAndWaitUntilDone();
     takesScreenshot();
   }
 
-  @Then("Operator clicks Check Syntax and Verify Draft")
+  @Then("Operator clicks Verify Draft")
+  public void operatorClicksVerifyDraft() {
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
+    takesScreenshot();
+  }
+
+  @Then("Operator clicks Check Syntax, Verify Draft and Validate Draft")
   public void operatorClicksCheckScriptSaveDraft() {
-    pricingScriptsV2CreateEditDraftPage.checkSyntax();
+    pricingScriptsV2CreateEditDraftPage.checkSyntaxBtn.clickAndWaitUntilDone();
     pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
     pricingScriptsV2CreateEditDraftPage.validateDraft();
     takesScreenshot();

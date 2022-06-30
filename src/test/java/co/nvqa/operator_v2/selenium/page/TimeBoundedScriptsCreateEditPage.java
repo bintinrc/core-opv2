@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
+@Deprecated
 public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage {
 
   protected static final int ACTION_DELETE = 3;
