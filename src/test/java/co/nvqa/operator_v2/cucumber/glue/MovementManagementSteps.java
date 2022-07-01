@@ -963,7 +963,7 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.modalUpdateButton.click();
   }
 
-  @When("Operator updates Station Schedule to Duplicate and Existing Schedule and verifies error messages")
+  @When("Operator updates Schedule to Duplicate and Existing Schedule and verifies error messages")
   public void operatorUpdatesCreatedStationSchedulesToDuplicateAndExistingShcedule(){
     HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     movementManagementPage.modify.click();
@@ -983,7 +983,7 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.verifyNotificationWithMessage(errorMessageList);
   }
 
-  @When("Operator updates Station Schedule to Duplicate Schedule and verifies error messages")
+  @When("Operator updates Schedule to Duplicate Schedule and verifies error messages")
   public void operatorUpdatesCreatedStationSchedulesToDuplicateShcedule(){
     HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     movementManagementPage.modify.click();
@@ -1001,7 +1001,7 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.verifyNotificationWithMessage(errorMessageList);
   }
 
-  @When("Operator updates Station Schedule to Existing Schedule and verifies error messages")
+  @When("Operator updates Schedule to Existing Schedule and verifies error messages")
   public void operatorUpdatesCreatedStationSchedulesToExistingShcedule(){
     HubRelation lastCreatedHub = get(KEY_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
     movementManagementPage.modify.click();
@@ -1152,5 +1152,25 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
     pause1s();
     movementManagementPage.verifyInvalidItem(name, value,0);
+  }
+
+  @Then("Operator verify all crossdock schedules are correct")
+  public void operatorVerifyAllCrossdockSchedulesAreCorrect() {
+    movementManagementPage.waitForLoadingIconDisappear();
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
+            .as("Number of displayed schedules:").isEqualTo(hubRelations.size());
+    for (int i = 0; i < hubRelations.size(); i++) {
+      HubRelationSchedule actual = movementManagementPage.hubRelationScheduleTable
+              .readEntity(i + 1);
+      hubRelations.get(i).getSchedules().get(i).setId(null);
+      hubRelations.get(i).getSchedules().get(i).setStartTime(null);
+      hubRelations.get(i).getSchedules().get(i).setDay(null);
+      hubRelations.get(i).getSchedules().get(i)
+              .setOriginHubName(hubRelations.get(i).getOriginHubName());
+      hubRelations.get(i).getSchedules().get(i)
+              .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
+      hubRelations.get(i).getSchedules().get(i).compareWithActual(actual, "drivers");
+    }
   }
 }
