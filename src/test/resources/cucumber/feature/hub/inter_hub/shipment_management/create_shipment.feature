@@ -1,11 +1,11 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @CreateShipment
 Feature: Shipment Management - Create Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @runthis
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment
+  @DeleteShipment @runthis
   Scenario: Create Shipment with Create Another Shipment (uid:7aeb10fa-ad56-4cbe-86f5-9717f878236c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -28,6 +28,15 @@ Feature: Shipment Management - Create Shipment
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @KillBrowser @ShouldAlwaysRun
+  @DeleteShipment
+  Scenario: Create  New Shipment - selected same origin and destination hub
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+
+  @KillBrowser @ShouldAlwaysRun @runthis
   Scenario: Kill Browser
     Given no-op
