@@ -447,7 +447,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Duplicate and Existing Schedule and verifies error messages
+    Then Operator updates Schedule to Duplicate and Existing Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
@@ -485,7 +485,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Duplicate Schedule and verifies error messages
+    Then Operator updates Schedule to Duplicate Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
@@ -523,7 +523,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Existing Schedule and verifies error messages
+    Then Operator updates Schedule to Existing Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
