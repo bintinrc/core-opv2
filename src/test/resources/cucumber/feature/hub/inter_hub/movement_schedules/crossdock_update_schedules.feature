@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @UpdateCrossdockHubsSchedules @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @UpdateCrossdockHubsSchedules
 Feature: Crossdock Hubs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -55,7 +55,7 @@ Feature: Crossdock Hubs
     Then Operator verifies page is back to view mode
     Then Operator verify all crossdock schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Fail Update Crossdock Schedule to Duplicate and Existing Schedule (uid:ba31534e-8002-4f4d-9320-b5bf2e765439)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
