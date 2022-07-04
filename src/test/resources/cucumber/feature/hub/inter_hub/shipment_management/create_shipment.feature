@@ -32,10 +32,11 @@ Feature: Shipment Management - Create Shipment
   Scenario: Create New Shipment - selected same origin and destination hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    When Operator create new Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name}                                                          |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then Operator verify error message exist
 
   @KillBrowser @ShouldAlwaysRun @runthis
   Scenario: Kill Browser

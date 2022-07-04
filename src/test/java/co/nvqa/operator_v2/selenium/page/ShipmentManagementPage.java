@@ -82,6 +82,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
+  private static final String XPATH_CREATE_SHIPMENT_ERROR_MESSAGE = "//md-input-container[@name='%s']/div/div[@class='custom-error-msg']";
+
 
   private static final String XPATH_SHIPMENTWEIGHTANDDIMENSION = "//button[.='Shipment Weight & Dimension page']";
 
@@ -272,6 +274,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     });
   }
 
+  public void checkErrorMessageShipmentCreation(){
+    boolean errMsgOriginHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub"));
+    boolean errMsgDestHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+
+    Assertions.assertThat(errMsgOriginHub)
+            .as("Error Message in Origin Hub Form is exist").isTrue();
+    Assertions.assertThat(errMsgDestHub)
+            .as("Error Message in Destination Hub Form is exist").isTrue();
+  }
+
+  public boolean checkErrMsgExist(){
+      return isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub")) ||
+              isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+  }
+
   public void shipmentScanExist(String source, String hub) {
     String xpath =
         XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
@@ -299,6 +316,31 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
     confirmToast(toastMessage, false);
     shipmentInfo.setId(shipmentId);
+  }
+
+  public void createNewShipment(ShipmentInfo shipmentInfo) {
+      createShipment.click();
+      createShipmentDialog.waitUntilVisible();
+      createShipmentDialog.type.selectValue("Air Haul");
+      createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+      createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+      createShipmentDialog.comments.setValue(shipmentInfo.getComments());
+  }
+
+  public void checkToastMsg(){
+      String toastMessage = getToastTopText();
+      assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
+              allOf(containsString("Shipment"), containsString("created")));
+      long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
+      confirmToast(toastMessage, false);
+  }
+
+  public void submitNewShipment (boolean isNextOrder){
+      if (isNextOrder) {
+          createShipmentDialog.createAnother.click();
+      } else {
+          createShipmentDialog.create.click();
+      }
   }
 
   public Long createAnotherShipment() {

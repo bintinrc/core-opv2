@@ -221,6 +221,63 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }, 10);
   }
 
+  @When("^Operator create new Shipment on Shipment Management page using data below:$")
+  public void operatorCreateNewShipmentOnShipmentManagementPageUsingDataBelow(
+          Map<String, String> mapOfData){
+    retryIfRuntimeExceptionOccurred(() -> {
+      try {
+        final Map<String, String> finalData = resolveKeyValues(mapOfData);
+        List<Order> listOfOrders;
+        boolean isNextOrder = false;
+
+        if (get("isNextOrder") != null) {
+          isNextOrder = get("isNextOrder");
+        }
+
+        if (containsKey(KEY_LIST_OF_CREATED_ORDER)) {
+          listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+        } else if (containsKey(KEY_CREATED_ORDER)) {
+          listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+        } else {
+          listOfOrders = new ArrayList<>();
+        }
+
+        ShipmentInfo shipmentInfo = new ShipmentInfo();
+        shipmentInfo.fromMap(finalData);
+        shipmentInfo.setOrdersCount((long) listOfOrders.size());
+
+        shipmentManagementPage.createNewShipment(shipmentInfo);
+        if (!shipmentManagementPage.checkErrMsgExist()){
+          shipmentManagementPage.submitNewShipment(isNextOrder);
+          shipmentManagementPage.checkToastMsg();
+        }
+
+        if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
+          shipmentInfo.setShipmentType("AIR_HAUL");
+        }
+
+        put(KEY_SHIPMENT_INFO, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+
+        if (isNextOrder) {
+          Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
+          shipmentInfo.setId(secondShipmentId);
+          Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+          List<Long> listOfShipmentId = new ArrayList<>();
+          listOfShipmentId.add(shipmentIdBefore);
+          listOfShipmentId.add(secondShipmentId);
+
+          put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+        }
+      } catch (Throwable ex) {
+        LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
+        shipmentManagementPage.refreshPage();
+        throw new NvTestRuntimeException(ex);
+      }
+    }, 10);
+  }
+
   @When("Operator edit Shipment on Shipment Management page based on {string} using data below:")
   public void operatorEditShipmentOnShipmentManagementPageBasedOnTypeUsingDataBelow(String editType,
       Map<String, String> mapOfData) {
@@ -824,5 +881,10 @@ public class ShipmentManagementSteps extends AbstractSteps {
 
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     shipmentManagementPage.openShipmentDetailsPage(Long.valueOf(shipmentId));
+  }
+
+  @Then("Operator verify error message exist")
+  public void operatorVerifyErrorMessageExist() {
+    shipmentManagementPage.checkErrorMessageShipmentCreation();
   }
 }
