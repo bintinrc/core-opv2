@@ -228,7 +228,7 @@ Feature: Crossdock Hubs
     Then Operator verify all crossdock schedules are correct
 
   @DeleteHubsViaAPI @DeleteHubsViaDb
-  Scenario: Update Station Schedule - Merged into Same Wave (uid:b8cdd252-c029-41a2-a3ad-a3d70a74707b)
+  Scenario: Update Crossdock Schedule - Merged into Same Wave (uid:6be5f247-ad8d-43ed-8db3-a5f4bd58a00e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
