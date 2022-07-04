@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @UpdateCrossdockHubsSchedules @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @UpdateCrossdockHubsSchedules
 Feature: Crossdock Hubs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -227,7 +227,7 @@ Feature: Crossdock Hubs
     Then Operator verifies page is back to view mode
     Then Operator verify all crossdock schedules are correct
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Update Station Schedule - Merged into Same Wave (uid:b8cdd252-c029-41a2-a3ad-a3d70a74707b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
