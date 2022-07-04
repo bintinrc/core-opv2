@@ -324,7 +324,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void createNewShipment(ShipmentInfo shipmentInfo) {
       createShipment.click();
       createShipmentDialog.waitUntilVisible();
-      createShipmentDialog.type.selectValue("Air Haul");
+      createShipmentDialog.type.selectValue(shipmentInfo.getShipmentDialogType());
       createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
       createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
       createShipmentDialog.comments.setValue(shipmentInfo.getComments());
@@ -332,9 +332,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void checkToastMsg(){
       String toastMessage = getToastTopText();
-      assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
-              allOf(containsString("Shipment"), containsString("created")));
-      long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
+      boolean shipmentCreated = toastMessage.contains("Shipment") && toastMessage.contains("created");
+      Assertions.assertThat(shipmentCreated).as("Toast message not contains Shipment <SHIPMENT_ID> created").isTrue();
       confirmToast(toastMessage, false);
   }
 

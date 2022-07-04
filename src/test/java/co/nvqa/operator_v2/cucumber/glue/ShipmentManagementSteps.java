@@ -19,11 +19,7 @@ import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -221,7 +217,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
     }, 10);
   }
 
-  @When("^Operator create new Shipment on Shipment Management page using data below:$")
+  @When("Operator create new Shipment on Shipment Management page using data below:")
   public void operatorCreateNewShipmentOnShipmentManagementPageUsingDataBelow(
           Map<String, String> mapOfData){
     retryIfRuntimeExceptionOccurred(() -> {
@@ -237,7 +233,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         if (containsKey(KEY_LIST_OF_CREATED_ORDER)) {
           listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
         } else if (containsKey(KEY_CREATED_ORDER)) {
-          listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+          listOfOrders = Collections.singletonList(get(KEY_CREATED_ORDER));
         } else {
           listOfOrders = new ArrayList<>();
         }
@@ -253,7 +249,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         }
 
         if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
-          shipmentInfo.setShipmentType("AIR_HAUL");
+          shipmentInfo.setShipmentType(shipmentInfo.getShipmentType());
         }
 
         put(KEY_SHIPMENT_INFO, shipmentInfo);
