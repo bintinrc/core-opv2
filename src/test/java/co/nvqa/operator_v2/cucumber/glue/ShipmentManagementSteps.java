@@ -887,4 +887,9 @@ public class ShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyErrorMessageExist() {
     shipmentManagementPage.checkErrorMessageShipmentCreation();
   }
+
+  @And("Operator verify {string} is disable")
+  public void operatorVerifyCreateButtonIsDisable(String disabledButton) {
+    shipmentManagementPage.checkDisabledCreateShipmentButton(disabledButton);
+  }
 }

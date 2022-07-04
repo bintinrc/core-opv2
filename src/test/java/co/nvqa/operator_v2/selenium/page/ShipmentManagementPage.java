@@ -83,6 +83,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
   private static final String XPATH_CREATE_SHIPMENT_ERROR_MESSAGE = "//md-input-container[@name='%s']/div/div[@class='custom-error-msg']";
+  private static final String XPATH_DISABLED_CREATE_SHIPMENT_BUTTON = "//*[@type='button'][@id='%s'][(@disabled)]";
+  private static final String CREATE_BUTTON = "create button";
+  private static final String CREATE_ANOTHER_BUTTON = "create another button";
 
 
   private static final String XPATH_SHIPMENTWEIGHTANDDIMENSION = "//button[.='Shipment Weight & Dimension page']";
@@ -352,6 +355,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     confirmToast(toastMessage, false);
 
     return shipmentId;
+  }
+
+  public void checkDisabledCreateShipmentButton(String disabledButton) {
+    ImmutableMap<String, String> buttonMap = ImmutableMap.<String, String>builder()
+            .put(CREATE_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createButton"))
+            .put(CREATE_ANOTHER_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createAnotherButton"))
+            .build();
+
+    Assertions.assertThat(isElementExistWait1Second(buttonMap.get(disabledButton))).as(f("'%s' is disabled", disabledButton)).isTrue();
   }
 
   public void editShipment(ShipmentInfo shipmentInfo) {
