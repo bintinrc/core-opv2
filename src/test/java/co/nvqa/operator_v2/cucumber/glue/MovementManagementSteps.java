@@ -1179,7 +1179,6 @@ public class MovementManagementSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String originHub = data.get("originHub");
     String destinationHub = data.get("destinationHub");
-    System.out.println("Origin: "+originHub);
     movementManagementPage.modify.click();
     if (originHub!=null) {
       movementManagementPage.EditFilter("", originHub, destinationHub);
