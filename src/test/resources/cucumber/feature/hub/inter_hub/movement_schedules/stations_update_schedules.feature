@@ -337,7 +337,7 @@ Feature: Stations
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    When Operator upgrades new Station Movement Schedules on Movement Management page:
+    When Operator upgrades new Movement Schedules on Movement Management page:
       | departureTime    | duration | endTime    | daysOfWeek          |
       |  SAMEWAVE        | 0        | SAMEWAVE   | monday,tuesday      |
       |  SAMEWAVE        | 0        | SAMEWAVE   | wednesday,thursday  |

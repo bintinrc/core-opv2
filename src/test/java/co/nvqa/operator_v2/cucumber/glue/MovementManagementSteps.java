@@ -1105,7 +1105,7 @@ public class MovementManagementSteps extends AbstractSteps {
     movementManagementPage.OK.click();
   }
 
-  @When("Operator upgrades new Station Movement Schedules on Movement Management page:")
+  @When("Operator upgrades new Movement Schedules on Movement Management page:")
   public void operatorUpdatesScheduleOnMovementPage(List<Map<String, String>> data){
     data = resolveListOfMaps(data);
     String UpdatedStartTime ="";
@@ -1172,5 +1172,29 @@ public class MovementManagementSteps extends AbstractSteps {
               .setDestinationHubName(hubRelations.get(i).getDestinationHubName());
       hubRelations.get(i).getSchedules().get(i).compareWithActual(actual, "drivers");
     }
+  }
+
+  @When("Operator updates created crossdock schedule with filter using data below:")
+  public void operatorUpdatesCreatedCrossdockScheduleWithFilter(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String originHub = data.get("originHub");
+    String destinationHub = data.get("destinationHub");
+    movementManagementPage.modify.click();
+    if (originHub!=null) {
+      movementManagementPage.EditFilter("", originHub, destinationHub);
+    }
+    movementManagementPage.UpdatesdepartureTime("21:00", 0);
+    movementManagementPage.UpdatesdurationTime("01:00", 0);
+    movementManagementPage.commentInputs.get(0)
+            .clearAndSendKeys("This schedule has been updated by Automation Test");
+    movementManagementPage.save.click();
+    movementManagementPage.modalUpdateButton.click();
+    movementManagementPage
+            .verifyNotificationWithMessage("1 schedule(s) have been updated");
+    List<HubRelation> hubRelations = get(KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP);
+    hubRelations.get(0).getSchedules().get(0).setDuration("00:01:00");
+    hubRelations.get(0).getSchedules().get(0).setStartTime("21:00");
+    hubRelations.get(0).getSchedules().get(0)
+            .setComment("This schedule has been updated by Automation Test");
   }
 }
