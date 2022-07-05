@@ -1654,7 +1654,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-container")
     public CheckBox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label span")
+    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label")
     public PageElement rtsCountryDefaultText;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
