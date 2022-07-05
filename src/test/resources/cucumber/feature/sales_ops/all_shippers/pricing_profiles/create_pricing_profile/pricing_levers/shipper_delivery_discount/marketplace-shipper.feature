@@ -128,7 +128,6 @@ Feature: Marketplace Shipper
     Then Operator edits shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
     When Operator go to "Marketplace Sellers (Sub Shippers)" tab on Edit Shipper page
     Then Operator search for marketplace sub shipper by shipper name and get sub shipper id
-    Then API Script Engine clear marketplace shipper cache
     Then Operator edits shipper "{KEY_SUBSHIPPER_LEGACY_ID}"
     Then Operator verifies the pricing profile is referred to parent shipper "{shipper-sop-mktpl-v4-dummy-pricing-profile-delivery-discount-legacy-id}"
 
