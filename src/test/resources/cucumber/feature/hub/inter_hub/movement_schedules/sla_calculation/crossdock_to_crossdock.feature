@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @CrossdockToCrossdock @CWF
+@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @CrossdockToCrossdock
 Feature: Crossdock to Crossdock
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -297,7 +297,7 @@ Feature: Crossdock to Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock Movement Found and There is Available Schedule (Transit Shipment) (uid:a9823aad-1649-426f-837d-0a2dd8ba2ff7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates 2 new Hub using data below:
