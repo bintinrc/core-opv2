@@ -97,7 +97,7 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
     @FindBy(xpath = "./td[contains(@class,'ant-table-cell status')]")
     public PageElement status;
 
-    @FindBy(xpath = "./td[contains(@class,'ant-table-cell mawb')]")
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell mawb')]")
     public PageElement mawb;
 
     @FindBy(xpath = "./td[contains(@class,'ant-table-cell comments')]")
