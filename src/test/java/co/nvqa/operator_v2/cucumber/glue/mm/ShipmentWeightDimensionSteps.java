@@ -98,9 +98,8 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
       case VALID:
       case HAS_DIMENSION:
         Shipment shipmentData = get(KEY_CREATED_SHIPMENT) != null? ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment() : null;
-        Shipment updatedShipment = ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment();
-        if (updatedShipment != null) {
-          shipmentData = updatedShipment;
+        if (getScenarioStorage().containsKey(KEY_SHIPMENT_DETAILS) && null != ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment()) {
+          shipmentData = ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment();
         }
         String shipmentStatus = (String) Optional.ofNullable(dataTable.get(STATUS_KEY))
             .orElse(shipmentData.getStatus());
