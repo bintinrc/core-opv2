@@ -865,14 +865,16 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @And("Operator verify Shipment Weight Update MAWB page UI updated with new MAWB")
   public void operatorVerifyShipmentWeightUpdateMAWBPageUIUpdatedWithNewMAWB() {
-    String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
-    shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
-        row -> {
-          Assertions.assertThat(row.mawb.getText())
-              .as("MAWB is updated with new value")
-              .isEqualTo(newMawb);
-        }
-    );
+    retryIfAssertionErrorOccurred(() -> {
+      String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+      shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+              row -> {
+                Assertions.assertThat(row.mawb.getText())
+                        .as("MAWB is updated with new value")
+                        .isEqualTo(newMawb);
+              }
+      );
+    }, "retrying the validation", 1000, 3);
   }
 
   @Given("Operator take note of the existing mawb")
