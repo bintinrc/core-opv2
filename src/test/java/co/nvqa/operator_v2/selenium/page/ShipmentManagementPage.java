@@ -112,9 +112,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public ShipmentEventsTable shipmentEventsTable;
   public MovementEventsTable movementEventsTable;
 
-  @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
-
   @FindBy(xpath = "//div[@class='shipment-bulk-container']")
   public ShipmentToBeUpdatedTable shipmentToBeUpdatedTable;
 
