@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP
 Feature: DP Administration - Distribution Point Partners
 
   @LaunchBrowser @ShouldAlwaysRun
