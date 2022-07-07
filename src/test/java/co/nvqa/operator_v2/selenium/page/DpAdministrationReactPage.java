@@ -164,7 +164,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void readEntity(DpPartner dpPartner){
-    Assertions.assertThat(Long.toString(dpPartner.getId())).as(f("Partner Name Is %s",dpPartner.getId())).isEqualTo(labelPartnerId.getText());
+    Assertions.assertThat(Long.toString(dpPartner.getId())).as(f("Partner ID Is %s",dpPartner.getId())).isEqualTo(labelPartnerId.getText());
     Assertions.assertThat(dpPartner.getName()).as(f("Partner Name Is %s",dpPartner.getName())).isEqualTo(labelPartnerName.getText());
     Assertions.assertThat(dpPartner.getPocName()).as(f("POC Name Is %s",dpPartner.getPocName())).isEqualTo(labelPocName.getText());
     Assertions.assertThat(dpPartner.getPocTel()).as(f("POC No Is %s",dpPartner.getPocTel())).isEqualTo(labelPocNo.getText());

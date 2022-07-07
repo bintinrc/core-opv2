@@ -28,6 +28,7 @@ Feature: DP Administration - Distribution Point Partners
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
     Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator refresh page
     And Operator click on Add Partner button on DP Administration React page
@@ -43,8 +44,8 @@ Feature: DP Administration - Distribution Point Partners
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Update DP Partner (uid:cb1ca5de-be07-4a3b-903e-955bf19dd2b1)
     Given Operator go to menu Distribution Points -> DP Administration (New)
-    Then The Dp Administration page is displayed
     And Operator refresh page
+    Then The Dp Administration page is displayed
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
       | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
