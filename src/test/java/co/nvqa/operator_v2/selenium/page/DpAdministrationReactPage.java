@@ -151,19 +151,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     sortElement.get(field).click();
   }
 
-  public PageElement getFilterValue(String field){
-    ImmutableMap<String, PageElement> FilterElement = ImmutableMap.<String, PageElement>builder()
-        .put("id", labelPartnerId)
-        .put("name", labelPartnerName)
-        .put("pocName", labelPocName)
-        .put("pocTel", labelPocNo)
-        .put("pocEmail", labelPocEmail)
-        .put("restrictions", labelRestrictions)
-        .build();
-
-    return FilterElement.get(field);
-  }
-
   public void fillFilter(String field,String value){
     textBoxElement.get(field).setValue(value);
   }

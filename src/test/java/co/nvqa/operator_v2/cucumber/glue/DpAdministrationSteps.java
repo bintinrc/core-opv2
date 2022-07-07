@@ -150,14 +150,12 @@ public class DpAdministrationSteps extends AbstractSteps {
         createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
-    dpAdminReactPage.inFrame(page -> {
-      page.dpAdminHeader.waitUntilVisible();
+    dpAdminReactPage.inFrame(() -> {
       for (String extractDetail : extractDetails) {
         String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
         dpAdminReactPage.waitUntilFilterAppear(extractDetail);
         dpAdminReactPage.fillFilter(extractDetail, valueDetails);
         pause2s();
-        page.getFilterValue(extractDetail).waitUntilVisible();
         dpAdminReactPage.readEntity(expected);
         dpAdminReactPage.clearFilter(extractDetail);
       }
@@ -249,10 +247,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     dpAdminReactPage.inFrame(page -> {
-      page.dpAdminHeader.waitUntilVisible();
-      page.filterPartnerName.waitUntilVisible();
       dpAdminReactPage.fillFilter("name", partner.getName());
-      page.labelPartnerId.waitUntilVisible();
     });
   }
 
@@ -286,10 +281,11 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator get partner id")
   public void operatorGetPartnerId() {
     dpAdminReactPage.inFrame(page -> {
-      page.dpAdminHeader.waitUntilVisible();
-      page.labelPartnerId.waitUntilVisible();
       String partnerId = dpAdminReactPage.labelPartnerId.getText();
       put(KEY_DP_PARTNER_ID, partnerId);
+      Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+      partner.setId(Long.parseLong(partnerId));
+      put(KEY_DP_MANAGEMENT_PARTNER,partner);
     });
   }
 
