@@ -108,6 +108,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-headerkey='restrictions']/div/div[1]/*[name()='svg']")
   public PageElement sortRestrictions;
 
+  @FindBy(xpath = "//h2[@data-testid='label_page_details']")
+  public PageElement dpAdminHeader;
+
+
+
   ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
       .put("name", filterPartnerName)

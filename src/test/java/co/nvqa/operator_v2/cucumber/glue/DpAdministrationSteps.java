@@ -235,6 +235,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("The Dp Administration page is displayed")
+  public void dpAdminIsDisplayed(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.dpAdminHeader.waitUntilVisible();
+    });
+  }
+
   @And("Operator check the submitted data in the table")
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
