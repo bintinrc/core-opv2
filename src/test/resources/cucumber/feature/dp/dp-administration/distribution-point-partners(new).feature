@@ -19,6 +19,7 @@ Feature: DP Administration - Distribution Point Partners
       | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     Then The Dp Administration page is displayed
+    When Operator waits for 7 seconds
     And Operator Search with Some DP Partner Details :
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
     And Operator check the data again with pressing ascending and descending order :
@@ -33,6 +34,7 @@ Feature: DP Administration - Distribution Point Partners
       | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
       | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
     Then Operator press submit button
+    When Operator waits for 7 seconds
     And Operator check the submitted data in the table
     And Operator get partner id
     Then DB Operator get newly DP partner by Id
@@ -47,6 +49,7 @@ Feature: DP Administration - Distribution Point Partners
       | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
       | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
     Then Operator press submit button
+    When Operator waits for 7 seconds
     And Operator check the submitted data in the table
     And Operator get partner id
     Then Operator press edit partner button
