@@ -211,7 +211,12 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.buttonSendNotifications.click();
       }
 
+      if (get(KEY_DP_MANAGEMENT_PARTNER) != null){
+        partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
+      }
+
       put(KEY_DP_MANAGEMENT_PARTNER, partner);
+
     });
   }
 
