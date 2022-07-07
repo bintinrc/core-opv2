@@ -246,6 +246,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.filterPartnerName.waitUntilVisible();
       dpAdminReactPage.fillFilter("name", partner.getName());
     });
   }
@@ -280,6 +281,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator get partner id")
   public void operatorGetPartnerId() {
     dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.labelPartnerId.waitUntilVisible();
       String partnerId = dpAdminReactPage.labelPartnerId.getText();
       put(KEY_DP_PARTNER_ID, partnerId);
     });
