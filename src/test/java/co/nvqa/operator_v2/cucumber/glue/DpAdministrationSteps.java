@@ -283,7 +283,8 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator get partner id")
   public void operatorGetPartnerId() {
-    dpAdminReactPage.inFrame(() -> {
+    dpAdminReactPage.inFrame(page -> {
+      page.dpAdminHeader.waitUntilVisible();
       dpAdminReactPage.labelPartnerId.waitUntilVisible();
       String partnerId = dpAdminReactPage.labelPartnerId.getText();
       put(KEY_DP_PARTNER_ID, partnerId);
