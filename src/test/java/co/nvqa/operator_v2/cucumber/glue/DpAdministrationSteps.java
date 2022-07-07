@@ -150,12 +150,14 @@ public class DpAdministrationSteps extends AbstractSteps {
         createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
-    dpAdminReactPage.inFrame(() -> {
+    dpAdminReactPage.inFrame(page -> {
+      page.dpAdminHeader.waitUntilVisible();
       for (String extractDetail : extractDetails) {
         String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
         dpAdminReactPage.waitUntilFilterAppear(extractDetail);
         dpAdminReactPage.fillFilter(extractDetail, valueDetails);
         pause2s();
+        page.getFilterValue(extractDetail).waitUntilVisible();
         dpAdminReactPage.readEntity(expected);
         dpAdminReactPage.clearFilter(extractDetail);
       }

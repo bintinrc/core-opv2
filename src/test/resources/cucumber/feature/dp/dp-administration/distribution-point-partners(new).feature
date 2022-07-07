@@ -13,24 +13,17 @@ Feature: DP Administration - Distribution Point Partners
 #    When Operator click on Download CSV File button on DP Administration React page
 #    Then Downloaded CSV file contains correct DP Partners data
 #
-#  @DeleteNewlyCreatedDpManagementPartner
-#  Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
-#    Given API Operator create new DP Management partner using data below:
-#      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
-#    Given Operator go to menu Distribution Points -> DP Administration (New)
-#    Then The Dp Administration page is displayed
-#    And Operator Search with Some DP Partner Details :
-#      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
-#    And Operator check the data again with pressing ascending and descending order :
-#      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Then The Dp Administration page is displayed
+    And Operator Search with Some DP Partner Details :
+      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
+    And Operator check the data again with pressing ascending and descending order :
+      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
 
-  @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed To See Driver List on Create Route if Driver Employment End Date < Today's Date
-    Given Operator go to menu Utilities -> QRCode Printing
-    And DB Operator find drivers with ended employment
-    When Operator go to menu Routing -> Route Logs
-    And Operator clicks Create Route on Route Logs page
-    Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
 
 #  @DeleteNewlyCreatedDpPartner
 #  Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
