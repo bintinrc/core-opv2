@@ -153,6 +153,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       for (String extractDetail : extractDetails) {
         String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
+        dpAdminReactPage.waitUntilFilterAppear(extractDetail);
         dpAdminReactPage.fillFilter(extractDetail, valueDetails);
         pause2s();
         dpAdminReactPage.readEntity(expected);
@@ -307,6 +308,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
     dpAdminReactPage.inFrame(() -> {
       String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0], expected);
+      dpAdminReactPage.waitUntilFilterAppear(extractDetails[0]);
       dpAdminReactPage.fillFilter(extractDetails[0], valueDetails);
       for (String extractDetail : extractDetails) {
         dpAdminReactPage.sortFilter(extractDetail);

@@ -48,6 +48,7 @@ Feature: DP Administration - Distribution Point Partners
       | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
+    Then Operator waits for 5 seconds
     And Operator get partner id
     Then Operator press edit partner button
     Then Operator Fill Dp Partner Details below :

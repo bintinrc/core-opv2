@@ -155,6 +155,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     textBoxElement.get(field).setValue(value);
   }
 
+  public void waitUntilFilterAppear(String field){
+    textBoxElement.get(field).waitUntilVisible();
+  }
+
   public void clearFilter(String field){
     textBoxElement.get(field).forceClear();
   }
