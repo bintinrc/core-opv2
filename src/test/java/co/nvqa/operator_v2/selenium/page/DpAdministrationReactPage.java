@@ -112,13 +112,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//h2[@data-testid='label_page_details']")
   public PageElement dpAdminHeader;
 
-  @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]")
-  public PageElement errorField;
-
   @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]/div[3]")
   public PageElement errorMsg;
 
-  public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
 
@@ -173,71 +169,55 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void errorCheck(Partner dpPartner) {
-    formPartnerName.setValue(dpPartner.getName());
-    formPartnerName.forceClear();
 
-    Assertions.assertThat(errorField.isDisplayed())
-        .as("Error Message Exist after delete Form Partner Name")
-        .isTrue();
+    if (dpPartner.getName().contains("NAME")) {
+      formPartnerName.setValue(dpPartner.getName());
+      formPartnerName.forceClear();
+    } else if (dpPartner.getName().contains("POCNME")) {
+      formPocName.setValue(dpPartner.getPocName());
+      formPocName.forceClear();
+    } else if (dpPartner.getName().contains("POCNUM")) {
+      if (dpPartner.getPocTel().equals("VALID")) {
 
-    String newPartnerName = RandomStringUtils.random(10, true, false);
-    formPartnerName.setValue(newPartnerName);
+        formPocNo.setValue(RandomStringUtils.random(10, true, false));
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
+                ERROR_MSG_NOT_PHONE_NUM))
+            .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
+        formPocNo.forceClear();
 
-    formPocName.setValue(dpPartner.getPocName());
-    formPocName.forceClear();
-    Assertions.assertThat(errorField.isDisplayed())
-        .as("Error Message Exist after delete Form POC Name")
-        .isTrue();
-    String newPocName = RandomStringUtils.random(10, true, false);
-    formPocName.setValue(newPocName);
+        formPocNo.setValue(RandomStringUtils.random(10, false, true));
+        formPocNo.forceClear();
+      }
+    } else if (dpPartner.getName().contains("POCMAIL")) {
+      formPocEmail.setValue(dpPartner.getPocEmail());
+      formPocEmail.forceClear();
 
+      formPocEmail.setValue(RandomStringUtils.random(10, true, false));
+      Assertions.assertThat(errorMsg.getText())
+          .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
+              ERROR_MSG_NOT_EMAIL_FORMAT))
+          .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+      formPocEmail.forceClear();
 
-    if (dpPartner.getPocTel().equals("VALID")){
-      formPocNo.setValue(RandomStringUtils.random(10, false, true));
-      formPocNo.forceClear();
-      Assertions.assertThat(errorField.isDisplayed())
-          .as("Error Message Exist after delete Form POC NO")
-          .isTrue();
+      formPocEmail.setValue(RandomStringUtils.random(10, false, true));
+      Assertions.assertThat(errorMsg.getText())
+          .as(f("Error Message Exist after fill Form POC Email with wrong format (Number): %s",
+              ERROR_MSG_NOT_EMAIL_FORMAT))
+          .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
 
-      formPocNo.setValue(RandomStringUtils.random(10, true, false));
-      Assertions.assertThat(errorField.isDisplayed())
-          .as("Error Message Exist after fill Form POC NO with wrong format (Not Number)")
-          .isTrue();
-
-      formPocNo.forceClear();
-      String newPocNo = RandomStringUtils.random(10, false, true);
-      formPocNo.setValue(newPocNo);
-
+    } else if (dpPartner.getName().contains("RESTRICTION")) {
+      formRestrictions.setValue(dpPartner.getRestrictions());
+      formRestrictions.forceClear();
     }
 
-
-    formPocEmail.setValue(RandomStringUtils.random(10, true, false));
-    Assertions.assertThat(errorField.isDisplayed())
-        .as("Error Message Exist after fill Form POC Email with wrong format (Letters)")
-        .isTrue();
-
-    formPocEmail.forceClear();
-    formPocEmail.setValue(RandomStringUtils.random(10, false, true));
-    Assertions.assertThat(errorField.isDisplayed())
-        .as("Error Message Exist after fill Form POC Email with wrong format (Numbers)")
-        .isTrue();
-
-    formPocEmail.forceClear();
-    formPocEmail.setValue(dpPartner.getPocEmail());
+  }
 
 
-    formRestrictions.setValue(dpPartner.getRestrictions());
-    formRestrictions.forceClear();
-    Assertions.assertThat(errorField.isDisplayed())
-        .as("Error Message Exist after delete Form Restrictions")
-        .isTrue();
-    String newRestrictions = RandomStringUtils.random(10, true, false);
-    formRestrictions.setValue(newRestrictions);
-
-    Assertions.assertThat(buttonSubmitPartner.isDisplayed())
-        .as("Button for Submit New Partner is available")
-        .isTrue();
-
+  public void checkErrorMsg(String errMessage) {
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message: %s", errMessage))
+        .isEqualTo(errMessage);
   }
 
   public void readEntity(DpPartner dpPartner) {

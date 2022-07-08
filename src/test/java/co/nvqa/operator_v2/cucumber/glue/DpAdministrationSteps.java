@@ -223,6 +223,14 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator will check the error message is equal {string}")
+  public void checkErrorMessageFromDpPartner(String errorMsg) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.checkErrorMsg(errorMsg);
+      pause3s();
+    });
+  }
+
   @Then("Operator press submit button")
   public void submitDpPartnerButton() {
     dpAdminReactPage.inFrame(() -> {

@@ -25,15 +25,25 @@ Feature: DP Administration - Distribution Point Partners
     And Operator check the data again with pressing ascending and descending order :
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
 
-  Scenario: DP Administration - Create DP Partner - Check validation form
+  Scenario Outline: DP Administration - Create DP Partner - Check validation form - <dataset_name>
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator refresh page
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name        | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | ERROR_CHECK | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                      | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
+      | ERROR_CHECK_<key_dataset> | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+    And Operator will check the error message is equal "<error_message>"
+
+    Examples:
+      | dataset_name       | key_dataset | error_message                    |
+      | Empty Partner Name | NAME        | This field is required           |
+      | Empty POC Name     | POCNME      | This field is required           |
+      | Empty POC No       | POCNUM      | This field is required           |
+      | Empty Restrictions | RESTRICTION | This field is required           |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email. |
+
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
