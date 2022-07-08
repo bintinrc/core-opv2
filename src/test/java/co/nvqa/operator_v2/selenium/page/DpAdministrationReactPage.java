@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -40,6 +41,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_add_dp']")
   public Button buttonAddDp;
 
+  @FindBy(xpath = "//button[@data-testId='button_dp_user']")
+  public Button buttonDpUser;
+
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
 
@@ -69,6 +73,27 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testId='field_restrictions']")
   public TextBox filterRestrictions;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_id']")
+  public TextBox filterDpId;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_name']")
+  public TextBox filterDpName;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_shortname']")
+  public TextBox filterDpShortName;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_hub']")
+  public TextBox filterDpHub;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_address']")
+  public TextBox filterDpAddress;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_direction']")
+  public TextBox filterDpDirection;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_activity']")
+  public TextBox filterDpActivity;
 
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_restrictions']")
   public TextBox formRestrictions;
@@ -112,13 +137,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//h2[@data-testid='label_page_details']")
   public PageElement dpAdminHeader;
 
+  @FindBy(xpath = "//h2[@data-testid='label_distribution_points']")
+  public PageElement distributionPointHeader;
+
   @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]/div[3]")
   public PageElement errorMsg;
 
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
 
-  ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
+  public ImmutableMap<String, TextBox> textBoxDpPartnerElement = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
       .put("name", filterPartnerName)
       .put("pocName", filterPocName)
@@ -126,6 +154,17 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("pocEmail", filterPocEmail)
       .put("restrictions", filterRestrictions)
       .build();
+
+  public ImmutableMap<String, TextBox> textBoxDpElement = ImmutableMap.<String, TextBox>builder()
+      .put("id", filterDpId)
+      .put("name", filterDpName)
+      .put("shortName", filterDpShortName)
+      .put("hub", filterDpHub)
+      .put("address", filterDpAddress)
+      .put("direction", filterDpDirection)
+      .put("activity", filterDpActivity)
+      .build();
+
 
   public DpAdministrationReactPage(WebDriver webDriver) {
     super(webDriver);
@@ -156,16 +195,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     sortElement.get(field).click();
   }
 
-  public void fillFilter(String field, String value) {
-    textBoxElement.get(field).setValue(value);
+  public void fillFilterDpPartner(String field, String value) {
+    textBoxDpPartnerElement.get(field).setValue(value);
   }
 
   public void waitUntilFilterAppear(String field) {
-    textBoxElement.get(field).waitUntilVisible();
+    textBoxDpPartnerElement.get(field).waitUntilVisible();
   }
 
   public void clearFilter(String field) {
-    textBoxElement.get(field).forceClear();
+    textBoxDpPartnerElement.get(field).forceClear();
   }
 
   public void errorCheck(Partner dpPartner) {
@@ -253,6 +292,20 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .build();
 
     return partnerElement.get(map);
+  }
+
+  public String getDpElementByMap(String map, DpDetailsResponse dp) {
+    ImmutableMap<String, String> dpElement = ImmutableMap.<String, String>builder()
+        .put("id", Long.toString(dp.getId()))
+        .put("name", dp.getName())
+        .put("shortName", dp.getShortName())
+        .put("hub", Long.toString(dp.getHubId()))
+        .put("address", dp.getAddress1())
+        .put("direction", dp.getDirections())
+        .put("activity", dp.getIsActive() ? "Active" : "Inactive")
+        .build();
+
+    return dpElement.get(map);
   }
 
 }
