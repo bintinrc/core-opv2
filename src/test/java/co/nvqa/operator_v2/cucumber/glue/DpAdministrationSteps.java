@@ -86,6 +86,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.verifyDownloadedFileContent(dpPartnersParams);
   }
 
+  @Then("Downloaded CSV file contains correct DP Partners data in new react page")
+  public void downloadedCsvFileContainsCorrectDpPartnersDataInNewReactPage() {
+    List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
+    dpAdminPage.verifyDownloadedFileContentNewReactPage(dpPartnersParams);
+  }
+
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
   public void operatorGetFirstDpPartnersParamsOnDpAdministrationPage(int count) {
     List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readFirstEntities(count);
