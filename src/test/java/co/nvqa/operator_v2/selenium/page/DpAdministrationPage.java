@@ -30,7 +30,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationPage.class);
 
   public static final String LOCATOR_SPINNER = "//md-progress-circular";
-  private static final String CSV_FILENAME_PATTERN = "data-dp-users";
+  private static final String CSV_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DPS_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DP_USERS_FILENAME_PATTERN = "data-dp-users";
   private static final String LOCATOR_BUTTON_ADD_PARTNER = "container.dp-administration.dp-partners.add-title";
