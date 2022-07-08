@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -13,7 +14,7 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Diaz Ilyasa
  */
-public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage>{
+public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage> {
 
   @FindBy(xpath = "//button[@data-testid='button_download_csv']")
   public Button buttonDownloadCsv;
@@ -111,7 +112,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//h2[@data-testid='label_page_details']")
   public PageElement dpAdminHeader;
 
+  @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]")
+  public PageElement errorField;
 
+  @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]/div[3]")
+  public PageElement errorMsg;
+
+  public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
+  public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
+  public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
 
   ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
@@ -126,7 +135,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     super(webDriver);
   }
 
-  public DpPartner convertPartnerToDpPartner (Partner partner){
+  public DpPartner convertPartnerToDpPartner(Partner partner) {
     DpPartner dpPartner = new DpPartner();
     dpPartner.setId(partner.getId());
     dpPartner.setDpmsPartnerId(partner.getDpmsPartnerId());
@@ -138,7 +147,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     return dpPartner;
   }
 
-  public void sortFilter(String field){
+  public void sortFilter(String field) {
     ImmutableMap<String, PageElement> sortElement = ImmutableMap.<String, PageElement>builder()
         .put("id", sortPartnerId)
         .put("name", sortPartnerName)
@@ -151,32 +160,108 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     sortElement.get(field).click();
   }
 
-  public void fillFilter(String field,String value){
+  public void fillFilter(String field, String value) {
     textBoxElement.get(field).setValue(value);
   }
 
-  public void waitUntilFilterAppear(String field){
+  public void waitUntilFilterAppear(String field) {
     textBoxElement.get(field).waitUntilVisible();
   }
 
-  public void clearFilter(String field){
+  public void clearFilter(String field) {
     textBoxElement.get(field).forceClear();
   }
 
-  public void readEntity(DpPartner dpPartner){
-    Assertions.assertThat(Long.toString(dpPartner.getId())).as(f("Partner ID Is %s",dpPartner.getId())).isEqualTo(labelPartnerId.getText());
-    Assertions.assertThat(dpPartner.getName()).as(f("Partner Name Is %s",dpPartner.getName())).isEqualTo(labelPartnerName.getText());
-    Assertions.assertThat(dpPartner.getPocName()).as(f("POC Name Is %s",dpPartner.getPocName())).isEqualTo(labelPocName.getText());
-    Assertions.assertThat(dpPartner.getPocTel()).as(f("POC No Is %s",dpPartner.getPocTel())).isEqualTo(labelPocNo.getText());
-    Assertions.assertThat(dpPartner.getPocEmail()).as(f("POC Email Is %s",dpPartner.getPocEmail())).isEqualTo(labelPocEmail.getText());
-    Assertions.assertThat(dpPartner.getRestrictions()).as(f("Restrictions Is %s",dpPartner.getRestrictions())).isEqualTo(labelRestrictions.getText());
+  public void errorCheck(Partner dpPartner) {
+    formPartnerName.setValue(dpPartner.getName());
+    formPartnerName.forceClear();
+
+    Assertions.assertThat(errorField.isDisplayed())
+        .as("Error Message Exist after delete Form Partner Name")
+        .isTrue();
+
+    String newPartnerName = RandomStringUtils.random(10, true, false);
+    formPartnerName.setValue(newPartnerName);
+
+    formPocName.setValue(dpPartner.getPocName());
+    formPocName.forceClear();
+    Assertions.assertThat(errorField.isDisplayed())
+        .as("Error Message Exist after delete Form POC Name")
+        .isTrue();
+    String newPocName = RandomStringUtils.random(10, true, false);
+    formPocName.setValue(newPocName);
+
+
+    if (dpPartner.getPocTel().equals("VALID")){
+      formPocNo.setValue(RandomStringUtils.random(10, false, true));
+      formPocNo.forceClear();
+      Assertions.assertThat(errorField.isDisplayed())
+          .as("Error Message Exist after delete Form POC NO")
+          .isTrue();
+
+      formPocNo.setValue(RandomStringUtils.random(10, true, false));
+      Assertions.assertThat(errorField.isDisplayed())
+          .as("Error Message Exist after fill Form POC NO with wrong format (Not Number)")
+          .isTrue();
+
+      formPocNo.forceClear();
+      String newPocNo = RandomStringUtils.random(10, false, true);
+      formPocNo.setValue(newPocNo);
+
+    }
+
+
+    formPocEmail.setValue(RandomStringUtils.random(10, true, false));
+    Assertions.assertThat(errorField.isDisplayed())
+        .as("Error Message Exist after fill Form POC Email with wrong format (Letters)")
+        .isTrue();
+
+    formPocEmail.forceClear();
+    formPocEmail.setValue(RandomStringUtils.random(10, false, true));
+    Assertions.assertThat(errorField.isDisplayed())
+        .as("Error Message Exist after fill Form POC Email with wrong format (Numbers)")
+        .isTrue();
+
+    formPocEmail.forceClear();
+    formPocEmail.setValue(dpPartner.getPocEmail());
+
+
+    formRestrictions.setValue(dpPartner.getRestrictions());
+    formRestrictions.forceClear();
+    Assertions.assertThat(errorField.isDisplayed())
+        .as("Error Message Exist after delete Form Restrictions")
+        .isTrue();
+    String newRestrictions = RandomStringUtils.random(10, true, false);
+    formRestrictions.setValue(newRestrictions);
+
+    Assertions.assertThat(buttonSubmitPartner.isDisplayed())
+        .as("Button for Submit New Partner is available")
+        .isTrue();
+
   }
 
-  public void checkingIdAndDpmsId(Partner partner){
-    Assertions.assertThat(partner.getId()).as("DP ID and DPMS ID is Same").isEqualTo(partner.getDpmsPartnerId());
+  public void readEntity(DpPartner dpPartner) {
+    Assertions.assertThat(Long.toString(dpPartner.getId()))
+        .as(f("Partner ID Is %s", dpPartner.getId())).isEqualTo(labelPartnerId.getText());
+    Assertions.assertThat(dpPartner.getName()).as(f("Partner Name Is %s", dpPartner.getName()))
+        .isEqualTo(labelPartnerName.getText());
+    Assertions.assertThat(dpPartner.getPocName()).as(f("POC Name Is %s", dpPartner.getPocName()))
+        .isEqualTo(labelPocName.getText());
+    Assertions.assertThat(dpPartner.getPocTel()).as(f("POC No Is %s", dpPartner.getPocTel()))
+        .isEqualTo(labelPocNo.getText());
+    Assertions.assertThat(dpPartner.getPocEmail()).as(f("POC Email Is %s", dpPartner.getPocEmail()))
+        .isEqualTo(labelPocEmail.getText());
+    Assertions.assertThat(dpPartner.getRestrictions())
+        .as(f("Restrictions Is %s", dpPartner.getRestrictions()))
+        .isEqualTo(labelRestrictions.getText());
   }
 
-  public String getDpPartnerElementByMap (String map,DpPartner dpPartner){
+  public void checkingIdAndDpmsId(Partner partner) {
+    Assertions.assertThat(partner.getId()).as("DP ID and DPMS ID is Same")
+        .isEqualTo(partner.getDpmsPartnerId());
+  }
+
+  public String getDpPartnerElementByMap(String map, DpPartner dpPartner) {
     ImmutableMap<String, String> partnerElement = ImmutableMap.<String, String>builder()
         .put("id", Long.toString(dpPartner.getId()))
         .put("name", dpPartner.getName())

@@ -176,47 +176,50 @@ public class DpAdministrationSteps extends AbstractSteps {
     Partner partner = partners.get(0);
 
     dpAdminReactPage.inFrame(() -> {
-      if (partner.getName() != null) {
-        dpAdminReactPage.formPartnerName.setValue(partner.getName());
-      }
-      if (partner.getPocName() != null) {
-        if (!dpAdminReactPage.formPocName.getValue().equals("")) {
-          dpAdminReactPage.formPocName.forceClear();
+      if (partner.getName() != null && partner.getName().contains("ERROR_CHECK")) {
+        dpAdminReactPage.errorCheck(partner);
+      } else {
+        if (partner.getName() != null) {
+          dpAdminReactPage.formPartnerName.setValue(partner.getName());
         }
-        dpAdminReactPage.formPocName.setValue(partner.getPocName());
-      }
-
-      if (partner.getPocTel() != null) {
-
-        if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
-          dpAdminReactPage.formPocNo.forceClear();
+        if (partner.getPocName() != null) {
+          if (!dpAdminReactPage.formPocName.getValue().equals("")) {
+            dpAdminReactPage.formPocName.forceClear();
+          }
+          dpAdminReactPage.formPocName.setValue(partner.getPocName());
         }
 
-        if (partner.getPocTel().equals("VALID")) {
-          partner.setPocTel(TestUtils.generatePhoneNumber());
-          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
-        } else {
-          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        if (partner.getPocTel() != null) {
+
+          if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
+            dpAdminReactPage.formPocNo.forceClear();
+          }
+
+          if (partner.getPocTel().equals("VALID")) {
+            partner.setPocTel(TestUtils.generatePhoneNumber());
+            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+          } else {
+            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+          }
         }
-      }
 
-      if (partner.getPocEmail() != null) {
-        dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
-      }
-      if (partner.getRestrictions() != null) {
-        dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
-      }
-      if (partner.getSendNotificationsToCustomer() != null
-          && partner.getSendNotificationsToCustomer()) {
-        dpAdminReactPage.buttonSendNotifications.click();
-      }
+        if (partner.getPocEmail() != null) {
+          dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
+        }
+        if (partner.getRestrictions() != null) {
+          dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
+        }
+        if (partner.getSendNotificationsToCustomer() != null
+            && partner.getSendNotificationsToCustomer()) {
+          dpAdminReactPage.buttonSendNotifications.click();
+        }
 
-      if (get(KEY_DP_MANAGEMENT_PARTNER) != null){
-        partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
+        if (get(KEY_DP_MANAGEMENT_PARTNER) != null){
+          partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
+        }
+
+        put(KEY_DP_MANAGEMENT_PARTNER, partner);
       }
-
-      put(KEY_DP_MANAGEMENT_PARTNER, partner);
-
     });
   }
 
