@@ -171,14 +171,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void errorCheck(Partner dpPartner) {
 
     if (dpPartner.getName().contains("NAME")) {
+      formPartnerName.forceClear();
       formPartnerName.setValue(dpPartner.getName());
       formPartnerName.forceClear();
     } else if (dpPartner.getName().contains("POCNME")) {
+      formPocName.forceClear();
       formPocName.setValue(dpPartner.getPocName());
       formPocName.forceClear();
     } else if (dpPartner.getName().contains("POCNUM")) {
       if (dpPartner.getPocTel().equals("VALID")) {
-
+        formPocNo.forceClear();
         formPocNo.setValue(RandomStringUtils.random(10, true, false));
         Assertions.assertThat(errorMsg.getText())
             .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
@@ -190,9 +192,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         formPocNo.forceClear();
       }
     } else if (dpPartner.getName().contains("POCMAIL")) {
-      formPocEmail.setValue(dpPartner.getPocEmail());
       formPocEmail.forceClear();
-
       formPocEmail.setValue(RandomStringUtils.random(10, true, false));
       Assertions.assertThat(errorMsg.getText())
           .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
@@ -207,6 +207,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
           .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
 
     } else if (dpPartner.getName().contains("RESTRICTION")) {
+      formRestrictions.forceClear();
       formRestrictions.setValue(dpPartner.getRestrictions());
       formRestrictions.forceClear();
     }
