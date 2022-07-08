@@ -44,6 +44,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_dp_user']")
   public Button buttonDpUser;
 
+  @FindBy(xpath = "//button[@data-testId='button_add_user']")
+  public Button buttonAddUser;
+
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
 

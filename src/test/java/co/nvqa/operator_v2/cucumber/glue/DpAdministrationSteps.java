@@ -266,8 +266,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @Then("The Dp list page is displayed")
-  public void dplistPageIsDisplayed(){
+  @Then("The Dp page is displayed")
+  public void dpPageIsDisplayed(){
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.distributionPointHeader.waitUntilVisible();
     });
@@ -315,6 +315,13 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressViewDpButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonViewDps.click();
+    });
+  }
+
+  @And("Operator press add user Button")
+  public void operatorPressAddUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonAddUser.click();
     });
   }
 
