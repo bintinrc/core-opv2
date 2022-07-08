@@ -11,7 +11,7 @@ Feature: DP Administration - Distribution Point Partners
     Then The Dp Administration page is displayed
     When Operator get first 10 DP Partners params on DP Administration page
     When Operator click on Download CSV File button on DP Administration React page
-    Then Downloaded CSV file contains correct DP Partners data
+    Then Downloaded CSV file contains correct DP Partners data in new react page
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
