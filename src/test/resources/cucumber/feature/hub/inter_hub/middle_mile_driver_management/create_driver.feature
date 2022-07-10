@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @CreateDriver @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @CreateDriver
 Feature: Middle Mile Driver Management - Create Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -89,9 +89,10 @@ Feature: Middle Mile Driver Management - Create Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
 
-  @DeleteDriver @RT
+  @DeleteDriver
   Scenario: Create Driver with existing Driver's username (uid:0252d293-a253-4cf4-854e-d626e1df9a61)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
