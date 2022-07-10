@@ -90,7 +90,7 @@ Feature: Middle Mile Driver Management - Create Driver
     Then Operator searches by "name" and verifies the created username
 
   @DeleteDriver
-  Scenario: Create Driver with existing Driver's username (uid:0252d293-a253-4cf4-854e-d626e1df9a61)
+  Scenario: Create Driver with existing Driver's username (uid:5cb46c58-8e7c-45c2-ae3a-50c40cdbc72f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Singapore"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
