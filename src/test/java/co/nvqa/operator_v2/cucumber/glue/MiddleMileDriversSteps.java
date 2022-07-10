@@ -210,7 +210,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
           middleMileDriversPage.fillEmploymentEndDate(
               EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
-
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
             middleMileDriver.setUsername(middleMileDriver.getFirstName());
@@ -435,6 +434,120 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void filterDriverby(){
     int totalDriver = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
     middleMileDriversPage.verifiesTotalDriverIsTheSame(totalDriver);
+  }
+
+  @When("Operator create new Existing username Middle Mile Driver and verify error message with details:")
+  public void operatorCreateNewExitstingUsernameMiddleMileDriverWithDetails(
+          List<Map<String, String>> middleMileDrivers) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        String country = get(COUNTRY);
+        for (Map<String, String> data : middleMileDrivers) {
+          Driver middleMileDriver = new Driver();
+          middleMileDriversPage.clickCreateDriversButton();
+          middleMileDriver.setFirstName(data.get("name"));
+
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
+            String name = AUTO + generateRequestedTrackingNumber();
+            System.out.println("Name and Username : " + name);
+            middleMileDriver.setFirstName(name);
+          }
+          middleMileDriversPage.fillName(middleMileDriver.getFirstName());
+
+          middleMileDriver.setHub(resolveValue(data.get("hub")));
+          if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
+            middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+          }
+
+          middleMileDriver.setMobilePhone(data.get("contactNumber"));
+          middleMileDriversPage.fillcontactNumber(middleMileDriver.getMobilePhone());
+
+          middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber())) {
+            String licenseNumber = RandomUtil.randomString(5);
+            System.out.println("License Number : " + licenseNumber);
+            middleMileDriver.setLicenseNumber(licenseNumber);
+          }
+          middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
+
+          middleMileDriver
+                  .setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillLicenseExpiryDate(
+                  EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+
+          if (country == null) {
+            middleMileDriver.setLicenseType(CLASS_5);
+          } else {
+            switch (country.toLowerCase()) {
+              case SINGAPORE:
+                middleMileDriver.setLicenseType(CLASS_5);
+                break;
+
+              case INDONESIA:
+                middleMileDriver.setLicenseType(SIM_B_I_UMUM);
+                break;
+
+              case THAILAND:
+                middleMileDriver.setLicenseType(TYPE_C);
+                break;
+
+              case VIETNAM:
+              case MALAYSIA:
+                middleMileDriver.setLicenseType(CLASS_E);
+                break;
+              case PHILIPPINES:
+                middleMileDriver.setLicenseType(RESTRICTION_5);
+                break;
+
+              default:
+                LOGGER.warn("Country is not on the list");
+            }
+          }
+          middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
+
+          middleMileDriver.setEmploymentType(data.get("employmentType"));
+          if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
+          } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
+          } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(VENDOR_SELECTION);
+          }
+          middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
+
+          middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
+          middleMileDriversPage.fillEmploymentEndDate(
+                  EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriver.setUsername(data.get("username"));
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
+            middleMileDriver.setUsername(middleMileDriver.getFirstName());
+          }
+          middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
+          middleMileDriversPage.clickCheckAvailabilityButton();
+          middleMileDriversPage.verifyErrorMessage(data.get("username")+" is not available!");
+
+          middleMileDriversPage.fillPassword(PASSWORD);
+
+          middleMileDriver.setComments(COMMENTS);
+          middleMileDriversPage.fillComments(middleMileDriver.getComments());
+
+          middleMileDriversPage.clickSaveButton();
+          middleMileDriversPage.verifyErrorMessage("lib.exceptions.NVConflictException: Username already registered");
+          put(KEY_CREATED_DRIVER, middleMileDriver);
+          putInList(KEY_LIST_OF_CREATED_DRIVERS, middleMileDriver);
+          put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in middle mile driver page not found, retrying...");
+        middleMileDriversPage.refreshPage();
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable();
+        middleMileDriversPage.clickCreateDriversButton();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 5);
 
   }
 }
