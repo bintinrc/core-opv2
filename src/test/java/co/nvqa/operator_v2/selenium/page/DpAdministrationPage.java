@@ -30,6 +30,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationPage.class);
 
   public static final String LOCATOR_SPINNER = "//md-progress-circular";
+  private static final String CSV_FILENAME_PATTERN_NEW = "data-dps";
   private static final String CSV_FILENAME_PATTERN = "data-dp-users";
   private static final String CSV_DPS_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DP_USERS_FILENAME_PATTERN = "data-dp-users";
@@ -506,6 +507,38 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .containsIgnoringCase(expectedDpUserParams.getEmailId());
     Assertions.assertThat(actualDpUserParams.getContactNo()).as("DP user contact no is the same")
         .containsIgnoringCase(expectedDpUserParams.getContactNo());
+  }
+
+  public void verifyDownloadedFileContentNewReactPage(List<DpPartner> expectedDpPartners) {
+    final String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN_NEW);
+    verifyFileDownloadedSuccessfully(fileName);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<DpPartner> actualDpPartners = DpPartner.fromCsvFile(DpPartner.class, pathName, true);
+
+    Assertions.assertThat(actualDpPartners).as("Unexpected number of lines in CSV file")
+        .hasSizeGreaterThanOrEqualTo(expectedDpPartners.size());
+
+    final Map<Long, DpPartner> actualMap = actualDpPartners.stream().collect(Collectors.toMap(
+        DpPartner::getId,
+        params -> params,
+        (params1, params2) -> params1
+    ));
+
+    for (DpPartner expectedDpPartner : expectedDpPartners) {
+      DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
+      Assertions.assertThat(actualDpPartner.getId()).as("DP ID is null").isNotNull();
+      Assertions.assertThat(actualDpPartner.getName()).as("DP Partner Name is correct")
+          .isEqualTo(expectedDpPartner.getName());
+      Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
+          .isEqualTo(expectedDpPartner.getPocName());
+      Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
+          .isEqualTo(expectedDpPartner.getPocTel());
+      assertEquals("POC Email is correct", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
+          actualDpPartner.getPocEmail());
+      assertEquals("Restrictions is correct",
+          Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
+          actualDpPartner.getRestrictions());
+    }
   }
 
   public void verifyDownloadedFileContent(List<DpPartner> expectedDpPartners) {
