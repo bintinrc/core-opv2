@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @CreateDriver
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @CreateDriver @CWF
 Feature: Middle Mile Driver Management - Create Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -89,7 +89,7 @@ Feature: Middle Mile Driver Management - Create Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriver @RT
   Scenario: Create Driver with existing Driver's username (uid:0252d293-a253-4cf4-854e-d626e1df9a61)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -97,7 +97,7 @@ Feature: Middle Mile Driver Management - Create Driver
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Existing username Middle Mile Driver and verify error message with details:
       | name   | hub          | contactNumber            | licenseNumber | employmentType | username                                   |
-      | RANDOM | {hub-name-2} | {default-phone-number}   | RANDOM        | FULL_TIME      | {ninja-driver-2-username}  |
+      | RANDOM | {mm-driver-hub-name-sg} | {default-phone-number}   | RANDOM        | FULL_TIME      | {ninja-driver-2-username}  |
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id-2}"
