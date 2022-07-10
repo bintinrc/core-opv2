@@ -101,7 +101,7 @@ Feature: Middle Mile Driver Management - Create Driver
       | RANDOM | {mm-driver-hub-name-sg} | {default-phone-number}   | RANDOM        | FULL_TIME      | {ninja-driver-2-username}  |
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
-    Given Operator get info of hub details id "{hub-id-2}"
+    Given Operator get info of hub details id "{mm-driver-hub-name-sg}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches and verifies the created username is not exist
