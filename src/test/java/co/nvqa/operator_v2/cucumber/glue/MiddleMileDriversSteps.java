@@ -547,7 +547,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.clickCreateDriversButton();
         throw new NvTestRuntimeException(ex.getCause());
       }
-    }, 5);
+    }, 1);
 
   }
 }
