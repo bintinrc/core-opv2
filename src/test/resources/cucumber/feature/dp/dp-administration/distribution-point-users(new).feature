@@ -1,11 +1,11 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpManagementPartner @RT
   Scenario: DP Administration - Create DP User
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -28,3 +28,5 @@ Feature: DP Administration - Distribution Point Users
       | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
+    When DB Operator gets details for newly created dp users from Hibernate
+    And Operator verifies the newly created DP user data is right

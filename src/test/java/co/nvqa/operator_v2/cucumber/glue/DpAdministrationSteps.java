@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -194,6 +195,7 @@ public class DpAdministrationSteps extends AbstractSteps {
         }
         if (dpUser.getUsername() != null){
           dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
+          put(KEY_DP_USER_USERNAME,dpUser.getUsername());
         }
         if (dpUser.getPassword() != null){
           dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
@@ -599,5 +601,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpPartner.setRestrictions(partner.getRestrictions());
 
     put(KEY_DP_PARTNER, dpPartner);
+  }
+
+  @And("Operator verifies the newly created DP user data is right")
+  public void verifyNewlyCreatedDpUser() {
+    DpUser dpUser = get(KEY_DP_USER);
+    List<co.nvqa.commons.model.dp.DpUser> dpUserDb = get(KEY_DATABASE_CHECKING_CREATED_DP_USER);
+    dpAdminPage.verifyNewlyCreatedDpUser(dpUser,dpUserDb.get(0));
   }
 }
