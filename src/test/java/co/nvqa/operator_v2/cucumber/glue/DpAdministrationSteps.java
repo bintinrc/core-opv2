@@ -178,27 +178,31 @@ public class DpAdministrationSteps extends AbstractSteps {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
     DpUser dpUser = dpUsers.get(0);
     dpAdminReactPage.inFrame(() -> {
-      if (dpUser.getFirstName() != null) {
-        dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
-      }
-      if (dpUser.getLastName() != null) {
-        dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
-      }
-      if (dpUser.getContactNo() != null) {
-        dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
-      }
-      if (dpUser.getEmailId() != null) {
-        dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
-      }
-      if (dpUser.getUsername() != null) {
-        dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
-        put(KEY_DP_USER_USERNAME, dpUser.getUsername());
-      }
-      if (dpUser.getPassword() != null) {
-        dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
-      }
-      put(KEY_DP_USER, dpUser);
+      if (dpUser.getFirstName() != null && dpUser.getFirstName().contains("ERROR_CHECK")) {
+        dpAdminReactPage.errorCheckDpUser(dpUser);
+      } else {
+        if (dpUser.getFirstName() != null){
+          dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
+        }
+        if (dpUser.getLastName() != null){
+          dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
+        }
+        if (dpUser.getContactNo() != null){
+          dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
+        }
+        if (dpUser.getEmailId() != null){
+          dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
+        }
+        if (dpUser.getUsername() != null){
+          dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
+          put(KEY_DP_USER_USERNAME,dpUser.getUsername());
+        }
+        if (dpUser.getPassword() != null){
+          dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
+        }
 
+        put(KEY_DP_USER, dpUser);
+      }
     });
   }
 
