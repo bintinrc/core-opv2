@@ -99,6 +99,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = ".//button[.='Cancel']")
   public Button cancel;
 
+  @FindBy(xpath = ".//button[.='OK' or .='Proceed']")
+  public Button okorProceed;
+
   @FindBy(xpath = ".//button[.='OK']")
   public Button ok;
 
@@ -511,15 +514,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInTripDepartureDialog() {
-    String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
-    assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
+    if(findElementsByXpath("//span[@class='ant-modal-confirm-title']").size()!=0){
+      String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
+      assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
 
-    String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
-    assertThat("Dialog message text is the same", dialogMessageText,
-        equalTo("Are you sure you want to start departure?"));
-
-    ok.waitUntilClickable();
-    ok.click();
+      String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
+      assertThat("Dialog message text is the same", dialogMessageText,
+          equalTo("Are you sure you want to start departure?"));
+    }
+    okorProceed.waitUntilClickable();
+    okorProceed.click();
     pause2s();
     antNotificationMessage = getAntNotificationMessage();
   }
