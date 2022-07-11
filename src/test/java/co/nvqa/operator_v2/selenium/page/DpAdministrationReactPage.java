@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.operator_v2.model.DpPartner;
+import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
@@ -46,6 +47,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//button[@data-testId='button_add_user']")
   public Button buttonAddUser;
+
+  @FindBy(xpath = "//button[@data-testId='button_submit']")
+  public TextBox buttonSubmitDpUser;
 
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
@@ -98,8 +102,41 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testId='field_dp_activity']")
   public TextBox filterDpActivity;
 
+  @FindBy(xpath = "//input[@data-testId='field_username']")
+  public TextBox filterDpUserUsername;
+
+  @FindBy(xpath = "//input[@data-testId='field_first_name']")
+  public TextBox filterDpUserFirstName;
+
+  @FindBy(xpath = "//input[@data-testId='field_last_name']")
+  public TextBox filterDpUserLastName;
+
+  @FindBy(xpath = "//input[@data-testId='field_email']")
+  public TextBox filterDpUserEmail;
+
+  @FindBy(xpath = "//input[@data-testId='field_contact']")
+  public TextBox filterDpUserContact;
+
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_restrictions']")
   public TextBox formRestrictions;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_first_name']")
+  public TextBox formDpUserFirstName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_last_name']")
+  public TextBox formDpUserLastName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_contact_no']")
+  public TextBox formDpUserContact;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_email']")
+  public TextBox formDpUserEmail;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_username']")
+  public TextBox formDpUserUsername;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_password']")
+  public TextBox formDpUserPassword;
 
   @FindBy(xpath = "//div[@data-testid='label_partner_id']/span")
   public PageElement labelPartnerId;
@@ -149,7 +186,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
 
-  public ImmutableMap<String, TextBox> textBoxDpPartnerElement = ImmutableMap.<String, TextBox>builder()
+  public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
       .put("name", filterPartnerName)
       .put("pocName", filterPocName)
@@ -158,7 +195,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("restrictions", filterRestrictions)
       .build();
 
-  public ImmutableMap<String, TextBox> textBoxDpElement = ImmutableMap.<String, TextBox>builder()
+  public ImmutableMap<String, TextBox> textBoxDpFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterDpId)
       .put("name", filterDpName)
       .put("shortName", filterDpShortName)
@@ -166,6 +203,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("address", filterDpAddress)
       .put("direction", filterDpDirection)
       .put("activity", filterDpActivity)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxDpUserFilter = ImmutableMap.<String, TextBox>builder()
+      .put("username", filterDpUserUsername)
+      .put("firstName", filterDpUserFirstName)
+      .put("lastName", filterDpUserLastName)
+      .put("email", filterDpUserEmail)
+      .put("contact", filterDpUserContact)
       .build();
 
 
@@ -199,18 +244,19 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void fillFilterDpPartner(String field, String value) {
-    textBoxDpPartnerElement.get(field).setValue(value);
-  }
-
-  public void waitUntilFilterAppear(String field) {
-    textBoxDpPartnerElement.get(field).waitUntilVisible();
+    textBoxDpPartnerFilter.get(field).waitUntilVisible(2);
+    textBoxDpPartnerFilter.get(field).setValue(value);
   }
 
   public void clearFilter(String field) {
-    textBoxDpPartnerElement.get(field).forceClear();
+    textBoxDpPartnerFilter.get(field).forceClear();
   }
 
-  public void errorCheck(Partner dpPartner) {
+  public void errorCheckDpUser(){
+
+  }
+
+  public void errorCheckDpPartner(Partner dpPartner) {
 
     if (dpPartner.getName().contains("NAME")) {
       formPartnerName.forceClear();
@@ -292,6 +338,18 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("pocTel", dpPartner.getPocTel())
         .put("pocEmail", dpPartner.getPocEmail())
         .put("restrictions", dpPartner.getRestrictions())
+        .build();
+
+    return partnerElement.get(map);
+  }
+
+  public String getDpUserElementByMap(String map, DpUser dpUser) {
+    ImmutableMap<String, String> partnerElement = ImmutableMap.<String, String>builder()
+        .put("username",dpUser.getUsername())
+        .put("firstName", dpUser.getFirstName())
+        .put("lastName", dpUser.getLastName())
+        .put("email", dpUser.getEmailId())
+        .put("contact", dpUser.getContactNo())
         .build();
 
     return partnerElement.get(map);

@@ -5,8 +5,8 @@ Feature: DP Administration - Distribution Point Users
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
-  Scenario: dp administrations - authorized scope - delete dp - active dp without pending reservations - Success Delete - SG
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: DP Administration - Create DP User
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -23,3 +23,8 @@ Feature: DP Administration - Distribution Point Users
     Then Operator press view DP User Button
     Then The Dp page is displayed
     And Operator press add user Button
+    When Operator Fill Dp User Details below :
+      | firstName | lastName | contactNo | emailId   | username                                | password |
+      | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+    Then Operator press submit user button
+    And Operator fill the Dp User filter by "username"

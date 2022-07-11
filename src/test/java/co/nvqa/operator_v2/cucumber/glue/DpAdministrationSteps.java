@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
-import co.nvqa.commons.model.dp.Hours;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
@@ -17,12 +16,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.mail.Part;
 
 /**
  * @author Sergey Mishanin
@@ -160,7 +156,6 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       for (String extractDetail : extractDetails) {
         String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
-        dpAdminReactPage.waitUntilFilterAppear(extractDetail);
         dpAdminReactPage.fillFilterDpPartner(extractDetail, valueDetails);
         pause2s();
         dpAdminReactPage.readEntity(expected);
@@ -177,6 +172,45 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator Fill Dp User Details below :")
+  public void operatorFillDpUserDetails(DataTable dt) {
+    List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
+    DpUser dpUser = dpUsers.get(0);
+    dpAdminReactPage.inFrame(() -> {
+      if (dpUser.getFirstName() != null && dpUser.getFirstName().contains("ERROR_CHECK")) {
+        dpAdminReactPage.errorCheckDpUser();
+      } else {
+        if (dpUser.getFirstName() != null){
+          dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
+        }
+        if (dpUser.getLastName() != null){
+          dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
+        }
+        if (dpUser.getContactNo() != null){
+          dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
+        }
+        if (dpUser.getEmailId() != null){
+          dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
+        }
+        if (dpUser.getUsername() != null){
+          dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
+        }
+        if (dpUser.getPassword() != null){
+          dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
+        }
+
+        put(KEY_DP_USER, dpUser);
+      }
+    });
+  }
+
+  @Then("Operator press submit user button")
+  public void operatorPressSubmitUserButton(){
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitDpUser.click();
+    });
+  }
+
   @Then("Operator Fill Dp Partner Details below :")
   public void operatorFillDpPartnerDetails(DataTable dt) {
     List<Partner> partners = convertDataTableToList(dt, Partner.class);
@@ -184,7 +218,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
     dpAdminReactPage.inFrame(() -> {
       if (partner.getName() != null && partner.getName().contains("ERROR_CHECK")) {
-        dpAdminReactPage.errorCheck(partner);
+        dpAdminReactPage.errorCheckDpPartner(partner);
       } else {
         if (partner.getName() != null) {
           dpAdminReactPage.formPartnerName.setValue(partner.getName());
@@ -279,7 +313,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(newlyCreatedPartner);
     dpAdminReactPage.inFrame(() -> {
       String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,newlyCreatedDpPartner);
-      dpAdminReactPage.textBoxDpPartnerElement.get(element).setValue(fillInValue);
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
     });
   }
 
@@ -288,7 +322,16 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpDetailsResponse newlyCreatedDpDetails = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
     dpAdminReactPage.inFrame(() -> {
       String fillInValue = dpAdminReactPage.getDpElementByMap(element,newlyCreatedDpDetails);
-      dpAdminReactPage.textBoxDpElement.get(element).setValue(fillInValue);
+      dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @Then("Operator fill the Dp User filter by {string}")
+  public void operatorFillTheDpUserFilter(String element){
+    DpUser dpUser = get(KEY_DP_USER);
+    dpAdminReactPage.inFrame(() -> {
+      String fillInValue = dpAdminReactPage.getDpUserElementByMap(element,dpUser);
+      dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(fillInValue);
     });
   }
 
@@ -372,7 +415,6 @@ public class DpAdministrationSteps extends AbstractSteps {
 
     dpAdminReactPage.inFrame(() -> {
       String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0], expected);
-      dpAdminReactPage.waitUntilFilterAppear(extractDetails[0]);
       dpAdminReactPage.fillFilterDpPartner(extractDetails[0], valueDetails);
       for (String extractDetail : extractDetails) {
         dpAdminReactPage.sortFilter(extractDetail);
