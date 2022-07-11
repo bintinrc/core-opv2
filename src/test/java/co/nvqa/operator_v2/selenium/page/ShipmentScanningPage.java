@@ -518,11 +518,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void clickProceedInTripDepartureDialog() {
     if(findElementsByXpath(ANT_MODAL_CONFIRM_TITLE).size()!=0){
       String dialogTitleText = dialogTitle.getText();
-      assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
+      Assertions.assertThat(dialogTitleText).as("Dialog title is the same").isEqualTo("Trip Departure");
 
       String dialogMessageText = dialogMessage.getText();
-      assertThat("Dialog message text is the same", dialogMessageText,
-          equalTo("Are you sure you want to start departure?"));
+      Assertions.assertThat(dialogMessageText).as("Dialog message text is the same").isEqualTo("Are you sure you want to start departure?");
     }
     okorProceed.waitUntilClickable();
     okorProceed.click();
