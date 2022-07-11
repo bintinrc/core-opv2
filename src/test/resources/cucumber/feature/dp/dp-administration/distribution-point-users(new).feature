@@ -5,7 +5,7 @@ Feature: DP Administration - Distribution Point Users
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
   Scenario: DP Administration - Create DP User
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
