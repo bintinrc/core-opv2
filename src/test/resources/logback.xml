@@ -28,6 +28,7 @@
     <logger name="org.apache" level="WARN" />
     <logger name="httpclient" level="WARN" />
     <logger name="io.restassured.internal" level="WARN" />
+    <logger name="org.hibernate" level="WARN" />
 
     <!-- By default, the level of the root level is set to DEBUG -->
     <root level="DEBUG">
