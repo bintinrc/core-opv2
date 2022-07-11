@@ -6,7 +6,7 @@ Feature: DP Administration - Distribution Point Users
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
-  Scenario: DP Administration - Create DP User
+  Scenario: DP Administration - Create DP User (uid:0146137a-6964-4985-a417-7bbd6035e5b7)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -32,7 +32,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator verifies the newly created DP user data is right
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: DP Administration - Create DP User - Username is duplicate
+  Scenario: DP Administration - Create DP User - Username is duplicate (uid:4b65c669-4fc4-44b1-9205-2ea7b44cf247)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -56,7 +56,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator will get the error message that the username is duplicate
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: DP Administration - Create DP User - Validation check
+  Scenario: DP Administration - Create DP User - Validation check (uid:fca3060c-a44a-4893-8b0d-b542fb18e644)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
