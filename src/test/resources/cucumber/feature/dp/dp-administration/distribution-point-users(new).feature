@@ -74,5 +74,5 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName   | lastName | contactNo | emailId   | username        | password |
-      | ERROR_CHECK | Ilyasa   | GENERATED | GENERATED | {dp-user-exist} | password |
+      | firstName   | lastName | contactNo | emailId   | username                                | password |
+      | ERROR_CHECK | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
