@@ -183,8 +183,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]/div[3]")
   public PageElement errorMsg;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement errorNotification;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']/div/div[3]/span")
+  public PageElement errorMsgUsernameDuplicate;
+
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
+  public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
 
   public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
@@ -252,8 +259,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     textBoxDpPartnerFilter.get(field).forceClear();
   }
 
-  public void errorCheckDpUser(){
-
+  public void duplicateUsernameExist(DpUser dpUser){
+    Assertions.assertThat(errorMsgUsernameDuplicate.getText())
+        .as(f("Error Message exist: %s", errorMsgUsernameDuplicate.getText())).isEqualTo(f(ERROR_MSG_DUPLICATE_USERNAME,dpUser.getUsername()));
   }
 
   public void errorCheckDpPartner(Partner dpPartner) {

@@ -178,38 +178,43 @@ public class DpAdministrationSteps extends AbstractSteps {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
     DpUser dpUser = dpUsers.get(0);
     dpAdminReactPage.inFrame(() -> {
-      if (dpUser.getFirstName() != null && dpUser.getFirstName().contains("ERROR_CHECK")) {
-        dpAdminReactPage.errorCheckDpUser();
-      } else {
-        if (dpUser.getFirstName() != null){
-          dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
-        }
-        if (dpUser.getLastName() != null){
-          dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
-        }
-        if (dpUser.getContactNo() != null){
-          dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
-        }
-        if (dpUser.getEmailId() != null){
-          dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
-        }
-        if (dpUser.getUsername() != null){
-          dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
-          put(KEY_DP_USER_USERNAME,dpUser.getUsername());
-        }
-        if (dpUser.getPassword() != null){
-          dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
-        }
-
-        put(KEY_DP_USER, dpUser);
+      if (dpUser.getFirstName() != null) {
+        dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
       }
+      if (dpUser.getLastName() != null) {
+        dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
+      }
+      if (dpUser.getContactNo() != null) {
+        dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
+      }
+      if (dpUser.getEmailId() != null) {
+        dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
+      }
+      if (dpUser.getUsername() != null) {
+        dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
+        put(KEY_DP_USER_USERNAME, dpUser.getUsername());
+      }
+      if (dpUser.getPassword() != null) {
+        dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
+      }
+      put(KEY_DP_USER, dpUser);
+
     });
   }
 
   @Then("Operator press submit user button")
-  public void operatorPressSubmitUserButton(){
+  public void operatorPressSubmitUserButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitDpUser.click();
+    });
+  }
+
+  @Then("Operator will get the error message that the username is duplicate")
+  public void checkUsernameIsDuplicate() {
+    DpUser dpUser = get(KEY_DP_USER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.errorNotification.waitUntilVisible();
+      dpAdminReactPage.duplicateUsernameExist(dpUser);
     });
   }
 
@@ -257,7 +262,7 @@ public class DpAdministrationSteps extends AbstractSteps {
           dpAdminReactPage.buttonSendNotifications.click();
         }
 
-        if (get(KEY_DP_MANAGEMENT_PARTNER) != null){
+        if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
           partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
         }
 
@@ -296,43 +301,45 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @Then("The Dp Administration page is displayed")
-  public void dpAdminIsDisplayed(){
+  public void dpAdminIsDisplayed() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.dpAdminHeader.waitUntilVisible();
     });
   }
 
   @Then("The Dp page is displayed")
-  public void dpPageIsDisplayed(){
+  public void dpPageIsDisplayed() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.distributionPointHeader.waitUntilVisible();
     });
   }
 
   @Then("Operator fill the partner filter by {string}")
-  public void operatorFillThePartnerFilter(String element){
+  public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
-    DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(newlyCreatedPartner);
+    DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(
+        newlyCreatedPartner);
     dpAdminReactPage.inFrame(() -> {
-      String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,newlyCreatedDpPartner);
+      String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,
+          newlyCreatedDpPartner);
       dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
     });
   }
 
   @Then("Operator fill the Dp list filter by {string}")
-  public void operatorFillTheDpListFilter(String element){
+  public void operatorFillTheDpListFilter(String element) {
     DpDetailsResponse newlyCreatedDpDetails = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
     dpAdminReactPage.inFrame(() -> {
-      String fillInValue = dpAdminReactPage.getDpElementByMap(element,newlyCreatedDpDetails);
+      String fillInValue = dpAdminReactPage.getDpElementByMap(element, newlyCreatedDpDetails);
       dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
     });
   }
 
   @Then("Operator fill the Dp User filter by {string}")
-  public void operatorFillTheDpUserFilter(String element){
+  public void operatorFillTheDpUserFilter(String element) {
     DpUser dpUser = get(KEY_DP_USER);
     dpAdminReactPage.inFrame(() -> {
-      String fillInValue = dpAdminReactPage.getDpUserElementByMap(element,dpUser);
+      String fillInValue = dpAdminReactPage.getDpUserElementByMap(element, dpUser);
       dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(fillInValue);
     });
   }
@@ -393,7 +400,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       put(KEY_DP_PARTNER_ID, partnerId);
       Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
       partner.setId(Long.parseLong(partnerId));
-      put(KEY_DP_MANAGEMENT_PARTNER,partner);
+      put(KEY_DP_MANAGEMENT_PARTNER, partner);
     });
   }
 
@@ -607,6 +614,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void verifyNewlyCreatedDpUser() {
     DpUser dpUser = get(KEY_DP_USER);
     List<co.nvqa.commons.model.dp.DpUser> dpUserDb = get(KEY_DATABASE_CHECKING_CREATED_DP_USER);
-    dpAdminPage.verifyNewlyCreatedDpUser(dpUser,dpUserDb.get(0));
+    dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb.get(0));
   }
 }
