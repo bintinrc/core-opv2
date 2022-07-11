@@ -92,7 +92,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-modal-confirm-content']")
   public WebElement dialogMessage;
 
-  public String ANT_MODAL_CONFIRM_TITLE = "//span[@class='ant-modal-confirm-title']";
+  @FindBy(xpath = "//span[@class='ant-modal-confirm-title']")
+  public List<WebElement> antModalConfirmTitleElements;
 
   public String ANT_MODAL_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]";
   public String ANT_MODAL_CONFIRM_TITLE_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']";
@@ -516,7 +517,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInTripDepartureDialog() {
-    if(findElementsByXpath(ANT_MODAL_CONFIRM_TITLE).size()!=0){
+    if(null != antModalConfirmTitleElements){
       String dialogTitleText = dialogTitle.getText();
       Assertions.assertThat(dialogTitleText).as("Dialog title is the same").isEqualTo("Trip Departure");
 
