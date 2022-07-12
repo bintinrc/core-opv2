@@ -82,7 +82,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     public String getXpath(String tableName) {
       return String.format(
           "(//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]"
-              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//div[@class='cell-wrapper']"
+              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']"
               + "//*[name()='a' or (name()='span')])[last()]", tableName, this.optionValue);
     }
   }
