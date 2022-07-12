@@ -170,6 +170,11 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
         value.toLowerCase(Locale.ROOT).contains("include"));
   }
 
+  public void selectShipmentsFiltersMode(String value) {
+    shipmentFiltersForm.includeShipments.setValue(
+        value.toLowerCase(Locale.ROOT).contains("include"));
+  }
+
   public void searchByTrackingId(String trackingId) {
     txnRsvnTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
   }
