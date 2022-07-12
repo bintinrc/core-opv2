@@ -1005,7 +1005,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
               .clear();
       pause1s();
       getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
-              .sendKeys(formatter.format(today.plusDays(2)));
+              .sendKeys(formatter.format(today.plusDays(5)));
       pause2s();
     }
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
