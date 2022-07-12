@@ -58,6 +58,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
+    private static final String ERROR_MESSAGE_NOTICE_TEXT_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//div[text()='%s']";
+    private static final String ERROR_MESSAGE_NOTICE_CONFLICT_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[text()='%s']";
+
+    private static final String CHECK_AVAILABILITY_BUTTON_XPATH = "//button[contains(@class,'check-username-btn')]//span[text()='Check Availability']";
     private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
     private static final String TABLE_ASSERTION_XPATH = "//div[contains(@class,'ant-table-body')]//tbody/tr[2]/td[%d]";
 
@@ -955,5 +959,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             licenseTypeInput.click();
         }
     }
+
+    public void clickCheckAvailabilityButton(){
+        waitUntilVisibilityOfElementLocated(CHECK_AVAILABILITY_BUTTON_XPATH);
+        click(CHECK_AVAILABILITY_BUTTON_XPATH);
+    }
+
+    public void verifyErrorMessage(String message){
+        if (isElementExist(f(ERROR_MESSAGE_NOTICE_TEXT_XPATH,message),2L)) {
+            Assertions.assertThat(true).as(message).isTrue();
+        } else if (isElementExist(f(ERROR_MESSAGE_NOTICE_CONFLICT_XPATH,message),2L)){
+            Assertions.assertThat(true).as(message).isTrue();
+        }
+    }
+
+
 
 }

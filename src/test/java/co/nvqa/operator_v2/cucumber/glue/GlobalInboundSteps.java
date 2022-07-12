@@ -236,6 +236,11 @@ public class GlobalInboundSteps extends AbstractSteps {
     globalInboundPage.verifiesPriorTag();
   }
 
+  @When("^Operator verifies RTS tag is displayed$")
+  public void operatorVerifiesRtsTagIsDisplayed() {
+    globalInboundPage.verifiesPriorTag();
+  }
+
   @And("Operator verifies order weight is overridden based on the volumetric weight")
   public void operatorVerifiesOrderWeightIsOverriddenBasedOnTheVolumetricWeight() {
     String countryCode = StandardTestConstants.COUNTRY_CODE;

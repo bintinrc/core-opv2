@@ -98,9 +98,8 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
       case VALID:
       case HAS_DIMENSION:
         Shipment shipmentData = get(KEY_CREATED_SHIPMENT) != null? ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment() : null;
-        Shipment updatedShipment = ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment();
-        if (updatedShipment != null) {
-          shipmentData = updatedShipment;
+        if (getScenarioStorage().containsKey(KEY_SHIPMENT_DETAILS) && null != ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment()) {
+          shipmentData = ((Shipments)getScenarioStorage().get(KEY_SHIPMENT_DETAILS)).getShipment();
         }
         String shipmentStatus = (String) Optional.ofNullable(dataTable.get(STATUS_KEY))
             .orElse(shipmentData.getStatus());
@@ -866,14 +865,16 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @And("Operator verify Shipment Weight Update MAWB page UI updated with new MAWB")
   public void operatorVerifyShipmentWeightUpdateMAWBPageUIUpdatedWithNewMAWB() {
-    String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
-    shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
-        row -> {
-          Assertions.assertThat(row.mawb.getText())
-              .as("MAWB is updated with new value")
-              .isEqualTo(newMawb);
-        }
-    );
+    retryIfAssertionErrorOccurred(() -> {
+      String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+      shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+              row -> {
+                Assertions.assertThat(row.mawb.getText())
+                        .as("MAWB is updated with new value")
+                        .isEqualTo(newMawb);
+              }
+      );
+    }, "retrying the validation", 1000, 3);
   }
 
   @Given("Operator take note of the existing mawb")

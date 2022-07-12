@@ -56,7 +56,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -135,7 +135,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -177,7 +177,7 @@ Feature: Stations
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[1].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
@@ -224,7 +224,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Existing Schedule and verifies error messages
+    Then Operator updates Schedule to Existing Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
@@ -262,7 +262,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Existing Schedule and verifies error messages
+    Then Operator updates Schedule to Existing Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
@@ -300,7 +300,7 @@ Feature: Stations
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verify all station schedules are correct
-    Then Operator updates Station Schedule to Duplicate Schedule and verifies error messages
+    Then Operator updates Schedule to Duplicate Schedule and verifies error messages
     When Operator clicks Error Message close icon
     Then Operator verifies page is back to view mode
     Then Operator verify all station schedules are correct
@@ -337,7 +337,7 @@ Feature: Stations
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    When Operator upgrades new Station Movement Schedules on Movement Management page:
+    When Operator upgrades new Movement Schedules on Movement Management page:
       | departureTime    | duration | endTime    | daysOfWeek          |
       |  SAMEWAVE        | 0        | SAMEWAVE   | monday,tuesday      |
       |  SAMEWAVE        | 0        | SAMEWAVE   | wednesday,thursday  |

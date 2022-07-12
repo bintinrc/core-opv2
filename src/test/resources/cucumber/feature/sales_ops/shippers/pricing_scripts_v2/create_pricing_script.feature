@@ -474,6 +474,7 @@ Feature: Pricing Scripts V2
       | C2C, NEXT_DAY    | C2C, NEXT_DAY    | NEXT_DAY     | C2C       | 12.947     | 0.847 | 12.1        | 0            | 0      | 0           | OK       | uid:237fffd0-27df-43c2-a12c-2e7b0adc9367 |
       | NORMAL, SAME_DAY | NORMAL, SAME_DAY | SAME_DAY     | NORMAL    | 9.416      | 0.616 | 8.8         | 0            | 0      | 0           | OK       | uid:b829add7-6a3e-4ae8-b1df-4b6d3e65751b |
 
+  @DeletePricingScript
   Scenario: Create Script  - with "const" Syntax Error (uid:9dc9ef39-4d5b-4334-b13a-ff8867df1435)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator send below data to create new Draft Script:
@@ -482,6 +483,88 @@ Feature: Pricing Scripts V2
     Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
       | top    | Network Request Error                 |
       | bottom | `const` is not support in the script. |
+
+  @DeletePricingScript
+  Scenario: Create and Check Script with rts_fee (uid:2156f91d-fea0-44e2-9bf5-df1f49de449f)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    When Operator do Run Check on specific Active Script using this data below:
+      | orderFields  | New      |
+      | serviceLevel | SAMEDAY  |
+      | serviceType  | Document |
+      | timeslotType | NONE     |
+      | isRts        | Yes      |
+      | size         | XS       |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 17.12 |
+      | gst          | 1.12  |
+      | deliveryFee  | 15    |
+      | insuranceFee | 0     |
+      | codFee       | 0     |
+      | handlingFee  | 0     |
+      | comments     | OK    |
+
+  @DeletePricingScript
+  Scenario: Create and Check Script with rts_fee (uid:2156f91d-fea0-44e2-9bf5-df1f49de449f)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    When Operator do Run Check on specific Active Script using this data below:
+      | orderFields  | New      |
+      | serviceLevel | SAMEDAY  |
+      | serviceType  | Document |
+      | timeslotType | NONE     |
+      | isRts        | No       |
+      | size         | XS       |
+      | weight       | 1.0      |
+      | insuredValue | 0.00     |
+      | codValue     | 0.00     |
+      | fromZone     | EAST     |
+      | toZone       | WEST     |
+    Then Operator verify the Run Check Result is correct using data below:
+      | grandTotal   | 16.05 |
+      | gst          | 1.05  |
+      | deliveryFee  | 15    |
+      | insuranceFee | 0     |
+      | codFee       | 0     |
+      | handlingFee  | 0     |
+      | comments     | OK    |
+
+  Scenario: Create Draft Pricing Script Failed - Not Fill Script Name and Script Description (uid:d5a25b08-13b9-442a-bd2c-ff5077e15371)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator send below data to create new Draft Script:
+      | name        | empty                                                                                                                                                                                                                                                                                                                        |
+      | description | empty                                                                                                                                                                                                                                                                                                                        |
+      | source      | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
+    When Operator verifies Save Draft button is inactive
+    Then Operator clicks Check Syntax
+    Then Operator clicks Verify Draft
+    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
+      | top | Please input a Script Name under the SCRIPT INFO tab |
+
+  Scenario: Create Draft Pricing Script Failed - Only Fill Script Description (uid:1e62adfe-08a5-4e7d-bcc2-d8cea3844a35)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator send below data to create new Draft Script:
+      | name        | empty                                                                                                                                                                                                                                                                                                                        |
+      | description | Test Script                                                                                                                                                                                                                                                                                                                  |
+      | source      | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
+    When Operator verifies Save Draft button is inactive
+    Then Operator clicks Check Syntax
+    Then Operator clicks Verify Draft
+    Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
+      | top | Please input a Script Name under the SCRIPT INFO tab |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
