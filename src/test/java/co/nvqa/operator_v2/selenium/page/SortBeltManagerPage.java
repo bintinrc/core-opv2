@@ -258,22 +258,21 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       emptyInputField(logicDescriptionInput.getWebElement(), true);
     }
     logicDescriptionInput.sendKeys(description);
-    logicArmFiltersInput.click();
-    // Loop through given arm filters, and input them
-    for (String armFilter : armFilters) {
-      if (isEdit) {
-        break; // skips editing filters
+    if (!isEdit) {
+      logicArmFiltersInput.click();
+      // Loop through given arm filters, and input them
+      for (String armFilter : armFilters) {
+        logicArmFiltersInput.scrollIntoView(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        waitUntilVisibilityOfElementLocated(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        click(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        pause100ms();
+        // Check if a new column appears when selecting filter
+        waitUntilVisibilityOfElementLocated(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter));
+        Assertions.assertThat(isElementExist(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter)))
+            .as(String.format("Column %s exists", armFilter))
+            .isTrue();
+        pause100ms();
       }
-      logicArmFiltersInput.scrollIntoView(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      waitUntilVisibilityOfElementLocated(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      click(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      pause100ms();
-      // Check if a new column appears when selecting filter
-      waitUntilVisibilityOfElementLocated(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter));
-      Assertions.assertThat(isElementExist(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter)))
-          .as(String.format("Column %s exists", armFilter))
-          .isTrue();
-      pause100ms();
     }
     // Input unassigned arm
     logicUnassignedArmInput.click();
@@ -414,6 +413,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   private FilterForm setFilterValueFromForm(FilterForm filterForm, String filterName,
       String value) {
     switch (filterName.toLowerCase()) {
+      case "av statuses":
+        filterForm.setAvStatuses(value);
+        break;
       case "dps":
         filterForm.setDps(Arrays.stream(value.split(", ")).collect(Collectors.toList()));
         break;
