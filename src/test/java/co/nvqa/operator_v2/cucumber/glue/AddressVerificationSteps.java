@@ -57,6 +57,7 @@ public class AddressVerificationSteps extends AbstractSteps {
 
   @When("Operator clicks on 'Edit' button for {int} address on Address Verification page")
   public void operatorOpenEditAddressModal(int index) {
+    if (index == -1) index = addressVerificationPage.editLinks.size();
     addressVerificationPage.editLinks.get(index - 1).click();
   }
 
@@ -68,6 +69,7 @@ public class AddressVerificationSteps extends AbstractSteps {
       double latitude = StringUtils.equalsIgnoreCase(value, "generated") ?
           TestUtils.generateLatitude() :
           Double.parseDouble(value);
+      addressVerificationPage.editAddressModal.latitude.forceClear();
       addressVerificationPage.editAddressModal.latitude.setValue(latitude);
     }
 
@@ -76,6 +78,7 @@ public class AddressVerificationSteps extends AbstractSteps {
       double longitude = StringUtils.equalsIgnoreCase(value, "generated") ?
           TestUtils.generateLongitude() :
           Double.parseDouble(value);
+      addressVerificationPage.editAddressModal.longitude.forceClear();
       addressVerificationPage.editAddressModal.longitude.setValue(longitude);
     }
   }
@@ -113,4 +116,22 @@ public class AddressVerificationSteps extends AbstractSteps {
         .perform();
   }
 
+  @When("Operator initialize address pool with all options checked in Address Verification page")
+  public void operatorInitializeAddressPoolWithAllOptionsCheckedInAddressVerificationPage() {
+    addressVerificationPage.isInboundOnlyCheckBox.check();
+    addressVerificationPage.isSameDayOrdersCheckBox.check();
+    addressVerificationPage.isPriorityOrdersCheckBox.check();
+    addressVerificationPage.initializePoolButton.click();
+  }
+
+  @When("Operator fetch addresses from initialized pool from zone {string}")
+  public void operatorFetchAddressesFromInitializedPoolFromZone(String zoneName) {
+    addressVerificationPage.switchTo();
+    addressVerificationPage.fetchAddressFromInitializedPool(resolveValue(zoneName));
+  }
+
+  @When("Operator assign {string} zone to the last address on Address Verification page")
+  public void operatorAssignZoneToTheLastAddressOnAddressVerificationPage(String zoneName) {
+    addressVerificationPage.assignZoneToLatestAddress(zoneName);
+  }
 }
