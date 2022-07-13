@@ -56,7 +56,7 @@ public class AddressVerificationSteps extends AbstractSteps {
   }
 
   @When("Operator clicks on 'Edit' button for {int} address on Address Verification page")
-  public void operatorOpenEditAddressModal(int index) {
+  public void operatorOpenEditAddressModal(Integer index) {
     if (index == -1) index = addressVerificationPage.editLinks.size();
     addressVerificationPage.editLinks.get(index - 1).click();
   }
