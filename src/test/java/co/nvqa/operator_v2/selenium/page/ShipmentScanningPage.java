@@ -273,6 +273,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void scanBarcode(String trackingId) {
+    click(XPATH_BARCODE_SCAN);
     sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
   }
 
