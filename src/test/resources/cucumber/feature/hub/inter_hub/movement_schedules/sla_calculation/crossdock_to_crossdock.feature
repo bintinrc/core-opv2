@@ -196,6 +196,7 @@ Feature: Crossdock to Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to Crossdock - Facility Type of Origin/Destination Crossdock Hub is changed to 'Station' (uid:2bc56464-c419-4627-939c-932a3ae5dd72)
@@ -244,6 +245,7 @@ Feature: Crossdock to Crossdock
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
+      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to Crossdock - Crossdock Movement found and available schedule only 1 day in a week (uid:6be5f247-ad8d-43ed-8db3-a5f4bd58a00e)
