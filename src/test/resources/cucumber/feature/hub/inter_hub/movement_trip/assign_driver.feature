@@ -1,11 +1,11 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @AssignDriver
 Feature: Movement Trip - Assign Driver
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb  @DeleteDriver
   Scenario: Assign Single Driver to Movement Trips (uid:4cf35840-44dd-4573-bdb1-a51ac7f58984)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
