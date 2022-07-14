@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.commons.util.NvRetry;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -126,6 +127,10 @@ public class AntSelect3 extends PageElement {
     removeSelected(Collections.singletonList(item));
   }
 
+  public void removeAllSelected() {
+    selectedItems.forEach(SelectedItem::remove);
+  }
+
   private String getItemIndexLocator(int index) {
     return getListBoxLocator() + "//div[@class='rc-virtual-list-holder-inner']/div[" + index + "]";
   }
@@ -169,6 +174,7 @@ public class AntSelect3 extends PageElement {
     try {
       waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
     } catch (Exception ex) {
+      NvRetry.LOGGER.error(ex.toString());
     }
   }
 
@@ -177,6 +183,9 @@ public class AntSelect3 extends PageElement {
     pause500ms();
   }
 
+  public void fillSearchTermAndEnter(String value) {
+    searchInput.sendKeysAndEnterNoXpath(value);
+  }
   public String getValue() {
     return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title") : null;
   }
