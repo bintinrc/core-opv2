@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.operator_v2.model.DpPartner;
+import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
@@ -40,6 +42,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_add_dp']")
   public Button buttonAddDp;
 
+  @FindBy(xpath = "//button[@data-testId='button_dp_user']")
+  public Button buttonDpUser;
+
+  @FindBy(xpath = "//button[@data-testId='button_add_user']")
+  public Button buttonAddUser;
+
+  @FindBy(xpath = "//button[@data-testId='button_submit']")
+  public TextBox buttonSubmitDpUser;
+
   @FindBy(xpath = "//input[@data-testId='field_partner_id']")
   public TextBox filterPartnerId;
 
@@ -70,8 +81,62 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testId='field_restrictions']")
   public TextBox filterRestrictions;
 
+  @FindBy(xpath = "//input[@data-testId='field_dp_id']")
+  public TextBox filterDpId;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_name']")
+  public TextBox filterDpName;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_shortname']")
+  public TextBox filterDpShortName;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_hub']")
+  public TextBox filterDpHub;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_address']")
+  public TextBox filterDpAddress;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_direction']")
+  public TextBox filterDpDirection;
+
+  @FindBy(xpath = "//input[@data-testId='field_dp_activity']")
+  public TextBox filterDpActivity;
+
+  @FindBy(xpath = "//input[@data-testId='field_username']")
+  public TextBox filterDpUserUsername;
+
+  @FindBy(xpath = "//input[@data-testId='field_first_name']")
+  public TextBox filterDpUserFirstName;
+
+  @FindBy(xpath = "//input[@data-testId='field_last_name']")
+  public TextBox filterDpUserLastName;
+
+  @FindBy(xpath = "//input[@data-testId='field_email']")
+  public TextBox filterDpUserEmail;
+
+  @FindBy(xpath = "//input[@data-testId='field_contact']")
+  public TextBox filterDpUserContact;
+
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_restrictions']")
   public TextBox formRestrictions;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_first_name']")
+  public TextBox formDpUserFirstName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_last_name']")
+  public TextBox formDpUserLastName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_contact_no']")
+  public TextBox formDpUserContact;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_email']")
+  public TextBox formDpUserEmail;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_username']")
+  public TextBox formDpUserUsername;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_password']")
+  public TextBox formDpUserPassword;
 
   @FindBy(xpath = "//div[@data-testid='label_partner_id']/span")
   public PageElement labelPartnerId;
@@ -112,13 +177,24 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//h2[@data-testid='label_page_details']")
   public PageElement dpAdminHeader;
 
+  @FindBy(xpath = "//h2[@data-testid='label_distribution_points']")
+  public PageElement distributionPointHeader;
+
   @FindBy(xpath = "//div[contains(@class,'nv-input-field-error')]/div[3]")
   public PageElement errorMsg;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement errorNotification;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']/div/div[3]/span")
+  public PageElement errorMsgUsernameDuplicate;
+
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
+  public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
+  public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
 
-  ImmutableMap<String, TextBox> textBoxElement = ImmutableMap.<String, TextBox>builder()
+  public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
       .put("name", filterPartnerName)
       .put("pocName", filterPocName)
@@ -126,6 +202,25 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("pocEmail", filterPocEmail)
       .put("restrictions", filterRestrictions)
       .build();
+
+  public ImmutableMap<String, TextBox> textBoxDpFilter = ImmutableMap.<String, TextBox>builder()
+      .put("id", filterDpId)
+      .put("name", filterDpName)
+      .put("shortName", filterDpShortName)
+      .put("hub", filterDpHub)
+      .put("address", filterDpAddress)
+      .put("direction", filterDpDirection)
+      .put("activity", filterDpActivity)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxDpUserFilter = ImmutableMap.<String, TextBox>builder()
+      .put("username", filterDpUserUsername)
+      .put("firstName", filterDpUserFirstName)
+      .put("lastName", filterDpUserLastName)
+      .put("email", filterDpUserEmail)
+      .put("contact", filterDpUserContact)
+      .build();
+
 
   public DpAdministrationReactPage(WebDriver webDriver) {
     super(webDriver);
@@ -156,19 +251,81 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     sortElement.get(field).click();
   }
 
-  public void fillFilter(String field, String value) {
-    textBoxElement.get(field).setValue(value);
-  }
-
-  public void waitUntilFilterAppear(String field) {
-    textBoxElement.get(field).waitUntilVisible();
+  public void fillFilterDpPartner(String field, String value) {
+    textBoxDpPartnerFilter.get(field).waitUntilVisible(2);
+    textBoxDpPartnerFilter.get(field).setValue(value);
   }
 
   public void clearFilter(String field) {
-    textBoxElement.get(field).forceClear();
+    textBoxDpPartnerFilter.get(field).forceClear();
   }
 
-  public void errorCheck(Partner dpPartner) {
+  public void duplicateUsernameExist(DpUser dpUser) {
+    Assertions.assertThat(errorMsgUsernameDuplicate.getText())
+        .as(f("Error Message exist: %s", errorMsgUsernameDuplicate.getText()))
+        .isEqualTo(f(ERROR_MSG_DUPLICATE_USERNAME, dpUser.getUsername()));
+  }
+
+  public void errorCheckDpUser(DpUser dpUser) {
+    formDpUserFirstName.setValue(dpUser.getFirstName());
+    formDpUserFirstName.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if First Name Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserFirstName.setValue(dpUser.getFirstName());
+
+    formDpUserLastName.setValue(dpUser.getLastName());
+    formDpUserLastName.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Last Name Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserLastName.setValue(dpUser.getLastName());
+
+    formDpUserContact.setValue(dpUser.getContactNo());
+    formDpUserContact.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Contact is Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserContact.setValue(RandomStringUtils.random(10, true, false));
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Contact is filled with random character: %s", ERROR_MSG_NOT_PHONE_NUM))
+        .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
+    formDpUserContact.forceClear();
+    formDpUserContact.setValue(dpUser.getContactNo());
+
+    formDpUserEmail.setValue(dpUser.getEmailId());
+    formDpUserEmail.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Email is Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserEmail.setValue(RandomStringUtils.random(10, true, false));
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Email is filled with wrong format (All Letter): %s", ERROR_MSG_NOT_EMAIL_FORMAT))
+        .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+    formDpUserEmail.forceClear();
+    formDpUserEmail.setValue(RandomStringUtils.random(10, false, true));
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Email is filled with wrong format (All Number): %s", ERROR_MSG_NOT_EMAIL_FORMAT))
+        .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+    formDpUserEmail.forceClear();
+    formDpUserEmail.setValue(dpUser.getEmailId());
+
+    formDpUserUsername.setValue(dpUser.getUsername());
+    formDpUserUsername.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Last Name Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserUsername.setValue(dpUser.getUsername());
+
+    formDpUserPassword.setValue(dpUser.getPassword());
+    formDpUserPassword.forceClear();
+    Assertions.assertThat(errorMsg.getText())
+        .as(f("Error Message if Last Name Empty: %s", ERROR_MSG_FIELD_REQUIRED))
+        .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
+    formDpUserPassword.setValue(dpUser.getPassword());
+  }
+
+  public void errorCheckDpPartner(Partner dpPartner) {
 
     if (dpPartner.getName().contains("NAME")) {
       formPartnerName.forceClear();
@@ -253,6 +410,32 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .build();
 
     return partnerElement.get(map);
+  }
+
+  public String getDpUserElementByMap(String map, DpUser dpUser) {
+    ImmutableMap<String, String> partnerElement = ImmutableMap.<String, String>builder()
+        .put("username", dpUser.getUsername())
+        .put("firstName", dpUser.getFirstName())
+        .put("lastName", dpUser.getLastName())
+        .put("email", dpUser.getEmailId())
+        .put("contact", dpUser.getContactNo())
+        .build();
+
+    return partnerElement.get(map);
+  }
+
+  public String getDpElementByMap(String map, DpDetailsResponse dp) {
+    ImmutableMap<String, String> dpElement = ImmutableMap.<String, String>builder()
+        .put("id", Long.toString(dp.getId()))
+        .put("name", dp.getName())
+        .put("shortName", dp.getShortName())
+        .put("hub", Long.toString(dp.getHubId()))
+        .put("address", dp.getAddress1())
+        .put("direction", dp.getDirections())
+        .put("activity", dp.getIsActive() ? "Active" : "Inactive")
+        .build();
+
+    return dpElement.get(map);
   }
 
 }
