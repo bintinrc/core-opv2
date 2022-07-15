@@ -16,10 +16,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -68,10 +68,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -121,10 +121,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -168,8 +168,8 @@ Feature: Parcel Sweeper Live
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from": {"name": "QA-SO-Test-UIO-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "22 Chuan Hoe Ave, Singapore 549854","address2": "","country": "SG","postcode": "549854","latitude":1.284711,"longitude":103.809378}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     When API Operator refresh created order data
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
@@ -219,10 +219,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -268,10 +268,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -318,10 +318,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
@@ -404,10 +404,10 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
-    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver success reservation by scanning created parcel using submit pod v5
