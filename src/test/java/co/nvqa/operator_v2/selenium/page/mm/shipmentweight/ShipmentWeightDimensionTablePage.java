@@ -35,7 +35,7 @@ public class ShipmentWeightDimensionTablePage extends
   public Button updateMawbButton;
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightRow> shipmentWeightNvTable;
-  @FindBy(xpath = "//div[contains(text(), 'Showing')]")
+  @FindBy(xpath = "//div/b[contains(text(), 'Showing')]")
   public PageElement resultCounterText;
 
   @FindBy(xpath = "//input[@aria-label='input-shipment_id']")

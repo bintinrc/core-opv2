@@ -128,8 +128,8 @@ Feature: Get Report in Ledger
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.52                                          |
-      | totalWithTax     | 8.02                                          |
+      | totalTax         | 0.63                                          |
+      | totalWithTax     | 9.63                                          |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
@@ -264,8 +264,9 @@ Feature: Get Report in Ledger
       | deliveryFee      | 8.5                                        |
       | rtsFee           | 0.0                                        |
       | totalTax         | 0.59                                       |
-      | totalWithTax     | 7.49                                       |
+      | totalWithTax     | 9.09                                       |
       | type             | Returned to Sender                         |
+
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Get Report for All Orders in Batch - Origin Balance Is In Thousands And Has 2 Decimal Places (uid:1f107c5c-32a4-46f2-8111-9530f2b7d39e)

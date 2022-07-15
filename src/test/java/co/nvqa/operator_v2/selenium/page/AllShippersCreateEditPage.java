@@ -323,7 +323,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     if (isCreateForm) {
       basicSettingsForm.shipperEmail.setValue(shipper.getEmail());
-      basicSettingsForm.shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
+
     }
 
     basicSettingsForm.channel.selectValue("B2C Marketplace");
