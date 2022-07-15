@@ -82,7 +82,7 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
 
   public static class UploadNewCsvDialog extends MdDialog {
 
-    @FindBy(xpath = "//button//span[text()='Upload New File']")
+    @FindBy(xpath = "//md-dialog[contains(@aria-label,'Upload New CSVSubmit')]//button[@aria-label='Upload New File']")
     public Button uploadNewFile;
 
     public UploadNewCsvDialog(WebDriver webDriver, WebElement webElement) {
