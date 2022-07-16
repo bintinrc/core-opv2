@@ -49,7 +49,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
-  private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[@class='th']//input";
+  private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[starts-with(@class,'VirtualTableHeader')]//input";
   private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div//a";
   private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
@@ -115,7 +115,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[text()='Save & Proceed']]")
   private PageElement saveAndProceed;
 
-  @FindBy(xpath = "//div[@*='suggestedEtas']//div[contains(@class,'selected-value')]")
+  @FindBy(xpath = "//div[@data-datakey='suggestedEtas']//div[contains(@class,'VirtualSelect')]")
   private List<PageElement> confirmedEtas;
 
   @FindBy(css = "div[class$='base-row'] input[type='checkbox']")
@@ -136,10 +136,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div[class*='footer-row']")
   private PageElement footerRow;
 
-  @FindAll(@FindBy(xpath = "//div[starts-with(@class,'th')]/*[1]"))
+  @FindAll(@FindBy(xpath = "//div[starts-with(@class,'VirtualTableHeader')]/*[1]"))
   private List<PageElement> columnNames;
 
-  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+  @FindAll(@FindBy(xpath = "//div[@class='BaseTable__row-cell']//div[starts-with(@class,'VirtualTable__')]"))
   private List<PageElement> columnValues;
 
   @FindBy(css = "span[class*='ant-select-selection-item']")
@@ -160,7 +160,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class*='base-row'] span[class*='checked']"))
   private List<PageElement> checkboxChecked;
 
-  @FindAll(@FindBy(css = "span[class*='-checked'][class$='filter']"))
+  @FindAll(@FindBy(css = "span[class*='-checked']"))
   private List<PageElement> filterApplied;
 
   @FindBy(css = "div.sfld-alert")
@@ -487,6 +487,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       }
     }
     waitWhilePageIsLoading();
+    pause3s();
     Assert.assertTrue(
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
@@ -543,6 +544,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       }
     }
     waitWhilePageIsLoading();
+    pause3s();
     String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
     String tableRowsXpath = tableXpath.concat("//div[contains(@class,'base-row')]");
     List<WebElement> tableRows = getWebDriver().findElements(By.xpath(tableRowsXpath));
@@ -708,9 +710,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     Map<String, String> gridContent = new HashMap<String, String>();
     String columnName, columnValue;
     String tableXpath = f(MODAL_TABLE_BY_TABLE_NAME_XPATH, tableName);
-    String tableColumnsXpath = tableXpath.concat("//div[contains(@class,'th')]/*[1]");
+    String tableColumnsXpath = tableXpath.concat(
+        "//div[contains(@class,'VirtualTableHeader')]/*[1]");
     List<WebElement> tableColumns = getWebDriver().findElements(By.xpath(tableColumnsXpath));
-    String tableColumnValuesXpath = tableXpath.concat("//div[@class='cell-wrapper']");
+    String tableColumnValuesXpath = tableXpath.concat(
+        "//div[@class='BaseTable__row-cell']//div[starts-with(@class,'VirtualTable__')]");
     List<WebElement> tableValues = getWebDriver().findElements(By.xpath(tableColumnValuesXpath));
     pause3s();
     for (int row = 0; row < tableColumns.size(); row++) {
