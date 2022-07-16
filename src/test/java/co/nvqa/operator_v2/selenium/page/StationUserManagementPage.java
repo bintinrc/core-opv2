@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -192,8 +193,9 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateFilter(String columnName, String expectedValue) {
     String valueXpath = f(TABLE_FIRST_ROW_VALUE_BY_COLUMN, columnName);
-    Assert.assertTrue("Table values are not Filtered",
-        getWebDriver().findElement(By.xpath(valueXpath)).getText().equalsIgnoreCase(expectedValue));
+    String actualValue = getWebDriver().findElement(By.xpath(valueXpath)).getText();
+    Assertions.assertThat(actualValue).as("Validation of Columnr Value")
+        .isEqualToIgnoringCase(expectedValue);
   }
 
   public void searchNoOfUsers(String filterValue) {
