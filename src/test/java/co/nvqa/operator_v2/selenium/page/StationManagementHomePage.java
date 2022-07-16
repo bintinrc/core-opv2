@@ -43,15 +43,16 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
-  private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
-  private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
+  private static final String MODAL_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
+  private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//div[contains(@class,'FilterSelect')]";
+  private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[contains(@class,'Filter') and text()='%s']";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[starts-with(@class,'VirtualTableHeader')]//input";
   private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div//a";
-  private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
+  private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//*[text()='%s'])[2]/ancestor::div[@class='ant-select-selector']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
@@ -208,7 +209,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       switchToStationHomeFrame();
     }
     langDropdownText = language.getText();
-    waitUntilVisibilityOfElementLocated(f("(//div[text()='%s'])[2]", langDropdownText), 30);
+    waitUntilVisibilityOfElementLocated(f("(//*[text()='%s'])[2]", langDropdownText), 30);
     WebElement hubs = getWebDriver().findElement(
         By.xpath(f(HUB_SELECTION_COMBO_VALUE_XPATH, langDropdownText)));
     AntSelect2 pageHubs = new AntSelect2(getWebDriver(), hubs);
@@ -477,7 +478,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   public void applyFilters(Map<String, String> filters, int resultsCount) {
     waitWhilePageIsLoading();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
-      String filterXpath = f(MODAL_TABLE_FILTER_XPATH, filter.getKey());
+      String filterXpath = f(MODAL_TABLE_SEARCH_XPATH, filter.getKey());
       scrollIntoView(filterXpath);
       List<WebElement> filterFields = getWebDriver().findElements(By.xpath(filterXpath));
       if (filterFields.size() > 0) {
@@ -505,6 +506,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       filterFields.get(0).click();
       pause2s();
       getWebDriver().findElement(By.xpath(filterXpath)).click();
+      filterFields.get(0).click();
     }
     waitWhilePageIsLoading();
     Assert.assertTrue(
