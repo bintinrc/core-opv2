@@ -30,7 +30,7 @@ public class AntModal extends PageElement {
   public PageElement title;
 
   public void close() {
-    close.moveAndClick();
+    close.click();
   }
 
   public boolean isDisplayed() {
