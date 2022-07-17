@@ -46,12 +46,12 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//div[contains(@class,'FilterSelect')]";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[contains(@class,'Filter') and text()='%s']";
-  private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
+  private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'VirtualTableHeader')][.//div[.='%s']]//*[@role='combobox']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[starts-with(@class,'VirtualTableHeader')]//input";
-  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div//a";
+  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//*[text()='%s']/parent::div/following::div//div[@class='link-index']/parent::div//a|//*[text()='%s']/parent::div//a";
   private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//*[text()='%s'])[2]/ancestor::div[@class='ant-select-selector']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
@@ -116,7 +116,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[text()='Save & Proceed']]")
   private PageElement saveAndProceed;
 
-  @FindBy(xpath = "//div[@data-datakey='suggestedEtas']//div[contains(@class,'VirtualSelect')]")
+  @FindBy(xpath = "//div[@*='suggestedEtas']//*[contains(@class,'ant-select-selection-item')]")
   private List<PageElement> confirmedEtas;
 
   @FindBy(css = "div[class$='base-row'] input[type='checkbox']")
@@ -619,6 +619,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void verifyPageOpenedOnClickingHyperlink(String linkName, String expectedPageName) {
     WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
+    scrollIntoView(navLink);
     navLink.click();
     switchToNewWindow();
     waitWhilePageIsLoading();
