@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Strings;
@@ -33,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
+import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 
 /**
@@ -298,6 +301,11 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorEditShipmentOnShipmentManagementPageBasedOnTypeUsingDataBelow(String editType,
       Map<String, String> mapOfData) {
     ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+    if (shipmentInfo == null) {
+      Shipments shipments = get(KEY_CREATED_SHIPMENT);
+      shipmentInfo = new ShipmentInfo(shipments);
+    }
+
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     switch (editType) {
       case "Start Hub":
@@ -315,7 +323,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         break;
       case "mawb":
         shipmentInfo.setMawb(
-            "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get(
+            "12" + resolvedMapOfData.get("mawb").charAt(0) + "-" + resolvedMapOfData.get(
                 "mawb").substring(1));
         break;
       case "non-mawb":
@@ -324,8 +332,35 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         shipmentInfo.setComments(resolvedMapOfData.get("comments"));
         break;
     }
-    page.editShipmentBy(editType, shipmentInfo, resolvedMapOfData);
+    ShipmentInfo finalShipmentInfo = shipmentInfo;
+    page.inFrame(() -> {
+      page.editShipmentBy(editType, finalShipmentInfo, resolvedMapOfData);
+    });
     put(KEY_SHIPMENT_INFO, shipmentInfo);
+  }
+
+  @When("Operator edit Shipment on Shipment Management page:")
+  public void operatorEditShipment(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    String shipmentId = resolvedData.get("shipmentId");
+    page.inFrame(() -> {
+      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+      if (resolvedData.containsKey("origHubName")) {
+        page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
+      }
+      if (resolvedData.containsKey("destHubName")) {
+        page.editShipmentDialog.endHub.selectValue(resolvedData.get("destHubName"));
+      }
+      if (resolvedData.containsKey("shipmentType")) {
+        page.editShipmentDialog.type.selectValue(resolvedData.get("shipmentType"));
+      }
+      if (resolvedData.containsKey("comments")) {
+        page.editShipmentDialog.comments.setValue(resolvedData.get("comments"));
+      }
+      page.editShipmentDialog.saveChanges.click();
+    });
   }
 
   @When("Operator force complete shipment from edit shipment")
@@ -424,6 +459,17 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.validateShipmentInfo(shipmentId, expectedShipmentInfo));
   }
 
+  @Then("^Operator verify search results contains exactly shipments on Shipment Management page:$")
+  public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
+      List<String> shipmentIds) {
+    page.inFrame(() -> {
+      List<String> actual = page.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
+      Assertions.assertThat(actual)
+          .as("List of Shipment IDs")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(shipmentIds));
+    });
+  }
+
   @Then("Operator verify the following parameters of shipment {string} on Shipment Management page:")
   public void operatorVerifyTheFollowingParametersForShipmentOnShipmentManagementPage(
       String shipmentIdAsString, Map<String, String> mapOfData) {
@@ -493,13 +539,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator edits and verifies that the cancelled shipment cannot be edited")
   public void operatorEditsAndVerifiesThatTheCancelledShipmentCannotBeEdited() {
     page.inFrame(() -> page.editCancelledShipment());
-  }
-
-  @And("Operator edits and verifies that the completed shipment cannot be edited")
-  public void operatorEditsAndVerifiesThatTheCompletedShipmentCannotBeEdited() {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.editShipmentBy("cancelled", shipmentInfo, null);
-    page.verifyUnableToEditCompletedShipmentToastExist();
   }
 
   @And("^Operator open the Master AWB of the created shipment on Shipment Management Page$")
@@ -842,6 +881,33 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     } else {
       LOGGER.warn("Mode {} is not existed!", mode);
     }
+  }
+
+  @Then("Operator verifies that search error modal shown with shipment ids:")
+  public void operatorVerifiesThatThereIsASearchErrorModalShownWith(List<String> shipmentIds) {
+    List<String> finalShipmentIds = resolveValues(shipmentIds);
+    page.inFrame(() -> {
+      page.searchErrorDialog.waitUntilVisible();
+      List<String> lines = page.searchErrorDialog.messageLines.stream()
+          .map(PageElement::getText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(lines.get(0))
+          .as("Error message")
+          .isEqualTo("We cannot find the following " + finalShipmentIds.size() + " shipment ids:");
+
+      lines.remove(0);
+      Assertions.assertThat(lines)
+          .as("Invalid shipment ids")
+          .containsExactlyInAnyOrderElementsOf(finalShipmentIds);
+    });
+  }
+
+  @Then("Operator click Show Shipments button in Search Error dialog on Shipment Management Page")
+  public void clickShowShipments() {
+    page.inFrame(() -> {
+      page.searchErrorDialog.waitUntilVisible();
+      page.searchErrorDialog.show.click();
+    });
   }
 
   @Then("Operator verifies the searched shipment ids result is right")

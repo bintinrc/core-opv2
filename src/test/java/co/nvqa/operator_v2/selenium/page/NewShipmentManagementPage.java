@@ -69,10 +69,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   private static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
   private static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
   private static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
-  private static final String XPATH_CHECKBOX_ON_SHIPMENT_TABLE = "//td[@class='id']/following-sibling::td[@class='column-checkbox']//md-checkbox[@ng-checked='table.isSelected(shipment)']//div[@class='md-icon']";
-  private static final String XPATH_SECOND_CHECKBOX_ON_SHIPMENT_TABLE = "(//md-checkbox)[2]";
-  private static final String XPATH_APPLY_ACTION_BUTTON = "//button[@ng-click='$mdOpenMenu($event)' and @aria-label='Action']";
-  private static final String XPATH_REOPEN_SHIPMENT_OPTION = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())']";
   private static final String XPATH_SEARCH_BY_SHIPMENT_ID = "//textarea[@id='shipment-ids']";
   private static final String XPATH_SEARCH_SHIPMENT_BUTTON = "//button[contains(@class,'shipment-search-btn')]";
   private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[@class='id']//input[@ng-model='searchText']";
@@ -120,6 +116,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
   @FindBy(xpath = ".//div[contains(@class,'ant-modal')][.//div[.='Upload Results']]")
   public UploadResultsDialog uploadResultsDialog;
+
+  @FindBy(css = ".ant-modal")
+  public SearchErrorDialog searchErrorDialog;
 
   @FindBy(css = ".ant-modal")
   public CreateShipmentDialog createShipmentDialog;
@@ -349,7 +348,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     editShipmentDialog.comments.setValue(shipmentInfo.getComments());
 
     if (StringUtils.isBlank(shipmentInfo.getMawb())) {
-      editShipmentDialog.saveChanges(shipmentInfo.getId());
+      editShipmentDialog.saveChanges.click();
     } else {
       editShipmentDialog.mawb.setValue(shipmentInfo.getMawb());
       editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
@@ -619,7 +618,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
       editShipmentDialog.forceSuccessButton.click();
       return;
     }
-    editShipmentDialog.saveChanges(shipmentInfo.getId());
+    editShipmentDialog.saveChanges.click();
   }
 
   public void verifiesSearchErrorModalIsShown(boolean isValidShipmentExist) {
@@ -1122,14 +1121,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     public void saveChanges(Long shipmentId) {
       saveChanges.click();
-      pause1s();
-
-      waitUntilVisibilityOfElementLocated(
-          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
-              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
-      waitUntilInvisibilityOfElementLocated(
-          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
-              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }
 
     public void saveChangesWithMawb(Long shipmentId) {
@@ -1242,6 +1233,19 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     public Button cancel;
 
     public ForceCompleteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SearchErrorDialog extends AntModal {
+
+    @FindBy(css = "div.ant-space-item")
+    public List<PageElement> messageLines;
+
+    @FindBy(xpath = ".//button[contains(.,'Show')]")
+    public Button show;
+
+    public SearchErrorDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
