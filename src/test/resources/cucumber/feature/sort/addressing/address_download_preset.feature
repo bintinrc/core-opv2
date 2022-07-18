@@ -325,7 +325,7 @@ Feature: Address Download
     Then Operator verifies that there will be success preset deletion toast shown
     And Operator verifies that the created preset is deleted
 
-  Scenario: Create New Filter Preset With Source Filter Successfully
+  Scenario: Create New Filter Preset With Source Filter Successfully (uid:f7a5cf09-6028-49c2-9c97-b51e43710e3f)
     Given Operator go to menu Addressing -> Address Download
     And Operator refresh page v1
     Then Operator verifies that the page is fully loaded
