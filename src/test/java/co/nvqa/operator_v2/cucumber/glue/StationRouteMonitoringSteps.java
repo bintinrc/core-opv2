@@ -82,6 +82,17 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verify value on Station Route Monitoring page for the {string} column is equal to {string}")
+  public void operatorVerifyValueOnStationRouteMonitoringPageForTheColumnValueIsEqualTo(
+      String columnName, String expectedValue) {
+    expectedValue = resolveValue(expectedValue);
+    StationRouteMonitoring columnValue = StationRouteMonitoring.valueOf(columnName);
+    String actualColumnValue = stationRouteMonitoringPage.getColumnValue(columnValue);
+    Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
+        expectedValue, actualColumnValue);
+    takesScreenshot();
+  }
+
   @When("Operator clicks on the {string} column value link")
   public void operatorClicksOnTheColumnValueLink(String columnName) {
     StationRouteMonitoring columnValue = StationRouteMonitoring.valueOf(columnName);

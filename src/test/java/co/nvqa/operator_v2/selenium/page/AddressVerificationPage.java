@@ -161,6 +161,45 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
   @FindBy(xpath = ".//button[.//span[contains(., 'Download CSV')]]")
   public AntButton downloadCsv;
 
+  @FindBy(xpath = "//input[@data-testid='is-inbounded-only-checkbox']")
+  public CheckBox isInboundOnlyCheckBox;
+
+  @FindBy(xpath = "//input[@data-testid='is-same-day-orders-checkbox']")
+  public CheckBox isSameDayOrdersCheckBox;
+
+  @FindBy(xpath = "//input[@data-testid='is-priority-orders-checkbox']")
+  public CheckBox isPriorityOrdersCheckBox;
+
+  @FindBy(xpath = "//button[@data-testid='initialize-address-pool-button'][1]")
+  public Button initializePoolButton;
+
+  @FindBy(xpath = "//div[text()='From Initialized Pool'][1]/following-sibling::div")
+  public PageElement zoneSearchInputWrapper;
+
+  @FindBy(xpath = "//div[text()='From Initialized Pool']/following-sibling::div//input[@type='search']")
+  public TextBox zoneSearchInput;
+
+  @FindBy(xpath = "//label[@title and text()='Number']/parent::div/following-sibling::div")
+  public PageElement addressSizeInputWrapper;
+
+  @FindBy(xpath = "//input[@data-testid='form-from-initialized-pool-number-input']")
+  public TextBox addressSizeInput;
+
+  @FindBy(xpath = "//button[@data-testid='from-initialize-pool-submit-button']")
+  public Button fetchAddressesFromInitializedPoolButton;
+
+  @FindBy(xpath = "//li[@title='Next Page']/preceding-sibling::li[1]")
+  public PageElement addressListLastPageButton;
+
+  @FindBy(xpath = "(//div[contains(@class,'ant-table')]//tr)[last()]//input")
+  public TextBox lastAssignZoneInput;
+
+  @FindBy(xpath = "(//div[contains(@class,'ant-table')]//tr)[last()]//button[contains(@data-testid,'assign-address')]")
+  public Button lastAssignZoneButton;
+
+  private final static String ZONE_LIST_XPATH = "//div[@class='address-name' and text()='%s']";
+  private final static String ZONE_ADDRESS_SIZE_XPATH = "%s/following-sibling::div[@class='address-size']";
+
   //endregion
 
   public AddressesTable addressesTable;
@@ -211,5 +250,35 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
     @FindBy(xpath = ".//button[.='Save']")
     public Button save;
 
+  }
+
+  public void fetchAddressFromInitializedPool(String zoneName) {
+    String addressSizeStr = findElementByXpath(
+        String.format(ZONE_ADDRESS_SIZE_XPATH, String.format(ZONE_LIST_XPATH, zoneName))).getText()
+        .split(" ")[0];
+
+    // Select zone
+    zoneSearchInputWrapper.click();
+    zoneSearchInput.sendKeysAndEnterNoXpath(zoneName);
+
+    // Edit address number
+    addressSizeInputWrapper.click();
+    addressSizeInput.forceClear();
+    addressSizeInput.sendKeys(addressSizeStr);
+
+    // Fetch addresses
+    fetchAddressesFromInitializedPoolButton.click();
+    pause1s();
+    fetchAddressesFromInitializedPoolButton.waitUntilClickable();
+
+    // Click the last page
+    addressListLastPageButton.click();
+  }
+
+  public void assignZoneToLatestAddress(String zoneName) {
+    lastAssignZoneInput.click();
+    lastAssignZoneInput.sendKeysAndEnterNoXpath(zoneName);
+    pause200ms();
+    lastAssignZoneButton.click();
   }
 }

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.Comparators;
@@ -42,7 +43,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
-  private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
+  private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
@@ -72,7 +73,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  @FindBy(xpath = "(//div[text()='Search or Select'])[2]//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "(//span[text()='Search or Select'])[2]/ancestor::div[@class='ant-select-selector']")
   public AntSelect2 hubs;
 
   @FindBy(xpath = "//button[contains(@*,'proceed')]")
@@ -93,7 +94,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
   private PageElement routeManifestRouteId;
 
-  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'th')]/*[1]")
+  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'VirtualTableHeader')]/*[1]")
   private List<PageElement> modalTableColumns;
 
   @FindBy(css = "div.value svg")
@@ -141,7 +142,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
   private List<PageElement> columnValues;
 
-  @FindBy(css = "div[class*='selected-value']")
+  @FindBy(css = "span[class*='ant-select-selection-item']")
   private PageElement headerHubValue;
 
   @FindBy(css = "div.ant-notification-notice-message")
@@ -168,7 +169,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
   public PageElement downloadFailedEtas;
 
-  @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
+  @FindBy(xpath = "//div[@class='ant-modal-body']//span[text()='Search or Select']")
   public List<PageElement> modalHubSelection;
 
   @FindBy(xpath = "//canvas")
