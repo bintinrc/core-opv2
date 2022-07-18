@@ -75,7 +75,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_REOPEN_SHIPMENT_OPTION_DISABLED = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())' and @disabled='disabled']";
   private static final String XPATH_SEARCH_BY_SHIPMENT_ID = "//textarea[@id='shipment-ids']";
   private static final String XPATH_SEARCH_SHIPMENT_BUTTON = "//button[contains(@class,'shipment-search-btn')]";
-  private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[@class='id']//input[@ng-model='searchText']";
+  private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[starts-with(@class,'id')]//input[@ng-model='searchText']";
   private static final String XPATH_SHIPMENT_ID_RESULT_TABLE = "//td[@nv-table-highlight='filter.id']";
   private static final String XPATH_SHIPMENT_ID_DUPLICATED = "//span[@ng-if='ctrl.duplicateCount!==0']";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
