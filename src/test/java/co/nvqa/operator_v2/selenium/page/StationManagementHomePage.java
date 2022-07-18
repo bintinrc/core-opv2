@@ -46,7 +46,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String MODAL_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//div[contains(@class,'FilterSelect')]";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[contains(@class,'Filter') and text()='%s']";
-  private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'VirtualTableHeader')][.//div[.='%s']]//*[@role='combobox']";
+  private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'VirtualTableHeader')][.//div[.='%s']]//div[@class='ant-select-selector']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
@@ -149,10 +149,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-notification-notice-message")
   private PageElement toastMessage;
 
-  @FindBy(xpath = "//div[@*='suggestedEtas']//*[@role='combobox']")
+  @FindBy(xpath = "//div[@*='suggestedEtas']//*[@class='ant-select-selector']")
   public AntSelect2 suggestedEtas;
 
-  @FindBy(css = "div[class*='common-date'] [role='combobox']")
+  @FindBy(css = "div[class*='common-date'] [class='ant-select-selector']")
   public AntSelect2 commonSuggestedEtas;
 
   @FindAll(@FindBy(css = "div[class*='base-row'] input[type='checkbox']"))
