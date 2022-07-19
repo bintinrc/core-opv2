@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteManifest @current
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteManifest
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
@@ -501,7 +501,7 @@ Feature: Route Manifest
       | expectedCodAmount | 0.00              |
       | driverId          | {ninja-driver-id} |
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
