@@ -75,13 +75,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_REOPEN_SHIPMENT_OPTION_DISABLED = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())' and @disabled='disabled']";
   private static final String XPATH_SEARCH_BY_SHIPMENT_ID = "//textarea[@id='shipment-ids']";
   private static final String XPATH_SEARCH_SHIPMENT_BUTTON = "//button[contains(@class,'shipment-search-btn')]";
-  private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[@class='id']//input[@ng-model='searchText']";
+  private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[starts-with(@class,'id')]//input[@ng-model='searchText']";
   private static final String XPATH_SHIPMENT_ID_RESULT_TABLE = "//td[@nv-table-highlight='filter.id']";
   private static final String XPATH_SHIPMENT_ID_DUPLICATED = "//span[@ng-if='ctrl.duplicateCount!==0']";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
   private static final String XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT = "//div//p[text()= ' %s ']";
+  private static final String XPATH_CREATE_SHIPMENT_ERROR_MESSAGE = "//md-input-container[@name='%s']/div/div[@class='custom-error-msg']";
+  private static final String XPATH_DISABLED_CREATE_SHIPMENT_BUTTON = "//*[@type='button'][@id='%s'][(@disabled)]";
+  private static final String CREATE_BUTTON = "create button";
+  private static final String CREATE_ANOTHER_BUTTON = "create another button";
+
 
   private static final String XPATH_SHIPMENTWEIGHTANDDIMENSION = "//button[.='Shipment Weight & Dimension page']";
 
@@ -272,6 +277,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     });
   }
 
+  public void checkErrorMessageShipmentCreation(){
+    boolean errMsgOriginHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub"));
+    boolean errMsgDestHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+
+    Assertions.assertThat(errMsgOriginHub)
+            .as("Error Message in Origin Hub Form is exist").isTrue();
+    Assertions.assertThat(errMsgDestHub)
+            .as("Error Message in Destination Hub Form is exist").isTrue();
+  }
+
+  public boolean checkErrMsgExist(){
+      return isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub")) ||
+              isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+  }
+
   public void shipmentScanExist(String source, String hub) {
     String xpath =
         XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
@@ -301,6 +321,30 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     shipmentInfo.setId(shipmentId);
   }
 
+  public void createNewShipment(ShipmentInfo shipmentInfo) {
+      createShipment.click();
+      createShipmentDialog.waitUntilVisible();
+      createShipmentDialog.type.selectValue(shipmentInfo.getShipmentDialogType());
+      createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+      createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+      createShipmentDialog.comments.setValue(shipmentInfo.getComments());
+  }
+
+  public void checkToastMsg(){
+      String toastMessage = getToastTopText();
+      boolean shipmentCreated = toastMessage.contains("Shipment") && toastMessage.contains("created");
+      Assertions.assertThat(shipmentCreated).as("Toast message not contains Shipment <SHIPMENT_ID> created").isTrue();
+      confirmToast(toastMessage, false);
+  }
+
+  public void submitNewShipment (boolean isNextOrder){
+      if (isNextOrder) {
+          createShipmentDialog.createAnother.click();
+      } else {
+          createShipmentDialog.create.click();
+      }
+  }
+
   public Long createAnotherShipment() {
     clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
     String toastMessage = getToastTopText();
@@ -310,6 +354,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     confirmToast(toastMessage, false);
 
     return shipmentId;
+  }
+
+  public void checkDisabledCreateShipmentButton(String disabledButton) {
+    ImmutableMap<String, String> buttonMap = ImmutableMap.<String, String>builder()
+            .put(CREATE_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createButton"))
+            .put(CREATE_ANOTHER_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createAnotherButton"))
+            .build();
+
+    Assertions.assertThat(isElementExistWait1Second(buttonMap.get(disabledButton))).as(f("'%s' is disabled", disabledButton)).isTrue();
   }
 
   public void editShipment(ShipmentInfo shipmentInfo) {
@@ -1235,10 +1288,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public static class CancelShipmentDialog extends MdDialog {
 
-    @FindBy(xpath = "//Button//span[.='Cancel Shipment']")
+    @FindBy(xpath = "//button[.='Cancel Shipment']")
     public Button cancelShipment;
 
-    @FindBy(xpath = "//Button//span[.='Cancel']")
+    @FindBy(xpath = "//button[.='Cancel']")
     public Button cancel;
 
     public CancelShipmentDialog(WebDriver webDriver, WebElement webElement) {

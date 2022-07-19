@@ -33,7 +33,6 @@ Feature: Crossdock to it's Station
     And Operator adds new relation on Movement Management page using data below:
       | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-#    And Operator adds new Station Movement Schedule on Movement Management page using data below:
     And Operator try adds new Station Movement Schedule on Movement Management page using data below:
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -43,21 +42,12 @@ Feature: Crossdock to it's Station
       | duration       | 1                                  |
       | endTime        | 16:30                              |
       | daysOfWeek     | all                                |
-    And Operator select "Relations" tab on Movement Management page
-    Then Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab
-    And Operator verify "Pending" tab is selected on 'Relations' tab
-    And Operator verify all Crossdock Hub in Pending tab have "Unfilled" value
-    And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
-    When Operator select "Complete" tab on Movement Management page
-    And Operator verify all Crossdock Hub of all listed Stations already defined
-    And Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
     And Operator load schedules on Movement Management page using data below:
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | originHub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management

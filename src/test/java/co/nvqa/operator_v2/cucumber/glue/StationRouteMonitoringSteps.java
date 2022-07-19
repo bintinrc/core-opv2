@@ -82,6 +82,17 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verify value on Station Route Monitoring page for the {string} column is equal to {string}")
+  public void operatorVerifyValueOnStationRouteMonitoringPageForTheColumnValueIsEqualTo(
+      String columnName, String expectedValue) {
+    expectedValue = resolveValue(expectedValue);
+    StationRouteMonitoring columnValue = StationRouteMonitoring.valueOf(columnName);
+    String actualColumnValue = stationRouteMonitoringPage.getColumnValue(columnValue);
+    Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
+        expectedValue, actualColumnValue);
+    takesScreenshot();
+  }
+
   @When("Operator clicks on the {string} column value link")
   public void operatorClicksOnTheColumnValueLink(String columnName) {
     StationRouteMonitoring columnValue = StationRouteMonitoring.valueOf(columnName);
@@ -89,15 +100,15 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
 
   }
 
-  @Then("Operator verifies Invalid Failed WP pop up modal is showing correct total parcels")
-  public void operatorVerifiesInvalidFailedWPPopUpModalIsShowingCorrectTotalParcels(
+  @Then("Operator verifies pop up modal is showing correct total parcels")
+  public void operatorVerifiesPopUpModalIsShowingCorrectTotalParcels(
       Map<String, String> mapOfData) {
     stationRouteMonitoringPage.validateTotalParcelsCounts(mapOfData);
     takesScreenshot();
   }
 
-  @Then("Operator verifies Invalid Failed WP pop up modal is showing No Results Found")
-  public void operatorVerifiesInvalidFailedWPPopUpModalIsShowingNoResultFound(
+  @Then("Operator verifies pop up modal is showing No Results Found")
+  public void operatorVerifiesPopUpModalIsShowingNoResultFound(
       Map<String, String> mapOfData) {
     stationRouteMonitoringPage.validateNoResultsFoundText(mapOfData);
     takesScreenshot();
@@ -159,10 +170,12 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator verifies that Edit Order page is opened on clicking tracking id in table {string}")
+  @And("Operator verifies that Edit Order page is opened on clicking tracking id {string} in table {string}")
   public void operatorVerifiesThatEditOrderPageIsOpenedOnClickingTrackingIdFromTheRouteMonitoringPage(
+      String trackingID,
       String tableName) {
-    stationRouteMonitoringPage.validateNavigationOfTrackingIDLink(tableName);
+    trackingID = resolveValue(trackingID);
+    stationRouteMonitoringPage.validateNavigationOfTrackingIDLink(trackingID, tableName);
     takesScreenshot();
   }
 }

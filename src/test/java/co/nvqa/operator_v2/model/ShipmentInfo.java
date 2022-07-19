@@ -21,6 +21,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
       .ofPattern("yyyy-MM-dd'T'HH:mm:ssz");
 
   private String shipmentType;
+  private String shipmentDialogType;
   private Long id;
   private String userId;
   private String entrySource;
@@ -74,6 +75,14 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
       normalisedZdt = normalisedZdt.plusSeconds(1L);
     }
     return normalisedZdt.format(FE_FORMATTER);
+  }
+
+  public String getShipmentDialogType() {
+    return shipmentDialogType;
+  }
+
+  public void setShipmentDialogType(String shipmentDialogType) {
+    this.shipmentDialogType = shipmentDialogType;
   }
 
   public String getShipmentType() {

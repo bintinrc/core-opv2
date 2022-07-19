@@ -35,10 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
@@ -933,7 +930,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
-    click("//button[contains(@aria-label,'Clear All Selections')]");
+    String xpathClearAllSelection = "//button[contains(@aria-label,'Clear All Selections')]";
+    moveToElementWithXpath(xpathClearAllSelection);
+    click(xpathClearAllSelection);
     click("//button[contains(@aria-label,'Load Selection')]");
   }
 
@@ -983,7 +982,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     }
   }
 
-  public void choosePickupActionAndClickSubmit(String trackingId, String action) {
+  public void choosePickupActionAndClickSubmit(String trackingId, String action, String date) {
+    LocalDateTime today = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
     filterTableOrderByTrackingId(trackingId);
     selectAllShown();
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
@@ -1001,6 +1002,14 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
             findElementByXpath("//button[@aria-label = 'Submit']"));
     pause2s();
+    if("date".equalsIgnoreCase(date)) {
+      getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
+              .clear();
+      pause1s();
+      getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
+              .sendKeys(formatter.format(today.plusDays(5)));
+      pause2s();
+    }
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
             findElementByXpath("//button[@aria-label = 'Submit']"));
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");

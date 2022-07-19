@@ -46,7 +46,6 @@ import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -158,19 +157,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
   public static final String XPATH_VALIDATION_ERROR = "//md-dialog[contains(@class, 'nv-container-shipper-errors-dialog')] ";
   public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
-  public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//tr[1]//td[@class='id']";
-  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//tr[1]//td[@class='effective-date']";
-  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//tr[1]//td[@class='discount']";
-  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
-  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//tr[1]//td[@class='comments']";
-  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
-  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//tr[1]//td[@class='cod-min']";
-  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
-  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
-  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
-  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
-  public static final String XPATH_PRICING_PROFILE_RTS_CHARGE = "//table[@class='table-body']//tr[1]//td[@class='rts-charge']";
-  public static final String XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC = "//table[@class='table-body']//tr[1]//td[@class='billing-weight-logic']";
+  public static final String XPATH_PRICING_PROFILE_ID = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='id']";
+  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='effective-date']";
+  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='discount']";
+  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
+  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='comments']";
+  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
+  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='cod-min']";
+  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
+  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
+  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
+  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
+  public static final String XPATH_PRICING_PROFILE_RTS_CHARGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='rts-charge']";
+  public static final String XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='billing-weight-logic']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_ADD_NEW_PRICING_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
@@ -324,7 +323,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     if (isCreateForm) {
       basicSettingsForm.shipperEmail.setValue(shipper.getEmail());
-      basicSettingsForm.shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
+
     }
 
     basicSettingsForm.channel.selectValue("B2C Marketplace");
@@ -1655,7 +1654,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-container")
     public CheckBox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label span")
+    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label")
     public PageElement rtsCountryDefaultText;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")

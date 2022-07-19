@@ -114,18 +114,18 @@ public class PathManagementSteps extends AbstractSteps {
     pathManagementPage.verifyDataAppearInPathTable(pathType);
   }
 
-  @And("Operator verify path data from {string} to {string} appear in path table")
-  public void operatorVerifyPathDataAppearInPathTable(String originHub, String destinationHub) {
+  @And("Operator verify path data from {string} {string} {string} appear in path table")
+  public void operatorVerifyPathDataAppearInPathTable(String originHub, String arrow, String destinationHub) {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
     List<String> passedHub = Arrays.asList(resolvedOriginHub, resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub, arrow);
   }
 
-  @And("Operator verify path data from {string} to {string} appear in path table with following transit hubs:")
-  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,
-      String destinationHubName, List<String> transitHubs) {
+  @And("Operator verify path data from {string} {string} {string} appear in path table with following transit hubs:")
+  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,String arrow,
+                                                                              String destinationHubName, List<String> transitHubs) {
     String resolvedOriginHub = resolveValue(originHubName);
     String resolvedDestinationHub = resolveValue(destinationHubName);
     List<String> resolvedTransitHubs = new ArrayList<>();
@@ -137,7 +137,7 @@ public class PathManagementSteps extends AbstractSteps {
     passedHubs.addAll(resolvedTransitHubs);
     passedHubs.add(resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs, arrow);
   }
 
   @When("Operator click {string} hyperlink button")
@@ -287,9 +287,9 @@ public class PathManagementSteps extends AbstractSteps {
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
     String transitHubName = resolvedMapOfData.get("transitHubName");
 
-    String path = originHubName + " → ";
+    String path = originHubName + " "+resolvedMapOfData.get("path")+" ";
     if (transitHubName != null) {
-      path += transitHubName + " → ";
+      path += transitHubName + " "+resolvedMapOfData.get("path")+" ";
     }
     path += destinationHubName;
 
@@ -308,9 +308,9 @@ public class PathManagementSteps extends AbstractSteps {
     String departureTime = resolvedMapOfData.get("departureTime");
     String departureTimeSecond = resolvedMapOfData.get("departureTimeSecond");
 
-    String path = originHubName + " → ";
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " ";
     if (transitHubName != null) {
-      path += transitHubName + " → ";
+      path += transitHubName + " " + resolvedMapOfData.get("path") + " ";
     }
     path += destinationHubName;
 
@@ -333,7 +333,7 @@ public class PathManagementSteps extends AbstractSteps {
 
     List<String> passedHub = Arrays.asList(originHubName, transitHubName, destinationHubName);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub);
+        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub,resolvedMapOfData.get("path"));
   }
 
   @Then("Operator verify it cannot create manual path {string} with data:")

@@ -30,6 +30,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationPage.class);
 
   public static final String LOCATOR_SPINNER = "//md-progress-circular";
+  private static final String CSV_FILENAME_PATTERN_NEW = "data-dps";
   private static final String CSV_FILENAME_PATTERN = "data-dp-users";
   private static final String CSV_DPS_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DP_USERS_FILENAME_PATTERN = "data-dp-users";
@@ -446,13 +447,17 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
     assertThatIfExpectedValueNotNull("DP Partner ID is correct", expectedDpPartnerParams.getId(),
         actualDpPartner.getId(), equalTo(expectedDpPartnerParams.getId()));
-    assertThatIfExpectedValueNotNull("DP Partner name is correct", expectedDpPartnerParams.getName(),
+    assertThatIfExpectedValueNotNull("DP Partner name is correct",
+        expectedDpPartnerParams.getName(),
         actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC name is correct", expectedDpPartnerParams.getPocName(),
+    assertThatIfExpectedValueNotNull("DP Partner POC name is correct",
+        expectedDpPartnerParams.getPocName(),
         actualDpPartner.getPocName(), equalTo(expectedDpPartnerParams.getPocName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC No. is correct", expectedDpPartnerParams.getPocTel(),
+    assertThatIfExpectedValueNotNull("DP Partner POC No. is correct",
+        expectedDpPartnerParams.getPocTel(),
         actualDpPartner.getPocTel(), equalTo(expectedDpPartnerParams.getPocTel()));
-    assertThatIfExpectedValueNotNull("DP Partner POC email is correct", expectedDpPartnerParams.getPocEmail(),
+    assertThatIfExpectedValueNotNull("DP Partner POC email is correct",
+        expectedDpPartnerParams.getPocEmail(),
         actualDpPartner.getPocEmail(), equalTo(expectedDpPartnerParams.getPocEmail()));
     assertThatIfExpectedValueNotNull("DP Partner POC restrictions is correct",
         expectedDpPartnerParams.getRestrictions(), actualDpPartner.getRestrictions(),
@@ -508,6 +513,39 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .containsIgnoringCase(expectedDpUserParams.getContactNo());
   }
 
+  public void verifyDownloadedFileContentNewReactPage(List<DpPartner> expectedDpPartners) {
+    final String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN_NEW);
+    verifyFileDownloadedSuccessfully(fileName);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<DpPartner> actualDpPartners = DpPartner.fromCsvFile(DpPartner.class, pathName, true);
+
+    Assertions.assertThat(actualDpPartners).as("Unexpected number of lines in CSV file")
+        .hasSizeGreaterThanOrEqualTo(expectedDpPartners.size());
+
+    final Map<Long, DpPartner> actualMap = actualDpPartners.stream().collect(Collectors.toMap(
+        DpPartner::getId,
+        params -> params,
+        (params1, params2) -> params1
+    ));
+
+    for (DpPartner expectedDpPartner : expectedDpPartners) {
+      DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
+      Assertions.assertThat(actualDpPartner.getId()).as("DP ID is null").isNotNull();
+      Assertions.assertThat(actualDpPartner.getName()).as("DP Partner Name is correct")
+          .isEqualTo(expectedDpPartner.getName());
+      Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
+          .isEqualTo(expectedDpPartner.getPocName());
+      Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
+          .isEqualTo(expectedDpPartner.getPocTel());
+      assertEquals("POC Email is correct",
+          Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
+          actualDpPartner.getPocEmail());
+      assertEquals("Restrictions is correct",
+          Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
+          actualDpPartner.getRestrictions());
+    }
+  }
+
   public void verifyDownloadedFileContent(List<DpPartner> expectedDpPartners) {
     final String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
     verifyFileDownloadedSuccessfully(fileName);
@@ -532,7 +570,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
           .isEqualTo(expectedDpPartner.getPocTel());
-      assertEquals("POC Email is correct", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
+      assertEquals("POC Email is correct",
+          Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
           actualDpPartner.getPocEmail());
       assertEquals("Restrictions is correct",
           Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
@@ -655,6 +694,28 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     }
   }
 
+  public void verifyNewlyCreatedDpUser(DpUser dpUser, co.nvqa.commons.model.dp.DpUser dpUserDb) {
+    Assertions.assertThat(dpUser.getFirstName() + " " + dpUser.getLastName())
+        .as(f("Name from Dp User is %s", dpUserDb.getName()))
+        .isEqualTo(dpUserDb.getName());
+
+    Assertions.assertThat(dpUser.getFirstName())
+        .as(f("First Name from Dp User is %s", dpUserDb.getFirstName()))
+        .isEqualTo(dpUserDb.getFirstName());
+
+    Assertions.assertThat(dpUser.getLastName())
+        .as(f("Last Name from Dp User is %s", dpUserDb.getLastName()))
+        .isEqualTo(dpUserDb.getLastName());
+
+    Assertions.assertThat(dpUser.getContactNo())
+        .as(f("Contact Number from Dp User is %s", dpUserDb.getContactNo()))
+        .isEqualTo(dpUserDb.getContactNo());
+
+    Assertions.assertThat(dpUser.getEmailId())
+        .as(f("Email from Dp User is %s", dpUserDb.getEmail()))
+        .isEqualTo(dpUserDb.getEmail());
+  }
+
   public String getErrorMessage() {
     waitUntilVisibilityOfElementLocated(XPATH_PUDO_POINT_IFRAME);
     final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
@@ -754,7 +815,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void clickResetPassword() {
-    waitUntilVisibilityOfElementLocated(XPATH_RESET_PASSWORD_BUTTON);
+    pause3s();
     moveToElementWithXpath(XPATH_RESET_PASSWORD_BUTTON);
     click(XPATH_RESET_PASSWORD_BUTTON);
   }

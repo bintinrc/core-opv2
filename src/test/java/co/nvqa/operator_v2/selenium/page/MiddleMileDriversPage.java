@@ -48,6 +48,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='No']";
     private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class, 'availability-btn')][text()='Yes']";
     private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'ant-table-selection')]";
+    private static final String SELECT_ALL_CHECKBOX_XPATH = "//div[@class='ant-table-selection']//input[@class='ant-checkbox-input']";
     private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
     private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
@@ -57,6 +58,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
     private static final String LICENSE_STATUS_FILTER_TEXT = "//input[@id='licenseStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
 
+    private static final String ERROR_MESSAGE_NOTICE_TEXT_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//div[text()='%s']";
+    private static final String ERROR_MESSAGE_NOTICE_CONFLICT_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[text()='%s']";
+
+    private static final String CHECK_AVAILABILITY_BUTTON_XPATH = "//button[contains(@class,'check-username-btn')]//span[text()='Check Availability']";
     private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
     private static final String TABLE_ASSERTION_XPATH = "//div[contains(@class,'ant-table-body')]//tbody/tr[2]/td[%d]";
 
@@ -616,7 +621,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void clickBulkAvailabilityMode(String mode) {
-        click(DROP_DOWN_ON_TABLE_XPATH);
+        if(!findElementByXpath(SELECT_ALL_CHECKBOX_XPATH).isSelected()){
+            click(DROP_DOWN_ON_TABLE_XPATH);
+        }
         click(APPLY_ACTION_DROP_DOWN_XPATH);
 
         if (YES.equalsIgnoreCase(mode)) {
@@ -952,5 +959,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             licenseTypeInput.click();
         }
     }
+
+    public void clickCheckAvailabilityButton(){
+        waitUntilVisibilityOfElementLocated(CHECK_AVAILABILITY_BUTTON_XPATH);
+        click(CHECK_AVAILABILITY_BUTTON_XPATH);
+    }
+
+    public void verifyErrorMessage(String message){
+        if (isElementExist(f(ERROR_MESSAGE_NOTICE_TEXT_XPATH,message),2L)) {
+            Assertions.assertThat(true).as(message).isTrue();
+        } else if (isElementExist(f(ERROR_MESSAGE_NOTICE_CONFLICT_XPATH,message),2L)){
+            Assertions.assertThat(true).as(message).isTrue();
+        }
+    }
+
+
 
 }

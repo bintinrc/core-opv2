@@ -46,19 +46,19 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentSumUpReport> shipmentSumUpReportNvTable;
 
-  @FindBy(xpath = "//div[@data-testid='group-opv-2-sg-2-hub-detail-section']//div[contains(@class, 'ant-col')][1]")
+  @FindBy(xpath = "//div[contains(@data-testid, '-detail-section')]//div[contains(@class, 'ant-col')][1]")
   public PageElement endHubSection;
 
-  @FindBy(xpath = "//div[@data-testid='group-opv-2-sg-2-hub-detail-section']//div[contains(@class, 'ant-col')][2]")
+  @FindBy(xpath = "//div[contains(@data-testid, '-detail-section')]//div[contains(@class, 'ant-col')][2]")
   public PageElement totalShipmentSection;
 
-  @FindBy(xpath = "//div[@data-testid='group-opv-2-sg-2-hub-detail-section']//div[contains(@class, 'ant-col')][3]")
+  @FindBy(xpath = "//div[contains(@data-testid, '-detail-section')]//div[contains(@class, 'ant-col')][3]")
   public PageElement totalWeightSection;
 
-  @FindBy(xpath = "//div[@data-testid='group-opv-2-sg-2-hub-detail-section']//div[contains(@class, 'ant-col')][4]")
+  @FindBy(xpath = "//div[contains(@data-testid, '-detail-section')]//div[contains(@class, 'ant-col')][4]")
   public PageElement totalKgvSection;
 
-  @FindBy(xpath = "//div[@data-testid='group-opv-2-sg-2-hub-detail-section']//div[contains(@class, 'ant-col')][5]")
+  @FindBy(xpath = "//div[contains(@data-testid, '-detail-section')]//div[contains(@class, 'ant-col')][5]")
   public PageElement totalParcelsSection;
 
 
@@ -97,7 +97,7 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
     @FindBy(xpath = "./td[contains(@class,'ant-table-cell status')]")
     public PageElement status;
 
-    @FindBy(xpath = "./td[contains(@class,'ant-table-cell mawb')]")
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell mawb')]")
     public PageElement mawb;
 
     @FindBy(xpath = "./td[contains(@class,'ant-table-cell comments')]")

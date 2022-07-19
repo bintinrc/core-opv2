@@ -17,8 +17,8 @@ Feature: Path Management - Create Manual Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
@@ -30,12 +30,14 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -67,6 +69,7 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | multiple                           |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data with "multiple" schedule in path detail with following data:
+      | path                | →                                         |
       | originHubName       | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName      | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
@@ -74,6 +77,7 @@ Feature: Path Management - Create Manual Path
       | departureTimeSecond | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[2]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -102,11 +106,12 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -133,12 +138,13 @@ Feature: Path Management - Create Manual Path
       | selectSchedule     | multiple                           |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data with "multiple" schedule in path detail with following data:
+      | path                | →                                         |
       | originHubName       | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | departureTime       | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
       | departureTimeSecond | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[2]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
-    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
+    Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" "→" "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
@@ -358,7 +364,7 @@ Feature: Path Management - Create Manual Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     Given API Operator create "manual" path with movement schedule id "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
@@ -583,9 +589,9 @@ Feature: Path Management - Create Manual Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[4].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
@@ -612,12 +618,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -627,12 +635,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[4].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[4].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -640,6 +650,7 @@ Feature: Path Management - Create Manual Path
     And Operator verifies path management page is loaded
     And Operator click "view" hyperlink button
     Then Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
@@ -658,8 +669,8 @@ Feature: Path Management - Create Manual Path
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
@@ -686,12 +697,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -701,12 +714,14 @@ Feature: Path Management - Create Manual Path
     And Operator choose single schedule and clicks create button in create manual path modal
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
+      | path               | →                                         |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     Then Operator verifies path data appear in path table with following hubs:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -718,6 +733,7 @@ Feature: Path Management - Create Manual Path
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
     And Operator click "view" hyperlink button
     Then Operator verify created manual path data in path detail empty schedule with following data:
+      | path               | →                                  |
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
