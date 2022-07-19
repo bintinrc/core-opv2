@@ -297,6 +297,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
         shipmentInfo.setMawb(
             "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get(
                 "mawb").substring(1));
+        put(KeyConstants.KEY_MAWB, shipmentInfo.getMawb());
         break;
       case "non-mawb":
         shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
