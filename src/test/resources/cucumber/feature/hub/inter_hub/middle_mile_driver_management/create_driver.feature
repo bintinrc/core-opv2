@@ -97,11 +97,11 @@ Feature: Middle Mile Driver Management - Create Driver
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
     And Operator create new Existing username Middle Mile Driver and verify error message with details:
-      | name   | hub          | contactNumber            | licenseNumber | employmentType | username                                   |
+      | name   | hub                     | contactNumber            | licenseNumber | employmentType | username                   |
       | RANDOM | {mm-driver-hub-name-sg} | {default-phone-number}   | RANDOM        | FULL_TIME      | {ninja-driver-2-username}  |
     When Operator refresh Middle Mile Driver Page
     And Operator verifies middle mile driver management page is loaded
-    Given Operator get info of hub details id "{mm-driver-hub-name-sg}"
+    Given Operator get info of hub details id "{hub-id-2}"
     And Operator selects the hub on the Middle Mile Drivers Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches and verifies the created username is not exist
