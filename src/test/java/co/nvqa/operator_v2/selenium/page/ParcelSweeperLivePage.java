@@ -26,7 +26,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
   private static final String PRIORITY_LEVEL_XPATH = "//span[@data-testid='priority-level']";
   private static final String PRIORITY_LEVEL_COLOR_XPATH = "//div[contains(@class,'priority-container')]";
   private static final String LOCATOR_RTS_INFO = "//h5[@data-testid='rts']";
-  private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
+  private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//div[@class='order-tag']";
   private static final String HUB_DROPDOWN_XPATH = "//span[contains(text(),'Search or select hub')]//preceding::input[@type='search']";
   private static final String CHOSEN_VALUE_SELECTION_XPATH = "//div[@label='%s']";
   private static final String SORT_TASK_DROPDOWN_XPATH = "//span[contains(text(),'Search or select task')]//preceding::input[@type='search'][1]";
@@ -97,6 +97,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
   public void verifyRTSInfo(boolean isRTSed) {
     if (isRTSed) {
+      pause2s();
       assertTrue("RTS Label is not displayed", isElementVisible(LOCATOR_RTS_INFO));
       assertThat("Unexpected text of RTS Label", getText(LOCATOR_RTS_INFO),
           equalToIgnoringCase("RTS"));
@@ -129,10 +130,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
-    sendKeys(HUB_DROPDOWN_XPATH, hubName);
-    waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-    click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
-
+    sendKeys(HUB_DROPDOWN_XPATH, hubName,Keys.ENTER);
     pause2s();
 
     //Select Sort Task

@@ -114,8 +114,10 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     And Operator edit the created Active Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {result.delivery_fee = 5;} else {result.delivery_fee = 3;}if (params.size == "S") {result.delivery_fee += 2.1;} else if (params.size == "M") {result.delivery_fee += 2.2;} else if (params.size == "L") {result.delivery_fee += 3.3;} else if (params.size == "XL") {result.delivery_fee += 4.4;} else if (params.size == "XXL") {result.delivery_fee += 5.5;} else {throw "Unknown size.";}if (params.weight <= 3) {result.delivery_fee += 6.6} else if (params.weight > 3) {result.delivery_fee += 7.7}return result;} |
-    And Operator clicks Check Syntax and Verify Draft
+    And Operator clicks Check Syntax, Verify Draft and Validate Draft
     Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Edit Active Script - Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
@@ -139,6 +141,8 @@ Feature: Edit Pricing Script
     And Operator edit the created Draft Script using data below:
       | source | function calculatePricing(params) {var result = {};result.delivery_fee = 1;if (params.is_rts === true) {result.delivery_fee = 5;} else {result.delivery_fee = 3;}if (params.size == "S") {result.delivery_fee += 2.1;} else if (params.size == "M") {result.delivery_fee += 2.2;} else if (params.size == "L") {result.delivery_fee += 3.3;} else if (params.size == "XL") {result.delivery_fee += 4.4;} else if (params.size == "XXL") {result.delivery_fee += 5.5;} else {throw "Unknown size.";}if (params.weight <= 3) {result.delivery_fee += 6.6} else if (params.weight > 3) {result.delivery_fee += 7.7}return result;} |
     Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @DeletePricingScript
   Scenario: Edit Draft Script - Syntax Error (uid:4daf468e-2dc4-46cf-9a5e-2b0bda48668e)
@@ -176,6 +180,36 @@ Feature: Edit Pricing Script
     Then Operator verifies that error toast is displayed on Pricing Scripts V2 page:
       | top    | Network Request Error                 |
       | bottom | `const` is not support in the script. |
+
+
+  @DeletePricingScript
+  Scenario: Edit Active Script - Edit Script Info (uid:ba483b50-bc2c-4304-90e9-524523533323)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator validate and release Draft Script
+    When Operator search according Active Script name
+    And Operator edit the created Active Script using data below:
+      | name        | Edit Script name {gradle-current-date-yyyyMMddHHmmsss}        |
+      | description | Edit Script Description {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Check Syntax, Verify Draft and Validate Draft
+    Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
+  Scenario: Edit Draft Script - Edit Script Info (uid:fba75f5b-44dd-42d5-859c-0ca775a6132b)
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var result = {};result.delivery_fee = 0.0;if (params.service_type == "Parcel") {result.delivery_fee += 3;}if (params.service_type == "Marketplace") {result.delivery_fee += 5;}if (params.service_type == "Return") {result.delivery_fee += 7;}if (params.service_type == "Document") {result.delivery_fee += 11;}if (params.service_type == "Bulky") {result.delivery_fee += 1.1;}if (params.service_type == "International") {result.delivery_fee += 2.2;}if (params.service_type == "Ninja Pack") {result.delivery_fee += 3.3;}if (params.service_type == "Marketplace International") {result.delivery_fee += 4.4;}if (params.service_type == "Corporate") {result.delivery_fee += 5.5;}if (params.service_type == "Corporate Return") {result.delivery_fee += 6.6;}if (params.service_level == "STANDARD") {result.delivery_fee += 13;}if (params.service_level == "EXPRESS") {result.delivery_fee += 17;}if (params.service_level == "SAMEDAY") {result.delivery_fee += 19;}if (params.service_level == "NEXTDAY") {result.delivery_fee += 23;}return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator edit the created Draft Script using data below:
+      | name        | Edit Script name {gradle-current-date-yyyyMMddHHmmsss}        |
+      | description | Edit Script Description {gradle-current-date-yyyyMMddHHmmsss} |
+    Then Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

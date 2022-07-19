@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public class TimeBoundedScriptsPage extends OperatorV2SimplePage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TimeBoundedScriptsPage.class);

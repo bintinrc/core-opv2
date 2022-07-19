@@ -43,10 +43,12 @@ public class SsbTemplateSteps extends AbstractSteps {
 
   private void setSsbTemplateData(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
-    Template template = new Template();
+    Template template = Objects.nonNull(get(KEY_TEMPLATE)) ? get(KEY_TEMPLATE) : new Template();
+
     String templateName = mapOfData.get("templateName");
     String templateDescription = mapOfData.get("templateDescription");
     String selectHeaders = mapOfData.get("selectHeaders");
+    String removeHeaders = mapOfData.get("removeHeaders");
 
     if (Objects.nonNull(templateName)) {
       ssbTemplatePage.setTemplateName(templateName);
@@ -58,7 +60,16 @@ public class SsbTemplateSteps extends AbstractSteps {
     }
     if (Objects.nonNull(selectHeaders)) {
       List<String> headerColumnList = Arrays.asList(selectHeaders.split(","));
-      headerColumnList.forEach(headerColumn -> ssbTemplatePage.dragAndDropColumn(headerColumn));
+      headerColumnList.forEach(
+          headerColumn -> ssbTemplatePage.dragAndDropColumnToSelectedHeadersColumn(headerColumn));
+      Configuration configuration = new Configuration();
+      configuration.setHeaders(headerColumnList);
+      template.setConfiguration(configuration);
+    }
+    if (Objects.nonNull(removeHeaders)) {
+      List<String> headerColumnList = Arrays.asList(removeHeaders.split(","));
+      headerColumnList.forEach(
+          headerColumn -> ssbTemplatePage.dragAndDropToAvailableHeadersColumn(headerColumn));
       Configuration configuration = new Configuration();
       configuration.setHeaders(headerColumnList);
       template.setConfiguration(configuration);
@@ -70,14 +81,19 @@ public class SsbTemplateSteps extends AbstractSteps {
 
   @And("Operator creates SSB template with below data successfully")
   public void operatorCreatesSSBTemplateWithBelowDataSuccessfully(Map<String, String> mapOfData) {
-    setSsbTemplateData(mapOfData);
-    ssbTemplatePage.clickSubmitBtn();
-    takesScreenshot();
+    operatorFillSSBTemplateWithBelowData(mapOfData);
     ssbTemplatePage.waitUntilVisibilityOfNotification("Created Template Successfully.", 5000);
   }
 
+  @And("Operator updates SSB template with below data successfully")
+  public void operatorUpdatedSSBTemplateWithBelowDataSuccessfully(Map<String, String> mapOfData) {
+    operatorFillSSBTemplateWithBelowData(mapOfData);
+    ssbTemplatePage.waitUntilVisibilityOfNotification("Updated Template Successfully.", 5000);
+  }
+
+  @And("Operator updates SSB template with below data")
   @And("Operator creates SSB template with below data")
-  public void operatorCreatesSSBTemplateWithBelowData(Map<String, String> mapOfData) {
+  public void operatorFillSSBTemplateWithBelowData(Map<String, String> mapOfData) {
     setSsbTemplateData(mapOfData);
     ssbTemplatePage.clickSubmitBtn();
     takesScreenshot();
@@ -98,4 +114,15 @@ public class SsbTemplateSteps extends AbstractSteps {
           .as("Error bottom text is correct").contains(mapOfData.get("bottom"));
     }
   }
+
+  @Then("Operator edits SSB Template with Name {value}")
+  public void operatorEditsSSBTemplateWithName(String name) {
+    ssbTemplatePage.selectAndEditSsbTemplate(name);
+  }
+
+  @Then("Operator deletes the SSB template {value}")
+  public void operatorDeletesTheSSBTemplate(String name) {
+    ssbTemplatePage.selectAndDeleteSsbTemplate(name);
+  }
+
 }

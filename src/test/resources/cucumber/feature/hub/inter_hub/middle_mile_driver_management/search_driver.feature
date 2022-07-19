@@ -7,12 +7,16 @@ Feature: Middle Mile Driver Management - Search Driver
 
   Scenario: Load All Drivers (uid:fc8158aa-ed1c-4c94-866a-bb4ced22ab35)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Driver gets all the driver
+    #Given API Driver gets all the driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
-    Given API Driver get all middle mile driver
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator verifies that the data shown has the same value
+    Then Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?showall=true"
+    And Operator verifies that the data shown has the same value
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
@@ -27,7 +31,7 @@ Feature: Middle Mile Driver Management - Search Driver
       | longitude    | GENERATED |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{KEY_CREATED_HUB.id},"hub":"{KEY_CREATED_HUB.name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    Given API Driver gets all the driver
+  #  Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
@@ -36,121 +40,150 @@ Feature: Middle Mile Driver Management - Search Driver
     When Operator selects the hub on the Middle Mile Drivers Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?hubIds=<id>"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Active (uid:9d52e56e-6edf-437b-ac09-5e9ef38cf683)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+   # Then Operator searches by "name" and verifies the created username
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Inactive (uid:723b57eb-3d0b-421b-be8b-681078759a88)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Inactive" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches and verifies the created username is not exist
+   # Then Operator searches and verifies the created username is not exist
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - License Status Active (uid:dd6df1fc-da8a-49b8-9abd-6ad4d87622ad)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+    #Then Operator searches by "name" and verifies the created username
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?licenseStatus=active"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - License Status Inactive (uid:3be300e1-e557-41f1-8dca-ba77bf01f1e9)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "License Status" with the value of "Inactive" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches and verifies the created username is not exist
+    #Then Operator searches and verifies the created username is not exist
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?licenseStatus=inactive"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Inactive and License Status Inactive (uid:f926dc6b-2165-444c-9f30-c0c35fa2c7db)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "Employment Status" with the value of "Inactive" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Inactive" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches and verifies the created username is not exist
+    #Then Operator searches and verifies the created username is not exist
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive&licenseStatus=inactive"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Active and License Status Active(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+    #Then Operator searches by "name" and verifies the created
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active&licenseStatus=active"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Inactive and License Status Active(uid:74fe1b41-427f-4d03-b263-bf4024b3df50)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-current-date-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
     When Operator selects the "Employment Status" with the value of "Inactive" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+    #Then Operator searches by "name" and verifies the created username
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive&licenseStatus=active"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Active and License Status Inactive(uid:8fe481c5-13db-4dc6-be5b-9a7c67cc6c93)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-current-date-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver
     When Operator selects the "License Status" with the value of "Inactive" on Middle Mile Driver Page
     When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+    #Then Operator searches by "name" and verifies the created username
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active&licenseStatus=inactive"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Hub, Employment Status Inactive and License Status Inactive (uid:e1d54146-6e85-4b1b-884e-e7f1f9a89070)
-    Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     And Operator verifies middle mile driver management page is loaded
     Given Operator get info of hub details id "{hub-id}"
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
+    And API Driver get all middle mile driver using hub filter with value "{hub-id}"
     When Operator selects the hub on the Middle Mile Drivers Page
     When Operator selects the "Employment Status" with the value of "Inactive" on Middle Mile Driver Page
     When Operator selects the "License Status" with the value of "Inactive" on Middle Mile Driver Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator verifies that the data shown has the same value
+    #Then Operator verifies that the data shown has the same value
+    Then Operator verifies that list of middle mile drivers is shown
+    And Make sure URL show is "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive&hubIds=<id>&licenseStatus=inactive"
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @DeleteDriver
   Scenario: Search Driver on Search Field Name (uid:f1863d5a-2151-4430-98e0-228cbfbd9853)
@@ -250,6 +283,178 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator refresh drivers data
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "comments" and verifies the created username
+
+
+  Scenario Outline: Sort Driver on Name column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "Name" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "Name"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on ID column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "ID" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "ID"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on Username column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "Username" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "Username"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on Hub column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "Hub" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "Hub"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on Employment Type column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "Employment Type" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "Employment Type"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on Employment Status column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "Employment Status" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "Employment Status"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on License Type column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "License Type" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "License Type"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+
+  Scenario Outline: Sort Driver on License Status column - <dataset_name> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    And Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click "<sort>" in "License Status" column on Middle Mile Driver Page
+    Then Make sure All data in Middle Mile Driver tables is "<result>" shown based on "License Status"
+
+    Examples:
+      | sort       | result      | hiptest-uid                              | dataset_name    |
+      | Ascending  | Ascending   | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Ascending  |
+      | Descending | Descending  | uid:2c68bebf-d4b1-400f-8b9c-a8a40c98fd68 | Sort Descending |
+
+  @DeleteDriver
+  Scenario: Load Driver by Filter - Click back/forward button(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
+#    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And Operator verifies middle mile driver management page is loaded
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given Operator get info of hub details id "{hub-id-2}"
+    And API Driver get all middle mile driver using hub filter with value "{hub-id-2}"
+    And Operator selects the hub on the Middle Mile Drivers Page
+    When Operator selects the "License Status" with the value of "Active" on Middle Mile Driver Page
+    When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    When Operator click on Browser back button
+    Then Operator verifies the Employment Status is "Active" and License Status is "Active"
+    When Operator click on Browser Forward button
+    Then Operator verifies that list of middle mile drivers is shown
+    And Operator verifies that the GUI elements are shown on the Middle Mile Driver Page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

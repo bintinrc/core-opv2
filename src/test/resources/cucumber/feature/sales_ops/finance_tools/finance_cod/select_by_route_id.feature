@@ -7,7 +7,7 @@ Feature: Generate COD Report - Select by Route ID
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute
-  Scenario: Generate COD Report - Select Multiple Route IDs
+  Scenario: Generate COD Report - Select Multiple Route IDs (uid:c93572ea-f29b-4fc3-b116-51bcb58e311a)
        #Test Data - Normal Order -Route 1
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-normal-rts-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -40,11 +40,12 @@ Feature: Generate COD Report - Select by Route ID
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully with cod
+    And Operator waits for 2 seconds
     Then Operator gets price order details from the billing_qa_gl.priced_orders table
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"timezone": "Asia/Singapore","email_addresses": ["{order-billing-email}"], "report_type" : "COD", "route_ids": [ {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} ], "template_id": {finance-cod-template-id}} |
+      | {"email_addresses": ["{order-billing-email}"], "report_type" : "COD", "route_ids": [ {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -54,7 +55,7 @@ Feature: Generate COD Report - Select by Route ID
     Then Operator verifies the finance cod report header using data {default-finance-cod-headers}
     Then Operator verifies the cod entry details in the body
 
-  Scenario: Generate COD Report - Not Select Any Route ID
+  Scenario: Generate COD Report - Not Select Any Route ID (uid:39322c76-ffbb-4b0a-a43c-ee93667e4eb5)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
@@ -62,7 +63,7 @@ Feature: Generate COD Report - Select by Route ID
       | emailAddress | {order-billing-email} |
     Then Operator verifies error message "Please enter at least 1 route ID."
 
-  Scenario: Generate COD Report - Select By Route - Verify Some Filter Can Not Be Selected
+  Scenario: Generate COD Report - Select By Route - Verify Some Filter Can Not Be Selected (uid:e5affb83-dc9a-42a4-87fe-b9111b8e02f0)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below

@@ -4,76 +4,52 @@ import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.ant.AntAbstractFilterBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDecimalFilterNumberBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterFreeTextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.AntIntFilterNumberBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.AbstractFilterBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvDecimalFilterNumberBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIntFilterNumberBox;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.function.Consumer;
-import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
 
 /**
- * @author Daniel Joi Partogi Hutapea
+ * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
-public class CreateRouteGroupsPage extends OperatorV2SimplePage {
+public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage> {
 
-  private static final SimpleDateFormat DATE_FILTER_SDF_2 = new SimpleDateFormat("yyyy-MM-dd");
-  private static final SimpleDateFormat DATE_FILTER_HOUR = new SimpleDateFormat("HH");
-  private static final String XPATH_GENERAL_FILTERS = "//div[@possible-filters='ctrl.possibleGeneralFilters']";
-  private static final String XPATH_TRANSACTION_FILTERS = "//div[@possible-filters='ctrl.possibleTxnFilters']";
-  private static final String XPATH_FILTER_BY_TITLE = "//div[@class='filter-container'][.//div[contains(@class,'main-title')]/p[.='%s']]";
-
-  private final Map<String, Consumer<String>> filterSetters;
   public TxnRsvnTable txnRsvnTable;
 
   //region General Filters
-  @FindBy(xpath = "//nv-filter-date-box[.//p[.='Start Datetime']]")
-  public NvFilterDateBox startDateTimeFilter;
-
-  @FindBy(xpath = "//nv-filter-date-box[.//p[.='End Datetime']]")
-  public NvFilterDateBox endDateTimeFilter;
-
   @FindBy(css = "nv-filter-time-box[main-title='Creation Time']")
   public NvFilterTimeBox creationTimeFilter;
 
   @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
   public NvFilterAutocomplete shipperFilter;
 
-  @FindBy(css = "nv-filter-box[item-types='DP Order']")
-  public NvFilterBox dpOrderFilter;
-
-  @FindBy(css = "nv-filter-box[item-types='Route Grouping']")
-  public NvFilterBox routeGroupingFilter;
-
-  @FindBy(css = "nv-filter-boolean-box[main-title='Routed']")
-  public NvFilterBooleanBox routedFilter;
-
-  @FindBy(css = "nv-filter-box[item-types='Master Shipper']")
-  public NvFilterBox masterShipperFilter;
   //endregion
 
   @FindBy(css = "[id^='route-group']")
@@ -82,98 +58,75 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   @FindBy(name = "Add Transactions/Reservations")
   public NvButtonSave addTransactionReservation;
 
-  @FindBy(name = "container.transactions.add-to-route-group")
-  public NvIconTextButton addToRouteGroup;
+  @FindBy(css = "button[data-pa-label='Add To Route Group']")
+  public Button addToRouteGroup;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public AddToRouteGroupDialog addToRouteGroupDialog;
 
-  @FindBy(name = "commons.load-selection")
-  public NvApiTextButton loadSelection;
+  @FindBy(css = "button[data-pa-label='Load Selection']")
+  public Button loadSelection;
+
+  @FindBy(css = "button[data-pa-label='Edit Filters & Sort']")
+  public Button editFilter;
 
   @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
   public NvAutocomplete addFilter;
 
-  @FindBy(xpath = "//button[.='Include Transactions']")
-  public Button includeTransactions;
-
-  @FindBy(xpath = "//button[.='Hide Transactions']")
-  public Button hideTransactions;
-
-  @FindBy(css = "div[possible-filters='ctrl.possibleTxnFilters']")
-  public TransactionsFiltersForm transactionsFiltersForm;
-
-  @FindBy(xpath = "//button[.='Include Reservations']")
-  public Button includeReservations;
-
-  @FindBy(xpath = "//button[.='Hide Reservations']")
-  public Button hideReservations;
-
-  @FindBy(css = "div[possible-filters='ctrl.possibleRxnFilters']")
-  public ReservationFiltersForm reservationFiltersForm;
-
-  @FindBy(xpath = "//button[.='Include Shipments']")
-  public Button includeShipments;
-
-  @FindBy(xpath = "//button[.='Hide Shipments']")
-  public Button hideShipments;
-
-  @FindBy(css = "div.filter-box-container[possible-filters='ctrl.possibleShipmentFilters']")
-  public ShipmentFiltersForm shipmentFiltersForm;
-
-  @FindBy(css = "div[possible-filters='ctrl.possibleGeneralFilters']")
+  @FindBy(xpath = "//div[contains(@class,'ant-card')][.//span[.='General Filters']]")
   public GeneralFiltersForm generalFiltersForm;
 
-  @FindBy(name = "Download CSV File")
-  public NvApiIconButton downloadCsvFile;
+  @FindBy(xpath = "//div[contains(@class,'ant-card')][.//span[.='Transaction Filters']]")
+  public TransactionsFiltersForm transactionsFiltersForm;
 
-  @FindBy(xpath = "(//md-menu[contains(.,'Preset Actions')])[1]")
-  public MdMenu presetActions;
+  @FindBy(xpath = "//div[contains(@class,'ant-card')][.//span[.='Reservation Filters']]")
+  public ReservationFiltersForm reservationFiltersForm;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-card')][.//span[.='Shipment Filters']]")
+  public ShipmentFiltersForm shipmentFiltersForm;
+
+  @FindBy(css = "button[data-pa-label='Download CSV']")
+  public Button downloadCsvFile;
+
+  @FindBy(xpath = "//button[normalize-space(.)='Preset Actions']")
+  public AntMenu presetActions;
 
   @FindBy(xpath = "(//md-menu[contains(.,'Preset Actions')])[2]")
   public MdMenu shippersPresetActions;
 
-  @FindBy(css = "md-dialog")
-  public AllOrdersPage.SavePresetDialog savePresetDialog;
+  @FindBy(css = ".ant-modal")
+  public SavePresetDialog savePresetDialog;
 
-  @FindBy(css = "md-dialog")
-  public AllOrdersPage.DeletePresetDialog deletePresetDialog;
+  @FindBy(css = ".ant-modal")
+  public DeletePresetDialog deletePresetDialog;
 
-  @FindBy(css = "[id^='commons.preset.load-filter-preset']")
-  public MdSelect filterPreset;
+  @FindBy(xpath = "//div[./label[.='Load Filter Preset']]//div[contains(@class,'ant-select')]")
+  public AntSelect3 filterPreset;
 
   @FindBy(xpath = "(//*[contains(@id,'commons.preset.load-filter-preset')])[2]")
   public MdSelect shippersFilterPreset;
 
-  public Map<String, AbstractFilterBox> filters;
+  public Map<String, AntAbstractFilterBox> filters;
 
   public CreateRouteGroupsPage(WebDriver webDriver) {
     super(webDriver);
-    filterSetters = ImmutableMap.<String, Consumer<String>>builder()
-        .put("RTS", value -> setSwitchFilter(XPATH_TRANSACTION_FILTERS, "RTS", value))
-        .put("Routed", value -> setSwitchFilter(XPATH_GENERAL_FILTERS, "Routed", value))
-        .put("Creation Time", this::setCreationTimeFilter)
-        .put("Route Grouping", routeGroupingFilter::selectFilter)
-        .put("Shipper", shipperFilter::selectFilter)
-        .put("Master Shipper", masterShipperFilter::selectFilter)
-        .put("DP Order", value -> dpOrderFilter.selectFilter(value))
-        .build();
-    txnRsvnTable = new TxnRsvnTable(webDriver);
-    filters = ImmutableMap.<String, AbstractFilterBox>builder()
-        .put("Start Datetime", startDateTimeFilter)
-        .put("End Datetime", endDateTimeFilter)
-        .put("Creation Time", creationTimeFilter)
-        .put("Shipper", shipperFilter)
-        .put("Master Shipper", masterShipperFilter)
-        .put("DP Order", dpOrderFilter)
-        .put("Route Grouping", routeGroupingFilter)
-        .put("Routed", routedFilter)
-        .build();
-  }
 
-  public void waitUntilRouteGroupPageIsLoaded() {
-    waitUntilInvisibilityOfElementLocated(
-        "//div[contains(@class,'message') and text()='Loading...']");
+    txnRsvnTable = new TxnRsvnTable(webDriver);
+    filters = ImmutableMap.<String, AntAbstractFilterBox>builder()
+        .put("Start Datetime", generalFiltersForm.startDateTimeFilter)
+        .put("End Datetime", generalFiltersForm.endDateTimeFilter)
+        .put("Creation Time", generalFiltersForm.creationTimeFilter)
+        .put("Shipper", generalFiltersForm.shipperFilter)
+        .put("Master Shipper", generalFiltersForm.masterShipperFilter)
+        .put("DP Order", generalFiltersForm.dpOrderFilter)
+        .put("Route Grouping", generalFiltersForm.routeGroupingFilter)
+        .put("Routed", generalFiltersForm.routedFilter)
+        .put("Service Level", generalFiltersForm.serviceLevelFilter)
+        .put("Excluded Shipper", generalFiltersForm.excludedShipperFilter)
+        .put("Hub Inbound Datetime", generalFiltersForm.hubInboundDatetimeFilter)
+        .put("Hub Inbound User", generalFiltersForm.hubInboundUserFilter)
+        .put("Orig Trxn End Time", generalFiltersForm.originalTransactionEndTimeFilter)
+        .build();
   }
 
   public void waitUntilPageLoaded() {
@@ -191,43 +144,8 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
     creationTimeFilter.selectToMinutes("00");
   }
 
-  public void setCreationTimeFilter(String dates) {
-    String fromDateStr;
-    String toDateStr;
-    String fromHours = "00";
-    String fromMinutes = "00";
-
-    if (StringUtils.equalsIgnoreCase("today", dates)) {
-      fromDateStr = DATE_FILTER_SDF_2.format(new Date());
-      toDateStr = fromDateStr;
-    } else if (StringUtils.equalsIgnoreCase("current hour", dates)) {
-      Date date = new Date();
-      fromDateStr = DATE_FILTER_SDF_2.format(date);
-      toDateStr = fromDateStr;
-      fromHours = DATE_FILTER_HOUR.format(date);
-    } else {
-      String[] datesStr = dates.split(";");
-      fromDateStr = StringUtils.normalizeSpace(datesStr[0]);
-      toDateStr = StringUtils.normalizeSpace(datesStr[1]);
-    }
-
-        /*
-          Set fromHour & fromMinute of Creation Time.
-         */
-    creationTimeFilter.selectFromDate(fromDateStr);
-    creationTimeFilter.selectFromHours(fromHours);
-    creationTimeFilter.selectFromMinutes(fromMinutes);
-
-        /*
-          Set toHour & toMinute of Creation Time.
-         */
-    creationTimeFilter.selectToDate(toDateStr);
-    creationTimeFilter.selectToHours("23");
-    creationTimeFilter.selectToMinutes("30");
-  }
-
   public void removeFilter(String filterName) {
-    AbstractFilterBox filter = filters.get(filterName);
+    AntAbstractFilterBox filter = filters.get(filterName);
     if (filter != null) {
       filter.removeFilter();
     }
@@ -243,26 +161,18 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   }
 
   public void selectTransactionFiltersMode(String value) {
-    clickf("//div[@model='ctrl.includeTxnModel']//button[@aria-label='%s']", value);
+    transactionsFiltersForm.includeTransactions.setValue(
+        value.toLowerCase(Locale.ROOT).contains("include"));
   }
 
   public void selectReservationFiltersMode(String value) {
-    clickf("//div[@model='ctrl.includeRxnModel']//button[@aria-label='%s']", value);
+    reservationFiltersForm.includeReservations.setValue(
+        value.toLowerCase(Locale.ROOT).contains("include"));
   }
 
-  public void addGeneralFilters(Map<String, String> data) {
-    data.forEach((filter, value) ->
-    {
-      AbstractFilterBox filterBox = filters.get(filter);
-      if (!filterBox.isDisplayedFast()) {
-        addFilter.selectValue(filter);
-      }
-      filterSetters.get(filter).accept(value);
-    });
-  }
-
-  public void setSwitchFilter(String blockXpath, String filter, String value) {
-    clickf(blockXpath + XPATH_FILTER_BY_TITLE + "//button[@aria-label='%s']", filter, value);
+  public void selectShipmentsFiltersMode(String value) {
+    shipmentFiltersForm.includeShipments.setValue(
+        value.toLowerCase(Locale.ROOT).contains("include"));
   }
 
   public void searchByTrackingId(String trackingId) {
@@ -281,7 +191,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
   /**
    * Accessor for Transaction/Reservation table
    */
-  public static class TxnRsvnTable extends MdVirtualRepeatTable<TxnRsvn> {
+  public static class TxnRsvnTable extends AntTableV2<TxnRsvn> {
 
     public static final String MD_VIRTUAL_REPEAT = "trvn in getTableData()";
     public static final String COLUMN_ID = "id";
@@ -291,238 +201,270 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage {
     public TxnRsvnTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("sequence", "sequence")
+          .put("sequence", "__index__")
           .put(COLUMN_ID, "id")
-          .put("orderId", "order-id")
-          .put("waypointId", "waypoint-id")
-          .put(COLUMN_TRACKING_ID, "tracking-id")
+          .put("orderId", "orderId")
+          .put("waypointId", "waypointId")
+          .put(COLUMN_TRACKING_ID, "trackingId")
           .put(COLUMN_TYPE, "type")
-          .put("shipper", "shipper")
+          .put("shipper", "shipperName")
           .put("address", "address")
-          .put("routeId", "route-id")
+          .put("routeId", "routeId")
           .put("status", "status")
-          .put("startDateTime", "start-date-time")
-          .put("endDateTime", "end-date-time")
-          .put("dp", "dp")
-          .put("pickupSize", "pickup-size")
-          .put("comments", "comments")
+          .put("startDateTime", "startTime")
+          .put("endDateTime", "endTime")
+          .put("dp", "dpName")
+          .put("pickupSize", "pickupSize")
+          .put("comments", "comment")
           .build()
       );
       setEntityClass(TxnRsvn.class);
-      setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
     }
   }
 
-  public static class AddToRouteGroupDialog extends MdDialog {
+  public static class AddToRouteGroupDialog extends AntModal {
 
-    @FindBy(css = "button[aria-label='Existing Route Group']")
+    @FindBy(id = "rc-tabs-0-tab-EXISTING_ROUTE_GROUP")
     public Button existingRouteGroup;
 
-    @FindBy(css = "button[aria-label='Create New Route Group']")
+    @FindBy(id = "rc-tabs-0-tab-NEW_ROUTE_GROUP")
     public Button createNewRouteGroup;
 
-    @FindBy(css = "[id^='route-group']")
-    public MdSelect routeGroup;
+    @FindBy(css = "div.ant-select")
+    public AntSelect3 routeGroup;
 
-    @FindBy(css = "input[type='text']")
+    @FindBy(css = "input[data-testid='new-route-group-input']")
     public TextBox newRouteGroup;
 
-    @FindBy(name = "Add Transactions/Reservations")
-    public NvButtonSave addTransactionsReservations;
+    @FindBy(css = "button[data-pa-label='Add Transactions/Reservations']")
+    public Button addTransactionsReservations;
 
     public AddToRouteGroupDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class ReservationFiltersForm extends PageElement {
-
-    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
-    public NvAutocomplete addFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Pick Up Size']")
-    public NvFilterBox pickUpSizeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Reservation Type']")
-    public NvFilterBox reservationTypeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Reservation Status']")
-    public NvFilterBox reservationStatusFilter;
-
-    public ReservationFiltersForm(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-  }
-
-  public static class TransactionsFiltersForm extends PageElement {
-
-    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
-    public NvAutocomplete addFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Granular Order Status']")
-    public NvFilterBox granularOrderStatusFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Order Service Type']")
-    public NvFilterBox orderServiceTypeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Zone']")
-    public NvFilterBox zoneFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Order Type']")
-    public NvFilterBox orderTypeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='PP/DD Leg']")
-    public NvFilterBox ppDdLegFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Transaction Status']")
-    public NvFilterBox transactionStatusFilter;
-
-    @FindBy(css = "nv-filter-boolean-box[main-title='RTS']")
-    public NvFilterBooleanBox rtsFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Parcel Size']")
-    public NvFilterBox parcelSizeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Timeslots']")
-    public NvFilterBox timeslotsFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Delivery Type']")
-    public NvFilterBox deliveryTypeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='DNR Group']")
-    public NvFilterBox dnrGroupFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Bulky Types']")
-    public NvFilterBox bulkyTypesFilter;
-
-    @FindBy(css = "nv-filter-number-box[main-title='Weight']")
-    public NvDecimalFilterNumberBox weightFilter;
-
-    @FindBy(css = "nv-filter-number-box[main-title='Priority Level']")
-    public NvIntFilterNumberBox priorityLevelFilter;
-
-    public TransactionsFiltersForm(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-  }
-
-  public static class ShipmentFiltersForm extends PageElement {
-
-    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
-    public NvAutocomplete addFilter;
-
-    @FindBy(css = "nv-filter-time-box[main-title='Shipment Date']")
-    public NvFilterTimeBox shipmentDateFilter;
-
-    @FindBy(css = "nv-filter-time-box[main-title='ETA (Date Time)']")
-    public NvFilterTimeBox etaDateTimeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='End Hub']")
-    public NvFilterBox endHubFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Last Inbound Hub']")
-    public NvFilterBox lastInboundHubFilter;
-
-    @FindBy(css = "nv-filter-free-text-box[main-title='MAWB']")
-    public NvFilterFreeTextBox mawbFilter;
-
-    @FindBy(css = "nv-filter-time-box[main-title='Shipment Completion Date Time']")
-    public NvFilterTimeBox shipmentCompletionDateTimeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Shipment Status']")
-    public NvFilterBox shipmentStatusFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Shipment Type']")
-    public NvFilterBox shipmentTypeFilter;
-
-    @FindBy(css = "nv-filter-box[item-types='Start Hub']")
-    public NvFilterBox startHubFilter;
-
-    @FindBy(css = "nv-filter-time-box[main-title='Transit Date Time']")
-    public NvFilterTimeBox transitDateTimeFilter;
-
-    public ShipmentFiltersForm(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-  }
-
   public static class GeneralFiltersForm extends PageElement {
 
-    @FindBy(css = "nv-autocomplete[placeholder='filter.select-filter']")
-    public NvAutocomplete addFilter;
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
+    public AntSelect addFilter;
 
-    @FindBy(xpath = "//nv-filter-date-box[.//p[.='Start Datetime']]")
-    public NvFilterDateBox startDateTimeFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Start Datetime')]]")
+    public AntDateRangePicker startDateTimeFilter;
 
-    @FindBy(xpath = "//nv-filter-date-box[.//p[.='End Datetime']]")
-    public NvFilterDateBox endDateTimeFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'End Datetime')]]")
+    public AntDateRangePicker endDateTimeFilter;
 
-    @FindBy(css = "nv-filter-time-box[main-title='Creation Time']")
-    public NvFilterTimeBox creationTimeFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Creation Time')]]")
+    public AntDateRangePicker creationTimeFilter;
 
-    @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
-    public NvFilterAutocomplete shipperFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipper')]]")
+    public AntFilterSelect3 shipperFilter;
 
-    @FindBy(css = "nv-filter-box[item-types='DP Order']")
-    public NvFilterBox dpOrderFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'DP Order')]]")
+    public AntFilterSelect3 dpOrderFilter;
 
-    @FindBy(css = "nv-filter-box[item-types='Route Grouping']")
-    public NvFilterBox routeGroupingFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Route Grouping')]]")
+    public AntFilterSelect3 routeGroupingFilter;
 
-    @FindBy(css = "nv-filter-boolean-box[main-title='Routed']")
-    public NvFilterBooleanBox routedFilter;
+    @FindBy(xpath = "..//div[contains(@class,'FilterContainer')][.//div[contains(.,'Routed')]]")
+    public AntFilterSwitch routedFilter;
 
-    @FindBy(css = "nv-filter-box[item-types='Master Shipper']")
-    public NvFilterBox masterShipperFilter;
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Master Shipper')]]")
+    public AntFilterSelect3 masterShipperFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Service Level')]]")
+    public AntFilterSelect3 serviceLevelFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Excluded Shipper')]]")
+    public AntFilterSelect3 excludedShipperFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub Inbound User')]]")
+    public AntFilterSelect3 hubInboundUserFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub Inbound Datetime')]]")
+    public AntDateRangePicker hubInboundDatetimeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Original Transaction End Time')]]")
+    public AntDateRangePicker originalTransactionEndTimeFilter;
+
+    public void addFilter(String filterName) {
+      addFilter.selectValue(filterName);
+      Actions actions = new Actions(getWebDriver());
+      actions.click(addFilter.searchInput.getWebElement()).sendKeys(Keys.ESCAPE).perform();
+    }
 
     public GeneralFiltersForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class SavePresetDialog extends MdDialog {
+  public static class TransactionsFiltersForm extends PageElement {
 
-    @FindBy(css = "div[ng-repeat='filter in selectedFilters']")
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
+    public AntSelect addFilter;
+
+    @FindBy(css = "button[role='switch']")
+    public AntSwitch includeTransactions;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Granular Order Status')]]")
+    public AntFilterSelect3 granularOrderStatusFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Order Service Type')]]")
+    public AntFilterSelect3 orderServiceTypeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Zone')]]")
+    public AntFilterSelect3 zoneFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Order Type')]]")
+    public AntFilterSelect3 orderTypeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'PP/DD Leg')]]")
+    public AntFilterSelect3 ppDdLegFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Transaction Status')]]")
+    public AntFilterSelect3 transactionStatusFilter;
+
+    @FindBy(xpath = ".//div[./label[.='RTS']]")
+    public AntFilterSwitch rtsFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Parcel Size')]]")
+    public AntFilterSelect3 parcelSizeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Timeslots')]]")
+    public AntFilterSelect3 timeslotsFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Delivery Type')]]")
+    public AntFilterSelect3 deliveryTypeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'DNR Group')]]")
+    public AntFilterSelect3 dnrGroupFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Weight')]]")
+    public AntDecimalFilterNumberBox weightFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Priority Level')]]")
+    public AntIntFilterNumberBox priorityLevelFilter;
+
+    public void addFilter(String filterName) {
+      addFilter.selectValue(filterName);
+      Actions actions = new Actions(getWebDriver());
+      actions.click(addFilter.searchInput.getWebElement()).sendKeys(Keys.ESCAPE).perform();
+    }
+
+    public TransactionsFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ReservationFiltersForm extends PageElement {
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
+    public AntSelect addFilter;
+
+    @FindBy(css = "button[role='switch']")
+    public AntSwitch includeReservations;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Pick Up Size')]]")
+    public AntFilterSelect3 pickUpSizeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Reservation Type')]]")
+    public AntFilterSelect3 reservationTypeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Reservation Status')]]")
+    public AntFilterSelect3 reservationStatusFilter;
+
+    public ReservationFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ShipmentFiltersForm extends PageElement {
+
+    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
+    public AntSelect addFilter;
+
+    @FindBy(css = "button[role='switch']")
+    public AntSwitch includeShipments;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Date')]]")
+    public AntDateRangePicker shipmentDateFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'ETA (Date Time)')]]")
+    public AntDateRangePicker etaDateTimeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'End Hub')]]")
+    public AntFilterSelect3 endHubFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Last Inbound Hub')]]")
+    public AntFilterSelect3 lastInboundHubFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'MAWB')]]")
+    public AntFilterFreeTextBox mawbFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Completion Date Time')]]")
+    public AntDateRangePicker shipmentCompletionDateTimeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Status')]]")
+    public AntFilterSelect3 shipmentStatusFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Type')]]")
+    public AntFilterSelect3 shipmentTypeFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Start Hub')]]")
+    public AntFilterSelect3 startHubFilter;
+
+    @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Transit Date Time')]]")
+    public AntDateRangePicker transitDateTimeFilter;
+
+    public ShipmentFiltersForm(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class DeletePresetDialog extends AntModal {
+
+    @FindBy(css = "div.ant-select")
+    public AntSelect3 preset;
+
+    @FindBy(xpath = ".//div[./div/*[@height]]/div[2]")
+    public PageElement message;
+
+    @FindBy(css = "button[data-pa-label='Cancel']")
+    public Button cancel;
+
+    @FindBy(css = "button[data-pa-label='Delete']")
+    public Button delete;
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class SavePresetDialog extends AntModal {
+
+    @FindBy(xpath = "(.//div[contains(@class,'FilterPresetSaveDialogue')])[2]/div")
     public List<PageElement> selectedFilters;
 
-    @FindBy(css = "[id^='container.route-logs.preset-name']")
+    @FindBy(css = "input[placeholder='Enter preset name']")
     public TextBox presetName;
 
-    @FindBy(css = "div.help-text")
+    @FindBy(css = "span.ant-typography")
     public PageElement helpText;
 
     @FindBy(css = "i.input-confirmed")
     public PageElement confirmedIcon;
 
-    @FindBy(name = "commons.cancel")
-    public NvIconTextButton cancel;
+    @FindBy(css = "button[data-pa-label='Cancel']")
+    public Button cancel;
 
-    @FindBy(name = "commons.save")
-    public NvIconTextButton save;
+    @FindBy(css = "button[data-pa-label='Save']")
+    public Button save;
 
-    @FindBy(name = "commons.update")
-    public NvIconTextButton update;
+    @FindBy(css = "button[data-pa-label='Update']")
+    public Button update;
 
     public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-  }
-
-  public static class DeletePresetDialog extends MdDialog {
-
-    @FindBy(css = "[id^='container.route-logs.select-preset']")
-    public MdSelect preset;
-
-    @FindBy(css = "[translate='commons.preset.confirm-delete-x']")
-    public PageElement message;
-
-    @FindBy(name = "commons.cancel")
-    public NvIconTextButton cancel;
-
-    @FindBy(name = "commons.delete")
-    public NvIconTextButton delete;
-
-    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

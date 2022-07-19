@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,6 +67,15 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   @FindBy(css = "[id^='commons.preset.load-filter-preset']")
   public MdSelect filterPreset;
 
+  @FindBy(id = "rsvn-ids")
+  public TextBox reservationIds;
+
+  @FindBy(css = "small.search-input-count")
+  public PageElement reservationIdsCount;
+
+  @FindBy(name = "container.shipper-pickups.search-by-reservation-ids")
+  public NvApiTextButton searchByReservationIds;
+
   @FindBy(css = "md-dialog")
   public AllOrdersPage.SavePresetDialog savePresetDialog;
 
@@ -85,6 +96,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
   public FinishReservationDialog finishReservationDialog;
+
+  @FindBy(xpath = "//*[text()='Reservation ID']/parent::th//input")
+  public PageElement reservationFilter;
 
   @FindBy(css = "md-dialog")
   public OperationResultsDialog operationResultsDialog;
@@ -124,6 +138,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-switch[aria-label='Bulk Assign Route']")
   public MdSwitch bulkAssignRoute;
+
+  @FindBy(name = "Refresh")
+  public NvApiIconButton refresh;
 
   @FindBy(css = "nv-bulk-route-assignment-side-panel")
   public BulkRouteAssignmentSidePanel bulkRouteAssignmentSidePanel;
@@ -374,6 +391,21 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       finishReservationDialog.selectFailureReasonDetail(detailsCount - 1);
     } while (finishReservationDialog.failureReasonDetail.size() > detailsCount);
 
+    finishReservationDialog.clickOnUpdateButton();
+    finishReservationDialog.proceedWithFailureInConfirmationPopUp();
+  }
+
+  public void finishReservationWithFailureReason(Map<String, String> mapOfData,
+      String reservationID) {
+    String failureReason = mapOfData.get("Failure Reason");
+    String failureReasonDetail1 = mapOfData.get("Failure Reason Detail 1");
+    reservationFilter.clearAndSendKeys(reservationID);
+    reservationsTable.clickActionButton(1, ACTION_BUTTON_FINISH);
+    finishReservationDialog.selectFailureAsReason();
+    finishReservationDialog.selectFailureReason(failureReason);
+    if (StringUtils.isNotBlank(failureReasonDetail1)) {
+      finishReservationDialog.selectFailureReasonDetail(1, failureReasonDetail1);
+    }
     finishReservationDialog.clickOnUpdateButton();
     finishReservationDialog.proceedWithFailureInConfirmationPopUp();
   }
@@ -684,14 +716,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
           f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
       return actualPriorityLevelColor.asHex();
     }
-
-    public String getBackgroundColorOfRow(int rowNumber) {
-      waitUntilVisibilityOfElementLocated(
-          f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
-      Color actualPriorityLevelColor = getBackgroundColor(
-          f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
-      return actualPriorityLevelColor.asHex();
-    }
   }
 
   /**
@@ -735,37 +759,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       fromDateField.setDate(fromDate);
     }
 
-    public void filterByHub(String hub) {
-      hubsFilter.clearAll();
-      hubsFilter.selectFilter(hub);
-    }
-
-    public void filterByZone(String zone) {
-      zonesFilter.clearAll();
-      zonesFilter.selectFilter(zone);
-    }
-
-    public void filterByShipper(String shipperName) {
-      shipperFilter.clearAll();
-      shipperFilter.selectFilter(shipperName);
-    }
-
-    public void filterByMasterShipper(String masterShipperName) {
-      masterShipperFilter.clearAll();
-      masterShipperFilter.selectFilter(masterShipperName);
-    }
-
-    public void filterByType(String reservationType) {
-      reservationTypesFilter.clearAll();
-      reservationTypesFilter.selectFilter(reservationType);
-    }
-
-    public void filterByStatus(String waypointStatus) {
-      if (waypointStatus != null) {
-        statusFilter.clearAll();
-        statusFilter.selectFilter(waypointStatus);
-      }
-    }
   }
 
   /**
@@ -883,7 +876,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     @FindBy(css = "div[md-virtual-repeat='item in cards']")
     public List<ReservationCard> reservationCards;
 
-    @FindBy(css = "nv-autocomplete[selected-item='selectedRoute']")
+    @FindBy(css = "nv-autocomplete[selected-item='selectedRoute.route']")
     public NvAutocomplete route;
 
     @FindBy(name = "Bulk Assign")

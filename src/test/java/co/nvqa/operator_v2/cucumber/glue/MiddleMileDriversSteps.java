@@ -71,6 +71,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String MALAYSIA = "malaysia";
   private static final String PHILIPPINES = "philippines";
 
+  private static Boolean IS_FIRST_TIME_SETUP_DRIVER = true;
+
   private MiddleMileDriversPage middleMileDriversPage;
 
   public MiddleMileDriversSteps() {
@@ -122,6 +124,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, getCurrentMethodName(), 500, 5);
+
   }
 
   @When("Operator create new Middle Mile Driver with details:")
@@ -207,7 +210,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
           middleMileDriversPage.fillEmploymentEndDate(
               EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
-
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
             middleMileDriver.setUsername(middleMileDriver.getFirstName());
@@ -254,6 +256,12 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName,
       String value) {
     middleMileDriversPage.selectFilter(filterName, value);
+    if (IS_FIRST_TIME_SETUP_DRIVER){
+      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
+      IS_FIRST_TIME_SETUP_DRIVER = false;
+    }
+    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
   }
 
   @When("Operator searches by {string} with value {string}")
@@ -366,5 +374,180 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   @When("Operator refresh Middle Mile Driver Page")
   public void operatorRefreshMiddleMileDriverPage() {
     middleMileDriversPage.refreshAndWaitUntilLoadingDone();
+  }
+
+  @When("Operator click {string} in {string} column on Middle Mile Driver Page")
+  public void operatorClicksortIconInNameColumn(String sortOrder, String column){
+    middleMileDriversPage.sortColumn(column, sortOrder);
+  }
+
+  @Then("Make sure All data in Middle Mile Driver tables is {string} shown based on {string}")
+  public void verifies_that_the_column_is_in_ascending_order(String sortOrder, String column){
+    middleMileDriversPage.getRecordsAndValidateSorting(column,sortOrder);
+  }
+
+  @When("Operator click on Browser back button")
+  public void OperatorClickOnBrowserBackButton(){
+    middleMileDriversPage.ClickToBrowserBackButton();
+  }
+
+  @Then("Operator verifies the Employment Status is {string} and License Status is {string}")
+  public void OperatorVerifiesFilterStatus(String Employment_value, String license_value){
+    middleMileDriversPage.verifiesTextInEmploymentStatusFilter(Employment_value);
+    middleMileDriversPage.verifiesTextInLicenseStatusFilter(license_value);
+  }
+
+  @When("Operator click on Browser Forward button")
+  public void OperatorClickOnBrowserForwardButton(){
+    middleMileDriversPage.ClickToBrowserForwardButton();
+  }
+
+  @Then("Make sure URL show is {string}")
+  public void VerifyURLinMiddleDriverPage(String URL){
+    if (URL.contains("<id>")){
+      Hub hub = get(KEY_HUB_INFO);
+      String hubID = hub.getId().toString();
+      URL = URL.replaceAll("<id>",hubID);
+    }
+    middleMileDriversPage.verifyURLofPage(URL);
+  }
+
+  @Then("Operator verifies that the GUI elements are shown on the Middle Mile Driver Page")
+  public void operatorVerifyTheElementsAreShown() {
+    List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+    middleMileDriversPage.convertDateToUnixTimestamp(middleMileDriver.get(0));
+    middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+  }
+
+//  @Then("API Fillter the list of driver")
+//  public void fillterTheListOfDriver(){
+//    GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+//    List<Driver> middleMileDrivers = drivers.getData().getDrivers();
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS = middleMileDrivers;
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,"Employment Status","Active");
+//    int count = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,"License Status","Active");
+//    count = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+//  }
+
+  @When("Operator verifies that list of middle mile drivers is shown")
+  public void filterDriverby(){
+    int totalDriver = middleMileDriversPage.LIST_OF_FILTER_DRIVERS.size();
+    middleMileDriversPage.verifiesTotalDriverIsTheSame(totalDriver);
+  }
+
+  @When("Operator create new Existing username Middle Mile Driver and verify error message with details:")
+  public void operatorCreateNewExitstingUsernameMiddleMileDriverWithDetails(
+          List<Map<String, String>> middleMileDrivers) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        String country = get(COUNTRY);
+        for (Map<String, String> data : middleMileDrivers) {
+          Driver middleMileDriver = new Driver();
+          middleMileDriversPage.clickCreateDriversButton();
+          middleMileDriver.setFirstName(data.get("name"));
+
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
+            String name = AUTO + generateRequestedTrackingNumber();
+            System.out.println("Name and Username : " + name);
+            middleMileDriver.setFirstName(name);
+          }
+          middleMileDriversPage.fillName(middleMileDriver.getFirstName());
+
+          middleMileDriver.setHub(resolveValue(data.get("hub")));
+          if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
+            middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+          }
+
+          middleMileDriver.setMobilePhone(data.get("contactNumber"));
+          middleMileDriversPage.fillcontactNumber(middleMileDriver.getMobilePhone());
+
+          middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber())) {
+            String licenseNumber = RandomUtil.randomString(5);
+            System.out.println("License Number : " + licenseNumber);
+            middleMileDriver.setLicenseNumber(licenseNumber);
+          }
+          middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
+
+          middleMileDriver
+                  .setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriversPage.fillLicenseExpiryDate(
+                  EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+
+          if (country == null) {
+            middleMileDriver.setLicenseType(CLASS_5);
+          } else {
+            switch (country.toLowerCase()) {
+              case SINGAPORE:
+                middleMileDriver.setLicenseType(CLASS_5);
+                break;
+
+              case INDONESIA:
+                middleMileDriver.setLicenseType(SIM_B_I_UMUM);
+                break;
+
+              case THAILAND:
+                middleMileDriver.setLicenseType(TYPE_C);
+                break;
+
+              case VIETNAM:
+              case MALAYSIA:
+                middleMileDriver.setLicenseType(CLASS_E);
+                break;
+              case PHILIPPINES:
+                middleMileDriver.setLicenseType(RESTRICTION_5);
+                break;
+
+              default:
+                LOGGER.warn("Country is not on the list");
+            }
+          }
+          middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
+
+          middleMileDriver.setEmploymentType(data.get("employmentType"));
+          if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
+          } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
+          } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(VENDOR_SELECTION);
+          }
+          middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
+
+          middleMileDriversPage.fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
+          middleMileDriversPage.fillEmploymentEndDate(
+                  EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+          middleMileDriver.setUsername(data.get("username"));
+          if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
+            middleMileDriver.setUsername(middleMileDriver.getFirstName());
+          }
+          middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
+          middleMileDriversPage.clickCheckAvailabilityButton();
+          middleMileDriversPage.verifyErrorMessage(data.get("username")+" is not available!");
+
+          middleMileDriversPage.fillPassword(PASSWORD);
+
+          middleMileDriver.setComments(COMMENTS);
+          middleMileDriversPage.fillComments(middleMileDriver.getComments());
+
+          middleMileDriversPage.clickSaveButton();
+          middleMileDriversPage.verifyErrorMessage("lib.exceptions.NVConflictException: Username already registered");
+          put(KEY_CREATED_DRIVER, middleMileDriver);
+          putInList(KEY_LIST_OF_CREATED_DRIVERS, middleMileDriver);
+          put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Element in middle mile driver page not found, retrying...");
+        middleMileDriversPage.refreshPage();
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable();
+        middleMileDriversPage.clickCreateDriversButton();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 1);
+
   }
 }

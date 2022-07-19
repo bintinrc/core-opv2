@@ -40,9 +40,9 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   private static final String STATION_COD_REPORT_BUTTON_XPATH = "//button[@disabled]//*[text()='%s']";
   private static final String STATION_COD_REPORT_LABELS_XPATH = "//div[@class='nv-filter-container']//div[@class='ant-col']//div[contains(text(),'%s')]";
   private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//ancestor::div[@class='ant-row-flex']//div[@role='combobox']";
-  private static final String STATION_COD_COLUMN_NAME_XPATH = "//div[contains(@class,'th')]/*[1]";
+  private static final String STATION_COD_COLUMN_NAME_XPATH = "//div[@role='gridcell']//div[contains(@class,'th')]";
   private static final String STATION_COD_COLUMN_VALUE_XPATH = "//div[@class='cell-wrapper']";
-  private static final String STATION_COD_TABLE_FILTER_BY_COLUMN_NAME_XPATH = "//div[contains(@class,'th')][.//*[.='%s']]//input";
+  private static final String STATION_COD_TABLE_FILTER_BY_COLUMN_NAME_XPATH = "//div[text()='%s']/parent::div[contains(@class,'th')]//input";
   private static final String STATION_COD_SUMMARY_ROW_BY_ROUTE_ID_XPATH = "//div[@role='row'][.//a[.='%s']]";
 
   @FindAll(@FindBy(xpath = "//iframe"))
@@ -69,7 +69,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@*='summary-button']")
   public PageElement summaryTab;
 
-  @FindAll(@FindBy(xpath = "//div[contains(@class,'th')]/*[1]"))
+  @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'th')]"))
   private List<PageElement> columnNames;
 
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))

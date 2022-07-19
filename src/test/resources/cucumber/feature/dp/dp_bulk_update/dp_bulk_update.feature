@@ -401,9 +401,9 @@ Feature: DP Administration - DP Bulk Update
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Distribution Points -> DP Bulk Update
     Given DB Operator changes all columns available for dp bulk update to 0 for dps:
-      | dpId                                 |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
     Then Operator verifies that the DP Bulk Update is loaded completely
     When Operator clicks on Select DP ID Button
     And Operator inputs DP with "same_partner_3_dps" condition into the textbox
@@ -417,13 +417,75 @@ Feature: DP Administration - DP Bulk Update
     Then Operator download CSV for bulk update
     Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
     When DB Operator verifies all dp details from bulk update are "Enabled"
-      | dpId                                 |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
     And DB Operator verifies pick dp capacity from bulk update for "XS"
       | dpId                                 |
       | {imda-pick-bulk-update-opv2-dp-1-id} |
-      | {imda-pick-bulk-update-opv2-dp-1-id} |
+
+  Scenario: Select DP IDs - Set Public and download CSV (uid:417eb9a4-e7ee-4ea4-b40e-07d21d3e6e64)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Given DB Operator changes "is_public" to 0 for dps:
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "same_partner_3_dps" condition into the textbox
+    When Operator clicks on Set Public on Apply Action Drop Down
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
+    When DB Operator verifies all dps are set public to 1
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+
+  Scenario: Select DP IDs - Set Not Public and download CSV (uid:fdb16bb5-da1b-4d44-be5e-ffa30339aace)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Given DB Operator changes "is_public" to 1 for dps:
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "same_partner_3_dps" condition into the textbox
+    When Operator clicks on Set Not Public on Apply Action Drop Down
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
+    When DB Operator verifies all dps are set public to 0
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+
+  Scenario: Select DP IDs - Only Some Dps are Selected - Set Public and download CSV (uid:6ebf5636-1414-470b-8a76-346da6516ac5)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Given DB Operator changes "is_public" to 0 for dps:
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "same_partner_3_dps" condition into the textbox
+    And Operator clicks on first checkbox
+    When Operator clicks on Set Public on Apply Action Drop Down
+    Then Operator download CSV for bulk update
+    Then Operator verifies data is correct in downloaded csv file = "SUCCESS"
+    When DB Operator verifies all dps are set public to 0
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-1-id} |
+    When DB Operator verifies all dps are set public to 1
+      | dpId                                    |
+      | {same-partner-bulk-update-opv2-dp-2-id} |
+      | {same-partner-bulk-update-opv2-dp-3-id} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

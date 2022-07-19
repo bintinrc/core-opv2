@@ -35,6 +35,9 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//div[contains(@class,'ant-form-item-control-input-content')])[1]")
   public AntSelect selectHub;
 
+  @FindBy(xpath = "//div[contains(@class,'ant-select-selector')]")
+  public AntSelect selectRegion;
+
   @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
   public AntButton load;
 
@@ -95,6 +98,12 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(className = "ant-modal-content")
   public EditMiddleTierNameModal editMiddleTierNameModal;
 
+  @FindBy(xpath = "//span[@class='ant-tree-title']//div[@class='ant-col total-holder']")
+  public PageElement numberOfOutput;
+
+  @FindBy(xpath = "//span[contains(text(),'No outputs.')]")
+  public PageElement noOutput;
+
   public SortTasksPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -108,7 +117,14 @@ public class SortTasksPage extends OperatorV2SimplePage {
   }
 
   public void verifyOutput(String sortName) {
-    assertTrue(sortName + " node displayed", isElementExistFast(f(OUTPUT_XPATH, sortName)));
+    assertTrue(sortName + " node displayed", isElementExistWait1Second(f(OUTPUT_XPATH, sortName)));
+  }
+
+  public void verifyNumberOutput(String type) {
+    if (type == "RTS") {
+      String outputNumber = numberOfOutput.getText();
+      assertEquals("1 (1 RTS zone)", outputNumber);
+    }
   }
 
   public void verifyOutputDeleted(String sortName) {

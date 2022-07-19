@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
+import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
@@ -118,10 +119,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .as("Actual waypoint from DB should not be null.")
           .isNotNull();
       Assertions.assertThat(actualWaypoint.getLatitude())
-          .as(String.format("Latitude is CORRECT: %f", jaroScore.getLatitude()))
+          .as("Latitude is CORRECT: %f", jaroScore.getLatitude())
           .isEqualTo(jaroScore.getLatitude());
       Assertions.assertThat(actualWaypoint.getLongitude())
-          .as(String.format("Longitude is CORRECT: %f", jaroScore.getLongitude()))
+          .as("Longitude is CORRECT: %f", jaroScore.getLongitude())
           .isEqualTo(jaroScore.getLongitude());
     });
   }
@@ -858,6 +859,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     put(KEY_DB_FOUND_DRIVERS, drivers);
   }
 
+  @Given("DB Operator find drivers with ended employment")
+  public void findDriversWithEndedEmployment() {
+    List<Driver> drivers = getDriverJdbc().findDriversWithEndedEmployment();
+    put(KEY_DB_FOUND_DRIVERS, drivers);
+  }
+
   @Given("DB Operator find drivers by {string} driver type name")
   public void findDriversByDriverTypeName(String driverTypeName) {
     List<Driver> drivers = getDriverJdbc()
@@ -1052,8 +1059,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @SuppressWarnings("unchecked")
   @Given("DB Operator verifies orders record using data below:")
-  public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
+  public void dbOperatorVerifiesOrdersRecord(Map<String, String> data) {
+    data = resolveKeyValues(data);
     Order order = get(KEY_CREATED_ORDER);
     final String finalTrackingId = order.getTrackingId();
     List<Order> orderRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
@@ -1070,73 +1077,83 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     Order orderRecord = orderRecordsFiltered.get(0);
 
-    if (Objects.nonNull(mapOfData.get("status"))) {
-      String status = mapOfData.get("status");
+    if (Objects.nonNull(data.get("status"))) {
+      String status = data.get("status");
       assertEquals(f("Expected %s in %s table", "status", "orders"), status,
           orderRecord.getStatus());
     }
-    if (Objects.nonNull(mapOfData.get("granularStatus"))) {
-      String granularStatus = mapOfData.get("granularStatus");
+    if (Objects.nonNull(data.get("granularStatus"))) {
+      String granularStatus = data.get("granularStatus");
       assertEquals(f("Expected %s in %s table", "granularStatus", "orders"), granularStatus,
           orderRecord.getGranularStatus());
     }
-    if (Objects.nonNull(mapOfData.get("toAddress1"))) {
+    if (Objects.nonNull(data.get("toAddress1"))) {
       String toAddress1 =
-          Objects.equals(mapOfData.get("toAddress1"), "GET_FROM_CREATED_ORDER") ? order
+          Objects.equals(data.get("toAddress1"), "GET_FROM_CREATED_ORDER") ? order
               .getToAddress1() :
-              mapOfData.get("toAddress1");
+              data.get("toAddress1");
       assertEquals(f("Expected %s in %s table", "to_address1", "orders"), toAddress1,
           orderRecord.getToAddress1());
     }
-    if (Objects.nonNull(mapOfData.get("toAddress2"))) {
+    if (Objects.nonNull(data.get("toAddress2"))) {
       String toAddress2 =
-          Objects.equals(mapOfData.get("toAddress2"), "GET_FROM_CREATED_ORDER") ? order
+          Objects.equals(data.get("toAddress2"), "GET_FROM_CREATED_ORDER") ? order
               .getToAddress2() :
-              mapOfData.get("toAddress2");
+              data.get("toAddress2");
       assertEquals(f("Expected %s in %s table", "to_address2", "orders"), toAddress2,
           orderRecord.getToAddress2());
     }
-    if (Objects.nonNull(mapOfData.get("toPostcode"))) {
+    if (Objects.nonNull(data.get("toPostcode"))) {
       String toPostcode =
-          Objects.equals(mapOfData.get("toPostcode"), "GET_FROM_CREATED_ORDER") ? order
+          Objects.equals(data.get("toPostcode"), "GET_FROM_CREATED_ORDER") ? order
               .getToPostcode() :
-              mapOfData.get("toPostcode");
+              data.get("toPostcode");
       assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), toPostcode,
           orderRecord.getToPostcode());
     }
-    if (Objects.nonNull(mapOfData.get("toCity"))) {
+    if (Objects.nonNull(data.get("toCity"))) {
       String toCity =
-          Objects.equals(mapOfData.get("toCity"), "GET_FROM_CREATED_ORDER") ? order.getToCity() :
-              mapOfData.get("toCity");
+          Objects.equals(data.get("toCity"), "GET_FROM_CREATED_ORDER") ? order.getToCity() :
+              data.get("toCity");
       assertEquals(f("Expected %s in %s table", "to_city", "orders"), toCity,
           orderRecord.getToCity());
     }
-    if (Objects.nonNull(mapOfData.get("toCountry"))) {
+    if (Objects.nonNull(data.get("toCountry"))) {
       String toCountry =
-          Objects.equals(mapOfData.get("toCountry"), "GET_FROM_CREATED_ORDER") ? order
+          Objects.equals(data.get("toCountry"), "GET_FROM_CREATED_ORDER") ? order
               .getToCountry() :
-              mapOfData.get("toCountry");
+              data.get("toCountry");
       assertEquals(f("Expected %s in %s table", "to_country", "orders"), toCountry,
           orderRecord.getToCountry());
     }
-    if (Objects.nonNull(mapOfData.get("toState"))) {
+    if (Objects.nonNull(data.get("toState"))) {
       String toState =
-          Objects.equals(mapOfData.get("toState"), "GET_FROM_CREATED_ORDER") ? order.getToState() :
-              mapOfData.get("toState");
+          Objects.equals(data.get("toState"), "GET_FROM_CREATED_ORDER") ? order.getToState() :
+              data.get("toState");
       assertEquals(f("Expected %s in %s table", "to_state", "orders"), toState,
           orderRecord.getToState());
     }
-    if (Objects.nonNull(mapOfData.get("toDistrict"))) {
+    if (Objects.nonNull(data.get("toDistrict"))) {
       String toDistrict =
-          Objects.equals(mapOfData.get("toDistrict"), "GET_FROM_CREATED_ORDER") ? order
+          Objects.equals(data.get("toDistrict"), "GET_FROM_CREATED_ORDER") ? order
               .getToDistrict() :
-              mapOfData.get("toDistrict");
+              data.get("toDistrict");
       assertEquals(f("Expected %s in %s table", "to_district", "orders"), toDistrict,
           orderRecord.getToDistrict());
     }
-    if (StringUtils.isNotBlank(mapOfData.get("rts"))) {
-      boolean expected = StringUtils.equalsAnyIgnoreCase(mapOfData.get("rts"), "1", "true");
+    if (StringUtils.isNotBlank(data.get("rts"))) {
+      boolean expected = StringUtils.equalsAnyIgnoreCase(data.get("rts"), "1", "true");
       assertEquals("RTS", expected, orderRecord.getRts());
+    }
+    if (StringUtils.isNotBlank(data.get("dimensions"))) {
+      Dimension expected = new Dimension(data.get("dimensions"));
+      Dimension actual = orderRecord.getDimensions();
+      expected.compareWithActual(actual);
+    }
+    if (StringUtils.isNotBlank(data.get("parcelSizeId"))) {
+      Assertions.assertThat(orderRecord.getParcelSizeId())
+          .as("parcel_size_id")
+          .isEqualTo(Long.valueOf(data.get("parcelSizeId")));
     }
   }
 
@@ -1342,7 +1359,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       case "contactNumber":
         Long driverId = driverData.getId();
         String actualContactNumber = getDriverJdbc().getLatestDriverContactNumber(driverId);
-        assertThat("Updated name is the same", actualContactNumber, equalTo(resolvedUpdatedValue));
+        Assertions.assertThat(actualContactNumber)
+            .as("Updated contact number is the same")
+            .contains(resolvedUpdatedValue);
         break;
       case "hub":
         String actualHubId = String.valueOf(driverData.getHubId());
@@ -1911,7 +1930,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyTheNewCodSoftDeleted() {
     CodInbound actual = getCoreJdbc().getCodInbound(get(KEY_CREATED_ROUTE_ID));
     assertThat("COD Inbound deleted_at", actual.getDeletedAt(),
-        Matchers.startsWith(DateUtil.getTodayDate_YYYY_MM_DD()));
+        Matchers.startsWith(DateUtil.getUTCTodayDate()));
   }
 
   @Then("DB Operator verify loyalty point for completed order is {string}")
@@ -2069,4 +2088,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
     put(KEY_WAYPOINT_DETAILS, waypoint);
   }
+
+
+  @Then("DB Operator verifies that {int} row(s) is/are added for the change type: {string} in account_audit_logs table in driver db")
+  public void dbOperatorVerifiesTheRowIsAddedForTheChangeTypeInAccountAuditLogsTableInDriverDb(
+      int records, String changeType) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    int totalRecord = getDriverJdbc().getAccountAuditTotal(driverInfo.getId(), changeType);
+    Assertions.assertThat(totalRecord)
+        .as("Total number of records with change type = %s", changeType)
+        .isEqualTo(records);
+  }
+
 }

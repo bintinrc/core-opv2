@@ -10,6 +10,7 @@ import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Pricing.BillingWeightEnum;
 import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -91,6 +92,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   @FindBy(css = "form[name='ctrl.moreForm'] [name='container.shippers.add-new-service']")
   public NvIconTextButton moreSettingsAddNewService;
 
+  @FindBy(name = "container.shippers.milkrun")
+  public NvIconTextButton milkrun;
+
   //endregion
 
   //region MARKETPLACE
@@ -134,6 +138,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ErrorSaveDialog errorSaveDialog;
   @FindBy(css = "md-dialog")
   public WarningDialog warningDialog;
+  @FindBy(css = "md-dialog")
+  public UnsetAsMilkrunDialog unsetAsMilkrunDialog;
   @FindBy(xpath = "//md-dialog/md-toolbar")
   public PageElement dialogHeader;
 
@@ -151,18 +157,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
   public static final String XPATH_VALIDATION_ERROR = "//md-dialog[contains(@class, 'nv-container-shipper-errors-dialog')] ";
   public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
-  public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//tr[1]//td[@class='id']";
-  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//tr[1]//td[@class='effective-date']";
-  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//tr[1]//td[@class='discount']";
-  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
-  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//tr[1]//td[@class='comments']";
-  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
-  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//tr[1]//td[@class='cod-min']";
-  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
-  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
-  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
-  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
-  public static final String XPATH_PRICING_PROFILE_RTS_CHARGE = "//table[@class='table-body']//tr[1]//td[@class='rts-charge']";
+  public static final String XPATH_PRICING_PROFILE_ID = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='id']";
+  public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='effective-date']";
+  public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='discount']";
+  public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='pricing-script-name']";
+  public static final String XPATH_PRICING_PROFILE_COMMENTS = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='comments']";
+  public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='contract-end-date']";
+  public static final String XPATH_PRICING_PROFILE_COD_MIN = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='cod-min']";
+  public static final String XPATH_PRICING_PROFILE_COD_PERCENTAGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='cod-percent']";
+  public static final String XPATH_PRICING_PROFILE_INS_THRESHOLD = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-threshold']";
+  public static final String XPATH_PRICING_PROFILE_INS_MIN = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-min']";
+  public static final String XPATH_PRICING_PROFILE_INS_PERCENTAGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='insurance-percent']";
+  public static final String XPATH_PRICING_PROFILE_RTS_CHARGE = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='rts-charge']";
+  public static final String XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC = "//div[@id='pricing-profile-table']//table[@class='table-body']//tr[1]//td[@class='billing-weight-logic']";
   public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
   public static final String XPATH_ADD_NEW_PRICING_PROFILE = "//button[@aria-label='Add New Profile']";
   public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//md-input-container[contains(@class,'md-input-invalid')]//div[@ng-repeat='e in errorMsgs' or @ng-message='required']";
@@ -177,7 +184,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded() {
-    shipperInformation.waitUntilClickable(60);
+    shipperInformation.waitUntilClickable(120);
   }
 
   public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
@@ -316,7 +323,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     if (isCreateForm) {
       basicSettingsForm.shipperEmail.setValue(shipper.getEmail());
-      basicSettingsForm.shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
+
     }
 
     basicSettingsForm.channel.selectValue("B2C Marketplace");
@@ -356,6 +363,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     basicSettingsForm.corporate.selectValue(orderCreate.getIsCorporate());
     basicSettingsForm.corporateReturn.selectValue(orderCreate.getIsCorporateReturn());
     basicSettingsForm.corporateManualAWB.selectValue(orderCreate.getIsCorporateManualAWB());
+    basicSettingsForm.corporateDocument.selectValue(orderCreate.getIsCorporateDocument());
 
     if (isCreateForm) {
       selectMultipleValuesFromMdSelectById("container.shippers.service-level",
@@ -713,10 +721,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
-    settings.setBulky(basicSettingsForm.bulky.isOn());
     settings.setCorporate(basicSettingsForm.corporate.isOn());
     settings.setCorporateReturn(basicSettingsForm.corporateReturn.isOn());
     settings.setCorporateManualAWB(basicSettingsForm.corporateManualAWB.isOn());
+    settings.setCorporateDocument(basicSettingsForm.corporateDocument.isOn());
     settings.setAvailableServiceLevels(basicSettingsForm.serviceLevel.getValue());
     return settings;
   }
@@ -760,13 +768,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
           .forEach(address ->
           {
             searchTableCustom1("contact", address.getContact());
-            clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
-            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
-            fillMilkrunReservationSettings(address);
-            clickNvApiTextButtonByName("commons.save-changes");
-            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
-
-            verifyPickupAddress(address);
+            milkrun.click();
+            unsetAsMilkrunDialog.waitUntilVisible();
+            unsetAsMilkrunDialog.delete.click();
+            unsetAsMilkrunDialog.waitUntilInvisible();
+            pause1s();
           });
     }
     clickNvIconTextButtonByName("Save Changes");
@@ -928,6 +934,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
     clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
     waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+    pause1s();
     click("//span[.='Milkrun Reservations']");
     waitUntilVisibilityOfElementLocated(
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
@@ -1308,7 +1315,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void goToTabCorporateSubShipper() {
     tabs.selectTab("Corporate sub shippers");
-    b2bManagementPage.onDisplay();
+    waitUntilPageLoaded();
+    b2bManagementPage.iframe.isDisplayedFast();
     b2bManagementPage.backToSubShipperTable();
   }
 
@@ -1443,11 +1451,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         newPricingProfileDialog.rtsValue.sendKeys(shipperRtsValue);
       }
     }
-    String billingWeight = pricing.getBillingWeight();
     String country = COUNTRY_CODE;
-    if (Objects.isNull(billingWeight) && (country.equalsIgnoreCase("TH")
-        || country.equalsIgnoreCase("PH") || country.equalsIgnoreCase("ID"))) {
-      newPricingProfileDialog.billingWeight.selectValue("Standard");
+    if (!(country.equalsIgnoreCase("SG") || country.equalsIgnoreCase("VN"))) {
+      String billingWeight = pricing.getBillingWeight().getCode();
+      if (Objects.isNull(billingWeight)) {
+        newPricingProfileDialog.billingWeight.selectValue("Standard");
+      } else if (!billingWeight.equalsIgnoreCase("empty")) {
+        newPricingProfileDialog.billingWeight.selectValue(billingWeight);
+      }
     }
   }
 
@@ -1463,6 +1474,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
     addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
+    addedPricingProfileOPV2.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(getText(XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC)));
     String value = getText(XPATH_PRICING_PROFILE_RTS_CHARGE);
     if (value.startsWith("-")) {
       addedPricingProfileOPV2.setRtsChargeType("Discount");
@@ -1569,7 +1581,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void addPricingProfileAndVerifySaveButtonIsDisabled(Shipper shipper) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION, 120);
     Pricing pricing = shipper.getPricing();
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
@@ -1643,7 +1654,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-container")
     public CheckBox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label span")
+    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label")
     public PageElement rtsCountryDefaultText;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
@@ -1722,7 +1733,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    @FindBy(xpath = "//md-select[contains(@aria-label,'Select billing weight logic')]")
     public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")
@@ -1960,5 +1971,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public String searchMarketplaceSubshipperAndGetLegacyId(String searchKey, String searchValue) {
     sendKeysAndEnter(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB, searchKey), searchValue);
     return getText(f(XPATH_SEARCH_MARKETPLACE_SUB_SHIPPER_TAB_LEGACY_ID, searchValue));
+  }
+
+  public static class UnsetAsMilkrunDialog extends MdDialog {
+
+    @FindBy(css = "[aria-label='Delete']")
+    public Button delete;
+
+    public UnsetAsMilkrunDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

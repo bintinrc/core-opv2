@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,18 +114,18 @@ public class PathManagementSteps extends AbstractSteps {
     pathManagementPage.verifyDataAppearInPathTable(pathType);
   }
 
-  @And("Operator verify path data from {string} to {string} appear in path table")
-  public void operatorVerifyPathDataAppearInPathTable(String originHub, String destinationHub) {
+  @And("Operator verify path data from {string} {string} {string} appear in path table")
+  public void operatorVerifyPathDataAppearInPathTable(String originHub, String arrow, String destinationHub) {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
     List<String> passedHub = Arrays.asList(resolvedOriginHub, resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub, arrow);
   }
 
-  @And("Operator verify path data from {string} to {string} appear in path table with following transit hubs:")
-  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,
-      String destinationHubName, List<String> transitHubs) {
+  @And("Operator verify path data from {string} {string} {string} appear in path table with following transit hubs:")
+  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,String arrow,
+                                                                              String destinationHubName, List<String> transitHubs) {
     String resolvedOriginHub = resolveValue(originHubName);
     String resolvedDestinationHub = resolveValue(destinationHubName);
     List<String> resolvedTransitHubs = new ArrayList<>();
@@ -136,7 +137,7 @@ public class PathManagementSteps extends AbstractSteps {
     passedHubs.addAll(resolvedTransitHubs);
     passedHubs.add(resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs, arrow);
   }
 
   @When("Operator click {string} hyperlink button")
@@ -239,6 +240,11 @@ public class PathManagementSteps extends AbstractSteps {
     pause2s();
   }
 
+  @And("Capture the error notification on Path Management Page")
+  public void captureErrorNotification() {
+    pathManagementPage.captureErrorNotification();
+  }
+
   @Then("Operator verify a notification with message {string} is shown on path management page")
   public void operatorVerifyANotificationWithMessageIsShownOnPathManagementPage(
       String notificationMessage) {
@@ -269,7 +275,7 @@ public class PathManagementSteps extends AbstractSteps {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     String originHubName = resolvedMapOfData.get("originHubName");
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
-    String path = originHubName + " → " + destinationHubName;
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " " +destinationHubName;
     pathManagementPage.verifyCreatedPathDetail(path, null);
   }
 
@@ -281,9 +287,9 @@ public class PathManagementSteps extends AbstractSteps {
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
     String transitHubName = resolvedMapOfData.get("transitHubName");
 
-    String path = originHubName + " → ";
+    String path = originHubName + " "+resolvedMapOfData.get("path")+" ";
     if (transitHubName != null) {
-      path += transitHubName + " → ";
+      path += transitHubName + " "+resolvedMapOfData.get("path")+" ";
     }
     path += destinationHubName;
 
@@ -302,9 +308,9 @@ public class PathManagementSteps extends AbstractSteps {
     String departureTime = resolvedMapOfData.get("departureTime");
     String departureTimeSecond = resolvedMapOfData.get("departureTimeSecond");
 
-    String path = originHubName + " → ";
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " ";
     if (transitHubName != null) {
-      path += transitHubName + " → ";
+      path += transitHubName + " " + resolvedMapOfData.get("path") + " ";
     }
     path += destinationHubName;
 
@@ -327,7 +333,7 @@ public class PathManagementSteps extends AbstractSteps {
 
     List<String> passedHub = Arrays.asList(originHubName, transitHubName, destinationHubName);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub);
+        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub,resolvedMapOfData.get("path"));
   }
 
   @Then("Operator verify it cannot create manual path {string} with data:")
@@ -461,13 +467,12 @@ public class PathManagementSteps extends AbstractSteps {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
 
-    String actualCreateDefaultPathInfoText = pathManagementPage.createDefaultPathModal.createDefaultPathInfo
-        .getText();
+    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage.split("Error Message: ")[1];
     String expectedCreateDefaultPathInfoText = f(
-        "No path found from %s to %s!\nPlease add movement schedule(s) in Movement Schedule page in order to create a path between facilities.",
+        "No path found between %s (sg) and %s (sg). Please ask your manager to check the schedule.",
         resolvedOriginHub, resolvedDestinationHub);
-    assertThat("Create default path message is equal", actualCreateDefaultPathInfoText,
-        equalTo(expectedCreateDefaultPathInfoText));
+    assertThat("Create default path message is equal", actualCreateDefaultPathInfoText.toLowerCase(),
+        equalTo(expectedCreateDefaultPathInfoText.toLowerCase()));
   }
 
   @Then("Operator verify {string} error info shown on create default path modal")

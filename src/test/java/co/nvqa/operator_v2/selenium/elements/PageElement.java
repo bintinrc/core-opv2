@@ -185,9 +185,9 @@ public class PageElement extends SimplePage {
     waitUntilInvisibilityOfElementLocated(webElement);
   }
 
-  public boolean waitUntilInvisible(int timeout) {
+  public boolean waitUntilInvisible(int timeoutInSeconds) {
     try {
-      waitUntilInvisibilityOfElementLocated(getWebElement(), timeout);
+      waitUntilInvisibilityOfElementLocated(getWebElement(), timeoutInSeconds);
       return true;
     } catch (Throwable ex) {
       return false;
@@ -236,6 +236,10 @@ public class PageElement extends SimplePage {
 
   public <T> T executeScript(String script) {
     return executeScript(script, getWebElement());
+  }
+
+  public boolean isSelected() {
+    return getWebElement().isSelected();
   }
 
   private WebElement refreshWebElement(WebDriver webDriver, WebElement webEl) {

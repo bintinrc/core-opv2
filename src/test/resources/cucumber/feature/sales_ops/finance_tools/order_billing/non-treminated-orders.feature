@@ -1,5 +1,5 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @NonTerminatedOrders
-Feature: Order Billing
+Feature: Order Billing - Non Terminated Orders
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
   "SCRIPT": Orders consolidated by script (1 file per script), grouped by shipper within the file

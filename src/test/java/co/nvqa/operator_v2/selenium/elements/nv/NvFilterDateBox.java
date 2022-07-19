@@ -60,7 +60,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   }
 
   @Override
-  void setValue(String... values) {
+  public void setValue(String... values) {
     selectDates(values[0], values[1]);
   }
 }

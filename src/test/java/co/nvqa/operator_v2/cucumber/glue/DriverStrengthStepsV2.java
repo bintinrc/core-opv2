@@ -1,15 +1,20 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
-import co.nvqa.operator_v2.model.DriverTypeParams;
+import co.nvqa.operator_v2.model.NVDriversInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
@@ -26,6 +31,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   private DriverStrengthPageV2 dsPage;
   private static final String KEY_INITIAL_COMING_VALUE = "KEY_INITIAL_COMING_VALUE";
+  private static final String DRIVER_CSV_FILE_NAME = "NV Drivers.csv";
 
   public DriverStrengthStepsV2() {
   }
@@ -76,7 +82,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("Operator verifies hint {string} is displayed in Add Driver dialog")
+  @When("Operator verifies hint {string} is displayed in Add/Edit Driver dialog")
   public void operatorVerifiesAddDriverHint(String expected) {
     final String exp = resolveValue(expected);
     dsPage.inFrame(() -> {
@@ -95,6 +101,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
           assertTrue("Hint is displayed", dsPage.addDriverDialog.zoneHints.isDisplayed());
           assertEquals("Hint text", expected, dsPage.addDriverDialog.zoneHints.getNormalizedText());
           break;
+        case "Please input a valid mobile phone number (e.g. 8123 4567)":
+          assertTrue("Valid mobile phone number", dsPage.addDriverDialog.validContactNumber.isDisplayed());
+          assertEquals("Hint text", expected, dsPage.addDriverDialog.validContactNumber.getNormalizedText());
+          break;
         default:
           break;
       }
@@ -112,6 +122,18 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
       dsPage.editDriverDialog.fillForm(driverInfo);
       dsPage.editDriverDialog.submitForm();
+    });
+  }
+
+  @When("^Operator updates created Driver on Driver Strength page using data below:$")
+  public void operatorUpdateCreatedDriver(Map<String, String> mapOfData) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    String username = driverInfo.getUsername();
+    driverInfo.fromMap(mapOfData);
+    dsPage.inFrame(() -> {
+      dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
+      dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
+      dsPage.editDriverDialog.fillForm(driverInfo);
     });
   }
 
@@ -194,6 +216,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
         assertThat("Type", actualDriverInfo.getType(), equalTo(expectedDriverInfo.getType()));
       }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getDpmsId())) {
+        assertThat("DPMS ID", actualDriverInfo.getDpmsId(), equalTo(expectedDriverInfo.getDpmsId()));
+      }
       if (expectedDriverInfo.getZoneMin() != null) {
         assertThat("Min", actualDriverInfo.getZoneMin(), equalTo(expectedDriverInfo.getZoneMin()));
       }
@@ -250,6 +275,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       if (data.containsKey("zones")) {
         List<String> zones = splitAndNormalize(data.get("zones"));
         dsPage.zonesFilter.selectValues(zones);
+      }
+
+      if (data.containsKey("hubs")) {
+        List<String> zones = splitAndNormalize(data.get("hubs"));
+        dsPage.hubsFilter.selectValues(zones);
+        dsPage.hubsFilter.click();
       }
 
       if (data.containsKey("driverTypes")) {
@@ -368,7 +399,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
-  @When("Operator click Submit button in Add Driver dialog")
+  @When("^Operator click Submit button in .* Driver dialog$")
   public void clickSubmitButton() {
     dsPage.inFrame(() -> {
       dsPage.addDriverDialog.submit.click();
@@ -378,6 +409,171 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @When("Operator wait until table loaded")
   public void waitForTableToLoad() {
     dsPage.inFrame(() -> dsPage.waitUntilTableLoaded());
+  }
+
+  @Then("Operator verifies that the column: {string} displays between the columns: {string} and {string}")
+  public void operatorVerifiesThatTheColumnDisplaysBetweenTheColumnsAnd(String column, String precedingColumn, String followingColumn) {
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    String userName = driverInfo.getUsername();
+    dsPage.inFrame(() -> {
+      List<String> columns = dsPage.getAllColumnsInResultGrid(userName);
+      int columnIndex = columns.indexOf(column);
+      takesScreenshot();
+      assertEquals("Verify preceding column name",precedingColumn, columns.get(columnIndex-1));
+      assertEquals("Verify following column name",followingColumn, columns.get(columnIndex+1));
+    });
+  }
+
+  @Then("Operator verifies that the following buttons are displayed in driver strength page")
+  public void operatorVerifiesThatTheFollowingButtonsAreDisplayedInDriverStrengthPage(List<String> labels) {
+    dsPage.inFrame(() -> {
+      for (String label : labels) {
+        assertTrue(f("Verify that the button: %s is displayed", label),
+            dsPage.verifyButtonsDisplayed(label));
+      }
+      takesScreenshot();
+    });
+  }
+
+  @Then("Operator verifies that the following UI element(s) is/are displayed in update driver modal up")
+  public void operatorVerifiesThatTheFollowingUIElementsAreDisplayedInUpdateDriverModalUp(List<String> elements) {
+    dsPage.inFrame(() -> {
+      dsPage.updateDriverDetails.click();
+      for (String element : elements) {
+        assertTrue(f("Verify that Ui element: %s is displayed", element),
+            dsPage.verifyUpdateDriverModalUiDisplayed(element));
+      }
+      takesScreenshot();
+    });
+  }
+
+  @Then("Operator verifies that the selected driver details can be downloaded with the file name: {string}")
+  public void verifiesThatTheSelectedDriverDetailsCanBeDownloadedWithTheFileName(String fileName) {
+    dsPage.inFrame(() ->{
+      dsPage.waitUntilPageLoaded();
+      dsPage.downloadAllShown.click();
+      dsPage.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+  @When("Operator verifies that the template for updating driver details can be downloaded with the file name: {string}")
+  public void operatorVerifiesThatTheTemplateForUpdatingDriverDetailsCanBeDownloadedWithTheFileName(String fileName) {
+    dsPage.inFrame(() ->{
+      dsPage.waitUntilPageLoaded();
+      dsPage.downloadCsvTemplate.click();
+      dsPage.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+  @Then("Operator verifies that the content in the downloaded csv file matches with the result displayed")
+  public void operatorVerifiesThatTheContentInTheDownloadedCsvFileMatchesWithTheResultDisplayed() {
+    dsPage.inFrame(() ->{
+      DriverInfo expectedDriverInfo = dsPage.driversTable.readEntity(1);
+      String fileName = dsPage
+          .getLatestDownloadedFilename(DRIVER_CSV_FILE_NAME);
+      dsPage.verifyFileDownloadedSuccessfully(fileName);
+      String pathName = StandardTestConstants.TEMP_DIR + fileName;
+      List<NVDriversInfo> actualDriverInfo = NVDriversInfo
+          .fromCsvFile(NVDriversInfo.class, pathName, true);
+      FileUtils.deleteQuietly(new File(pathName));
+      Assertions.assertThat(actualDriverInfo.size())
+          .as("Number of lines in CSV")
+          .isGreaterThanOrEqualTo(1);
+      if (expectedDriverInfo.getId() != null) {
+        assertThat("Id", actualDriverInfo.get(0).getId(), equalTo(String.valueOf(expectedDriverInfo.getId())));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getFullName())) {
+        assertThat("Name", actualDriverInfo.get(0).getName(),
+            equalTo(expectedDriverInfo.getFullName()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getHub())) {
+        assertThat("First Name", actualDriverInfo.get(0).getHub(),
+            equalTo(expectedDriverInfo.getHub()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
+        assertThat("Last Name", actualDriverInfo.get(0).getType(),
+            equalTo(expectedDriverInfo.getType()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getLicenseNumber())) {
+        assertThat("License Number", actualDriverInfo.get(0).getLicenseNumber(),
+            equalTo(expectedDriverInfo.getLicenseNumber()));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getVehicleType())) {
+        assertThat("Vehicle Type", actualDriverInfo.get(0).getVehicle(),
+            equalTo(expectedDriverInfo.getVehicleType()));
+      }
+      if (expectedDriverInfo.getZoneMin() != null) {
+        assertThat("Min", actualDriverInfo.get(0).getMinCapacity(), equalTo(String.valueOf(expectedDriverInfo.getZoneMin())));
+      }
+      if (expectedDriverInfo.getZoneMax() != null) {
+        assertThat("Max", actualDriverInfo.get(0).getMaxCapacity(), equalTo(String.valueOf(expectedDriverInfo.getZoneMax())));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
+        assertThat("Comments", actualDriverInfo.get(0).getComments(),
+            equalTo(expectedDriverInfo.getComments()));
+      }
+    });
+  }
+
+  @Then("Operator verifies that the following options are displayed on clicking hamburger icon")
+  public void operatorVerifiesThatTheFollowingOptionsAreDisplayedOnClickingHamburgerIcon(List<String> values) {
+    dsPage.inFrame(() -> {
+      List<String> actualOptions = dsPage.getAllDownloadOptions();
+      assertTrue("Assert that Download hamburger contains all expected options!", actualOptions.containsAll(values));
+    });
+  }
+
+  @Then("Operator verifies that the file name: {string} can be downloaded on clicking the option: {string}")
+  public void operatorVerifiesThatTheFileNameCanBeDownloadedOnClickingTheOption(String fileName, String downloadOption) {
+    String resolvedFileName = resolveValue(fileName).toString().replace("-","_");
+    dsPage.inFrame(() -> {
+      dsPage.verifyFileDownloadForUpdate(downloadOption);
+      dsPage.verifyFileDownloadedSuccessfully(resolvedFileName);
+    });
+  }
+
+  @Then("Operator verifies that the following content displayed on the downloaded csv file: {string}")
+  public void operatorVerifiesThatTheFollowingContentDisplayedOnTheDownloadedCsvFile(String fileName, List<String> values) {
+    String resolvedFileName = resolveValue(fileName).toString().replace("-","_");
+    values = resolveValues(values);
+    String expectedText = String.join(",", values);
+    dsPage.verifyFileDownloadedSuccessfully(resolvedFileName, expectedText);
+  }
+
+  @Then("Operator selects the records that are displayed in the result grid")
+  public void operatorSelectsTheRecordsThatAreDisplayedInTheResultGrid() {
+    dsPage.inFrame(() ->{
+      dsPage.waitUntilPageLoaded();
+      dsPage.recordCheckbox.click();
+    });
+  }
+
+  @When("Operator uploads csv file: {string} to bulk update the driver details")
+  public void operatorUploadsCsvFileToBulkUpdateTheDriverDetails(String fileName) {
+    fileName = resolveValue(fileName);
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
+    dsPage.inFrame(() -> {
+      dsPage.bulkUploadDrivers.sendKeys(file.getAbsolutePath());
+    });
+  }
+
+  @Then("Operator verifies that the notice/alert message: {string} is displayed")
+  public void operatorVerifiesThatTheNoticeMessageIsDisplayed(String noticeMessage) {
+    dsPage.inFrame(() -> {
+      boolean isDisplayed = dsPage.verifyNoticeDisplayed(noticeMessage);
+      assertTrue(f("Assert that notice : %s  is displayed as expected!", noticeMessage), isDisplayed);
+    });
+  }
+
+  @Then("Operator verifies that the failure reasons can be downloaded with file name: {string}")
+  public void operatorVerifiesThatTheFailureReasonsCanBeDownloadedWithFileName(String fileName) {
+    String resolvedFileName = resolveValue(fileName).toString().replace("-","_");
+    dsPage.inFrame(() -> {
+      dsPage.waitUntilVisibilityOfElementLocated(dsPage.downloadFailureReasons.getWebElement());
+      dsPage.downloadFailureReasons.click();
+      dsPage.verifyFileDownloadedSuccessfully(resolvedFileName);
+    });
   }
 
 }

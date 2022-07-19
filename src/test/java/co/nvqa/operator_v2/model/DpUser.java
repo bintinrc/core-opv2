@@ -17,6 +17,8 @@ public class DpUser extends DataEntity<DpUser> {
   private String lastName;
   private String contactNo;
   private String emailId;
+  private String username;
+  private String password;
 
   public DpUser() {
   }
@@ -95,6 +97,22 @@ public class DpUser extends DataEntity<DpUser> {
       contactNo = TestUtils.generatePhoneNumber();
     }
     this.contactNo = contactNo;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   @Override

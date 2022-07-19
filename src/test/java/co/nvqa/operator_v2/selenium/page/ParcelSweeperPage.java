@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -52,41 +53,55 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
   public void verifyRouteInfo(String routeId, String driverName, String color) {
     pause2s();
     if (routeId != null) {
-      assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER));
+      Assertions.assertThat(getText(LOCATOR_ROUTE_INFO_CONTAINER))
+          .as("Route ID is CORRECT")
+          .isEqualTo(routeId);
     }
 
     if (StringUtils.isNotBlank(driverName)) {
-      assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_DESCRIPTION_CONTAINER),
-          equalToIgnoringCase(driverName));
+      Assertions.assertThat(getText(LOCATOR_ROUTE_DESCRIPTION_CONTAINER))
+          .as("Driver name is CORRECT")
+          .isEqualToIgnoringCase(driverName);
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ROUTE_CONTAINER, "background-color"));
-      assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex())
+          .as("Route info container color is CORRECT")
+          .isEqualTo(color);
     }
   }
 
   public void verifyZoneInfo(String shortName, String name, String color) {
+    name = name.equalsIgnoreCase("Z-Out of Zone") ? "?" : name;
     if (StringUtils.isNotBlank(shortName)) {
       String zoneShortName = getText(
           LOCATOR_ZONE_INFO_CONTAINER + "//h3[contains(@class,'zone-title')]");
       String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
       if (!("NIL".equalsIgnoreCase(shortName))) {
         if ((zoneFullName != null && !zoneFullName.isEmpty())) {
-          assertThat("Unexpected Zone Name", zoneFullName, equalToIgnoringCase(name));
+          Assertions.assertThat(zoneFullName)
+              .as(String.format("Zone name is CORRECT: %s", name))
+              .isEqualToIgnoringCase(name);
         } else {
-          assertThat("Unexpected Zone Name", zoneShortName, equalToIgnoringCase(shortName));
+          Assertions.assertThat(zoneShortName)
+              .as(String.format("Zone short name is CORRECT: %s", shortName))
+              .isEqualToIgnoringCase(shortName);
         }
       } else {
-        assertThat("Unexpected Zone Name", "NIL", equalToIgnoringCase(shortName));
+        Assertions.assertThat("NIL")
+            .as(String.format("Zone short name is CORRECT: %s", shortName))
+            .isEqualToIgnoringCase(shortName);
       }
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
-      assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex())
+          .as("Zone info container color is CORRECT")
+          .isEqualTo(color);
     }
   }
 
@@ -95,24 +110,30 @@ public class ParcelSweeperPage extends OperatorV2SimplePage {
       String actualNextSort = getText(
           LOCATOR_ZONE_INFO_CONTAINER + "//h3[@class = 'next-sorting-node']");
       if (!("NIL".equalsIgnoreCase(nextSort))) {
-        assertThat("Unexpected Next Sorting Hub Name", actualNextSort,
-            equalToIgnoringCase(nextSort));
+        Assertions.assertThat(actualNextSort)
+            .as("Next sorting hub name is CORRECT")
+            .isEqualToIgnoringCase(nextSort);
       } else {
-        assertThat("Unexpected Next Sorting Hub Name", "NIL", equalToIgnoringCase(nextSort));
+        Assertions.assertThat("NIL")
+            .as("Next sorting hub name is CORRECT")
+            .isEqualToIgnoringCase(nextSort);
       }
     }
   }
 
   public void verifyDestinationHub(String hubName, String color) {
     if (StringUtils.isNotBlank(hubName)) {
-      assertThat("Unexpected Destination Hub Name",
-          getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"), equalToIgnoringCase(hubName));
+      Assertions.assertThat(getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"))
+          .as("Destination hub name is CORRECT")
+          .isEqualToIgnoringCase(hubName);
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
-      assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex())
+          .as("Zone info container color is CORRECT")
+          .isEqualTo(color);
     }
   }
 }

@@ -27,6 +27,6 @@ public abstract class AbstractFilterBox extends PageElement {
     removeFilter.click();
   }
 
-  abstract void setValue(String... values);
+  public abstract void setValue(String... values);
 
 }

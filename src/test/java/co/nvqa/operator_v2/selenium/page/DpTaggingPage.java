@@ -116,7 +116,7 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   public void checkAndAssignAll(boolean isMultipleOrders) {
     dpTaggingTable.selectAllShown();
-    assignAll.click();
+    assignAll.clickAndWaitUntilDone();
 
     if (isMultipleOrders) {
       waitUntilInvisibilityOfToast("DP tagging performed successfully");
@@ -224,8 +224,6 @@ public class DpTaggingPage extends OperatorV2SimplePage {
         "CONFIRMED");
     assertTrue("Received At is not the same : ",
         result.getReceivedAt().toString().contains(formatter.format(today)));
-    assertEquals("DP Reservation Event Name is not the same : ",
-        result.getDpReservationEventName(), "DRIVER_DROPPED_OFF");
     assertEquals("DP Job Order Status is not the same : ", result.getDpJobOrderStatus(), "SUCCESS");
   }
 }

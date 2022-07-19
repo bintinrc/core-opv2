@@ -118,6 +118,7 @@ public class GlobalInboundSteps extends AbstractSteps {
     if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(rackSector)) {
       rackSector = order.getRackSector();
     }
+    globalInboundPage.switchTo();
     globalInboundPage
         .globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor,
             weightWarning, rackSector, destinationHub);
@@ -232,6 +233,11 @@ public class GlobalInboundSteps extends AbstractSteps {
 
   @When("^Operator verifies prior tag is displayed$")
   public void operatorVerifiesPriorTagIsDisplayed() {
+    globalInboundPage.verifiesPriorTag();
+  }
+
+  @When("^Operator verifies RTS tag is displayed$")
+  public void operatorVerifiesRtsTagIsDisplayed() {
     globalInboundPage.verifiesPriorTag();
   }
 

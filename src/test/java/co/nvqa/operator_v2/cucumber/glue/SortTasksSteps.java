@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortTasksPage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage;
 import co.nvqa.operator_v2.selenium.page.ViewSortStructurePage.TreeNode.NodeType;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
@@ -280,10 +281,28 @@ public class SortTasksSteps extends AbstractSteps {
     sortTasksPage.submit.click();
   }
 
+  @Then("^Operator select a RTS zone$")
+  public void operatorSelectARtsZone(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String rtsZone = mapOfData.get("rtsZone");
+    sortTasksPage.find.sendKeys(rtsZone);
+    sortTasksPage.select.get(0).check();
+    sortTasksPage.submit.click();
+  }
+
   @Then("^Operator remove selection of a sort task$")
   public void operatorUnselectASortTask() {
     String sortName = get(KEY_CREATED_MIDDLE_TIER_NAME);
     sortTasksPage.find.sendKeys(sortName);
+    sortTasksPage.select.get(0).uncheck();
+    sortTasksPage.submit.click();
+  }
+
+  @Then("^Operator remove selection of RTS zone$")
+  public void operatorRemoveRtsZone(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String rtsZone = mapOfData.get("rtsZone");
+    sortTasksPage.find.sendKeys(rtsZone);
     sortTasksPage.select.get(0).uncheck();
     sortTasksPage.submit.click();
   }
@@ -293,14 +312,54 @@ public class SortTasksSteps extends AbstractSteps {
     String sortName = get(KEY_CREATED_MIDDLE_TIER_NAME);
 
     retryIfAssertionErrorOccurred(() -> {
+      pause3s();
       operatorRefreshTable();
       sortTasksPage.verifyOutput(sortName);
+    }, "Cannot find the sort task node");
+  }
+
+  @Then("^Operator verify RTS zone appears on tree list$")
+  public void operatorVerifyRtsZoneAppearsOnTreeList(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    String rtsZone = mapOfData.get("rtsZone");
+
+    retryIfAssertionErrorOccurred(() -> {
+      pause3s();
+      operatorRefreshTable();
+      sortTasksPage.verifyOutput(rtsZone);
+      sortTasksPage.verifyNumberOutput("RTS");
     }, "Cannot find the sort task node");
   }
 
   @Then("^Operator verify removed outputs removed on tree list$")
   public void operatorVerifyRemovedOutputsRemovedOnTreeList() {
     String sortName = get(KEY_CREATED_MIDDLE_TIER_NAME);
-    sortTasksPage.verifyOutputDeleted(sortName);
+
+    retryIfAssertionErrorOccurred(() -> {
+      pause3s();
+      operatorRefreshTable();
+      sortTasksPage.verifyOutputDeleted(sortName);
+    }, "Can find the sort task node");
+  }
+
+  @Then("^Operator verify output on tree list$")
+  public void operatorVerifyOutputOnTreeList(List<String> expectedNodes) {
+    expectedNodes = resolveValues(expectedNodes);
+    if (expectedNodes.get(0).equals("noOutput")) {
+      sortTasksPage.noOutput.isDisplayed();
+    } else {
+      List<String> actual = sortTasksPage.nodeNames.stream().map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      assertThat("List of displayed nodes", actual,
+          Matchers.contains(expectedNodes.toArray(new String[0])));
+    }
+  }
+
+  @And("Operator select region on Sort Task page")
+  public void operatorSelectRegionOnSortTaskPage(Map<String,String>data) {
+    data = resolveKeyValues(data);
+    String regionName = data.get("regionName");
+    sortTasksPage.selectRegion.selectValue(regionName);
+    pause5s();
   }
 }

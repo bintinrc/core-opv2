@@ -6,14 +6,12 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,7 +22,7 @@ import org.openqa.selenium.support.FindBy;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends SimpleReactPage {
+public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInboundScanningPage> {
 
   public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
   public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
@@ -64,7 +62,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']")
   public TextBox shipmentIdInput;
 
-  @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
+  private static String XPATH_SHIPMENTID_INPUT = "//div[.='Scan Shipment to Inbound']//input | //input[@id='toAddTrackingId']";
+
+  @FindBy(css = "[data-testid='scan-box-container'] div.message")
   public PageElement scanAlertMessage;
 
   @FindBy(xpath = "//md-card[contains(@class,'scan-status-card')]")
@@ -73,10 +73,18 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(css = "md-dialog")
   public TripCompletion tripCompletionDialog;
 
-  @FindBy(css = "div.scan-state-text h2")
+  public String TRIP_COMPLETION_DIALOG="//div[@class='ant-modal-content']";
+
+  @FindBy(xpath = ".//button[.='Cancel']")
+  public Button cancel;
+
+  @FindBy(xpath = ".//button[.='Proceed']")
+  public Button proceed;
+
+  @FindBy(css = "h2.scan-state-text")
   public PageElement scannedState;
 
-  @FindBy(css = "md-card-content h1")
+  @FindBy(xpath = "//h1[@*='scan-state-command']")
   public PageElement scannedMessage;
 
   @FindBy(css = "div.scanned-shipping-id")
@@ -91,11 +99,19 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   @FindBy(xpath = "//input[@value='SHIPMENT_HUB_INBOUND']")
   public PageElement intoHub;
 
+  @FindBy(xpath = "//iframe")
+  public PageElement frame;
+
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void inboundScanning(long shipmentId, String label, String hub) {
+    inboundScanningShipment(shipmentId, label, hub);
+    checkSessionScan(String.valueOf(shipmentId));
+  }
+
+  public void inboundScanningShipment(long shipmentId, String label, String hub) {
     pause2s();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
@@ -107,7 +123,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
     }
     startInboundButton.click();
     fillShipmentId(shipmentId);
-    checkSessionScan(String.valueOf(shipmentId));
   }
 
   public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub) {
@@ -131,8 +146,12 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub,
       String condition) {
     pause2s();
-    inboundHub.searchAndSelectValue(hub);
-    click(grabXpathButton(label));
+    selectInboundHub(hub);
+    if (CONST_INTO_VAN.equals(label)) {
+      intoVan.click();
+    } else if (CONST_INTO_HUB.equals(label)) {
+      intoHub.click();
+    }
     startInboundButton.click();
     fillShipmentId(shipmentId);
     pause2s();
@@ -168,7 +187,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void fillShipmentId(Object value) {
-    shipmentIdInput.setValue(String.valueOf(value) + Keys.ENTER);
+    sendKeysAndEnter(XPATH_SHIPMENTID_INPUT, value.toString());
   }
 
   public void checkSessionScan(String shipmentId) {
@@ -204,10 +223,10 @@ public class ShipmentInboundScanningPage extends SimpleReactPage {
   }
 
   public void completeTrip() {
-    tripCompletionDialog.waitUntilVisible();
-    tripCompletionDialog.proceed.waitUntilClickable();
-    tripCompletionDialog.proceed.click();
-    tripCompletionDialog.waitUntilInvisible();
+    waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
+    proceed.waitUntilClickable();
+    proceed.click();
+    waitUntilInvisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
   }
 
   public void inputEndDate(Date date) {

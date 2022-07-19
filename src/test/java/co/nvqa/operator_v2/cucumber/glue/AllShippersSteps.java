@@ -14,6 +14,7 @@ import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Pricing.BillingWeightEnum;
 import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -50,6 +51,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections.CollectionUtils;
@@ -57,6 +59,8 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -64,6 +68,7 @@ import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_DASH_LOGIN;
@@ -71,7 +76,6 @@ import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTabl
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.ACTION_NINJA_DASH_LOGIN;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.CULUMN_BRANCH_ID;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
-import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -622,9 +626,22 @@ public class AllShippersSteps extends AbstractSteps {
               .sendKeys(value);
         }
       }
+      value = data.get("billingWeightLogic");
+      if (StringUtils.isNotBlank(value)) {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.selectValue(
+            value);
+      }
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
+  }
+
+  @And("Operator verifies that Billing Weight Logic is not available in the Edit Pricing Profile dialog")
+  public void operatorVerifiesThatBillingWeightLogicIsNotAvailable() {
+    Assertions.assertThat(
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.isDisplayed())
+        .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog")
+        .isFalse();
   }
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
@@ -647,10 +664,13 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("^Operator save changes on Edit Shipper Page and gets saved pricing profile values$")
   public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue() {
     try {
-      allShippersPage.allShippersCreateEditPage.saveChanges.click();
-      closeErrorToastIfDisplayedAndSaveShipper();
-      allShippersPage.allShippersCreateEditPage
-          .waitUntilInvisibilityOfToast("All changes saved successfully");
+      retryIfRuntimeExceptionOccurred(() -> {
+        allShippersPage.allShippersCreateEditPage.saveChanges.click();
+        closeErrorToastIfDisplayedAndSaveShipper();
+        allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
+            "All changes saved successfully");
+      }, "Save Shipper", 100, 3);
+
       takesScreenshot();
       Shipper shipper = get(KEY_CREATED_SHIPPER);
       getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
@@ -697,6 +717,7 @@ public class AllShippersSteps extends AbstractSteps {
       allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
       Pricing createdPricingProfile = allShippersPage.getCreatedPricingProfile();
       put(KEY_CREATED_PRICING_PROFILE_OPV2, createdPricingProfile);
+      put(KEY_PRICING_PROFILE, createdPricingProfile);
       put(KEY_PRICING_PROFILE_ID, createdPricingProfile.getTemplateId().toString());
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
@@ -1043,15 +1064,12 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.setPickupAddressesAsMilkrun(shipper);
   }
 
-  @When("^Operator unset pickup addresses of the created shipper using data below:$")
-  public void operatorUnsetPickupAddressesOfTheCreatedShipperUsingDataBelow(
-      Map<String, String> mapOfData) {
+  @When("^Operator unset pickup addresses of the created shipper$")
+  public void operatorUnsetPickupAddressesOfTheCreatedShipper() {
     Shipper shipper = get(KEY_CREATED_SHIPPER);
     List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
     if (CollectionUtils.isNotEmpty(addresses)) {
-      for (int i = 0; i < addresses.size(); i++) {
-        fillMilkrunReservationsProperties(addresses.get(i), i + 1, mapOfData);
-      }
+      addresses.forEach(address -> address.setMilkRun(false));
     }
     allShippersPage.unsetPickupAddressesAsMilkrun(shipper);
   }
@@ -1166,7 +1184,7 @@ public class AllShippersSteps extends AbstractSteps {
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     getWebDriver().navigate().to(editSpecificShipperPageURL);
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(180);
     takesScreenshot();
   }
 
@@ -1213,6 +1231,7 @@ public class AllShippersSteps extends AbstractSteps {
       String endDate = mapOfData.get("endDate");
       String rtsChargeType = mapOfData.get("rtsChargeType");
       String rtsChargeValue = mapOfData.get("rtsChargeValue");
+      String billingWeightLogic = mapOfData.get("billingWeightLogic");
 
       pricing.setComments(comments);
       pricing.setScriptName(pricingScriptName);
@@ -1229,6 +1248,17 @@ public class AllShippersSteps extends AbstractSteps {
           Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
       pricing.setContractEndDate(
           Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
+      String country = COUNTRY_CODE;
+      if (!country.equalsIgnoreCase("SG")) {
+        if (Objects.isNull(billingWeightLogic)) {
+          pricing.setBillingWeight(BillingWeightEnum.STANDARD);
+        } else {
+          pricing.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(billingWeightLogic));
+        }
+      } else {
+        pricing.setBillingWeight(BillingWeightEnum.LEGACY);
+      }
+
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
@@ -1330,7 +1360,6 @@ public class AllShippersSteps extends AbstractSteps {
     Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
     Boolean isDisableDriverAppReschedule = Boolean
         .parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
-    Boolean isCorporateReturn = Boolean.parseBoolean(mapOfData.get("isCorporateReturn"));
     String ocVersion = mapOfData.get("ocVersion");
     String servicesTemp = mapOfData.get("services");
     String trackingType = mapOfData.get("trackingType");
@@ -1354,7 +1383,8 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
     orderCreate
         .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
-    orderCreate.setIsCorporateReturn(isCorporateReturn);
+    orderCreate.setIsCorporateReturn(Boolean.parseBoolean(mapOfData.get("isCorporateReturn")));
+    orderCreate.setIsCorporateDocument(Boolean.parseBoolean(mapOfData.get("isCorporateDocument")));
     shipper.setOrderCreate(orderCreate);
 
     DistributionPoint distributionPoint = new DistributionPoint();
@@ -1436,8 +1466,16 @@ public class AllShippersSteps extends AbstractSteps {
   @When("Operator set service type {string} to {string} on edit shipper page")
   public void setServiceTypeOnShipperEditOrCreatePage(
       String serviceType, String value) {
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
     allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
+    allShippersPage.allShippersCreateEditPage.saveChanges.click();
+  }
+
+  @When("Operator set service type {string} to {string} on Sub shippers Default Setting tab edit shipper page")
+  public void setServiceTypeOnSubShippersDefaultSettingTab(
+      String serviceType, String value) {
+    String model = "ctrl.data.marketplace.serviceType[key]";
+    allShippersPage.allShippersCreateEditPage
+        .clickToggleButtonByLabelAndModel(serviceType, model, value);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
   }
 
@@ -1649,9 +1687,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws
       IOException {
     uploadFileBulkCreateCorporateSubShipper(data);
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-      page.createSubShipperAccount.click();
-    });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .inFrame(page -> page.createSubShipperAccount.click());
   }
 
   @When("Operator upload bulk create corporate sub shippers file with data below:")
@@ -1723,7 +1760,8 @@ public class AllShippersSteps extends AbstractSteps {
           }
           while (!isSubShipperExist && !isNextPageDisabled);
 
-          assertTrue(isSubShipperExist);
+          Assertions.assertThat(isSubShipperExist)
+              .as("Sub shipper exist with id: " + expectedSellerId).isTrue();
         })
     );
   }
@@ -1844,9 +1882,8 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator downloads error log on b2b management page")
   public void downloadErrorLog() {
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-      page.downloadErrorLog.click();
-    });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage
+        .inFrame(page -> page.downloadErrorLog.click());
   }
 
   @Then("bulk shipper creation error log file contains data:")
@@ -1875,37 +1912,62 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
-    Pricing pricingProfile = get(KEY_PRICING_PROFILE);
-    PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
+    Pricing pricingProfile =
+        Objects.isNull(get(KEY_PRICING_PROFILE)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
+            : get(KEY_PRICING_PROFILE);
 
-    if (Objects.nonNull(pricingProfile.getCodMin())) {
-      assertEquals("COD min fee is not the same: ", pricingProfile.getCodMin(),
-          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee()));
+    PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
+    if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {
+      throw new NvTestRuntimeException("Actual and expected pricing lever details are missing");
     }
-    if (Objects.nonNull(pricingProfile.getCodPercentage())) {
-      assertEquals("COD percentage is not the same: ", pricingProfile.getCodPercentage(),
-          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage()));
+
+    SoftAssertions softAssertions = new SoftAssertions();
+    String codMin = pricingProfile.getCodMin();
+    if (Objects.nonNull(codMin) && !codMin.equalsIgnoreCase("-")) {
+      softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee())).
+          as("COD min fee is correct").isEqualTo(codMin);
     }
-    if (Objects.nonNull(pricingProfile.getInsMin())) {
-      assertEquals("INS min fee is not the same: ", pricingProfile.getInsMin(),
-          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee()));
+    String codPercentage = pricingProfile.getCodPercentage();
+    if (Objects.nonNull(codPercentage) && !codPercentage.equalsIgnoreCase("-")) {
+      softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage())).
+          as("COD percentage fee is correct").isEqualTo(codPercentage);
     }
-    if (Objects.nonNull(pricingProfile.getInsPercentage())) {
-      assertEquals("INS percentage fee is not the same: ", pricingProfile.getInsPercentage(),
-          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage()));
+    String insMin = pricingProfile.getInsMin();
+    if (Objects.nonNull(insMin) && !insMin.equalsIgnoreCase("-")) {
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee())).
+          as("Insurance min fee is correct").isEqualTo(insMin);
     }
-    if (Objects.nonNull(pricingProfile.getInsThreshold())) {
-      assertEquals("INS threshold is not the same: ", pricingProfile.getInsThreshold(),
-          NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()));
+    String insPercentage = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(insPercentage) && !insPercentage.equalsIgnoreCase("-")) {
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage())).
+          as("Insurance Percentage fee is correct").isEqualTo(insPercentage);
     }
-    if (Objects.nonNull(pricingProfile.getRtsChargeType())) {
-      String rtsChargeOpv2 = pricingProfile.getRtsChargeType();
+    String insThreshold = pricingProfile.getInsPercentage();
+    if (Objects.nonNull(insThreshold) && !insThreshold.equalsIgnoreCase("-")) {
+      softAssertions.assertThat(
+              NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold())).
+          as("Insurance Threshold fee is correct").isEqualTo(insThreshold);
+    }
+    String rtsChargeType = pricingProfile.getRtsChargeType();
+    if (Objects.nonNull(rtsChargeType)) {
       Double rtsChargeDb = pricingLeversFromDb.getRtsCharge();
-      if (rtsChargeOpv2.equalsIgnoreCase("Discount")) {
-        assertTrue("RTS charge is not the same", rtsChargeDb <= 0);
+      if (rtsChargeType.equalsIgnoreCase("Discount")) {
+        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a negative value").isNegative();
       }
-      if (rtsChargeOpv2.equalsIgnoreCase("Surcharge")) {
-        assertTrue("RTS charge is not the same", rtsChargeDb >= 0);
+      if (rtsChargeType.equalsIgnoreCase("Surcharge")) {
+        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a positive value").isPositive();
+      }
+    }
+    BillingWeightEnum billingWeight = pricingProfile.getBillingWeight();
+    if (Objects.nonNull(billingWeight)) {
+      if (billingWeight.getCode().equalsIgnoreCase("Legacy")) {
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
+            as("Billing Weight Logic is null").isNull();
+      } else {
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
+            as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
       }
     }
   }
@@ -1914,9 +1976,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorVerifiesThePricingProfileDetailsAreLikeBelow(Map<String, String> data) {
     Pricing pricingProfile = setShipperPricingProfile(data).getPricing();
     Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
-    allShippersPage
-        .verifyPricingProfileDetails(pricingProfile,
-            pricingProfileFromOPV2);
+    allShippersPage.verifyPricingProfileDetails(pricingProfile, pricingProfileFromOPV2);
   }
 
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
@@ -1961,5 +2021,18 @@ public class AllShippersSteps extends AbstractSteps {
       assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"),
           actualText);
     }
+  }
+
+  @And("Operator Edit Shipper Page of created b2b sub shipper")
+  public void operatorGetDataOfCreatedBBSubShipper() {
+    String externalRefCreatedShipper = get(KEY_SUB_SHIPPER_SELLER_ID);
+    List<Shipper> exsistingCorporateSubShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+    Optional<Shipper> createdSubShipper = exsistingCorporateSubShipper.stream()
+        .filter(subShipper -> subShipper.getExternalRef().equals(externalRefCreatedShipper))
+        .findFirst();
+    Assertions.assertThat(createdSubShipper.isPresent()).as("Created sub shipper is exist")
+        .isTrue();
+    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+    openSpecificShipperEditPage(String.valueOf(createdSubShipper.get().getLegacyId()));
   }
 }

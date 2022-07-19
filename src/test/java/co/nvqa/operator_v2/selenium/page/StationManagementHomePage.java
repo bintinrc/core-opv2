@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.Comparators;
@@ -42,24 +43,23 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
-  private static final String MODAL_TABLE_FILTER_XPATH = "//div[@class='th'][.//*[.='%s']]//input";
+  private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_MULTIPLE_FILTER_XPATH = "//*[text()='%s']/preceding-sibling::label//input";
   private static final String MODAL_TABLE_COMBO_FILTER_XPATH = "//div[contains(@class,'th')][.//div[.='%s']]//*[@role='combobox']";
   private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='BaseTable__header']//div[contains(@class,'th')]";
   private static final String MODAL_TABLE_FILTER_SORT_XPATH = "//div[contains(@class,'th')]//div[contains(text(),'%s')]";
   private static final String MODAL_TABLE_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/parent::div/parent::div/following-sibling::div//div[@role='table']";
   private static final String MODAL_TABLE_FILTER_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-modal-content')]//div[text()='%s']/parent::div[@class='th']//input";
-  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div[contains(@class,'link-wrapper')]//a";
+  private static final String LEFT_NAVIGATION_LINKS_BY_HEADER = "//div[text()='%s']/following-sibling::div//a | //div[text()='%s']/parent::div[@class='ant-card-head-title']/ancestor::div//div//a";
   private static final String HUB_SELECTION_COMBO_VALUE_XPATH = "(//div[text()='%s'])[2]//ancestor::div[@role='combobox']";
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
-  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//i";
+  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//div[@class='icon']";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
-  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//div[text()='%s']";
+  private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
-  private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[contains(@class,'NoResult')]";
-
+  private static final String NO_RESULTS_FOUND_TEXT_XPATH = "//div[contains(@class,'ant-card')][.//*[.='%s']]//div[normalize-space(text())='No Results Found']";
   public StationManagementHomePage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -73,7 +73,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  @FindBy(xpath = "(//div[text()='Search or Select'])[2]//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "(//span[text()='Search or Select'])[2]/ancestor::div[@class='ant-select-selector']")
   public AntSelect2 hubs;
 
   @FindBy(xpath = "//button[contains(@*,'proceed')]")
@@ -94,19 +94,19 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Route ID']/following-sibling::div")
   private PageElement routeManifestRouteId;
 
-  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'th')]/*[1]")
+  @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[starts-with(@class,'VirtualTableHeader')]/*[1]")
   private List<PageElement> modalTableColumns;
 
   @FindBy(css = "div.value svg")
   private PageElement tileValueLoadIcon;
 
-  @FindBy(css = "i[class$='modal-close-icon']")
+  @FindBy(css = "button[class$='ant-modal-close']")
   private List<PageElement> modalCloseIcon;
 
   @FindBy(css = "div[class$='badge-count']")
   private List<PageElement> sfldTicketCount;
 
-  @FindBy(css = "i[aria-label$='bell']")
+  @FindBy(css = "span[aria-label$='bell']")
   private PageElement alarmBell;
 
   @FindBy(xpath = "//button[@disabled]//*[text()='Save & Proceed']")
@@ -124,7 +124,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.polling-time-info")
   public PageElement pollingTimeInfo;
 
-  @FindBy(css = "[id*='DialogTitle']")
+  @FindBy(css = "[id*='rc_unique_0']")
   public PageElement dialogLanguage;
 
   @FindBy(css = "li:last-child .text")
@@ -142,7 +142,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
   private List<PageElement> columnValues;
 
-  @FindBy(css = "div[class*='selected-value']")
+  @FindBy(css = "span[class*='ant-select-selection-item']")
   private PageElement headerHubValue;
 
   @FindBy(css = "div.ant-notification-notice-message")
@@ -160,7 +160,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindAll(@FindBy(css = "div[class*='base-row'] span[class*='checked']"))
   private List<PageElement> checkboxChecked;
 
-  @FindAll(@FindBy(css = "div[class*='-checked'][class$='filter']"))
+  @FindAll(@FindBy(css = "span[class*='-checked'][class$='filter']"))
   private List<PageElement> filterApplied;
 
   @FindBy(css = "div.sfld-alert")
@@ -169,7 +169,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[.//*[.='Download Failed ETAs']]")
   public PageElement downloadFailedEtas;
 
-  @FindBy(xpath = "//div[@class='ant-modal-body']//div[text()='Search or Select']")
+  @FindBy(xpath = "//div[@class='ant-modal-body']//span[text()='Search or Select']")
   public List<PageElement> modalHubSelection;
 
   @FindBy(xpath = "//canvas")
@@ -811,6 +811,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    /*
     scrollIntoView(footerRow.getWebElement());
     pause5s();
     colElements = getWebDriver().findElements(
@@ -818,6 +819,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     colElements.forEach(element -> {
       colData.add(element.getText().trim());
     });
+    */
     return colData;
   }
 
@@ -845,10 +847,17 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
           Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
       return;
     }
+    if ("ETA Calculated".contentEquals(columnName)) {
+      List<Double> columnValue = new ArrayList<Double>();
+      colData.forEach(value -> {
+        value = value.replaceAll("-", "");
+        columnValue.add(Double.parseDouble(value));
+      });
+      Assert.assertTrue(
+          f("Assert that the column values %s are sorted as expected", columnName),
+          Comparators.isInOrder(columnValue, Comparator.naturalOrder()));
+    }
 
-    Assert.assertTrue(
-        f("Assert that the column values %s are sorted as expected", columnName),
-        Comparators.isInOrder(colData, Comparator.naturalOrder()));
   }
 
 
@@ -908,7 +917,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     WebElement quickFilter = getWebDriver().findElement(
         By.xpath(filterXpath));
     if(filterApplied.size() > 0){
-      return;
+      filterApplied.get(0).click();
+      pause2s();
     }
     quickFilter.click();
     pause2s();
@@ -948,7 +958,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         By.xpath(titleXpath));
     pause1s();
     moveToElement(tileTitle);
-    pause1s();
+    pause5s();
     Assert.assertTrue(f("Assert that the title %s is displayed", title),
         mouseOverText.size() > 0);
   }

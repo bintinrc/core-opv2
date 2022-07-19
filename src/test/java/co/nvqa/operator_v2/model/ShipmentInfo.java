@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
@@ -20,7 +21,10 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
       .ofPattern("yyyy-MM-dd'T'HH:mm:ssz");
 
   private String shipmentType;
+  private String shipmentDialogType;
   private Long id;
+  private String userId;
+  private String entrySource;
   private String createdAt;
   private String transitAt;
   private String status;
@@ -53,6 +57,10 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
     setMawb(shipments.getShipment().getMawb());
   }
 
+  public ShipmentInfo(Map<String, ?> data) {
+    super(data);
+  }
+
   public String normalisedDate(String originDate) {
     if (originDate == null) {
       return null;
@@ -67,6 +75,14 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
       normalisedZdt = normalisedZdt.plusSeconds(1L);
     }
     return normalisedZdt.format(FE_FORMATTER);
+  }
+
+  public String getShipmentDialogType() {
+    return shipmentDialogType;
+  }
+
+  public void setShipmentDialogType(String shipmentDialogType) {
+    this.shipmentDialogType = shipmentDialogType;
   }
 
   public String getShipmentType() {
@@ -183,5 +199,21 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo> {
 
   public void setSla(String sla) {
     this.sla = sla;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public String getEntrySource() {
+    return entrySource;
+  }
+
+  public void setEntrySource(String entrySource) {
+    this.entrySource = entrySource;
   }
 }

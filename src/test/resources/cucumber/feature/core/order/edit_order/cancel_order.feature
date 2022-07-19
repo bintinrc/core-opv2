@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @CancelOrder
+@OperatorV2 @Core @Order @EditOrder @CancelOrder @EditOrder1
 Feature: Cancel Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -121,7 +121,10 @@ Feature: Cancel Order
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    And API Driver failed the C2C/Return order pickup using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Pickup Fail" on Edit Order page
     And Operator verify order granular status is "Pickup Fail" on Edit Order page
@@ -133,8 +136,8 @@ Feature: Cancel Order
     And Operator verify order summary on Edit order page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Operator verify Pickup transaction of the created order using data below:
-      | status   | FAIL                                      |
-      | comments | {KEY_SELECTED_FAILURE_REASON.description} |
+      | status  | FAIL                   |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     And API Operator verify Delivery transaction of the created order using data below:
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
@@ -147,7 +150,10 @@ Feature: Cancel Order
       | name | CANCEL |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And DB Operator verify Jaro Scores of the created order after cancel
+    And Operator save the last DELIVERY transaction of the created order as "KEY_TRANSACTION_AFTER"
+    And DB Operator verify Jaro Scores:
+      | waypointId                         | archived | status  |
+      | {KEY_TRANSACTION_AFTER.waypointId} | 1        | Pending |
 
   Scenario: Cancel Order - Staging (uid:0bd14e39-9e38-463c-ab66-784553f537cf)
     Given API Shipper create V4 order using data below:

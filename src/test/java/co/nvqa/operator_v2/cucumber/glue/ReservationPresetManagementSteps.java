@@ -82,6 +82,21 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.assignShipperDialog.assignShipper.clickAndWaitUntilDone();
   }
 
+  @Then("^Operator unassign pending task on Reservation Preset Management page:$")
+  public void unassignPendingTask(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String shipper = data.get("shipper");
+    reservationPresetManagementPage.pendingTab.click();
+    pause2s();
+    PendingTaskBlock pendingTaskBlock = reservationPresetManagementPage.pendingTasks.stream()
+        .filter(t -> t.shipper.getText().startsWith("Unassign: " + shipper))
+        .findFirst()
+        .orElseThrow(() -> new AssertionError("Task for shipper " + shipper + " was not found"));
+    pendingTaskBlock.unassign.click();
+    reservationPresetManagementPage.unassignShipperDialog.waitUntilVisible();
+    reservationPresetManagementPage.unassignShipperDialog.unassignShipper.clickAndWaitUntilDone();
+  }
+
   @Then("^Operator route pending reservations on Reservation Preset Management page:$")
   public void routePendingReservations(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -101,9 +116,10 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.overviewTab.click();
     pause2s();
     reservationPresetManagementPage.reservationPresetTable.filterByColumn(COLUMN_NAME, group);
+    reservationPresetManagementPage.routeDate.simpleSetValue(routeDate);
+    reservationPresetManagementPage.waitWhilePageIsLoading(2);
     reservationPresetManagementPage.reservationPresetTable.selectRow(1);
-    reservationPresetManagementPage.routeDate.setValue(routeDate);
-    reservationPresetManagementPage.actionsMenu.selectOption("Create route");
+    reservationPresetManagementPage.actionsMenu.selectOption("Create Route");
     reservationPresetManagementPage.createRouteDialog.waitUntilVisible();
     reservationPresetManagementPage.createRouteDialog.confirm.clickAndWaitUntilDone();
   }

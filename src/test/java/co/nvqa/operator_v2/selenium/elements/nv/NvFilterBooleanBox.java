@@ -28,7 +28,7 @@ public class NvFilterBooleanBox extends AbstractFilterBox {
   public PageElement selectedValue;
 
   @Override
-  void setValue(String... values) {
+  public void setValue(String... values) {
     selectFilter(Boolean.parseBoolean(values[0]));
   }
 

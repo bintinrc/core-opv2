@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.FinancialBatchPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
@@ -118,6 +119,7 @@ public class FinancialBatchSteps extends AbstractSteps {
   @Then("Operator verifies error message is displayed in Financial Batch page")
   public void operatorVerifiesErrorMessageIsDisplayedInFinancialBatchPage(
       List<String> errorMessages) {
+    takesScreenshot();
     financialBatchPage.antNotificationMessage.waitUntilVisible(1);
 
     List<String> actualErrorMsgs = financialBatchPage.noticeNotifications.stream()
@@ -125,12 +127,12 @@ public class FinancialBatchSteps extends AbstractSteps {
 
     Assertions.assertThat(errorMessages).as("Error Messages are correct")
         .isEqualTo(actualErrorMsgs);
-
   }
 
 
   @Then("Operator verifies error message {string} is displayed on Financial Batch Page")
   public void operatorVerifiesErrorMessageIsDisplayedOnFinancialBatchPage(String message) {
+    takesScreenshot();
     String actualErrorMsgText = financialBatchPage.errorMessageText.getText();
     Assertions.assertThat(message).as("Error message is correct").isEqualTo(actualErrorMsgText);
   }
@@ -151,4 +153,11 @@ public class FinancialBatchSteps extends AbstractSteps {
     }
   }
 
+  @And("Operator generated financial batch report using data below:")
+  public void operatorGeneratedFinancialBatchReportUsingDataBelow(Map<String, String> mapOfData) {
+    if (mapOfData.containsKey("emailAddress")) {
+      financialBatchPage.setEmailAddress(mapOfData.get("emailAddress"));
+    }
+    financialBatchPage.requestReportBtn.click();
+  }
 }

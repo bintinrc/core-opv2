@@ -178,7 +178,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -472,7 +472,7 @@ Feature: Edit Order
     And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies first & last waypoints.seq_no are dummy waypoints
+
     And DB Operator verifies route_monitoring_data record
 
     Examples:
@@ -526,6 +526,9 @@ Feature: Edit Order
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
+    Then Operator verifies that success toast displayed:
+      | top                | 1 order(s) RTS-ed |
+      | waitUntilInvisible | true              |
     Then Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:

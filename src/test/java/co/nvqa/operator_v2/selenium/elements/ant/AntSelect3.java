@@ -1,15 +1,17 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -43,30 +45,49 @@ public class AntSelect3 extends PageElement {
   public List<SelectedItem> selectedItems;
 
   @FindBy(css = ".ant-select-selection-search-input")
-  public TextBox searchInput;
+  public ForceClearTextBox searchInput;
 
   @FindBy(css = ".ant-select-clear > span")
   public PageElement clearIcon;
+
+  private Boolean isMultiple;
+
+  private boolean isMultiple() {
+    if (isMultiple == null) {
+      isMultiple = StringUtils.contains(getAttribute("class"), "ant-select-multiple");
+    }
+    return isMultiple;
+  }
 
   public void selectValue(String value) {
     if (!StringUtils.equals(value, getValue())) {
       enterSearchTerm(value);
       clickMenuItem(value);
+      pause500ms();
+      closeMenu();
     }
   }
 
   public void selectValues(Iterable<String> values) {
-    values.forEach(this::selectValue);
+    values.forEach(v -> {
+      enterSearchTerm(v);
+      clickMenuItem(v);
+    });
+    closeMenu();
   }
 
   public void selectByIndex(int index) {
     openMenu();
     clickMenuItemByIndex(index);
+    closeMenu();
   }
 
   public void selectValueWithoutSearch(String value) {
-    openMenu();
-    clickMenuItem(value);
+    if (!StringUtils.equals(getValue(), value)) {
+      openMenu();
+      clickMenuItem(value);
+      closeMenu();
+    }
   }
 
   public void clickMenuItem(String value) {
@@ -85,17 +106,19 @@ public class AntSelect3 extends PageElement {
   }
 
   public void clearValue() {
-    openMenu();
-    if (clearIcon.isDisplayedFast()) {
-      clearIcon.click();
-    } else {
-      searchInput.forceClear();
+    if (StringUtils.isNotBlank(getValue())) {
+      openMenu();
+      if (clearIcon.isDisplayedFast()) {
+        clearIcon.click();
+      } else {
+        searchInput.forceClear();
+      }
+      closeMenu();
     }
   }
 
   public void removeSelected(List<String> items) {
-    selectedItems.stream()
-        .filter(i -> items.contains(i.getContent()))
+    selectedItems.stream().filter(i -> items.contains(i.getContent()))
         .forEach(SelectedItem::remove);
   }
 
@@ -104,45 +127,66 @@ public class AntSelect3 extends PageElement {
   }
 
   private String getItemIndexLocator(int index) {
-    return getListBoxLocator() + "/div[" + index + "]";
+    return getListBoxLocator() + "//div[@class='rc-virtual-list-holder-inner']/div[" + index + "]";
   }
 
   private String getItemContainsLocator(String value) {
-    return getListBoxLocator() + "/div[contains(normalize-space(@title),'"
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']/div[contains(normalize-space(@title),'"
         + StringUtils.normalizeSpace(value) + "')]";
   }
 
   private String getItemEqualsLocator(String value) {
-    return getListBoxLocator() + "/div[normalize-space(@title)='" + StringUtils.normalizeSpace(
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']/div[normalize-space(@title)='"
+        + StringUtils.normalizeSpace(
         value) + "']";
   }
 
   private String getListBoxLocator() {
     String listId = searchInput.getAttribute("aria-owns");
-    return "//div[./div[@id='" + listId + "']]//div[@class='rc-virtual-list-holder-inner']";
+    return "//div[./div/div[@id='" + listId + "']]";
   }
 
   private void openMenu() {
-    if (!isElementVisible(getListBoxLocator(), 0)) {
+    String listBoxLocator = getListBoxLocator();
+    if (!isElementVisible(listBoxLocator, 0)) {
+      searchInput.moveAndClick();
+    }
+    if (!isElementVisible(listBoxLocator, 0)) {
       searchInput.click();
     }
   }
 
+  public void closeMenu() {
+    String listBoxLocator = getListBoxLocator();
+    try {
+      waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
+    } catch (Exception ex) {
+    }
+    if (isElementVisible(listBoxLocator, 0)) {
+      jsClick();
+    }
+    if (isElementVisible(listBoxLocator, 0)) {
+      new Actions(getWebDriver()).sendKeys(Keys.ESCAPE).perform();
+    }
+    try {
+      waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
+    } catch (Exception ex) {
+    }
+  }
+
   public void enterSearchTerm(String value) {
-    searchInput.sendKeys(value);
+    searchInput.setValue(value);
     pause500ms();
   }
 
   public String getValue() {
-    return selectedValue.isDisplayedFast() ?
-        selectedValue.getAttribute("title") :
-        null;
+    return selectedValue.isDisplayedFast() ? selectedValue.getAttribute("title") : null;
   }
 
   public List<String> getValues() {
-    return selectedValues.stream()
-        .map(e -> e.getAttribute("title"))
-        .collect(Collectors.toList());
+    return selectedValues.stream().map(e -> e.getAttribute("title")).collect(Collectors.toList());
   }
 
   public boolean hasItem(String value) {
@@ -181,5 +225,9 @@ public class AntSelect3 extends PageElement {
     public void remove() {
       remove.click();
     }
+  }
+
+  public void waitUntilEnabled() {
+    searchInput.waitUntilClickable();
   }
 }

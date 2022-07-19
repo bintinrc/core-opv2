@@ -7,6 +7,9 @@ import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
+import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
+import co.nvqa.operator_v2.util.TestUtils;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -16,6 +19,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -26,6 +30,10 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
       .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
+  private DpAdministrationReactPage dpAdminReactPage;
+
+  private static final String DP_PARTNER_LABEL = "label_page_details";
+  private static final String DP_LABEL = "label_distribution_points";
 
   public DpAdministrationSteps() {
   }
@@ -33,6 +41,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Override
   public void init() {
     dpAdminPage = new DpAdministrationPage(getWebDriver());
+    dpAdminReactPage = new DpAdministrationReactPage(getWebDriver());
   }
 
   @Given("Operator add new DP Partner on DP Administration page with the following attributes:")
@@ -61,10 +70,24 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.downloadCsvFile();
   }
 
+  @When("Operator click on Download CSV File button on DP Administration React page")
+  public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationReactPage() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonDownloadCsv.click();
+      pause5s();
+    });
+  }
+
   @Then("Downloaded CSV file contains correct DP Partners data")
   public void downloadedCsvFileContainsCorrectDpPartnersData() {
     List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
     dpAdminPage.verifyDownloadedFileContent(dpPartnersParams);
+  }
+
+  @Then("Downloaded CSV file contains correct DP Partners data in new react page")
+  public void downloadedCsvFileContainsCorrectDpPartnersDataInNewReactPage() {
+    List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
+    dpAdminPage.verifyDownloadedFileContentNewReactPage(dpPartnersParams);
   }
 
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
@@ -119,6 +142,299 @@ public class DpAdministrationSteps extends AbstractSteps {
       resourcePath = "images/dpPhotoInvalidSize.png";
     }
     return resourcePath;
+  }
+
+  @And("Operator Search with Some DP Partner Details :")
+  public void operatorVerifyRouteDetails(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
+        dpAdminReactPage.fillFilterDpPartner(extractDetail, valueDetails);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+        dpAdminReactPage.clearFilter(extractDetail);
+      }
+    });
+  }
+
+  @And("Operator click on Add Partner button on DP Administration React page")
+  public void operatorPressAddDpButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonAddPartner.click();
+      pause3s();
+    });
+  }
+
+  @Then("Operator Fill Dp User Details below :")
+  public void operatorFillDpUserDetails(DataTable dt) {
+    List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
+    DpUser dpUser = dpUsers.get(0);
+    dpAdminReactPage.inFrame(() -> {
+      if (dpUser.getFirstName() != null && dpUser.getFirstName().contains("ERROR_CHECK")) {
+        dpAdminReactPage.errorCheckDpUser(dpUser);
+      } else {
+        if (dpUser.getFirstName() != null){
+          dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
+        }
+        if (dpUser.getLastName() != null){
+          dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
+        }
+        if (dpUser.getContactNo() != null){
+          dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
+        }
+        if (dpUser.getEmailId() != null){
+          dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
+        }
+        if (dpUser.getUsername() != null){
+          dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
+          put(KEY_DP_USER_USERNAME,dpUser.getUsername());
+        }
+        if (dpUser.getPassword() != null){
+          dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
+        }
+
+        put(KEY_DP_USER, dpUser);
+      }
+    });
+  }
+
+  @Then("Operator press submit user button")
+  public void operatorPressSubmitUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitDpUser.click();
+    });
+  }
+
+  @Then("Operator will get the error message that the username is duplicate")
+  public void checkUsernameIsDuplicate() {
+    DpUser dpUser = get(KEY_DP_USER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.errorNotification.waitUntilVisible();
+      dpAdminReactPage.duplicateUsernameExist(dpUser);
+    });
+  }
+
+  @Then("Operator Fill Dp Partner Details below :")
+  public void operatorFillDpPartnerDetails(DataTable dt) {
+    List<Partner> partners = convertDataTableToList(dt, Partner.class);
+    Partner partner = partners.get(0);
+
+    dpAdminReactPage.inFrame(() -> {
+      if (partner.getName() != null && partner.getName().contains("ERROR_CHECK")) {
+        dpAdminReactPage.errorCheckDpPartner(partner);
+      } else {
+        if (partner.getName() != null) {
+          dpAdminReactPage.formPartnerName.setValue(partner.getName());
+        }
+        if (partner.getPocName() != null) {
+          if (!dpAdminReactPage.formPocName.getValue().equals("")) {
+            dpAdminReactPage.formPocName.forceClear();
+          }
+          dpAdminReactPage.formPocName.setValue(partner.getPocName());
+        }
+
+        if (partner.getPocTel() != null) {
+
+          if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
+            dpAdminReactPage.formPocNo.forceClear();
+          }
+
+          if (partner.getPocTel().equals("VALID")) {
+            partner.setPocTel(TestUtils.generatePhoneNumber());
+            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+          } else {
+            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+          }
+        }
+
+        if (partner.getPocEmail() != null) {
+          dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
+        }
+        if (partner.getRestrictions() != null) {
+          dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
+        }
+        if (partner.getSendNotificationsToCustomer() != null
+            && partner.getSendNotificationsToCustomer()) {
+          dpAdminReactPage.buttonSendNotifications.click();
+        }
+
+        if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
+          partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
+        }
+
+        put(KEY_DP_MANAGEMENT_PARTNER, partner);
+      }
+    });
+  }
+
+  @Then("Operator will check the error message is equal {string}")
+  public void checkErrorMessageFromDpPartner(String errorMsg) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.checkErrorMsg(errorMsg);
+      pause3s();
+    });
+  }
+
+  @Then("Operator press submit button")
+  public void submitDpPartnerButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartner.click();
+    });
+  }
+
+  @Then("Operator press edit partner button")
+  public void editDpPartnerButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonEditPartner.click();
+    });
+  }
+
+  @Then("Operator press submit partner changes button")
+  public void submitDpPartnerChangesButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitPartnerChanges.click();
+    });
+  }
+
+  @Then("The Dp Administration page is displayed")
+  public void dpAdminIsDisplayed() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.dpAdminHeader.waitUntilVisible();
+    });
+  }
+
+  @Then("The Dp page is displayed")
+  public void dpPageIsDisplayed() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.distributionPointHeader.waitUntilVisible();
+    });
+  }
+
+  @Then("Operator fill the partner filter by {string}")
+  public void operatorFillThePartnerFilter(String element) {
+    Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(
+        newlyCreatedPartner);
+    dpAdminReactPage.inFrame(() -> {
+      String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,
+          newlyCreatedDpPartner);
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @Then("Operator fill the Dp list filter by {string}")
+  public void operatorFillTheDpListFilter(String element) {
+    DpDetailsResponse newlyCreatedDpDetails = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+    dpAdminReactPage.inFrame(() -> {
+      String fillInValue = dpAdminReactPage.getDpElementByMap(element, newlyCreatedDpDetails);
+      dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @Then("Operator fill the Dp User filter by {string}")
+  public void operatorFillTheDpUserFilter(String element) {
+    DpUser dpUser = get(KEY_DP_USER);
+    dpAdminReactPage.inFrame(() -> {
+      String fillInValue = dpAdminReactPage.getDpUserElementByMap(element, dpUser);
+      dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @And("Operator check the submitted data in the table")
+  public void checkSubmittedDataInTable() {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    dpAdminReactPage.inFrame(page -> {
+      dpAdminReactPage.fillFilterDpPartner("name", partner.getName());
+    });
+  }
+
+  @And("Operator Search Dp Partners by Id")
+  public void operatorSearchDpPartnersById() {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.waitUntilVisibilityOfElementLocated(
+          f("//h2[@data-testid='%s']", DP_PARTNER_LABEL));
+      dpAdminReactPage.filterPartnerId.setValue(partner.getId());
+    });
+  }
+
+
+  @And("Operator press view DP Button")
+  public void operatorPressViewDpButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonViewDps.click();
+    });
+  }
+
+  @And("Operator press add user Button")
+  public void operatorPressAddUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonAddUser.click();
+    });
+  }
+
+  @And("Operator press view DP User Button")
+  public void operatorPressViewDpUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonDpUser.click();
+    });
+  }
+
+  @When("Operator press Add DP")
+  public void operatorPressAddDp() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.waitUntilVisibilityOfElementLocated(
+          f("//h2[@data-testid='%s']", DP_LABEL));
+      dpAdminReactPage.buttonAddDp.click();
+    });
+  }
+
+  @Then("Operator get partner id")
+  public void operatorGetPartnerId() {
+    dpAdminReactPage.inFrame(page -> {
+      String partnerId = dpAdminReactPage.labelPartnerId.getText();
+      put(KEY_DP_PARTNER_ID, partnerId);
+      Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+      partner.setId(Long.parseLong(partnerId));
+      put(KEY_DP_MANAGEMENT_PARTNER, partner);
+    });
+  }
+
+  @Then("Operator need to make sure that the id and dpms partner id from newly created dp partner is same")
+  public void dpPartnerIdDpmsIdChecking() {
+    Partner partner = get(KEY_DP_PARTNER);
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.checkingIdAndDpmsId(partner);
+    });
+  }
+
+  @And("Operator check the data again with pressing ascending and descending order :")
+  public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
+    Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetails[0], expected);
+      dpAdminReactPage.fillFilterDpPartner(extractDetails[0], valueDetails);
+      for (String extractDetail : extractDetails) {
+        dpAdminReactPage.sortFilter(extractDetail);
+        pause2s();
+        dpAdminReactPage.readEntity(expected);
+      }
+    });
   }
 
   private File getDpPhoto(String resourcePath) {
@@ -296,5 +612,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpPartner.setRestrictions(partner.getRestrictions());
 
     put(KEY_DP_PARTNER, dpPartner);
+  }
+
+  @And("Operator verifies the newly created DP user data is right")
+  public void verifyNewlyCreatedDpUser() {
+    DpUser dpUser = get(KEY_DP_USER);
+    List<co.nvqa.commons.model.dp.DpUser> dpUserDb = get(KEY_DATABASE_CHECKING_CREATED_DP_USER);
+    dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb.get(0));
   }
 }

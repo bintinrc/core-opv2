@@ -1003,10 +1003,7 @@ Feature: Number of Parcels with Exception Cases
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | globalInboundRequest | { "hubId":"{hub-id-Global2}" } |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"HUB INBOUND SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
@@ -1044,11 +1041,11 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status     | CREATED          |
 
     Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent |
-      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
+      | HubName            | HubId            | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent |
+      | {hub-name-Global2} | {hub-id-Global2} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
-  Scenario Outline: View Parcel Routing Scanned Pacels with Exception Cases (uid:b407f68a-f384-476f-b3f9-7ff9e049d8fa)
+  Scenario Outline: View Parcel Routing Scanned Parcels with Exception Cases
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1061,10 +1058,6 @@ Feature: Number of Parcels with Exception Cases
     And API Operator sweep parcel in the hub
       | hubId | <HubId>                         |
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name-3}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator gets the event time by event name:"PARCEL ROUTING SCAN"
     When Operator go to menu Recovery -> Recovery Tickets
