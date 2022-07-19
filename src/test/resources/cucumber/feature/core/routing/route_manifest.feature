@@ -549,6 +549,8 @@ Feature: Route Manifest
       | name | FORCED SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE STATUS |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGES |
     And DB Operator verify core_qa_sg/cod_collections record is NOT created:
       | driverId        | {ninja-driver-id} |
       | transactionMode | DELIVERY          |
