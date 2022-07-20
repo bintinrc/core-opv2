@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.util.NvRetry;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -15,6 +16,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AntSelect3 extends PageElement {
 
@@ -52,6 +55,7 @@ public class AntSelect3 extends PageElement {
   public PageElement clearIcon;
 
   private Boolean isMultiple;
+  private static final Logger LOGGER = LoggerFactory.getLogger(AntSelect3.class);
 
   private boolean isMultiple() {
     if (isMultiple == null) {
@@ -174,7 +178,7 @@ public class AntSelect3 extends PageElement {
     try {
       waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
     } catch (Exception ex) {
-      NvRetry.LOGGER.error(ex.toString());
+      LOGGER.error(ex.toString());
     }
   }
 

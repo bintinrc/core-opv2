@@ -1,15 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.reportportal.Launch;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
-import com.google.common.collect.Iterables;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -168,12 +167,10 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
   }
 
   public void selectSessionItemByName(String sessionName) {
-    SessionItem sessionItem = listSessionItems.stream()
+    Optional<SessionItem> sessionItem = listSessionItems.stream()
         .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
-        .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException(
-            "Could not find session with name=" + sessionName));
-    sessionItem.click();
+        .findFirst();
+    sessionItem.get().click();
     loadingIndicator.waitUntilInvisible(10);
   }
 
