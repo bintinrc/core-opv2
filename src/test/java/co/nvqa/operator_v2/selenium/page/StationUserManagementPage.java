@@ -29,7 +29,7 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
   private static final String REMOVE_USER_SUCCESS_MESSAGE = "//*[contains(text(),'Successfully removed user %s!')]";
   private static final String FILTER_RESULT_IN_LIST_OF_USERS = "//div[@data-datakey='email']//mark[contains(text(),'%s')]";
   private static final String STATION_USER_MANAGEMENT_PAGE_TITLE = "//*[text()='%s']";
-  private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "(//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='mark' or name()='span'])[last()]";
+  private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span']";
 
   public StationUserManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -193,6 +193,7 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateFilter(String columnName, String expectedValue) {
     String valueXpath = f(TABLE_FIRST_ROW_VALUE_BY_COLUMN, columnName);
+    pause5s();
     String actualValue = getWebDriver().findElement(By.xpath(valueXpath)).getText();
     Assertions.assertThat(actualValue).as("Validation of Columnr Value")
         .isEqualToIgnoringCase(expectedValue);
