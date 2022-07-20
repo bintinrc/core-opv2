@@ -870,15 +870,15 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     public SchedulesTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_ORIGIN_HUB, "origin-hub-name")
-          .put(COLUMN_DESTINATION_HUB, "destination-hub-name")
-          .put("movementType", "movement-type")
-          .put("departureTime", "start-time")
-          .put(COLUMN_DURATION, "duration")
-          .put(COLUMN_DURATION_TIME, "duration")
-          .put(COLUMN_DAYS_OF_WEEK, "day")
-          .put(COLUMN_DRIVERS, "drivers")
-          .put("comment", "comments")
+          .put(COLUMN_ORIGIN_HUB, "contains(@class,'origin-hub-name')")
+          .put(COLUMN_DESTINATION_HUB, "contains(@class,'destination-hub-name')")
+          .put("movementType", "contains(@class,'movement-type')")
+          .put("departureTime", "contains(@class,'start-time')")
+          .put(COLUMN_DURATION, "contains(@class,'duration')")
+          .put(COLUMN_DURATION_TIME, "contains(@class,'duration')")
+          .put(COLUMN_DAYS_OF_WEEK, "contains(@class,'day')")
+          .put(COLUMN_DRIVERS, "contains(@class,'drivers')")
+          .put("comment", "contains(@class,'comments')")
           .build()
       );
       setColumnValueProcessors(ImmutableMap.of(
