@@ -14,11 +14,14 @@ Feature: Shipment Management - Search Shipment 2
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     When Operator click "Load All Selection" on Shipment Management page
-    When Operator edit Shipment on Shipment Management page including MAWB using data below:
-      | destHubName | {hub-name-2}                                                         |
-      | origHubName | {hub-name}                                                           |
-      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    When Operator edit Shipment on Shipment Management page based on "mawb" using data below:
+      | origHubName     | {hub-name-2}                                                        |
+      | destHubName     | {hub-name}                                                          |
+      | comments        | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb            | {KEY_CREATED_SHIPMENT_ID}                                           |
+      | mawbVendor      | Boss Cargo Express Freight Services Inc.                            |
+      | MawbOrigin      | ABC                                                                 |
+      | MawbDestination | 123                                                                 |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter shipment based on MAWB value on Shipment Management page

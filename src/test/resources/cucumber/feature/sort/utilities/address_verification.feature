@@ -176,7 +176,7 @@ Feature: Address Verification
       | name | VERIFY ADDRESS |
     And Operator verifies Zone is "{av-zone-short-name}" on Edit Order page
 
-  Scenario: AV Non RTS orders - RTS zone does not exist
+  Scenario: AV Non RTS orders - Zone is NULL
     When Operator go to menu Utilities -> Address Verification
     And Operator refresh page v1
     Then Address Verification page is loaded
