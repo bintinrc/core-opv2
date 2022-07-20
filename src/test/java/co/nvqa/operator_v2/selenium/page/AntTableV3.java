@@ -73,7 +73,7 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = getTableLocator() + f("//thead//th[%s]//input", columnLocators.get(columnId));
+    String xpath = getTableLocator() + f("//thead//th[contains(@class,'%s')]//input", columnLocators.get(columnId));
     String currentValue = getValue(xpath);
     if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value)) {
       StringBuilder sb = new StringBuilder();
