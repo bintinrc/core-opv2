@@ -718,11 +718,11 @@ public class MovementManagementSteps extends AbstractSteps {
     Map<String, String> data = resolveKeyValues(dataMap);
     String originHub = data.get("originHub");
     if (StringUtils.isNotBlank(originHub)) {
-      movementManagementPage.schedulesTable.filterByColumn(COLUMN_ORIGIN_HUB, originHub);
+      movementManagementPage.schedulesTable.filterOriginHubName.sendKeys(originHub);
     }
     String destinationHub = data.get("destinationHub");
     if (StringUtils.isNotBlank(destinationHub)) {
-      movementManagementPage.schedulesTable.filterByColumn(COLUMN_DESTINATION_HUB, destinationHub);
+      movementManagementPage.schedulesTable.filterDestHubName.sendKeys(destinationHub);
     }
   }
 
