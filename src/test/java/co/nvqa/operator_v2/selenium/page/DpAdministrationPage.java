@@ -536,13 +536,24 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
-          .isEqualTo(expectedDpPartner.getPocTel());
-      assertEquals("POC Email is correct",
-          Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
-          actualDpPartner.getPocEmail());
-      assertEquals("Restrictions is correct",
-          Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
-          actualDpPartner.getRestrictions());
+          .isEqualTo("'" + expectedDpPartner.getPocTel());
+
+      if (expectedDpPartner.getPocEmail() == null || expectedDpPartner.getPocEmail().equals("")) {
+        Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
+            .isEqualTo("-");
+      } else {
+        Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
+            .isEqualTo(expectedDpPartner.getPocEmail());
+      }
+
+      if (expectedDpPartner.getRestrictions() == null || expectedDpPartner.getRestrictions()
+          .equals("")) {
+        Assertions.assertThat(actualDpPartner.getRestrictions()).as("POC No. is correct")
+            .isEqualTo("-");
+      } else {
+        Assertions.assertThat(actualDpPartner.getRestrictions()).as("POC No. is correct")
+            .isEqualTo(expectedDpPartner.getRestrictions());
+      }
     }
   }
 

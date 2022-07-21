@@ -16,6 +16,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -96,10 +97,16 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
   }
 
-  @When("^Operator get first (\\d+) DP Partners params on DP Administration New page$")
-  public void operatorGetFirstDpPartnersParamsOnDpAdministrationNewPage(int count) {
-    List<DpPartner> dpPartnersParams = dpAdminReactPage.dpPartnersReactTable().readFirstEntities(count);
-    put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
+  @When("Operator get DP Partners Data on DP Administration page")
+  public void operatorGetFirstDpPartnersDataOnDpAdministrationPage(Map<String, String> detailsAsMap) {
+    co.nvqa.commons.model.dp.DpPartner dpPartner = resolveValue(detailsAsMap.get("dpPartnerList"));
+    int countValue = Integer.parseInt(resolveValue(detailsAsMap.get("count")));
+    List<DpPartner> dpPartners = new ArrayList<>();
+    for (int i = 0 ; i < countValue; i++){
+      Partner partner = dpPartner.getPartners().get(i);
+      dpPartners.add(dpAdminReactPage.convertPartnerToDpPartner(partner));
+    }
+    put(KEY_LIST_OF_DP_PARTNERS, dpPartners);
   }
 
   @When("Operator update created DP Partner on DP Administration page with the following attributes:")
