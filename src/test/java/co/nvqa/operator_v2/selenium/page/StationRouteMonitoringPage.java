@@ -117,7 +117,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='Load Selection']")
   public PageElement loadSelection;
 
-  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@role='combobox']")
+  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//input[@role='combobox']")
   public AntSelect2 timeslot;
 
   @FindBy(xpath = "//a[@data-testid='reservation-link']")
