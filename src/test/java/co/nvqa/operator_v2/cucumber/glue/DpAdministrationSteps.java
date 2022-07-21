@@ -358,6 +358,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(
         newlyCreatedPartner);
     dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpPartnerFilter.get(element).waitUntilVisible();
       String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,
           newlyCreatedDpPartner);
       dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
@@ -377,6 +378,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorFillTheDpUserFilter(String element) {
     DpUser dpUser = get(KEY_DP_USER);
     dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.textBoxDpUserFilter.get(element).waitUntilVisible();
       String fillInValue = dpAdminReactPage.getDpUserElementByMap(element, dpUser);
       dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(fillInValue);
     });
