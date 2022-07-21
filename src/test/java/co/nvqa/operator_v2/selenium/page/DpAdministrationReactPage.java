@@ -194,6 +194,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
   public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
 
+  private final DpPartnerReactTable dpPartnerReactTable;
+
   public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
       .put("name", filterPartnerName)
@@ -224,6 +226,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public DpAdministrationReactPage(WebDriver webDriver) {
     super(webDriver);
+    dpPartnerReactTable = new DpPartnerReactTable(webDriver);
   }
 
   public DpPartner convertPartnerToDpPartner(Partner partner) {
@@ -438,4 +441,32 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     return dpElement.get(map);
   }
 
+  public DpPartnerReactTable dpPartnersReactTable() {
+    return dpPartnerReactTable;
+  }
+
+  public static class DpPartnerReactTable extends AntTableV2<DpPartner> {
+
+    public static final String DP_PARTNER_ID = "id";
+    public static final String DP_PARTNER_NAME = "name";
+
+    public DpPartnerReactTable(WebDriver webDriver) {
+      super(webDriver);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(DP_PARTNER_ID, "label_partner_id")
+          .put(DP_PARTNER_NAME, "label_partner_name")
+          .put("pocName", "label_poc_name")
+          .put("pocTel", "label_poc_no")
+          .put("pocEmail", "label_poc_email")
+          .put("restrictions", "label_restrictions")
+          .build()
+      );
+      setEntityClass(DpPartner.class);
+      setActionButtonsLocators(ImmutableMap.of(
+          "edit",
+          "button_edit_partner",
+          "View DPs",
+          "button_view_dps"));
+    }
+  }
 }

@@ -96,6 +96,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
   }
 
+  @When("^Operator get first (\\d+) DP Partners params on DP Administration New page$")
+  public void operatorGetFirstDpPartnersParamsOnDpAdministrationNewPage(int count) {
+    List<DpPartner> dpPartnersParams = dpAdminReactPage.dpPartnersReactTable().readFirstEntities(count);
+    put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
+  }
+
   @When("Operator update created DP Partner on DP Administration page with the following attributes:")
   public void operatorUpdateCreatedDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
       Map<String, String> data) {
