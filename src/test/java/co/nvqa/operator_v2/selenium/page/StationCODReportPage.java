@@ -72,7 +72,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTableHeader')]"))
   private List<PageElement> columnNames;
 
-  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+  @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTable___StyledDiv')]"))
   private List<PageElement> columnValues;
 
     @FindBy(css = "div.ant-row div.ant-col:nth-child(1)")
