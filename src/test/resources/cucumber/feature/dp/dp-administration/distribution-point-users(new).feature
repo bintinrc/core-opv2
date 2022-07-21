@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
+@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -77,8 +77,8 @@ Feature: DP Administration - Distribution Point Users
       | firstName   | lastName | contactNo | emailId   | username                                | password |
       | ERROR_CHECK | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser @RT
-  Scenario: DP Administration - Create DP User (uid:0146137a-6964-4985-a417-7bbd6035e5b7)
+  @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
+  Scenario: DP Administration - Download CSV DP Users
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
