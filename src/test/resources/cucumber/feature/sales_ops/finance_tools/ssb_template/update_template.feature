@@ -12,9 +12,9 @@ Feature: Update Template
     And Operator clicks Create Template button
     And SSB Report Template Editor page is loaded
     Then Operator creates SSB template with below data successfully
-      | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | selectHeaders       | Shipper Name                                                     |
+      | templateName        | Dummy-Template-1-{gradle-current-date-yyyyMMddHHmmsss}             |
+      | templateDescription | Dummy-Template-1-Description-{gradle-current-date-yyyyMMddHHmmsss} |
+      | selectHeaders       | Shipper Name                                                       |
     Then Operator waits for 1 seconds
     Then Operator edits SSB Template with Name "{KEY_TEMPLATE.getName}"
     Then Operator updates SSB template with below data successfully
@@ -38,14 +38,14 @@ Feature: Update Template
     And Operator clicks Create Template button
     And SSB Report Template Editor page is loaded
     Then Operator creates SSB template with below data successfully
-      | templateName        | Dummy-Template-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | templateDescription | Dummy-Template-Description-{gradle-current-date-yyyyMMddHHmmsss} |
-      | selectHeaders       | Shipper Name                                                     |
+      | templateName        | Dummy-Template-2-{gradle-current-date-yyyyMMddHHmmsss}             |
+      | templateDescription | Dummy-Template-2-Description-{gradle-current-date-yyyyMMddHHmmsss} |
+      | selectHeaders       | Shipper Name                                                       |
     Then Operator waits for 1 seconds
     Then Operator edits SSB Template with Name "{KEY_TEMPLATE.getName}"
     Then Operator updates SSB template with below data successfully
-      | templateName        | Dummy-Template-Update-{gradle-current-date-yyyyMMddHHmmsss}             |
-      | templateDescription | Dummy-Template-Update-Description-{gradle-current-date-yyyyMMddHHmmsss} |
+      | templateName        | Dummy-Template-2-Update-{gradle-current-date-yyyyMMddHHmmsss}             |
+      | templateDescription | Dummy-Template-2-Update-Description-{gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator waits for 2 seconds
     Then DB Operator gets the template details using template name
     Then Operator verifies below details in billing_qa_gl.templates table
