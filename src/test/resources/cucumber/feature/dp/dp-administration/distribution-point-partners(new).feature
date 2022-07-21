@@ -13,7 +13,7 @@ Feature: DP Administration - Distribution Point Partners
     When Operator get DP Partners Data on DP Administration page
       | dpPartnerList | KEY_DP_MANAGEMENT_PARTNER_LIST |
       | count         | 10                             |
-    When Operator click on Download CSV File button on DP Administration React page
+    When Operator click on Download CSV File button on React page
     Then Downloaded CSV file contains correct DP Partners data in new react page
 
   @DeleteNewlyCreatedDpManagementPartner

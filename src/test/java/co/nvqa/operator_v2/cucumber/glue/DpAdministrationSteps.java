@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
+import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -35,6 +36,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
+  private static final String DP_USER_LIST = "DP_USER_LIST";
 
   public DpAdministrationSteps() {
   }
@@ -71,8 +73,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.downloadCsvFile();
   }
 
-  @When("Operator click on Download CSV File button on DP Administration React page")
-  public void operatorClickOnDownloadCsvFileButtonOnDpAdministrationReactPage() {
+  @When("Operator click on Download CSV File button on React page")
+  public void operatorClickOnDownloadCsvFileButtonOnReactPage() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonDownloadCsv.click();
       pause5s();
@@ -91,6 +93,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminPage.verifyDownloadedFileContentNewReactPage(dpPartnersParams);
   }
 
+  @Then("Downloaded CSV file contains correct DP Users data in new react page")
+  public void downloadedCsvFileContainsCorrectDpUsersDataInNewReactPage(Map<String, String> detailsAsMap) {
+    List<User> user = get(detailsAsMap.get("userList"));
+    DpDetailsResponse dp = get(detailsAsMap.get("dp"));
+    dpAdminPage.verifyDownloadedFileContentNewReactPageDpUsers(user,dp);
+  }
+
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
   public void operatorGetFirstDpPartnersParamsOnDpAdministrationPage(int count) {
     List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readFirstEntities(count);
@@ -107,6 +116,18 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpPartners.add(dpAdminReactPage.convertPartnerToDpPartner(partner));
     }
     put(KEY_LIST_OF_DP_PARTNERS, dpPartners);
+  }
+
+  @When("Operator get DP Users Data on DP Administration page")
+  public void operatorGetFirstDpUsersDataOnDpAdministrationPage(Map<String, String> detailsAsMap) {
+    co.nvqa.commons.model.dp.dp_user.DpUser dpUser = resolveValue(detailsAsMap.get("dpUsers"));
+    int countValue = Integer.parseInt(resolveValue(detailsAsMap.get("count")));
+    List<User> userList = new ArrayList<>();
+    for (int i = 0 ; i < countValue; i++){
+      User user = dpUser.getUsers().get(i);
+      userList.add(user);
+    }
+    put(DP_USER_LIST, userList);
   }
 
   @When("Operator update created DP Partner on DP Administration page with the following attributes:")
