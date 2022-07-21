@@ -54,7 +54,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
 
     public String getXpath() {
       return String.format(
-          "(//div[@role='row' and @class='BaseTable__row base-row']//div[@data-datakey='%s']"
+          "(//div[@role='gridcell' and @class='BaseTable__row-cell' and @data-datakey='%s']"
               + "/child::*//*[name()='a' or (name()='span')])[last()]", this.optionValue);
     }
   }
@@ -82,7 +82,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     public String getXpath(String tableName) {
       return String.format(
           "(//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]"
-              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//div[@class='cell-wrapper']"
+              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']"
               + "//*[name()='a' or (name()='span')])[last()]", tableName, this.optionValue);
     }
   }
@@ -99,13 +99,13 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public AntSelect2 hubs;
 
-  @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public AntSelect2 zones;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public List<PageElement> modalHubSelection;
 
   @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
