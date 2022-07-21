@@ -857,6 +857,12 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
     @FindBy(xpath = "//td[@class='comments']//textarea")
     public TextBox comment;
 
+    @FindBy(xpath = "//th[contains(@class,'origin-hub-name')]//input")
+    public TextBox filterOriginHubName;
+
+    @FindBy(xpath = "//th[contains(@class,'destination-hub-name')]//input")
+    public TextBox filterDestHubName;
+
     private static final Pattern DURATION_PATTERN = Pattern
         .compile("(\\d{2})d\\s(\\d{2})h\\s(\\d{2})m");
     private static final String DAY_OF_WEEK_LOCATOR = ".//tbody/tr[%d]/td[contains(@class,'day')]//input[@value='%d']";
