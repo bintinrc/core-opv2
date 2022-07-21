@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable;
 import java.util.List;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -198,7 +199,8 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
   public Button lastAssignZoneButton;
 
   private final static String ZONE_LIST_XPATH = "//div[@class='address-name' and text()='%s']";
-  private final static String ZONE_ADDRESS_SIZE_XPATH = "%s/following-sibling::div[@class='address-size']";
+  private final static String ZONE_ADDRESS_SIZE_XPATH = "(%s/following-sibling::div[@class='address-size'])[last()]";
+  private final static String ZONE_SELECTED_OPTION_XPATH = "(//div[contains(@class, 'ant-select-item-option-content') and text()='%s'])[last()]";
 
   //endregion
 
@@ -259,12 +261,14 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
 
     // Select zone
     zoneSearchInputWrapper.click();
-    zoneSearchInput.sendKeysAndEnterNoXpath(zoneName);
+    zoneSearchInput.sendKeys(zoneName);
+    findElementByXpath(String.format(ZONE_SELECTED_OPTION_XPATH, zoneName)).click();
 
     // Edit address number
     addressSizeInputWrapper.click();
     addressSizeInput.forceClear();
     addressSizeInput.sendKeys(addressSizeStr);
+    addressSizeInput.sendKeys(Keys.TAB);
 
     // Fetch addresses
     fetchAddressesFromInitializedPoolButton.click();
@@ -272,6 +276,7 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
     fetchAddressesFromInitializedPoolButton.waitUntilClickable();
 
     // Click the last page
+    addressListLastPageButton.waitUntilClickable(90);
     addressListLastPageButton.click();
   }
 
