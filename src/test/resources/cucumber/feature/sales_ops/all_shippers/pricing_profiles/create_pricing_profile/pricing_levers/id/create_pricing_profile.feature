@@ -129,7 +129,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
       | type               | PERCENTAGE                                          |
       | comments           | This is a test pricing script                       |
-      | billingWeightLogic | Shipper submitted weight only                       |
+      | billingWeightLogic | Shipper submitted gross weight only                 |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database
@@ -148,7 +148,7 @@ Feature: Create Pricing Profile - ID
       | pricingScriptName  | {pricing-script-id-all} - {pricing-script-name-all} |
       | type               | PERCENTAGE                                          |
       | comments           | This is a test pricing script                       |
-      | billingWeightLogic | Shipper submitted weight only                       |
+      | billingWeightLogic | Shipper submitted gross weight only                 |
     Then Operator waits for 2 seconds
     And DB Operator fetches pricing lever details
     Then Operator verifies the pricing lever details in the database

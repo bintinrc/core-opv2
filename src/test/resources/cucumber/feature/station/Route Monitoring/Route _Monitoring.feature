@@ -852,6 +852,241 @@ Feature: Route Monitoring V2
       | {hub-id-15} | {hub-name-15} |
 
 
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Reservation
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Single Transaction
+    Given Operator loads Operator portal home page
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 1
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Multiple Transactions
+    Given Operator loads Operator portal home page
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 3
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline:Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery Transactions
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "Station","phone_number": "+6595557073 ","email": "Station@ninjatest.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Delivery" transaction of created orders has the same waypoint_id
+    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 2
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 1
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Pickup Transactions
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "Station","phone_number": "+6595557073 ","email": "Station@ninjatest.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator get order details
+    And API Operator gets "Pickup" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Pickup" transaction of created orders has the same waypoint_id
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 2
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 1
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "Station","phone_number": "+6595557073 ","email": "Station@ninjatest.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep multiple parcels in the hub
+      | hubId | <HubId> |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder  | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","from":{"name": "Station","phone_number": "+6595557073 ","email": "Station@ninjatest.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcels to the route using data below:
+      | orderId                           | addParcelToRouteRequest |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} | { "type":"DD" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} | { "type":"DD" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | { "type":"PP" }         |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | { "type":"PP" }         |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
+    And API Operator gets "Pickup" transaction waypoint ids of created orders
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies that each "Delivery" transaction of orders has the same waypoint_id:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    And API Operator verifies that each "Pickup" transaction of orders has the same waypoint_id:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
+    And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies there are 2 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 4
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 2
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 2
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Empty Route
+    Given Operator loads Operator portal home page
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  Scenario Outline: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
+    Given Operator loads Operator portal home page
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by Automation Test for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":<HubId>,"hub":"<HubName>","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep multiple parcels in the hub
+      | hubId | <HubId> |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{ninja-driver-name}"
+    When Operator go to menu Routing -> Route Logs
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY |
+      | routeDateTo   | TODAY     |
+      | hubName       | <HubName> |
+    And Operator edits details of created route using data below:
+      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | tags       | {route-tag-name}                        |
+      | zone       | {zone-name}                             |
+      | hub        | <HubName>                               |
+      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
+      | comments   | Route has been edited by automated test |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_CREATED_DRIVER_INFO.getFullName}"
+
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
