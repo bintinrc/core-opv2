@@ -494,7 +494,7 @@ Feature: Van Inbound
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
       | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
-  @ForceSuccessOrder @ArchiveRout
+  @ForceSuccessOrder @ArchiveRoute
   Scenario Outline: Parcel Sweep Before Scan Parcel to Van Inbound
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
