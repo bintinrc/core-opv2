@@ -179,7 +179,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @And("Operator Search with Some DP Partner Details :")
-  public void operatorVerifyRouteDetails(Map<String, String> searchSDetailsAsMap) {
+  public void operatorVerifyDpPartnerDetails(Map<String, String> searchSDetailsAsMap) {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
 
@@ -193,8 +193,29 @@ public class DpAdministrationSteps extends AbstractSteps {
         String valueDetails = dpAdminReactPage.getDpPartnerElementByMap(extractDetail, expected);
         dpAdminReactPage.fillFilterDpPartner(extractDetail, valueDetails);
         pause2s();
-        dpAdminReactPage.readEntity(expected);
-        dpAdminReactPage.clearFilter(extractDetail);
+        dpAdminReactPage.readDpPartnerEntity(expected);
+        dpAdminReactPage.clearDpPartnerFilter(extractDetail);
+      }
+    });
+  }
+
+  @And("Operator Search with Some DP User Details :")
+  public void operatorVerifyDpUserDetails(Map<String, String> searchDetailsAsMap) {
+    User user = resolveValue(searchDetailsAsMap.get("dpUser"));
+    DpUser dpUser = dpAdminReactPage.convertUserToDpUser(user);
+
+    searchDetailsAsMap = resolveKeyValues(searchDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpUserElementByMap(extractDetail,dpUser);
+        dpAdminReactPage.fillFilterDpUser(extractDetail, valueDetails);
+        pause2s();
+        dpAdminReactPage.readDpUserEntity(dpUser);
+        dpAdminReactPage.clearDpUserFilter(extractDetail);
       }
     });
   }
@@ -468,7 +489,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       for (String extractDetail : extractDetails) {
         dpAdminReactPage.sortFilter(extractDetail);
         pause2s();
-        dpAdminReactPage.readEntity(expected);
+        dpAdminReactPage.readDpPartnerEntity(expected);
       }
     });
   }
