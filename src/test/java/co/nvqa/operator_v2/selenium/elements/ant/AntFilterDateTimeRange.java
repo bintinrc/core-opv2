@@ -1,11 +1,12 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,26 +34,27 @@ public class AntFilterDateTimeRange extends PageElement {
   }
 
   @FindBy(xpath = "(.//div[contains(@class, 'ant-picker-input')]/input)[1]")
-  public TextBox dateFrom;
+  public ForceClearTextBox dateFrom;
 
-  @FindBy(xpath = "((.//div[contains(@class, 'ant-select')])[1]")
+  @FindBy(xpath = "(.//div[contains(@class, 'ant-select')])[1]")
   public AntSelect2 hoursFrom;
 
-  @FindBy(xpath = "((.//div[contains(@class, 'ant-select')])[2]")
+  @FindBy(xpath = "(.//div[contains(@class, 'ant-select')])[3]")
   public AntSelect2 minutesFrom;
 
   @FindBy(xpath = "(.//div[contains(@class, 'ant-picker-input')]/input)[2]")
-  public TextBox dateTo;
+  public ForceClearTextBox dateTo;
 
-  @FindBy(xpath = "((.//div[contains(@class, 'ant-select')])[3]")
+  @FindBy(xpath = "(.//div[contains(@class, 'ant-select')])[5]")
   public AntSelect2 hoursTo;
 
-  @FindBy(xpath = "((.//div[contains(@class, 'ant-select')])[4]")
+  @FindBy(xpath = "(.//div[contains(@class, 'ant-select')])[7]")
   public AntSelect2 minutesTo;
 
   public void setFromDate(String from) {
     if (!StringUtils.equals(from, getFromDate())) {
-      dateFrom.sendKeys(from);
+      dateFrom.click();
+      dateFrom.setValue(from + Keys.ENTER);
     }
   }
 
@@ -62,7 +64,8 @@ public class AntFilterDateTimeRange extends PageElement {
 
   public void setToDate(String from) {
     if (!StringUtils.equals(from, getToDate())) {
-      dateTo.sendKeys(from);
+      dateTo.click();
+      dateTo.setValue(from + Keys.ENTER);
     }
   }
 

@@ -27,9 +27,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +69,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void listAllShipment() {
     page.inFrame(() -> {
       page.loadSelection.click();
-      page.waitUntilLoaded(2, 30);
+      pause5s();
     });
   }
 
@@ -98,9 +101,36 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         page.shipmentStatusFilter.selectFilter(splitAndNormalize(data.get("shipmentStatus")));
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Shipment Status", data.get("shipmentStatus"));
       }
+      if (data.containsKey("shipmentDate")) {
+        List<String> values = splitAndNormalize(data.get("shipmentDate"));
+        String[] fromValues = values.get(0).split(":");
+        page.shipmentDateFilter.setFromDate(fromValues[0].trim());
+        page.shipmentDateFilter.setFromHours(fromValues[1].trim());
+        page.shipmentDateFilter.setFromMinutes(fromValues[2].trim());
+        String[] toValues = values.get(1).split(":");
+        page.shipmentDateFilter.setToDate(toValues[0].trim());
+        page.shipmentDateFilter.setToHours(toValues[1].trim());
+        page.shipmentDateFilter.setToMinutes(toValues[2].trim());
+      }
       if (data.containsKey("shipmentType")) {
         page.shipmentTypeFilter.clearAll();
         page.shipmentTypeFilter.selectFilter(splitAndNormalize(data.get("shipmentType")));
+      }
+      if (data.containsKey("originHub")) {
+        if (!page.originHubFilter.isDisplayedFast()) {
+          page.addFilter.selectValue("Origin Hub");
+        } else {
+          page.originHubFilter.clearAll();
+        }
+        page.originHubFilter.selectFilter(splitAndNormalize(data.get("originHub")));
+      }
+      if (data.containsKey("destinationHub")) {
+        if (!page.destinationHubFilter.isDisplayedFast()) {
+          page.addFilter.selectValue("Destination Hub");
+        } else {
+          page.destinationHubFilter.clearAll();
+        }
+        page.destinationHubFilter.selectFilter(splitAndNormalize(data.get("destinationHub")));
       }
       if (data.containsKey("lastInboundHub")) {
         if (!page.lastInboundHubFilter.isDisplayedFast()) {
@@ -178,7 +208,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("^Operator clear all filters on Shipment Management page$")
   public void operatorClearAllFiltersOnShipmentManagementPage() {
-    page.clearAllFilters();
+    page.inFrame(() -> page.clearAllFilters.click());
   }
 
   @When("^Operator create Shipment on Shipment Management page using data below:$")
@@ -712,9 +742,24 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @And("^Operator save current filters as preset on Shipment Management page$")
   public void operatorSaveCurrentFiltersAsPresetWithNameOnShipmentManagementPage() {
     String presetName = "Test" + TestUtils.generateDateUniqueString();
-    long presetId = page.saveFiltersAsPreset(presetName);
-    put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID, presetId);
-    put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME, presetName);
+    page.inFrame(() -> {
+      page.waitUntilLoaded(2);
+      page.presetActionsMenu.selectOption("Save Current As Preset");
+      page.savePresetDialog.waitUntilVisible();
+      page.savePresetDialog.name.setValue(presetName);
+      page.savePresetDialog.save.click();
+      page.waitUntilVisibilityOfToastReact("1 preset filter created");
+      String presetId = page.selectFiltersPreset.getValue();
+      Pattern p = Pattern.compile("(\\d+) (-) (.+)");
+      Matcher m = p.matcher(presetId);
+      if (m.matches()) {
+        presetId = m.group(1);
+        assertThat("created preset is selected", m.group(3), equalTo(presetName));
+      }
+      put(KEY_SHIPMENTS_FILTERS_PRESET_ID, presetId);
+      put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID, presetId);
+      put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME, presetName);
+    });
   }
 
   @And("^Operator select created filters preset on Shipment Management page$")
@@ -724,30 +769,86 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     operatorSelectGivenFiltersPresetOnShipmentManagementPage(presetName);
   }
 
-  @And("^Operator select \"(.+)\" filters preset on Shipment Management page$")
+  @And("Operator select {value} filters preset on Shipment Management page")
   public void operatorSelectGivenFiltersPresetOnShipmentManagementPage(String filterPresetName) {
-    filterPresetName = resolveValue(filterPresetName);
-    page.filterPresetSelector.searchAndSelectValue(filterPresetName);
+    page.inFrame(() -> page.selectFiltersPreset.selectValue(filterPresetName));
   }
 
-  @And("^Operator verify parameters of selected filters preset on Shipment Management page$")
-  public void operatorVerifyParametersOfSelectedFiltersPresetOnShipmentManagementPage() {
-    Map<String, String> filters = get(KEY_SHIPMENT_MANAGEMENT_FILTERS);
-    page.verifySelectedFilters(filters);
+  @And("Operator verify selected filters on Shipment Management page:")
+  public void verifySelectedFilters(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      if (data.containsKey("shipmentStatus")) {
+        List<String> actual = page.shipmentStatusFilter.getSelectedValues();
+        assertions.assertThat(actual)
+            .as("Shipment Status")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentStatus")));
+      }
+      if (data.containsKey("shipmentType")) {
+        List<String> actual = page.shipmentTypeFilter.getSelectedValues();
+        assertions.assertThat(actual)
+            .as("Shipment Type")
+            .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentType")));
+      }
+      if (data.containsKey("originHub")) {
+        if (!page.originHubFilter.isDisplayedFast()) {
+          assertions.fail("Origin Hub filter is not displayed");
+        } else {
+          List<String> actual = page.originHubFilter.getSelectedValues();
+          assertions.assertThat(actual)
+              .as("Origin Hub")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("originHub")));
+        }
+      }
+      if (data.containsKey("destinationHub")) {
+        if (!page.destinationHubFilter.isDisplayedFast()) {
+          assertions.fail("Destination Hub filter is not displayed");
+        } else {
+          List<String> actual = page.destinationHubFilter.getSelectedValues();
+          assertions.assertThat(actual)
+              .as("Destination Hub")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("destinationHub")));
+        }
+      }
+      if (data.containsKey("lastInboundHub")) {
+        if (!page.lastInboundHubFilter.isDisplayedFast()) {
+          assertions.fail("Last Inbound Hub filter is not displayed");
+        } else {
+          List<String> actual = page.lastInboundHubFilter.getSelectedValues();
+          assertions.assertThat(actual)
+              .as("Last Inbound Hub")
+              .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("lastInboundHub")));
+        }
+      }
+    });
+    assertions.assertAll();
   }
 
   @And("^Operator delete created filters preset on Shipment Management page$")
   public void operatorDeleteCreatedFiltersPresetOnShipmentManagementPage() {
     String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
-    page.deleteFiltersPreset(presetName);
+    page.inFrame(() -> {
+      page.presetActionsMenu.selectOption("Delete Preset");
+      page.deletePresetDialog.waitUntilVisible();
+      page.deletePresetDialog.name.selectValue(presetName);
+      page.deletePresetDialog.delete.click();
+      page.waitUntilVisibilityOfToastReact("1 preset filter deleted");
+    });
   }
 
   @Then("^Operator verify filters preset was deleted$")
   public void operatorVerifyFiltersPresetWasDeleted() {
     String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + " - " + get(
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
-    page.verifyFiltersPresetWasDeleted(presetName);
+    page.inFrame(() -> {
+      List<String> presets = page.selectFiltersPreset.getValues();
+      Assertions.assertThat(presets)
+          .as("Available filters presets")
+          .doesNotContain(presetName);
+    });
+    remove(KEY_SHIPMENTS_FILTERS_PRESET_ID);
     remove(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
   }
 

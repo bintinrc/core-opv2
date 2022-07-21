@@ -54,7 +54,6 @@ import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.Shipme
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
 
 /**
  * @author Lanang Jati
@@ -133,13 +132,16 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   public CancelShipmentDialog cancelShipmentDialog;
 
   @FindBy(css = ".ant-modal")
+  public SavePresetDialog savePresetDialog;
+
+  @FindBy(css = ".ant-modal")
+  public DeletePresetDialog deletePresetDialog;
+
+  @FindBy(css = ".ant-modal")
   public BulkUpdateShipmentDialog bulkUpdateShipmentDialog;
 
   @FindBy(css = ".ant-modal")
   public ConfirmBulkUpdateDialog confirmBulkUpdateDialog;
-
-  @FindBy(css = "[id^='commons.preset.load-filter-preset']")
-  public MdSelect filterPresetSelector;
 
   @FindBy(css = ".ant-checkbox-wrapper:not(.ant-checkbox-wrapper-checked)")
   private CheckBox uncheckedShipmentCheckBox;
@@ -186,8 +188,17 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='apply-action-button']")
   public AntMenu actionsMenu;
 
+  @FindBy(css = "[data-testid='preset-actions-button']")
+  public AntMenu presetActionsMenu;
+
+  @FindBy(css = "[data-testid='pick-preset-select']")
+  public AntSelect3 selectFiltersPreset;
+
   @FindBy(xpath = ".//button[.='Edit Filters']")
   public Button editFilters;
+
+  @FindBy(css = "[data-testid='clear-all-selections-button']")
+  public Button clearAllFilters;
 
   private static final String FILEPATH = TestConstants.TEMP_DIR;
 
@@ -232,45 +243,8 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     }
   }
 
-  public long saveFiltersAsPreset(String presetName) {
-    clickButtonByAriaLabel("Action");
-    clickButtonByAriaLabel("Save Current as Preset");
-    waitUntilVisibilityOfMdDialogByTitle("Save Preset");
-    sendKeysByAriaLabel("Preset Name", presetName);
-    clickNvIconTextButtonByName("commons.save");
-    waitUntilVisibilityOfToast("1 filter preset created");
-    String presetId = getMdSelectValueById("commons.preset.load-filter-preset");
-    Pattern p = Pattern.compile("(\\d+) (-) (.+)");
-    Matcher m = p.matcher(presetId);
-    if (m.matches()) {
-      presetId = m.group(1);
-      assertThat("created preset is selected", m.group(3), equalTo(presetName));
-    }
-    return Long.parseLong(presetId);
-  }
-
-  public void deleteFiltersPreset(String presetName) {
-    pause2s();
-    clickButtonByAriaLabel("Action");
-    clickButtonByAriaLabel("Delete Preset");
-    waitUntilVisibilityOfElementLocated("//md-dialog-content//div[.='Select a preset to delete']");
-    waitUntilElementIsClickable("//md-select[contains(@aria-label,'Select preset')]");
-    selectValueFromMdSelectByAriaLabel("Select preset", presetName);
-    clickNvIconTextButtonByName("commons.delete");
-    waitUntilVisibilityOfToast("1 filter preset deleted");
-  }
-
   public void verifyFiltersPresetWasDeleted(String presetName) {
-    assertThat("Preset [" + presetName + "] exists in presets list",
-        getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET), not(contains(presetName)));
-  }
 
-  public void verifySelectedFilters(Map<String, String> filters) {
-    filters.forEach((filter, expectedValue) -> {
-      String actualValue = getAttribute("aria-label",
-          "//nv-filter-box[@item-types='%s']//nv-icon-text-button[@ng-repeat]", filter);
-      assertThat(filter + " filter selected value", actualValue, equalTo(expectedValue));
-    });
   }
 
   public void checkErrorMessageShipmentCreation() {
@@ -468,23 +442,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
         throw ex;
       }
     }, "retry Inbounded Shipment Exist", 500, 10);
-  }
-
-  public void clearAllFilters() {
-    if (findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed()) {
-      if (findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed()) {
-        List<WebElement> clearValueBtnList = findElementsByXpath(XPATH_CLEAR_FILTER_VALUE);
-
-        for (WebElement clearBtn : clearValueBtnList) {
-          clearBtn.click();
-          pause1s();
-        }
-      }
-
-      click(XPATH_CLEAR_FILTER_BUTTON);
-    }
-
-    pause2s();
   }
 
   public void closeScanModal() {
@@ -1354,6 +1311,34 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     @FindBy(xpath = ".//div[./h5[.='Failed']]//table/tbody//tr[@data-row-key]/td[2]")
     public List<PageElement> failedReasons;
+
+  }
+
+  public static class SavePresetDialog extends AntModal {
+
+    public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(id = "name")
+    public TextBox name;
+
+    @FindBy(xpath = ".//button[.='Save']")
+    public Button save;
+
+  }
+
+  public static class DeletePresetDialog extends AntModal {
+
+    public DeletePresetDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = ".ant-select")
+    public AntSelect3 name;
+
+    @FindBy(xpath = ".//button[.='Delete']")
+    public Button delete;
 
   }
 }
