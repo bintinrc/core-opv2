@@ -361,6 +361,10 @@ public class OperatorV2SimplePage extends SimplePage {
     return getToastText("//div[@class='ant-message-notice']//span[2]");
   }
 
+  public String getAntTopTextV2() {
+    return getToastText("//div[@class='ant-notification-notice-message']");
+  }
+
   public WebElement getToastBottom() {
     String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
     return waitUntilVisibilityOfElementLocated(xpathExpression);
