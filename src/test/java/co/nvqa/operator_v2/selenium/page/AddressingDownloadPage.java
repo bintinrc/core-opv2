@@ -59,6 +59,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]/preceding-sibling::label[contains(text(), 'RTS')]/following-sibling::div")
   public PageElement filterDropDownRTS;
 
+  @FindBy(xpath = "//div[contains(@class,'select-filters-holder')]//div[contains(@class,'select-show')]/preceding-sibling::label[contains(text(), 'Source')]/following-sibling::div")
+  public PageElement filterDropDownSource;
+
   @FindBy(xpath = "//div[@title='Verified']")
   public PageElement verifiedOption;
 
@@ -67,6 +70,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[@title='Yes']")
   public PageElement yesRtsOption;
+
+  @FindBy(xpath = "//div[@title='Auto AV']")
+  public PageElement autoAvOption;
 
   @FindBy(xpath = "//div[@title='No']")
   public PageElement noRtsOption;
@@ -128,6 +134,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String HUB_IDS_DATA_TESTID = "hub_ids";
   private static final String RTS_DATA_TESTID = "rts";
   private static final String CREATED_AT_TESTID = "created_at";
+  private static final String SOURCE_TESTID = "av_sources";
 
   private static final String CREATION_TIME_PRESET_FILTER_TIMEPICKER_FIELD = "(//div[contains(text(), 'Creation Time')]/following-sibling::span//input)[%d]";
   private static final String CREATION_TIME_FILTER_DATEPICKER_FIELD = "//div[contains(@class, 'ant-picker-range')]//input[@placeholder='%s date']";
@@ -229,6 +236,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         click(f(PRESET_SELECTION_XPATH, CREATED_AT_TESTID));
         break;
 
+      case SOURCE:
+        click(f(PRESET_SELECTION_XPATH, SOURCE_TESTID));
+        break;
+
       default:
         NvLogger.warn("Invalid Address Download Filter Type");
     }
@@ -291,6 +302,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
       case CREATED_AT:
         setCreatedAtFilter();
+        break;
+
+      case SOURCE:
+        filterDropDownSource.click();
+        autoAvOption.click();
         break;
 
       default:

@@ -486,7 +486,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .getExpectedArrivalTime();
         String normalizedDepartDate = shipmentInfo.normalisedDate(
             actualDepartureTime.toString().replaceAll("Z", ":00Z"));
-        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + "Z";
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
         actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
@@ -527,7 +527,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case STATUS:
         filterValue = tripManagementDetailsData.getData().get(index).getStatus();
         tripStatusFilter.scrollIntoView();
-        tripStatusFilter.openButton.click();
+        TestUtils.callJavaScriptExecutor("arguments[0].click();", tripStatusFilter.openButton.getWebElement(),
+                getWebDriver());
         tripStatusFilter.selectType(filterValue);
         tripStatusFilter.ok.click();
         break;

@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.dp.Dp;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Hours;
+import co.nvqa.commons.model.dp.dp_user.DpUser;
+import co.nvqa.commons.model.dp.dp_user.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -84,6 +86,13 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     dpDetail.setOperatingHours(workingHours);
 
     put(KEY_CREATE_DP_REQUEST, dpDetail);
+  }
+
+  @When("Operator fill Detail for create DP Management User:")
+  public void ninjaPointVUserFillDetailForCreateDpManagementUser(DataTable dt) {
+    List<User> dpUsers = convertDataTableToList(dt, User.class);
+    User dpUser = dpUsers.get(0);
+    put(KEY_CREATE_DP_MANAGEMENT_USER_REQUEST, dpUser);
   }
 
   @When("Operator fill Detail for update DP:")
