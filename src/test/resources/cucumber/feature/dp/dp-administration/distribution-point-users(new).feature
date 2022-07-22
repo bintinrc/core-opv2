@@ -78,7 +78,7 @@ Feature: DP Administration - Distribution Point Users
       | ERROR_CHECK | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
-  Scenario: DP Administration - Download CSV DP Users
+  Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -114,7 +114,7 @@ Feature: DP Administration - Distribution Point Users
       | dp       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
-  Scenario: DP Administration - Download CSV DP Users
+  Scenario: DP Administration - Search DP User (uid:f254face-546e-410c-90dd-b23780cb40e2)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:

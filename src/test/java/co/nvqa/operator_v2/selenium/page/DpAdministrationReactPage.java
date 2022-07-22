@@ -374,7 +374,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       formPocName.forceClear();
       formPocName.setValue(dpPartner.getPocName());
       formPocName.forceClear();
-    } else if (dpPartner.getName().contains("POCNUM")) {
+    } else if (dpPartner.getName().contains("!POCNUM")) {
+      if (dpPartner.getPocTel().equals("VALID")) {
+        formPocNo.forceClear();
+        formPocNo.setValue(RandomStringUtils.random(10, true, false));
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
+                ERROR_MSG_NOT_PHONE_NUM))
+            .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
+      }
+    }else if (dpPartner.getName().contains("POCNUM")) {
       if (dpPartner.getPocTel().equals("VALID")) {
         formPocNo.forceClear();
         formPocNo.setValue(RandomStringUtils.random(10, true, false));
