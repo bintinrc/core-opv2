@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -62,6 +63,15 @@ public class UnverifiedAddressAssignmentPage extends
       );
       setEntityClass(TxnAddress.class);
     }
+  }
+
+  public void verifyNotificationWithMessage(String containsMessage) {
+    String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
+    waitUntilVisibilityOfElementLocated(notificationXpath);
+    WebElement notificationElement = findElementByXpath(notificationXpath);
+    assertThat("Toast message is the same", notificationElement.getText(),
+        equalTo(containsMessage));
+    waitUntilInvisibilityOfNotification(notificationXpath, false);
   }
 
 }
