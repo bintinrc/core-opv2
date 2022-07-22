@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -513,6 +514,36 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .containsIgnoringCase(expectedDpUserParams.getContactNo());
   }
 
+  public void verifyDownloadedFileContentNewReactPageDpUsers(List<User> expectedUsers,
+      DpDetailsResponse dp) {
+    final String fileName = getLatestDownloadedFilename(CSV_DP_USERS_FILENAME_PATTERN+ "-" + dp.getName());
+    verifyFileDownloadedSuccessfully(fileName);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<User> actualDpUser = User.fromCsvFile(User.class, pathName, true);
+
+    Assertions.assertThat(actualDpUser).as("Unexpected number of lines in CSV file")
+        .hasSizeGreaterThanOrEqualTo(expectedUsers.size());
+
+    final Map<String, User> actualMap = actualDpUser.stream().collect(Collectors.toMap(
+        User::getUsername,
+        params -> params,
+        (params1, params2) -> params1
+    ));
+
+    for (User user : expectedUsers) {
+      User actualUser = actualMap.get(user.getUsername());
+      Assertions.assertThat(user.getUsername()).as("User ID is Not null").isNotNull();
+      Assertions.assertThat(actualUser.getFirstName()).as("User First Name is correct")
+          .isEqualTo(user.getFirstName());
+      Assertions.assertThat(actualUser.getLastName()).as("User Last Name is correct")
+          .isEqualTo(user.getLastName());
+      Assertions.assertThat(actualUser.getContactNo()).as("Contact Number is correct")
+          .isEqualTo("'"+user.getContactNo());
+      Assertions.assertThat(actualUser.getEmail()).as("Email is correct")
+          .isEqualTo(user.getEmail());
+    }
+  }
+
   public void verifyDownloadedFileContentNewReactPage(List<DpPartner> expectedDpPartners) {
     final String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN_NEW);
     verifyFileDownloadedSuccessfully(fileName);
@@ -536,13 +567,24 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
-          .isEqualTo(expectedDpPartner.getPocTel());
-      assertEquals("POC Email is correct",
-          Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
-          actualDpPartner.getPocEmail());
-      assertEquals("Restrictions is correct",
-          Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
-          actualDpPartner.getRestrictions());
+          .isEqualTo("'" + expectedDpPartner.getPocTel());
+
+      if (expectedDpPartner.getPocEmail() == null || expectedDpPartner.getPocEmail().equals("")) {
+        Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
+            .isEqualTo("-");
+      } else {
+        Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
+            .isEqualTo(expectedDpPartner.getPocEmail());
+      }
+
+      if (expectedDpPartner.getRestrictions() == null || expectedDpPartner.getRestrictions()
+          .equals("")) {
+        Assertions.assertThat(actualDpPartner.getRestrictions()).as("POC No. is correct")
+            .isEqualTo("-");
+      } else {
+        Assertions.assertThat(actualDpPartner.getRestrictions()).as("POC No. is correct")
+            .isEqualTo(expectedDpPartner.getRestrictions());
+      }
     }
   }
 

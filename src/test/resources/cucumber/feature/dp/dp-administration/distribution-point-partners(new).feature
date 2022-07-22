@@ -9,8 +9,11 @@ Feature: DP Administration - Distribution Point Partners
   Scenario: DP Administration - Download CSV DP Partners (uid:ccd24e58-8ae7-4410-8d20-831b6da979b1)
     Given Operator go to menu Distribution Points -> DP Administration (New)
     Then The Dp Administration page is displayed
-    When Operator get first 10 DP Partners params on DP Administration page
-    When Operator click on Download CSV File button on DP Administration React page
+    And API Operator get DP Management partner list
+    When Operator get DP Partners Data on DP Administration page
+      | dpPartnerList | KEY_DP_MANAGEMENT_PARTNER_LIST |
+      | count         | 10                             |
+    When Operator click on Download CSV File button on React page
     Then Downloaded CSV file contains correct DP Partners data in new react page
 
   @DeleteNewlyCreatedDpManagementPartner
@@ -101,9 +104,10 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                    |
-      | Empty Partner Name | NAME        | This field is required           |
-      | Empty POC Name     | POCNME      | This field is required           |
-      | Empty POC No       | POCNUM      | This field is required           |
-      | Empty Restrictions | RESTRICTION | This field is required           |
-      | Wrong Format Email | POCMAIL     | That doesn't look like an email. |
+      | dataset_name       | key_dataset | error_message                          | form        |
+      | Empty Partner Name | NAME        | This field is required                 | name        |
+      | Empty POC Name     | POCNME      | This field is required                 | pocName     |
+      | Empty POC No       | POCNUM      | This field is required                 | pocTel      |
+      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      |
+      | Empty Restrictions | RESTRICTION | This field is required                 | restriction |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    |
