@@ -33,7 +33,7 @@ Feature: Shipment Management - Create Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
 #    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create new Shipment on Shipment Management page using data below:
+    When Operator create Shipment on Shipment Management page using data below:
       | origHubName        | {hub-name}                                                          |
       | destHubName        | {hub-name}                                                          |
       | comments           | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |

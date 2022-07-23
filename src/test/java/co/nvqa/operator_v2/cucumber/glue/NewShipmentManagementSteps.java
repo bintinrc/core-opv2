@@ -19,14 +19,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -73,16 +70,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator click ([^\"]*) button on Shipment Management page$")
-  public void clickActionButton(String actionButton) {
-    Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-    page.clickActionButton(shipmentId, actionButton);
-
-    if ("Force".equals(actionButton)) {
-      page.waitUntilForceToastDisappear(shipmentId);
-    }
-  }
-
   @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
   public void fillSearchFilter(String filter, String value) {
     String resolvedValue = resolveValue(value);
@@ -111,6 +98,34 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         page.shipmentDateFilter.setToDate(toValues[0].trim());
         page.shipmentDateFilter.setToHours(toValues[1].trim());
         page.shipmentDateFilter.setToMinutes(toValues[2].trim());
+      }
+      if (data.containsKey("shipmentCompletionDate")) {
+        if (!page.shipmentCompletionDateFilter.isDisplayedFast()) {
+          page.addFilter.selectValue("Shipment Completion Date");
+        }
+        List<String> values = splitAndNormalize(data.get("shipmentCompletionDate"));
+        String[] fromValues = values.get(0).split(":");
+        page.shipmentCompletionDateFilter.setFromDate(fromValues[0].trim());
+        page.shipmentCompletionDateFilter.setFromHours(fromValues[1].trim());
+        page.shipmentCompletionDateFilter.setFromMinutes(fromValues[2].trim());
+        String[] toValues = values.get(1).split(":");
+        page.shipmentCompletionDateFilter.setToDate(toValues[0].trim());
+        page.shipmentCompletionDateFilter.setToHours(toValues[1].trim());
+        page.shipmentCompletionDateFilter.setToMinutes(toValues[2].trim());
+      }
+      if (data.containsKey("transitDateTime")) {
+        if (!page.transitDateTimeFilter.isDisplayedFast()) {
+          page.addFilter.selectValue("transit Date Time");
+        }
+        List<String> values = splitAndNormalize(data.get("transitDateTime"));
+        String[] fromValues = values.get(0).split(":");
+        page.transitDateTimeFilter.setFromDate(fromValues[0].trim());
+        page.transitDateTimeFilter.setFromHours(fromValues[1].trim());
+        page.transitDateTimeFilter.setFromMinutes(fromValues[2].trim());
+        String[] toValues = values.get(1).split(":");
+        page.transitDateTimeFilter.setToDate(toValues[0].trim());
+        page.transitDateTimeFilter.setToHours(toValues[1].trim());
+        page.transitDateTimeFilter.setToMinutes(toValues[2].trim());
       }
       if (data.containsKey("shipmentType")) {
         page.shipmentTypeFilter.clearAll();
@@ -141,69 +156,49 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         page.lastInboundHubFilter.selectFilter(splitAndNormalize(data.get("lastInboundHub")));
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", data.get("lastInboundHub"));
       }
+      if (data.containsKey("mawb")) {
+        if (!page.mawbFilter.isDisplayedFast()) {
+          page.addFilter.selectValue("MAWB");
+        } else {
+          page.mawbFilter.clearAll();
+        }
+        page.mawbFilter.selectFilter(splitAndNormalize(data.get("mawb")));
+      }
     });
   }
 
   @When("Operator search shipments by given Ids on Shipment Management page:")
   public void fillSearchShipmentsByIds(List<String> ids) {
-    String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
+    enterShipmentIds(ids);
+    clickSearchByShipmentId();
+  }
+
+  @When("Operator click Search by shipment id on Shipment Management page")
+  public void clickSearchByShipmentId() {
     page.inFrame(() -> {
-      page.shipmentIds.setValue(shipmentIds);
       page.searchByShipmentIds.click();
     });
   }
 
-  @When("Operator filter shipment based on MAWB value on Shipment Management page")
-  public void fillSearchFilterMawb() {
-    final String mawb = get(KeyConstants.KEY_MAWB);
-
-    page.addFilter("MAWB", mawb, true);
-    putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "MAWB", mawb);
+  @When("Operator enters shipment ids on Shipment Management page:")
+  public void enterShipmentIds(List<String> ids) {
+    String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
+    page.inFrame(() -> {
+      page.shipmentIds.setValue(shipmentIds);
+    });
   }
 
-  @When("Operator filter shipment based on MAWB data value on Shipment Management page")
-  public void fillSearchFilterMawbParameter(Map<String, String> mapData) {
-    String mawb = resolveValue(mapData.get("mawb"));
-    page.addFilter("MAWB", mawb, true);
-    putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "MAWB", mawb);
-  }
-
-  @When("Operator filter shipment based on {string} Date on Shipment Management page")
-  public void fillSearchFilterByDate(String dateFieldName) {
-    LocalDateTime today = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-    LocalDateTime yesterday = today.minusDays(1);
-    String dateOfYesterday = formatter.format(yesterday);
-    LocalDateTime tomorrow = today.plusDays(1);
-    String dateOfTomorrow = formatter.format(tomorrow);
-
-    if (!dateFieldName.equals("Shipment Date")) {
-      page.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters",
-          dateFieldName);
-    }
-    page.changeDate(dateFieldName, dateOfYesterday, true);
-    page.changeDate(dateFieldName, dateOfTomorrow, false);
+  @When("Operator enters next shipment ids on Shipment Management page:")
+  public void enterNextShipmentIds(List<String> ids) {
+    String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
+    page.inFrame(() -> {
+      page.shipmentIds.sendKeys("\n" + shipmentIds);
+    });
   }
 
   @Given("Operator click Edit filter on Shipment Management page")
   public void operatorClickEditFilterOnShipmentManagementPage() {
     page.inFrame(() -> page.editFilters.click());
-  }
-
-  @Then("^Operator scan Shipment with source ([^\"]*) in hub ([^\"]*) on Shipment Management page$")
-  public void operatorScanShipmentWithSourceInHubOnShipmentManagementPage(String source,
-      String hub) {
-    try {
-      page.shipmentScanExist(source, hub);
-    } finally {
-      page.closeScanModal();
-    }
-  }
-
-  @Then("Operator verify inbounded Shipment exist on Shipment Management page")
-  public void operatorVerifyInboundedShipmentExistOnShipmentManagementPage() {
-    Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-    page.verifyInboundedShipmentExist(shipmentId);
   }
 
   @When("^Operator clear all filters on Shipment Management page$")
@@ -266,65 +261,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         }
       });
     }, 1);
-  }
-
-  @When("Operator create new Shipment on Shipment Management page using data below:")
-  public void operatorCreateNewShipmentOnShipmentManagementPageUsingDataBelow(
-      Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() -> {
-      page.inFrame(() -> {
-        try {
-          final Map<String, String> finalData = resolveKeyValues(mapOfData);
-          List<Order> listOfOrders;
-          boolean isNextOrder = false;
-
-          if (get("isNextOrder") != null) {
-            isNextOrder = get("isNextOrder");
-          }
-
-          if (containsKey(KEY_LIST_OF_CREATED_ORDER)) {
-            listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
-          } else if (containsKey(KEY_CREATED_ORDER)) {
-            listOfOrders = Collections.singletonList(get(KEY_CREATED_ORDER));
-          } else {
-            listOfOrders = new ArrayList<>();
-          }
-
-          ShipmentInfo shipmentInfo = new ShipmentInfo();
-          shipmentInfo.fromMap(finalData);
-          shipmentInfo.setOrdersCount((long) listOfOrders.size());
-
-          page.createNewShipment(shipmentInfo);
-          if (!page.checkErrMsgExist()) {
-            page.submitNewShipment(isNextOrder);
-            page.getNewShipperId();
-          }
-
-          if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
-            shipmentInfo.setShipmentType(shipmentInfo.getShipmentType());
-          }
-
-          put(KEY_SHIPMENT_INFO, shipmentInfo);
-          put(KEY_CREATED_SHIPMENT, shipmentInfo);
-          put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
-
-          if (isNextOrder) {
-            Long secondShipmentId = page.createAnotherShipment();
-            shipmentInfo.setId(secondShipmentId);
-            Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
-            List<Long> listOfShipmentId = new ArrayList<>();
-            listOfShipmentId.add(shipmentIdBefore);
-            listOfShipmentId.add(secondShipmentId);
-
-            put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
-          }
-        } catch (Throwable ex) {
-          LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
-          page.refreshPage();
-          throw new NvTestRuntimeException(ex);
-        }
-      });
-    }, 10);
   }
 
   @When("Operator edit Shipment on Shipment Management page based on {string} using data below:")
@@ -393,20 +329,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator force complete shipment from edit shipment")
-  public void operatorForceCompleteShipmentFromEditShipment() {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.editShipmentBy("completed", shipmentInfo, null);
-  }
-
-  @When("^Operator edit Shipment on Shipment Management page using data below:$")
-  public void operatorEditShipmentOnShipmentManagementPageUsingDataBelow(
-      Map<String, String> mapOfData) {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    shipmentInfo.fromMap(mapOfData);
-    page.editShipment(shipmentInfo);
-  }
-
   @When("^Operator edit Shipment on Shipment Management page including MAWB using data below:$")
   public void operatorEditShipmentOnShipmentManagementPageIncludingMawbUsingDataBelow(
       Map<String, String> mapOfData) {
@@ -437,25 +359,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     data = StandardTestUtils.replaceDataTableTokens(data);
     ShipmentInfo shipmentInfo = new ShipmentInfo();
     shipmentInfo.fromMap(data);
-
-    page.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
-  }
-
-  @Then("^Operator open shipment management page and verify parameters of shipment on Shipment Management page using data below:$")
-  public void operatorOpenShipmentManagementPageVerifyParametersShipmentOnShipmentManagementPage(
-      Map<String, String> data) {
-    data = resolveKeyValues(data);
-    data = StandardTestUtils.replaceDataTableTokens(data);
-    ShipmentInfo shipmentInfo = new ShipmentInfo();
-    shipmentInfo.fromMap(data);
-
-    page.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
-  }
-
-  @Then("^Operator verify parameters of the created shipment via API on Shipment Management page$")
-  public void operatorVerifyParametersOfTheCreatedShipmentViaApiOnShipmentManagementPage() {
-    Shipments shipment = get(KEY_CREATED_SHIPMENT);
-    page.validateShipmentId(shipment.getShipment().getId());
+    page.inFrame(() -> page.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo));
   }
 
   @Then("Operator verify parameters of the created multiple shipment on Shipment Management page")
@@ -500,30 +404,12 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator verify the following parameters of shipment {string} on Shipment Management page:")
-  public void operatorVerifyTheFollowingParametersForShipmentOnShipmentManagementPage(
-      String shipmentIdAsString, Map<String, String> mapOfData) {
-    String resolvedShipment = resolveValue(shipmentIdAsString);
-    ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
-    Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
-    expectedShipmentInfo.fromMap(resolvedKeyValues);
-    page.validateShipmentInfo(Long.valueOf(resolvedShipment),
-        expectedShipmentInfo);
-  }
-
   @Then("Operator verify the following parameters of all created shipments status is pending")
   public void operatorVerifyTheFollowingParametersOfTheAllCreatedShipmentsStatusIsPending() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
     for (Long shipmentId : shipmentIds) {
       page.validateShipmentStatusPending(shipmentId);
     }
-  }
-
-  @When("^Operator click \"([^\"]*)\" action button for the created shipment on Shipment Management page$")
-  public void operatorClickActionButtonForTheCreatedShipmentOnShipmentManagementPage(
-      String actionId) {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.clickActionButton(shipmentInfo.getId(), actionId);
   }
 
   @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
@@ -543,14 +429,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @And("Operator open the shipment detail for the shipment {string} on Shipment Management Page")
   public void operatorOpenShipmentDetailOnShipmentManagementPage(String shipmentIdAsString) {
     Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
-    page.openShipmentDetailsPage(shipmentId);
-  }
-
-
-  @And("^Operator force success the created shipment on Shipment Management page$")
-  public void operatorForceSuccessTheCreatedShipmentOnShipmentManagementPage() {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.forceSuccessShipment(shipmentInfo.getId());
+    page.inFrame(() -> page.openShipmentDetailsPage(shipmentId));
   }
 
   @And("^Operator cancel the created shipment on Shipment Management page$")
@@ -569,12 +448,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator edits and verifies that the cancelled shipment cannot be edited")
   public void operatorEditsAndVerifiesThatTheCancelledShipmentCannotBeEdited() {
     page.inFrame(() -> page.editCancelledShipment());
-  }
-
-  @And("^Operator open the Master AWB of the created shipment on Shipment Management Page$")
-  public void operatorOpenTheMasterAwbOfTheCreatedShipmentOnShipmentManagementPage() {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.openAwb(shipmentInfo.getId());
   }
 
   @And("^Operator verify the Shipment Details Page opened is for the created shipment$")
@@ -611,16 +484,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     }, "retry shipment details", 1000, 3);
   }
 
-  @Then("Operator verifies event is present for updated shipments on Shipment Detail page")
-  public void operatorVerifiesEventIsPresentForShipmentsOnShipmentDetailPage(
-      Map<String, String> dataTable) {
-    List<String> shipmentIds = get(KEY_LIST_SELECTED_SHIPMENT_IDS);
-    final Map<String, String> finalMapOfData = resolveKeyValues(dataTable);
-    shipmentIds.forEach(sid -> {
-      verifyShipmentEventData(Long.valueOf(sid), finalMapOfData);
-    });
-  }
-
   @Then("Operator verifies event is present for shipment on Shipment Detail page")
   public void operatorVerifiesEventIsPresentForShipmentOnShipmentDetailPage(
       Map<String, String> mapOfData) {
@@ -651,11 +514,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       LOGGER.error(ex.getMessage(), ex);
       throw ex;
     }
-  }
-
-  @Then("Operator verify cannot parse parameter id as long error toast exist")
-  public void operatorVerifyCannotParseParameterIdAsLongErrorToastExist() {
-    page.verifyCannotParseParameterIdAsLongToastExist();
   }
 
   @Then("Operator verifies event is present for shipment id {string} on Shipment Detail page")
@@ -732,11 +590,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         throw new NvTestRuntimeException(ex.getCause());
       }
     }, "retry shipment details", 1000, 3);
-  }
-
-  @And("^Operator verify the the master AWB is opened$")
-  public void operatorVerifyTheOpenedMasterAwbIsConsistedOfTheRightData() {
-    page.verifyMasterAwbIsOpened();
   }
 
   @And("^Operator save current filters as preset on Shipment Management page$")
@@ -844,30 +697,20 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
     page.inFrame(() -> {
       List<String> presets = page.selectFiltersPreset.getValues();
-      Assertions.assertThat(presets)
-          .as("Available filters presets")
-          .doesNotContain(presetName);
+      if (!presets.isEmpty()) {
+        Assertions.assertThat(presets)
+            .as("Available filters presets")
+            .doesNotContain(presetName);
+      }
     });
     remove(KEY_SHIPMENTS_FILTERS_PRESET_ID);
     remove(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
-  }
-
-  @And("^Operator verify that the data consist is correct$")
-  public void operatorDownloadAndVerifyThatTheDataConsistsIsCorrect() {
-    byte[] shipmentAirwayBill = get(KEY_SHIPMENT_AWB);
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    page.downloadPdfAndVerifyTheDataIsCorrect(shipmentInfo, shipmentAirwayBill);
   }
 
   @Given("Operator intends to create a new Shipment directly from the Shipment Toast")
   public void operatorIntendsToCreateANewShipmentDirectlyFromTheShipmentToast() {
     boolean isNextOrder = true;
     put("isNextOrder", isNextOrder);
-  }
-
-  @When("Operator click Force Success Button")
-  public void operatorClickForceSuccessButton() {
-    page.forceSuccessShipment();
   }
 
   @And("^Operator create CSV \"([^\"]*)\" file which has multiple valid Tracking ID in it and upload the CSV$")
@@ -955,33 +798,15 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator searches multiple shipment ids in the Shipment Management Page")
   public void operatorSearchesMultipleShipmentIdsInTheShipmentManagementPage() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    page.bulkSearchShipmentIds(shipmentIds);
+    fillSearchShipmentsByIds(
+        shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
   }
 
-  @When("Operator searches multiple shipment ids in the Shipment Management Page with {string}")
-  public void operatorSearchesMultipleShipmentIdsInTheShipmentManagementPageWith(String condition) {
+  @When("Operator enters multiple shipment ids in the Shipment Management Page")
+  public void operatorEntersMultipleShipmentIdsInTheShipmentManagementPage() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    if ("duplicated".equalsIgnoreCase(condition)) {
-      page.bulkSearchShipmentIds(shipmentIds, true);
-    } else {
-      page.bulkSearchShipmentIdsWithCondition(shipmentIds, condition);
-    }
-  }
-
-  @Then("Operator verifies that more than 30 warning toast shown")
-  public void operatorVerifiesThatMoreThanWarningToastShown() {
-    page.moreThan30WarningToastShown();
-  }
-
-  @Then("Operator verifies that there is a search error modal shown with {string}")
-  public void operatorVerifiesThatThereIsASearchErrorModalShownWith(String mode) {
-    if ("valid shipment".equalsIgnoreCase(mode)) {
-      page.verifiesSearchErrorModalIsShown(true);
-    } else if ("none".equalsIgnoreCase(mode)) {
-      page.verifiesSearchErrorModalIsShown(false);
-    } else {
-      LOGGER.warn("Mode {} is not existed!", mode);
-    }
+    enterShipmentIds(
+        shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
   }
 
   @Then("Operator verifies that search error modal shown with shipment ids:")
@@ -1011,22 +836,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator verifies the searched shipment ids result is right")
-  public void operatorVerifiesTheSearchedShipmentIdsResultIsRight() {
-    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    for (int i = 0; i < shipmentIds.size(); i++) {
-      page.searchedShipmentVerification(shipmentIds.get(i));
-    }
-  }
-
-  @Then("Operator verifies the searched shipment ids result is right except last")
-  public void operatorVerifiesTheSearchedShipmentIdsResultIsRightExceptLast() {
-    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    for (int i = 0; i < shipmentIds.size() - 1; i++) {
-      page.searchedShipmentVerification(shipmentIds.get(i));
-    }
-  }
-
   @Then("Operator verify {string} action button is disabled on shipment Management page")
   public void operatorVerifyActionButtonIsDisabled(String actionButton) {
     page.inFrame(() -> {
@@ -1036,11 +845,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
             .isFalse();
       }
     });
-  }
-
-  @Then("Operator verify empty line parsing error toast exist")
-  public void operatorVerifyEmptyLineParsingErrorToastExist() {
-    page.verifyEmptyLineParsingErrorToastExist();
   }
 
   @Then("Operator selects all shipments and click bulk update button under the apply action")
@@ -1069,16 +873,10 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
 
     page.inFrame(() -> {
-      page.bulkUpdateShipment(resolvedMapOfData, shipmentIds);
+      page.bulkUpdateShipment(resolvedMapOfData);
       page.verifyShipmentToBeUpdatedData(shipmentIds, resolvedMapOfData);
       page.confirmUpdateBulk(resolvedMapOfData);
     });
-  }
-
-  @When("Operator bulk MAWB update shipment with data below:")
-  public void operatorBulkMawbUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
-    page.bulkMawbUpdateShipment(resolveKeyValues(mapOfData),
-        get(KEY_LIST_OF_CREATED_SHIPMENT_ID));
   }
 
   @Then("Operator verify the following parameters of shipment with id {string} on Shipment Management page:")
@@ -1107,19 +905,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.selectAnotherShipmentAndVerifyCount());
   }
 
-  @And("Operator open the shipment detail for the first shipment on Shipment Management Page")
-  public void operatorOpenTheShipmentDetailForTheFirstShipmentOnShipmentManagementPage() {
-    Map<String, String> data = page.shipmentsTable.readRow(0);
-    String shipmentId = data.get("id");
-
-    put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-    page.openShipmentDetailsPage(Long.valueOf(shipmentId));
-  }
-
   @Then("Operator verify error message exist")
   public void operatorVerifyErrorMessageExist() {
-    page.inFrame(() -> page.checkErrorMessageShipmentCreation());
-
+    page.inFrame(() -> {
+      Assertions.assertThat(page.createShipmentDialog.startHubError.isDisplayedFast())
+          .withFailMessage("Error Message in Origin Hub Form is not displayed").isTrue();
+      Assertions.assertThat(page.createShipmentDialog.endHubError.isDisplayedFast())
+          .withFailMessage("Error Message in Destination Hub Form is not displayed").isTrue();
+    });
   }
 
   @And("Operator verify {string} is disable")
@@ -1139,5 +932,27 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         .withFailMessage(disabledButton + " is enabled")
         .isFalse()
     );
+  }
+
+  @And("Operator verifies number of entered shipment ids on Shipment Management page:")
+  public void verifyNumberOfShipmentIDs(Map<String, String> data) {
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      if (data.containsKey("entered")) {
+        assertions.assertThat(page.enteredUniqueShipmentIds.getText())
+            .as("Entered unique shipment ids")
+            .isEqualTo(data.get("entered") + " entered");
+      }
+      if (data.containsKey("duplicate")) {
+        if (!page.enteredDuplicateShipmentIds.isDisplayedFast()) {
+          assertions.fail("Number of duplicated shipment ids is not displayed");
+        } else {
+          assertions.assertThat(page.enteredDuplicateShipmentIds.getText())
+              .as("Entered duplicate shipment ids")
+              .isEqualTo("(" + data.get("duplicate") + " duplicate)");
+        }
+      }
+    });
+    assertions.assertAll();
   }
 }

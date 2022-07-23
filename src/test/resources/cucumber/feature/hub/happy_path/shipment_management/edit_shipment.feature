@@ -214,7 +214,8 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of the created shipment on Shipment Management page
     When Operator clicks on reopen shipment button under the Apply Action
-    Then Operator verifies that the shipment is reopened
+    Then Operator verifies that notification displayed:
+      | top | Success reopen shipments |
     And Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Pending |
 
@@ -234,8 +235,10 @@ Feature: Shipment Management - Edit Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
     When Operator clicks on reopen shipment button under the Apply Action for multiple shipments
-    Then Operator verifies that the shipment is reopened
-    And Operator verify the following parameters of all created shipments status is pending
+    Then Operator verifies that notification displayed:
+      | top | Success reopen shipments |
+    And Operator verify the following parameters of all created shipments on Shipment Management page:
+      | status | Pending |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

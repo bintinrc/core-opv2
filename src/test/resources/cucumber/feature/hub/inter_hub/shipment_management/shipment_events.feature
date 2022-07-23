@@ -7,8 +7,9 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Create Shipment
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -21,13 +22,15 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Close Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator put created parcel to shipment
     And API Operator closes the created shipment
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -46,6 +49,9 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Re-open Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -53,7 +59,6 @@ Feature: Shipment Management - Shipment Events
     And API Operator put created parcel to shipment
     And API Operator closes the created shipment
     And API Operator opens "{KEY_CREATED_SHIPMENT_ID}" shipment
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -72,12 +77,14 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Re-open Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
       | hubId      | {hub-id}                  |
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -96,6 +103,9 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Hub Inbound Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
@@ -105,7 +115,6 @@ Feature: Shipment Management - Shipment Events
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
       | hubId      | {hub-id-2}                |
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -130,9 +139,11 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Force Complete Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator change the status of the shipment into "Completed"
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -151,9 +162,11 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Cancel Shipment
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator change the status of the shipment into "Cancelled"
-    When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
