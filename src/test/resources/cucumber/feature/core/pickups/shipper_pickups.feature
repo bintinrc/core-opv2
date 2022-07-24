@@ -319,8 +319,8 @@ Feature: Shipper Pickups
     Then Operator verify reservation details on Shipper Pickups page:
       | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | shipperName | {shipper-v4-name}                        |
-      | routeId     | {KEY_CREATED_ROUTE_ID}                   |
-      | driverName  | {ninja-driver-name}                      |
+      | routeId     | null                                     |
+      | driverName  | null                                     |
 
   Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Utilities -> QRCode Printing
