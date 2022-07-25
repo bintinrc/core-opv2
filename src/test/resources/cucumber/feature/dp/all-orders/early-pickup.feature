@@ -103,6 +103,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     Given DB Operator set pickup date of DP reservation to current date from Hibernate
@@ -145,6 +146,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     Given DB Operator set pickup date of DP reservation to current date from Hibernate
@@ -189,6 +191,7 @@ Feature: Early Pickup
     Given DB Operator get DP job id from Hibernate
     And API Operator do the DP Success for From Driver Flow
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
@@ -221,6 +224,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds 
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
@@ -241,6 +245,7 @@ Feature: Early Pickup
     And DB Operator get DP job id from Hibernate
     And API Operator do the DP Success for To Driver Flow
     And API Driver "2.2" success reservation from dp
+    And Operator waits for 5 seconds
     When DB Operator gets all the data input for Driver Collection Order from database
     Then Operator verifies the data on the database for driver collect scenarios are all right
     When API Operator get order details by saved Order ID
@@ -272,6 +277,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
@@ -292,6 +298,7 @@ Feature: Early Pickup
     And DB Operator get DP job id from Hibernate
     And API Operator do the DP Success for To Driver Flow
     And API Driver "2.2" success reservation from dp
+    And Operator waits for 5 seconds
     When DB Operator gets all the data input for Driver Collection Order from database
     Then Operator verifies the data on the database for driver collect scenarios are all right
     When API Operator get order details by saved Order ID
@@ -323,6 +330,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds 
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
@@ -333,7 +341,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     And Operator verifies the delivery address is doorstep address "51 Lengkok Bahru" and "Redhill MRT"
     Given DB Operator gets Customer Unlock Code Based on Tracking ID
-    And API DP do the Customer Collection from dp with ID = "{dp-id-full-cap-full-buffer}"
+    And API DP do the Customer Collection from dp with ID = "{opv2-dp-dp-id}"
     When DB Operator gets all the data input for Customer Collection Order from database
     Then Operator verifies the data on the database for Customer Collect scenarios are all right
 
@@ -363,6 +371,7 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page

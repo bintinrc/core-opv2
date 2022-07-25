@@ -159,6 +159,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     createRouteGroupsPage.inFrame(page -> page.selectReservationFiltersMode(value));
   }
 
+  @Given("Operator choose {value} on Shipments Filters section on Create Route Groups page")
+  public void operatorChooseOnShipmentsFiltersSectionOnCreateRouteGroupPage(String value) {
+    createRouteGroupsPage.inFrame(page -> page.selectShipmentsFiltersMode(value));
+  }
+
   @When("^Operator verifies selected Transactions Filters on Create Route Groups page:$")
   public void operatorVerifiesSelectedTransactionFilters(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
