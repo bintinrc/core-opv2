@@ -81,6 +81,8 @@ Feature: Shipment Management - Edit Shipment 4
   @DeleteShipment
   Scenario Outline: Edit Shipment <title> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API get all Vendors
+    And API get all Airports
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
@@ -93,9 +95,9 @@ Feature: Shipment Management - Edit Shipment 4
       | destHubName     | {hub-name}                                                          |
       | comments        | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb            | {KEY_CREATED_SHIPMENT_ID}                                           |
-      | mawbVendor      | PT Test SG Insert                                                   |
-      | MawbOrigin      | ABC                                                                 |
-      | MawbDestination | DEF                                                                 |
+      | mawbVendor      | {KEY_LIST_OF_VENDORS[1]}                                            |
+      | MawbOrigin      | {KEY_LIST_OF_AIRPORTS[1]}                                           |
+      | MawbDestination | {KEY_LIST_OF_AIRPORTS[2]}                                           |
     And Operator refresh page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
