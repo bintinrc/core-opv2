@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.model.driver.Reschedule;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ReservationInfo;
