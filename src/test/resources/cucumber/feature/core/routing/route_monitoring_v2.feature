@@ -403,7 +403,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @Debug
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag (uid:4bf8531a-ead3-49ac-bce5-7072f26142dc)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:

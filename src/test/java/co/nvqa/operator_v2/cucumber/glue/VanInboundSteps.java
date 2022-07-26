@@ -220,17 +220,17 @@ public class VanInboundSteps extends AbstractSteps {
     Assertions.assertThat(actualDialogHeader)
         .as(f("Assert that the dialog header displayed is %s", expectedmodalName))
         .isEqualTo(expectedmodalName.trim());
-    String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    String expectedTrackingId = expectedValues.get("Tracking ID");
     String actualTrackingId = vanInboundPage.unScannedParcelsDialog.trackingId.getText().trim();
     Assertions.assertThat(actualTrackingId)
         .as(f("Assert that the tracking id: %s is shown in the modal", expectedTrackingId))
         .isEqualTo(expectedTrackingId);
     String expectedWarningMessage = expectedValues.get("WarningMessage");
     if (StringUtils.isNotBlank(expectedValues.get("WarningMessage"))) {
-      String actualWarningMessage = vanInboundPage.unScannedParcelsDialog.granularWarningText.getText()
+      String actualWarningMessage = vanInboundPage.unScannedParcelsDialog.commentsText.getText()
           .trim();
       Assertions.assertThat(actualWarningMessage)
-          .as(f("Assert that the warning message: %s is shown in the Granular status",
+          .as(f("Assert that the warning message: %s is shown in the Comments column",
               expectedWarningMessage))
           .isEqualTo(expectedWarningMessage);
       takesScreenshot();
@@ -240,7 +240,7 @@ public class VanInboundSteps extends AbstractSteps {
   @Then("Operator verifies Parcel is not available in the modal")
   public void operatorVerifiesParcelIsNotAvailableInTheModal() {
     Assert.assertFalse(f("Assert that the tracking id: %s is shown in the modal",
-            get(KEY_CREATED_SHIPMENT_ID).toString()),
+            get(KEY_CREATED_ORDER_TRACKING_ID).toString()),
         vanInboundPage.unScannedParcelsDialog.trackingId.isDisplayed());
     takesScreenshot();
   }
@@ -250,6 +250,10 @@ public class VanInboundSteps extends AbstractSteps {
     vanInboundPage.clickHubInboundShipmentButton();
   }
 
+  @And("Operator clicks the Parcel Sweep button")
+  public void operatorClicksTheParcelSweepButton() {
+    vanInboundPage.clickParcelSweepButton();
+  }
 
   @And("Operator clicks on the view button")
   public void operatorClicksOnTheViewButton() {

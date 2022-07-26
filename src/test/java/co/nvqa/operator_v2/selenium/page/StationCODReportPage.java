@@ -39,9 +39,9 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   public static final String CSV_SUMMARY_FILE_DOWNLOAD_PATTERN ="station-cod-report-summary.csv";
   private static final String STATION_COD_REPORT_BUTTON_XPATH = "//button[@disabled]//*[text()='%s']";
   private static final String STATION_COD_REPORT_LABELS_XPATH = "//div[@class='nv-filter-container']//div[@class='ant-col']//div[contains(text(),'%s')]";
-  private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//ancestor::div[@class='ant-row-flex']//div[@role='combobox']";
+  private static final String STATION_COD_REPORT_COMBOBOX_XPATH = "//div[text()='%s']//ancestor::div[@class='ant-row ant-row-flex']//div[@class='ant-select-selector']";
   private static final String STATION_COD_COLUMN_NAME_XPATH = "//div[@role='gridcell']//div[contains(@class,'th')]";
-  private static final String STATION_COD_COLUMN_VALUE_XPATH = "//div[@class='cell-wrapper']";
+  private static final String STATION_COD_COLUMN_VALUE_XPATH = "//div[@role='gridcell']";
   private static final String STATION_COD_TABLE_FILTER_BY_COLUMN_NAME_XPATH = "//div[text()='%s']/parent::div[contains(@class,'th')]//input";
   private static final String STATION_COD_SUMMARY_ROW_BY_ROUTE_ID_XPATH = "//div[@role='row'][.//a[.='%s']]";
 
@@ -60,7 +60,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@role='table']//div[contains(@class,'base-row')]")
   private List<PageElement> results;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//span[@*='ant-calendar-picker']]")
+  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[@*='ant-picker ant-picker-range']]")
   public AntIntervalCalendarPicker transactionEndDateFilter;
 
   @FindBy(xpath = "//button[@*='details-button']")
@@ -69,10 +69,10 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@*='summary-button']")
   public PageElement summaryTab;
 
-  @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'th')]"))
+  @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTableHeader')]"))
   private List<PageElement> columnNames;
 
-  @FindAll(@FindBy(css = "div[class='cell-wrapper']"))
+  @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTable___StyledDiv')]"))
   private List<PageElement> columnValues;
 
     @FindBy(css = "div.ant-row div.ant-col:nth-child(1)")
