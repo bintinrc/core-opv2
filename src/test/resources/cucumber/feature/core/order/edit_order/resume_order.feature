@@ -65,7 +65,7 @@ Feature: Resume Order
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     When Operator get "Pickup" transaction with status "Fail"
-    Then DB Operator verifies waypoint status is "PENDING"
+    Then DB Operator verifies waypoint status is "FAIL"
     When Operator get "Pickup" transaction with status "Pending"
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
