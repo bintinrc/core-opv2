@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
+import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -156,6 +157,21 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='label_restrictions']/span")
   public PageElement labelRestrictions;
 
+  @FindBy(xpath = "//div[@data-testid='label_username']/span")
+  public PageElement labelUsername;
+
+  @FindBy(xpath = "//div[@data-testid='label_first_name']/span")
+  public PageElement labelUserFirstName;
+
+  @FindBy(xpath = "//div[@data-testid='label_last_name']/span")
+  public PageElement labelUserLastName;
+
+  @FindBy(xpath = "//div[@data-testid='label_email']/span")
+  public PageElement labelUserEmail;
+
+  @FindBy(xpath = "//div[@data-testid='label_contact']/span")
+  public PageElement labelUserContact;
+
   @FindBy(xpath = "//div[@data-headerkey='id']/div/div[1]/*[name()='svg']")
   public PageElement sortPartnerId;
 
@@ -238,6 +254,17 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     return dpPartner;
   }
 
+  public DpUser convertUserToDpUser(User user) {
+    DpUser dpUser = new DpUser();
+    dpUser.setId(user.getId());
+    dpUser.setUsername(user.getUsername());
+    dpUser.setContactNo(user.getContactNo());
+    dpUser.setFirstName(user.getFirstName());
+    dpUser.setLastName(user.getLastName());
+    dpUser.setEmailId(user.getEmail());
+    return dpUser;
+  }
+
   public void sortFilter(String field) {
     ImmutableMap<String, PageElement> sortElement = ImmutableMap.<String, PageElement>builder()
         .put("id", sortPartnerId)
@@ -256,8 +283,17 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     textBoxDpPartnerFilter.get(field).setValue(value);
   }
 
-  public void clearFilter(String field) {
+  public void fillFilterDpUser(String field, String value) {
+    textBoxDpUserFilter.get(field).waitUntilVisible(2);
+    textBoxDpUserFilter.get(field).setValue(value);
+  }
+
+  public void clearDpPartnerFilter(String field) {
     textBoxDpPartnerFilter.get(field).forceClear();
+  }
+
+  public void clearDpUserFilter(String field) {
+    textBoxDpUserFilter.get(field).forceClear();
   }
 
   public void duplicateUsernameExist(DpUser dpUser) {
@@ -288,7 +324,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
     formDpUserContact.setValue(RandomStringUtils.random(10, true, false));
     Assertions.assertThat(errorMsg.getText())
-        .as(f("Error Message if Contact is filled with random character: %s", ERROR_MSG_NOT_PHONE_NUM))
+        .as(f("Error Message if Contact is filled with random character: %s",
+            ERROR_MSG_NOT_PHONE_NUM))
         .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
     formDpUserContact.forceClear();
     formDpUserContact.setValue(dpUser.getContactNo());
@@ -300,12 +337,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(ERROR_MSG_FIELD_REQUIRED);
     formDpUserEmail.setValue(RandomStringUtils.random(10, true, false));
     Assertions.assertThat(errorMsg.getText())
-        .as(f("Error Message if Email is filled with wrong format (All Letter): %s", ERROR_MSG_NOT_EMAIL_FORMAT))
+        .as(f("Error Message if Email is filled with wrong format (All Letter): %s",
+            ERROR_MSG_NOT_EMAIL_FORMAT))
         .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
     formDpUserEmail.forceClear();
     formDpUserEmail.setValue(RandomStringUtils.random(10, false, true));
     Assertions.assertThat(errorMsg.getText())
-        .as(f("Error Message if Email is filled with wrong format (All Number): %s", ERROR_MSG_NOT_EMAIL_FORMAT))
+        .as(f("Error Message if Email is filled with wrong format (All Number): %s",
+            ERROR_MSG_NOT_EMAIL_FORMAT))
         .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
     formDpUserEmail.forceClear();
     formDpUserEmail.setValue(dpUser.getEmailId());
@@ -335,7 +374,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       formPocName.forceClear();
       formPocName.setValue(dpPartner.getPocName());
       formPocName.forceClear();
-    } else if (dpPartner.getName().contains("POCNUM")) {
+    } else if (dpPartner.getName().contains("!POCNUM")) {
+      if (dpPartner.getPocTel().equals("VALID")) {
+        formPocNo.forceClear();
+        formPocNo.setValue(RandomStringUtils.random(10, true, false));
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
+                ERROR_MSG_NOT_PHONE_NUM))
+            .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
+      }
+    }else if (dpPartner.getName().contains("POCNUM")) {
       if (dpPartner.getPocTel().equals("VALID")) {
         formPocNo.forceClear();
         formPocNo.setValue(RandomStringUtils.random(10, true, false));
@@ -378,7 +426,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(errMessage);
   }
 
-  public void readEntity(DpPartner dpPartner) {
+  public void readDpPartnerEntity(DpPartner dpPartner) {
     Assertions.assertThat(Long.toString(dpPartner.getId()))
         .as(f("Partner ID Is %s", dpPartner.getId())).isEqualTo(labelPartnerId.getText());
     Assertions.assertThat(dpPartner.getName()).as(f("Partner Name Is %s", dpPartner.getName()))
@@ -392,6 +440,20 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(dpPartner.getRestrictions())
         .as(f("Restrictions Is %s", dpPartner.getRestrictions()))
         .isEqualTo(labelRestrictions.getText());
+  }
+
+  public void readDpUserEntity(DpUser dpUser) {
+    Assertions.assertThat(dpUser.getUsername()).as(f("username Is %s", dpUser.getUsername()))
+        .isEqualTo(labelUsername.getText());
+    Assertions.assertThat(dpUser.getFirstName()).as(f("First Name Is %s", dpUser.getFirstName()))
+        .isEqualTo(labelUserFirstName.getText());
+    Assertions.assertThat(dpUser.getLastName()).as(f("Last Name Is %s", dpUser.getLastName()))
+        .isEqualTo(labelUserLastName.getText());
+    Assertions.assertThat(dpUser.getEmailId()).as(f("Email Is %s", dpUser.getEmailId()))
+        .isEqualTo(labelUserEmail.getText());
+    Assertions.assertThat(dpUser.getContactNo())
+        .as(f("Contact No Is %s", dpUser.getContactNo()))
+        .isEqualTo(labelUserContact.getText());
   }
 
   public void checkingIdAndDpmsId(Partner partner) {

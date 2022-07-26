@@ -78,7 +78,7 @@ Feature: Edit Pricing Profiles - TH
     And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     And Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | billingWeightLogic | Shipper submitted weight only |
+      | billingWeightLogic | Shipper submitted gross weight only |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     And DB Operator fetches pricing lever details

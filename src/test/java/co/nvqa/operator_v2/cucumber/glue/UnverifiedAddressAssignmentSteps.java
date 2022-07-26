@@ -50,5 +50,11 @@ public class UnverifiedAddressAssignmentSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verify success notification {value}")
+  public void operatorVerifyNotificationMessage(String message) {
+    page.inFrame(() -> {
+      page.verifyNotificationWithMessage(message);
+    });
+  }
 
 }
