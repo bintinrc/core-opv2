@@ -204,7 +204,7 @@ Feature: Sort Belt Manager V2
     Given Operator go to menu Sort -> Sort Belt Manager
     And Operator refresh page v1
     And Sort Belt Manager page is loaded
-    And Operator selects hub "PANDAN" and device "SGDWS-00-OKURA" of Sort Belt Manager
+    And Operator selects hub "JKB" and device "AUTOMATION-DONT-USE-0" of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
     And Operator clicks Create Logic -> "Create new"
     Then Operator make sure redirected to "Create" logic page
