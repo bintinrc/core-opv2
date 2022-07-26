@@ -84,6 +84,8 @@ Feature: Shipment Management - Edit Shipment 5
   Scenario: Bulk Update Shipment - Update MAWB (uid:598e206a-37df-485d-b4b8-de9c5310ba7b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
+    And API get all Vendors
+    And API get all Airports
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -92,9 +94,9 @@ Feature: Shipment Management - Edit Shipment 5
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk MAWB update shipment with data below:
       | mawb            | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
-      | mawbVendor      | PT Test SG Insert                    |
-      | MawbOrigin      | ABC                                  |
-      | MawbDestination | DEF                                  |
+      | mawbVendor      | KEY_LIST_OF_VENDORS[1]               |
+      | MawbOrigin      | KEY_LIST_OF_AIRPORTS[1]              |
+      | MawbDestination | KEY_LIST_OF_AIRPORTS[2]              |
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
