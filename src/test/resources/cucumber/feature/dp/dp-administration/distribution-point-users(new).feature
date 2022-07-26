@@ -28,8 +28,11 @@ Feature: DP Administration - Distribution Point Users
       | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
-    When DB Operator gets details for newly created dp users from Hibernate
+    When DB Operator gets details for DP User from Hibernate
+      | username | {KEY_DP_USER_USERNAME} |
     And Operator verifies the newly created DP user data is right
+      | dpUser   | KEY_DP_USER          |
+      | dpUserDb | KEY_DATABASE_DP_USER |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Create DP User - Username is duplicate (uid:4b65c669-4fc4-44b1-9205-2ea7b44cf247)
