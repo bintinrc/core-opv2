@@ -616,17 +616,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
     // Try to input value
     String columnXpath = String.format(COLUMN_MAPPING_XPATH, 1, 2);
-    findElementByXpath(columnXpath).click();
+    click(columnXpath);
     pause200ms();
-    WebElement columnInput = findElementByXpath(columnXpath + "//input");
-    columnInput.sendKeys("1");
-    pause200ms();
-    columnInput.sendKeys(Keys.ENTER);
-    pause200ms();
-    columnInput.sendKeys(Keys.TAB);
-
-    Assertions.assertThat(findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, 1)).getAttribute("class"))
-        .contains("error");
+    Assertions.assertThat(isElementExist("//*[text()='No Data']"))
+        .as("Arm list contains No Data")
+        .isTrue();
 
     return true;
   }
