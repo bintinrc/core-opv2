@@ -8,6 +8,8 @@ Feature: Shipment Management - Search Shipment 2
   @DeleteShipment
   Scenario: Search Shipment by Filter - MAWB (uid:59cc8df2-47e0-46c4-9ca6-08179b099a02)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    And API get all Vendors
+    And API get all Airports
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
@@ -19,9 +21,9 @@ Feature: Shipment Management - Search Shipment 2
       | destHubName     | {hub-name}                                                          |
       | comments        | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb            | {KEY_CREATED_SHIPMENT_ID}                                           |
-      | mawbVendor      | Boss Cargo Express Freight Services Inc.                            |
-      | MawbOrigin      | ABC                                                                 |
-      | MawbDestination | 123                                                                 |
+      | mawbVendor      | KEY_LIST_OF_VENDORS[1]                                              |
+      | MawbOrigin      | KEY_LIST_OF_AIRPORTS[1]                                             |
+      | MawbDestination | KEY_LIST_OF_AIRPORTS[2]                                             |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter shipment based on MAWB value on Shipment Management page
