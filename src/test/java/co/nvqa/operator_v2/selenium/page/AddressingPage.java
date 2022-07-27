@@ -50,6 +50,7 @@ public class AddressingPage extends SimpleReactPage<AddressingPage> {
   }
 
   public void clickAddAddressButton() {
+    addAddress.waitUntilVisible();
     addAddress.click();
   }
 
@@ -129,6 +130,27 @@ public class AddressingPage extends SimpleReactPage<AddressingPage> {
     @FindBy(css = "[data-testid='form-region-input']")
     public ForceClearTextBox source;
 
+    @FindBy(css = "[data-testid='form-province-input']")
+    public ForceClearTextBox province;
+
+    @FindBy(css = "[data-testid='form-district-input']")
+    public ForceClearTextBox district;
+
+    @FindBy(css = "[data-testid='form-community-input']")
+    public ForceClearTextBox community;
+
+    @FindBy(css = "[data-testid='form-subdistrict-input']")
+    public ForceClearTextBox subdistrict;
+
+    @FindBy(css = "[data-testid='form-ward-input']")
+    public ForceClearTextBox ward;
+
+    @FindBy(css = "[data-testid='form-area-input']")
+    public ForceClearTextBox area;
+
+    @FindBy(css = "[data-testid='form-subdivision-input']")
+    public ForceClearTextBox subdivision;
+
     public void fill(Addressing address) {
       if (isNotBlank(address.getStreetName())) {
         street.setValue(address.getStreetName());
@@ -147,6 +169,30 @@ public class AddressingPage extends SimpleReactPage<AddressingPage> {
       }
       if (isNotBlank(address.getAddressType())) {
         addressType.selectValue(String.valueOf(address.getAddressType()));
+      }
+      if (isNotBlank(address.getProvince())) {
+        province.setValue(address.getProvince());
+      }
+      if (isNotBlank(address.getCity())) {
+        city.setValue(address.getCity());
+      }
+      if (isNotBlank(address.getDistrict())) {
+        district.setValue(address.getDistrict());
+      }
+      if (isNotBlank(address.getCommunity())) {
+        community.setValue(address.getCommunity());
+      }
+      if (isNotBlank(address.getSubdistrict())) {
+        subdistrict.setValue(address.getSubdistrict());
+      }
+      if (isNotBlank(address.getWard())) {
+        ward.setValue(address.getWard());
+      }
+      if (isNotBlank(address.getArea())) {
+        area.setValue(address.getArea());
+      }
+      if (isNotBlank(address.getSubdivision())) {
+        subdivision.setValue(address.getSubdivision());
       }
     }
   }
@@ -177,6 +223,30 @@ public class AddressingPage extends SimpleReactPage<AddressingPage> {
 
     @FindBy(css = "[data-testid='delete-address-button']")
     public Button deleteAddress;
+
+    @FindBy(xpath = ".//div[./div/label='Province']//input")
+    public PageElement province;
+
+    @FindBy(xpath = ".//div[./div/label='City']//input")
+    public PageElement city;
+
+    @FindBy(xpath = ".//div[./div/label='District']//input")
+    public PageElement district;
+
+    @FindBy(xpath = ".//div[./div/label='Community']//input")
+    public PageElement community;
+
+    @FindBy(xpath = ".//div[./div/label='Subdistrict']//input")
+    public PageElement subdistrict;
+
+    @FindBy(xpath = ".//div[./div/label='Ward']//input")
+    public PageElement ward;
+
+    @FindBy(xpath = ".//div[./div/label='Area']//input")
+    public PageElement area;
+
+    @FindBy(xpath = ".//div[./div/label='Subdivision']//input")
+    public PageElement subdivision;
   }
 
   public static class ConfirmDeleteModal extends AntModal {
