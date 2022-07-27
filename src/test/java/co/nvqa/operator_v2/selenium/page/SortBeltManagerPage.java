@@ -213,6 +213,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-row'][2]//div[contains(@class,'logic-details')][2]")
   public PageElement logicDetailArmFilters;
 
+  @FindBy(xpath = "//*[text()='No Data']")
+  public PageElement noDataElement;
+
   public DuplicatedCombinationsTable duplicatedCombinationsTable;
   public UniqueCombinationsTable uniqueCombinationsTable;
 
@@ -616,17 +619,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
 
     // Try to input value
     String columnXpath = String.format(COLUMN_MAPPING_XPATH, 1, 2);
-    findElementByXpath(columnXpath).click();
+    click(columnXpath);
     pause200ms();
-    WebElement columnInput = findElementByXpath(columnXpath + "//input");
-    columnInput.sendKeys("1");
-    pause200ms();
-    columnInput.sendKeys(Keys.ENTER);
-    pause200ms();
-    columnInput.sendKeys(Keys.TAB);
-
-    Assertions.assertThat(findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, 1)).getAttribute("class"))
-        .contains("error");
+    Assertions.assertThat(noDataElement.isDisplayed())
+        .as("Arm list contains No Data")
+        .isTrue();
 
     return true;
   }
