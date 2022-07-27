@@ -1277,7 +1277,7 @@ public class OperatorV2SimplePage extends SimplePage {
 
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
-    wait5sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
+    wait50sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
         f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
   }
 
