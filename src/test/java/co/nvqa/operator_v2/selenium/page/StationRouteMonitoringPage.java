@@ -94,7 +94,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   private static final String NO_RESULTS_FOUND_XPATH = "//div[contains(text(),'')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[contains(text(),'No Results Found')]";
   private static final String TRACKINGID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link']";
   private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='reservation-link' and text()='%s']";
-  private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//div[@class='cell-wrapper']//span[1]";
+  private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//span[1]";
   private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//h3[text()='%s']";
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
@@ -117,7 +117,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='Load Selection']")
   public PageElement loadSelection;
 
-  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@role='combobox']")
+  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='ant-select-selector']")
   public AntSelect2 timeslot;
 
   @FindBy(xpath = "//a[@data-testid='reservation-link']")

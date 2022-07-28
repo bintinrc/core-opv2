@@ -672,9 +672,9 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @And("Operator verifies the newly created DP user data is right")
-  public void verifyNewlyCreatedDpUser() {
-    DpUser dpUser = get(KEY_DP_USER);
-    List<co.nvqa.commons.model.dp.DpUser> dpUserDb = get(KEY_DATABASE_CHECKING_CREATED_DP_USER);
-    dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb.get(0));
+  public void verifyNewlyCreatedDpUser(Map<String, String> dataTableAsMap) {
+    DpUser dpUser = get(dataTableAsMap.get("dpUser"));
+    co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
+    dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb);
   }
 }

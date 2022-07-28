@@ -331,10 +331,11 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    And Operator cancels the created shipment on Shipment Management page
+    And Operator cancel the created shipment on Shipment Management page
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
@@ -420,7 +421,112 @@ Feature: Van Inbound
       | WarningMessage | Please hub inbound shipment!    |
     Then Operator verifies edit order page is displayed on clicking the view button
 
+    Examples:
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
 
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable Van Inbound Parcels Yet to Parcel Sweep
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator creates shipment using data below:
+      | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
+    And API Operator adds parcels to shipment using following data:
+      | country    | <Country>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | actionType | ADD                             |
+    And API Operator performs hub inbound by updating shipment status using data below:
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
+      | hubCountry | <Country>                 |
+      | hubId      | <DestHubId>               |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                     |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | WarningMessage | Please perform parcel sweep!    |
+
+    Examples:
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
+
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Unable Van Inbound Parcels in Pending Shipment and Yet to Parcel Swept
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator creates shipment using data below:
+      | createShipmentRequest | {"shipment": {"shipment_type": "LAND_HAUL", "orig_hub_id": <OrigHubId>, "dest_hub_id": <DestHubId>, "comments": "<Comments>", "orig_hub_country": "<Country>", "dest_hub_country": "<Country>", "curr_hub_country": "<Country>", "status": "Pending", "end_date": null }}' |
+    And API Operator adds parcels to shipment using following data:
+      | country    | <Country>                       |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | actionType | ADD                             |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator closes the modal
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName      | <ModalName>                                           |
+      | Tracking ID    | {KEY_CREATED_ORDER_TRACKING_ID}                       |
+      | WarningMessage | Please hub inbound shipment and perform parcel sweep! |
+
+    Examples:
+      | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |
+      | {hub-id-8} | {hub-name-8} | {hub-id-9} | sg      | Unscanned Parcels | GENERATED |
+
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Parcel Sweep Before Scan Parcel to Van Inbound
+    Given Operator loads Operator portal home page
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<OrigHubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator verifies unable to Van Inbound message is displayed
+    And Operator clicks the Parcel Sweep button
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | <OrigHubName>                   |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies the following details in the modal
+      | ModalName   | <ModalName>                     |
+      | Tracking ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator closes the dialog
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    And Operator verifies the route is started on clicking route start button
+    And Operator closes the dialog
+    And Operator click Parcels Yet to scan area on Van Inbound Page
+    Then Operator verifies Parcel is not available in the modal
 
     Examples:
       | OrigHubId  | OrigHubName  | DestHubId  | Country | ModalName         | Comments  |

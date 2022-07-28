@@ -7,8 +7,8 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Update Comments (uid:1410c729-d7db-438b-a6b6-a86ceb72fcc2)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -26,8 +26,9 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Update Multiple Fields (uid:325947b5-3c94-441e-b5d1-28dd76627eb0)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -49,8 +50,9 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Remove Selected Shipment (uid:05a2ed45-d659-45f3-b5d5-9878335e7a18)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -63,17 +65,19 @@ Feature: Shipment Management - Edit Shipment
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
-    Then Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}" on Shipment Management page:
-      | startHub | {hub-name} |
-    And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
-      | startHub | {hub-name-3} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
+      | origHubName | {hub-name-3}                         |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
+      | origHubName | {hub-name}                           |
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Abort Update (uid:83793581-a5af-45c1-aef5-bfc0e5edb0c5)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -92,14 +96,15 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Modify Selection (uid:c5697e80-4b45-4866-a71c-240056492089)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And Operator search shipments by given Ids on Shipment Management page:
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator selects shipments and click bulk update button:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
       | shipmentType    | Others |
       | modifySelection | true   |

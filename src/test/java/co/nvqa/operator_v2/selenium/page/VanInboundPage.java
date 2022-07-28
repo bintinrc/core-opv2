@@ -56,7 +56,7 @@ public class VanInboundPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//h4[contains(text(),' Unable to van inbound')]")
   public PageElement unableToVanInboundModalTitle;
 
-  @FindBy(xpath = "//p[contains(text(),' We are unable to van inbound this parcel')]")
+  @FindBy(xpath = "//p[contains(text(),'We are unable to van inbound this parcel')]")
   public PageElement unableToVanInboundModalMessage;
 
   @FindBy(xpath = "//md-icon[@role='button']")
@@ -70,6 +70,9 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[@aria-label='Hub Inbound Shipment']")
   public PageElement hubInboundShipment;
+
+  @FindBy(xpath = "//button[@aria-label='Parcel Sweep Parcel']")
+  public PageElement parcelSweepButton;
 
   @FindBy(xpath = "//label[text()='Tracking ID']/following-sibling::h3")
   private PageElement editOrderTrackingId;
@@ -152,6 +155,10 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   public void clickHubInboundShipmentButton() {
     hubInboundShipment.click();
+  }
+
+  public void clickParcelSweepButton() {
+    parcelSweepButton.click();
   }
 
 
@@ -295,8 +302,8 @@ public class VanInboundPage extends OperatorV2SimplePage {
     @FindBy(css = "td.tracking-id")
     public PageElement trackingId;
 
-    @FindBy(css = "td.granular-status>div.warning-text")
-    public PageElement granularWarningText;
+    @FindBy(css = "td.comments>div.warning-text")
+    public PageElement commentsText;
 
   }
 

@@ -1288,7 +1288,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public static class CancelShipmentDialog extends MdDialog {
 
-    @FindBy(xpath = "//button[.='Cancel Shipment']")
+    @FindBy(xpath = "//Button[.='Cancel Shipment']")
     public Button cancelShipment;
 
     @FindBy(xpath = "//button[.='Cancel']")

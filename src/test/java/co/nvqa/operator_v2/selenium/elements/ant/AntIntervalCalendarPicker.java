@@ -48,10 +48,10 @@ public class AntIntervalCalendarPicker extends PageElement {
   @FindBy(xpath = ".//i[contains(@class,'ant-calendar-picker-clear')]")
   public PageElement clear;
 
-  @FindBy(xpath = "//*[contains(@class,'ant-calendar-date-panel')]//input[@placeholder='Start date']")
+  @FindBy(xpath = "//*[contains(@class,'ant-picker ant-picker-range')]//input[@placeholder='Start date']")
   public TextBox inputFrom;
 
-  @FindBy(xpath = "//*[contains(@class,'ant-calendar-date-panel')]//input[@placeholder='End date']")
+  @FindBy(xpath = "//*[contains(@class,'ant-picker ant-picker-range')]//input[@placeholder='End date']")
   public TextBox inputTo;
 
   public void setFrom(String from) {
@@ -94,13 +94,14 @@ public class AntIntervalCalendarPicker extends PageElement {
         inputFrom.waitUntilVisible();
       }
       if (!StringUtils.equals(from, currentFrom)) {
-        inputFrom.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from);
+        inputFrom.sendKeys(
+            StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + from + Keys.ENTER + Keys.ENTER);
       }
       if (!StringUtils.equals(to, currentTo)) {
         inputTo.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10) + to);
       }
-      valueFrom.jsClick();
-      inputTo.waitUntilInvisible();
+//      valueFrom.jsClick();
+//      inputTo.waitUntilInvisible();
     }
   }
 

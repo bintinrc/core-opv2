@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @AllOrders
+@OperatorV2 @Core @Order @AllOrders @RoutingModules
 Feature: All Orders - Add To Route
 
   @LaunchBrowser @ShouldAlwaysRun
