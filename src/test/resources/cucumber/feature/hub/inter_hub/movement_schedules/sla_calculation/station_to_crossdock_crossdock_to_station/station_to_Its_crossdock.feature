@@ -7,7 +7,7 @@ Feature: Station to it's Crossdock
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock - Station Movement Found and there is available schedule (uid:6fcd7f9e-1876-4445-b840-d6baeece5575)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -66,27 +66,28 @@ Feature: Station to it's Crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}           |
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
-      | status      | Transit                             |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID}          |
+      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | status      | Transit                            |
 #      | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    Then Operator verify movement event on Shipment Details page using data below:
+    Then Operator verify movement event on Shipment Details page:
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
   @DeleteShipment @CloseNewWindows @DeletePaths @SoftDeleteCrossdockDetailsViaDb
   Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-station-id} to hub id = {hub-relation-destination-hub-id}
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
@@ -106,28 +107,29 @@ Feature: Station to it's Crossdock
     When Operator add to shipment in hub {hub-station-name} to hub id = {hub-relation-destination-hub-name}
     And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}           |
       | origHubName | {hub-station-name}                  |
       | destHubName | {hub-relation-destination-hub-name} |
       | status      | Transit                             |
       | sla         | -                                   |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(MMDA) |
       | result | Transit                    |
       | hub    | {hub-station-name}         |
-    Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                               |
-      | status   | FAILED                                                                                        |
+    Then Operator verify movement event on Shipment Details page:
+      | source   | SLA_CALCULATION                                                                                                                            |
+      | status   | FAILED                                                                                                                                     |
       | comments | No path found between {hub-station-name} (sg) and {hub-relation-destination-hub-name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to its Crossdock - Station Movement not found (uid:034368e1-26d9-43fc-9aec-6a8f6cb8f3eb)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -160,23 +162,24 @@ Feature: Station to it's Crossdock
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Transit                            |
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(MMDA)          |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                      |
-      | status   | FAILED                                                                                                               |
+    Then Operator verify movement event on Shipment Details page:
+      | source   | SLA_CALCULATION                                                                                                                                           |
+      | status   | FAILED                                                                                                                                                    |
       | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @KillBrowser @ShouldAlwaysRun

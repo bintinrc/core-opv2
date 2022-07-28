@@ -26,11 +26,11 @@ public class AntModal extends PageElement {
   @FindBy(className = "ant-modal-close")
   public PageElement close;
 
-  @FindBy(className = "ant-modal-title")
+  @FindBy(css = ".ant-modal-title,.ant-modal-confirm-title")
   public PageElement title;
 
   public void close() {
-    close.moveAndClick();
+    close.click();
   }
 
   public boolean isDisplayed() {
