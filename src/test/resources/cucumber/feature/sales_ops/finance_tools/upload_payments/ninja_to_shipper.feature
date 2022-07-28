@@ -68,7 +68,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | -<amount>,0.0 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 83.41  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC1-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with smaller amount of "Ready" ledger balance - CSV Has Netsuite ID And Payee Info (uid:4ee22504-4e2c-4e8a-9513-daa8211dbd48)
@@ -133,7 +133,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | -81.81,-71.81 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC2-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload for COD Remittance with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer and Payee Info (uid:4ef31ab4-b028-405e-bcc2-f4c665d9476d)
@@ -198,7 +198,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | -81.81,18.19 |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 100.0  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC3-{gradle-current-date-yyyyMMddHHmmsss} | 100.0  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Shipper ID doesn't link to Account ID - Payment via CSV Upload for COD Remittance with exact amount of "Ready" ledger balance (uid:868c4ece-2f82-4c67-bd19-b7a4ae24e799)
@@ -261,8 +261,8 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | overall_balance | 0.0           |
       | logs            | -<amount>,0.0 |
     Examples:
-      | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 83.41  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | source   | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
+      | Netsuite | 81.81  | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Shipper ID doesn't link to Account ID - Payment via CSV Upload for COD Remittance with smaller amount of "Ready" ledger balance (uid:a39bc732-830f-44d8-9fa1-5fb7ac03fd9b)
@@ -325,8 +325,8 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | overall_balance | -71.81        |
       | logs            | -81.81,-71.81 |
     Examples:
-      | source   | account_id                                       | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | source   | amount | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
+      | Netsuite | 10.0   | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Account ID
@@ -425,7 +425,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | <amount_2> |
     Examples:
       | source   | account_id                                       | amount | account_id_2                                       | amount_2 | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 81.81    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC4-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 81.81    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: Payment via CSV Upload for COD Remittance - CSV Has Multiple Shipper Legacy ID From Different Account ID (uid:c549dd65-ca71-4b2f-854e-4d07bac3acc0)
@@ -525,4 +525,4 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit)
       | logs            | <amount_2> |
     Examples:
       | source   | account_id                                       | amount | account_id_2                                       | amount_2 | type   | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 83.41    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-TC5-{gradle-current-date-yyyyMMddHHmmsss} | 81.81  | QA-SO-AUTO-TC5-2-{gradle-current-date-yyyyMMddHHmmsss} | 81.81    | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
