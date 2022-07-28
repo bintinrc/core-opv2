@@ -20,7 +20,7 @@ Feature: Shipment Management - Edit Shipment 4
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
@@ -44,7 +44,7 @@ Feature: Shipment Management - Edit Shipment 4
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
@@ -68,7 +68,7 @@ Feature: Shipment Management - Edit Shipment 4
     And Operator click Edit filter on Shipment Management page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                                                            |
       | id           | {KEY_CREATED_SHIPMENT_ID}                                           |
       | status       | Pending                                                             |

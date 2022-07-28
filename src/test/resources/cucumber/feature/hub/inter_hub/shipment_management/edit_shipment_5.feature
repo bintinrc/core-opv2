@@ -13,8 +13,9 @@ Feature: Shipment Management - Edit Shipment 5
     When API Operator change the status of the shipment into "Completed"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Completed                 |
     When Operator edit Shipment on Shipment Management page:
       | shipmentId | {KEY_CREATED_SHIPMENT_ID} |
     Then  Operator verifies that error react notification displayed:

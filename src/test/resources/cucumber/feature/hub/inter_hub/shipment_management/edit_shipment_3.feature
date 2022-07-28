@@ -51,8 +51,9 @@ Feature: Shipment Management - Edit Shipment 3
     When API Operator change the status of the shipment into "Completed"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Completed                 |
     When Operator clicks on reopen shipment button under the Apply Action
     Then Operator verifies that the Reopen Shipment Button is disabled
 

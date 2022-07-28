@@ -14,8 +14,9 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Cancelled |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
     When Operator edits and verifies that the cancelled shipment cannot be edited
 
   @DeleteShipment
@@ -28,8 +29,9 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Cancelled |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
     Then Operator verify "Cancel" action button is disabled on shipment Management page
 
   @DeleteShipment
@@ -42,8 +44,9 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Completed |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Completed |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Completed                 |
     Then Operator verify "Cancel" action button is disabled on shipment Management page
 
   @DeleteShipment
@@ -54,15 +57,17 @@ Feature: Shipment Management - Edit Shipment 2
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Pending"
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Pending |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Pending                   |
     And Operator cancel the created shipment on Shipment Management page
     And Operator click Edit filter on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Cancelled |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
 
   @DeleteShipment
   Scenario: Re-open Single Shipment (uid:52a4379e-fbae-46a7-ba5c-0841aae75286)
@@ -76,8 +81,9 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator clicks on reopen shipment button under the Apply Action
     Then Operator verifies that notification displayed:
       | top | Success reopen shipments |
-    And Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Pending |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Pending                   |
 
   @DeleteShipments
   Scenario: Re-open Multiple Shipments (uid:a7e00285-e076-43c0-8987-38d2e33996f6)
@@ -95,8 +101,9 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator clicks on reopen shipment button under the Apply Action for multiple shipments
     Then Operator verifies that notification displayed:
       | top | Success reopen shipments |
-    And Operator verify the following parameters of all created shipments on Shipment Management page:
-      | status | Pending |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Pending                   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

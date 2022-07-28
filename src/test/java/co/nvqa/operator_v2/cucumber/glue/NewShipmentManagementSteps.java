@@ -10,8 +10,6 @@ import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage;
-import co.nvqa.operator_v2.util.KeyConstants;
-import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -21,6 +19,7 @@ import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
+import static co.nvqa.operator_v2.util.TestConstants.COUNTRY_CODE;
+import static co.nvqa.operator_v2.util.TestConstants.OPERATOR_PORTAL_BASE_URL;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea. Modified by Sergey Mishanin.
@@ -70,19 +71,11 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
-  public void fillSearchFilter(String filter, String value) {
-    String resolvedValue = resolveValue(value);
-    putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, resolvedValue);
-    page.inFrame(() -> {
-
-    });
-  }
-
   @When("Operator apply filters on Shipment Management Page:")
   public void operatorFilerWithData(Map<String, String> mapOfData) {
     Map<String, String> data = resolveKeyValues(mapOfData);
     page.inFrame(() -> {
+      page.waitUntilLoaded(1);
       if (data.containsKey("shipmentStatus")) {
         page.shipmentStatusFilter.clearAll();
         page.shipmentStatusFilter.selectFilter(splitAndNormalize(data.get("shipmentStatus")));
@@ -175,25 +168,19 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator click Search by shipment id on Shipment Management page")
   public void clickSearchByShipmentId() {
-    page.inFrame(() -> {
-      page.searchByShipmentIds.click();
-    });
+    page.inFrame(() -> page.searchByShipmentIds.click());
   }
 
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> {
-      page.shipmentIds.setValue(shipmentIds);
-    });
+    page.inFrame(() -> page.shipmentIds.setValue(shipmentIds));
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
   public void enterNextShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> {
-      page.shipmentIds.sendKeys("\n" + shipmentIds);
-    });
+    page.inFrame(() -> page.shipmentIds.sendKeys("\n" + shipmentIds));
   }
 
   @Given("Operator click Edit filter on Shipment Management page")
@@ -206,7 +193,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.clearAllFilters.click());
   }
 
-  @When("^Operator create Shipment on Shipment Management page using data below:$")
+  @When("^Operator create Shipment on Shipment Management page:$")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
     retryIfRuntimeExceptionOccurred(() -> {
@@ -263,48 +250,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     }, 1);
   }
 
-  @When("Operator edit Shipment on Shipment Management page based on {string} using data below:")
-  public void operatorEditShipmentOnShipmentManagementPageBasedOnTypeUsingDataBelow(String editType,
-      Map<String, String> mapOfData) {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    if (shipmentInfo == null) {
-      Shipments shipments = get(KEY_CREATED_SHIPMENT);
-      shipmentInfo = new ShipmentInfo(shipments);
-    }
-
-    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
-    switch (editType) {
-      case "Start Hub":
-        shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
-        break;
-      case "End Hub":
-        shipmentInfo.setDestHubName(resolvedMapOfData.get("destHubName"));
-        break;
-      case "Comments":
-        shipmentInfo.setComments(resolvedMapOfData.get("comments"));
-        break;
-      case "EDA & ETA":
-        shipmentInfo.setArrivalDatetime(
-            resolvedMapOfData.get("EDA") + " " + resolvedMapOfData.get("ETA"));
-        break;
-      case "mawb":
-        shipmentInfo.setMawb(
-            "12" + resolvedMapOfData.get("mawb").charAt(0) + "-" + resolvedMapOfData.get(
-                "mawb").substring(1));
-        break;
-      case "non-mawb":
-        shipmentInfo.setOrigHubName(resolvedMapOfData.get("origHubName"));
-        shipmentInfo.setDestHubName(resolvedMapOfData.get("destHubName"));
-        shipmentInfo.setComments(resolvedMapOfData.get("comments"));
-        break;
-    }
-    ShipmentInfo finalShipmentInfo = shipmentInfo;
-    page.inFrame(() -> {
-      page.editShipmentBy(editType, finalShipmentInfo, resolvedMapOfData);
-    });
-    put(KEY_SHIPMENT_INFO, shipmentInfo);
-  }
-
   @When("Operator edit Shipment on Shipment Management page:")
   public void operatorEditShipment(Map<String, String> data) {
     Map<String, String> resolvedData = resolveKeyValues(data);
@@ -329,31 +274,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @When("^Operator edit Shipment on Shipment Management page including MAWB using data below:$")
-  public void operatorEditShipmentOnShipmentManagementPageIncludingMawbUsingDataBelow(
-      Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    shipmentInfo.fromMap(mapOfData);
-    page.editShipment(shipmentInfo);
-    put(KeyConstants.KEY_MAWB, shipmentInfo.getMawb());
-  }
-
-  @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
-  public void operatorVerifyParametersOfTheCreatedShipmentOnShipmentManagementPage() {
-    ShipmentInfo shipmentInfo;
-
-    if (get(KEY_SHIPMENT_INFO) == null) {
-      Shipments shipments = get(KEY_CREATED_SHIPMENT);
-      shipmentInfo = new ShipmentInfo(shipments);
-    } else {
-      shipmentInfo = get(KEY_SHIPMENT_INFO);
-    }
-
-    page.inFrame(() -> page.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo));
-  }
-
-  @Then("^Operator verify parameters of shipment on Shipment Management page using data below:$")
+  @Then("^Operator verify parameters of shipment on Shipment Management page:$")
   public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     data = StandardTestUtils.replaceDataTableTokens(data);
@@ -362,54 +283,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> page.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo));
   }
 
-  @Then("Operator verify parameters of the created multiple shipment on Shipment Management page")
-  public void operatorVerifyParametersOfTheCreatedMultipleShipmentOnShipmentManagementPage() {
-    List<Long> shipmentId = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    page.inFrame(() -> {
-      for (Long shipmentIds : shipmentId) {
-        page.validateShipmentId(shipmentIds);
-      }
-    });
-  }
-
-  @Then("^Operator verify the following parameters of the created shipment on Shipment Management page:$")
-  public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
-      Map<String, String> mapOfData) {
-    Long shipmentId;
-
-    if (get(KEY_CREATED_SHIPMENT_ID) != null) {
-      shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-    } else if (get(KEY_SHIPMENT_INFO) != null) {
-      ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-      shipmentId = shipmentInfo.getId();
-    } else if (get(KEY_CREATED_SHIPMENT) != null) {
-      Shipments shipments = get(KEY_CREATED_SHIPMENT);
-      shipmentId = shipments.getShipment().getId();
-    } else {
-      throw new IllegalArgumentException("Shipper id was not defined");
-    }
-
-    ShipmentInfo expectedShipmentInfo = new ShipmentInfo(resolveKeyValues(mapOfData));
-    page.inFrame(() -> page.validateShipmentInfo(shipmentId, expectedShipmentInfo));
-  }
-
   @Then("^Operator verify search results contains exactly shipments on Shipment Management page:$")
   public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
       List<String> shipmentIds) {
     page.inFrame(() -> {
       List<String> actual = page.shipmentsTable.readColumn(COLUMN_SHIPMENT_ID);
-      Assertions.assertThat(actual)
-          .as("List of Shipment IDs")
+      Assertions.assertThat(actual).as("List of Shipment IDs")
           .containsExactlyInAnyOrderElementsOf(resolveValues(shipmentIds));
     });
-  }
-
-  @Then("Operator verify the following parameters of all created shipments status is pending")
-  public void operatorVerifyTheFollowingParametersOfTheAllCreatedShipmentsStatusIsPending() {
-    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    for (Long shipmentId : shipmentIds) {
-      page.validateShipmentStatusPending(shipmentId);
-    }
   }
 
   @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
@@ -465,131 +346,47 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }
 
-  @Then("^Operator verify shipment event on Shipment Details page using data below:$")
-  public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() -> {
+  @Then("^Operator verify shipment event on Shipment Details page:$")
+  public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> data) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> page.inFrame(() -> {
       try {
-        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-        ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-        page.switchTo();
-        ShipmentEvent actualEvent = new ShipmentEvent(
-            page.shipmentEventsTable.readShipmentEventsTable(
-                finalMapOfData.get("source")));
-        expectedEvent.compareWithActual(actualEvent);
+        ShipmentEvent expectedEvent = new ShipmentEvent(resolveKeyValues(data));
+        page.shipmentEventsTable.readAllEntities().stream()
+            .filter(expectedEvent::matchedTo)
+            .findFirst().orElseThrow(
+                () -> new AssertionError("Shipment Event was not found:\n" + expectedEvent));
       } catch (Throwable ex) {
         LOGGER.error(ex.getLocalizedMessage(), ex);
         page.refreshPage();
-        throw new NvTestRuntimeException(ex.getCause());
-      }
-    }, "retry shipment details", 1000, 3);
-  }
-
-  @Then("Operator verifies event is present for shipment on Shipment Detail page")
-  public void operatorVerifiesEventIsPresentForShipmentOnShipmentDetailPage(
-      Map<String, String> mapOfData) {
-    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-    List<Shipments> lists = get(KEY_LIST_OF_CREATED_SHIPMENT);
-
-    lists.forEach(shipment -> {
-      retryIfAssertionErrorOccurred(() -> {
-        verifyShipmentEventData(shipment.getShipment().getId(), finalMapOfData);
-      }, "retry shipment details event", 5000, 10);
-    });
-  }
-
-  private void verifyShipmentEventData(Long shipmentId, Map<String, String> finalMapOfData) {
-    try {
-      ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-      navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-          TestConstants.COUNTRY_CODE, shipmentId));
-      page.waitUntilPageLoaded();
-      List<ShipmentEvent> events = page.shipmentEventsTable.readFirstEntities(1);
-      ShipmentEvent actualEvent = events.stream().filter(
-              event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-          .findFirst().orElseThrow(() -> new AssertionError(
-              f("There is no [%s] shipment event on Shipment Details page",
-                  expectedEvent.getSource())));
-      expectedEvent.compareWithActual(actualEvent);
-    } catch (Throwable ex) {
-      LOGGER.error(ex.getMessage(), ex);
-      throw ex;
-    }
-  }
-
-  @Then("Operator verifies event is present for shipment id {string} on Shipment Detail page")
-  public void operatorVerifiesEventIsPresentForShipmentIdOnShipmentDetailPage(
-      String shipmentIdAsString, Map<String, String> mapOfData) {
-    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-    Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-        navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-            TestConstants.COUNTRY_CODE, shipmentId));
-        page.waitUntilPageLoaded();
-        List<ShipmentEvent> events = page.shipmentEventsTable.readFirstEntities(
-            1);
-        ShipmentEvent actualEvent = events.stream().filter(
-                event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-            .findFirst().orElseThrow(() -> new AssertionError(
-                f("There is no [%s] shipment event on Shipment Details page",
-                    expectedEvent.getSource())));
-        expectedEvent.compareWithActual(actualEvent);
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getMessage(), ex);
         throw ex;
       }
-    }, "retry shipment details event", 5000, 10);
+    }), "retry shipment details", 1000, 3);
   }
 
-  @Then("^Operator open shipment detail and verify shipment event on Shipment Details page using data below:$")
-  public void operatorOpenShipmentDetailAndVerifyShipmentEventOnEditOrderPage(
-      Map<String, String> mapOfData) {
-    retryIfAssertionErrorOccurred(() -> {
-      try {
-        ShipmentInfo shipmentInfo;
-
-        if (get(KEY_SHIPMENT_INFO) == null) {
-          Shipments shipments = get(KEY_CREATED_SHIPMENT);
-          shipmentInfo = new ShipmentInfo(shipments);
-        } else {
-          shipmentInfo = get(KEY_SHIPMENT_INFO);
-        }
-        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
-        page.openShipmentDetailsPage(shipmentInfo.getId());
-
-        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-        ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-        page.switchTo();
-        ShipmentEvent actualEvent = new ShipmentEvent(
-            page.shipmentEventsTable.readShipmentEventsTable(
-                finalMapOfData.get("source")));
-        expectedEvent.compareWithActual(actualEvent);
-      } catch (Throwable ex) {
-        LOGGER.error(ex.getLocalizedMessage(), ex);
-        page.refreshPage();
-        throw new NvTestRuntimeException(ex.getCause());
-      }
-    }, "retry shipment details", 5000, 10);
+  @Then("Operator opens Shipment Details page for shipment {value}")
+  public void openShipmentDetailsPage(String shipmentId) {
+    navigateTo(
+        f("%s/%s/new-shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
+    page.inFrame(() -> page.waitUntilLoaded());
+    pause3s();
   }
 
-  @Then("Operator verify movement event on Shipment Details page using data below:")
+  @Then("Operator verify movement event on Shipment Details page:")
   public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData) {
-    retryIfRuntimeExceptionOccurred(() -> {
-      final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-      MovementEvent expectedEvent = new MovementEvent(finalMapOfData);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> page.inFrame(() -> {
+      MovementEvent expectedEvent = new MovementEvent(resolveKeyValues(mapOfData));
       try {
-        page.switchTo();
-        MovementEvent actualEvent = new MovementEvent(
-            page.movementEventsTable.readMovementEventsTable(
-                finalMapOfData.get("source")));
-        expectedEvent.compareWithActual(actualEvent);
+        page.movementEventsTable.readAllEntities().stream()
+            .filter(expectedEvent::matchedTo)
+            .findFirst()
+            .orElseThrow(
+                () -> new AssertionError("Movement Event was not found:\n" + expectedEvent));
       } catch (Throwable ex) {
         LOGGER.error(ex.getLocalizedMessage(), ex);
         page.refreshPage();
-        throw new NvTestRuntimeException(ex.getCause());
+        throw ex;
       }
-    }, "retry shipment details", 1000, 3);
+    }), "retry shipment details", 1000, 3);
   }
 
   @And("^Operator save current filters as preset on Shipment Management page$")
@@ -629,19 +426,16 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @And("Operator verify selected filters on Shipment Management page:")
   public void verifySelectedFilters(Map<String, String> data) {
-    Map<String, String> finalData = resolveKeyValues(data);
     SoftAssertions assertions = new SoftAssertions();
     page.inFrame(() -> {
       if (data.containsKey("shipmentStatus")) {
         List<String> actual = page.shipmentStatusFilter.getSelectedValues();
-        assertions.assertThat(actual)
-            .as("Shipment Status")
+        assertions.assertThat(actual).as("Shipment Status")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentStatus")));
       }
       if (data.containsKey("shipmentType")) {
         List<String> actual = page.shipmentTypeFilter.getSelectedValues();
-        assertions.assertThat(actual)
-            .as("Shipment Type")
+        assertions.assertThat(actual).as("Shipment Type")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("shipmentType")));
       }
       if (data.containsKey("originHub")) {
@@ -649,8 +443,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           assertions.fail("Origin Hub filter is not displayed");
         } else {
           List<String> actual = page.originHubFilter.getSelectedValues();
-          assertions.assertThat(actual)
-              .as("Origin Hub")
+          assertions.assertThat(actual).as("Origin Hub")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("originHub")));
         }
       }
@@ -659,8 +452,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           assertions.fail("Destination Hub filter is not displayed");
         } else {
           List<String> actual = page.destinationHubFilter.getSelectedValues();
-          assertions.assertThat(actual)
-              .as("Destination Hub")
+          assertions.assertThat(actual).as("Destination Hub")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("destinationHub")));
         }
       }
@@ -669,8 +461,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           assertions.fail("Last Inbound Hub filter is not displayed");
         } else {
           List<String> actual = page.lastInboundHubFilter.getSelectedValues();
-          assertions.assertThat(actual)
-              .as("Last Inbound Hub")
+          assertions.assertThat(actual).as("Last Inbound Hub")
               .containsExactlyInAnyOrderElementsOf(splitAndNormalize(data.get("lastInboundHub")));
         }
       }
@@ -698,9 +489,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> {
       List<String> presets = page.selectFiltersPreset.getValues();
       if (!presets.isEmpty()) {
-        Assertions.assertThat(presets)
-            .as("Available filters presets")
-            .doesNotContain(presetName);
+        Assertions.assertThat(presets).as("Available filters presets").doesNotContain(presetName);
       }
     });
     remove(KEY_SHIPMENTS_FILTERS_PRESET_ID);
@@ -744,8 +533,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     ShipmentInfo finalShipmentInfo = shipmentInfo;
     page.inFrame(() -> {
       try {
-        page.createAndUploadCsv(orders, fileName, true, true, numberOfOrder,
-            finalShipmentInfo);
+        page.createAndUploadCsv(orders, fileName, true, true, numberOfOrder, finalShipmentInfo);
       } catch (FileNotFoundException e) {
         throw new RuntimeException(e);
       }
@@ -787,26 +575,16 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @Then("Operator verifies that the Reopen Shipment Button is disabled")
   public void operatorVerifiesThatTheReopenShipmentButtonIsDisabled() {
-    page.inFrame(() ->
-        Assertions.assertThat(
-                page.actionsMenu.getItemElement("Reopen Shipments").getAttribute("class"))
-            .withFailMessage("Reopen Shipments option is enabled")
-            .contains("ant-dropdown-menu-item-disabled")
-    );
-  }
-
-  @When("Operator searches multiple shipment ids in the Shipment Management Page")
-  public void operatorSearchesMultipleShipmentIdsInTheShipmentManagementPage() {
-    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    fillSearchShipmentsByIds(
-        shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
+    page.inFrame(() -> Assertions.assertThat(
+            page.actionsMenu.getItemElement("Reopen Shipments").getAttribute("class"))
+        .withFailMessage("Reopen Shipments option is enabled")
+        .contains("ant-dropdown-menu-item-disabled"));
   }
 
   @When("Operator enters multiple shipment ids in the Shipment Management Page")
   public void operatorEntersMultipleShipmentIdsInTheShipmentManagementPage() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
-    enterShipmentIds(
-        shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
+    enterShipmentIds(shipmentIds.stream().map(Objects::toString).collect(Collectors.toList()));
   }
 
   @Then("Operator verifies that search error modal shown with shipment ids:")
@@ -814,16 +592,13 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     List<String> finalShipmentIds = resolveValues(shipmentIds);
     page.inFrame(() -> {
       page.searchErrorDialog.waitUntilVisible();
-      List<String> lines = page.searchErrorDialog.messageLines.stream()
-          .map(PageElement::getText)
+      List<String> lines = page.searchErrorDialog.messageLines.stream().map(PageElement::getText)
           .collect(Collectors.toList());
-      Assertions.assertThat(lines.get(0))
-          .as("Error message")
+      Assertions.assertThat(lines.get(0)).as("Error message")
           .isEqualTo("We cannot find the following " + finalShipmentIds.size() + " shipment ids:");
 
       lines.remove(0);
-      Assertions.assertThat(lines)
-          .as("Invalid shipment ids")
+      Assertions.assertThat(lines).as("Invalid shipment ids")
           .containsExactlyInAnyOrderElementsOf(finalShipmentIds);
     });
   }
@@ -841,8 +616,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> {
       if ("Cancel".equals(actionButton)) {
         Assertions.assertThat(page.shipmentsTable.getActionButton(1, ACTION_CANCEL).isEnabled())
-            .as("Cancel button is enabled")
-            .isFalse();
+            .as("Cancel button is enabled").isFalse();
       }
     });
   }
@@ -879,24 +653,15 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator verify the following parameters of shipment with id {string} on Shipment Management page:")
-  public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
-      String shipmentIdAsString, Map<String, String> mapOfData) {
-    String resolvedShipmentId = resolveValue(shipmentIdAsString);
-    Long shipmentId = Long.valueOf(resolvedShipmentId);
-    Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
-    page.inFrame(() -> page.validateShipmentUpdated(shipmentId, resolvedKeyValues));
-  }
-
   @Then("Operator verify the following parameters of all created shipments on Shipment Management page:")
   public void operatorVerifyTheFollowingParametersOfAllTheCreatedShipmentOnShipmentManagementPage(
       Map<String, String> mapOfData) {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    Map<String, String> data = new HashMap<>(mapOfData);
     for (Long shipmentId : shipmentIds) {
-      page.inFrame(() ->
-          operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(
-              String.valueOf(shipmentId), mapOfData)
-      );
+      data.put("id", shipmentId.toString());
+      page.inFrame(
+          () -> operatorVerifyParametersShipmentOnShipmentManagementPage(data));
     }
   }
 
@@ -929,9 +694,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         throw new IllegalStateException("Unknown button name " + disabledButton);
     }
     page.inFrame(() -> Assertions.assertThat(button.isEnabled())
-        .withFailMessage(disabledButton + " is enabled")
-        .isFalse()
-    );
+        .withFailMessage(disabledButton + " is enabled").isFalse());
   }
 
   @And("Operator verifies number of entered shipment ids on Shipment Management page:")
@@ -940,8 +703,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> {
       if (data.containsKey("entered")) {
         assertions.assertThat(page.enteredUniqueShipmentIds.getText())
-            .as("Entered unique shipment ids")
-            .isEqualTo(data.get("entered") + " entered");
+            .as("Entered unique shipment ids").isEqualTo(data.get("entered") + " entered");
       }
       if (data.containsKey("duplicate")) {
         if (!page.enteredDuplicateShipmentIds.isDisplayedFast()) {

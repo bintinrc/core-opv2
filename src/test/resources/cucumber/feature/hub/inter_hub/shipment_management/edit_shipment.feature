@@ -66,10 +66,12 @@ Feature: Shipment Management - Edit Shipment
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    Then Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}" on Shipment Management page:
-      | startHub | {hub-name-3} |
-    And Operator verify the following parameters of shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}" on Shipment Management page:
-      | startHub | {hub-name} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
+      | origHubName | {hub-name-3}                         |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
+      | origHubName | {hub-name}                           |
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Abort Update (uid:83793581-a5af-45c1-aef5-bfc0e5edb0c5)

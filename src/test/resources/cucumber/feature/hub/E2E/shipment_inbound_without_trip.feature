@@ -45,11 +45,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -132,11 +132,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -248,11 +248,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -387,11 +387,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -473,11 +473,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -560,11 +560,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -647,11 +647,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -734,11 +734,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |
@@ -827,11 +827,11 @@ Feature: E2E Without Trip
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {hub-name}                         |
-      | currHubName | {hub-name}                          |
-      | status      | Transit                            |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | origHubName | {hub-name}                |
+      | currHubName | {hub-name}                |
+      | status      | Transit                   |
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {hub-id-2} - {hub-name-2}  |

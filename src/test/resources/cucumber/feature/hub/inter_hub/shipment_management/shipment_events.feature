@@ -13,7 +13,7 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
@@ -34,13 +34,13 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CLOSED                     |
       | userId    | qa@ninjavan.co                      |
       | result    | Closed                              |
@@ -62,13 +62,13 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_REOPENED                   |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
@@ -88,13 +88,13 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_VAN_INBOUND(MMDA)          |
       | userId    | qa@ninjavan.co                      |
       | result    | Transit                             |
@@ -118,19 +118,19 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_VAN_INBOUND(MMDA)          |
       | userId    | qa@ninjavan.co                      |
       | result    | Transit                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_HUB_INBOUND(MMDA)          |
       | userId    | qa@ninjavan.co                      |
       | result    | Completed                           |
@@ -147,13 +147,13 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_FORCE_COMPLETED            |
       | userId    | qa@ninjavan.co                      |
       | result    | Completed                           |
@@ -170,13 +170,13 @@ Feature: Shipment Management - Shipment Events
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CREATED                    |
       | userId    | qa@ninjavan.co                      |
       | result    | Pending                             |
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source    | SHIPMENT_CANCELLED                  |
       | userId    | qa@ninjavan.co                      |
       | result    | Cancelled                           |

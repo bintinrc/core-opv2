@@ -10,30 +10,49 @@ Feature: Shipment Management - Create Shipment
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given Operator intends to create a new Shipment directly from the Shipment Toast
-    When Operator create Shipment on Shipment Management page using data below:
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify parameters of the created multiple shipment on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                             |
+      | id           | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
+      | origHubName  | {hub-name}                           |
+      | currHubName  | {hub-name}                           |
+      | destHubName  | {hub-name-2}                         |
+      | status       | Pending                              |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                             |
+      | id           | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
+      | origHubName  | {hub-name}                           |
+      | currHubName  | {hub-name}                           |
+      | destHubName  | {hub-name-2}                         |
+      | status       | Pending                              |
 
   @DeleteShipment
   Scenario: Create Shipment without Create Another Shipment (uid:8f16c9aa-7941-4ab7-9a9f-8f6afa5804c5)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
 #    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify parameters of the created shipment on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                             |
+      | id           | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
+      | origHubName  | {hub-name}                           |
+      | currHubName  | {hub-name}                           |
+      | destHubName  | {hub-name-2}                         |
+      | status       | Pending                              |
 
   Scenario: Create New Shipment - selected same origin and destination hub
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
 #    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    When Operator create Shipment on Shipment Management page:
       | origHubName        | {hub-name}                                                          |
       | destHubName        | {hub-name}                                                          |
       | comments           | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |

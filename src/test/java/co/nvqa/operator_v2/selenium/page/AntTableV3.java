@@ -17,10 +17,10 @@ import org.openqa.selenium.support.PageFactory;
 public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private String actionButtonLocatorTemplate = ACTION_BUTTON_LOCATOR_PATTERN;
-  private static final String CELL_LOCATOR_PATTERN = "//tr[%1$d]/td[contains(@class, '%2$s')] | //tr[contains(@class,'ant-table-row')][%1$d]/td[%2$s]";
-  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "(//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//button)[%s]";
+  private static final String CELL_LOCATOR_PATTERN = "//tbody//tr[not(@aria-hidden='true')][%1$d]/td[contains(@class, '%2$s')] | //tr[not(@aria-hidden='true')][contains(@class,'ant-table-row')][%1$d]/td[%2$s]";
+  private static final String ACTION_BUTTON_LOCATOR_PATTERN = "(//tbody//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//button)[%s]";
 
-  private static final String CHECKBOX_LOCATOR_PATTERN = "//tr[%1$d]/td[contains(@class, '_checkbox')]//input";
+  private static final String CHECKBOX_LOCATOR_PATTERN = "//tbody//tr[%1$d]/td[contains(@class, '_checkbox')]//input";
 
   public void setActionButtonLocatorTemplate(String actionButtonLocatorTemplate) {
     this.actionButtonLocatorTemplate = actionButtonLocatorTemplate;
@@ -63,9 +63,10 @@ public class AntTableV3<T extends DataEntity<?>> extends AbstractTable<T> {
   public int getRowsCount() {
     if (StringUtils.isNotBlank(getTableLocator())) {
       return executeInContext(getTableLocator(),
-          () -> getElementsCount(".//tbody/tr"));
+          () -> getElementsCount(".//tbody/tr[not(@aria-hidden='true')]"));
     } else {
-      return getElementsCount("//tr[contains(@class,'ant-table-row')]");
+      return getElementsCount(
+          "//tbody//tr[not(@aria-hidden='true')][contains(@class,'ant-table-row')]");
     }
   }
 

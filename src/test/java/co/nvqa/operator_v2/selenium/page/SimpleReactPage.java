@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -101,6 +102,9 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
     try {
       consumer.accept((T) this);
+    } catch (NoSuchWindowException ex) {
+      waitUntilLoaded();
+      consumer.accept((T) this);
     } finally {
       getWebDriver().switchTo().defaultContent();
     }
@@ -113,6 +117,9 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
     try {
       return consumer.apply((T) this);
+    } catch (NoSuchWindowException ex) {
+      waitUntilLoaded();
+      return consumer.apply((T) this);
     } finally {
       getWebDriver().switchTo().defaultContent();
     }
@@ -123,6 +130,9 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
     pageFrame.waitUntilVisible();
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
     try {
+      consumer.run();
+    } catch (NoSuchWindowException ex) {
+      waitUntilLoaded();
       consumer.run();
     } finally {
       getWebDriver().switchTo().defaultContent();

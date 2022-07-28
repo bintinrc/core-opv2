@@ -18,13 +18,11 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -55,8 +53,6 @@ import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.Shipme
  */
 @SuppressWarnings("WeakerAccess")
 public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManagementPage> {
-
-  private static final String XPATH_SHIPMENTWEIGHTANDDIMENSION = "//button[.='Shipment Weight & Dimension page']";
 
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
 
@@ -179,6 +175,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='clear-all-selections-button']")
   public Button clearAllFilters;
 
+  @FindBy(css = "h1")
+  public PageElement shipmentIdTitle;
+
   private static final String FILEPATH = TestConstants.TEMP_DIR;
 
   public NewShipmentManagementPage(WebDriver webDriver) {
@@ -225,22 +224,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   public Long createAnotherShipment() {
     createShipmentDialog.createAnother.click();
     return getNewShipperId();
-  }
-
-  public void editShipment(ShipmentInfo shipmentInfo) {
-    clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
-
-    editShipmentDialog.waitUntilVisible();
-    editShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
-    editShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
-    editShipmentDialog.comments.setValue(shipmentInfo.getComments());
-
-    if (StringUtils.isBlank(shipmentInfo.getMawb())) {
-      editShipmentDialog.saveChanges.click();
-    } else {
-      editShipmentDialog.mawb.setValue(shipmentInfo.getMawb());
-      editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
-    }
   }
 
   public void editCancelledShipment() {
@@ -290,69 +273,14 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     fWait.until(table -> table.getRowsCount() > 0);
   }
 
-  public void validateShipmentStatusPending(Long shipmentId) {
-    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
-    assertThat("shipment Id is the same", actualShipmentInfo.getId(), equalTo(shipmentId));
-    assertThat("shipment status is the same", actualShipmentInfo.getStatus(), equalTo("Pending"));
-  }
-
-  public void validateShipmentId(Long shipmentId) {
-    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    ShipmentInfo actual = shipmentsTable.readEntity(1);
-    Assertions.assertThat(actual.getId())
-        .withFailMessage("Shipment with ID %s " + shipmentId + " was not found")
-        .isEqualTo(shipmentId);
-  }
-
   public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId) {
     String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
-    String actualTextShipmentDetails = getText(
-        "//md-content[contains(@class,'nv-shipment-details')]//h3");
+    String actualTextShipmentDetails = shipmentIdTitle.getText();
     Assertions.assertThat(actualTextShipmentDetails)
-        .as("Shipment ID is same: ", expectedTextShipmentDetails);
+        .as("Shipment ID title").
+        isEqualTo(expectedTextShipmentDetails);
     isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     getWebDriver().close();
-  }
-
-  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo,
-      Map<String, String> resolvedMapOfData) {
-    clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
-    editShipmentDialog.waitUntilVisible();
-    if ("Start Hub".equals(editType)) {
-      editShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
-    }
-    if ("End Hub".equals(editType)) {
-      editShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
-    }
-    if ("Comments".equals(editType)) {
-      editShipmentDialog.comments.setValue(shipmentInfo.getComments());
-    }
-    if ("EDA & ETA".equals(editType)) {
-      String updatedEDA = shipmentInfo.getArrivalDatetime().split(" ")[0];
-      String updatedETA = shipmentInfo.getArrivalDatetime().split(" ")[1].split(":")[0];
-      editShipmentDialog.datePickerInput.clear();
-      editShipmentDialog.datePickerInput.sendKeys(updatedEDA);
-      editShipmentDialog.selectHour.selectValue(updatedETA);
-    }
-    if ("non-mawb".equals(editType)) {
-      editShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
-      editShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
-      editShipmentDialog.comments.setValue(shipmentInfo.getComments());
-    }
-    if ("mawb".equals(editType)) {
-      editMawbInShipmentManagement(shipmentInfo, resolvedMapOfData, "");
-    }
-    if ("cancelled".equals(editType)) {
-      editShipmentDialog.saveChanges.click();
-      pause1s();
-      return;
-    }
-    if ("completed".equals(editType)) {
-      editShipmentDialog.forceSuccessButton.click();
-      return;
-    }
-    editShipmentDialog.saveChanges.click();
   }
 
   public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid,
@@ -571,44 +499,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     shipmentToBeUpdatedTable.done.click();
   }
 
-  public void validateShipmentUpdated(Long shipmentId, Map<String, String> resolvedMapOfData) {
-    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
-    assertThat("Shipment id is the same", actualShipmentInfo.getId(), equalTo(shipmentId));
-    if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("Shipment Type is the same", actualShipmentInfo.getShipmentType().toLowerCase(),
-          equalTo(resolvedMapOfData.get("shipmentType").toLowerCase()));
-    }
-    if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("Start Hub is the same", actualShipmentInfo.getOrigHubName().toLowerCase(),
-          equalTo(resolvedMapOfData.get("startHub").toLowerCase()));
-    }
-    if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("End Hub is the same", actualShipmentInfo.getDestHubName().toLowerCase(),
-          equalTo(resolvedMapOfData.get("endHub").toLowerCase()));
-    }
-    if (resolvedMapOfData.get("EDA") != null) {
-      String eda = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[0];
-      assertThat("EDA is the same", eda, equalTo(resolvedMapOfData.get("EDA").toLowerCase()));
-    }
-    if (resolvedMapOfData.get("ETA") != null) {
-      String eta = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[1];
-      assertThat("ETA is the same", eta, equalTo(resolvedMapOfData.get("ETA").toLowerCase()));
-    }
-    if (resolvedMapOfData.get("mawb") != null) {
-      String mawb = actualShipmentInfo.getMawb().toLowerCase();
-      String expected =
-          "12" + resolvedMapOfData.get("mawb").charAt(0) + "-" + resolvedMapOfData.get("mawb")
-              .substring(1);
-      assertThat("MAWB is the same", mawb, equalTo(expected));
-    }
-    if (resolvedMapOfData.get("comments") != null) {
-      String comments = actualShipmentInfo.getComments().toLowerCase();
-      assertThat("Comments is the same", comments,
-          equalTo(resolvedMapOfData.get("comments").toLowerCase()));
-    }
-  }
-
   public void selectAnotherShipmentAndVerifyCount() {
     uncheckedShipmentCheckBox.check();
     tableActionsMenu.selectOption("Show Only Selected");
@@ -617,55 +507,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     Assertions.assertThat(shipmentsTable.getRowsCount())
         .as("Count of displayed shipments")
         .isEqualTo(3);
-  }
-
-  public void editMawbInShipmentManagement(ShipmentInfo shipmentInfo,
-      Map<String, String> resolvedMapOfData, String bulkIds) {
-    waitUntilVisibilityOfElementLocated(XPATH_SHIPMENTWEIGHTANDDIMENSION);
-    click(XPATH_SHIPMENTWEIGHTANDDIMENSION);
-    waitUntilNewWindowOrTabOpened();
-    switchToOtherWindow();
-    switchTo();
-    if (bulkIds.equals("")) {
-      searchMawbByShipmentId(String.valueOf(shipmentInfo.getId()));
-    } else {
-      searchMawbByShipmentId(bulkIds);
-    }
-    updateMawbDetails(shipmentInfo, resolvedMapOfData);
-    closeShipmentDimentionAndMoveToShipmentManagement();
-  }
-
-  public void searchMawbByShipmentId(String shipmentId) {
-    waitUntilVisibilityOfElementLocated("//textarea[@id='search-by-sid_searchIds']");
-    sidsTextArea.sendKeys(shipmentId);
-    waitUntilVisibilityOfElementLocated(XPATH_SEARCHBYSIDSUBMIT);
-    click(XPATH_SEARCHBYSIDSUBMIT);
-    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
-    click("//button[@data-testid='result-error-close-button']");
-  }
-
-  public void updateMawbDetails(ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData) {
-    selectAllCheckbox.click();
-    pause2s();
-    click("//button[contains(.,'Update MAWB')]");
-    inputUpdateMawb.sendKeys(shipmentInfo.getMawb());
-    TestUtils.findElementAndClick("//input[@id='updateMAWBForm_vendor_id']", "xpath",
-        getWebDriver());
-    sendKeysAndEnter("//input[@id='updateMAWBForm_vendor_id']",
-        resolvedMapOfData.get("mawbVendor"));
-    TestUtils.findElementAndClick(inputUpdateMawbOriginAirport, "xpath", getWebDriver());
-    sendKeysAndEnter(inputUpdateMawbOriginAirport, resolvedMapOfData.get("MawbOrigin"));
-    TestUtils.findElementAndClick(inputUpdateMawbDestinationAirport, "xpath", getWebDriver());
-    sendKeysAndEnter(inputUpdateMawbDestinationAirport, resolvedMapOfData.get("MawbDestination"));
-    click("//button[@data-testid='mawb-update-submit-button']");
-    waitUntilVisibilityOfElementLocated("//div[@class='ant-message-notice'][last()]");
-  }
-
-  public void closeShipmentDimentionAndMoveToShipmentManagement() {
-    getWebDriver().close();
-    for (String handle1 : getWebDriver().getWindowHandles()) {
-      getWebDriver().switchTo().window(handle1).switchTo();
-    }
   }
 
   /**
@@ -791,91 +632,47 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     @FindBy(css = "button[aria-label='Force Success']")
     public Button forceSuccessButton;
 
-    public void saveChangesWithMawb(Long shipmentId) {
-      saveChanges.click();
-      pause1s();
-
-      waitUntilVisibilityOfElementLocated(
-          "//md-dialog[contains(@aria-describedby,'dialogContent') and not (contains(@class,'shipment-edit'))]");
-      click("//button[@aria-label='Save']");
-
-      waitUntilVisibilityOfElementLocated(
-          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
-              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
-      waitUntilInvisibilityOfElementLocated(
-          f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']",
-              shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
-    }
-
   }
 
-  public static class ShipmentEventsTable extends MdVirtualRepeatTable<ShipmentEvent> {
+  public static class ShipmentEventsTable extends AntTableV3<ShipmentEvent> {
 
-    public static final String MD_VIRTUAL_REPEAT = "p in getTableData()";
     public static final String SOURCE = "source";
     public static final String USER_ID = "userId";
     public static final String RESULT = "result";
     public static final String HUB = "hub";
     public static final String CREATED_AT = "createdAt";
-    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'shipment-events')]//tr[./td[.='%s']]//td";
 
     public ShipmentEventsTable(WebDriver webDriver) {
       super(webDriver);
-      setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-      setColumnLocators(
-          ImmutableMap.<String, String>builder().put(SOURCE, "source").put(USER_ID, "user_id")
-              .put(RESULT, "result").put(HUB, "hub").put(CREATED_AT, "created_at").build());
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(SOURCE, "source")
+          .put(USER_ID, "user")
+          .put(RESULT, "result")
+          .put(HUB, "hub")
+          .put(CREATED_AT, "created-at")
+          .build());
       setEntityClass(ShipmentEvent.class);
-      setNvTableParam("ctrl.tableParamScans");
-    }
-
-    public Map<String, String> readShipmentEventsTable(String source) {
-      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
-      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
-      Assertions.assertThat(list.size())
-          .as(f("There is no [%s] shipment event on Shipment Details page", source))
-          .isNotZero();
-      Map<String, String> eventsTable = new HashMap<>();
-      eventsTable.put(SOURCE, list.get(0));
-      eventsTable.put(USER_ID, list.get(1));
-      eventsTable.put(RESULT, list.get(2));
-      eventsTable.put(HUB, list.get(3));
-      eventsTable.put(CREATED_AT, list.get(4));
-      return eventsTable;
+      setTableLocator("//div[@data-testid='shipment-events-table']");
     }
   }
 
-  public static class MovementEventsTable extends MdVirtualRepeatTable<MovementEvent> {
+  public static class MovementEventsTable extends AntTableV3<MovementEvent> {
 
-    public static final String MD_VIRTUAL_REPEAT = "p in getTableData()";
     public static final String SOURCE = "source";
     public static final String STATUS = "status";
     public static final String CREATED_AT = "createdAt";
     public static final String COMMENTS = "comments";
-    public static final String XPATH_TABLE_DATA = "//div[contains(@id,'movement-events')]//tr[./td[.='%s']]//td";
 
     public MovementEventsTable(WebDriver webDriver) {
       super(webDriver);
-      setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-      setColumnLocators(
-          ImmutableMap.<String, String>builder().put(SOURCE, "source").put(STATUS, "status")
-              .put(CREATED_AT, "created_at").put(COMMENTS, "comments").build());
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(SOURCE, "source")
+          .put(STATUS, "status")
+          .put(CREATED_AT, "created-at")
+          .put(COMMENTS, "comments")
+          .build());
       setEntityClass(MovementEvent.class);
-      setNvTableParam("ctrl.tableParamEvents");
-    }
-
-    public Map<String, String> readMovementEventsTable(String source) {
-      waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
-      List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
-      Assertions.assertThat(list.size())
-          .as(f("There is no [%s] movement event on Shipment Details page", source))
-          .isNotZero();
-      Map<String, String> eventsTable = new HashMap<>();
-      eventsTable.put(SOURCE, list.get(0));
-      eventsTable.put(STATUS, list.get(1));
-      eventsTable.put(CREATED_AT, list.get(2));
-      eventsTable.put(COMMENTS, list.get(3));
-      return eventsTable;
+      setTableLocator("//div[@data-testid='movement-events-table']");
     }
   }
 

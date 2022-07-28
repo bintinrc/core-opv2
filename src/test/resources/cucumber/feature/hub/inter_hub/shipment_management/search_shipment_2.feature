@@ -15,7 +15,7 @@ Feature: Shipment Management - Search Shipment 2
     When Operator apply filters on Shipment Management Page:
       | mawb | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                                   |
       | id           | {KEY_CREATED_SHIPMENT_ID}                  |
       | status       | Pending                                    |
@@ -47,7 +47,7 @@ Feature: Shipment Management - Search Shipment 2
       | shipmentStatus         | Completed                                                                       |
       | shipmentCompletionDate | {gradle-previous-1-day-yyyy-MM-dd}:00:00,{gradle-current-date-yyyy-MM-dd}:23:30 |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Completed                 |
@@ -79,7 +79,7 @@ Feature: Shipment Management - Search Shipment 2
       | shipmentStatus  | Transit                                                                         |
       | transitDateTime | {gradle-previous-1-day-yyyy-MM-dd}:00:00,{gradle-current-date-yyyy-MM-dd}:23:30 |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | At Transit Hub,Transit    |
@@ -100,7 +100,7 @@ Feature: Shipment Management - Search Shipment 2
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator put created parcel to shipment
-    And Operator close the shipment which has been created
+    And API Operator closes the shipment using created shipper id
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
@@ -109,7 +109,7 @@ Feature: Shipment Management - Search Shipment 2
     When Operator apply filters on Shipment Management Page:
       | lastInboundHub | {hub-name-2} |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Closed                    |

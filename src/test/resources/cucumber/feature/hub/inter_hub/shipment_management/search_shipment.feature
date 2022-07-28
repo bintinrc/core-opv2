@@ -67,7 +67,7 @@ Feature: Shipment Management - Search Shipment
     When Operator apply filters on Shipment Management Page:
       | <filterName> | <filterValue> |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
@@ -90,7 +90,7 @@ Feature: Shipment Management - Search Shipment
       | shipmentType   | Air Haul |
       | shipmentStatus | Pending  |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
@@ -109,7 +109,7 @@ Feature: Shipment Management - Search Shipment
       | shipmentType   | Air Haul |
       | shipmentStatus | Pending  |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
@@ -127,7 +127,7 @@ Feature: Shipment Management - Search Shipment
     When Operator apply filters on Shipment Management Page:
       | shipmentDate | {gradle-previous-1-day-yyyy-MM-dd}:00:00,{gradle-current-date-yyyy-MM-dd}:23:30 |
     And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
