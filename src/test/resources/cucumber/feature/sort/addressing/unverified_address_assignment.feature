@@ -1,4 +1,4 @@
-@Sort @Addressing @UnverifiedAddressAssignment
+@Sort @UnverifiedAddressAssignment
 Feature: Unverified Address Assignment
 
   @LaunchBrowser @ShouldAlwaysRun
