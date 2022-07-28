@@ -7,7 +7,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Remove Shipment From Hub Inbounded List (uid:fe33b7eb-a7c9-494f-b61e-abb128865383)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
@@ -72,7 +72,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
 
   @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Hub Start Inbound - Trip Completion Dialog for Transit Trip (uid:7a8aa0d0-09cd-482f-b9ea-bef4ec569eea)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
@@ -106,7 +106,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
 
   @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Hub Start Inbound - No Trip Completion Dialog for Arrived Trip (uid:dd213e6d-f654-432f-8e6e-02713bf0115b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates 2 new Hub using data below:
       | name         | GENERATED |
@@ -141,7 +141,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Pending Shipment From Another Country to Hub Inbound (uid:9d27846c-0adc-4f0d-9c8d-c73d7dd68075)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -169,8 +169,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
       | destHubName | {hub-name-temp-2}                                                   |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
@@ -188,27 +189,28 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator go to menu Utilities -> QRCode Printing
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID} |
       | origHubName | {hub-name-temp}           |
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Pending                   |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CREATED       |
-      | result | Pending                |
-      | userId | qa@ninjavan.co |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_CREATED |
+      | result | Pending          |
+      | userId | qa@ninjavan.co   |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Closed Shipment From Another Country to Hub Inbound (uid:3abba664-7cd2-4d17-af97-e3aa384f99d5)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -237,16 +239,17 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
       | destHubName | {hub-name-temp-2}                                                   |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Set constant order for Indonesia:
-      | constantOrder  | {indonesia-default-order} |
+      | constantOrder | {indonesia-default-order} |
     Given Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan and close shipment with data below:
-      | origHubName  | {hub-name-temp}         |
+      | origHubName  | {hub-name-temp}           |
       | destHubName  | {hub-name-temp-2}         |
       | shipmentType | Air Haul                  |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
@@ -265,27 +268,28 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator go to menu Utilities -> QRCode Printing
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID} |
       | origHubName | {hub-name-temp}           |
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Closed                    |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CLOSED        |
-      | result | Closed                 |
-      | userId | qa@ninjavan.co |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_CLOSED |
+      | result | Closed          |
+      | userId | qa@ninjavan.co  |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Cancelled Shipment From Another Country to Hub Inbound (uid:8cc04fcd-6d84-42f5-bf40-52c57980fd62)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -314,8 +318,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
       | destHubName | {hub-name-temp-2}                                                   |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
@@ -335,27 +340,28 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator go to menu Utilities -> QRCode Printing
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID} |
       | origHubName | {hub-name-temp}           |
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Cancelled                 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CANCELLED     |
-      | result | Cancelled              |
-      | userId | qa@ninjavan.co |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_CANCELLED |
+      | result | Cancelled          |
+      | userId | qa@ninjavan.co     |
     And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Completed Shipment From Another Country to Hub Inbound (uid:911c9382-f4d5-497b-831c-8acddc793454)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -384,8 +390,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
       | destHubName | {hub-name-temp-2}                                                   |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
@@ -405,22 +412,23 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator go to menu Utilities -> QRCode Printing
+    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID} |
       | origHubName | {hub-name-temp}           |
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Completed                 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_FORCE_COMPLETED |
       | result | Completed                |
-      | userId | qa@ninjavan.co   |
+      | userId | qa@ninjavan.co           |
     And Operator close current window and switch to Shipment management page
 
   @KillBrowser @ShouldAlwaysRun
