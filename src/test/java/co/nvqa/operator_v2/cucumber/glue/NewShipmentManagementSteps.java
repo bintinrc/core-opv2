@@ -196,7 +196,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("^Operator create Shipment on Shipment Management page:$")
   public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(
       Map<String, String> mapOfData) {
-//    retryIfRuntimeExceptionOccurred(() -> {
+    retryIfRuntimeExceptionOccurred(() -> {
       page.inFrame(page -> {
         page.waitUntilLoaded();
         try {
@@ -248,7 +248,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           throw new NvTestRuntimeException(ex);
         }
       });
-//    }, 1);
+    }, 1);
   }
 
   @When("^Operator create Shipment without confirm on Shipment Management page:$")
