@@ -169,7 +169,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -190,7 +190,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -239,7 +239,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -269,7 +269,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -318,7 +318,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -341,7 +341,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -390,7 +390,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
     And Operator refresh page
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -413,7 +413,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 5
     Then Operator verifies toast with message "Mismatched hub system ID: shipment destination hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:

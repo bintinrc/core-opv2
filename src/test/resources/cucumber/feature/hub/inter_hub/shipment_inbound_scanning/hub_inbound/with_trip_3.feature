@@ -120,7 +120,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And Operator clicks proceed in end inbound dialog "Hub Inbound"
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

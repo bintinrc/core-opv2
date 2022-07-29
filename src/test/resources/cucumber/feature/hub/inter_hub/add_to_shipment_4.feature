@@ -172,7 +172,7 @@ Feature: Add To Shipment 4
       | name        | ADDED TO SHIPMENT                                                                                              |
       | hubName     | {hub-name}                                                                                                     |
       | description | Shipment {KEY_CREATED_SHIPMENT_ID} bound for Hub {KEY_DESTINATION_HUB_ID} ({KEY_CREATED_ORDER.destinationHub}) |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -207,7 +207,7 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -236,7 +236,7 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -265,7 +265,7 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -294,7 +294,7 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -318,7 +318,7 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -355,7 +355,7 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -392,7 +392,7 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -436,7 +436,7 @@ Feature: Add To Shipment 4
       | comments | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

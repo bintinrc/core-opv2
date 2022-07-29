@@ -7,7 +7,7 @@ Feature: Shipment Management - Edit Shipment 3
 
   @DeleteShipment
   Scenario: Re-open Shipment - Invalid Shipment Status - Pending (uid:5ddf5f14-3298-4e4e-a747-aa832bb234bd)
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -18,7 +18,7 @@ Feature: Shipment Management - Edit Shipment 3
   @DeleteShipment
   Scenario: Re-open Shipment - Invalid Shipment Status - Transit (uid:f8ccf5c9-85be-420a-b870-54bd4868b793)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -38,14 +38,15 @@ Feature: Shipment Management - Edit Shipment 3
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
     And Operator verify the following parameters of all created shipments on Shipment Management page:
-      | status | At Transit Hub |
+#      | status | At Transit Hub | #need to confirm At Transit Hub or Transit
+      | status | Transit|
     When Operator clicks on reopen shipment button under the Apply Action
     Then Operator verifies that the Reopen Shipment Button is disabled
 
   @DeleteShipment
   Scenario: Re-open Shipment - Invalid Shipment Status - Completed (uid:dabe7158-2e9d-4a69-a35d-8b66ff5872b0)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
@@ -60,7 +61,7 @@ Feature: Shipment Management - Edit Shipment 3
   @DeleteShipment @CloseNewWindows
   Scenario: Upload Bulk Orders to Shipment with Valid Tracking ID Data (uid:db962525-cadb-4314-8e90-1a5d7bb3a3a4)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create multiple V4 orders using data below:
@@ -76,7 +77,7 @@ Feature: Shipment Management - Edit Shipment 3
   @DeleteShipment @CloseNewWindows
   Scenario: Upload Bulk Orders to Shipment with Duplicate Tracking ID Data (uid:76ff878a-2998-4656-a9de-62af667591d9)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create multiple V4 orders using data below:
@@ -92,7 +93,7 @@ Feature: Shipment Management - Edit Shipment 3
   @DeleteShipment
   Scenario: Upload Bulk Orders to Shipment with Invalid Tracking ID Data (uid:06c9f41b-780b-40f3-8c34-d422ded305f6)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
