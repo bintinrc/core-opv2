@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment
 Feature: Shipment Management - Search Shipment
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -19,7 +19,7 @@ Feature: Shipment Management - Search Shipment
     Then Operator verify search results contains exactly shipments on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-@RT
+
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Empty Line (uid:a2945cf0-7404-427f-80f9-7feb06288d75)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -33,7 +33,7 @@ Feature: Shipment Management - Search Shipment
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
 
-  @DeleteFilterTemplate @RT
+  @DeleteFilterTemplate
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -48,7 +48,7 @@ Feature: Shipment Management - Search Shipment
       | originHub      | {hub-name}   |
       | destinationHub | {hub-name-2} |
 
-  @DeleteFilterTemplate @RT
+  @DeleteFilterTemplate
   Scenario: Preset Setting - Delete Shipment Filter as Preset (uid:c722664d-4ef4-4f13-92d6-5074a3dde4f5)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -58,7 +58,7 @@ Feature: Shipment Management - Search Shipment
     And Operator refresh page
     Then Operator verify filters preset was deleted
 
-  @DeleteShipment @RT
+  @DeleteShipment
   Scenario Outline: Search Shipment by Filter - <scenarioName>
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -79,7 +79,7 @@ Feature: Shipment Management - Search Shipment
       | Start Hub    | originHub      | {hub-name}   |
       | End Hub      | destinationHub | {hub-name-2} |
 
-  @DeleteShipment @RT
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -98,7 +98,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @RT
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -117,7 +117,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @RT
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -134,7 +134,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
-  @RT
+
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -148,7 +148,7 @@ Feature: Shipment Management - Search Shipment
       | top    | SERVER_ERROR_EXCEPTION                                                     |
       | bottom | ^.*Error Message: Cannot parse parameter id as Long: For input string: "," |
 
-  @DeleteShipment @RT
+  @DeleteShipment
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management

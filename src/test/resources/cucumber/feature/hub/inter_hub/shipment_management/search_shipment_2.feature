@@ -13,7 +13,7 @@ Feature: Shipment Management - Search Shipment 2
     And API Operator assign mawb "mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" to following shipmentIds
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     When Operator apply filters on Shipment Management Page:
-      | mawb | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                                   |
@@ -23,7 +23,7 @@ Feature: Shipment Management - Search Shipment 2
       | origHubName  | {hub-name}                                 |
       | currHubName  | {hub-name}                                 |
       | destHubName  | {hub-name-2}                               |
-      | mawb         | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb         | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
@@ -68,7 +68,7 @@ Feature: Shipment Management - Search Shipment 2
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator put created parcel to shipment
-    And Operator close the shipment which has been created
+    And API Operator closes the created shipment
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
