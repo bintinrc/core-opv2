@@ -7,7 +7,7 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipment
   Scenario: Edit Shipment - Start Hub (uid:e171e86e-2295-4016-b257-a7645768bfc1)
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -31,7 +31,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Edit Shipment - End Hub (uid:0714fd17-4ddc-4a0e-ada6-b1ff199ce12a)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -76,7 +76,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Upload Bulk Orders to Shipment with Valid Tracking ID Data (uid:bbe26bb4-8a11-49e0-9c01-f39008b27399)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create multiple V4 orders using data below:
@@ -92,7 +92,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Upload Bulk Orders to Shipment with Duplicate Tracking ID Data (uid:844fed49-f618-4443-a85e-66dff1fec3c8)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create multiple V4 orders using data below:
@@ -108,7 +108,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Upload Bulk Orders to Shipment with Invalid Tracking ID Data (uid:0d5917c8-528e-47da-9210-3317d4b549a8)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -138,7 +138,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Bulk Update Shipment - Update Multiple Fields (uid:d8fae297-b77a-4c4f-b104-e0a8dea17a12)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -162,7 +162,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Cancel Shipment with Pending Status (uid:4281e860-d180-4f26-9435-7e2588fd82c2)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Pending"
@@ -182,7 +182,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Cancel Shipment with Completed Status (uid:141dbb2c-9a73-46a2-9c0d-8fbfb7bc5e59)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
@@ -197,7 +197,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Re-open Single Shipment (uid:7b08a458-bde7-4ee2-946c-c4fb7323c6db)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator closes the created shipment
@@ -213,7 +213,7 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipment
   Scenario: Re-open Multiple Shipments (uid:186571a8-ec55-461e-ba77-4ed9e2892658)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}

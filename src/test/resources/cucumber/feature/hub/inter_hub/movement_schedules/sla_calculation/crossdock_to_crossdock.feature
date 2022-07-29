@@ -37,7 +37,7 @@ Feature: Crossdock to Crossdock
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -88,7 +88,7 @@ Feature: Crossdock to Crossdock
       | schedules[1].daysOfWeek     | {{next-1-day-name}}                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -140,7 +140,7 @@ Feature: Crossdock to Crossdock
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator closes the created shipment
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -182,7 +182,7 @@ Feature: Crossdock to Crossdock
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And Operator refresh page
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -232,7 +232,7 @@ Feature: Crossdock to Crossdock
       | facilityType      | Station                            |
     When Operator go to menu Inter-Hub -> Movement Schedules
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -285,7 +285,7 @@ Feature: Crossdock to Crossdock
       | schedules[1].daysOfWeek     | monday                                                        |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -318,7 +318,7 @@ Feature: Crossdock to Crossdock
     When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

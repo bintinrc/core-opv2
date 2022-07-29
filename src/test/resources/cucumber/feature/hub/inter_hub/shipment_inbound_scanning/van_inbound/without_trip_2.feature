@@ -10,7 +10,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -27,7 +27,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -44,7 +44,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -61,7 +61,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -79,7 +79,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -95,7 +95,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
     Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is [Pending], but scanned at [{hub-name-2}], please inbound into van in the origin hub [{hub-name}]" appears in Shipment Inbound Box
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -116,7 +116,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -126,7 +126,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
       | currHubName | {hub-name}                |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -147,7 +147,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -158,7 +158,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} in Shipment Inbound Scanning page
     Then Operator verify small message "shipment {KEY_CREATED_SHIPMENT_ID} is [Closed], but scanned at [{hub-name-2}], please inbound into van in the origin hub [{hub-name}]" appears in Shipment Inbound Box
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -183,7 +183,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     And Operator refresh page
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     Then Operator verify small message "Shipment id {KEY_CREATED_SHIPMENT_ID} cannot change status from Transit to Transit" appears in Shipment Inbound Box
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

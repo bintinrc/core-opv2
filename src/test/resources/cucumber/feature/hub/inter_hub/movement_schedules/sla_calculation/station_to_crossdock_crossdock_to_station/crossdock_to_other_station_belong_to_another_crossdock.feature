@@ -81,7 +81,7 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -176,7 +176,7 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -259,7 +259,7 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

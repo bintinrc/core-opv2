@@ -68,7 +68,7 @@ Feature: Station to Station Under Same Crossdock Given Station is Updated/Disabl
     When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -143,7 +143,7 @@ Feature: Station to Station Under Same Crossdock Given Station is Updated/Disabl
     And Operator refresh page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Then Operator verify hub "{KEY_LIST_OF_CREATED_HUBS[1].id}" not found on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

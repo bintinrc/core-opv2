@@ -402,7 +402,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -421,7 +421,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -464,7 +464,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -484,7 +484,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -527,7 +527,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     When Operator change the country to "Indonesia"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -548,7 +548,7 @@ Feature: Shipment Van Inbound With Trip Scanning 5
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:

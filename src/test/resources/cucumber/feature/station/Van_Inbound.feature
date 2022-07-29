@@ -331,7 +331,7 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

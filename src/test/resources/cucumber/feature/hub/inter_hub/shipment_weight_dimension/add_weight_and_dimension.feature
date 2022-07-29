@@ -72,7 +72,7 @@ Feature: Search Weight and Dimension
     Then Operator verify notice message "Success! SID {KEY_CREATED_SHIPMENT_ID} record was updated." is shown in Shipment Weight Dimension Add UI
     Then DB Operator verify the updated shipment dimension is correct
       | weight | 3.1 |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -104,7 +104,7 @@ Feature: Search Weight and Dimension
     Then DB Operator verify the updated shipment dimension is correct
       | weight | 3.1 |
       | length | 16  |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -138,7 +138,7 @@ Feature: Search Weight and Dimension
       | weight | 3.1 |
       | length | 16  |
       | width  | 8.0 |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -210,7 +210,7 @@ Feature: Search Weight and Dimension
       | length | 16  |
       | width  | 8.0 |
       | height | 9.7 |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -255,7 +255,7 @@ Feature: Search Weight and Dimension
       | length | 16  |
       | width  | 8.0 |
       | height | 9.7 |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -291,7 +291,7 @@ Feature: Search Weight and Dimension
       | length | 16  |
       | width  | 8.0 |
       | height | 9.7 |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

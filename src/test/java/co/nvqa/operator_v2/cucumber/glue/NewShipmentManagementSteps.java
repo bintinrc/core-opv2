@@ -229,6 +229,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           put(KEY_SHIPMENT_INFO, shipmentInfo);
           put(KEY_CREATED_SHIPMENT, shipmentInfo);
           put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+          putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
 
           if (isNextOrder) {
             Long secondShipmentId = page.createAnotherShipment();
@@ -248,6 +249,62 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         }
       });
     }, 1);
+  }
+
+  @When("^Operator create Shipment without confirm on Shipment Management page:$")
+  public void operatorCreateShipmentOnShipmentManagementPageWithoutConfirmUsingDataBelow(
+          Map<String, String> mapOfData) {
+    page.inFrame(page -> {
+      page.waitUntilLoaded();
+      try {
+        final Map<String, String> finalData = resolveKeyValues(mapOfData);
+        List<Order> listOfOrders;
+        boolean isNextOrder = false;
+
+        if (get("isNextOrder") != null) {
+          isNextOrder = get("isNextOrder");
+        }
+
+        if (containsKey(KEY_LIST_OF_CREATED_ORDER)) {
+          listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+        } else if (containsKey(KEY_CREATED_ORDER)) {
+          listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+        } else {
+          listOfOrders = new ArrayList<>();
+        }
+
+        ShipmentInfo shipmentInfo = new ShipmentInfo();
+        shipmentInfo.fromMap(finalData);
+        shipmentInfo.setOrdersCount((long) listOfOrders.size());
+
+        page.createShipmentWithoutConfirm(shipmentInfo, isNextOrder);
+
+        if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
+          shipmentInfo.setShipmentType("AIR_HAUL");
+        }
+
+        put(KEY_SHIPMENT_INFO, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+        putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
+
+        if (isNextOrder) {
+          Long secondShipmentId = page.createAnotherShipment();
+          shipmentInfo.setId(secondShipmentId);
+          Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+          List<Long> listOfShipmentId = new ArrayList<>();
+          listOfShipmentId.add(shipmentIdBefore);
+          listOfShipmentId.add(secondShipmentId);
+          page.createShipmentDialog.close();
+          page.createShipmentDialog.waitUntilInvisible();
+          put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+        }
+      } catch (Throwable ex) {
+        LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
+        page.refreshPage();
+        throw new NvTestRuntimeException(ex);
+      }
+    });
   }
 
   @When("Operator edit Shipment on Shipment Management page:")
@@ -342,6 +399,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
+    page.switchTo();
     page.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }

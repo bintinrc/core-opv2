@@ -14,7 +14,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     And Operator refresh page
     When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page
     Then Operator verify small message "Shipment id {KEY_CREATED_SHIPMENT_ID} cannot change status from Transit to Transit" appears in Shipment Inbound Box
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -34,7 +34,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
   Scenario: Van Inbound Pending Shipment In Other Country (uid:cfea52a0-fa58-4815-80a9-825f21efdd3a)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
@@ -54,7 +54,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator change the country to "Singapore"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name}                                                          |
@@ -75,7 +75,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
   Scenario: Van Inbound Transit Shipment In Other Country (uid:d633880e-39e0-4654-9411-87aae90ae478)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
@@ -92,7 +92,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
     When Operator change the country to "Singapore"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -113,7 +113,7 @@ Feature: Shipment Van Inbound Without Trip Scanning
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
     When Operator change the country to "Singapore"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

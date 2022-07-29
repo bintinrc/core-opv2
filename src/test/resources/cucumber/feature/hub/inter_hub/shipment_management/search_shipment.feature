@@ -6,7 +6,7 @@ Feature: Shipment Management - Search Shipment
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Invalid Shipment (uid:bc7c0cdf-fbcb-4db2-8c0d-a16b39e617a5)
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
@@ -22,7 +22,7 @@ Feature: Shipment Management - Search Shipment
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Empty Line (uid:a2945cf0-7404-427f-80f9-7feb06288d75)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
@@ -36,7 +36,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteFilterTemplate
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | originHub      | {hub-name}   |
@@ -51,7 +51,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteFilterTemplate
   Scenario: Preset Setting - Delete Shipment Filter as Preset (uid:c722664d-4ef4-4f13-92d6-5074a3dde4f5)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator save current filters as preset on Shipment Management page
     And Operator delete created filters preset on Shipment Management page
@@ -61,7 +61,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario Outline: Search Shipment by Filter - <scenarioName>
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator apply filters on Shipment Management Page:
@@ -82,7 +82,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
@@ -101,7 +101,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
@@ -120,7 +120,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
@@ -137,7 +137,7 @@ Feature: Shipment Management - Search Shipment
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
@@ -151,7 +151,7 @@ Feature: Shipment Management - Search Shipment
   @DeleteShipment
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
