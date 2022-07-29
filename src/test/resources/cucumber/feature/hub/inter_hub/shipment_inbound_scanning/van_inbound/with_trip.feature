@@ -36,7 +36,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page:
       | origHubName | {hub-name-temp}                                                     |
@@ -72,7 +72,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Indonesia"
     And Operator search shipments by given Ids on Shipment Management page:
@@ -189,7 +189,7 @@ Feature: Shipment Van Inbound With Trip Scanning
 #    And Capture the toast with message is shown on Shipment Inbound Scanning page
 #    Then Operator verify small message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." appears in Shipment Inbound Box
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Singapore"
     And Operator refresh page
@@ -299,7 +299,7 @@ Feature: Shipment Van Inbound With Trip Scanning
 #    Then Operator verifies movement trip shown has status value "transit" for trip id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}"
 #    And Operator verifies trip has departed
 #    And Operator verifies event "departed" with status "transit" is present for trip on Trip events page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -405,7 +405,7 @@ Feature: Shipment Van Inbound With Trip Scanning
 #    Then Operator verifies movement trip shown has status value "transit" for trip id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}"
 #    And Operator verifies trip has departed
 #    And Operator verifies event "departed" with status "transit" is present for trip on Trip events page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |

@@ -7,7 +7,7 @@ Feature: Shipment Management - Shipment Events
 
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Create Shipment
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -23,7 +23,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Close Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -50,7 +50,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Re-open Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -78,7 +78,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Re-open Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator performs van inbound by updating shipment status using data below:
@@ -104,7 +104,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Hub Inbound Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator performs van inbound by updating shipment status using data below:
@@ -140,7 +140,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Force Complete Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator change the status of the shipment into "Completed"
@@ -163,7 +163,7 @@ Feature: Shipment Management - Shipment Events
   @DeleteShipment @CloseNewWindows
   Scenario: Shipment Events -  Cancel Shipment
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator change the status of the shipment into "Cancelled"

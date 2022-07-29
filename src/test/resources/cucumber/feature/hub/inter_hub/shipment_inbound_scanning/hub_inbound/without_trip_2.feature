@@ -10,7 +10,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | Air Haul               |
@@ -32,7 +32,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Completed    |
@@ -53,7 +53,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator refresh page
     When API Operator change the status of the shipment into "Completed"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Completed |
@@ -71,7 +71,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Completed"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Completed |
@@ -89,7 +89,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
@@ -107,7 +107,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Cancelled"
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |

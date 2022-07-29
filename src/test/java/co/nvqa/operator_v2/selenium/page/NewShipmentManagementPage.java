@@ -212,6 +212,15 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     shipmentInfo.setId(getNewShipperId());
   }
 
+  public void createShipmentWithoutConfirm(ShipmentInfo shipmentInfo, boolean isNextOrder) {
+    createShipment.click();
+    createShipmentDialog.waitUntilVisible();
+    createShipmentDialog.type.selectValue("Air Haul");
+    createShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
+    createShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
+    createShipmentDialog.comments.setValue(shipmentInfo.getComments());
+  }
+
   public long getNewShipperId() {
     String pattern = "Created new shipment (\\d+)";
     String toastMessage = waitAndGetNoticeText(pattern, true);
