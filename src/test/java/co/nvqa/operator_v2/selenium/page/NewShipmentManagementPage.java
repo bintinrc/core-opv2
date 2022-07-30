@@ -54,6 +54,8 @@ import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.Shipme
 @SuppressWarnings("WeakerAccess")
 public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManagementPage> {
 
+  private  static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
+  private static final String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
 
   @FindBy(id = "search-by-sid_searchIds")
@@ -846,8 +848,6 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   }
 
   public void AddFilterWithValue(String value){
-    String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
-    String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
     if (isElementEnabled(f(FILTER_DROPDOWN_LIST_XPATH,value))){
       click(f(FILTER_DROPDOWN_LIST_XPATH,value));
     } else {

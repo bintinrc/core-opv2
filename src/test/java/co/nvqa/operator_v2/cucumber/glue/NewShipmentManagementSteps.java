@@ -94,7 +94,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("shipmentCompletionDate")) {
         if (!page.shipmentCompletionDateFilter.isDisplayedFast()) {
-//          page.addFilter.selectValue("Shipment Completion Date");
           page.AddFilterWithValue("Shipment Completion Date");
         }
         List<String> values = splitAndNormalize(data.get("shipmentCompletionDate"));
@@ -109,7 +108,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("transitDateTime")) {
         if (!page.transitDateTimeFilter.isDisplayedFast()) {
-//          page.addFilter.selectValue("transit Date Time");
           page.AddFilterWithValue("Transit Date Time");
         }
         List<String> values = splitAndNormalize(data.get("transitDateTime"));
@@ -128,7 +126,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("originHub")) {
         if (!page.originHubFilter.isDisplayedFast()) {
-//          page.addFilter.selectValue("Origin Hub");
           page.AddFilterWithValue("Origin Hub");
         } else {
           page.originHubFilter.clearAll();
@@ -137,7 +134,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("destinationHub")) {
         if (!page.destinationHubFilter.isDisplayedFast()) {
-//          page.addFilter.selectValue("Destination Hub");
           page.AddFilterWithValue("Destination Hub");
         } else {
           page.destinationHubFilter.clearAll();
