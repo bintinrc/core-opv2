@@ -124,9 +124,8 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='load-selection-button']")
   public Button loadSelection;
 
-  @FindBy(css = "[data-testid='add-filter-select']")
+  @FindBy(xpath = "//div[@data-testid='add-filter-select']")
   public AntSelect3 addFilter;
-
   @FindBy(css = "[data-testid='created_date-filter-card']")
   public AntFilterDateTimeRange shipmentDateFilter;
 
@@ -843,6 +842,21 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     @FindBy(xpath = ".//button[.='Delete']")
     public Button delete;
+
+  }
+
+  public void AddFilterWithValue(String value){
+    String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
+    String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
+    if (isElementEnabled(f(FILTER_DROPDOWN_LIST_XPATH,value))){
+      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+    } else {
+      click(ADD_FILTER_XPATH);
+      waitUntilVisibilityOfElementLocated(f(FILTER_DROPDOWN_LIST_XPATH,value));
+      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+    }
+    pause1s();
+    click(ADD_FILTER_XPATH);
 
   }
 }
