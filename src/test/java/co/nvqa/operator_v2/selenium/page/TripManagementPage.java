@@ -237,6 +237,31 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
 
+  private static String departureInput1 = "//input[@id='departure']";
+  private static String facilitiesInput1 = "//input[@id='facilities']";
+
+  @FindBy(xpath = "//input[@id='departure']")
+  public PageElement departureInput;
+
+  @FindBy(xpath = "//span[.='Select one or multiple facilities']")
+  public PageElement facilitiesInput;
+
+  @FindBy(xpath = "//button[.='Load Trips']")
+  public Button loadTrips;
+
+  @FindBy(xpath = "//button[.='Reload Search']")
+  public Button reloadSearch;
+
+  @FindBy(xpath = "//a[.='Create To/from Airport Trip']")
+  public PageElement createToFromAirportTrip;
+
+  @FindBy(xpath = "//a[.='Create Flight Trip']")
+  public PageElement createFlightTrip;
+
+  private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
+  //private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']//div[.='%s']";
+
+
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
 
@@ -1806,4 +1831,56 @@ public class TripManagementPage extends OperatorV2SimplePage {
       unassignAllDrivers.click();
     }
   }
+
+  public void verifyAirportTripMovementPageItems() {
+    waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
+    Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
+            .as("Load button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(departureInput.isDisplayed())
+            .as("Departure input appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(isElementEnabled("//button[.='Load Trips']"))
+            .as("Load Trips appear in Airport trip Management page").isFalse();
+    Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
+            .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(facilitiesInput.isDisplayed())
+            .as("Facilities input appear in Airport trip Management page").isTrue();
+  }
+
+  public void fillDepartureDateDetails(Map<String, String> mapOfData) {
+    departureInput.click();
+    String startDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
+    String endDate = TestUtils.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
+    moveToElement(findElementByXpath(f(XPATH_CAL_DEPARTUREDATE, startDate)));
+    click(f(XPATH_CAL_DEPARTUREDATE, startDate));
+    click(f(XPATH_CAL_DEPARTUREDATE, endDate));
+  }
+
+  public void clickOnLoadTripsAirportManagementDetails() {
+    loadTrips.click();
+    waitUntilPageLoaded();
+    pause2s();
+  }
+
+  public void verifyLoadedTripsPageInAirportManagementDetails(Map<String, String> mapOfData) {
+    Assertions.assertThat(isElementVisible("//button//strong[.='Back']", 5))
+            .as("Reload appear in Airport trip Management page").isTrue();
+    String departureDate = findElementByXpath("//div[contains(text(), ' - ')][./div[.='Departure Date']]").getText();
+    String expStartDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy");
+    String expEndDate = TestUtils.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
+    Assertions.assertThat(departureDate.split("\n")[1])
+            .as("Departure Date value appear in Airport trip Management page").isEqualTo(expStartDate + " - " + expEndDate);
+
+    String actOriginOrDestination = findElementByXpath("//span[contains(.,'Destination Facilities')]/parent::div/parent::div").getText();
+    Assertions.assertThat(actOriginOrDestination.split("\n")[1])
+            .as("Origin / Destination Facilities value appear in Airport trip Management page").isEqualTo(mapOfData.get("origiOrDestination"));
+
+    Assertions.assertThat(reloadSearch.isEnabled())
+            .as("Reload Search button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(createToFromAirportTrip.isDisplayed())
+            .as("Create To/from Airport Trip button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(createFlightTrip.isDisplayed())
+            .as("Create Flight Trip button appear in Airport trip Management page").isTrue();
+
+  }
+
 }

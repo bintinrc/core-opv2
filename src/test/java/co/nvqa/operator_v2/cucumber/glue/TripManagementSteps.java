@@ -10,9 +10,11 @@ import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -534,6 +536,28 @@ public class TripManagementSteps extends AbstractSteps {
     @Then("Operator verifies {string} with value {string} is not shown on Create One Trip page")
     public void operatorVerifiesInvalidDriver(String name, String value){
         tripManagementPage.verifyInvalidItem(name, value);
+    }
+
+    @And("Operator verifies that the Airport Management Page is opened")
+    public void operatorVerifiesThatTheAirportTripManagementPageIsOpened() {
+        tripManagementPage.switchTo();
+        tripManagementPage.verifyAirportTripMovementPageItems();
+        pause2s();
+    }
+
+    @When("Operator fill the departure date for Airport Management")
+    public void operatorFilltheDetailsInAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.fillDepartureDateDetails(mapOfData);
+    }
+
+    @And("Operator click on 'Load Trips' on Airport Management")
+    public void operatorclickOnLoadTripsOnAirportManagement() {
+        tripManagementPage.clickOnLoadTripsAirportManagementDetails();
+    }
+
+    @Then("Verify the parameters of loaded trips in Airport Management")
+    public void verifyParametersinAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(mapOfData);
     }
 
 }
