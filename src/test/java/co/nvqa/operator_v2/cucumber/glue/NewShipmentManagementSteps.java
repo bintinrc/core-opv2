@@ -94,7 +94,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("shipmentCompletionDate")) {
         if (!page.shipmentCompletionDateFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Shipment Completion Date");
+          page.AddFilterWithValue("Shipment Completion Date");
         }
         List<String> values = splitAndNormalize(data.get("shipmentCompletionDate"));
         String[] fromValues = values.get(0).split(":");
@@ -108,7 +108,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("transitDateTime")) {
         if (!page.transitDateTimeFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("transit Date Time");
+          page.AddFilterWithValue("Transit Date Time");
         }
         List<String> values = splitAndNormalize(data.get("transitDateTime"));
         String[] fromValues = values.get(0).split(":");
@@ -126,7 +126,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("originHub")) {
         if (!page.originHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Origin Hub");
+          page.AddFilterWithValue("Origin Hub");
         } else {
           page.originHubFilter.clearAll();
         }
@@ -134,7 +134,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("destinationHub")) {
         if (!page.destinationHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Destination Hub");
+          page.AddFilterWithValue("Destination Hub");
         } else {
           page.destinationHubFilter.clearAll();
         }
@@ -142,16 +142,17 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("lastInboundHub")) {
         if (!page.lastInboundHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Last Inbound Hub");
+          page.AddFilterWithValue("Last Inbound Hub");
         } else {
           page.lastInboundHubFilter.clearAll();
         }
+
         page.lastInboundHubFilter.selectFilter(splitAndNormalize(data.get("lastInboundHub")));
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", data.get("lastInboundHub"));
       }
       if (data.containsKey("mawb")) {
         if (!page.mawbFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("MAWB");
+          page.AddFilterWithValue("MAWB");
         } else {
           page.mawbFilter.clearAll();
         }
@@ -168,13 +169,20 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator click Search by shipment id on Shipment Management page")
   public void clickSearchByShipmentId() {
-    page.inFrame(() -> page.searchByShipmentIds.click());
+    page.inFrame(() -> {
+      page.searchByShipmentIds.waitUntilClickable();
+      page.searchByShipmentIds.click();
+    });
   }
 
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> page.shipmentIds.setValue(shipmentIds));
+    page.inFrame(() -> {
+      page.shipmentIds.waitUntilVisible();
+      page.shipmentIds.setValue(shipmentIds);
+    }
+    );
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
