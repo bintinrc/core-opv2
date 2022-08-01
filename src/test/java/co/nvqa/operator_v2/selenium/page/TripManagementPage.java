@@ -244,7 +244,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public PageElement departureInput;
 
   @FindBy(xpath = "//span[.='Select one or multiple facilities']")
-  public PageElement facilitiesInput;
+  public PageElement selectFacility;
 
   @FindBy(xpath = "//button[.='Load Trips']")
   public Button loadTrips;
@@ -258,8 +258,43 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//a[.='Create Flight Trip']")
   public PageElement createFlightTrip;
 
+  @FindBy(xpath = "//input[@id='facilities']")
+  public PageElement facilitiesInput;
+
+  @FindBy(xpath = "//th[contains(@class,'destination_hub_id')]//input")
+  public PageElement airportDestHubFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'trip_id')]//input")
+  public PageElement airportTripIdFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'origin_hub_id')]//input")
+  public PageElement airportOriginHubFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'departure_date_time')]//input")
+  public PageElement airportDepartDateTimeFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'duration')]//input")
+  public PageElement airportDurationFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'mawb')]//input")
+  public PageElement airportMawbFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'drivers')]//input")
+  public PageElement airportDriversFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'status')]//input")
+  public PageElement airportStatusFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'comment')]//input")
+  public PageElement airportCommentsFilter;
+
   private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
-  //private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']//div[.='%s']";
+  private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
+  private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
+  private static final String XPATH_DEPARTURE_DATE_TEXT = "//div[contains(text(), ' - ')][./div[.='Departure Date']]";
+  private static final String XPATH_FACILITIES_TEXT = "//span[contains(.,'Destination Facilities')]/parent::div/parent::div";
+  private static final String FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
+  private static final String XPATH_CAL_PREV_MONTH = "//button[@class='ant-picker-header-prev-btn']";
 
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
@@ -1842,7 +1877,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .as("Load Trips appear in Airport trip Management page").isFalse();
     Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
             .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
-    Assertions.assertThat(facilitiesInput.isDisplayed())
+    Assertions.assertThat(selectFacility.isDisplayed())
             .as("Facilities input appear in Airport trip Management page").isTrue();
   }
 
@@ -1850,9 +1885,31 @@ public class TripManagementPage extends OperatorV2SimplePage {
     departureInput.click();
     String startDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
     String endDate = TestUtils.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
+    if(mapOfData.get("startDate").startsWith("D-")){
+      click(XPATH_CAL_PREV_MONTH);
+    }
     moveToElement(findElementByXpath(f(XPATH_CAL_DEPARTUREDATE, startDate)));
     click(f(XPATH_CAL_DEPARTUREDATE, startDate));
     click(f(XPATH_CAL_DEPARTUREDATE, endDate));
+  }
+
+  public void fillOrigDestDetails(Map<String, String> mapOfData) {
+    if(mapOfData.containsKey("originOrDestination")){
+      String[] values = mapOfData.get("originOrDestination").split(";");
+      facilitiesInput.click();
+      for(String value : values){
+        sendKeysAndEnter(XPATH_FACILITIES_INPUT, value);
+        click(f(XPATH_DIV_STARTSWITH_TEMPLATE, value));
+      }
+    }
+  }
+
+  public void verifyMaxOrigDestDetails() {
+    facilitiesInput.click();
+    Assertions.assertThat(
+            findElementsByXpath(FILTERS_DISABLED_XPATH).size())
+            .as("Other filters options are DISABLED")
+            .isNotZero();
   }
 
   public void clickOnLoadTripsAirportManagementDetails() {
@@ -1862,17 +1919,21 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyLoadedTripsPageInAirportManagementDetails(Map<String, String> mapOfData) {
+    waitUntilVisibilityOfElementLocated("//button//strong[.='Back']");
     Assertions.assertThat(isElementVisible("//button//strong[.='Back']", 5))
             .as("Reload appear in Airport trip Management page").isTrue();
-    String departureDate = findElementByXpath("//div[contains(text(), ' - ')][./div[.='Departure Date']]").getText();
-    String expStartDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy");
-    String expEndDate = TestUtils.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
-    Assertions.assertThat(departureDate.split("\n")[1])
-            .as("Departure Date value appear in Airport trip Management page").isEqualTo(expStartDate + " - " + expEndDate);
 
-    String actOriginOrDestination = findElementByXpath("//span[contains(.,'Destination Facilities')]/parent::div/parent::div").getText();
+    String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
+    String expDepartDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy") + " - " +
+            TestUtils.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
+    Assertions.assertThat(departureDate.split("\n")[1])
+            .as("Departure Date value appear in Airport trip Management page")
+            .isEqualTo(expDepartDate);
+
+    String actOriginOrDestination = findElementByXpath(XPATH_FACILITIES_TEXT).getText();
     Assertions.assertThat(actOriginOrDestination.split("\n")[1])
-            .as("Origin / Destination Facilities value appear in Airport trip Management page").isEqualTo(mapOfData.get("origiOrDestination"));
+            .as("Origin / Destination Facilities value appear in Airport trip Management page")
+            .isEqualTo(mapOfData.get("originOrDestination"));
 
     Assertions.assertThat(reloadSearch.isEnabled())
             .as("Reload Search button appear in Airport trip Management page").isTrue();
@@ -1880,6 +1941,32 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .as("Create To/from Airport Trip button appear in Airport trip Management page").isTrue();
     Assertions.assertThat(createFlightTrip.isDisplayed())
             .as("Create Flight Trip button appear in Airport trip Management page").isTrue();
+
+    verifyAirportTripsTable();
+
+  }
+
+  public void verifyAirportTripsTable(){
+    Assertions.assertThat(airportDestHubFilter.isDisplayed())
+            .as("Destination Hub Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportTripIdFilter.isDisplayed())
+            .as("Trip Id Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportOriginHubFilter.isDisplayed())
+            .as("Origin Hub Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDepartDateTimeFilter.isDisplayed())
+            .as("Departure Date Time Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDurationFilter.isDisplayed())
+            .as("Duration Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportMawbFilter.isDisplayed())
+            .as("Mawb Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDriversFilter.isDisplayed())
+            .as("Drivers Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportStatusFilter.isDisplayed())
+            .as("Status Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportCommentsFilter.isDisplayed())
+            .as("Comments Filter appear in Airport trip Management page").isTrue();
+    /*Assertions.assertThat(findElementByXpath("//div[.='End of Table']").isDisplayed())
+            .as("Comments Filter appear in Airport trip Management page").isTrue();*/
 
   }
 

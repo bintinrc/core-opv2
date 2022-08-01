@@ -550,6 +550,16 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.fillDepartureDateDetails(mapOfData);
     }
 
+    @When("Operator fill the Origin Or Destination for Airport Management")
+    public void operatorFilltheOriginDetailsInAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.fillOrigDestDetails(mapOfData);
+    }
+
+    @And("Verify operator cannot fill more than 4 Origin Or Destination for Airport Management")
+    public void verifyMaxOriginDetailsInAirportManagement() {
+        tripManagementPage.verifyMaxOrigDestDetails();
+    }
+
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         tripManagementPage.clickOnLoadTripsAirportManagementDetails();
