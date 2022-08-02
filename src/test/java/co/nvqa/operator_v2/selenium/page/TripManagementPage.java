@@ -293,6 +293,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_FACILITIES_TEXT = "//span[contains(.,'Destination Facilities')]/parent::div/parent::div";
   private static final String FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
   private static final String XPATH_CAL_PREV_MONTH = "//button[@class='ant-picker-header-prev-btn']";
+  private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table') or contains(text(),'No Results Found')]";
+
 
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
@@ -1964,6 +1966,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
     Assertions.assertThat(airportCommentsFilter.isDisplayed())
             .as("Comments Filter appear in Airport trip Management page").isTrue();
 
+    if(findElementsByXpath(XPATH_END_OF_TABLE).size()==0){
+      do {
+        WebElement element = getWebDriver().findElement(By.xpath("//div[contains(@class,'table-container')]//table/tbody//tr[last()]"));
+        TestUtils.callJavaScriptExecutor("arguments[0].scrollIntoView();", element, getWebDriver());
+        moveToElement(element);
+      }while (findElementsByXpath(XPATH_END_OF_TABLE).size()==0);
+    }
+
+    Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
+            .as("End Of Table appear in Airport trip Management page").isTrue();
   }
 
 }
