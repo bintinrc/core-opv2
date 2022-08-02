@@ -237,9 +237,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
 
-  private static String departureInput1 = "//input[@id='departure']";
-  private static String facilitiesInput1 = "//input[@id='facilities']";
-
   @FindBy(xpath = "//input[@id='departure']")
   public PageElement departureInput;
 
