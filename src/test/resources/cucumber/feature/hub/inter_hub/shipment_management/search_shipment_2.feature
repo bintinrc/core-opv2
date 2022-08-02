@@ -7,13 +7,13 @@ Feature: Shipment Management - Search Shipment 2
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - MAWB (uid:59cc8df2-47e0-46c4-9ca6-08179b099a02)
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator assign mawb "mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" to following shipmentIds
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     When Operator apply filters on Shipment Management Page:
-      | mawb | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                                   |
@@ -23,12 +23,12 @@ Feature: Shipment Management - Search Shipment 2
       | origHubName  | {hub-name}                                 |
       | currHubName  | {hub-name}                                 |
       | destHubName  | {hub-name-2}                               |
-      | mawb         | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb         | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
     Given Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -59,7 +59,7 @@ Feature: Shipment Management - Search Shipment 2
   @DeleteShipment
   Scenario: Search Shipment by Filter - Transit Date Time (uid:d78f101e-c251-46ec-9b14-0eef64804627)
     Given Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -68,11 +68,11 @@ Feature: Shipment Management - Search Shipment 2
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator put created parcel to shipment
-    And Operator close the shipment which has been created
+    And API Operator closes the created shipment
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
-      | hubId      | {hub-id-2}                |
+      | hubId      | {hub-id}                |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     When Operator apply filters on Shipment Management Page:
@@ -82,16 +82,16 @@ Feature: Shipment Management - Search Shipment 2
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
-      | status       | At Transit Hub,Transit    |
+      | status       | Transit    |
       | userId       | {operator-portal-uid}     |
       | origHubName  | {hub-name}                |
-      | currHubName  | {hub-name-2}              |
+      | currHubName  | {hub-name}              |
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Last Inbound Hub (uid:7a2bf3c3-622d-4f31-9851-02ef7797ef1b)
     Given Operator go to menu Utilities -> QRCode Printing
-    And Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -104,23 +104,25 @@ Feature: Shipment Management - Search Shipment 2
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
-      | hubId      | {hub-id-2}                |
+      | hubId      | {hub-id}                |
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
-      | lastInboundHub | {hub-name-2} |
+     | shipmentType   | Air Haul |
+     | shipmentStatus | Transit  |
+      | lastInboundHub | {hub-name} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
-      | status       | Closed                    |
+      | status       | Transit                    |
       | userId       | {operator-portal-uid}     |
       | origHubName  | {hub-name}                |
-      | currHubName  | {hub-name-2}              |
+      | currHubName  | {hub-name}              |
       | destHubName  | {hub-name-2}              |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments without Duplicate (uid:68b7217b-41a8-4259-9da8-e8ce68f0a7b0)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
@@ -132,7 +134,7 @@ Feature: Shipment Management - Search Shipment 2
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Duplicate (uid:6ec523ea-2f26-4d09-b90b-cb686c7c3b0c)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
@@ -145,7 +147,7 @@ Feature: Shipment Management - Search Shipment 2
 
   Scenario: Search Shipment by ID - Search > 30 Shipments without Duplicate (uid:a4c69f51-6389-46b4-8348-db2b4fb4dfe5)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 35 shipment IDs
     When Operator enters multiple shipment ids in the Shipment Management Page
@@ -157,7 +159,7 @@ Feature: Shipment Management - Search Shipment 2
 
   Scenario: Search Shipment by ID - Search > 30 Shipments with Duplicate (uid:b57b2ffb-b215-4188-b66e-9ae51dc67278)
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/new-shipment-management"
+    When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 35 shipment IDs
     When Operator enters multiple shipment ids in the Shipment Management Page

@@ -54,6 +54,8 @@ import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.Shipme
 @SuppressWarnings("WeakerAccess")
 public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManagementPage> {
 
+  private  static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
+  private static final String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
 
   @FindBy(id = "search-by-sid_searchIds")
@@ -124,9 +126,8 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "[data-testid='load-selection-button']")
   public Button loadSelection;
 
-  @FindBy(css = "[data-testid='add-filter-select']")
+  @FindBy(xpath = "//div[@data-testid='add-filter-select']")
   public AntSelect3 addFilter;
-
   @FindBy(css = "[data-testid='created_date-filter-card']")
   public AntFilterDateTimeRange shipmentDateFilter;
 
@@ -210,6 +211,15 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
       createShipmentDialog.create.click();
     }
     shipmentInfo.setId(getNewShipperId());
+  }
+
+  public void createShipmentWithoutConfirm(ShipmentInfo shipmentInfo, boolean isNextOrder) {
+    createShipment.click();
+    createShipmentDialog.waitUntilVisible();
+    createShipmentDialog.type.selectValue("Air Haul");
+    createShipmentDialog.startHub.selectValue(shipmentInfo.getOrigHubName());
+    createShipmentDialog.endHub.selectValue(shipmentInfo.getDestHubName());
+    createShipmentDialog.comments.setValue(shipmentInfo.getComments());
   }
 
   public long getNewShipperId() {
@@ -834,6 +844,19 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     @FindBy(xpath = ".//button[.='Delete']")
     public Button delete;
+
+  }
+
+  public void AddFilterWithValue(String value){
+    if (isElementEnabled(f(FILTER_DROPDOWN_LIST_XPATH,value))){
+      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+    } else {
+      click(ADD_FILTER_XPATH);
+      waitUntilVisibilityOfElementLocated(f(FILTER_DROPDOWN_LIST_XPATH,value));
+      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+    }
+    pause1s();
+    click(ADD_FILTER_XPATH);
 
   }
 }

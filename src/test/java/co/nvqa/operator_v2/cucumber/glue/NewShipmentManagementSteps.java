@@ -94,7 +94,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("shipmentCompletionDate")) {
         if (!page.shipmentCompletionDateFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Shipment Completion Date");
+          page.AddFilterWithValue("Shipment Completion Date");
         }
         List<String> values = splitAndNormalize(data.get("shipmentCompletionDate"));
         String[] fromValues = values.get(0).split(":");
@@ -108,7 +108,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("transitDateTime")) {
         if (!page.transitDateTimeFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("transit Date Time");
+          page.AddFilterWithValue("Transit Date Time");
         }
         List<String> values = splitAndNormalize(data.get("transitDateTime"));
         String[] fromValues = values.get(0).split(":");
@@ -126,7 +126,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("originHub")) {
         if (!page.originHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Origin Hub");
+          page.AddFilterWithValue("Origin Hub");
         } else {
           page.originHubFilter.clearAll();
         }
@@ -134,7 +134,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("destinationHub")) {
         if (!page.destinationHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Destination Hub");
+          page.AddFilterWithValue("Destination Hub");
         } else {
           page.destinationHubFilter.clearAll();
         }
@@ -142,16 +142,17 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
       if (data.containsKey("lastInboundHub")) {
         if (!page.lastInboundHubFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("Last Inbound Hub");
+          page.AddFilterWithValue("Last Inbound Hub");
         } else {
           page.lastInboundHubFilter.clearAll();
         }
+
         page.lastInboundHubFilter.selectFilter(splitAndNormalize(data.get("lastInboundHub")));
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", data.get("lastInboundHub"));
       }
       if (data.containsKey("mawb")) {
         if (!page.mawbFilter.isDisplayedFast()) {
-          page.addFilter.selectValue("MAWB");
+          page.AddFilterWithValue("MAWB");
         } else {
           page.mawbFilter.clearAll();
         }
@@ -168,13 +169,20 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator click Search by shipment id on Shipment Management page")
   public void clickSearchByShipmentId() {
-    page.inFrame(() -> page.searchByShipmentIds.click());
+    page.inFrame(() -> {
+      page.searchByShipmentIds.waitUntilClickable();
+      page.searchByShipmentIds.click();
+    });
   }
 
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> page.shipmentIds.setValue(shipmentIds));
+    page.inFrame(() -> {
+      page.shipmentIds.waitUntilVisible();
+      page.shipmentIds.setValue(shipmentIds);
+    }
+    );
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
@@ -229,6 +237,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
           put(KEY_SHIPMENT_INFO, shipmentInfo);
           put(KEY_CREATED_SHIPMENT, shipmentInfo);
           put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+          putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
 
           if (isNextOrder) {
             Long secondShipmentId = page.createAnotherShipment();
@@ -248,6 +257,62 @@ public class NewShipmentManagementSteps extends AbstractSteps {
         }
       });
     }, 1);
+  }
+
+  @When("^Operator create Shipment without confirm on Shipment Management page:$")
+  public void operatorCreateShipmentOnShipmentManagementPageWithoutConfirmUsingDataBelow(
+          Map<String, String> mapOfData) {
+    page.inFrame(page -> {
+      page.waitUntilLoaded();
+      try {
+        final Map<String, String> finalData = resolveKeyValues(mapOfData);
+        List<Order> listOfOrders;
+        boolean isNextOrder = false;
+
+        if (get("isNextOrder") != null) {
+          isNextOrder = get("isNextOrder");
+        }
+
+        if (containsKey(KEY_LIST_OF_CREATED_ORDER)) {
+          listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+        } else if (containsKey(KEY_CREATED_ORDER)) {
+          listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+        } else {
+          listOfOrders = new ArrayList<>();
+        }
+
+        ShipmentInfo shipmentInfo = new ShipmentInfo();
+        shipmentInfo.fromMap(finalData);
+        shipmentInfo.setOrdersCount((long) listOfOrders.size());
+
+        page.createShipmentWithoutConfirm(shipmentInfo, isNextOrder);
+
+        if (StringUtils.isBlank(shipmentInfo.getShipmentType())) {
+          shipmentInfo.setShipmentType("AIR_HAUL");
+        }
+
+        put(KEY_SHIPMENT_INFO, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+        putInList(KEY_LIST_OF_CREATED_SHIPMENT_ID,shipmentInfo.getId());
+
+        if (isNextOrder) {
+          Long secondShipmentId = page.createAnotherShipment();
+          shipmentInfo.setId(secondShipmentId);
+          Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+          List<Long> listOfShipmentId = new ArrayList<>();
+          listOfShipmentId.add(shipmentIdBefore);
+          listOfShipmentId.add(secondShipmentId);
+          page.createShipmentDialog.close();
+          page.createShipmentDialog.waitUntilInvisible();
+          put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+        }
+      } catch (Throwable ex) {
+        LOGGER.debug("Searched element is not found, retrying after 2 seconds...");
+        page.refreshPage();
+        throw new NvTestRuntimeException(ex);
+      }
+    });
   }
 
   @When("Operator edit Shipment on Shipment Management page:")
@@ -342,6 +407,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     } else {
       shipmentInfo = get(KEY_SHIPMENT_INFO);
     }
+    page.switchTo();
     page.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
   }
