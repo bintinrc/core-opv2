@@ -1726,11 +1726,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "rts-charge")
     public TextBox rtsValue;
 
-    @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
-    public CheckBox codCountryDefaultCheckbox;
+    @FindBy(xpath = "//md-input-container[contains(@label,'COD Value')]/md-checkbox")
+    public MdCheckbox codCountryDefaultCheckbox;
 
     @FindBy(xpath = "//md-input-container[contains(@label,'Insured Value')]/md-checkbox")
-    public CheckBox insuranceCountryDefaultCheckbox;
+    public MdCheckbox insuranceCountryDefaultCheckbox;
 
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
