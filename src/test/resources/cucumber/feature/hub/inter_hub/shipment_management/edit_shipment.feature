@@ -110,6 +110,138 @@ Feature: Shipment Management - Edit Shipment
       | modifySelection | true   |
     Then Operator verify it highlight selected shipment and it can select another shipment
 
+  @DeleteShipment
+  Scenario: Cancel Shipment with Closed Status
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then API Operator closes the created shipment
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
+    And Operator cancel the created shipment on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
+
+
+  @DeleteShipment
+  Scenario: Cancel Shipment with Transit Status
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then API Operator closes the created shipment
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Transit                   |
+    And Operator cancel the created shipment on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
+
+
+  @DeleteShipment
+  Scenario: Auto Cancel Pending Shipment with 0 parcel and creation time < current time
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then DB Operator update shipment created date:
+      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
+      | dateOffset  | -3                                |
+    Then API Operator cancel old shipment from "3_days_before"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | status      | Cancelled                 |
+
+
+  @DeleteShipment
+  Scenario: Auto Cancel Pending Shipment with 0 parcel and creation time > current time
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then API Operator cancel old shipment from "3_days_before"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | status      | Pending                   |
+
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Auto Cancel Pending Shipment with > 0 parcel
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator scan order to shipment on Add to Shipment page:
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
+      | originHub      | {hub-name}                         |
+      | destinationHub | {hub-name-2}                       |
+      | shipmentType   | Air Haul                           |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then DB Operator update shipment created date:
+      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
+      | dateOffset  | -3                                |
+    Then API Operator cancel old shipment from "3_days_before"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | status      | Pending                   |
+
+  @DeleteShipment
+  Scenario: Auto Cancel Close Shipment with 0 parcel
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then API Operator closes the created shipment
+    Then DB Operator update shipment created date:
+      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
+      | dateOffset  | -3                                |
+    Then API Operator cancel old shipment from "3_days_before"
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID} |
+      | status      | Closed                    |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
