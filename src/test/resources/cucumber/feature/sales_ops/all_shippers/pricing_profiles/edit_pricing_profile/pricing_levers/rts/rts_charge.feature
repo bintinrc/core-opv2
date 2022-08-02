@@ -169,7 +169,6 @@ Feature: Pricing Levers - RTS Charge
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2,"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     # edit pending pricing profile for shipper
-      # edit pending pricing profile for shipper
     When Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
