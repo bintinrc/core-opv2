@@ -1965,8 +1965,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .as("Status Filter appear in Airport trip Management page").isTrue();
     Assertions.assertThat(airportCommentsFilter.isDisplayed())
             .as("Comments Filter appear in Airport trip Management page").isTrue();
-    /*Assertions.assertThat(findElementByXpath("//div[.='End of Table']").isDisplayed())
-            .as("Comments Filter appear in Airport trip Management page").isTrue();*/
 
   }
 
