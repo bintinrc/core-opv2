@@ -121,14 +121,14 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #    When Operator go to menu Inter-Hub -> Shipment Management
 #    And Operator search shipments by given Ids on Shipment Management page:
 #      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-#    Then Operator verify parameters of shipment on Shipment Management page using data below:
+#    Then Operator verify parameters of shipment on Shipment Management page:
 #      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
 #      | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
 #      | destHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}    |
 #      | status      | At Transit Hub                        |
 #    And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-#    Then Operator verify shipment event on Shipment Details page using data below:
+#    Then Operator verify shipment event on Shipment Details page:
 #      | source | SHIPMENT_HUB_INBOUND(OpV2)         |
 #      | result | At Transit Hub                     |
 #      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -264,25 +264,26 @@ Feature: Shipment Hub Inbound With Trip Scanning
     When Operator clicks proceed in end inbound dialog "Hub Inbound"
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}    |
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | userId | qa@ninjavan.co             |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
-      | eventName         | HUB INBOUND SCAN                               |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
+      | eventName         | HUB INBOUND SCAN                                  |
+      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
+      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
       | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
@@ -420,22 +421,22 @@ Feature: Shipment Hub Inbound With Trip Scanning
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}    |
       | status      | Transit                               |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | DEL_FROM_HUB_INBOUND               |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | qa@ninjavan.co             |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
-      | eventName         | HUB INBOUND SCAN                               |
-      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}             |
-      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}               |
+      | eventName         | HUB INBOUND SCAN                                  |
+      | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                |
+      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
       | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
@@ -539,14 +540,14 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #    When Operator go to menu Inter-Hub -> Shipment Management
 #    And Operator search shipments by given Ids on Shipment Management page:
 #      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-#    Then Operator verify parameters of shipment on Shipment Management page using data below:
+#    Then Operator verify parameters of shipment on Shipment Management page:
 #      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
 #      | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
 #      | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
 #      | status      | Completed                             |
 #    And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-#    Then Operator verify shipment event on Shipment Details page using data below:
+#    Then Operator verify shipment event on Shipment Details page:
 #      | source | SHIPMENT_HUB_INBOUND(OpV2)               |
 #      | result | Completed                          |
 #      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
@@ -651,14 +652,14 @@ Feature: Shipment Hub Inbound With Trip Scanning
 #    When Operator go to menu Inter-Hub -> Shipment Management
 #    And Operator search shipments by given Ids on Shipment Management page:
 #      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-#    Then Operator verify parameters of shipment on Shipment Management page using data below:
+#    Then Operator verify parameters of shipment on Shipment Management page:
 #      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 #      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
 #      | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
 #      | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
 #      | status      | Transit                               |
 #    And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-#    Then Operator verify shipment event on Shipment Details page using data below:
+#    Then Operator verify shipment event on Shipment Details page:
 #      | source | SHIPMENT_VAN_INBOUND(OpV2)               |
 #      | result | Transit                          |
 #      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -769,17 +770,17 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator refresh page
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Transit                            |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_VAN_INBOUND(MMDA)   |
-      | result | Transit                      |
-      | userId | qa@ninjavan.co               |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_VAN_INBOUND(MMDA) |
+      | result | Transit                    |
+      | userId | qa@ninjavan.co             |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

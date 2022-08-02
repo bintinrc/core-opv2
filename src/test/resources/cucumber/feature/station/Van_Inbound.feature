@@ -331,10 +331,11 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    And Operator cancels the created shipment on Shipment Management page
+    And Operator cancel the created shipment on Shipment Management page
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
