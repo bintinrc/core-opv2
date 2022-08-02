@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -1880,8 +1881,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   public void fillDepartureDateDetails(Map<String, String> mapOfData) {
     departureInput.click();
-    String startDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
-    String endDate = TestUtils.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
+    String startDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
+    String endDate = DateUtil.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
     if(mapOfData.get("startDate").startsWith("D-")){
       click(XPATH_CAL_PREV_MONTH);
     }
@@ -1921,8 +1922,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .as("Reload appear in Airport trip Management page").isTrue();
 
     String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
-    String expDepartDate = TestUtils.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy") + " - " +
-            TestUtils.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
+    String expDepartDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy") + " - " +
+            DateUtil.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
     Assertions.assertThat(departureDate.split("\n")[1])
             .as("Departure Date value appear in Airport trip Management page")
             .isEqualTo(expDepartDate);

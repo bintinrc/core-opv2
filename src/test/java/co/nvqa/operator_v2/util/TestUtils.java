@@ -9,13 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -194,17 +190,5 @@ public class TestUtils extends CommonSeleniumTestUtils {
   public static void callJavaScriptExecutor(String argument, WebElement element, WebDriver webDriver){
     JavascriptExecutor jse = ((JavascriptExecutor)webDriver);
     jse.executeScript(argument, element);
-  }
-
-  public static String getPastFutureDate(String reqDate, String format){
-    if(reqDate.contains("D-")){
-      reqDate = reqDate.substring(1);
-    }else if(reqDate.contains("D+")){
-      reqDate = reqDate.substring(2);
-    }
-    int day = Integer.parseInt(reqDate);
-    Format dateFormat = new SimpleDateFormat(format);
-    reqDate = dateFormat.format(DateUtils.addDays(new Date(), day));
-    return reqDate;
   }
 }
