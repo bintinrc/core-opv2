@@ -39,7 +39,7 @@ Feature: Unverified Address Assignment
     And Operator assign address "{KEY_CREATED_ORDER.buildCommaSeparatedToAddress}" to zone "{filter-zone-name}" on Unverified Address Assignment page
     Then Operator verify success notification "1 address assigned"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verifies Zone is "{zone-short-name}" on Edit Order page
+    Then Operator verifies Zone is "{av-zone-short-name}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
     When DB operator gets details for delivery transactions by order id
