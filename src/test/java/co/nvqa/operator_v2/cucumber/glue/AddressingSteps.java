@@ -11,6 +11,8 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 /**
  * @author Tristania Siagian
  */
@@ -34,12 +36,42 @@ public class AddressingSteps extends AbstractSteps {
     });
   }
 
-  @And("^Operator creates new address on Addressing Page$")
-  public void addNewAddress() {
+  @And("^Operator creates new address on \"([^\"]*)\" Addressing Page$")
+  public void addNewAddress(String country) {
     String uniqueCode = generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
-
     Addressing addressing = new Addressing();
+
+    switch (country) {
+      case "Indonesia":
+        addressing.setProvince("Jakarta");
+        addressing.setCity("Jakarta Barat");
+        addressing.setDistrict("Tanjung Duren");
+        addressing.setCommunity("Jakbar");
+        break;
+      case "Thailand":
+        addressing.setProvince("Loei");
+        addressing.setDistrict("Tha Li District");
+        addressing.setSubdistrict("A Hi");
+        break;
+      case "Vietnam":
+        addressing.setCity("Hanoi");
+        addressing.setDistrict("Hanoi");
+        addressing.setWard("Ba dinh district");
+        break;
+      case "Malaysia":
+        addressing.setCity("Kuala lumpur");
+        addressing.setState("Selangor");
+        addressing.setArea("Batu caves");
+        break;
+      case "Philippines":
+        addressing.setProvince("Manila");
+        addressing.setCity("Manila city");
+        addressing.setDistrict("Capital District");
+        addressing.setSubdivision("Metro Manila");
+        break;
+    }
+
     addressing.setPostcode("112233");
     addressing.setStreetName(TestUtils.randomInt(10, 99) + " Test Street");
     addressing.setBuildingName("Test Building");
@@ -130,6 +162,46 @@ public class AddressingSteps extends AbstractSteps {
       assertions.assertThat(page.addressCards.get(0).longitude.getValue())
           .as("Longitude")
           .isEqualTo(expected.getLongitude().toString());
+      if (isNotBlank(expected.getProvince())) {
+        assertions.assertThat(page.addressCards.get(0).province.getValue())
+            .as("Province")
+            .isEqualTo(expected.getProvince());
+      }
+      if (isNotBlank(expected.getCity())) {
+        assertions.assertThat(page.addressCards.get(0).city.getValue())
+            .as("City")
+            .isEqualTo(expected.getCity());
+      }
+      if (isNotBlank(expected.getDistrict())) {
+        assertions.assertThat(page.addressCards.get(0).district.getValue())
+            .as("District")
+            .isEqualTo(expected.getDistrict());
+      }
+      if (isNotBlank(expected.getCommunity())) {
+        assertions.assertThat(page.addressCards.get(0).community.getValue())
+            .as("Community")
+            .isEqualTo(expected.getCommunity());
+      }
+      if (isNotBlank(expected.getSubdistrict())) {
+        assertions.assertThat(page.addressCards.get(0).subdistrict.getValue())
+            .as("Subdistrict")
+            .isEqualTo(expected.getSubdistrict());
+      }
+      if (isNotBlank(expected.getWard())) {
+        assertions.assertThat(page.addressCards.get(0).ward.getValue())
+            .as("Ward")
+            .isEqualTo(expected.getWard());
+      }
+      if (isNotBlank(expected.getArea())) {
+        assertions.assertThat(page.addressCards.get(0).area.getValue())
+            .as("Area")
+            .isEqualTo(expected.getArea());
+      }
+      if (isNotBlank(expected.getSubdivision())) {
+        assertions.assertThat(page.addressCards.get(0).subdivision.getValue())
+            .as("Subdivision")
+            .isEqualTo(expected.getSubdivision());
+      }
       assertions.assertAll();
     });
   }

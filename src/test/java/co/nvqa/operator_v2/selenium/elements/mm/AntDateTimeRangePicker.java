@@ -33,6 +33,10 @@ public class AntDateTimeRangePicker extends PageElement {
   public TextBox toInput;
   @FindBy(xpath = "//li[@class='ant-picker-ok']/button")
   public Button okButton;
+  @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[1]//input/following-sibling::span")
+  public PageElement fromDateClearIcon;
+  @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[2]//input/following-sibling::span")
+  public PageElement toDateClearIcon;
   @FindBy(css = ".ant-picker-clear")
   public PageElement clearIcon;
 
@@ -84,6 +88,13 @@ public class AntDateTimeRangePicker extends PageElement {
     clearIcon.click();
   }
 
+  public void clearFromDate() {
+    fromDateClearIcon.moveAndClick();
+  }
+
+  public void clearToDate() {
+    toDateClearIcon.moveAndClick();
+  }
 
   public void setToDate(String to) {
     toInput.click();

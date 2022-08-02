@@ -20,7 +20,7 @@ public class MdDialog extends PageElement {
   @FindBy(name = "Cancel")
   public NvIconButton close;
 
-  @FindBy(xpath = ".//*[self::h1 or self::h2 or self::h4 or self::h5]")
+  @FindBy(xpath = ".//*[self::h1 or self::h2 or self::h4 or self::h5 or @class='ant-modal-confirm-title']")
   public PageElement title;
 
   public void close() {

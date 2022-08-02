@@ -7,7 +7,7 @@ Feature: Crossdock to other station belong to another crossdock
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found and there is available schedule (uid:6b2b71e2-4d64-4ebe-8437-aa9323d75613)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -42,7 +42,7 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Land Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                     |
       | schedules[1].departureTime  | 20:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -55,7 +55,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -81,27 +81,28 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
-      | id          | {KEY_CREATED_SHIPMENT_ID}           |
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}  |
-      | status      | Transit                             |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_CREATED_SHIPMENT_ID}          |
+      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | status      | Transit                            |
 #      | sla         | {{next-5-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(OpV2)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    Then Operator verify movement event on Shipment Details page using data below:
+    Then Operator verify movement event on Shipment Details page:
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement Found but there is no schedule (uid:de3b62b5-e244-446c-9665-ed69cf4ffa3d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -145,7 +146,7 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Land Haul                                                      |
+      | schedules[1].movementType   | Land Haul                                                     |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
@@ -158,7 +159,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -175,24 +176,25 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | status      | Closed                             |
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                               |
-      | status   | FAILED                                                                                        |
+    Then Operator verify movement event on Shipment Details page:
+      | source   | SLA_CALCULATION                                                                                                                                           |
+      | status   | FAILED                                                                                                                                                    |
       | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Crossdock to other station belong to another crossdock - Crossdock Movement not found (uid:dd887208-e154-43b0-913b-6d8e59ccdeb1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -240,7 +242,7 @@ Feature: Crossdock to other station belong to another crossdock
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
-      | movementType   | Land Haul                           |
+      | movementType   | Land Haul                          |
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
@@ -257,21 +259,21 @@ Feature: Crossdock to other station belong to another crossdock
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[3].name} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | status      | Closed                            |
+      | status      | Closed                             |
       | sla         | -                                  |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                               |
-      | status   | FAILED                                                                                        |
+    Then Operator verify movement event on Shipment Details page:
+      | source   | SLA_CALCULATION                                                                                                                                           |
+      | status   | FAILED                                                                                                                                                    |
       | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[3].name} (sg). Please ask your manager to check the schedule. |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

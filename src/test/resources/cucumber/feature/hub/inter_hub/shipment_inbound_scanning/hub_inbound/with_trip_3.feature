@@ -7,7 +7,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Start Hub Inbound After Select Driver and Trip (uid:026a1de3-00a4-4fb3-990e-5514ea40f19b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -50,7 +50,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Destination Hub Inbound (uid:847aafe2-b443-4567-9ec3-5bbb2dc91c69)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -121,15 +121,17 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Hub Inbound has ended" is shown on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Completed                          |
-    Then Operator verifies event is present for shipment on Shipment Detail page
+    When Operator opens Shipment Details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_HUB_INBOUND(OpV2)         |
       | result | Completed                          |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -142,8 +144,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Correct Shipment to Transit Hub Inbound (uid:f7dd1fb0-485a-4b1a-a3b2-cf1c786b5c9e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -225,17 +226,18 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | status      | At Transit Hub                     |
-    Then Operator verifies event is present for shipment on Shipment Detail page
+    When Operator opens Shipment Details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_HUB_INBOUND(OpV2)         |
       | result | At Transit Hub                     |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | userId | qa@ninjavan.co             |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order on Edit order page
       | eventName         | SHIPMENT VAN INBOUNDED                                                                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                                 |
@@ -244,7 +246,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Scan Incorrect Shipment to Hub Inbound (uid:e0ebe28c-a18c-4c82-bb16-5c19932d1447)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -294,7 +296,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
 
   @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: View Shipments To Unload for Hub Inbound (uid:95ed3788-2005-4b0b-ac45-4a706dec9f5e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |

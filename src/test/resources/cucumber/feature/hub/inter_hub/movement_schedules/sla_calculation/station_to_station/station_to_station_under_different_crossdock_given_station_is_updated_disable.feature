@@ -7,7 +7,7 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock Given Station is Updated/Disable - Station is Updated (uid:d84cb5fc-9c86-41c5-b945-6d6a973f8219)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -78,27 +78,28 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
     And Operator close the shipment which has been created
     And API Operator does the "van-inbound" scan for the shipment
     And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Transit                            |
       | sla         | -                                  |
     When Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
+    Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(MMDA)         |
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-    And Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                      |
-      | status   | FAILED                                                                                                               |
+    And Operator verify movement event on Shipment Details page:
+      | source   | SLA_CALCULATION                                                                                                                                           |
+      | status   | FAILED                                                                                                                                                    |
       | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
 
   @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
   Scenario: Station to Station Under Different Crossdock Given Station is Updated/Disable - Station is Disable (uid:b78d02b4-1e05-4655-a8c1-ad43e6d9971b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -160,10 +161,11 @@ Feature: Station to Station Under Different Crossdock Given Station is Updated/D
     And Operator refresh page
     And Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Then Operator verify hub "{KEY_LIST_OF_CREATED_HUBS[1].id}" not found on Shipment Inbound Scanning page
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |

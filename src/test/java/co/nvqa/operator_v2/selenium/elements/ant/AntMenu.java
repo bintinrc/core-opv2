@@ -18,14 +18,24 @@ public class AntMenu extends PageElement {
   }
 
   private static final String MD_MENU_ITEM_LOCATOR = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@role='menuitem'][.='%s']";
+  private static final String MD_MENU_ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-dropdown') and not(contains(@class, 'ant-dropdown-hidden'))]//li[@role='menuitem'][contains(.,'%s')]";
 
 
   public void selectOption(String option) {
     openMenu();
+    getItemElement(option).click();
+    pause100ms();
+  }
+
+  public Button getItemElement(String option) {
     option = escapeValue(option);
     String selector = f(MD_MENU_ITEM_LOCATOR, option);
-    new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector))).click();
-    pause100ms();
+    if (isElementExist(selector, 1)) {
+      return new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector)));
+    } else {
+      selector = f(MD_MENU_ITEM_CONTAINS_LOCATOR, option);
+      return new Button(getWebDriver(), getWebDriver().findElement(By.xpath(selector)));
+    }
   }
 
   private void openMenu() {

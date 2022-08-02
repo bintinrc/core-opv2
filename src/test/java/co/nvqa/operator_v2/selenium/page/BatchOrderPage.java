@@ -151,7 +151,7 @@ public class BatchOrderPage extends OperatorV2SimplePage {
 
   public static class RollbackDialog extends MdDialog {
 
-    @FindBy(id = "password")
+    @FindBy(css = "[aria-label='Password']")
     public TextBox password;
 
     @FindBy(name = "commons.rollback")
