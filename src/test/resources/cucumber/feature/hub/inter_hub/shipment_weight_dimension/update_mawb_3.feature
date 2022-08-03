@@ -1,5 +1,5 @@
 #https://studio.cucumber.io/projects/210778/test-plan/folders/2110424
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateMAWB3 @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateMAWB3
 Feature: Update MAWB 3
 
   @LaunchBrowser @ShouldAlwaysRun
