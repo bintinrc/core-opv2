@@ -63,8 +63,8 @@ Feature: Airport Trip Management - Load Trip
       | originOrDestination    | ABC (Airport);CDG (Airport);ERC (Airport)    |
     And Operator click on 'Load Trips' on Airport Management
     Then Verify the parameters of loaded trips in Airport Management
-      | startDate             | D-2                                              |
-      | endDate               | D+1                                              |
+      | startDate             | D-2                               |
+      | endDate               | D+1                               |
       | originOrDestination   | ABC (Airport), CDG (Airport), ERC (Airport)      |
 
   @ForceSuccessOrder
