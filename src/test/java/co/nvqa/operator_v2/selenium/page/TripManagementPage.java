@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -236,6 +237,65 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
+
+  @FindBy(xpath = "//input[@id='departure']")
+  public PageElement departureInput;
+
+  @FindBy(xpath = "//span[.='Select one or multiple facilities']")
+  public PageElement selectFacility;
+
+  @FindBy(xpath = "//button[.='Load Trips']")
+  public Button loadTrips;
+
+  @FindBy(xpath = "//button[.='Reload Search']")
+  public Button reloadSearch;
+
+  @FindBy(xpath = "//a[.='Create To/from Airport Trip']")
+  public PageElement createToFromAirportTrip;
+
+  @FindBy(xpath = "//a[.='Create Flight Trip']")
+  public PageElement createFlightTrip;
+
+  @FindBy(xpath = "//input[@id='facilities']")
+  public PageElement facilitiesInput;
+
+  @FindBy(xpath = "//th[contains(@class,'destination_hub_id')]//input")
+  public PageElement airportDestHubFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'trip_id')]//input")
+  public PageElement airportTripIdFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'origin_hub_id')]//input")
+  public PageElement airportOriginHubFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'departure_date_time')]//input")
+  public PageElement airportDepartDateTimeFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'duration')]//input")
+  public PageElement airportDurationFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'mawb')]//input")
+  public PageElement airportMawbFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'drivers')]//input")
+  public PageElement airportDriversFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'status')]//input")
+  public PageElement airportStatusFilter;
+
+  @FindBy(xpath = "//th[contains(@class,'comment')]//input")
+  public PageElement airportCommentsFilter;
+
+  private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
+  private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
+  private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
+  private static final String XPATH_DEPARTURE_DATE_TEXT = "//div[contains(text(), ' - ')][./div[.='Departure Date']]";
+  private static final String XPATH_FACILITIES_TEXT = "//span[contains(.,'Destination Facilities')]/parent::div/parent::div";
+  private static final String FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
+  private static final String XPATH_CAL_PREV_MONTH = "//button[@class='ant-picker-header-prev-btn']";
+  private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table') or contains(text(),'No Results Found')]";
+
+
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -1806,4 +1866,116 @@ public class TripManagementPage extends OperatorV2SimplePage {
       unassignAllDrivers.click();
     }
   }
+
+  public void verifyAirportTripMovementPageItems() {
+    waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
+    Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
+            .as("Load button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(departureInput.isDisplayed())
+            .as("Departure input appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(isElementEnabled("//button[.='Load Trips']"))
+            .as("Load Trips appear in Airport trip Management page").isFalse();
+    Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
+            .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(selectFacility.isDisplayed())
+            .as("Facilities input appear in Airport trip Management page").isTrue();
+  }
+
+  public void fillDepartureDateDetails(Map<String, String> mapOfData) {
+    departureInput.click();
+    String startDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
+    String endDate = DateUtil.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
+    if(mapOfData.get("startDate").startsWith("D-")){
+      click(XPATH_CAL_PREV_MONTH);
+    }
+    moveToElement(findElementByXpath(f(XPATH_CAL_DEPARTUREDATE, startDate)));
+    click(f(XPATH_CAL_DEPARTUREDATE, startDate));
+    click(f(XPATH_CAL_DEPARTUREDATE, endDate));
+  }
+
+  public void fillOrigDestDetails(Map<String, String> mapOfData) {
+    if(mapOfData.containsKey("originOrDestination")){
+      String[] values = mapOfData.get("originOrDestination").split(";");
+      facilitiesInput.click();
+      for(String value : values){
+        sendKeysAndEnter(XPATH_FACILITIES_INPUT, value);
+        click(f(XPATH_DIV_STARTSWITH_TEMPLATE, value));
+      }
+    }
+  }
+
+  public void verifyMaxOrigDestDetails() {
+    facilitiesInput.click();
+    Assertions.assertThat(
+            findElementsByXpath(FILTERS_DISABLED_XPATH).size())
+            .as("Other filters options are DISABLED")
+            .isNotZero();
+  }
+
+  public void clickOnLoadTripsAirportManagementDetails() {
+    loadTrips.click();
+    waitUntilPageLoaded();
+    pause2s();
+  }
+
+  public void verifyLoadedTripsPageInAirportManagementDetails(Map<String, String> mapOfData) {
+    waitUntilVisibilityOfElementLocated("//button//strong[.='Back']");
+    Assertions.assertThat(isElementVisible("//button//strong[.='Back']", 5))
+            .as("Reload appear in Airport trip Management page").isTrue();
+
+    String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
+    String expDepartDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy") + " - " +
+            DateUtil.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
+    Assertions.assertThat(departureDate.split("\n")[1])
+            .as("Departure Date value appear in Airport trip Management page")
+            .isEqualTo(expDepartDate);
+
+    String actOriginOrDestination = findElementByXpath(XPATH_FACILITIES_TEXT).getText();
+    Assertions.assertThat(actOriginOrDestination.split("\n")[1])
+            .as("Origin / Destination Facilities value appear in Airport trip Management page")
+            .isEqualTo(mapOfData.get("originOrDestination"));
+
+    Assertions.assertThat(reloadSearch.isEnabled())
+            .as("Reload Search button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(createToFromAirportTrip.isDisplayed())
+            .as("Create To/from Airport Trip button appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(createFlightTrip.isDisplayed())
+            .as("Create Flight Trip button appear in Airport trip Management page").isTrue();
+
+    verifyAirportTripsTable();
+
+  }
+
+  public void verifyAirportTripsTable(){
+    Assertions.assertThat(airportDestHubFilter.isDisplayed())
+            .as("Destination Hub Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportTripIdFilter.isDisplayed())
+            .as("Trip Id Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportOriginHubFilter.isDisplayed())
+            .as("Origin Hub Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDepartDateTimeFilter.isDisplayed())
+            .as("Departure Date Time Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDurationFilter.isDisplayed())
+            .as("Duration Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportMawbFilter.isDisplayed())
+            .as("Mawb Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportDriversFilter.isDisplayed())
+            .as("Drivers Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportStatusFilter.isDisplayed())
+            .as("Status Filter appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(airportCommentsFilter.isDisplayed())
+            .as("Comments Filter appear in Airport trip Management page").isTrue();
+
+    if(findElementsByXpath(XPATH_END_OF_TABLE).size()==0){
+      do {
+        WebElement element = getWebDriver().findElement(By.xpath("//div[contains(@class,'table-container')]//table/tbody//tr[last()]"));
+        TestUtils.callJavaScriptExecutor("arguments[0].scrollIntoView();", element, getWebDriver());
+        moveToElement(element);
+      }while (findElementsByXpath(XPATH_END_OF_TABLE).size()==0);
+    }
+
+    Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
+            .as("End Of Table appear in Airport trip Management page").isTrue();
+  }
+
 }

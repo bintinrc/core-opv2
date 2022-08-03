@@ -536,4 +536,36 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.verifyInvalidItem(name, value);
     }
 
+    @And("Operator verifies that the Airport Management Page is opened")
+    public void operatorVerifiesThatTheAirportTripManagementPageIsOpened() {
+        tripManagementPage.switchTo();
+        tripManagementPage.verifyAirportTripMovementPageItems();
+        pause2s();
+    }
+
+    @When("Operator fill the departure date for Airport Management")
+    public void operatorFilltheDetailsInAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.fillDepartureDateDetails(mapOfData);
+    }
+
+    @When("Operator fill the Origin Or Destination for Airport Management")
+    public void operatorFilltheOriginDetailsInAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.fillOrigDestDetails(mapOfData);
+    }
+
+    @And("Verify operator cannot fill more than 4 Origin Or Destination for Airport Management")
+    public void verifyMaxOriginDetailsInAirportManagement() {
+        tripManagementPage.verifyMaxOrigDestDetails();
+    }
+
+    @And("Operator click on 'Load Trips' on Airport Management")
+    public void operatorclickOnLoadTripsOnAirportManagement() {
+        tripManagementPage.clickOnLoadTripsAirportManagementDetails();
+    }
+
+    @Then("Verify the parameters of loaded trips in Airport Management")
+    public void verifyParametersinAirportManagement(Map<String, String> mapOfData) {
+        tripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(mapOfData);
+    }
+
 }
