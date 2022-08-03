@@ -1970,7 +1970,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
       do {
         WebElement element = getWebDriver().findElement(By.xpath("//div[contains(@class,'table-container')]//table/tbody//tr[last()]"));
         TestUtils.callJavaScriptExecutor("arguments[0].scrollIntoView();", element, getWebDriver());
-        moveToElement(element);
       }while (findElementsByXpath(XPATH_END_OF_TABLE).size()==0);
     }
 
