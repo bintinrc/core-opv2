@@ -52,6 +52,22 @@ Feature: Airport Trip Management - Load Trip
       | originOrDestination   | CDG (Airport), ERC (Airport)      |
 
   @ForceSuccessOrder
+  Scenario: Load Air Haul Trip by Departure Date, Origin and Destination Facilities
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Airport Trip Management
+    And Operator verifies that the Airport Management Page is opened
+    When Operator fill the departure date for Airport Management
+      | startDate              | D-2    |
+      | endDate                | D+1    |
+    When Operator fill the Origin Or Destination for Airport Management
+      | originOrDestination    | ABC (Airport);CDG (Airport);ERC (Airport)    |
+    And Operator click on 'Load Trips' on Airport Management
+    Then Verify the parameters of loaded trips in Airport Management
+      | startDate             | D-2                               |
+      | endDate               | D+1                               |
+      | originOrDestination   | ABC (Airport), CDG (Airport), ERC (Airport)      |
+
+  @ForceSuccessOrder
   Scenario: Load Air Haul Trip by Departure Date and 4 Origin/Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
