@@ -239,4 +239,10 @@ public class AddressDatasourceSteps extends AbstractSteps {
     addressDatasourcePage.kecamatanTextBox.isDisplayed();
     addressDatasourcePage.searchButton.isEnabled();
   }
+
+  @Then("^Operator verifies no result found on Address Datasource page$")
+  public void operatorVerifiesNoResult() {
+    assertTrue("No result found on Address Datasource page Displayed!",
+        addressDatasourcePage.noResultsFound.isDisplayed());
+  }
 }
