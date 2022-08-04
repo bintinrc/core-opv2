@@ -93,5 +93,31 @@ public class LoginSteps extends AbstractSteps {
     profilePage.clickProfileButton();
     profilePage.changeCountry(countryName);
     put(COUNTRY, countryName);
+ /*   Note: Update contry code and API base URL when we change country name
+    also change timezone if needed
+    This is global change, and impacting to all APIs
+    Son Ha
+  */
+    switch (countryName) {
+      case "Singapore":
+        TestConstants.COUNTRY_CODE = "sg";
+        break;
+      case "Indonesia":
+        TestConstants.COUNTRY_CODE = "id";
+        break;
+      case "Thailand":
+        TestConstants.COUNTRY_CODE = "th";
+        break;
+      case "Vietnam":
+        TestConstants.COUNTRY_CODE = "vn";
+        break;
+      case "Malaysia":
+        TestConstants.COUNTRY_CODE = "my";
+        break;
+      case "Philippines":
+        TestConstants.COUNTRY_CODE = "ph";
+        break;
+    }
+    TestConstants.API_BASE_URL=TestConstants.API_BASE_URL.substring(0,TestConstants.API_BASE_URL.length()-2)+TestConstants.COUNTRY_CODE ;
   }
 }
