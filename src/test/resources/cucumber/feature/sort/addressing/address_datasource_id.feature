@@ -167,6 +167,15 @@ Feature: Address Datasource
       | latitude  | {latitude-1}        |
       | longitude | {longitude-1}       |
 
+  Scenario: ID Address Datasource Landing Page - Search Box Invalid Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province  | INVALID |
+      | kota      | INVALID |
+      | kecamatan | INVALID |
+    Then Operator verifies no result found on Address Datasource page
+
   Scenario: ID Address Datasource  Landing Page - Scrolling
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource

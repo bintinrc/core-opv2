@@ -94,6 +94,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[15]/td[@class='state']")
   public PageElement tableRow;
 
+  @FindBy(xpath = "//div[text()='No Results Found']")
+  public PageElement noResultsFound;
+
   public AddressDatasourcePage(WebDriver webDriver) {
     super(webDriver);
   }
