@@ -334,16 +334,4 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     scanningPage.verifyConfirmMessage(message);
   }
 
-  @Then("Operator verify small message {string} {string} in Start Inbound Box Page")
-  public void verifySmallMessageOfPage(String message, String status) {
-    if ("appears".equals(status)) {
-      assertThat("Small message is equal", scanningPage.tripUnselectedWarning.getText(),
-              equalTo(message));
-      return;
-    }
-    if ("not appears".equals(status)) {
-      assertThat("Small message is not shown", scanningPage.tripUnselectedWarning.isDisplayedFast(),
-              equalTo(false));
-    }
-  }
 }
