@@ -82,6 +82,18 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='search-button']")
   public Button searchButton;
 
+  @FindBy(css = "[for='state']")
+  public TextBox provinceTextField;
+
+  @FindBy(css = "[for='city']")
+  public TextBox cityTextField;
+
+  @FindBy(css = "[for='district']")
+  public TextBox districtTextField;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[15]/td[@class='state']")
+  public PageElement tableRow;
+
   public AddressDatasourcePage(WebDriver webDriver) {
     super(webDriver);
   }

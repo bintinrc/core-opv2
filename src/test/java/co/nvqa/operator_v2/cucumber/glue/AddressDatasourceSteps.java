@@ -183,4 +183,60 @@ public class AddressDatasourceSteps extends AbstractSteps {
     addressDatasourcePage.kecamatanTextBox.sendKeys(data.get("kecamatan"));
     addressDatasourcePage.searchButton.click();
   }
+
+  @Then("^Operator verify search field lable:$")
+  public void operatorVerifySearchField(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    addressDatasourcePage.switchTo();
+
+    if (StringUtils.isNotBlank(data.get("l1")) && data.get("l1").equals("province")) {
+      Assertions.assertThat(addressDatasourcePage.provinceTextField.getText())
+          .as("L1 text field" + addressDatasourcePage.provinceTextField.getText())
+          .isEqualToIgnoringCase(data.get("l1"));
+    }
+    if (StringUtils.isNotBlank(data.get("l2")) && data.get("l2").equals("Kota/Kabupaten")) {
+      Assertions.assertThat(addressDatasourcePage.cityTextField.getText())
+          .as("L2 text field" + addressDatasourcePage.cityTextField.getText())
+          .isEqualToIgnoringCase(data.get("l2"));
+    }
+    if (StringUtils.isNotBlank(data.get("l3")) && data.get("l3").equals("Kecamatan")) {
+      Assertions.assertThat(addressDatasourcePage.districtTextField.getText())
+          .as("L3 text field" + addressDatasourcePage.districtTextField.getText())
+          .isEqualToIgnoringCase(data.get("l3"));
+    }
+  }
+
+  @Then("^Operator verifies search button is disabled$")
+  public void verifiesSearchButtonDisabled() {
+    addressDatasourcePage.switchTo();
+    Assertions.assertThat(addressDatasourcePage.searchButton.isEnabled())
+        .as("Search button is disabled")
+        .isFalse();
+  }
+
+  @When("^Operator search the existing address datasource:$")
+  public void operatorSearchExistingAddressDatasource(Map<String, String> data) {
+    addressDatasourcePage.switchTo();
+    data = resolveKeyValues(data);
+
+    if (StringUtils.isNotBlank(data.get("province"))) {
+      addressDatasourcePage.provinceTextBox.sendKeys(data.get("province"));
+    }
+    if (StringUtils.isNotBlank(data.get("kota"))) {
+      addressDatasourcePage.kotaTextBox.sendKeys(data.get("kota"));
+    }
+    if (StringUtils.isNotBlank(data.get("kecamatan"))) {
+      addressDatasourcePage.kecamatanTextBox.sendKeys(data.get("kecamatan"));
+    }
+    addressDatasourcePage.searchButton.click();
+  }
+
+  @When("^Operator verifies search box not affected by the scroll$")
+  public void operatorVerifiesSearchBox() {
+    addressDatasourcePage.tableRow.scrollIntoView(true);
+    addressDatasourcePage.provinceTextBox.isDisplayed();
+    addressDatasourcePage.kotaTextBox.isDisplayed();
+    addressDatasourcePage.kecamatanTextBox.isDisplayed();
+    addressDatasourcePage.searchButton.isEnabled();
+  }
 }
