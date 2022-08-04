@@ -20,12 +20,8 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -294,6 +290,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
   private static final String XPATH_CAL_PREV_MONTH = "//button[@class='ant-picker-header-prev-btn']";
   private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table') or contains(text(),'No Results Found')]";
+  private static final String XPATH_TABLE_NOT_CONTAINS_TD = "//div[contains(@class,'table-container')]//table/tbody//tr/td[%s][not(contains(.,'%s'))]";
+  private static final String XPATH_TABLE_FIRST_ROW ="//div[contains(@class,'table-container')]//table/tbody//tr[1]/td[%s]";
 
 
 
@@ -1966,15 +1964,103 @@ public class TripManagementPage extends OperatorV2SimplePage {
     Assertions.assertThat(airportCommentsFilter.isDisplayed())
             .as("Comments Filter appear in Airport trip Management page").isTrue();
 
+    scrollToEndOfAirportTripsTable();
+
+    Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
+            .as("End Of Table appear in Airport trip Management page").isTrue();
+  }
+
+  public void createNewFlightTrip(Map<String, String> mapOfData) {
+    createFlightTrip.click();
+    switchToOtherWindow();
+    waitUntilPageLoaded();
+    switchTo();
+    Assertions.assertThat(findElementByXpath("//h3[.='Create Flight Trip']").isDisplayed())
+            .as("End Of Table appear in Airport trip Management page").isTrue();
+    Assertions.assertThat(findElementByXpath("//input[@id='editForm_originAirport']").isDisplayed())
+            .as("End Of Table appear in Airport trip Management page").isTrue();
+
+  }
+
+  public HashMap filterTheAirportTripsTable(String filter) {
+    HashMap<String, String> map = new HashMap<>();
+    map.put("COLUMN", filter);
+    switch (filter) {
+      case "Destination Facility":
+        map.put("COLUMN_NO", "1");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1)).getText());
+        airportDestHubFilter.click();
+        sendKeys(airportDestHubFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Trip ID":
+        map.put("COLUMN_NO", "2");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 2)).getText());
+        airportTripIdFilter.click();
+        sendKeys(airportTripIdFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Origin Facility":
+        map.put("COLUMN_NO", "3");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 3)).getText());
+        airportOriginHubFilter.click();
+        sendKeys(airportOriginHubFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Departure Date Time":
+        map.put("COLUMN_NO", "4");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 4)).getText());
+        airportDepartDateTimeFilter.click();
+        sendKeys(airportDepartDateTimeFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Duration":
+        map.put("COLUMN_NO", "5");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 5)).getText());
+        airportDurationFilter.click();
+        sendKeys(airportDurationFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "MAWB":
+        map.put("COLUMN_NO", "6");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 6)).getText());
+        airportMawbFilter.click();
+        sendKeys(airportMawbFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Driver":
+        map.put("COLUMN_NO", "7");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 7)).getText());
+        airportDriversFilter.click();
+        sendKeys(airportDriversFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Status":
+        map.put("COLUMN_NO", "8");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 8)).getText());
+        airportStatusFilter.click();
+        sendKeys(airportStatusFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      case "Comments":
+        map.put("COLUMN_NO", "9");
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 9)).getText());
+        airportCommentsFilter.click();
+        sendKeys(airportCommentsFilter.getWebElement(), map.get("FIRST_DATA"));
+        break;
+      default:
+        LOGGER.warn("Search type is not found");
+    }
+    return map;
+  }
+
+  public void verifyFilteredResultsInAirportTripsTable(HashMap<String, String> map) {
+    scrollToEndOfAirportTripsTable();
+     Assertions.assertThat(
+             findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
+             .as(f("All the records with %s as '%s' are displayed.", map.get("COLUMN"), map.get("FIRST_DATA")))
+             .isZero();
+  }
+
+  private void scrollToEndOfAirportTripsTable(){
     if(findElementsByXpath(XPATH_END_OF_TABLE).size()==0){
       do {
         WebElement element = getWebDriver().findElement(By.xpath("//div[contains(@class,'table-container')]//table/tbody//tr[last()]"));
         TestUtils.callJavaScriptExecutor("arguments[0].scrollIntoView();", element, getWebDriver());
       }while (findElementsByXpath(XPATH_END_OF_TABLE).size()==0);
     }
-
-    Assertions.assertThat(findElementByXpath(XPATH_END_OF_TABLE).isDisplayed())
-            .as("End Of Table appear in Airport trip Management page").isTrue();
   }
 
 }
