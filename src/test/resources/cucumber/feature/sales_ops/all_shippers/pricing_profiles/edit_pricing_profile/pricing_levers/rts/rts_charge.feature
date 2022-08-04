@@ -116,7 +116,7 @@ Feature: Pricing Levers - RTS Charge
       | errorMessage | This field is required. |
 
   @CloseNewWindows
-  Scenario: Edit Pending Pricing Profile - From RTS Surcharge to RTS Country Default (uid:c0db78c9-9a46-4740-849e-de5a24478a0f)
+  Scenario: Edit Pending Pricing Profile - From RTS Surcharge to RTS Country Default - Edit to have RTS Surcharge again (uid:c0db78c9-9a46-4740-849e-de5a24478a0f)
     # add pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2}} |
@@ -133,6 +133,16 @@ Feature: Pricing Levers - RTS Charge
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | isDefaultRts | true |
+    Then Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | rtsChargeType  | Surcharge |
+      | rtsChargeValue | 20        |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | rtsChargeType  | Surcharge |
+      | rtsChargeValue | 20        |
 
   @CloseNewWindows
   Scenario: Edit Pending Pricing Profile - From RTS Country Default to RTS Discount (uid:03ed3871-2c63-427d-ab56-87c623e9bc18)
@@ -152,6 +162,33 @@ Feature: Pricing Levers - RTS Charge
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | rtsChargeType  | Discount |
       | rtsChargeValue | 10       |
+
+  @CloseNewWindows
+  Scenario:Edit Pending Pricing Profile - Remove RTS Surcharge - Other pricing levers are exists
+     # add pending pricing profile for shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
+      | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2,"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
+    # edit pending pricing profile for shipper
+    When Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | rtsChargeType  | Discount |
+      | rtsChargeValue | 10       |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | isDefaultRts | true |
+    Then Operator verifies country default text is displayed like below
+      | rtsCharge | Use Country Default: 0% RTS Fee |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | isDefaultRts | true |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
