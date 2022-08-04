@@ -20,7 +20,7 @@ Feature: Address Verification
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB operator gets details for delivery transactions by order id
     And DB operator gets details for delivery waypoint
-    And API Operator get Addressing Zone from a lat long with type "STANDARD"
+    And API Operator get Addressing Zone from a lat long with type "RTS"
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
@@ -55,7 +55,7 @@ Feature: Address Verification
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB operator gets details for delivery transactions by order id
     And DB operator gets details for delivery waypoint
-    And API Operator get Addressing Zone from a lat long with type "STANDARD"
+    And API Operator get Addressing Zone from a lat long with type "RTS"
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
@@ -90,7 +90,7 @@ Feature: Address Verification
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB operator gets details for delivery transactions by order id
     And DB operator gets details for delivery waypoint
-    And API Operator get Addressing Zone from a lat long with type "STANDARD"
+    And API Operator get Addressing Zone from a lat long with type "RTS"
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
