@@ -39,8 +39,6 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   public static final String CONST_INTO_VAN = "Into Van";
   public static final String CONST_INTO_HUB = "Into Hub";
 
-  public static final String INBOUND_CONFIRM_MESSAGE_XPATH = "//div[@class='ant-modal-confirm-content']";
-
   @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
   public MdSelect inboundHub;
 
@@ -107,6 +105,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
 
   @FindBy(xpath = "//iframe")
   public PageElement frame;
+
+  @FindBy(xpath = " //div[@class='ant-modal-confirm-content']")
+  public PageElement confirmMessage;
 
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -374,7 +375,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
 
   public void verifyConfirmMessage(String message){
     waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
-    String actualMessage = findElementByXpath(INBOUND_CONFIRM_MESSAGE_XPATH).getText();
+    String actualMessage = confirmMessage.getText();
     Assertions.assertThat(actualMessage).as("Message show on dialog is correct").isEqualToIgnoringCase(message);
   }
 }
