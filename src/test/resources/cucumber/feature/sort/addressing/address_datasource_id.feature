@@ -183,6 +183,32 @@ Feature: Address Datasource
       | province | {province} |
     Then Operator verifies search box not affected by the scroll
 
+  Scenario: ID Address Datasource - Edit Row - LatLong
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province  | {province-2} |
+      | kota      | {kota-2}     |
+      | kecamatan | {kecamatan-2}|
+    When Operator clicks on Edit Button on Address Datasource Page
+    And Operator fills address parameters in Edit Address modal on Address Datasource page:
+      | latlong   | {latitude-2},{longitude-2} |
+    When API Operator get Addressing Zone:
+      | latitude  | {latitude-2} |
+      | longitude | {longitude-2}|
+    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
+    Then Operator verifies the address datasorce details in Row Details modal:
+      | province  | {province-2}             |
+      | kota      | {kota-2}                 |
+      | kecamatan | {kecamatan-2}            |
+      | zone      | {KEY_ZONE_INFO.shortName}|
+      | hub       | {KEY_HUB_INFO.shortName} |
+    When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
+    And Operator verify the data source toast:
+      | top  | Datasource Updated |
+      | body | 1 match edited     |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
