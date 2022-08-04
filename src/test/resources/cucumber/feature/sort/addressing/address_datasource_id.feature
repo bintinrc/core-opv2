@@ -1,5 +1,5 @@
 @Sort @AddressDataSourceId
-Feature: Addressing
+Feature: Address Datasource
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -16,9 +16,9 @@ Feature: Addressing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong  | GENERATED       |
-      | province | Jakarta         |
-      | kota     | Jakarta Selatan |
+      | latlong  | GENERATED  |
+      | province | {province} |
+      | kota     | {kota}     |
     Then Operator verifies Add Button is Disabled
 
   @DeleteAddressDatasource
@@ -27,14 +27,14 @@ Feature: Addressing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong   | -6.2579475,106.8436415 |
-      | province  | Jakarta                |
-      | kota      | Jakarta Selatan        |
-      | kecamatan | Pancoran               |
+      | latlong   | {latitude-1},{longitude-1} |
+      | province  | {province}                 |
+      | kota      | {kota}                     |
+      | kecamatan | {kecamatan}                |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
-      | latitude  | -6.2579475  |
-      | longitude | 106.8436415 |
+      | latitude  | {latitude-1}  |
+      | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     Then Operator verifies the address datasorce details in Row Details modal:
       | province  | {KEY_CREATED_ADDRESSING.province} |
@@ -63,14 +63,14 @@ Feature: Addressing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong   | -6.2579475,106.8436415 |
-      | province  | Jakarta                |
-      | kota      | Jakarta Selatan        |
-      | kecamatan | Pancoran               |
+      | latlong   | {latitude-1},{longitude-1} |
+      | province  | {province}                 |
+      | kota      | {kota}                     |
+      | kecamatan | {kecamatan}                |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
-      | latitude  | -6.2579475  |
-      | longitude | 106.8436415 |
+      | latitude  | {latitude-1}  |
+      | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     Then Operator verifies the address datasorce details in Row Details modal:
       | province  | {KEY_CREATED_ADDRESSING.province} |
@@ -85,14 +85,14 @@ Feature: Addressing
     When Operator refresh page
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
-      | latlong   | -6.1936067,106.89121 |
-      | province  | Jakarta              |
-      | kota      | Jakarta Selatan      |
-      | kecamatan | Pancoran             |
+      | latlong   | {latitude-2},{longitude-2} |
+      | province  | {province}                 |
+      | kota      | {kota}                     |
+      | kecamatan | {kecamatan}                |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
-      | latitude  | -6.1936067 |
-      | longitude | 106.89121  |
+      | latitude  | {latitude-2}  |
+      | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     Then Operator verifies the address datasorce details in Row Details modal:
       | province  | {KEY_CREATED_ADDRESSING.province} |
