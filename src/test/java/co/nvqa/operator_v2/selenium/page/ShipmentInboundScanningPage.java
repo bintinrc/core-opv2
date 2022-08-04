@@ -106,6 +106,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//iframe")
   public PageElement frame;
 
+  @FindBy(xpath = " //div[@class='ant-modal-confirm-content']")
+  public PageElement confirmMessage;
+
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -368,5 +371,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     public TripCompletion(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+  }
+
+  public void verifyConfirmMessage(String message){
+    waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
+    String actualMessage = confirmMessage.getText();
+    Assertions.assertThat(actualMessage).as("Message show on dialog is correct").isEqualToIgnoringCase(message);
   }
 }

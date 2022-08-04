@@ -327,8 +327,11 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
           .isEqualTo(finalMessages.get("scannedShipmentId"));
       takesScreenshot();
     });
+  }
 
-
+  @Then("Operator verifies message {string} show on dialog")
+  public void operatorVerifiesMessageOnDialog(String message){
+    scanningPage.verifyConfirmMessage(message);
   }
 
 }

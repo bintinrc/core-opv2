@@ -427,7 +427,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       try {
         String actualToastMessage = "";
         if(null == antNotificationMessage || antNotificationMessage.equals("")){
-          actualToastMessage = getAntTopText();
+          actualToastMessage = getAntTopTextV2();
         }else{
           actualToastMessage = antNotificationMessage;
         }
@@ -438,7 +438,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 10);
+    }, getCurrentMethodName(), 500, 2);
     pause5s();
   }
 
