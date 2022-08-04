@@ -115,6 +115,65 @@ Feature: Address Datasource
       | latitude  | {KEY_CREATED_ADDRESSING.latitude}  |
       | longitude | {KEY_CREATED_ADDRESSING.longitude} |
 
+  Scenario: ID Address Datasource Landing Page
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator verify search field lable:
+      | l1 | province         |
+      | l2 | Kota / Kabupaten |
+      | l3 | Kecamatan        |
+
+  Scenario: ID Address Datasource  Landing Page - Search Box No Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator verifies search button is disabled
+
+  Scenario: ID Address Datasource  Landing Page - Search Box 1 of 3 Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province | {created-province} |
+    Then Operator verifies new address datasource is added:
+      | province  | {created-province}  |
+      | kota      | {created-kota}      |
+      | kecamatan | {created-kecamatan} |
+      | latitude  | {latitude-1}        |
+      | longitude | {longitude-1}       |
+
+  Scenario: ID Address Datasource  Landing Page - Search Box 2 of 3 Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province | {created-province} |
+      | kota     | {created-kota}     |
+    Then Operator verifies new address datasource is added:
+      | province  | {created-province}  |
+      | kota      | {created-kota}      |
+      | kecamatan | {created-kecamatan} |
+      | latitude  | {latitude-1}        |
+      | longitude | {longitude-1}       |
+
+  Scenario: ID Address Datasource  Landing Page - Search Box 3 of 3  Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province  | {created-province}  |
+      | kota      | {created-kota}      |
+      | kecamatan | {created-kecamatan} |
+    Then Operator verifies new address datasource is added:
+      | province  | {created-province}  |
+      | kota      | {created-kota}      |
+      | kecamatan | {created-kecamatan} |
+      | latitude  | {latitude-1}        |
+      | longitude | {longitude-1}       |
+
+  Scenario: ID Address Datasource  Landing Page - Scrolling
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province | {province} |
+    Then Operator verifies search box not affected by the scroll
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
