@@ -518,6 +518,16 @@ public class AllShippersSteps extends AbstractSteps {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         pricing.setComments(value);
       }
+      value = data.get("isDefaultIns");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("true")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+              .check();
+        } else if (value.equalsIgnoreCase("false")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.uncheck();
+
+        }
+      }
       value = data.get("insuranceMinFee");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
@@ -559,6 +569,15 @@ public class AllShippersSteps extends AbstractSteps {
           pricing.setInsThreshold(value);
         }
       }
+      value = data.get("isDefaultCod");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("true")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+              .check();
+        } else if (value.equalsIgnoreCase("false")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.uncheck();
+        }
+      }
       value = data.get("codMinFee");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
@@ -584,16 +603,6 @@ public class AllShippersSteps extends AbstractSteps {
               .setValue(value);
           pricing.setCodPercentage(value);
         }
-      }
-      value = data.get("isDefaultIns");
-      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
-            .check();
-      }
-      value = data.get("isDefaultCod");
-      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
-            .check();
       }
       value = data.get("isDefaultRts");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
