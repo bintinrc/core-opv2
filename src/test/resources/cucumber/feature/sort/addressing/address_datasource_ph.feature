@@ -5,13 +5,13 @@ Feature: Address Datasource
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: ID Address Datasource - Add a Row with No Input
+  Scenario: PH Address Datasource - Add a Row with No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     Then Operator verifies Add Button is Disabled
 
-  Scenario: ID Address Datasource - Add a Row with Empty Field
+  Scenario: PH Address Datasource - Add a Row with Empty Field
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
@@ -21,8 +21,20 @@ Feature: Address Datasource
       | municipality  | {municipality}     |
     Then Operator verifies Add Button is Disabled
 
+  Scenario: PH Address Datasource - Add a Row with Invalid Latlong Input
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator clicks on Add a Row Button on Address Datasource Page
+    And Operator fills address parameters in Add a Row modal on Address Datasource page:
+      | latlong       | 1.1,1.11        |
+      | province      | {province}      |
+      | municipality  | {municipality}  |
+      | barangay      | {barangay}      |
+    Then Operator verifies Add Button is Disabled
+    And Operator verifies invalid latlong message
+
   @DeleteAddressDatasource
-  Scenario: ID Address Datasource - Add a Row with Valid Input
+  Scenario: PH Address Datasource - Add a Row with Valid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
@@ -58,7 +70,7 @@ Feature: Address Datasource
       | longitude     | {KEY_CREATED_ADDRESSING.longitude} |
 
   @DeleteAddressDatasource
-  Scenario: ID Address Datasource - Add a Row with Valid Input Duplicate Entry
+  Scenario: PH Address Datasource - Add a Row with Valid Input Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
@@ -115,7 +127,7 @@ Feature: Address Datasource
       | latitude          | {KEY_CREATED_ADDRESSING.latitude}  |
       | longitude         | {KEY_CREATED_ADDRESSING.longitude} |
 
-  Scenario: ID Address Datasource Landing Page
+  Scenario: PH Address Datasource Landing Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator verify search field lable:
@@ -123,12 +135,12 @@ Feature: Address Datasource
       | l2 | Municipality |
       | l3 | Barangay     |
 
-  Scenario: ID Address Datasource  Landing Page - Search Box No Input
+  Scenario: PH Address Datasource  Landing Page - Search Box No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator verifies search button is disabled
 
-  Scenario: ID Address Datasource  Landing Page - Search Box 1 of 3 Input
+  Scenario: PH Address Datasource  Landing Page - Search Box 1 of 3 Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -140,7 +152,7 @@ Feature: Address Datasource
       | latitude      | {latitude-1}            |
       | longitude     | {longitude-1}           |
 
-  Scenario: ID Address Datasource  Landing Page - Search Box 2 of 3 Input
+  Scenario: PH Address Datasource  Landing Page - Search Box 2 of 3 Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -153,7 +165,7 @@ Feature: Address Datasource
       | latitude      | {latitude-1}            |
       | longitude     | {longitude-1}           |
 
-  Scenario: ID Address Datasource  Landing Page - Search Box 3 of 3  Input
+  Scenario: PH Address Datasource  Landing Page - Search Box 3 of 3  Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -167,7 +179,7 @@ Feature: Address Datasource
       | latitude      | {latitude-1}            |
       | longitude     | {longitude-1}           |
 
-  Scenario: ID Address Datasource Landing Page - Search Box Invalid Input
+  Scenario: PH Address Datasource Landing Page - Search Box Invalid Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -176,7 +188,7 @@ Feature: Address Datasource
       | barangay      | INVALID |
     Then Operator verifies no result found on Address Datasource page
 
-  Scenario: ID Address Datasource  Landing Page - Scrolling
+  Scenario: PH Address Datasource  Landing Page - Scrolling
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
