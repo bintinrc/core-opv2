@@ -37,6 +37,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='form-input-latlong']")
   public TextBox latlong;
 
+  @FindBy(css = "[data-testid='form-input-city']")
+  public TextBox municipality;
+
+  @FindBy(css = "[data-testid='form-input-district']")
+  public TextBox barangay;
+
   @FindBy(xpath = "//span[contains(text(), 'Province')] /following-sibling::span")
   public PageElement provinceAddRow;
 
@@ -45,6 +51,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//span[contains(text(), 'Kecamatan')] /following-sibling::span")
   public PageElement kecamatanAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'Municipality')] /following-sibling::span")
+  public PageElement municipalityAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'Barangay')] /following-sibling::span")
+  public PageElement barangayAddRow;
 
   @FindBy(xpath = "//span[contains(text(), 'Hub')] /following-sibling::span")
   public PageElement hubAddRow;
@@ -64,6 +76,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='district']")
   public PageElement createdKecamatan;
 
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='city']")
+  public PageElement createdMunicipality;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='district']")
+  public PageElement createdBarangay;
+
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='latLng']")
   public PageElement createdLatlong;
 
@@ -78,6 +96,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(css = "[data-testid='search-input-district']")
   public TextBox kecamatanTextBox;
+
+  @FindBy(css = "[data-testid='search-input-city']")
+  public TextBox municipalityTextBox;
+
+  @FindBy(css = "[data-testid='search-input-district']")
+  public TextBox barangayTextBox;
 
   @FindBy(css = "[data-testid='search-button']")
   public Button searchButton;
