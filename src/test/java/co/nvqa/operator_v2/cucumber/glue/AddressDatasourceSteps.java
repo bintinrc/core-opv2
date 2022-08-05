@@ -5,11 +5,13 @@ import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressDatasourcePage;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 
 @ScenarioScoped
 public class AddressDatasourceSteps extends AbstractSteps {
@@ -245,4 +247,62 @@ public class AddressDatasourceSteps extends AbstractSteps {
     assertTrue("No result found on Address Datasource page Displayed!",
         addressDatasourcePage.noResultsFound.isDisplayed());
   }
-}
+
+  @When("Operator clicks on Edit Button on Address Datasource Page")
+  public void operatorClicksOnEditButtonOnAddressDatasourcePage() {
+    pause2s();
+    addressDatasourcePage.editButton.waitUntilClickable();
+    addressDatasourcePage.editButton.click();
+  }
+
+  @And("Operator fills address parameters in Edit Address modal on Address Datasource page:")
+  public void operatorFillsAddressParametersInEditAddressModalOnAddressDatasourcePage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String latlong = data.get("latlong");
+    String province = data.get("province");
+    String kota = data.get("kota");
+    String kecamatan = data.get("kecamatan");
+    Addressing addressing = new Addressing();
+    if (StringUtils.isNotBlank(latlong) && StringUtils.equalsIgnoreCase(latlong, "generated")) {
+      Double latitude = TestUtils.generateLatitude();
+      Double longitude = TestUtils.generateLongitude();
+      String latlongValue = latitude + "," + longitude;
+      addressDatasourcePage.latlong.setValue(latlong);
+      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND+"a");
+      addressDatasourcePage.latlong.sendKeys(latlong);
+      addressing.setLatitude(latitude);
+      addressing.setLongitude(longitude);
+    }
+    else if (StringUtils.isNotBlank(latlong) && !StringUtils
+            .equalsIgnoreCase(latlong, "generated")) {
+      String latitude = latlong.split(",")[0];
+      String longitude = latlong.split(",")[1];
+      addressDatasourcePage.latlong.setValue(latlong);
+      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND+"a");
+      addressDatasourcePage.latlong.sendKeys(latlong);
+      addressing.setLatitude(Double.valueOf(latitude));
+      addressing.setLongitude(Double.valueOf(longitude));
+    }
+    if (StringUtils.isNotBlank(province)) {
+      addressDatasourcePage.province.setValue(province);
+      addressing.setProvince(province);
+    }
+    if (StringUtils.isNotBlank(kota)) {
+      addressDatasourcePage.kota.setValue(kota);
+      addressing.setCity(kota);
+    }
+    if (StringUtils.isNotBlank(kecamatan)) {
+      addressDatasourcePage.kecamatan.setValue(kecamatan);
+      addressing.setDistrict(kecamatan);
+    }
+
+    put(KEY_CREATED_ADDRESSING, addressing);
+  }
+
+  @When("Operator clicks on Save Button in Edit a Row modal on Address Datasource page")
+  public void operatorClicksOnSaveButtonInEditARowModalOnAddressDatasourcePage() {
+    addressDatasourcePage.add.waitUntilClickable();
+    addressDatasourcePage.add.click();
+    pause5s();
+  }
+  }
