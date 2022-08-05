@@ -38,6 +38,12 @@ public class AddressDatasourceSteps extends AbstractSteps {
         .isFalse();
   }
 
+  @Then("^Operator verifies invalid latlong message$")
+  public void verifiesInvalidLatlongMessage() {
+    Assertions.assertThat(addressDatasourcePage.invalidLatlong.getText()).as("invalid Latlong")
+        .isEqualToIgnoringCase("Latitude must be at minimum 5 decimal places");
+  }
+
   @When("^Operator fills address parameters in Add a Row modal on Address Datasource page:$")
   public void operatorFillsAddressDatasource(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -256,7 +262,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
   }
 
   @And("Operator fills address parameters in Edit Address modal on Address Datasource page:")
-  public void operatorFillsAddressParametersInEditAddressModalOnAddressDatasourcePage(Map<String, String> data) {
+  public void operatorFillsAddressParametersInEditAddressModalOnAddressDatasourcePage(
+      Map<String, String> data) {
     data = resolveKeyValues(data);
     String latlong = data.get("latlong");
     String province = data.get("province");
@@ -268,17 +275,16 @@ public class AddressDatasourceSteps extends AbstractSteps {
       Double longitude = TestUtils.generateLongitude();
       String latlongValue = latitude + "," + longitude;
       addressDatasourcePage.latlong.setValue(latlong);
-      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND+"a");
+      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND + "a");
       addressDatasourcePage.latlong.sendKeys(latlong);
       addressing.setLatitude(latitude);
       addressing.setLongitude(longitude);
-    }
-    else if (StringUtils.isNotBlank(latlong) && !StringUtils
-            .equalsIgnoreCase(latlong, "generated")) {
+    } else if (StringUtils.isNotBlank(latlong) && !StringUtils
+        .equalsIgnoreCase(latlong, "generated")) {
       String latitude = latlong.split(",")[0];
       String longitude = latlong.split(",")[1];
       addressDatasourcePage.latlong.setValue(latlong);
-      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND+"a");
+      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND + "a");
       addressDatasourcePage.latlong.sendKeys(latlong);
       addressing.setLatitude(Double.valueOf(latitude));
       addressing.setLongitude(Double.valueOf(longitude));
@@ -305,4 +311,31 @@ public class AddressDatasourceSteps extends AbstractSteps {
     addressDatasourcePage.add.click();
     pause5s();
   }
+
+  @When("^Operator clicks on View Zone and Hub Match Button on Address Datasource Page$")
+  public void operatorViewZoneAndHub() {
+    addressDatasourcePage.viewZoneAndHubButton.waitUntilClickable();
+    addressDatasourcePage.viewZoneAndHubButton.click();
   }
+
+  @Then("^Operator verifies the zone and hub details in View Zone and Hub Match modal:")
+  public void operatorVerifiesZoneAndHub(Map<String, String> data) {
+    data = resolveKeyValues(data);
+
+    if (StringUtils.isNotBlank(data.get("latlong"))) {
+      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneLatlong.getText())
+          .as("latlong")
+          .isEqualToIgnoringCase(data.get("latlong"));
+    }
+    if (StringUtils.isNotBlank(data.get("hub"))) {
+      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneHub.getText())
+          .as("hub")
+          .isEqualToIgnoringCase(data.get("hub"));
+    }
+    if (StringUtils.isNotBlank(data.get("zone"))) {
+      Assertions.assertThat(addressDatasourcePage.viewHubAndZoneZone.getText())
+          .as("zone")
+          .isEqualToIgnoringCase(data.get("zone"));
+    }
+  }
+}

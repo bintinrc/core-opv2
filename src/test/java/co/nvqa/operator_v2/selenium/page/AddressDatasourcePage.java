@@ -100,6 +100,22 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//div[text()='No Results Found']")
   public PageElement noResultsFound;
 
+  @FindBy(xpath = "//button[contains(@class, 'view-zone-and-hub-button')]")
+  public Button viewZoneAndHubButton;
+
+  @FindBy(xpath = "//div[@class='zone-and-hub-match-dialog']//span[@class='value']")
+  public PageElement viewHubAndZoneLatlong;
+
+  @FindBy(xpath = "//div[@class='zone-and-hub-match-dialog']//td[@colspan=1]/span")
+  public PageElement viewHubAndZoneZone;
+
+  @FindBy(xpath = "//div[@class='zone-and-hub-match-dialog']//td[@colspan=2]/span")
+  public PageElement viewHubAndZoneHub;
+
+  @FindBy(xpath = "//div[@class='ant-form-item-explain-error']")
+  public PageElement invalidLatlong;
+
+
   public AddressDatasourcePage(WebDriver webDriver) {
     super(webDriver);
   }
