@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @BatchOrder
+@OperatorV2 @Core @NewFeatures @BatchOrder @NewFeatures2
 Feature: Batch Order
 
   @LaunchBrowser @ShouldAlwaysRun
