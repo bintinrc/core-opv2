@@ -5,7 +5,6 @@ Feature: Address Datasource
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   Scenario: ID Address Datasource - Add a Row with No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -446,7 +445,6 @@ Feature: Address Datasource
     And Operator verify the latlong error alert:
       | latlongError   |Please provide longitude|
 
-
   Scenario: ID Address Datasource - Edit Row - Delete
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -481,7 +479,6 @@ Feature: Address Datasource
       | top  | Datasource Deleted |
       | body | 1 match deleted    |
 
-  @MyTag2
   Scenario: ID Address Datasource - Edit Row - Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -539,6 +536,6 @@ Feature: Address Datasource
       | latitude  | {latitude-2}   |
       | longitude | {longitude-2}    |
 
-  @KillBrowser @ShouldAlwaysRun @MyTag2
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
