@@ -343,6 +343,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[.='No data']")
   public PageElement noDataElement;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement antNotificationDescription;
+
+  public static String notificationMessage = "";
+
   private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
   private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
   private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
@@ -2183,7 +2191,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
     airportLatitudeInput.sendKeys(map.get("latitude"));
     airportLongitudeInput.sendKeys(map.get("longitude"));
     newAirportSubmit.click();
-    getAntTopText();
+    //successMessage = getAntTopText();
+    //captureErrorNotification();
+
+
   }
 
   public void verifyAirportCreationSuccessMessage(String airportName) {
@@ -2192,6 +2203,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyNewlyCreatedAirport(Map<String, String> map) {
+    clearWebField(airportCodeFilter.getWebElement());
     airportCodeFilter.sendKeys(map.get("airportCode"));
     Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
             .isFalse();
@@ -2205,6 +2217,22 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .isEqualTo(map.get("region"));
     Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 6)).getText()).as("Airport latitude & longitude is same")
             .isEqualTo(map.get("latitude") + ", " + map.get("longitude"));
+  }
+
+  public void captureErrorNotification() {
+    antNotificationMessage.waitUntilVisible();
+    if(antNotificationMessage.isDisplayed()){
+      if(antNotificationDescription.isDisplayed()){
+        notificationMessage = antNotificationDescription.getText();
+        if(notificationMessage.trim().equals("")){
+          notificationMessage = antNotificationMessage.getText();
+        }
+      }
+    }
+  }
+
+  public void verifyTheErrorInAirportCreation(String expError) {
+    Assertions.assertThat(notificationMessage).as("Error message is same").contains(expError);
   }
 
 }

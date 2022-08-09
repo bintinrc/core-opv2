@@ -593,6 +593,7 @@ public class TripManagementSteps extends AbstractSteps {
     public void operatorAddsNewAirport(Map<String, String> mapOfData) {
         tripManagementPage.createNewAirport(mapOfData);
         put("KEY_NEW_AIRPORT_DETAILS", mapOfData);
+        putInList("KEY_NEW_AIRPORT_LIST", mapOfData.get("airportCode"));
     }
 
     @And("Verify the new airport {string} created success message")
@@ -603,5 +604,15 @@ public class TripManagementSteps extends AbstractSteps {
     @And("Verify the newly created airport values in table")
     public void verifyNewlyCreatedAirport() {
         tripManagementPage.verifyNewlyCreatedAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+    }
+
+    @And("Capture the error in Airport Trip Management Page")
+    public void captureTheErrorInAirportCreation() {
+        tripManagementPage.captureErrorNotification();
+    }
+
+    @And("Verify the error {string} is displayed while creating new airport")
+    public void verifyTheErrorInAirportCreation(String expError) {
+        tripManagementPage.verifyTheErrorInAirportCreation(expError);
     }
 }
