@@ -1313,7 +1313,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @Debug
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1359,6 +1359,155 @@ Feature: Route Monitoring V2
       | HubId       | HubName       | Name                        | Address                 | Contact                 |
       | {hub-id-15} | {hub-name-15} | {PA_shipper-v4-pickup-name} | {PA_shipper-v4-address} | {PA_shipper-v4-contact} |
 
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending & Late PA Job Waypoint
+    Given Operator loads Operator portal home page
+    When API Operator creates Pickup Appointment job
+      | createPAJobRequest | {"shipper_id":{PA_shipper-v4-id},"from":{"address_details":{"address_id":463589,"address1":"Test Address","email":"Station@ninjavan.co","contact":"+659888888","name":"<Name>","country":"SG"}},"pickup_timeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T12:00:00+08:00"},"pickup_service":{"type":"Scheduled","level":"Standard"},"pickup_approx_volume":"Less than 3 Parcels","pickup_instructions":"Stationinstructions","disable_cutoff_validation":"false","priority_level":"1","merchant_booking_ref":"pencil-123","metadata":{"custom_key":"custom_string","custom_key2":2}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator assigns Pickup Appointment job to Route
+      | pa_Id    | {KEY_CREATED_PA_ID}    |
+      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Late PA Job Waypoint
+    Given Operator loads Operator portal home page
+    When API Operator creates Pickup Appointment job
+      | createPAJobRequest | {"shipper_id":{PA_shipper-v4-id},"from":{"address_details":{"address_id":463589,"address1":"Test Address","email":"Station@ninjavan.co","contact":"+659888888","name":"<Name>","country":"SG"}},"pickup_timeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T12:00:00+08:00"},"pickup_service":{"type":"Scheduled","level":"Standard"},"pickup_approx_volume":"Less than 3 Parcels","pickup_instructions":"Stationinstructions","disable_cutoff_validation":"false","priority_level":"1","merchant_booking_ref":"pencil-123","metadata":{"custom_key":"custom_string","custom_key2":2}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator assigns Pickup Appointment job to Route
+      | pa_Id    | {KEY_CREATED_PA_ID}    |
+      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    And API Operator success Pickup Appointment job
+      | pa_Id | {KEY_CREATED_PA_ID} |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 1
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Late PA Job Waypoint
+    Given Operator loads Operator portal home page
+    When API Operator creates Pickup Appointment job
+      | createPAJobRequest | {"shipper_id":{PA_shipper-v4-id},"from":{"address_details":{"address_id":463589,"address1":"Test Address","email":"Station@ninjavan.co","contact":"+659888888","name":"<Name>","country":"SG"}},"pickup_timeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T12:00:00+08:00"},"pickup_service":{"type":"Scheduled","level":"Standard"},"pickup_approx_volume":"Less than 3 Parcels","pickup_instructions":"Stationinstructions","disable_cutoff_validation":"false","priority_level":"1","merchant_booking_ref":"pencil-123","metadata":{"custom_key":"custom_string","custom_key2":2}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator assigns Pickup Appointment job to Route
+      | pa_Id    | {KEY_CREATED_PA_ID}    |
+      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    And API Operator fails Pickup Appointment job
+      | pa_Id       | {KEY_CREATED_PA_ID}                                                                   |
+      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 1
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Early PA Job Waypoint
+    Given Operator loads Operator portal home page
+    When API Operator creates Pickup Appointment job
+      | createPAJobRequest | {"shipper_id":{PA_shipper-v4-id},"from":{"address_details":{"address_id":463589,"address1":"Test Address","email":"Station@ninjavan.co","contact":"+659888888","name":"<Name>","country":"SG"}},"pickup_timeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T22:00:00+08:00"},"pickup_service":{"type":"Scheduled","level":"Standard"},"pickup_approx_volume":"Less than 3 Parcels","pickup_instructions":"Stationinstructions","disable_cutoff_validation":"false","priority_level":"1","merchant_booking_ref":"pencil-123","metadata":{"custom_key":"custom_string","custom_key2":2}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator assigns Pickup Appointment job to Route
+      | pa_Id    | {KEY_CREATED_PA_ID}    |
+      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    And API Operator success Pickup Appointment job
+      | pa_Id | {KEY_CREATED_PA_ID} |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Early PA Job Waypoint
+    Given Operator loads Operator portal home page
+    When API Operator creates Pickup Appointment job
+      | createPAJobRequest | {"shipper_id":{PA_shipper-v4-id},"from":{"address_details":{"address_id":463589,"address1":"Test Address","email":"Station@ninjavan.co","contact":"+659888888","name":"<Name>","country":"SG"}},"pickup_timeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T22:00:00+08:00"},"pickup_service":{"type":"Scheduled","level":"Standard"},"pickup_approx_volume":"Less than 3 Parcels","pickup_instructions":"Stationinstructions","disable_cutoff_validation":"false","priority_level":"1","merchant_booking_ref":"pencil-123","metadata":{"custom_key":"custom_string","custom_key2":2}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator assigns Pickup Appointment job to Route
+      | pa_Id    | {KEY_CREATED_PA_ID}    |
+      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    And API Operator fails Pickup Appointment job
+      | pa_Id       | {KEY_CREATED_PA_ID}                                                                   |
+      | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
+    When Operator loads Operator portal Station Route Monitoring page
+    And Operator selects hub "<HubName>" and click load selection
+    And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_PARCEL_COUNT" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "TOTAL_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_PRIORITY_PARCELS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "PENDING_AND_LATE_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "SUCCESSFUL_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "INVALID_FAILED_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "VALID_FAILED_WAYPOINTS" column is equal to 0
+    Then Operator verify value on Station Route Monitoring page for the "EARLY_WAYPOINTS" column is equal to 1
+    Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
+
+    Examples:
+      | HubId       | HubName       |
+      | {hub-id-15} | {hub-name-15} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
