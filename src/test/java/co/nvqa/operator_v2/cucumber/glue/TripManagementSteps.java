@@ -583,4 +583,25 @@ public class TripManagementSteps extends AbstractSteps {
         HashMap<String, String> map = get("KEY_AIRPORT_MANAGEMENT_FILTER");
         tripManagementPage.verifyFilteredResultsInAirportTripsTable(map);
     }
+
+    @When("Operator click on Manage Airport Facility and verify all components")
+    public void operatorOpenManageAirportFacility() {
+        tripManagementPage.operatorOpenManageAirportFacility();
+    }
+
+    @Then("Operator Add new Airport")
+    public void operatorAddsNewAirport(Map<String, String> mapOfData) {
+        tripManagementPage.createNewAirport(mapOfData);
+        put("KEY_NEW_AIRPORT_DETAILS", mapOfData);
+    }
+
+    @And("Verify the new airport {string} created success message")
+    public void verifySuccessMessageAirportCreation(String airportName) {
+        tripManagementPage.verifyAirportCreationSuccessMessage(airportName);
+    }
+
+    @And("Verify the newly created airport values in table")
+    public void verifyNewlyCreatedAirport() {
+        tripManagementPage.verifyNewlyCreatedAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+    }
 }

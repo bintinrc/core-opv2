@@ -28,6 +28,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -282,6 +283,66 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//th[contains(@class,'comment')]//input")
   public PageElement airportCommentsFilter;
 
+  @FindBy(xpath = "//button[.='Manage Airport Facility']")
+  public Button manageAirportFacility;
+
+  @FindBy(xpath = "//button[.='New Airport']")
+  public Button addNewAirport;
+
+  @FindBy(xpath = "//a[.='Looking for warehouse facility?']")
+  public PageElement lookingForWarehouseFacility;
+
+  @FindBy(xpath = "//input[@aria-label='input-id']")
+  public PageElement airportIdFilter;
+
+  @FindBy(xpath = "//input[@aria-label='input-airport_code']")
+  public PageElement airportCodeFilter;
+
+  @FindBy(xpath = "//input[@aria-label='input-airport_name']")
+  public PageElement airportNameFilter;
+
+  @FindBy(xpath = "//input[@aria-label='input-city']")
+  public PageElement airportCityFilter;
+
+  @FindBy(xpath = "//input[@aria-label='input-region']")
+  public PageElement airportRegionFilter;
+
+  @FindBy(xpath = "//input[@aria-label='input-_latitudeLongitude']")
+  public PageElement airportLatitudeLongitudeFilter;
+
+  @FindBy(xpath = "//button[contains(@data-testid,'edit-airport-button')]")
+  public PageElement editAirportButton;
+
+  @FindBy(xpath = "//button[contains(@data-testid,'disable-airport-button')]")
+  public PageElement disableAirportButton;
+
+  @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Add New Airport']")
+  public PageElement addNewAirportPanel;
+
+  @FindBy(xpath = "//input[@data-testid='airport-code-input']")
+  public PageElement airportCodeInput;
+
+  @FindBy(xpath = "//input[@data-testid='airport-name-input']")
+  public PageElement airportNameInput;
+
+  @FindBy(xpath = "//input[@data-testid='city-input']")
+  public PageElement airportCityInput;
+
+  @FindBy(xpath = "//input[@id='createAirportForm_region']")
+  public PageElement airportRegionInput;
+
+  @FindBy(xpath = "//input[@data-testid='latitude-input']")
+  public PageElement airportLatitudeInput;
+
+  @FindBy(xpath = "//input[@data-testid='longitude-input']")
+  public PageElement airportLongitudeInput;
+
+  @FindBy(xpath = "//button[@data-testid='confirm-createAirport-button']")
+  public PageElement newAirportSubmit;
+
+  @FindBy(xpath = "//div[.='No data']")
+  public PageElement noDataElement;
+
   private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
   private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
   private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
@@ -291,7 +352,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String XPATH_CAL_PREV_MONTH = "//button[@class='ant-picker-header-prev-btn']";
   private static final String XPATH_END_OF_TABLE = "//div[contains(text(),'End of Table') or contains(text(),'No Results Found')]";
   private static final String XPATH_TABLE_NOT_CONTAINS_TD = "//div[contains(@class,'table-container')]//table/tbody//tr/td[%s][not(contains(.,'%s'))]";
-  private static final String XPATH_TABLE_FIRST_ROW ="//div[contains(@class,'table-container')]//table/tbody//tr[1]/td[%s]";
+  private static final String XPATH_TABLE_FIRST_ROW ="//div[contains(@class,'table-container')]//table/tbody//tr[%s]/td[%s]";
+  private static final String XPATH_MANAGE_AIRPORT_FACILITY_LOADING ="//div[@class='ant-spin-container ant-spin-blur']";
+  private static final String XPATH_AIRPORT_FACILITY_COUNTRY_TEXT ="//h4[contains(.,'Airport Facility in')]";
+  private static final String XPATH_TOTAL_LIST_OF_AIRPORTS ="//h4[contains(.,'Total: ')]";
+  private static final String XPATH_LOADED_LIST_OF_AIRPORTS ="//span[contains(.,'Showing %s of %s results')]";
+  public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class='ant-select-item-option-content' and text()='%s']";
 
 
 
@@ -1988,55 +2054,55 @@ public class TripManagementPage extends OperatorV2SimplePage {
     switch (filter) {
       case "Destination Facility":
         map.put("COLUMN_NO", "1");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 1)).getText());
         airportDestHubFilter.click();
         sendKeys(airportDestHubFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Trip ID":
         map.put("COLUMN_NO", "2");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 2)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 2)).getText());
         airportTripIdFilter.click();
         sendKeys(airportTripIdFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Origin Facility":
         map.put("COLUMN_NO", "3");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 3)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 3)).getText());
         airportOriginHubFilter.click();
         sendKeys(airportOriginHubFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Departure Date Time":
         map.put("COLUMN_NO", "4");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 4)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 4)).getText());
         airportDepartDateTimeFilter.click();
         sendKeys(airportDepartDateTimeFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Duration":
         map.put("COLUMN_NO", "5");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 5)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 5)).getText());
         airportDurationFilter.click();
         sendKeys(airportDurationFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "MAWB":
         map.put("COLUMN_NO", "6");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 6)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText());
         airportMawbFilter.click();
         sendKeys(airportMawbFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Driver":
         map.put("COLUMN_NO", "7");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 7)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 7)).getText());
         airportDriversFilter.click();
         sendKeys(airportDriversFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Status":
         map.put("COLUMN_NO", "8");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 8)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 8)).getText());
         airportStatusFilter.click();
         sendKeys(airportStatusFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
       case "Comments":
         map.put("COLUMN_NO", "9");
-        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 9)).getText());
+        map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 9)).getText());
         airportCommentsFilter.click();
         sendKeys(airportCommentsFilter.getWebElement(), map.get("FIRST_DATA"));
         break;
@@ -2061,6 +2127,84 @@ public class TripManagementPage extends OperatorV2SimplePage {
         TestUtils.callJavaScriptExecutor("arguments[0].scrollIntoView();", element, getWebDriver());
       }while (findElementsByXpath(XPATH_END_OF_TABLE).size()==0);
     }
+  }
+
+  public void operatorOpenManageAirportFacility(){
+    manageAirportFacility.click();
+    waitUntilPageLoaded();
+    waitUntilInvisibilityOfElementLocated(XPATH_MANAGE_AIRPORT_FACILITY_LOADING);
+    Assertions.assertThat(findElementByXpath(XPATH_AIRPORT_FACILITY_COUNTRY_TEXT).isDisplayed())
+            .as("Airport Facility in text is displayed").isTrue();
+    Assertions.assertThat(addNewAirport.isDisplayed()).as("Add new Airport is displayed").isTrue();
+    Assertions.assertThat(findElementByXpath(XPATH_TOTAL_LIST_OF_AIRPORTS).isDisplayed())
+            .as("Total Airports list is displayed").isTrue();
+    String total = findElementByXpath(XPATH_TOTAL_LIST_OF_AIRPORTS).getText().replace("Total: ", "");
+    Assertions.assertThat(findElementByXpath(f(XPATH_LOADED_LIST_OF_AIRPORTS, total, total)).isDisplayed())
+            .as("Showing n of n results is displayed").isTrue();
+    Assertions.assertThat(lookingForWarehouseFacility.isDisplayed()).as("Looking for warehouse facility? is displayed").isTrue();
+
+    Color actualColor = Color.fromString(lookingForWarehouseFacility.getCssValue("color"));
+    Assertions.assertThat(actualColor.asHex()).as("Color of Looking for warehouse facility? is blue").isEqualTo("#1890ff");
+
+    verifyAirportFacilitiesTable();
+  }
+
+  public void verifyAirportFacilitiesTable(){
+    Assertions.assertThat(airportIdFilter.isDisplayed())
+            .as("Airport Id Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(airportCodeFilter.isDisplayed())
+            .as("Airport Code Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(airportNameFilter.isDisplayed())
+            .as("Airport Name Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(airportCityFilter.isDisplayed())
+            .as("Airport City Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(airportRegionFilter.isDisplayed())
+            .as("Airport Region Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(airportLatitudeLongitudeFilter.isDisplayed())
+            .as("Airport Latitude Longitude Filter appear in Airport list table").isTrue();
+    Assertions.assertThat(findElementByXpath("//th[.='Actions']").isDisplayed())
+            .as("Airport Actions Column appear in Airport list table").isTrue();
+    Assertions.assertThat(editAirportButton.isDisplayed())
+            .as("Edit Airport button appear in Airport list table").isTrue();
+    Assertions.assertThat(disableAirportButton.isDisplayed())
+            .as("Disable Airport button appear in Airport list table").isTrue();
+  }
+
+  public void createNewAirport(Map<String, String> map) {
+    addNewAirport.click();
+    Assertions.assertThat(newAirportSubmit.isEnabled())
+            .as("New airport submit button is disabled").isFalse();
+    addNewAirportPanel.waitUntilVisible();
+    airportCodeInput.sendKeys(map.get("airportCode"));
+    airportNameInput.sendKeys(map.get("airportName"));
+    airportCityInput.sendKeys(map.get("city"));
+    airportRegionInput.click();
+    sendKeysAndEnterById("createAirportForm_region", map.get("region"));
+    airportLatitudeInput.sendKeys(map.get("latitude"));
+    airportLongitudeInput.sendKeys(map.get("longitude"));
+    newAirportSubmit.click();
+    getAntTopText();
+  }
+
+  public void verifyAirportCreationSuccessMessage(String airportName) {
+    String actMessage = getAntTopText();
+    Assertions.assertThat(actMessage).as("Success message is same").isEqualTo(airportName);
+  }
+
+  public void verifyNewlyCreatedAirport(Map<String, String> map) {
+    airportCodeFilter.sendKeys(map.get("airportCode"));
+    Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+            .isFalse();
+    Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 2)).getText()).as("Airport Code is same")
+            .isEqualTo(map.get("airportCode"));
+    Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 3)).getText()).as("Airport Name is same")
+            .isEqualTo(map.get("airportName"));
+    Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 4)).getText()).as("Airport city is same")
+            .isEqualTo(map.get("city"));
+    Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 5)).getText()).as("Airport region is same")
+            .isEqualTo(map.get("region"));
+    Assertions.assertThat(findElementByXpath(f(XPATH_TABLE_FIRST_ROW,2, 6)).getText()).as("Airport latitude & longitude is same")
+            .isEqualTo(map.get("latitude") + ", " + map.get("longitude"));
   }
 
 }
