@@ -2191,10 +2191,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
     airportLatitudeInput.sendKeys(map.get("latitude"));
     airportLongitudeInput.sendKeys(map.get("longitude"));
     newAirportSubmit.click();
-    //successMessage = getAntTopText();
-    //captureErrorNotification();
-
-
   }
 
   public void verifyAirportCreationSuccessMessage(String airportName) {
