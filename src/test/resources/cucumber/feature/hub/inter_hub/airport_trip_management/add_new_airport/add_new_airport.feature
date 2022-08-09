@@ -21,12 +21,7 @@ Feature: Airport Trip Management - Load Trip
       | longitude     | -81.6894072     |
     And Verify the new airport "Airport \"Test Airport\" has been created" created success message
     And Verify the newly created airport values in table
-
-
-
-
-
-
+    
   @KillBrowser
   Scenario: Kill Browser
     Given no-op
