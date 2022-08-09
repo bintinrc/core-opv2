@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate
+@OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
 Feature: Order Parcel Size Update
 
   @LaunchBrowser @ShouldAlwaysRun

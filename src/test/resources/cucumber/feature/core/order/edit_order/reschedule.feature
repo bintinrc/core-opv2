@@ -1,5 +1,5 @@
-@OperatorV2 @Core @Order @EditOrder @Reschedule @EditOrder1
-Feature: Reschedule & RTS
+@OperatorV2 @Core @Order @EditOrder @Reschedule @EditOrder2
+Feature: Reschedule
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
