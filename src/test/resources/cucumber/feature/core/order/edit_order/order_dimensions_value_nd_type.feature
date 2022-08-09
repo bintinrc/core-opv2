@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @EditOrder2
+@OperatorV2 @Core @Order @EditOrder @EditOrder3
 Feature: Order Dimensions Value and Type
 
   @LaunchBrowser @ShouldAlwaysRun

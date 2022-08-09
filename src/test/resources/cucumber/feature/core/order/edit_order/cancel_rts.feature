@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @CancelRTS @EditOrder1
+@OperatorV2 @Core @Order @EditOrder @CancelRTS @EditOrder3
 Feature: Cancel RTS
 
   @LaunchBrowser @ShouldAlwaysRun

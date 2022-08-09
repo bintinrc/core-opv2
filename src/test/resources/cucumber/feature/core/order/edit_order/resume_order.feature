@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @ResumeOrder @EditOrder1
+@OperatorV2 @Core @Order @EditOrder @ResumeOrder @EditOrder2
 Feature: Resume Order
 
   @LaunchBrowser @ShouldAlwaysRun
