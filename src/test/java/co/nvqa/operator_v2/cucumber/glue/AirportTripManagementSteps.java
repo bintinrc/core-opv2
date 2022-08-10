@@ -102,4 +102,9 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void verifyTheErrorInAirportCreation(String expError) {
         airportTripManagementPage.verifyTheErrorInAirportCreation(expError);
     }
+
+    @And("Verify the validation error {string} is displayed")
+    public void verifyTheValidationErrorInAirportCreation(String expError) {
+        airportTripManagementPage.verifyTheValidationErrorInAirportCreation(expError);
+    }
 }
