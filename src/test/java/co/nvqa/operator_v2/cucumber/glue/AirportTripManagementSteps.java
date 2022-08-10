@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
-import co.nvqa.operator_v2.selenium.page.MainPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,7 +14,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(AirportTripManagementSteps.class);
 
     private AirportTripManagementPage airportTripManagementPage;
-    private MainPage mainPage;
 
     public AirportTripManagementSteps() {
     }
@@ -23,7 +21,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @Override
     public void init() {
         airportTripManagementPage = new AirportTripManagementPage(getWebDriver());
-        mainPage = new MainPage(getWebDriver());
     }
 
     @And("Operator verifies that the Airport Management Page is opened")
