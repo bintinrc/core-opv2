@@ -128,6 +128,14 @@ public class AddressDatasourceSteps extends AbstractSteps {
     addressDatasourcePage.confirmReplace.click();
   }
 
+  @When("^Operator clicks on Delete Button in Row Details modal on Address Datasource page$")
+  public void operatorClickDeleteButton() {
+    addressDatasourcePage.delete.waitUntilClickable();
+    addressDatasourcePage.delete.click();
+    addressDatasourcePage.confirmReplace.waitUntilVisible();
+    addressDatasourcePage.confirmReplace.click();
+  }
+
   @Then("^Operator verifies the address datasorce details in Row Details modal:$")
   public void operatorVerifiesDetailsInRowDetailsModal(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -182,6 +190,11 @@ public class AddressDatasourceSteps extends AbstractSteps {
     Assertions.assertThat(body)
         .as("Message: " + data.get("body"))
         .isEqualTo(data.get("body"));
+  }
+
+  @And("Operator verify the data source toast disappears")
+  public void operatorVerifyTheDataSourceToastDisappears() {
+    addressDatasourcePage.notification.message.waitUntilInvisible();
   }
 
   @Then("^Operator verifies new address datasource is added:$")
@@ -352,27 +365,47 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
     if (StringUtils.isNotBlank(province)) {
       addressDatasourcePage.province.sendKeys(Keys.COMMAND + "a");
-      addressDatasourcePage.province.sendKeys(province);
+      if (province.contains("EMPTY")) {
+        addressDatasourcePage.province.forceClear();
+      } else {
+        addressDatasourcePage.province.sendKeys(province);
+      }
       addressing.setProvince(province);
     }
     if (StringUtils.isNotBlank(kota)) {
       addressDatasourcePage.kota.sendKeys(Keys.COMMAND + "a");
-      addressDatasourcePage.kota.sendKeys(kota);
+      if (kota.contains("EMPTY")) {
+        addressDatasourcePage.kota.forceClear();
+      } else {
+        addressDatasourcePage.kota.sendKeys(kota);
+      }
       addressing.setCity(kota);
     }
     if (StringUtils.isNotBlank(kecamatan)) {
       addressDatasourcePage.kecamatan.sendKeys(Keys.COMMAND + "a");
-      addressDatasourcePage.kecamatan.sendKeys(kecamatan);
+      if (kecamatan.contains("EMPTY")) {
+        addressDatasourcePage.kecamatan.forceClear();
+      } else {
+        addressDatasourcePage.kecamatan.sendKeys(kecamatan);
+      }
       addressing.setDistrict(kecamatan);
     }
     if (StringUtils.isNotBlank(barangay)) {
       addressDatasourcePage.barangay.sendKeys(Keys.COMMAND + "a");
-      addressDatasourcePage.barangay.sendKeys(barangay);
+      if (barangay.contains("EMPTY")) {
+        addressDatasourcePage.barangay.forceClear();
+      } else {
+        addressDatasourcePage.barangay.sendKeys(barangay);
+      }
       addressing.setDistrict(barangay);
     }
     if (StringUtils.isNotBlank(municipality)) {
       addressDatasourcePage.municipality.sendKeys(Keys.COMMAND + "a");
-      addressDatasourcePage.municipality.sendKeys(municipality);
+      if (municipality.contains("EMPTY")) {
+        addressDatasourcePage.municipality.forceClear();
+      } else {
+        addressDatasourcePage.municipality.sendKeys(municipality);
+      }
       addressing.setDistrict(municipality);
     }
 
@@ -419,5 +452,12 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String latlongError = data.get("latlongError");
     Assertions.assertThat(addressDatasourcePage.invalidLatlong.getText()).as("invalid Latlong")
         .isEqualToIgnoringCase(latlongError);
+  }
+
+  @And("Operator verifies empty field error shows up in address datasource page")
+  public void operatorVerifiesEmptyFieldErrorShowsUpInAddressDatasourcePage() {
+    Assertions.assertThat(addressDatasourcePage.emptyFieldError.isDisplayed())
+        .as("Empty field error shows up")
+        .isTrue();
   }
 }

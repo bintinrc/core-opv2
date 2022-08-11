@@ -22,6 +22,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='form-dialog-replace-button']")
   public Button replace;
 
+  @FindBy(css = "[data-testid='form-dialog-delete-button']")
+  public Button delete;
+
   @FindBy(css = "[data-testid='confirm-button']")
   public Button confirmReplace;
 
@@ -138,6 +141,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//div[@class='ant-form-item-explain-error']")
   public PageElement invalidLatlong;
+
+  @FindBy(xpath = "//div[text()='Required to fill in']")
+  public PageElement emptyFieldError;
 
 
   public AddressDatasourcePage(WebDriver webDriver) {
