@@ -139,7 +139,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
       | errorMessage | Special character is not allowed |
 
   @CloseNewWindows
-  Scenario: Edit Pending Pricing Profile - From COD Min Fee and COD Percentage to COD Country Default - Edit to have COD Min Fee and COD Percentage again
+  Scenario: Edit Pending Pricing Profile - From COD Min Fee and COD Percentage to COD Country Default - Edit to have COD Min Fee and COD Percentage again (uid:ac36c369-4d24-407b-902a-e4b6855d562e)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | codMinFee     | 1.2 |
       | codPercentage | 3   |
