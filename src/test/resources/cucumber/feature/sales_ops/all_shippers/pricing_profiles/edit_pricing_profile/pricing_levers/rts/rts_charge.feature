@@ -164,7 +164,7 @@ Feature: Pricing Levers - RTS Charge
       | rtsChargeValue | 10       |
 
   @CloseNewWindows
-  Scenario:Edit Pending Pricing Profile - Remove RTS Surcharge - Other pricing levers are exists
+  Scenario: Edit Pending Pricing Profile - Remove RTS Surcharge - Other pricing levers are exists (uid:e1d985b1-1eaf-464c-9ff8-60dfb495a8c9)
      # add pending pricing profile for shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{shipper-v4-dummy-pricing-profile-rts-2-global-id}"
       | {"effective_date":"{gradle-next-2-day-yyyy-MM-dd}T00:00:00Z","contractEndDate":"{gradle-next-3-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id},"pricing_levers": {"rts_charge":2,"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |

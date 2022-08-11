@@ -194,7 +194,7 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
       | isDefaultIns | true |
 
   @CloseNewWindows
-  Scenario: Edit Pending Pricing Profile - From Insurance Min Fee and Insurance Percentage to Insurance Country Default - Edit to have Insurance Min Fee and Insurance Percentage again
+  Scenario: Edit Pending Pricing Profile - From Insurance Min Fee and Insurance Percentage to Insurance Country Default - Edit to have Insurance Min Fee and Insurance Percentage again (uid:a9827797-88e2-49ba-8a89-11dea6f3b02f)
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | insuranceMinFee     | 1.2 |
       | insurancePercentage | 3   |
