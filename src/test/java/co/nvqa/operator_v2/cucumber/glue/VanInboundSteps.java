@@ -63,9 +63,10 @@ public class VanInboundSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} scanned parcels displayed on Van Inbound Page")
   public void verifyScannedParcels(String expected) {
-    Assertions.assertThat(vanInboundPage.scannedParcelsCount.getText())
-        .as("Scanned parcels label")
-        .isEqualTo(expected.trim() + " Parcels");
+    retryIfAssertionErrorOccurred(
+        () -> Assertions.assertThat(vanInboundPage.scannedParcelsCount.getText())
+            .as("Scanned parcels label")
+            .isEqualTo(expected.trim() + " Parcels"), "Check Scanned parcels label", 1000, 3);
   }
 
   @Then("Operator click Scanned Parcels area on Van Inbound Page")
@@ -93,7 +94,7 @@ public class VanInboundSteps extends AbstractSteps {
 
   @Then("Operator verify order scan updated")
   public void verifyOrderScanUpdated() {
-    editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+    editOrderPage.waitWhilePageIsLoading(120);
     editOrderPage.verifyInboundIsSucceed();
   }
 
@@ -125,7 +126,8 @@ public class VanInboundSteps extends AbstractSteps {
   }
 
   @Then("Operator confirms that the modal: {string} is displayed and has {int} parcels")
-  public void operator_confirms_that_the_modal_is_displayed_and_has_parcels(String modalName, Integer parcelNo) {
+  public void operator_confirms_that_the_modal_is_displayed_and_has_parcels(String modalName,
+      Integer parcelNo) {
     vanInboundPage.waitUntilPageLoaded(60);
     String actualDialogHeader = vanInboundPage.shipmentInboundDialog.dialogHeader.getText().trim();
     String actualCount = vanInboundPage.shipmentInboundDialog.parcelNo.getText().trim();
@@ -158,10 +160,12 @@ public class VanInboundSteps extends AbstractSteps {
   }
 
   @Then("Operator confirms that the modal: {string} is displayed and has tracking id displayed")
-  public void operator_confirms_that_the_modal_is_displayed_and_has_tracking_id_displayed(String modalName) {
+  public void operator_confirms_that_the_modal_is_displayed_and_has_tracking_id_displayed(
+      String modalName) {
     String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     String actualDialogHeader = vanInboundPage.shipmentInboundDialog.dialogHeader.getText().trim();
-    String actualTrackingId = vanInboundPage.shipmentInboundDialog.trackingIdInModal.getText().trim();
+    String actualTrackingId = vanInboundPage.shipmentInboundDialog.trackingIdInModal.getText()
+        .trim();
     Assertions.assertThat(actualDialogHeader)
         .as(f("Assert that the dialog header displayed is %s", modalName))
         .isEqualTo(actualDialogHeader.trim());

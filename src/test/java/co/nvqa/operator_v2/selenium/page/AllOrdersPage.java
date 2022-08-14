@@ -35,7 +35,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
@@ -112,6 +116,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public PullSelectedFromRouteDialog pullSelectedFromRouteDialog;
+
+  @FindBy(css = "md-dialog")
+  public PrintWaybillsDialog printWaybillsDialog;
 
   @FindBy(css = "md-dialog")
   public ResumeSelectedDialog resumeSelectedDialog;
@@ -207,7 +214,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     filterPreset.waitUntilEnabled(60);
   }
 
-  private final EditOrderPage editOrderPage;
+  public final EditOrderPage editOrderPage;
 
   public AllOrdersPage(WebDriver webDriver) {
     this(webDriver, new EditOrderPage(webDriver));
@@ -645,7 +652,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void switchToEditOrderWindow(Long orderId) {
     switchToOtherWindow("order/" + orderId);
-    editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+    editOrderPage.waitWhilePageIsLoading(120);
   }
 
   public String getTextOnTableOrder(int rowNumber, String columnDataClass) {
@@ -1064,14 +1071,27 @@ public class AllOrdersPage extends OperatorV2SimplePage {
             dbCheckingCustomerCollectOrder.getRsvnEventName(),
             "DP_RELEASED_TO_CUSTOMER");
     assertTrue("Released At is not the same : ",
-            dbCheckingCustomerCollectOrder.getReleasedAt().toString()
-                    .startsWith(formatter.format(today)));
+        dbCheckingCustomerCollectOrder.getReleasedAt().toString()
+            .startsWith(formatter.format(today)));
     assertTrue("Collected At is not the same : ",
-            dbCheckingCustomerCollectOrder.getCollectedAt().toString()
-                    .startsWith(formatter.format(today)));
+        dbCheckingCustomerCollectOrder.getCollectedAt().toString()
+            .startsWith(formatter.format(today)));
     assertEquals("Status is not the same : ", dbCheckingCustomerCollectOrder.getStatus(),
-            "RELEASED");
+        "RELEASED");
     assertEquals("Source is not the same : ", dbCheckingCustomerCollectOrder.getSource(),
-            "OPERATOR");
+        "OPERATOR");
+  }
+
+  public static class PrintWaybillsDialog extends MdDialog {
+
+    @FindBy(css = "md-checkbox")
+    public MdCheckbox checkbox;
+
+    @FindBy(name = "container.order.list.download-selected")
+    public NvIconTextButton downloadSelected;
+
+    public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

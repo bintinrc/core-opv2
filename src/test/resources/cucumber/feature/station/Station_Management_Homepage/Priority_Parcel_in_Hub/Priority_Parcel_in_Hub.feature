@@ -3352,7 +3352,7 @@ Feature: Priority Parcel in Hub
       | HubName1     | HubId1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-id-9} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @ArchiveRoute @Debug
+  @ForceSuccessOrder @ArchiveRoute
   Scenario Outline: Sort Priority Parcel in Hub Based on Time in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
