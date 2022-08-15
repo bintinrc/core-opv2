@@ -157,6 +157,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
     public PageElement antNotificationDescription;
 
+    @FindBy(xpath = "//div[@role='alert']")
+    public PageElement validationAlert;
+
     public static String notificationMessage = "";
 
     public void verifyAirportTripMovementPageItems() {
@@ -459,6 +462,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(notificationMessage).as("Error message is same").contains(expError);
     }
 
+
     public void searchAirport(PageElement filter, String value){
         clearWebField(filter.getWebElement());
         filter.sendKeys(value);
@@ -481,12 +485,20 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .isTrue();
     }
 
-    public List<String> ListOfItems(String xpath){
+    public List<String> ListOfItems(String xpath) {
         List<WebElement> ListOfElements = findElementsByXpath(xpath);
         List<String> Items = new ArrayList<String>();
-        ListOfElements.forEach(element ->{
+        ListOfElements.forEach(element -> {
             Items.add(element.getText().trim());
         });
         return Items;
+    }
+
+    public void verifyTheValidationErrorInAirportCreation(String expError) {
+        Assertions.assertThat(validationAlert.getText()).as("Validation error message is same")
+                .contains(expError);
+        Assertions.assertThat(newAirportSubmit.isEnabled())
+                .as("New airport submit button is disabled").isFalse();
+
     }
 }

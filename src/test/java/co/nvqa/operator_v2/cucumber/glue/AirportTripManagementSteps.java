@@ -132,8 +132,14 @@ public class AirportTripManagementSteps extends AbstractSteps{
     }
 
     @Then("Operator verifies the search airport on Airport Facility page")
-    public void operatorVerifiesSearchAirport(){
+    public void operatorVerifiesSearchAirport() {
         Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
         airportTripManagementPage.verifySearchedAirport(airport);
+    }
+
+    @And("Verify the validation error {string} is displayed")
+    public void verifyTheValidationErrorInAirportCreation(String expError) {
+        airportTripManagementPage.verifyTheValidationErrorInAirportCreation(expError);
+
     }
 }
