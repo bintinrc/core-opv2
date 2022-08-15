@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Airport;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -13,9 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Meganathan Ramasamy
@@ -458,5 +457,36 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     public void verifyTheErrorInAirportCreation(String expError) {
         Assertions.assertThat(notificationMessage).as("Error message is same").contains(expError);
+    }
+
+    public void searchAirport(PageElement filter, String value){
+        clearWebField(filter.getWebElement());
+        filter.sendKeys(value);
+        pause500ms();
+    }
+    public void verifySearchedAirport(Airport airport) {
+        String LIST_OF_AIRPORT_ELEMENTS = "//div[contains(@class,'table-container')]//table/tbody//tr/td[%s]";
+
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 2)).contains(airport.getAirportCode())).as("Airport Code is same")
+                .isTrue();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 3)).contains(airport.getAirportName())).as("Airport Name is same")
+                .isTrue();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 4)).contains(airport.getCity())).as("Airport city is same")
+                .isTrue();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 5)).contains(airport.getRegion())).as("Airport region is same")
+                .isTrue();
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 6)).contains(airport.getLatitude().toString() + ", " + airport.getLongitude().toString())).as("Airport latitude & longitude is same")
+                .isTrue();
+    }
+
+    public List<String> ListOfItems(String xpath){
+        List<WebElement> ListOfElements = findElementsByXpath(xpath);
+        List<String> Items = new ArrayList<String>();
+        ListOfElements.forEach(element ->{
+            Items.add(element.getText().trim());
+        });
+        return Items;
     }
 }

@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Airport;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.slf4j.Logger;
@@ -79,8 +81,8 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @Then("Operator Add new Airport")
     public void operatorAddsNewAirport(Map<String, String> mapOfData) {
         airportTripManagementPage.createNewAirport(mapOfData);
-        put("KEY_NEW_AIRPORT_DETAILS", mapOfData);
-        putInList("KEY_NEW_AIRPORT_LIST", mapOfData.get("airportCode"));
+        put(KEY_NEW_AIRPORT_DETAILS, mapOfData);
+        putInList(KEY_NEW_AIRPORT_LIST, mapOfData.get("airportCode"));
     }
 
     @And("Verify the new airport {string} created success message")
@@ -90,7 +92,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @And("Verify the newly created airport values in table")
     public void verifyNewlyCreatedAirport() {
-        airportTripManagementPage.verifyNewlyCreatedAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+        airportTripManagementPage.verifyNewlyCreatedAirport(get(KEY_NEW_AIRPORT_DETAILS));
     }
 
     @And("Capture the error in Airport Trip Management Page")
@@ -101,5 +103,37 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Verify the error {string} is displayed while creating new airport")
     public void verifyTheErrorInAirportCreation(String expError) {
         airportTripManagementPage.verifyTheErrorInAirportCreation(expError);
+    }
+
+    @Given("Operator search airport by {string}")
+    public void operatorSeachAirport(String searchValue){
+        Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
+        switch (searchValue.toLowerCase()){
+            case "id":
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getID().toString());
+                break;
+            case "airport code":
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirportCode());
+                break;
+            case "airport name":
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirportName());
+                break;
+            case "city":
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, airport.getCity());
+                break;
+            case "region":
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, airport.getRegion());
+                break;
+            case "latitude, longitude":
+                String longLat = airport.getLatitude().toString()+", "+airport.getLongitude().toString();
+                airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, longLat);
+                break;
+        }
+    }
+
+    @Then("Operator verifies the search airport on Airport Facility page")
+    public void operatorVerifiesSearchAirport(){
+        Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
+        airportTripManagementPage.verifySearchedAirport(airport);
     }
 }
