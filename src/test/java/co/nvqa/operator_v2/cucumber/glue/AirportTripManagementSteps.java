@@ -107,26 +107,51 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Given("Operator search airport by {string}")
     public void operatorSeachAirport(String searchValue){
+        String invalidValue = "AAAAA";
         Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
         switch (searchValue.toLowerCase()){
             case "id":
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getID().toString());
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getID().toString());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, invalidValue);
+                }
                 break;
             case "airport code":
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirportCode());
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirportCode());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, invalidValue);
+                }
                 break;
             case "airport name":
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirportName());
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirportName());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, invalidValue);
+                }
                 break;
             case "city":
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, airport.getCity());
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, airport.getCity());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, invalidValue);
+                }
                 break;
             case "region":
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, airport.getRegion());
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, airport.getRegion());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, invalidValue);
+                }
                 break;
             case "latitude, longitude":
-                String longLat = airport.getLatitude().toString()+", "+airport.getLongitude().toString();
-                airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, longLat);
+                if(!(airport ==null)){
+                    String longLat = airport.getLatitude().toString()+", "+airport.getLongitude().toString();
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, longLat);
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, invalidValue);
+                }
                 break;
         }
     }
@@ -141,5 +166,10 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void verifyTheValidationErrorInAirportCreation(String expError) {
         airportTripManagementPage.verifyTheValidationErrorInAirportCreation(expError);
 
+    }
+
+    @Then("Operator verifies that no data appear on Airport Facility page")
+    public void operatorVerifiesNoDataDisplay(){
+        airportTripManagementPage.verifyNodataDisplay();
     }
 }

@@ -202,7 +202,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyMaxOrigDestDetails() {
         facilitiesInput.click();
         Assertions.assertThat(
-                findElementsByXpath(FILTERS_DISABLED_XPATH).size())
+                        findElementsByXpath(FILTERS_DISABLED_XPATH).size())
                 .as("Other filters options are DISABLED")
                 .isNotZero();
     }
@@ -354,7 +354,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyFilteredResultsInAirportTripsTable(HashMap<String, String> map) {
         scrollToEndOfAirportTripsTable();
         Assertions.assertThat(
-                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
+                        findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
                 .as(f("All the records with %s as '%s' are displayed.", map.get("COLUMN"), map.get("FIRST_DATA")))
                 .isZero();
     }
@@ -501,4 +501,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("New airport submit button is disabled").isFalse();
 
     }
+
+    public void verifyNodataDisplay(){
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are not present")
+                .isTrue();
+    }
+
 }
