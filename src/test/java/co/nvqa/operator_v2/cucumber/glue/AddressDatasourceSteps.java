@@ -137,7 +137,6 @@ public class AddressDatasourceSteps extends AbstractSteps {
     addressDatasourcePage.replace.click();
     addressDatasourcePage.confirmReplace.waitUntilVisible();
     addressDatasourcePage.confirmReplace.click();
-    addressDatasourcePage.confirmReplace.waitUntilInvisible();
   }
 
   @When("^Operator clicks on Delete Button in Row Details modal on Address Datasource page$")
@@ -344,6 +343,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.barangayTextBox.sendKeys(data.get(KEY_BARANGAY));
     }
     if (StringUtils.isNotBlank(data.get(KEY_POSTCODE))) {
+      addressDatasourcePage.postcodeTextBox.waitUntilVisible();
       addressDatasourcePage.postcodeTextBox.sendKeys(data.get(KEY_POSTCODE));
     }
     addressDatasourcePage.searchButton.click();
@@ -393,6 +393,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String kecamatan = data.get(KEY_KECAMATAN);
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
+    String postcode = data.get(KEY_POSTCODE);
     Addressing addressing = new Addressing();
     if (StringUtils.isNotBlank(latlong)) {
       Double latitude = TestUtils.generateLatitude();
@@ -447,6 +448,15 @@ public class AddressDatasourceSteps extends AbstractSteps {
         addressDatasourcePage.municipality.sendKeys(municipality);
       }
       addressing.setDistrict(municipality);
+    }
+    if (StringUtils.isNotBlank(postcode)) {
+      addressDatasourcePage.postcode.sendKeys(Keys.COMMAND + "a");
+      if (postcode.contains("EMPTY")) {
+        addressDatasourcePage.postcode.forceClear();
+      } else {
+        addressDatasourcePage.postcode.sendKeys(postcode);
+      }
+      addressing.setPostcode(postcode);
     }
 
     put(KEY_CREATED_ADDRESSING, addressing);
