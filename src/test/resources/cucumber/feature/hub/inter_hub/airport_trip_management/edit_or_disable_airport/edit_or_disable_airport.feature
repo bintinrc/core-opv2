@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @EditDisableAirport
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @EditDisableAirport @1
 Feature: Airport Trip Management - Edit/Disable Airport
 
   @LaunchBrowser @ShouldAlwaysRun

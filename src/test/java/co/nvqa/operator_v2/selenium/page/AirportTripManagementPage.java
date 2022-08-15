@@ -568,13 +568,27 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void clickOnCancelOrDisable(String buttonName) {
-        if(buttonName.equalsIgnoreCase("Disable")){
-            disableButton.click();
-        } else if(buttonName.equalsIgnoreCase("Cancel")){
-            cancelButton.click();
-        }else if(buttonName.equalsIgnoreCase("Activate")){
-            activateButton.click();
-        }
+        retryIfAssertionErrorOccurred(() ->
+        {
+            try {
+                if(buttonName.equalsIgnoreCase("Disable")){
+                    disableButton.click();
+                    pause3s();
+                    Assertions.assertThat(disableAirportPanel.isDisplayed()).as("Disable panel displayed")
+                            .isFalse();
+                } else if(buttonName.equalsIgnoreCase("Cancel")){
+                    cancelButton.click();
+                }else if(buttonName.equalsIgnoreCase("Activate")){
+                    activateButton.click();
+                    pause3s();
+                    Assertions.assertThat(activateAirportPanel.isDisplayed()).as("Activate panel displayed")
+                            .isFalse();
+                }
+            } catch (AssertionError ex) {
+                throw ex;
+            }
+        }, "retry", 500, 3);
+
     }
 
     public void verifyButton(Map<String, String> map, String buttonName) {
