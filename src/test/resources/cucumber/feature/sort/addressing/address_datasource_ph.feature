@@ -48,7 +48,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_CREATED_ADDRESSING.province} |
       | municipality | {KEY_CREATED_ADDRESSING.city}     |
       | barangay     | {KEY_CREATED_ADDRESSING.district} |
@@ -84,7 +84,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_CREATED_ADDRESSING.province} |
       | municipality | {KEY_CREATED_ADDRESSING.city}     |
       | barangay     | {KEY_CREATED_ADDRESSING.district} |
@@ -106,7 +106,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_CREATED_ADDRESSING.province} |
       | municipality | {KEY_CREATED_ADDRESSING.city}     |
       | barangay     | {KEY_CREATED_ADDRESSING.district} |
@@ -208,7 +208,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-2}              |
       | municipality | {municipality-2}          |
       | barangay     | {barangay-2}              |
@@ -230,7 +230,7 @@ Feature: Address Datasource
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-2}              |
       | municipality | {municipality-2}          |
       | barangay     | {barangay-2}              |
@@ -256,7 +256,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-3}              |
       | municipality | {municipality-3}          |
       | barangay     | {barangay-3}              |
@@ -276,7 +276,7 @@ Feature: Address Datasource
       | municipality | {municipality-4} |
       | barangay     | {barangay-4}     |
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-4}              |
       | municipality | {municipality-4}          |
       | barangay     | {barangay-4}              |
@@ -341,7 +341,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-3}              |
       | municipality | {municipality-3}          |
       | barangay     | {barangay-3}              |
@@ -375,7 +375,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-3}              |
       | municipality | {municipality-3}          |
       | barangay     | {barangay-3}              |
@@ -396,7 +396,7 @@ Feature: Address Datasource
       | municipality | {municipality-5} |
       | barangay     | {barangay-5}     |
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-5}              |
       | municipality | {municipality-5}          |
       | barangay     | {barangay-5}              |
@@ -437,7 +437,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-3}              |
       | municipality | {municipality-3}          |
       | barangay     | {barangay-3}              |
@@ -501,7 +501,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_CREATED_ADDRESSING.province} |
       | municipality | {KEY_CREATED_ADDRESSING.city}     |
       | barangay     | {KEY_CREATED_ADDRESSING.district} |
@@ -542,7 +542,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {KEY_CREATED_ADDRESSING.province} |
       | municipality | {KEY_CREATED_ADDRESSING.city}     |
       | barangay     | {KEY_CREATED_ADDRESSING.district} |
@@ -570,7 +570,7 @@ Feature: Address Datasource
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
-    Then Operator verifies the address datasorce details in Row Details modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province}                |
       | municipality | {municipality}            |
       | barangay     | {barangay}                |
