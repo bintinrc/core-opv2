@@ -192,26 +192,6 @@ Feature: Airport Trip Management - Edit/Disable Airport
     And Verify the validation error "Airport code must be exactly 3 letters" is displayed
 
   @ForceSuccessOrder @DeleteCreatedAirports
-  Scenario: Edit Airport Code with 3 mix letter and number
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And API Operator refresh Airports cache
-    And Operator verifies that the Airport Management Page is opened
-    When Operator click on Manage Airport Facility and verify all components
-    Then Operator Add new Airport
-      | airportCode   | AAJ             |
-      | airportName   | Test Airport    |
-      | city          | SG              |
-      | region        | JKB             |
-      | latitude      | 37.9220427      |
-      | longitude     | -81.6894072     |
-    And Verify the new airport "Airport \"Test Airport\" has been created" created success message
-    And Verify the newly created airport values in table
-    And Edit the "airportCode" for created Airport
-      | airportCode   | 12A             |
-    And Verify the validation error "Airport code must be exactly 3 letters" is displayed
-
-  @ForceSuccessOrder @DeleteCreatedAirports
   Scenario: Edit Airport Code with existing Airport Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
@@ -242,7 +222,7 @@ Feature: Airport Trip Management - Edit/Disable Airport
     And Verify the error "Duplicate Airport code. Airport code AAJ is already exists" is displayed while creating new airport
 
   @ForceSuccessOrder @DeleteCreatedAirports
-  Scenario: Edit Airport Code with existing Airport Code
+  Scenario: Edit Airport Code with existing Airport Name
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And API Operator refresh Airports cache
