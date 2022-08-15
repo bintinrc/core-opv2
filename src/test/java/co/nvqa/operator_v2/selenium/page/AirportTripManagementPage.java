@@ -501,4 +501,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("New airport submit button is disabled").isFalse();
 
     }
+
+    public void verifyNodataDisplay(){
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are not present")
+                .isTrue();
+    }
 }
