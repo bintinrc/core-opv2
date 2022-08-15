@@ -122,11 +122,32 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button[contains(@data-testid,'edit-airport-button')]")
     public PageElement editAirportButton;
 
+    @FindBy(xpath = "//button[contains(@data-testid,'activate-airport-button')]")
+    public PageElement activateAirportButton;
+
     @FindBy(xpath = "//button[contains(@data-testid,'disable-airport-button')]")
     public PageElement disableAirportButton;
 
     @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Add New Airport']")
     public PageElement addNewAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Edit Airport']")
+    public PageElement editAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Disable Airport?']")
+    public PageElement disableAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Confirm activation']")
+    public PageElement activateAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Disable']")
+    public PageElement disableButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Cancel']")
+    public PageElement cancelButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Activate']")
+    public PageElement activateButton;
 
     @FindBy(xpath = "//input[@data-testid='airport-code-input']")
     public PageElement airportCodeInput;
@@ -149,6 +170,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button[@data-testid='confirm-createAirport-button']")
     public PageElement newAirportSubmit;
 
+    @FindBy(xpath = "//button[@data-testid='confirm-editAirport-button']")
+    public PageElement editAirportSubmit;
+
+    @FindBy(xpath = "//button[@data-testid='confirm-editAirport-button' or @data-testid='confirm-createAirport-button']")
+    public PageElement createOrEditAirportSubmit;
+
     @FindBy(xpath = "//div[.='No data']")
     public PageElement noDataElement;
 
@@ -157,6 +184,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
     public PageElement antNotificationDescription;
+
+    @FindBy(xpath = "//div[@class='ant-modal-body']")
+    public PageElement antModalBody;
 
     @FindBy(xpath = "//div[@role='alert']")
     public PageElement validationAlert;
@@ -466,7 +496,113 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyTheValidationErrorInAirportCreation(String expError) {
         Assertions.assertThat(validationAlert.getText()).as("Validation error message is same")
                 .contains(expError);
-        Assertions.assertThat(newAirportSubmit.isEnabled())
+        Assertions.assertThat(createOrEditAirportSubmit.isEnabled())
                 .as("New airport submit button is disabled").isFalse();
+    }
+
+    public void editExistingAirport(String editField, Map<String, String> updatedMap, Map<String, String> origMap) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(origMap.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        editAirportButton.click();
+        editAirportPanel.waitUntilVisible();
+
+        switch (editField) {
+            case "airportCode":
+                clearWebField(airportCodeInput.getWebElement());
+                airportCodeInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "airportName":
+                clearWebField(airportNameInput.getWebElement());
+                airportNameInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "city":
+                clearWebField(airportCityInput.getWebElement());
+                airportCityInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "region":
+                clearWebField(airportRegionInput.getWebElement());
+                airportRegionInput.click();
+                sendKeysAndEnterById("createAirportForm_region", updatedMap.get(editField));
+                break;
+            case "latitude":
+                clearWebField(airportLatitudeInput.getWebElement());
+                airportLatitudeInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "longitude":
+                clearWebField(airportLongitudeInput.getWebElement());
+                airportLongitudeInput.sendKeys(updatedMap.get(editField));
+                break;
+            default:
+                LOGGER.warn("Search type is not found");
+        }
+        editAirportSubmit.click();
+    }
+
+    public void disableExistingAirport(Map<String, String> map) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        disableAirportButton.click();
+        disableAirportPanel.waitUntilVisible();
+
+        String message = antModalBody.getText();
+
+        Assertions.assertThat(message).as("Are you sure you want to submit changes?")
+                .contains("Warning: Disabling the selected airport will result in the following. " +
+                        "Are you sure you want to submit changes?");
+        Assertions.assertThat(message).as("Remove some shipment schedules")
+                .contains("Remove some shipment schedules");
+        Assertions.assertThat(message).as("Remove some shipment paths")
+                .contains("Remove some shipment paths");
+        Assertions.assertThat(message).as("Remove all sort airport currently tie to the hub")
+                .contains("Remove all sort airport currently tie to the hub");
+        Assertions.assertThat(message).as("Current zone mapping tied to this airport will need to be updated")
+                .contains("Current zone mapping tied to this airport will need to be updated");
+        Assertions.assertThat(message).as("Selected airport ACJ will be removed and disabled.")
+                .contains(f("Selected airport %s will be removed and disabled.", map.get("airportCode")));
+    }
+
+    public void clickOnCancelOrDisable(String buttonName) {
+        if(buttonName.equalsIgnoreCase("Disable")){
+            disableButton.click();
+        } else if(buttonName.equalsIgnoreCase("Cancel")){
+            cancelButton.click();
+        }else if(buttonName.equalsIgnoreCase("Activate")){
+            activateButton.click();
+        }
+    }
+
+    public void verifyButton(Map<String, String> map, String buttonName) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+        if(buttonName.equalsIgnoreCase("Activate")){
+            Assertions.assertThat(activateAirportButton.isDisplayed()).as("Activate button is displayed")
+                    .isTrue();
+        }else if(buttonName.equalsIgnoreCase("Disable")){
+            Assertions.assertThat(disableAirportButton.isDisplayed()).as("Disable button is displayed")
+                    .isTrue();
+        }
+    }
+
+    public void activateExistingAirport(Map<String, String> map) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        activateAirportButton.click();
+        activateAirportPanel.waitUntilVisible();
+
+        String message = antModalBody.getText();
+
+        Assertions.assertThat(message).as("This action will RE-ACTIVATE selected Airport, continue?")
+                .contains("This action will RE-ACTIVATE selected Airport, continue?");
     }
 }
