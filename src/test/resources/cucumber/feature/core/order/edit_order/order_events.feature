@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @OrderEvents @EditOrder1
+@OperatorV2 @Core @EditOrder @OrderEvents @EditOrder1
 Feature: Order Events
 
   @LaunchBrowser @ShouldAlwaysRun
