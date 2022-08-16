@@ -536,7 +536,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(noDataElement.isDisplayed()).as("Records are not present")
                 .isTrue();
     }
-    
+
     public void editExistingAirport(String editField, Map<String, String> updatedMap, Map<String, String> origMap) {
         clearWebField(airportCodeFilter.getWebElement());
         airportCodeFilter.sendKeys(origMap.get("airportCode"));
