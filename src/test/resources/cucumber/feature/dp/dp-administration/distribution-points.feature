@@ -85,7 +85,6 @@ Feature: DP Administration - Distribution Points
       | floorNo           | 1                                                   |
       | postcode          | 467360                                              |
       | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
-    Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID
     Then Operator verifies dp Params with database
