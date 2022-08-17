@@ -72,7 +72,7 @@ Feature: Shipment Management - Search Shipment 2
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
-      | hubId      | {hub-id-2}                |
+      | hubId      | {hub-id}                |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     When Operator apply filters on Shipment Management Page:
@@ -82,10 +82,10 @@ Feature: Shipment Management - Search Shipment 2
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
-      | status       | At Transit Hub,Transit    |
+      | status       | Transit    |
       | userId       | {operator-portal-uid}     |
       | origHubName  | {hub-name}                |
-      | currHubName  | {hub-name-2}              |
+      | currHubName  | {hub-name}              |
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
@@ -104,18 +104,20 @@ Feature: Shipment Management - Search Shipment 2
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
-      | hubId      | {hub-id-2}                |
+      | hubId      | {hub-id}                |
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
-      | lastInboundHub | {hub-name-2} |
+     | shipmentType   | Air Haul |
+     | shipmentStatus | Transit  |
+      | lastInboundHub | {hub-name} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
-      | status       | Closed                    |
+      | status       | Transit                    |
       | userId       | {operator-portal-uid}     |
       | origHubName  | {hub-name}                |
-      | currHubName  | {hub-name-2}              |
+      | currHubName  | {hub-name}              |
       | destHubName  | {hub-name-2}              |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments without Duplicate (uid:68b7217b-41a8-4259-9da8-e8ce68f0a7b0)

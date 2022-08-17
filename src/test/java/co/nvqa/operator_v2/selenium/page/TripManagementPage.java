@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -19,18 +20,15 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -236,6 +234,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
+
+
+
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -1806,4 +1807,5 @@ public class TripManagementPage extends OperatorV2SimplePage {
       unassignAllDrivers.click();
     }
   }
+
 }

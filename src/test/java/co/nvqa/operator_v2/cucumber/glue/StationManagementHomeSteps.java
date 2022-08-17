@@ -568,6 +568,13 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.getRecordsAndValidateSorting(columnName);
   }
 
+  @Then("Operators sorts and verifies that the column:{string} is in descending order")
+  public void operators_sorts_and_verifies_that_the_column_is_in_descending_order(
+      String columnName) {
+    stationManagementHomePage.sortColumn(columnName, "DESCENDING_ORDER");
+    stationManagementHomePage.getRecordsAndValidateSorting(columnName);
+  }
+
   @When("Operators chooses the date:{string} as station confirmed eta and proceed")
   public void operators_chooses_the_date_as_station_confirmed_eta_and_proceed(String etaToChoose) {
     stationManagementHomePage.selectSuggestedEtaAndProceed(etaToChoose);

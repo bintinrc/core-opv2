@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @DeleteOrder @EditOrder1
+@OperatorV2 @Core @EditOrder @DeleteOrder @EditOrder3
 Feature: Delete Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -14,6 +14,18 @@ Feature: Delete Order
     And Operator delete order on Edit Order Page
     Then Operator verifies All Orders Page is displayed
     And DB Operator verifies order is deleted
+    And DB Operator verifies orders records are hard-deleted in orders table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in transactions table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_details table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Order - Status = Van en-route to Pickup (uid:dcb07b88-ecda-4b51-85c1-381b3ff898e9)
@@ -35,6 +47,18 @@ Feature: Delete Order
     And Operator delete order on Edit Order Page
     Then Operator verifies All Orders Page is displayed
     And DB Operator verifies order is deleted
+    And DB Operator verifies orders records are hard-deleted in orders table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in transactions table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_details table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   Scenario: Operator Delete Order - Status = Staging (uid:9b41fbd7-7079-49d9-81c6-81505e5ffd2c)
     Given API Shipper create V4 order using data below:
@@ -47,6 +71,18 @@ Feature: Delete Order
     And Operator delete order on Edit Order Page
     Then Operator verifies All Orders Page is displayed
     And DB Operator verifies order is deleted
+    And DB Operator verifies orders records are hard-deleted in orders table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in transactions table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_details table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Order - Status = Pickup Fail (uid:1ea40765-c2f6-4d5e-9847-6d17a7921eab)
@@ -68,6 +104,18 @@ Feature: Delete Order
     And Operator delete order on Edit Order Page
     Then Operator verifies All Orders Page is displayed
     And DB Operator verifies order is deleted
+    And DB Operator verifies orders records are hard-deleted in orders table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in transactions table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in waypoints table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_details table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in order_delivery_verifications table:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+    And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

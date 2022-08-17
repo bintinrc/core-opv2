@@ -193,6 +193,40 @@ Feature: Edit Pricing Profiles - Normal Shippers - Insurance
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | isDefaultIns | true |
 
+  @CloseNewWindows
+  Scenario: Edit Pending Pricing Profile - From Insurance Min Fee and Insurance Percentage to Insurance Country Default - Edit to have Insurance Min Fee and Insurance Percentage again (uid:a9827797-88e2-49ba-8a89-11dea6f3b02f)
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | insuranceMinFee     | 1.2 |
+      | insurancePercentage | 3   |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | insuranceMinFee     | 1.2 |
+      | insurancePercentage | 3   |
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | isDefaultIns | true |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | isDefaultIns | true |
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | isDefaultIns        | false |
+      | insuranceMinFee     | 4     |
+      | insurancePercentage | 4     |
+      | insuranceThreshold  | 4     |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | insuranceMinFee     | 4 |
+      | insurancePercentage | 4 |
+      | insuranceThreshold  | 4 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

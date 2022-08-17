@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @ImplantedManifest
+@OperatorV2 @Core @NewFeatures @ImplantedManifest @NewFeatures1
 Feature: Implanted Manifest
 
   @LaunchBrowser @ShouldAlwaysRun

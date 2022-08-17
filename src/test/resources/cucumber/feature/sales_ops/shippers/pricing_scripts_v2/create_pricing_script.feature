@@ -485,7 +485,7 @@ Feature: Pricing Scripts V2
       | bottom | `const` is not support in the script. |
 
   @DeletePricingScript
-  Scenario: Create and Check Script with rts_fee (uid:2156f91d-fea0-44e2-9bf5-df1f49de449f)
+  Scenario Outline: Create and Check Script with rts_fee - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
       | source | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
@@ -497,7 +497,7 @@ Feature: Pricing Scripts V2
       | serviceLevel | SAMEDAY  |
       | serviceType  | Document |
       | timeslotType | NONE     |
-      | isRts        | Yes      |
+      | isRts        | <isRTS>  |
       | size         | XS       |
       | weight       | 1.0      |
       | insuredValue | 0.00     |
@@ -505,42 +505,17 @@ Feature: Pricing Scripts V2
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 17.12 |
-      | gst          | 1.12  |
-      | deliveryFee  | 15    |
-      | insuranceFee | 0     |
-      | codFee       | 0     |
-      | handlingFee  | 0     |
-      | comments     | OK    |
-
-  @DeletePricingScript
-  Scenario: Create and Check Script with rts_fee (uid:2156f91d-fea0-44e2-9bf5-df1f49de449f)
-    Given Operator go to menu Shipper -> Pricing Scripts V2
-    When Operator create new Draft Script using data below:
-      | source | function calculatePricing(params) {var price = 15.0;var result = {};result.delivery_fee = price;result.cod_fee = 0.0;result.insurance_fee = 0.0;result.handling_fee = 0.0;if (params.is_rts==true) {result.rts_fee = 1.0;} else if (params.is_rts==false) {result.rts_fee = 3.0;} else {result.rts_fee = 0.0}return result;} |
-    Then Operator verify the new Script is created successfully on Drafts
-    And Operator validate and release Draft Script
-    When Operator search according Active Script name
-    When Operator do Run Check on specific Active Script using this data below:
-      | orderFields  | New      |
-      | serviceLevel | SAMEDAY  |
-      | serviceType  | Document |
-      | timeslotType | NONE     |
-      | isRts        | No       |
-      | size         | XS       |
-      | weight       | 1.0      |
-      | insuredValue | 0.00     |
-      | codValue     | 0.00     |
-      | fromZone     | EAST     |
-      | toZone       | WEST     |
-    Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 16.05 |
-      | gst          | 1.05  |
-      | deliveryFee  | 15    |
-      | insuranceFee | 0     |
-      | codFee       | 0     |
-      | handlingFee  | 0     |
-      | comments     | OK    |
+      | grandTotal   | <grandTotal> |
+      | gst          | <gst>        |
+      | deliveryFee  | 15           |
+      | insuranceFee | 0            |
+      | codFee       | 0            |
+      | handlingFee  | 0            |
+      | comments     | OK           |
+    Examples:
+      | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              |
+      | Yes   | Dataset name | 17.12      | 1.12 | uid:313b70a4-3803-40cd-8872-b08da89e3281 |
+      | No    | is RTS = no  | 16.05      | 1.05 | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 |
 
   Scenario: Create Draft Pricing Script Failed - Not Fill Script Name and Script Description (uid:d5a25b08-13b9-442a-bd2c-ff5077e15371)
     Given Operator go to menu Shipper -> Pricing Scripts V2

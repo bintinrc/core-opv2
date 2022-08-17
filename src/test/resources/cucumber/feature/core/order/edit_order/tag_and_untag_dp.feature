@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @TagAndUntagDP @EditOrder2 @RoutingModules
+@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules
 Feature: Tag & Untag DP
 
   @LaunchBrowser @ShouldAlwaysRun

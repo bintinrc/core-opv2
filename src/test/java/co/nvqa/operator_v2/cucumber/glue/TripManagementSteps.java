@@ -535,5 +535,4 @@ public class TripManagementSteps extends AbstractSteps {
     public void operatorVerifiesInvalidDriver(String name, String value){
         tripManagementPage.verifyInvalidItem(name, value);
     }
-
 }
