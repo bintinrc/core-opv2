@@ -1617,8 +1617,8 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName    | HubId        | TileName                | ModalName               | Filter   | FSRModalTitle                                |
-      | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Shipper Issue (uid:5cbabffd-dd14-4604-905b-191cfb44e93f)
@@ -3352,7 +3352,7 @@ Feature: Priority Parcel in Hub
       | HubName1     | HubId1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-id-9} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @ArchiveRoute @Debug
+  @ForceSuccessOrder @ArchiveRoute
   Scenario Outline: Sort Priority Parcel in Hub Based on Time in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
