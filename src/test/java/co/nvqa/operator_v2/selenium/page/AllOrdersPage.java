@@ -930,10 +930,10 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
-    String xpathClearAllSelection = "//button[contains(@aria-label,'Clear All Selections')]";
+    String xpathClearAllSelection = "//button[contains(@aria-label,'clear-all-selections')]";
     moveToElementWithXpath(xpathClearAllSelection);
     click(xpathClearAllSelection);
-    click("//button[contains(@aria-label,'Load Selection')]");
+    click("//button[contains(@aria-label,'load-selection')]");
   }
 
   public void applyAction(String trackingId) {
