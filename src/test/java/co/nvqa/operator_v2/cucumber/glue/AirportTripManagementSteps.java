@@ -112,21 +112,21 @@ public class AirportTripManagementSteps extends AbstractSteps{
         switch (searchValue.toLowerCase()){
             case "id":
                 if(!(airport ==null)){
-                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getID().toString());
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getId().toString());
                 } else {
                     airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, invalidValue);
                 }
                 break;
             case "airport code":
                 if(!(airport ==null)){
-                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirportCode());
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirport_code());
                 } else {
                     airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, invalidValue);
                 }
                 break;
             case "airport name":
                 if(!(airport ==null)){
-                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirportName());
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirport_name());
                 } else {
                     airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, invalidValue);
                 }

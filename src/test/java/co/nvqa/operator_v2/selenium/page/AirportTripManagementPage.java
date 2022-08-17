@@ -503,9 +503,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
         Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
                 .isFalse();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 2)).contains(airport.getAirportCode())).as("Airport Code is same")
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 2)).contains(airport.getAirport_code())).as("Airport Code is same")
                 .isTrue();
-        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 3)).contains(airport.getAirportName())).as("Airport Name is same")
+        Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 3)).contains(airport.getAirport_name())).as("Airport Name is same")
                 .isTrue();
         Assertions.assertThat(ListOfItems(f(LIST_OF_AIRPORT_ELEMENTS, 4)).contains(airport.getCity())).as("Airport city is same")
                 .isTrue();
