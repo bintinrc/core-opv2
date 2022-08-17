@@ -630,6 +630,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator Reset password {string}")
   public void operatorResetPassword(String status) {
+    pause5s();
     DpUser dpUser = get(KEY_DP_USER);
     String username = dpUser.getClientId();
     String password = "password";
