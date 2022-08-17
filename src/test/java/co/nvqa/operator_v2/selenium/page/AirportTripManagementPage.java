@@ -397,7 +397,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyFilteredResultsInAirportTripsTable(HashMap<String, String> map) {
         scrollToEndOfAirportTripsTable();
         Assertions.assertThat(
-                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
+                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_NO"), map.get("FIRST_DATA"))).size())
                 .as(f("All the records with %s as '%s' are displayed.", map.get("COLUMN"), map.get("FIRST_DATA")))
                 .isZero();
     }
