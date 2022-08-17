@@ -145,7 +145,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}  |
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasource details in Row Details modal:
+    Then Operator verifies the address datasource details in Edit A Row modal:
       | postcode | {datasource-postcode-1}   |
       | zone     | {KEY_ZONE_INFO.shortName} |
       | hub      | {KEY_HUB_INFO.shortName}  |

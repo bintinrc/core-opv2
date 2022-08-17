@@ -208,7 +208,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasource details in Row Details modal:
+    Then Operator verifies the address datasource details in Edit A Row modal:
       | province     | {province-2}              |
       | municipality | {municipality-2}          |
       | barangay     | {barangay-2}              |

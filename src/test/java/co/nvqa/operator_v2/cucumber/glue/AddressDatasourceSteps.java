@@ -510,4 +510,39 @@ public class AddressDatasourceSteps extends AbstractSteps {
         .as("Empty field error shows up")
         .isTrue();
   }
+
+  @Then("^Operator verifies the address datasource details in Edit A Row modal:$")
+  public void operatorVerifiesDetailsInEditRowModal(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    if (StringUtils.isNotBlank(data.get(KEY_PROVINCE))) {
+      Assertions.assertThat(addressDatasourcePage.province.getValue())
+          .as("Province")
+          .isEqualToIgnoringCase(data.get(KEY_PROVINCE));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_KOTA))) {
+      Assertions.assertThat(addressDatasourcePage.kota.getValue())
+          .as("Kota")
+          .isEqualToIgnoringCase(data.get(KEY_KOTA));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_KECAMATAN))) {
+      Assertions.assertThat(addressDatasourcePage.kecamatan.getValue())
+          .as("kecamatan")
+          .isEqualToIgnoringCase(data.get(KEY_KECAMATAN));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_MUNICIPALITY))) {
+      Assertions.assertThat(addressDatasourcePage.municipality.getValue())
+          .as("Municipality")
+          .isEqualToIgnoringCase(data.get(KEY_MUNICIPALITY));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_BARANGAY))) {
+      Assertions.assertThat(addressDatasourcePage.barangay.getValue())
+          .as("Barangay")
+          .isEqualToIgnoringCase(data.get(KEY_BARANGAY));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_POSTCODE))) {
+      Assertions.assertThat(addressDatasourcePage.postcode.getValue())
+          .as("postcode")
+          .isEqualToIgnoringCase(data.get(KEY_POSTCODE));
+    }
+  }
 }
