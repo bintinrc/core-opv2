@@ -382,7 +382,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorCancelTheCreatedShipmentOnShipmentManagementPage() {
     Long shipmentId;
     if (containsKey(KEY_CREATED_SHIPMENT_ID)) {
-      shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+      shipmentId = Long.valueOf(Integer.toString(get(KEY_CREATED_SHIPMENT_ID)));
     } else {
       ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
       shipmentId = shipmentInfo.getId();
