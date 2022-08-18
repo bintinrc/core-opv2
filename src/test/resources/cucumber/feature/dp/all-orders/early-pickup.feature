@@ -34,6 +34,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -68,8 +69,10 @@ Feature: Early Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -114,6 +117,7 @@ Feature: Early Pickup
     And DB Operator gets the Order ID by Tracking ID
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
     When DB Operator gets the reservation date details for created order
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -157,6 +161,7 @@ Feature: Early Pickup
     And DB Operator gets the Order ID by Tracking ID
     Given DB Operator gets Reservation ID based on Order ID from order pickups table
     When DB Operator gets the reservation date details for created order
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -195,6 +200,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Send To Doorstep" with "date"
     Then Downloaded csv file contains correct orders and message "Requested early pickup_date is after scheduled pickup date"
@@ -228,6 +234,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds 
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -281,6 +288,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -334,6 +342,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds 
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Send To Doorstep" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
@@ -375,6 +384,7 @@ Feature: Early Pickup
     And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
+    Given Operator go to menu Order -> All Orders
     When Operator clicks Clear All Selections and Load Selection button on All Orders Page
     And Operator apply Early pickup action and chooses "Return To Sender" with ""
     Then Downloaded csv file contains correct orders and message "Pickup Reservation Created"
