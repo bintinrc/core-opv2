@@ -313,7 +313,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     Then Operator verifies the order status is "TRANSIT" and granular status is "ENROUTE_TO_SORTING_HUB"
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Customer Collect
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Customer Collect (uid:90460434-d424-4cf7-84da-66564e61ec44)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
