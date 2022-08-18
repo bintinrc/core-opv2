@@ -86,7 +86,7 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario Outline: DP Administration - Update DP Partner - Check validation form - <dataset_name>
+  Scenario Outline: DP Administration - Update DP Partner - Check validation form - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -104,10 +104,10 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                          | form        |
-      | Empty Partner Name | NAME        | This field is required                 | name        |
-      | Empty POC Name     | POCNME      | This field is required                 | pocName     |
-      | Empty POC No       | POCNUM      | This field is required                 | pocTel      |
-      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      |
-      | Empty Restrictions | RESTRICTION | This field is required                 | restriction |
-      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    |
+      | dataset_name       | key_dataset | error_message                          | form        | hiptest-uid                              |
+      | Empty Partner Name | NAME        | This field is required                 | name        | uid:069ee3a5-8cb2-4635-8e2f-f2c3099377fd |
+      | Empty POC Name     | POCNME      | This field is required                 | pocName     | uid:c410a9dd-077e-4440-932c-d34ef2921292 |
+      | Empty POC No       | POCNUM      | This field is required                 | pocTel      | uid:0259c76c-91e5-44b3-91bf-a9f88bc5e3ab |
+      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      | uid:704e42eb-3920-4b1a-99fc-844e39a520e1 |
+      | Empty Restrictions | RESTRICTION | This field is required                 | restriction | uid:40c4ce1e-e5ab-43ac-8cb0-e7c01ae83fcf |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    | uid:0fe5eebf-b7b6-40cc-8d13-7b6576da02b9 |
