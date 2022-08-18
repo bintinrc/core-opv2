@@ -179,6 +179,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//div[.='No data']")
     public PageElement noDataElement;
 
+    @FindBy(xpath = "//div[.='No Results Found']")
+    public PageElement noResultsFound;
+
     @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
     public PageElement antNotificationMessage;
 
@@ -318,61 +321,70 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("End Of Table appear in Airport trip Management page").isTrue();
     }
 
-    public HashMap filterTheAirportTripsTable(String filter) {
+    public HashMap filterTheAirportTripsTable(String filter, String invalidData) {
         HashMap<String, String> map = new HashMap<>();
+        String searchData = "";
         map.put("COLUMN", filter);
         switch (filter) {
             case "Destination Facility":
                 map.put("COLUMN_NO", "1");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 1)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 1)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDestHubFilter.click();
                 sendKeys(airportDestHubFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Trip ID":
                 map.put("COLUMN_NO", "2");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 2)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 2)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportTripIdFilter.click();
                 sendKeys(airportTripIdFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Origin Facility":
                 map.put("COLUMN_NO", "3");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 3)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 3)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportOriginHubFilter.click();
                 sendKeys(airportOriginHubFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Departure Date Time":
                 map.put("COLUMN_NO", "4");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 4)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 4)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDepartDateTimeFilter.click();
                 sendKeys(airportDepartDateTimeFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Duration":
                 map.put("COLUMN_NO", "5");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 5)).getText());
-                airportDurationFilter.click();
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 5)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 sendKeys(airportDurationFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "MAWB":
                 map.put("COLUMN_NO", "6");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportMawbFilter.click();
                 sendKeys(airportMawbFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Driver":
                 map.put("COLUMN_NO", "7");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 7)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 7)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDriversFilter.click();
                 sendKeys(airportDriversFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Status":
                 map.put("COLUMN_NO", "8");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 8)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 8)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportStatusFilter.click();
                 sendKeys(airportStatusFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Comments":
                 map.put("COLUMN_NO", "9");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 9)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 9)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportCommentsFilter.click();
                 sendKeys(airportCommentsFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
@@ -385,7 +397,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyFilteredResultsInAirportTripsTable(HashMap<String, String> map) {
         scrollToEndOfAirportTripsTable();
         Assertions.assertThat(
-                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
+                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_NO"), map.get("FIRST_DATA"))).size())
                 .as(f("All the records with %s as '%s' are displayed.", map.get("COLUMN"), map.get("FIRST_DATA")))
                 .isZero();
     }
@@ -618,5 +630,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
         Assertions.assertThat(message).as("This action will RE-ACTIVATE selected Airport, continue?")
                 .contains("This action will RE-ACTIVATE selected Airport, continue?");
+    }
+
+    public void verifyNoResultsFound(){
+        Assertions.assertThat(noResultsFound.isDisplayed()).as("Records are not present")
+                .isTrue();
     }
 }

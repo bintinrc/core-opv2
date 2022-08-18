@@ -62,7 +62,12 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @And("Operator search the {string} column")
     public void operatorSearchesInAirportManagement(String filter) {
-        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter));
+        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter, ""));
+    }
+
+    @And("Operator search the {string} column with invalid data {string}")
+    public void operatorSearchesInAirportManagement(String filter, String invalidData) {
+        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter, invalidData));
     }
 
     @And("Verify only filtered results are displayed")
@@ -142,5 +147,10 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @Then("Verify the airport is displayed with {string} button")
     public void verifyTheButtonIsDisplayed(String buttonName) {
         airportTripManagementPage.verifyButton(get("KEY_NEW_AIRPORT_DETAILS"), buttonName);
+    }
+
+    @Then("Operator verifies that no data appear on Airport Trips page")
+    public void operatorVerifiesNoDataDisplayOnAirportTrips(){
+        airportTripManagementPage.verifyNoResultsFound();
     }
 }
