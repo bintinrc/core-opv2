@@ -355,7 +355,7 @@ Feature: Early Pickup
     When DB Operator gets all the data input for Customer Collection Order from database
     Then Operator verifies the data on the database for Customer Collect scenarios are all right
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Customer Collect
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Customer Collect (uid:611a955c-3f0f-467a-839b-3553a97c1509)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
