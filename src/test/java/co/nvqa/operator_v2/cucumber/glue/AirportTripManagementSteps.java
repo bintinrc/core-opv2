@@ -48,6 +48,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         airportTripManagementPage.clickOnLoadTripsAirportManagementDetails();
+        takesScreenshot();
     }
 
     @Then("Verify the parameters of loaded trips in Airport Management")

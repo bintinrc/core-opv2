@@ -245,11 +245,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         loadTrips.click();
         waitUntilPageLoaded();
         pause2s();
+        waitUntilVisibilityOfElementLocated("//button//strong[.='Back']");
     }
 
     public void verifyLoadedTripsPageInAirportManagementDetails(Map<String, String> mapOfData) {
         waitUntilVisibilityOfElementLocated("//button//strong[.='Back']");
-        Assertions.assertThat(isElementVisible("//button//strong[.='Back']", 5))
+        Assertions.assertThat(reloadSearch.isDisplayed())
                 .as("Reload appear in Airport trip Management page").isTrue();
 
         String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
