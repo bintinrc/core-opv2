@@ -35,6 +35,8 @@ Feature: Parcel in Incoming Shipment
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
       | hubId      | <OrigHubId>               |
+    And API Operator clears incoming shipment cache
+    And Operator waits for 600 seconds
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<DestHubName>" and proceed
     And Operator verifies that the count in tile: "<TileName1>" has increased by 1
@@ -86,6 +88,8 @@ Feature: Parcel in Incoming Shipment
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
       | hubId      | <OrigHubId>               |
+    And API Operator clears incoming shipment cache
+    And Operator waits for 600 seconds
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<DestHubName>" and proceed
     And Operator verifies that the count in tile: "<TileName1>" has increased by 1
