@@ -42,13 +42,13 @@ Feature: Distribution Point - Delete Dp
       | shipperClientSecret | {shipper-create-new-dp-client-secret}                                                                                                                                                                                                                                                                                            |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator Setting DP Drop Off from order by DP
+    And API Operator Setting DP Drop Off from order by DP
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-create-new-dp-management-client-id}                                                                                                                                                                                                                                                                                     |
       | shipperClientSecret | {shipper-create-new-dp-management-client-secret}                                                                                                                                                                                                                                                                                 |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator Setting the DP Drop Off from order by DP Management
+    And API Operator Setting the DP Drop Off from order by DP Management
     And API Operator Delete newly created DP
     And API Operator Delete newly created DP Management
     When DB Operator get DP Data by DP ID
@@ -56,7 +56,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
-  Scenario: DP Administrations - Authorized Scope - Delete DP - Inactive DP - OpV2 - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Inactive DP - OpV2 - SG (uid:12f0b5b0-4e1a-41f5-bd03-ec820be71c67)
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -78,7 +78,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid DP ID - Failed Delete - OpV2 - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid DP ID - Failed Delete - OpV2 - SG (uid:1c242f5a-a37b-43ea-9f93-31caedb76da0)
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -98,7 +98,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Invalid Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid Partner ID - Failed Delete - OpV2 - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid Partner ID - Failed Delete - OpV2 - SG (uid:2127a0c8-7236-4f9f-a752-6db75eeb9709)
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
