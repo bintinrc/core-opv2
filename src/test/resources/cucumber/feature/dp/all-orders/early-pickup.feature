@@ -5,7 +5,7 @@ Feature: Early Pickup
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep (uid:1d79db4c-4971-4620-bd99-d30fad2e07c7)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
@@ -43,7 +43,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     And Operator verifies the delivery address is doorstep address "51 Lengkok Bahru" and "Redhill MRT"
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender (uid:eab4d313-788d-42d2-bb3e-1b232dbf8b4a)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
@@ -170,7 +170,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     Then Operator verifies the delivery address is rts
 
-  Scenario: Driver Drop Off - Trigger Earlier Pickup - After Pickup Date
+  Scenario: Driver Drop Off - Trigger Earlier Pickup - After Pickup Date (uid:39c04a38-bcba-428f-872a-db10e68b6f04)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
@@ -205,7 +205,7 @@ Feature: Early Pickup
     And Operator apply Early pickup action and chooses "Send To Doorstep" with "date"
     Then Downloaded csv file contains correct orders and message "Requested early pickup_date is after scheduled pickup date"
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Driver Collect
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep - Driver Collect (uid:5cbc4fd3-15e1-4ba8-8d9c-e4a9614381ab)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
@@ -259,7 +259,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     Then Operator verifies the order status is "TRANSIT" and granular status is "ENROUTE_TO_SORTING_HUB"
 
-  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Driver Collect
+  Scenario: Driver Drop Off Order - Trigger Early Pickup - Multiple Orders - Return to Sender - Driver Collect (uid:b1fc4aaf-c616-4b08-80aa-94337c59919f)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
