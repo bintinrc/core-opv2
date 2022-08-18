@@ -2,7 +2,7 @@
 Feature: Distribution Point - Delete Dp
 
   @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
-  Scenario: dp administrations - authorized scope - delete dp - active dp without pending reservations - Success Delete
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Active DP without pending reservations - Success Delete - OpV2 - SG (uid:d3519a57-c19b-40d1-a9d2-77ce99521061)
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -22,7 +22,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner @CompleteDpReservations @ForceSuccessReservationByApi @ForceSuccessOrder
-  Scenario: dp administrations - authorized scope - delete dp - active dp with pending reservations - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Active DP with pending reservations - OpV2 - SG (uid:a39e8933-77c3-40fc-9a08-d23f9269b39a)
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -56,7 +56,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartner @DeleteNewlyCreatedDpManagementPartner
-  Scenario: dp administrations - authorized scope - delete dp - inactive dp - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Inactive DP - OpV2 - SG
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -78,7 +78,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: dp administrations - authorized scope - delete dp - Invalid DP ID - Failed Delete - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid DP ID - Failed Delete - OpV2 - SG
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:
@@ -98,7 +98,7 @@ Feature: Distribution Point - Delete Dp
     Then Operator need to compare both of delete result after "Invalid Delete DP" and make sure both of the data is valid
 
   @DeleteNewlyCreatedDpPartnerAndDp @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: dp administrations - authorized scope - delete dp - Invalid partner ID - Failed Delete - SG
+  Scenario: DP Administrations - Authorized Scope - Delete DP - Invalid Partner ID - Failed Delete - OpV2 - SG
     Given API Operator create new DP partner using data below:
       | createDpPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     Given API Operator create new DP Management partner using data below:

@@ -394,7 +394,9 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
     String postcode = data.get(KEY_POSTCODE);
+    String whitelisted = data.get(KEY_WHITELISTED);
     Addressing addressing = new Addressing();
+
     if (StringUtils.isNotBlank(latlong)) {
       Double latitude = TestUtils.generateLatitude();
       Double longitude = TestUtils.generateLongitude();
@@ -457,6 +459,9 @@ public class AddressDatasourceSteps extends AbstractSteps {
         addressDatasourcePage.postcode.sendKeys(postcode);
       }
       addressing.setPostcode(postcode);
+    }
+    if (StringUtils.isNotBlank(whitelisted)) {
+      addressDatasourcePage.whitelisted.selectValue(whitelisted);
     }
 
     put(KEY_CREATED_ADDRESSING, addressing);
