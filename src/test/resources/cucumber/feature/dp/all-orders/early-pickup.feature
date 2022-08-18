@@ -81,7 +81,7 @@ Feature: Early Pickup
     When API Operator get order details by saved Order ID
     Then Operator verifies the delivery address is rts
 
-  Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep
+  Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Send to Doorstep (uid:3da6f61d-54b9-42ab-8be6-25ea9999f104)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
@@ -125,7 +125,7 @@ Feature: Early Pickup
     And DB operator verifies collect job is created
     When API Operator get order details by saved Order ID
 
-  Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Return to Sender
+  Scenario: Driver Drop Off Order - Overstayed Order - Trigger Early Pickup - Multiple Orders - Return to Sender (uid:976ad5ed-f3c4-43b8-8c3b-aa14684cdf1f)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {opv2-dp-order-creation-shipper-client-id}                                                                                                                                                                                                                                                                                                      |
