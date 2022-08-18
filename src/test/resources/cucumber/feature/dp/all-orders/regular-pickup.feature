@@ -31,6 +31,7 @@ Feature: Regular Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     Given DB Operator set pickup date of DP reservation to current date from Hibernate
@@ -71,6 +72,7 @@ Feature: Regular Pickup
     Given API Operator get order details
     Given DB Operator get DP job id from Hibernate
     Given API Driver v5 success dp drop off
+    And Operator waits for 5 seconds
     When DB Operator gets all details for ninja collect driver drop off confirmed status
     Then Operator verifies that all the details for ninja collect driver drop off confirmed status are right
     When DB Operator removes shipper id from dp id = "{opv2-dp-dp-id}"
