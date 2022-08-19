@@ -401,7 +401,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
       Double latitude = TestUtils.generateLatitude();
       Double longitude = TestUtils.generateLongitude();
       String latlongValue = latitude + "," + longitude;
-      addressDatasourcePage.latlong.sendKeys(Keys.COMMAND + "a");
+      addressDatasourcePage.latlong.forceClear();
       addressDatasourcePage.latlong.sendKeys(latlong);
       addressing.setLatitude(latitude);
       addressing.setLongitude(longitude);
