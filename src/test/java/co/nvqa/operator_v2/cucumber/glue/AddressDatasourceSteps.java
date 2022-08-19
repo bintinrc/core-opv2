@@ -407,55 +407,55 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressing.setLongitude(longitude);
     }
     if (StringUtils.isNotBlank(province)) {
-      addressDatasourcePage.province.sendKeys(Keys.COMMAND + "a");
       if (province.contains("EMPTY")) {
         addressDatasourcePage.province.forceClear();
       } else {
+        addressDatasourcePage.province.forceClear();
         addressDatasourcePage.province.sendKeys(province);
       }
       addressing.setProvince(province);
     }
     if (StringUtils.isNotBlank(kota)) {
-      addressDatasourcePage.kota.sendKeys(Keys.COMMAND + "a");
       if (kota.contains("EMPTY")) {
         addressDatasourcePage.kota.forceClear();
       } else {
+        addressDatasourcePage.kota.forceClear();
         addressDatasourcePage.kota.sendKeys(kota);
       }
       addressing.setCity(kota);
     }
     if (StringUtils.isNotBlank(kecamatan)) {
-      addressDatasourcePage.kecamatan.sendKeys(Keys.COMMAND + "a");
       if (kecamatan.contains("EMPTY")) {
         addressDatasourcePage.kecamatan.forceClear();
       } else {
+        addressDatasourcePage.kecamatan.forceClear();
         addressDatasourcePage.kecamatan.sendKeys(kecamatan);
       }
       addressing.setDistrict(kecamatan);
     }
     if (StringUtils.isNotBlank(barangay)) {
-      addressDatasourcePage.barangay.sendKeys(Keys.COMMAND + "a");
       if (barangay.contains("EMPTY")) {
         addressDatasourcePage.barangay.forceClear();
       } else {
+        addressDatasourcePage.barangay.forceClear();
         addressDatasourcePage.barangay.sendKeys(barangay);
       }
       addressing.setDistrict(barangay);
     }
     if (StringUtils.isNotBlank(municipality)) {
-      addressDatasourcePage.municipality.sendKeys(Keys.COMMAND + "a");
       if (municipality.contains("EMPTY")) {
         addressDatasourcePage.municipality.forceClear();
       } else {
+        addressDatasourcePage.municipality.forceClear();
         addressDatasourcePage.municipality.sendKeys(municipality);
       }
       addressing.setDistrict(municipality);
     }
     if (StringUtils.isNotBlank(postcode)) {
-      addressDatasourcePage.postcode.sendKeys(Keys.COMMAND + "a");
       if (postcode.contains("EMPTY")) {
         addressDatasourcePage.postcode.forceClear();
       } else {
+        addressDatasourcePage.postcode.forceClear();
         addressDatasourcePage.postcode.sendKeys(postcode);
       }
       addressing.setPostcode(postcode);
