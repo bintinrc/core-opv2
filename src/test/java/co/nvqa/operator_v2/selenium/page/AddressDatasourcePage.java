@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -46,6 +47,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='form-input-district']")
   public TextBox barangay;
 
+  @FindBy(css = "[data-testid='form-input-postcode']")
+  public TextBox postcode;
+
+  @FindBy(css = "[data-testid='form-input-whitelist']")
+  public AntSelect3 whitelisted;
+
   @FindBy(xpath = "//span[contains(text(), 'Province')] /following-sibling::span")
   public PageElement provinceAddRow;
 
@@ -67,6 +74,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//span[contains(text(), 'Zone')] /following-sibling::span")
   public PageElement zoneAddRow;
 
+  @FindBy(xpath = "//span[contains(text(), 'Postcode')] /following-sibling::span")
+  public PageElement zoneAddPostcode;
+
   @FindBy(css = ".ant-notification")
   public AntNotification notification;
 
@@ -84,6 +94,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='district']")
   public PageElement createdBarangay;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='postcode']")
+  public PageElement createdPostcode;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='whitelistDisplay']")
+  public PageElement createdWhitelisted;
 
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered table-listing']//tr[1]/td[@class='latLng']")
   public PageElement createdLatlong;
@@ -106,11 +122,17 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='search-input-district']")
   public TextBox barangayTextBox;
 
+  @FindBy(css = "[data-testid='search-input-postcode']")
+  public TextBox postcodeTextBox;
+
   @FindBy(css = "[data-testid='search-button']")
   public Button searchButton;
 
   @FindBy(css = "[for='state']")
   public TextBox provinceTextField;
+
+  @FindBy(css = "[for='postcode']")
+  public TextBox postcodeTextField;
 
   @FindBy(css = "[for='city']")
   public TextBox cityTextField;

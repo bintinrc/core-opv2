@@ -515,6 +515,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpParams.fromMap(data);
     dpAdminPage.editDistributionPoint(currentDpName, dpParams);
     put(KEY_DISTRIBUTION_POINT, dpParams);
+    put(KEY_DISTRIBUTION_POINT_ID, dpParams.getId());
   }
 
   @When("Operator get all DP params on DP Administration page")
@@ -630,6 +631,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator Reset password {string}")
   public void operatorResetPassword(String status) {
+    pause5s();
     DpUser dpUser = get(KEY_DP_USER);
     String username = dpUser.getClientId();
     String password = "password";
