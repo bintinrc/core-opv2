@@ -110,11 +110,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String DETAIL_PAGE_SHIPMENTS_TAB_XPATH = "//div[text()='Shipments' and @role='tab']";
   private static final String DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
   private static final String DETAIL_PAGE_ASSIGN_DRIVER_XPATH = "//span[@data-testid='assign-driver-icon']"; //Helpful for the future - Add driver from detail page, do not remove
-  private static final String SHIPMENTS_TAB_SHIPMENT_ID_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-id']";
-  private static final String SHIPMENTS_TAB_ORIGIN_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orig-hub-name']";
-  private static final String SHIPMENTS_TAB_CURRENT_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-curr-hub-name']";
-  private static final String SHIPMENTS_TAB_DEST_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-dest-hub-name']";
-  private static final String SHIPMENTS_TAB_STATUS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-status' and text()='Status']";
+  private static final String SHIPMENTS_TAB_SHIPMENT_ID_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-id']";
+  private static final String SHIPMENTS_TAB_ORIGIN_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-origin-hub-name']";
+  private static final String SHIPMENTS_TAB_CURRENT_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-last-inbound-hub-name']";
+  private static final String SHIPMENTS_TAB_DEST_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-destination-hub-name']";
+  private static final String SHIPMENTS_TAB_STATUS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-status' and text()='Status']";
   private static final String SHIPMENTS_TAB_SLA_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-sla']";
   private static final String SHIPMENTS_TAB_PARCELS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orders-count']";
   private static final String SHIPMENTS_TAB_SHIPMENT_TYPE_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-type']";
