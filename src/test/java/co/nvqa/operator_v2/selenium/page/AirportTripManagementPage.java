@@ -122,11 +122,32 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button[contains(@data-testid,'edit-airport-button')]")
     public PageElement editAirportButton;
 
+    @FindBy(xpath = "//button[contains(@data-testid,'activate-airport-button')]")
+    public PageElement activateAirportButton;
+
     @FindBy(xpath = "//button[contains(@data-testid,'disable-airport-button')]")
     public PageElement disableAirportButton;
 
     @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Add New Airport']")
     public PageElement addNewAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Edit Airport']")
+    public PageElement editAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Disable Airport?']")
+    public PageElement disableAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[text()='Confirm activation']")
+    public PageElement activateAirportPanel;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Disable']")
+    public PageElement disableButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Cancel']")
+    public PageElement cancelButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Activate']")
+    public PageElement activateButton;
 
     @FindBy(xpath = "//input[@data-testid='airport-code-input']")
     public PageElement airportCodeInput;
@@ -149,8 +170,17 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button[@data-testid='confirm-createAirport-button']")
     public PageElement newAirportSubmit;
 
+    @FindBy(xpath = "//button[@data-testid='confirm-editAirport-button']")
+    public PageElement editAirportSubmit;
+
+    @FindBy(xpath = "//button[@data-testid='confirm-editAirport-button' or @data-testid='confirm-createAirport-button']")
+    public PageElement createOrEditAirportSubmit;
+
     @FindBy(xpath = "//div[.='No data']")
     public PageElement noDataElement;
+
+    @FindBy(xpath = "//div[.='No Results Found']")
+    public PageElement noResultsFound;
 
     @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
     public PageElement antNotificationMessage;
@@ -158,8 +188,14 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
     public PageElement antNotificationDescription;
 
+    @FindBy(xpath = "//div[@class='ant-modal-body']")
+    public PageElement antModalBody;
+
     @FindBy(xpath = "//div[@role='alert']")
     public PageElement validationAlert;
+
+    @FindBy(xpath = "//button//strong[.='Back']")
+    public PageElement backButton;
 
     public static String notificationMessage = "";
 
@@ -212,11 +248,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         loadTrips.click();
         waitUntilPageLoaded();
         pause2s();
+        backButton.waitUntilVisible();
     }
 
     public void verifyLoadedTripsPageInAirportManagementDetails(Map<String, String> mapOfData) {
-        waitUntilVisibilityOfElementLocated("//button//strong[.='Back']");
-        Assertions.assertThat(isElementVisible("//button//strong[.='Back']", 5))
+        backButton.waitUntilVisible();
+        Assertions.assertThat(reloadSearch.isDisplayed())
                 .as("Reload appear in Airport trip Management page").isTrue();
 
         String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
@@ -288,61 +325,70 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("End Of Table appear in Airport trip Management page").isTrue();
     }
 
-    public HashMap filterTheAirportTripsTable(String filter) {
+    public HashMap filterTheAirportTripsTable(String filter, String invalidData) {
         HashMap<String, String> map = new HashMap<>();
+        String searchData = "";
         map.put("COLUMN", filter);
         switch (filter) {
             case "Destination Facility":
                 map.put("COLUMN_NO", "1");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 1)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 1)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDestHubFilter.click();
                 sendKeys(airportDestHubFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Trip ID":
                 map.put("COLUMN_NO", "2");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 2)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 2)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportTripIdFilter.click();
                 sendKeys(airportTripIdFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Origin Facility":
                 map.put("COLUMN_NO", "3");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 3)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 3)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportOriginHubFilter.click();
                 sendKeys(airportOriginHubFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Departure Date Time":
                 map.put("COLUMN_NO", "4");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 4)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 4)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDepartDateTimeFilter.click();
                 sendKeys(airportDepartDateTimeFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Duration":
                 map.put("COLUMN_NO", "5");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 5)).getText());
-                airportDurationFilter.click();
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 5)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 sendKeys(airportDurationFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "MAWB":
                 map.put("COLUMN_NO", "6");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportMawbFilter.click();
                 sendKeys(airportMawbFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Driver":
                 map.put("COLUMN_NO", "7");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 7)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 7)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportDriversFilter.click();
                 sendKeys(airportDriversFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Status":
                 map.put("COLUMN_NO", "8");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 8)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 8)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportStatusFilter.click();
                 sendKeys(airportStatusFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Comments":
                 map.put("COLUMN_NO", "9");
-                map.put("FIRST_DATA", findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 9)).getText());
+                searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 9)).getText() : invalidData;
+                map.put("FIRST_DATA", searchData);
                 airportCommentsFilter.click();
                 sendKeys(airportCommentsFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
@@ -355,7 +401,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyFilteredResultsInAirportTripsTable(HashMap<String, String> map) {
         scrollToEndOfAirportTripsTable();
         Assertions.assertThat(
-                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_ID"), map.get("FIRST_DATA"))).size())
+                findElementsByXpath(f(XPATH_TABLE_NOT_CONTAINS_TD, map.get("COLUMN_NO"), map.get("FIRST_DATA"))).size())
                 .as(f("All the records with %s as '%s' are displayed.", map.get("COLUMN"), map.get("FIRST_DATA")))
                 .isZero();
     }
@@ -466,7 +512,132 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyTheValidationErrorInAirportCreation(String expError) {
         Assertions.assertThat(validationAlert.getText()).as("Validation error message is same")
                 .contains(expError);
-        Assertions.assertThat(newAirportSubmit.isEnabled())
+        Assertions.assertThat(createOrEditAirportSubmit.isEnabled())
                 .as("New airport submit button is disabled").isFalse();
+    }
+
+    public void editExistingAirport(String editField, Map<String, String> updatedMap, Map<String, String> origMap) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(origMap.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        editAirportButton.click();
+        editAirportPanel.waitUntilVisible();
+
+        switch (editField) {
+            case "airportCode":
+                clearWebField(airportCodeInput.getWebElement());
+                airportCodeInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "airportName":
+                clearWebField(airportNameInput.getWebElement());
+                airportNameInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "city":
+                clearWebField(airportCityInput.getWebElement());
+                airportCityInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "region":
+                clearWebField(airportRegionInput.getWebElement());
+                airportRegionInput.click();
+                sendKeysAndEnterById("createAirportForm_region", updatedMap.get(editField));
+                break;
+            case "latitude":
+                clearWebField(airportLatitudeInput.getWebElement());
+                airportLatitudeInput.sendKeys(updatedMap.get(editField));
+                break;
+            case "longitude":
+                clearWebField(airportLongitudeInput.getWebElement());
+                airportLongitudeInput.sendKeys(updatedMap.get(editField));
+                break;
+            default:
+                LOGGER.warn("Search type is not found");
+        }
+        editAirportSubmit.click();
+    }
+
+    public void disableExistingAirport(Map<String, String> map) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        disableAirportButton.click();
+        disableAirportPanel.waitUntilVisible();
+
+        String message = antModalBody.getText();
+
+        Assertions.assertThat(message).as("Are you sure you want to submit changes?")
+                .contains("Warning: Disabling the selected airport will result in the following. " +
+                        "Are you sure you want to submit changes?");
+        Assertions.assertThat(message).as("Remove some shipment schedules")
+                .contains("Remove some shipment schedules");
+        Assertions.assertThat(message).as("Remove some shipment paths")
+                .contains("Remove some shipment paths");
+        Assertions.assertThat(message).as("Remove all sort airport currently tie to the hub")
+                .contains("Remove all sort airport currently tie to the hub");
+        Assertions.assertThat(message).as("Current zone mapping tied to this airport will need to be updated")
+                .contains("Current zone mapping tied to this airport will need to be updated");
+        Assertions.assertThat(message).as("Selected airport ACJ will be removed and disabled.")
+                .contains(f("Selected airport %s will be removed and disabled.", map.get("airportCode")));
+    }
+
+    public void clickOnCancelOrDisable(String buttonName) {
+        retryIfAssertionErrorOccurred(() ->
+        {
+            try {
+                if(buttonName.equalsIgnoreCase("Disable")){
+                    disableButton.click();
+                    pause3s();
+                    Assertions.assertThat(disableAirportPanel.isDisplayed()).as("Disable panel displayed")
+                            .isFalse();
+                } else if(buttonName.equalsIgnoreCase("Cancel")){
+                    cancelButton.click();
+                }else if(buttonName.equalsIgnoreCase("Activate")){
+                    activateButton.click();
+                    pause3s();
+                    Assertions.assertThat(activateAirportPanel.isDisplayed()).as("Activate panel displayed")
+                            .isFalse();
+                }
+            } catch (AssertionError ex) {
+                throw ex;
+            }
+        }, "retry", 500, 3);
+
+    }
+
+    public void verifyButton(Map<String, String> map, String buttonName) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+        if(buttonName.equalsIgnoreCase("Activate")){
+            Assertions.assertThat(activateAirportButton.isDisplayed()).as("Activate button is displayed")
+                    .isTrue();
+        }else if(buttonName.equalsIgnoreCase("Disable")){
+            Assertions.assertThat(disableAirportButton.isDisplayed()).as("Disable button is displayed")
+                    .isTrue();
+        }
+    }
+
+    public void activateExistingAirport(Map<String, String> map) {
+        clearWebField(airportCodeFilter.getWebElement());
+        airportCodeFilter.sendKeys(map.get("airportCode"));
+        Assertions.assertThat(noDataElement.isDisplayed()).as("Records are present")
+                .isFalse();
+
+        activateAirportButton.click();
+        activateAirportPanel.waitUntilVisible();
+
+        String message = antModalBody.getText();
+
+        Assertions.assertThat(message).as("This action will RE-ACTIVATE selected Airport, continue?")
+                .contains("This action will RE-ACTIVATE selected Airport, continue?");
+    }
+
+    public void verifyNoResultsFound(){
+        Assertions.assertThat(noResultsFound.isDisplayed()).as("Records are not present")
+                .isTrue();
     }
 }

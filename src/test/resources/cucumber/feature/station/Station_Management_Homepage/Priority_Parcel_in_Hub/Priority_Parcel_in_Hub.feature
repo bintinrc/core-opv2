@@ -1617,8 +1617,8 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName    | HubId        | TileName                | ModalName               | Filter   | FSRModalTitle                                |
-      | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Shipper Issue (uid:5cbabffd-dd14-4604-905b-191cfb44e93f)

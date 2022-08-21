@@ -48,6 +48,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         airportTripManagementPage.clickOnLoadTripsAirportManagementDetails();
+        takesScreenshot();
     }
 
     @Then("Verify the parameters of loaded trips in Airport Management")
@@ -62,7 +63,12 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @And("Operator search the {string} column")
     public void operatorSearchesInAirportManagement(String filter) {
-        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter));
+        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter, ""));
+    }
+
+    @And("Operator search the {string} column with invalid data {string}")
+    public void operatorSearchesInAirportManagement(String filter, String invalidData) {
+        put("KEY_AIRPORT_MANAGEMENT_FILTER", airportTripManagementPage.filterTheAirportTripsTable(filter, invalidData));
     }
 
     @And("Verify only filtered results are displayed")
@@ -106,5 +112,46 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Verify the validation error {string} is displayed")
     public void verifyTheValidationErrorInAirportCreation(String expError) {
         airportTripManagementPage.verifyTheValidationErrorInAirportCreation(expError);
+    }
+
+    @Then("Edit the {string} for created Airport")
+    public void operatorAddsNewAirport(String editField, Map<String, String> mapOfData) {
+        Map<String, String> map = get("KEY_NEW_AIRPORT_DETAILS");
+        Map<String, String> updatedMap = new HashMap<>();
+        updatedMap.putAll(map);
+        updatedMap.put(editField, mapOfData.get(editField));
+        airportTripManagementPage.editExistingAirport(editField, updatedMap, map);
+        put("KEY_UPDATED_AIRPORT_DETAILS", updatedMap);
+        putInList("KEY_NEW_AIRPORT_LIST", mapOfData.get("airportCode"));
+    }
+
+    @And("Verify the newly updated airport values in table")
+    public void verifyNewlyUpdatedAirport() {
+        airportTripManagementPage.verifyNewlyCreatedAirport(get("KEY_UPDATED_AIRPORT_DETAILS"));
+    }
+
+    @Then("Operator click on Disable button for the created Airport in table")
+    public void operatorDisableNewAirport() {
+        airportTripManagementPage.disableExistingAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+    }
+
+    @Then("Click on {string} button on panel")
+    public void operatorClickOnCancelOrDisable(String buttonName) {
+        airportTripManagementPage.clickOnCancelOrDisable(buttonName);
+    }
+
+    @Then("Operator click on Activate button for the created Airport in table")
+    public void operatorActivteNewAirport() {
+        airportTripManagementPage.activateExistingAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+    }
+
+    @Then("Verify the airport is displayed with {string} button")
+    public void verifyTheButtonIsDisplayed(String buttonName) {
+        airportTripManagementPage.verifyButton(get("KEY_NEW_AIRPORT_DETAILS"), buttonName);
+    }
+
+    @Then("Operator verifies that no data appear on Airport Trips page")
+    public void operatorVerifiesNoDataDisplayOnAirportTrips(){
+        airportTripManagementPage.verifyNoResultsFound();
     }
 }

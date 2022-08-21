@@ -381,6 +381,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
   public void openViewDpsScreen(String dpPartnerName) {
     dpPartnersTable.filterByColumn("name", dpPartnerName);
+    pause3s();
     dpPartnersTable.clickActionButton(1, "View DPs");
   }
 
@@ -906,6 +907,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void welcomePageDisplayed() {
+    waitUntilVisibilityOfElementLocated(XPATH_WELCOME_PAGE_NINJA_POINT);
     Assertions.assertThat(isElementVisible(XPATH_WELCOME_PAGE_NINJA_POINT))
         .as("welcome page is displayed").isTrue();
   }

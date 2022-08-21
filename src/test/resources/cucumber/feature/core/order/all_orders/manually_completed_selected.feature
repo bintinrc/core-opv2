@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @AllOrders @ForceSuccess
+@OperatorV2 @Core @AllOrders @ForceSuccess
 Feature: All Orders - Manually Completed Selected
 
   @LaunchBrowser @ShouldAlwaysRun
