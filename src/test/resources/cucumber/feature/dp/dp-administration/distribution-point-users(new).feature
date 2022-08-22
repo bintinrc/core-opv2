@@ -89,8 +89,8 @@ Feature: DP Administration - Distribution Point Users
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpUserCheckManagement | onUserCheckManagement | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username                                | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | firstName | lastName | contactNo    | email            | username                                    | password |
+      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | USERNAME{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
@@ -126,7 +126,7 @@ Feature: DP Administration - Distribution Point Users
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
       | firstName | lastName | contactNo    | email            | username                                | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | USER{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |

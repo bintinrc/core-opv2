@@ -930,6 +930,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
+    pause3s();
     String xpathClearAllSelection = "//div[contains(text(),'Clear All Selections')]/parent::button";
     moveToElementWithXpath(xpathClearAllSelection);
     click(xpathClearAllSelection);
