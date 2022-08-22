@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Airport;
+import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
