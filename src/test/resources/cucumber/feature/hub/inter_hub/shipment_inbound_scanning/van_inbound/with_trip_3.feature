@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip3 @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip3
 Feature: Shipment Van Inbound With Trip Scanning 3
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -474,7 +474,7 @@ Feature: Shipment Van Inbound With Trip Scanning 3
 #      | hubId             | {KEY_LIST_OF_CREATED_HUBS[1].id}                  |
 #      | descriptionString | Inbounded at Hub {KEY_LIST_OF_CREATED_HUBS[1].id} |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths @RT
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound with Missing Shipment (uid:6ab1af92-2ff5-4d19-a190-14627dde199e)
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -687,7 +687,7 @@ Feature: Shipment Van Inbound With Trip Scanning 3
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator verify new Hubs are created
+#    And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
