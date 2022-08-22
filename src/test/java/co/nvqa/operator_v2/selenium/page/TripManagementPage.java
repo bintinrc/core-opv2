@@ -327,8 +327,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     Long actualTripManagementSum = (long) tripManagementList.size();
-    assertThat("Sum of Trip Management", actualTripManagementSum, equalTo(tripManagementCount));
-
+    Assertions.assertThat(actualTripManagementSum)
+        .as("Sum of Trip Management")
+        .isEqualTo(tripManagementCount);
   }
 
   public void searchAndVerifiesTripManagementIsExistedById(Long tripManagementId) {
