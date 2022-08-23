@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.slf4j.Logger;
@@ -85,8 +87,8 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @Then("Operator Add new Airport")
     public void operatorAddsNewAirport(Map<String, String> mapOfData) {
         airportTripManagementPage.createNewAirport(mapOfData);
-        put("KEY_NEW_AIRPORT_DETAILS", mapOfData);
-        putInList("KEY_NEW_AIRPORT_LIST", mapOfData.get("airportCode"));
+        put(KEY_NEW_AIRPORT_DETAILS, mapOfData);
+        putInList(KEY_NEW_AIRPORT_LIST, mapOfData.get("airportCode"));
     }
 
     @And("Verify the new airport {string} created success message")
@@ -96,7 +98,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @And("Verify the newly created airport values in table")
     public void verifyNewlyCreatedAirport() {
-        airportTripManagementPage.verifyNewlyCreatedAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+        airportTripManagementPage.verifyNewlyCreatedAirport(get(KEY_NEW_AIRPORT_DETAILS));
     }
 
     @And("Capture the error in Airport Trip Management Page")
@@ -109,30 +111,93 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyTheErrorInAirportCreation(expError);
     }
 
+    @Given("Operator search airport by {string}")
+    public void operatorSeachAirport(String searchValue){
+        String invalidValue = "AAAAA";
+        Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
+        switch (searchValue.toLowerCase()){
+            case "id":
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, airport.getId().toString());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportIdFilter, invalidValue);
+                }
+                break;
+            case "airport code":
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, airport.getAirport_code());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCodeFilter, invalidValue);
+                }
+                break;
+            case "airport name":
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, airport.getAirport_name());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportNameFilter, invalidValue);
+                }
+                break;
+            case "city":
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, airport.getCity());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportCityFilter, invalidValue);
+                }
+                break;
+            case "region":
+                if(!(airport ==null)){
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, airport.getRegion());
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportRegionFilter, invalidValue);
+                }
+                break;
+            case "latitude, longitude":
+                if(!(airport ==null)){
+                    String longLat = airport.getLatitude().toString()+", "+airport.getLongitude().toString();
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, longLat);
+                } else {
+                    airportTripManagementPage.searchAirport(airportTripManagementPage.airportLatitudeLongitudeFilter, invalidValue);
+                }
+                break;
+        }
+    }
+
+    @Then("Operator verifies the search airport on Airport Facility page")
+    public void operatorVerifiesSearchAirport() {
+        Airport airport = get(KEY_NEW_AIRPORT_DETAILS);
+        airportTripManagementPage.verifySearchedAirport(airport);
+    }
+
     @And("Verify the validation error {string} is displayed")
     public void verifyTheValidationErrorInAirportCreation(String expError) {
         airportTripManagementPage.verifyTheValidationErrorInAirportCreation(expError);
+
+    }
+
+    @Then("Operator verifies that no data appear on Airport Facility page")
+    public void operatorVerifiesNoDataDisplay(){
+        airportTripManagementPage.verifyNodataDisplay();
     }
 
     @Then("Edit the {string} for created Airport")
     public void operatorAddsNewAirport(String editField, Map<String, String> mapOfData) {
-        Map<String, String> map = get("KEY_NEW_AIRPORT_DETAILS");
+        Map<String, String> map = get(KEY_NEW_AIRPORT_DETAILS);
         Map<String, String> updatedMap = new HashMap<>();
         updatedMap.putAll(map);
         updatedMap.put(editField, mapOfData.get(editField));
         airportTripManagementPage.editExistingAirport(editField, updatedMap, map);
-        put("KEY_UPDATED_AIRPORT_DETAILS", updatedMap);
-        putInList("KEY_NEW_AIRPORT_LIST", mapOfData.get("airportCode"));
+        put(KEY_UPDATED_AIRPORT_DETAILS, updatedMap);
+        putInList(KEY_NEW_AIRPORT_LIST, mapOfData.get("airportCode"));
     }
 
     @And("Verify the newly updated airport values in table")
     public void verifyNewlyUpdatedAirport() {
-        airportTripManagementPage.verifyNewlyCreatedAirport(get("KEY_UPDATED_AIRPORT_DETAILS"));
+        airportTripManagementPage.verifyNewlyCreatedAirport(get(KEY_UPDATED_AIRPORT_DETAILS));
     }
 
     @Then("Operator click on Disable button for the created Airport in table")
     public void operatorDisableNewAirport() {
-        airportTripManagementPage.disableExistingAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+        airportTripManagementPage.disableExistingAirport(get(KEY_NEW_AIRPORT_DETAILS));
     }
 
     @Then("Click on {string} button on panel")
@@ -142,12 +207,12 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Operator click on Activate button for the created Airport in table")
     public void operatorActivteNewAirport() {
-        airportTripManagementPage.activateExistingAirport(get("KEY_NEW_AIRPORT_DETAILS"));
+        airportTripManagementPage.activateExistingAirport(get(KEY_NEW_AIRPORT_DETAILS));
     }
 
     @Then("Verify the airport is displayed with {string} button")
     public void verifyTheButtonIsDisplayed(String buttonName) {
-        airportTripManagementPage.verifyButton(get("KEY_NEW_AIRPORT_DETAILS"), buttonName);
+        airportTripManagementPage.verifyButton(get(KEY_NEW_AIRPORT_DETAILS), buttonName);
     }
 
     @Then("Operator verifies that no data appear on Airport Trips page")
