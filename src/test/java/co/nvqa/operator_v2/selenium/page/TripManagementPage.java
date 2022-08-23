@@ -234,9 +234,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
-
-
-
+  private static String movementTripFilterTextXpath = "//span[@title='%s']";
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -290,12 +288,21 @@ public class TripManagementPage extends OperatorV2SimplePage {
     if (filterName.equalsIgnoreCase("originhub")) {
       TestUtils.findElementAndClick(originHub, "xpath", getWebDriver());
       sendKeysAndEnter(originHub, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Origin hub is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("movementtype")) {
       movementTypeFilterPage.click();
       sendKeysAndEnter(movementType, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Movement type is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
       TestUtils.findElementAndClick(destinationHub, "xpath", getWebDriver());
       sendKeysAndEnter(destinationHub, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Destination hub is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("OneTimeOriginHub")) {
       TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
       sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, filterValue);
