@@ -795,7 +795,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     shipmentToGo.waitUntilVisible();
     String shipmentToGoText = shipmentToGo.getText().trim();
     Long actualShipmentToGoCount = Long.valueOf(shipmentToGoText.split(" ")[0]);
-    assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    Assertions.assertThat(expectedTotalShipment).isEqualTo(actualShipmentToGoCount);
   }
 
   public void verifyShipmentToUnload(Long expectedTotalShipment) {
