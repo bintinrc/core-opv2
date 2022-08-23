@@ -699,7 +699,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     switchTo();
     shipmentDetailPageShipmentId.waitUntilVisible();
     String expectedShipmentIdString = f("Shipment ID : %s", shipmentIdAsString);
-    assertEquals(expectedShipmentIdString, shipmentDetailPageShipmentId.getText());
+    Assertions.assertThat(expectedShipmentIdString).isEqualTo(shipmentDetailPageShipmentId.getText());
   }
 
   public void verifyTripData(String expectedInboundHub, String expectedInboundType,
@@ -749,8 +749,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
-//    waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
-//    waitUntilInvisibilityOfElementLocated("//td[contains(@class, 'tracking-id')][.='"+shipmentId+"]'");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
@@ -758,7 +756,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       try {
         waitUntilVisibilityOfElementLocated(XPATH_SMALL_SUCCESS_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-        assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
@@ -772,7 +770,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String[] expected = expectedSuccessMessage.split("\n");
         waitUntilVisibilityOfElementLocated(XPATH_SCANTEXT_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SCANTEXT_MESSAGE).getText();
-        assertThat("ScanText message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+        Assertions.assertThat(actualSuccessMessage).as("ScanText message is equal").isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
@@ -784,7 +782,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String actualSuccessMessage = smallRemoveMessage.getText();
-        assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedRemoveMessage));
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedRemoveMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
