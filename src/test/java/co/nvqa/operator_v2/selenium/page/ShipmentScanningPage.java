@@ -435,8 +435,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
           actualToastMessage = antNotificationMessage;
         }
         antNotificationMessage = "";
-        assertThat("Shipment inbound toast message is the same", actualToastMessage,
-            equalTo(expectedToastMessage));
+        Assertions.assertThat(actualToastMessage).as("Shipment inbound toast message is the same").isEqualTo(expectedToastMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
