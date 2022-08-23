@@ -24,7 +24,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
@@ -52,7 +54,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
@@ -136,7 +140,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
@@ -170,7 +176,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
@@ -276,7 +284,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -306,7 +316,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -338,7 +350,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -380,9 +394,10 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator clicks on "Archive" tab
-    And Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
-    And Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator sets movement trips filter with data below:
+      | tab            | Archive                            |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     Then Operator verifies that the trip management shown in "departure" tab is correct
@@ -411,7 +426,9 @@ Feature: Movement Trip - Assign Driver
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator clicks on "assign_driver" icon on the action column
