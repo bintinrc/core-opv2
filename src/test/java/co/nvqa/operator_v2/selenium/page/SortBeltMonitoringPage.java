@@ -6,14 +6,18 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
 
 public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPage> {
 
@@ -38,7 +42,7 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
   @FindBy(css = ".ant-skeleton")
   public PageElement loadingIndicator;
 
-  @FindBy(css = ".ant-select-selector")
+  @FindBy(css = ".ant-select-multiple .ant-select-selector")
   public AntSelect3 trackingIDSearchSelect;
 
   @FindBy(xpath = ".//input[@placeholder='Search Arm ID']")
@@ -166,13 +170,54 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
     loadingIndicator.waitUntilInvisible(10);
   }
 
-  public void selectSessionItemByName(String sessionName) {
-    Optional<SessionItem> sessionItem = listSessionItems.stream()
+  public SessionItem findSessionItemByName(String sessionName) {
+    SessionItem sessionItem = listSessionItems.stream()
         .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
-        .findFirst();
-    sessionItem.get().click();
+        .findFirst().orElse(null);
+    return sessionItem;
+  }
+
+  public void selectSessionItemByName(String sessionName) {
+    waitForSessionItemDisplayed(sessionName);
+    SessionItem session = listSessionItems.stream()
+        .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
+        .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("No session [%s] found", sessionName)));
+    session.click();
     loadingIndicator.waitUntilInvisible(10);
   }
 
+  public void waitForSessionItemDisplayed(String sessionName) {
+    new FluentWait<WebDriver>(getWebDriver())
+        .pollingEvery(Duration.ofSeconds(5))
+        .withTimeout(Duration.ofMinutes(2))
+        .ignoring(NoSuchElementException.class)
+        .until(new Function<WebDriver, Boolean>() {
+          public Boolean apply(WebDriver webDriver) {
+            System.out.println(String.format("Wait for the Session [%s] displayed..", sessionName));
+          /*  List<WebElement> listItems = findElementsBy(By.cssSelector("li.ant-list-item"));
+            WebElement session = listItems.stream()
+                .filter(item -> StringUtils.equals(item.findElement(By.xpath(
+                            "//li[contains(@class,'ant-list-item')]//div[contains(@class,'sessionItem')]/div[1]/div[1]"))
+                        .getText(),
+                    sessionName))
+                .findAny().orElse(null);*/
+            SessionItem session = listSessionItems.stream()
+                .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
+                .findAny().orElse(null);
+            if (session != null) {
+              System.out.println(String.format("The Session [%s] is displayed!!", sessionName));
+              return true;
+            }
+            refreshPage_v1();
+            switchTo();
+            return false;
+          }
+        });
+  }
+
+  public void selectSessionItemByNameWithWait(String sessionName) {
+
+    loadingIndicator.waitUntilInvisible(10);
+  }
 
 }
