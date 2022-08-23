@@ -695,7 +695,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void verifyShipmentDetailPageIsOpenedForShipmentWithId(String shipmentIdAsString) {
     pageTitle.waitUntilVisible();
     String expectedPageTitle = "Shipment Details";
-    assertEquals(expectedPageTitle, pageTitle.getText());
+    Assertions.assertThat(expectedPageTitle).isEqualTo(pageTitle.getText());
     switchTo();
     shipmentDetailPageShipmentId.waitUntilVisible();
     String expectedShipmentIdString = f("Shipment ID : %s", shipmentIdAsString);
