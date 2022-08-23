@@ -523,8 +523,6 @@ Feature: Shipment Van Inbound With Trip Scanning 3
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[3].id} } |
     And API Operator put created parcel to shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}"
-#    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
-#    And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 2
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
@@ -687,7 +685,6 @@ Feature: Shipment Van Inbound With Trip Scanning 3
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-#    And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
@@ -704,7 +701,6 @@ Feature: Shipment Van Inbound With Trip Scanning 3
     And Operator click start inbound
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     And Click on No, goback on dialog box for shipment "{KEY_CREATED_SHIPMENT_ID}"
-#    And Capture the toast with message is shown on Shipment Inbound Scanning page
     Then Operator verifies toast with message "Shipment {KEY_CREATED_SHIPMENT_ID} is in terminal state: [Cancelled]" is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -754,7 +750,6 @@ Feature: Shipment Van Inbound With Trip Scanning 3
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-#    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
     And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
