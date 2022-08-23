@@ -802,7 +802,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     shipmentToUnload.waitUntilVisible();
     String shipmentToUnloadText = shipmentToUnload.getText().trim();
     Long actualShipmentToGoCount = Long.valueOf(shipmentToUnloadText.split(" ")[0]);
-    assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    Assertions.assertThat(expectedTotalShipment).isEqualTo(actualShipmentToGoCount);
   }
 
   public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
@@ -810,7 +810,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     for (PageElement shipmentIdElement : shipmentIdList) {
       String currentShipmentId = shipmentIdElement.getText();
       if (shipmentId.equals(currentShipmentId)) {
-        assertEquals(shipmentId, currentShipmentId);
+        Assertions.assertThat(shipmentId).isEqualTo(currentShipmentId);
         shipmentIdElement.scrollIntoView();
         return;
       }
