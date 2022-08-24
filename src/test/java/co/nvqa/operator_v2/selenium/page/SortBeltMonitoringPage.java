@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPage> {
 
@@ -53,6 +54,8 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
 
   @FindBy(css = "div.ant-table tr.ant-table-row td.ant-table-cell:nth-of-type(2)")
   public List<PageElement> armIDCells;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SortBeltMonitoringPage.class);
 
   public SortBeltMonitoringPage(WebDriver webDriver) {
     super(webDriver);
@@ -170,13 +173,6 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
     loadingIndicator.waitUntilInvisible(10);
   }
 
-  public SessionItem findSessionItemByName(String sessionName) {
-    SessionItem sessionItem = listSessionItems.stream()
-        .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
-        .findFirst().orElse(null);
-    return sessionItem;
-  }
-
   public void selectSessionItemByName(String sessionName) {
     waitForSessionItemDisplayed(sessionName);
     SessionItem session = listSessionItems.stream()
@@ -187,37 +183,22 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
   }
 
   public void waitForSessionItemDisplayed(String sessionName) {
-    new FluentWait<WebDriver>(getWebDriver())
+    new FluentWait<>(getWebDriver())
         .pollingEvery(Duration.ofSeconds(5))
         .withTimeout(Duration.ofMinutes(2))
         .ignoring(NoSuchElementException.class)
-        .until(new Function<WebDriver, Boolean>() {
-          public Boolean apply(WebDriver webDriver) {
-            System.out.println(String.format("Wait for the Session [%s] displayed..", sessionName));
-          /*  List<WebElement> listItems = findElementsBy(By.cssSelector("li.ant-list-item"));
-            WebElement session = listItems.stream()
-                .filter(item -> StringUtils.equals(item.findElement(By.xpath(
-                            "//li[contains(@class,'ant-list-item')]//div[contains(@class,'sessionItem')]/div[1]/div[1]"))
-                        .getText(),
-                    sessionName))
-                .findAny().orElse(null);*/
-            SessionItem session = listSessionItems.stream()
-                .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
-                .findAny().orElse(null);
-            if (session != null) {
-              System.out.println(String.format("The Session [%s] is displayed!!", sessionName));
-              return true;
-            }
-            refreshPage_v1();
-            switchTo();
-            return false;
+        .until(webDriver -> {
+          LOGGER.info(String.format("Wait for the Session [%s] displayed..", sessionName));
+          SessionItem session = listSessionItems.stream()
+              .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
+              .findAny().orElse(null);
+          if (session != null) {
+           LOGGER.info(String.format("The Session [%s] is displayed!!", sessionName));
+            return true;
           }
+          refreshPage_v1();
+          switchTo();
+          return false;
         });
   }
-
-  public void selectSessionItemByNameWithWait(String sessionName) {
-
-    loadingIndicator.waitUntilInvisible(10);
-  }
-
 }
