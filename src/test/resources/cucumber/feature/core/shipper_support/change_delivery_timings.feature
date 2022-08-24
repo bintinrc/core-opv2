@@ -1,4 +1,4 @@
-@OperatorV2 @Core @ShipperSupport @ChangeDeliveryTimings
+@OperatorV2 @Core @ShipperSupport @ChangeDeliveryTimings @runupdateaddress
 Feature: Change Delivery Timings
 
   @LaunchBrowser @ShouldAlwaysRun
