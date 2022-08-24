@@ -30,7 +30,9 @@ Feature: Movement Trip - View Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
@@ -67,8 +69,9 @@ Feature: Movement Trip - View Trips
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    When Operator clicks on "Arrival" tab
-    When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Arrival                          |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
@@ -129,7 +132,9 @@ Feature: Movement Trip - View Trips
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -164,7 +169,6 @@ Feature: Movement Trip - View Trips
       | actionType     | ADD                                                     |
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
-
     And API Operator depart trip with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
@@ -172,7 +176,9 @@ Feature: Movement Trip - View Trips
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
     When Operator clicks on "Arrival" tab
-    When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator sets movement trips filter with data below:
+      | tab            | Arrival                            |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -213,9 +219,10 @@ Feature: Movement Trip - View Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator clicks on "Archive" tab
-    And Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
-    And Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator sets movement trips filter with data below:
+      | tab            | Archive                            |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
@@ -253,7 +260,9 @@ Feature: Movement Trip - View Trips
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator refresh page
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator sets movement trips filter with data below:
+      | tab       | Departure                          |
+      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     When Operator clicks on "view" icon on the action column
