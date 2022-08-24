@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @BatchOrder
+@OperatorV2 @Core @NewFeatures @BatchOrder @NewFeatures2
 Feature: Batch Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -46,7 +46,7 @@ Feature: Batch Order
 
   @DeleteOrArchiveRoute
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup (uid:4802ac7b-e874-49b2-96bb-cf56451f1cae)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                               |
@@ -92,7 +92,7 @@ Feature: Batch Order
 
   @DeleteOrArchiveRoute
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail (uid:6daf555d-d582-4328-9f68-d04b98e6931b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                               |
@@ -140,7 +140,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
   Scenario: Rollback Order - Valid Batch Id, Status = Staging (uid:b4cbfdac-28df-4d85-9e16-578c4d3d473c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -180,7 +180,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
   Scenario: Rollback Order - Invalid Batch Id (uid:d52ba19e-b344-48a5-a264-a7101450934e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Batch Order
     And Operator search for "1111" batch on Batch Orders page
     Then Operator verifies that error toast displayed:
@@ -188,7 +188,7 @@ Feature: Batch Order
       | bottom | ^.*Error Message: Order batch with batch id 1111 not found!.* |
 
   Scenario: Rollback Order - Valid Batch Id, Order Not Allowed to be Deleted (uid:57cfd4b5-5631-436e-818b-5a6ff1e21830)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates a batch
     And API Shipper create V4 order under batch using data below:
       | batchId             | {KEY_CREATED_BATCH_ID}                                                                                                                                                                                                                                                                                                                                                                    |

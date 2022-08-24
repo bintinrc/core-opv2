@@ -13,7 +13,7 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force created order status to Completed
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -31,7 +31,7 @@ Feature: Add To Shipment 4
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -58,7 +58,7 @@ Feature: Add To Shipment 4
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -87,7 +87,7 @@ Feature: Add To Shipment 4
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -131,7 +131,7 @@ Feature: Add To Shipment 4
       | creatorUserNameId       | 39                          |
       | creatorUserEmailId      | 66                          |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
       | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
@@ -172,10 +172,11 @@ Feature: Add To Shipment 4
       | name        | ADDED TO SHIPMENT                                                                                              |
       | hubName     | {hub-name}                                                                                                     |
       | description | Shipment {KEY_CREATED_SHIPMENT_ID} bound for Hub {KEY_DESTINATION_HUB_ID} ({KEY_CREATED_ORDER.destinationHub}) |
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                           |
       | id           | {KEY_CREATED_SHIPMENT_ID}          |
       | status       | Pending                            |
@@ -206,11 +207,13 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Closed on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Closed |
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Folded 70x50 mm
@@ -233,11 +236,13 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Closed on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Closed |
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Single 100x150 mm
@@ -260,11 +265,13 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Closed on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Closed |
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Folded 100x150 mm
@@ -287,11 +294,13 @@ Feature: Add To Shipment 4
     And Operator close shipment on Add to Shipment page
     Then Operator verifies that notification displayed:
       | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
-    When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Closed on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
-      | status | Closed |
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
 
   @DeleteShipment
   Scenario: Create New Shipment - with selected origin hub
@@ -309,10 +318,11 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType    | AIR_HAUL                                            |
       | id              | {KEY_CREATED_SHIPMENT_ID}                           |
       | userId          | {operator-portal-uid}                               |
@@ -345,10 +355,11 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType    | AIR_HAUL                                            |
       | id              | {KEY_CREATED_SHIPMENT_ID}                           |
       | userId          | {operator-portal-uid}                               |
@@ -381,10 +392,11 @@ Feature: Add To Shipment 4
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType    | <shipmentTypeTable>                                 |
       | id              | {KEY_CREATED_SHIPMENT_ID}                           |
       | userId          | {operator-portal-uid}                               |
@@ -424,10 +436,11 @@ Feature: Add To Shipment 4
       | comments | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
-    When Operator go to menu Inter-Hub -> Shipment Management
+    And Operator go to menu Inter-Hub -> Shipment Management
+#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType    | AIR_HAUL                                            |
       | id              | {KEY_CREATED_SHIPMENT_ID}                           |
       | userId          | {operator-portal-uid}                               |

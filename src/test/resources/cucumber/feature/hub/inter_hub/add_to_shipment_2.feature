@@ -7,7 +7,7 @@ Feature: Add To Shipment 2
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Multiple Parcels to Shipment (uid:2b1021d1-828f-437c-a095-baebbae1d8c7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -15,14 +15,14 @@ Feature: Add To Shipment 2
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB_ID}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan multiple created order to shipment in hub {hub-name-2} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Action Toggle (uid:ffad1735-0cb1-43ac-a6f2-2fe32cfcfadf)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -30,7 +30,7 @@ Feature: Add To Shipment 2
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB_ID}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan multiple created order to shipment in hub {hub-name-2} to hub id = {KEY_DESTINATION_HUB}
     And Operator removes all the parcel from the shipment
@@ -38,7 +38,7 @@ Feature: Add To Shipment 2
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Add Arrived at Distribution Point Parcel to Shipment (uid:af227045-0411-4130-a054-124ac1b6edb8)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -59,25 +59,18 @@ Feature: Add To Shipment 2
     And API Operator do the DP Success for From Driver Flow
     Given API Driver "2.2" success dp drop off
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel to Shipment with Alert (uid:21ff371d-e507-453a-9d4a-f37c18037aa7)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    Given Operator intends to create a new Shipment directly from the Shipment Toast
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify parameters of the created multiple shipment on Shipment Management page
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     And Set temporary order:
       | constantOrder  | {indonesia-default-order} |
@@ -86,19 +79,19 @@ Feature: Add To Shipment 2
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Pending Pickup Parcel to Shipment (uid:8588eec2-d295-4ea2-9760-7aca19564882)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
 
   @DeleteShipment
   Scenario: Add Pending Pickup at Distribution Point Parcel to Shipment (uid:d2181800-29d5-4f12-a344-7198446b0599)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -106,7 +99,7 @@ Feature: Add To Shipment 2
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator verifies that the row of the added order is red highlighted

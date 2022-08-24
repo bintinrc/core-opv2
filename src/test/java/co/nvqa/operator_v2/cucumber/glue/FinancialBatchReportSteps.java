@@ -115,7 +115,16 @@ public class FinancialBatchReportSteps extends AbstractSteps {
       throw new NvTestRuntimeException("There were no financial batch report data in CSV");
     }
 
-    FinancialBatchReportEntry financialBatchReportEntryCsv = listOfBatchEntries.get(0);
+    FinancialBatchReportEntry financialBatchReportEntryCsv;
+    Long globalShipperID = get(KEY_SHIPPER_ID);
+    if (Objects.isNull(globalShipperID)) {
+      financialBatchReportEntryCsv = listOfBatchEntries.get(0);
+    } else {
+      financialBatchReportEntryCsv = listOfBatchEntries.stream()
+          .filter(e -> Objects.equals(e.getGlobalShipperId(), globalShipperID)).findFirst()
+          .orElseThrow(() -> new NvTestRuntimeException(
+              f("Could not find entry for shipper id : %s ", globalShipperID)));
+    }
 
     SoftAssertions softAssertions = new SoftAssertions();
     if (mapOfData.containsKey("globalShipperId")) {

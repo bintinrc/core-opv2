@@ -930,8 +930,12 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void clearAllSelectionsAndLoadSelection() {
-    click("//button[contains(@aria-label,'Clear All Selections')]");
-    click("//button[contains(@aria-label,'Load Selection')]");
+    pause3s();
+    String xpathClearAllSelection = "//div[contains(text(),'Clear All Selections')]/parent::button";
+    moveToElementWithXpath(xpathClearAllSelection);
+    click(xpathClearAllSelection);
+    pause2s();
+    click("//div[contains(text(),'Load Selection')]/parent::button");
   }
 
   public void applyAction(String trackingId) {
@@ -1005,7 +1009,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
               .clear();
       pause1s();
       getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
-              .sendKeys(formatter.format(today.plusDays(2)));
+              .sendKeys(formatter.format(today.plusDays(5)));
       pause2s();
     }
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",

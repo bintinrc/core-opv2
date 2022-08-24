@@ -191,6 +191,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   @When("Operator clicks on Bulk Update on Apply Action Drop Down")
   public void operatorClicksOnBulkUpdateOnApplyActionDropDown() {
     dpBulkUpdatePage.applyActionButton.click();
+    pause2s();
     dpBulkUpdatePage.bulkUpdateButton.click();
     dpBulkUpdatePage.bulkUpdateDialog.isDisplayed();
   }

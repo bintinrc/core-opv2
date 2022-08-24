@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -22,13 +23,13 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
   private static final String STATION_HOME_URL_PATH = "/station-homepage";
   private static final String STATION_HUB_URL_PATH = "/station-homepage/hubs/%s";
 
-  private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//*[contains(text(),'%s')]/ancestor::div//div[text()='%s']/parent::div[@class='th']//input";
+  private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/parent::div[starts-with(@class,'VirtualTableHeader')]//input";
   private static final String ERROR_MESSAGE = "//*[contains(text(),'Could not add user due to duplicate entry or other unknown error for %s!')]";
   private static final String ADD_USER_SUCCESS_MESSAGE = "//*[contains(text(),'Successfully added user for %s!')]";
   private static final String REMOVE_USER_SUCCESS_MESSAGE = "//*[contains(text(),'Successfully removed user %s!')]";
   private static final String FILTER_RESULT_IN_LIST_OF_USERS = "//div[@data-datakey='email']//mark[contains(text(),'%s')]";
   private static final String STATION_USER_MANAGEMENT_PAGE_TITLE = "//*[text()='%s']";
-  private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row base-row'][1]//div[@data-datakey='%s']";
+  private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span']";
 
   public StationUserManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -41,10 +42,10 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div[class*='selected-value']")
   private PageElement headerHubValue;
 
-  @FindBy(xpath = "//span[contains(text(),'View Users')]")
+  @FindBy(xpath = "//span[contains(text(),'View Users')]/ancestor::button")
   private PageElement viewUsersButton;
 
-  @FindBy(xpath = "//*[contains(text(),'Email')]/ancestor::div//div[text()='Email']/parent::div[@class='th']//input")
+  @FindBy(xpath = "//*[contains(text(),'Email')]/parent::div//input")
   private PageElement searchEmailTextBox;
 
   @FindBy(xpath = "//*[contains(text(),'Add User')]")
@@ -74,7 +75,7 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='BaseTable__row base-row'][1]")
   private List<PageElement> firstRowOfTable;
 
-  @FindBy(xpath = "//*[contains(text(),'No. of users')]/ancestor::div//div[text()='No. of users']/following-sibling::span//input")
+  @FindBy(xpath = "//div[text()='No. of users']/parent::div[starts-with(@class,'VirtualTableHeader')]//input")
   private PageElement noOfUsersFilter;
 
 
@@ -108,8 +109,7 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void filterValue(String filterName, String filterValue) {
 
-    String stationNameSearchXpath = f(MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH, filterName,
-        filterName);
+    String stationNameSearchXpath = f(MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH, filterName);
     WebElement searchBox = getWebDriver().findElement(By.xpath(stationNameSearchXpath));
     waitUntilVisibilityOfElementLocated(searchBox);
     searchBox.clear();
@@ -193,8 +193,10 @@ public class StationUserManagementPage extends OperatorV2SimplePage {
 
   public void validateFilter(String columnName, String expectedValue) {
     String valueXpath = f(TABLE_FIRST_ROW_VALUE_BY_COLUMN, columnName);
-    Assert.assertTrue("Table values are not Filtered",
-        getWebDriver().findElement(By.xpath(valueXpath)).getText().equalsIgnoreCase(expectedValue));
+    pause5s();
+    String actualValue = getWebDriver().findElement(By.xpath(valueXpath)).getText();
+    Assertions.assertThat(actualValue).as("Validation of Columnr Value")
+        .isEqualToIgnoringCase(expectedValue);
   }
 
   public void searchNoOfUsers(String filterValue) {

@@ -6,7 +6,6 @@ Feature: Generate COD Report - Select by Hub/Station
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-
   @DeleteOrArchiveRoute
   Scenario: Generate COD Report - Filter By Order Completed Date - Select Multiple Hub/Station
          #Test Data - Normal Order- Hub 1

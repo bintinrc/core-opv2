@@ -138,6 +138,42 @@ Feature: Edit Pricing Profiles - Normal Shippers - COD
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | errorMessage | Special character is not allowed |
 
+  @CloseNewWindows
+  Scenario: Edit Pending Pricing Profile - From COD Min Fee and COD Percentage to COD Country Default - Edit to have COD Min Fee and COD Percentage again (uid:ac36c369-4d24-407b-902a-e4b6855d562e)
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | codMinFee     | 1.2 |
+      | codPercentage | 3   |
+      | codThreshold  | 0   |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | codMinFee     | 1.2 |
+      | codPercentage | 3   |
+      | codThreshold  | 0   |
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | isDefaultCod | true |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | isDefaultCod | true |
+    Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+      | isDefaultCod  | false |
+      | codMinFee     | 4     |
+      | codPercentage | 4     |
+      | codThreshold  | 0     |
+    And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
+    And Operator save changes on Edit Shipper Page
+    And Operator edits shipper "{KEY_CREATED_SHIPPER.legacyId}"
+    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+      | codMinFee     | 4 |
+      | codPercentage | 4 |
+      | codThreshold  | 0 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -93,6 +94,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   @FindBy(xpath = "//div[@id='rc_select_0_list']//div[@class='ant-empty-description']")
   public PageElement listEmptyData;
 
+  @FindBy(css = "[data-testid='hub-select']")
+  public AntSelect3 hubSelect;
+
   @FindBy(xpath = "//input[@value='SHIPMENT_VAN_INBOUND']")
   public PageElement intoVan;
 
@@ -101,6 +105,9 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
 
   @FindBy(xpath = "//iframe")
   public PageElement frame;
+
+  @FindBy(xpath = " //div[@class='ant-modal-confirm-content']")
+  public PageElement confirmMessage;
 
   public ShipmentInboundScanningPage(WebDriver webDriver) {
     super(webDriver);
@@ -115,7 +122,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     pause2s();
     click(XPATH_INBOUND_HUB);
     listEmptyData.waitUntilInvisible();
-    selectInboundHub(hub);
+    hubSelect.selectValue(hub);
     if (CONST_INTO_VAN.equals(label)) {
       intoVan.click();
     } else if (CONST_INTO_HUB.equals(label)) {
@@ -146,7 +153,7 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
   public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub,
       String condition) {
     pause2s();
-    selectInboundHub(hub);
+    hubSelect.selectValue(hub);
     if (CONST_INTO_VAN.equals(label)) {
       intoVan.click();
     } else if (CONST_INTO_HUB.equals(label)) {
@@ -295,24 +302,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     sendKeysAndEnter(XPATH_MOVEMENT_TRIP, movementTripSchedule);
   }
 
-  public void selectInboundHub(String hub) {
-    if (getWebDriver().findElements(
-            By.xpath("//div[@data-testid='hub-select']//span[@class='ant-select-selection-item']"))
-        .size() != 0) {
-      moveToElementWithXpath("//div[@data-testid='hub-select']//span[@class='ant-select-clear']");
-      TestUtils.findElementAndClick(
-          "//div[@data-testid='hub-select']//span[@class='ant-select-clear']", "xpath",
-          getWebDriver());
-    }
-    TestUtils.findElementAndClick(XPATH_INBOUND_HUB, "xpath", getWebDriver());
-    sendKeysAndEnter(XPATH_INBOUND_HUB, hub);
-  }
-
   public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver,
       String movementTripSchedule) {
     if (hub != null) {
       pause2s();
-      selectInboundHub(hub);
+      hubSelect.selectValue(hub);
     }
 
     if (label != null) {
@@ -377,5 +371,11 @@ public class ShipmentInboundScanningPage extends SimpleReactPage<ShipmentInbound
     public TripCompletion(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+  }
+
+  public void verifyConfirmMessage(String message){
+    waitUntilVisibilityOfElementLocated(TRIP_COMPLETION_DIALOG);
+    String actualMessage = confirmMessage.getText();
+    Assertions.assertThat(actualMessage).as("Message show on dialog is correct").isEqualToIgnoringCase(message);
   }
 }

@@ -41,6 +41,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String ACTIVATED_LOGIC_POPUP_XPATH = "//div[contains(@class,'ant-notification-notice-message') and text()='Logic Activated']";
   public static final String SUB_PAGE_HEADER_XPATH = "//div[@class='section-header']//div[text()='%s']";
   public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class='ant-select-item-option-content' and text()='%s']";
+  public static final String DROPDOWN_SELECTIONS_LIST_XPATH = "//div[@class='ant-select-item-option-content']";
   public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[text()='%s']";
   public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][%d]";
   public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
@@ -212,6 +213,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-row'][2]//div[contains(@class,'logic-details')][2]")
   public PageElement logicDetailArmFilters;
 
+  @FindBy(xpath = "//*[text()='No Data']")
+  public PageElement noDataElement;
+
   public DuplicatedCombinationsTable duplicatedCombinationsTable;
   public UniqueCombinationsTable uniqueCombinationsTable;
 
@@ -258,22 +262,21 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       emptyInputField(logicDescriptionInput.getWebElement(), true);
     }
     logicDescriptionInput.sendKeys(description);
-    logicArmFiltersInput.click();
-    // Loop through given arm filters, and input them
-    for (String armFilter : armFilters) {
-      if (isEdit) {
-        break; // skips editing filters
+    if (!isEdit) {
+      logicArmFiltersInput.click();
+      // Loop through given arm filters, and input them
+      for (String armFilter : armFilters) {
+        logicArmFiltersInput.scrollIntoView(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        waitUntilVisibilityOfElementLocated(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        click(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
+        pause100ms();
+        // Check if a new column appears when selecting filter
+        waitUntilVisibilityOfElementLocated(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter));
+        Assertions.assertThat(isElementExist(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter)))
+            .as(String.format("Column %s exists", armFilter))
+            .isTrue();
+        pause100ms();
       }
-      logicArmFiltersInput.scrollIntoView(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      waitUntilVisibilityOfElementLocated(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      click(String.format(DROPDOWN_SELECTIONS_XPATH, armFilter));
-      pause100ms();
-      // Check if a new column appears when selecting filter
-      waitUntilVisibilityOfElementLocated(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter));
-      Assertions.assertThat(isElementExist(String.format(LOGIC_MAPPING_COLUMN_XPATH, armFilter)))
-          .as(String.format("Column %s exists", armFilter))
-          .isTrue();
-      pause100ms();
     }
     // Input unassigned arm
     logicUnassignedArmInput.click();
@@ -414,6 +417,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   private FilterForm setFilterValueFromForm(FilterForm filterForm, String filterName,
       String value) {
     switch (filterName.toLowerCase()) {
+      case "av statuses":
+        filterForm.setAvStatuses(value);
+        break;
       case "dps":
         filterForm.setDps(Arrays.stream(value.split(", ")).collect(Collectors.toList()));
         break;
@@ -607,25 +613,17 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     Assertions.assertThat(isElementExist(String.format(DROPDOWN_SELECTIONS_XPATH, "-")))
         .as("Only EMPTY option is available")
         .isTrue();
-    Assertions.assertThat(isElementExist(String.format(DROPDOWN_SELECTIONS_XPATH, "1")))
-        .as("No arm 1 option is available")
-        .isFalse();
+    Assertions.assertThat(findElementsByXpath(DROPDOWN_SELECTIONS_LIST_XPATH).size())
+        .as("Selection is only containing -")
+        .isOne();
 
     // Try to input value
     String columnXpath = String.format(COLUMN_MAPPING_XPATH, 1, 2);
-    findElementByXpath(columnXpath).click();
+    click(columnXpath);
     pause200ms();
-    WebElement columnInput = findElementByXpath(columnXpath + "//input");
-    columnInput.sendKeys("1");
-    pause200ms();
-    columnInput.sendKeys(Keys.ENTER);
-    pause200ms();
-    columnInput.sendKeys(Keys.TAB);
-
-    // Check if value is updated
-    Assertions.assertThat(findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, 1)).getText())
-        .as("No arm can be selected")
-        .isEmpty();
+    Assertions.assertThat(noDataElement.isDisplayed())
+        .as("Arm list contains No Data")
+        .isTrue();
 
     return true;
   }

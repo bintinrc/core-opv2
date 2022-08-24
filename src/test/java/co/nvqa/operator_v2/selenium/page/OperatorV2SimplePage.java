@@ -361,6 +361,10 @@ public class OperatorV2SimplePage extends SimplePage {
     return getToastText("//div[@class='ant-message-notice']//span[2]");
   }
 
+  public String getAntTopTextV2() {
+    return getToastText("//div[@class='ant-notification-notice-message']");
+  }
+
   public WebElement getToastBottom() {
     String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
     return waitUntilVisibilityOfElementLocated(xpathExpression);
@@ -1277,7 +1281,7 @@ public class OperatorV2SimplePage extends SimplePage {
 
   public void waitUntilNewWindowOrTabOpened() {
     LOGGER.info("Wait until new window or tab opened.");
-    wait5sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
+    wait50sUntil(() -> getWebDriver().getWindowHandles().size() > 1,
         f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
   }
 

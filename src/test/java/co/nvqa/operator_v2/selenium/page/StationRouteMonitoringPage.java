@@ -54,7 +54,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
 
     public String getXpath() {
       return String.format(
-          "(//div[@role='row' and @class='BaseTable__row base-row']//div[@data-datakey='%s']"
+          "(//div[@role='gridcell' and @class='BaseTable__row-cell' and @data-datakey='%s']"
               + "/child::*//*[name()='a' or (name()='span')])[last()]", this.optionValue);
     }
   }
@@ -82,7 +82,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     public String getXpath(String tableName) {
       return String.format(
           "(//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]"
-              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//div[@class='cell-wrapper']"
+              + "//div[@class='BaseTable__row-cell' and @data-datakey='%s']"
               + "//*[name()='a' or (name()='span')])[last()]", tableName, this.optionValue);
     }
   }
@@ -94,18 +94,18 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   private static final String NO_RESULTS_FOUND_XPATH = "//div[contains(text(),'')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[contains(text(),'No Results Found')]";
   private static final String TRACKINGID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='tracking_id-link']";
   private static final String RESERVATIONID_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//a[@data-testid='reservation-link' and text()='%s']";
-  private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//div[@class='cell-wrapper']//span[1]";
+  private static final String TAG_COLUMN_VALUE_XPATH = "//div[contains(text(),'%s')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='BaseTable__row-cell' and @data-datakey='tags']//span[1]";
   private static final String EDIT_ORDER_TRACKING_ID_XPATH = "//h3[text()='%s']";
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public AntSelect2 hubs;
 
-  @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public AntSelect2 zones;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//ancestor::div[@role='combobox']")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
   public List<PageElement> modalHubSelection;
 
   @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
@@ -117,7 +117,7 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='Load Selection']")
   public PageElement loadSelection;
 
-  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@role='combobox']")
+  @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='ant-select-selector']")
   public AntSelect2 timeslot;
 
   @FindBy(xpath = "//a[@data-testid='reservation-link']")

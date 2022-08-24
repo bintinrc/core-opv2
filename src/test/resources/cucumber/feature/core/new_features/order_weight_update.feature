@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OrderWeightUpdate
+@OperatorV2 @Core @NewFeatures @OrderWeightUpdate @NewFeatures2
 Feature: Order Weight Update V2
 
   @LaunchBrowser @ShouldAlwaysRun

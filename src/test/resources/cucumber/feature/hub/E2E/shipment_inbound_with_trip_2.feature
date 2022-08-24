@@ -71,7 +71,7 @@ Feature: E2E With Trip 2
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -151,7 +151,7 @@ Feature: E2E With Trip 2
       | longitude    | GENERATED |
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
@@ -192,7 +192,7 @@ Feature: E2E With Trip 2
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -313,7 +313,7 @@ Feature: E2E With Trip 2
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -434,7 +434,7 @@ Feature: E2E With Trip 2
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -585,18 +585,18 @@ Feature: E2E With Trip 2
     When Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-    Then Operator verify parameters of shipment on Shipment Management page using data below:
+    Then Operator verify parameters of shipment on Shipment Management page:
       | id          | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}    |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}    |
       | status      | Completed                             |
     And Operator open the shipment detail for the shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}" on Shipment Management Page
-    Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_HUB_INBOUND(OpV2)               |
+    Then Operator verify shipment event on Shipment Details page:
+      | source | SHIPMENT_HUB_INBOUND(OpV2)         |
       | result | Completed                          |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | userId | qa@ninjavan.co             |
+      | userId | qa@ninjavan.co                     |
     And Operator verifies event is present for order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" on Edit order page
       | eventName         | SHIPMENT COMPLETED                             |
       | hubName           | {KEY_LIST_OF_CREATED_HUBS[3].name}             |

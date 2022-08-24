@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -19,18 +20,15 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -112,11 +110,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String DETAIL_PAGE_SHIPMENTS_TAB_XPATH = "//div[text()='Shipments' and @role='tab']";
   private static final String DETAIL_PAGE_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
   private static final String DETAIL_PAGE_ASSIGN_DRIVER_XPATH = "//span[@data-testid='assign-driver-icon']"; //Helpful for the future - Add driver from detail page, do not remove
-  private static final String SHIPMENTS_TAB_SHIPMENT_ID_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-id']";
-  private static final String SHIPMENTS_TAB_ORIGIN_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orig-hub-name']";
-  private static final String SHIPMENTS_TAB_CURRENT_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-curr-hub-name']";
-  private static final String SHIPMENTS_TAB_DEST_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-dest-hub-name']";
-  private static final String SHIPMENTS_TAB_STATUS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-status' and text()='Status']";
+  private static final String SHIPMENTS_TAB_SHIPMENT_ID_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-id']";
+  private static final String SHIPMENTS_TAB_ORIGIN_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-origin-hub-name']";
+  private static final String SHIPMENTS_TAB_CURRENT_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-last-inbound-hub-name']";
+  private static final String SHIPMENTS_TAB_DEST_HUB_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-destination-hub-name']";
+  private static final String SHIPMENTS_TAB_STATUS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-status' and text()='Status']";
   private static final String SHIPMENTS_TAB_SLA_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-sla']";
   private static final String SHIPMENTS_TAB_PARCELS_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-orders-count']";
   private static final String SHIPMENTS_TAB_SHIPMENT_TYPE_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-shipment-type']";
@@ -236,6 +234,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
   private static String destinationHub = "//input[@id='destinationHub']";
+  private static String movementTripFilterTextXpath = "//span[@title='%s']";
 
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
@@ -289,12 +288,21 @@ public class TripManagementPage extends OperatorV2SimplePage {
     if (filterName.equalsIgnoreCase("originhub")) {
       TestUtils.findElementAndClick(originHub, "xpath", getWebDriver());
       sendKeysAndEnter(originHub, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Origin hub is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("movementtype")) {
       movementTypeFilterPage.click();
       sendKeysAndEnter(movementType, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Movement type is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("destinationhub")) {
       TestUtils.findElementAndClick(destinationHub, "xpath", getWebDriver());
       sendKeysAndEnter(destinationHub, filterValue);
+      Assertions.assertThat(!TestUtils.isBlank(getText(String.format(movementTripFilterTextXpath, filterValue))))
+          .as("Destination hub is found. Proceeds to the next step...")
+          .isTrue();
     } else if (filterName.equalsIgnoreCase("OneTimeOriginHub")) {
       TestUtils.findElementAndClick(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, "xpath", getWebDriver());
       sendKeysAndEnter(CREATE_TRIP_PAGE_ORIGIN_HUB_XPATH, filterValue);
@@ -326,8 +334,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     Long actualTripManagementSum = (long) tripManagementList.size();
-    assertThat("Sum of Trip Management", actualTripManagementSum, equalTo(tripManagementCount));
-
+    Assertions.assertThat(actualTripManagementSum)
+        .as("Sum of Trip Management")
+        .isEqualTo(tripManagementCount);
   }
 
   public void searchAndVerifiesTripManagementIsExistedById(Long tripManagementId) {
@@ -486,7 +495,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
             .getExpectedArrivalTime();
         String normalizedDepartDate = shipmentInfo.normalisedDate(
             actualDepartureTime.toString().replaceAll("Z", ":00Z"));
-        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + "Z";
+        normalizedDepartDate = normalizedDepartDate.replace(" ", "T") + ".000Z";
         actualDepartureTime = ZonedDateTime.parse(normalizedDepartDate, BE_FORMATTER);
         actualDepartTimeFilter.openButton.click();
         actualDepartTimeFilter.selectTime(actualDepartureTime);
@@ -527,7 +536,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case STATUS:
         filterValue = tripManagementDetailsData.getData().get(index).getStatus();
         tripStatusFilter.scrollIntoView();
-        tripStatusFilter.openButton.click();
+        TestUtils.callJavaScriptExecutor("arguments[0].click();", tripStatusFilter.openButton.getWebElement(),
+                getWebDriver());
         tripStatusFilter.selectType(filterValue);
         tripStatusFilter.ok.click();
         break;
@@ -1805,4 +1815,5 @@ public class TripManagementPage extends OperatorV2SimplePage {
       unassignAllDrivers.click();
     }
   }
+
 }

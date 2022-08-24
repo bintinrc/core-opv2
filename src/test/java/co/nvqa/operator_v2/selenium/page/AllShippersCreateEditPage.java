@@ -34,6 +34,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.md.TabWrapper;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.text.ParseException;
@@ -95,6 +96,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   @FindBy(name = "container.shippers.milkrun")
   public NvIconTextButton milkrun;
 
+  @FindBy(name = "container.shippers.more-reservation-add-pickup-address")
+  public NvIconTextButton addAddress;
+
+  @FindBy(name = "container.shippers.more-reservation-edit-pickup-address")
+  public NvIconButton editAddress;
+
   //endregion
 
   //region MARKETPLACE
@@ -140,6 +147,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public WarningDialog warningDialog;
   @FindBy(css = "md-dialog")
   public UnsetAsMilkrunDialog unsetAsMilkrunDialog;
+
+  @FindBy(css = "md-dialog")
+  public AddAddressDialog addAddressDialog;
   @FindBy(xpath = "//md-dialog/md-toolbar")
   public PageElement dialogHeader;
 
@@ -323,7 +333,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     if (isCreateForm) {
       basicSettingsForm.shipperEmail.setValue(shipper.getEmail());
-      basicSettingsForm.shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
+
     }
 
     basicSettingsForm.channel.selectValue("B2C Marketplace");
@@ -534,83 +544,74 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   }
 
   private void addAddress(Address address) {
-    scrollIntoView("//*[@name='container.shippers.more-reservation-add-pickup-address']", false);
-    clickNvIconTextButtonByName("container.shippers.more-reservation-add-pickup-address");
+    addAddress.click();
     fillAddAddressForm(address);
   }
 
   private void fillAddAddressForm(Address address) {
-    waitUntilVisibilityOfMdDialogByTitle("Add Address");
-    String value = address.getName();
+    addAddressDialog.waitUntilVisible();
 
+    String value = address.getName();
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Contact Name", value);
+      addAddressDialog.contactName.setValue(value);
     }
 
     value = address.getContact();
-
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Contact Mobile Number", value);
+      addAddressDialog.contactMobileNumber.setValue(value);
     }
 
     value = address.getEmail();
-
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Contact Email", value);
+      addAddressDialog.contactEmail.setValue(value);
     }
 
     value = address.getAddress1();
-
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Pickup Address 1", value);
+      addAddressDialog.pickupAddress1.setValue(value);
     }
 
     value = address.getAddress2();
-
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Pickup Address 2 / Unit Number", value);
+      addAddressDialog.pickupAddress2.setValue(value);
     }
 
     value = address.getCountry();
-
     if (StringUtils.isNotBlank(value)) {
-      selectValueFromMdSelectById("commons.country", value);
+      addAddressDialog.country.selectByValue(value);
     }
 
     value = address.getPostcode();
-
     if (StringUtils.isNotBlank(value)) {
-      sendKeysById("Pickup Postcode", value);
+      addAddressDialog.pickupPostcode.setValue(value);
     }
 
     Double val = address.getLatitude();
-
     if (val != null) {
-      sendKeysById("Latitude", String.valueOf(val));
+      addAddressDialog.latitude.setValue(val);
     }
 
     val = address.getLongitude();
-
     if (val != null) {
-      sendKeysById("Longitude", String.valueOf(val));
+      addAddressDialog.longitude.setValue(val);
     }
 
     if (BooleanUtils.isTrue(address.getMilkRun())) {
       fillMilkrunReservationSettings(address);
     }
 
-    clickNvApiTextButtonByName("commons.save-changes");
-    waitUntilInvisibilityOfMdDialogByTitle("Add Address");
+    addAddressDialog.saveChanges.click();
+    addAddressDialog.waitUntilInvisible();
   }
 
   private void fillMilkrunReservationSettings(Address address) {
-    click("//span[.='Milkrun Reservations']");
+    addAddressDialog.milkrunReservationsTab.click();
     pause500ms();
     if (CollectionUtils.isNotEmpty(address.getMilkrunSettings())) {
       List<MilkrunSettings> milkrunSettingsList = address.getMilkrunSettings();
       for (int i = 0; i < milkrunSettingsList.size(); i++) {
         MilkrunSettings milkrunSettings = milkrunSettingsList.get(i);
-        clickNvIconTextButtonByName("container.shippers.add-new-reservation");
+        addAddressDialog.addNewReservation.click();
         fillMilkrunReservationForm(milkrunSettings, i + 1);
       }
     }
@@ -932,16 +933,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void verifyMilkrunSettings(Address address) {
     int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
-    clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
-    waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+    editAddress.click();
+    addAddressDialog.waitUntilVisible();
     pause1s();
-    click("//span[.='Milkrun Reservations']");
+    addAddressDialog.milkrunReservationsTab.click();
     waitUntilVisibilityOfElementLocated(
         "//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
     assertEquals("Number of Milkrun Reservations", reservationsCount,
         getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
-    clickNvApiTextButtonByName("commons.save-changes");
-    waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
+    addAddressDialog.saveChanges.click();
+    addAddressDialog.waitUntilInvisible();
   }
 
   public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper,
@@ -1474,7 +1475,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     addedPricingProfileOPV2.setInsThreshold(getText(XPATH_PRICING_PROFILE_INS_THRESHOLD));
     addedPricingProfileOPV2.setInsMin(getText(XPATH_PRICING_PROFILE_INS_MIN));
     addedPricingProfileOPV2.setInsPercentage(getText(XPATH_PRICING_PROFILE_INS_PERCENTAGE));
-    addedPricingProfileOPV2.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(getText(XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC)));
+    addedPricingProfileOPV2.setBillingWeight(BillingWeightEnum.getBillingWeightEnum(
+        getText(XPATH_PRICING_PROFILE_BILLING_WEIGHT_LOGIC)));
     String value = getText(XPATH_PRICING_PROFILE_RTS_CHARGE);
     if (value.startsWith("-")) {
       addedPricingProfileOPV2.setRtsChargeType("Discount");
@@ -1503,7 +1505,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     if (pricing != null) {
       clickTabItem(" Pricing and Billing");
 
-      if (pricing != null && StringUtils.isNotBlank(pricing.getScriptName())) {
+      if (StringUtils.isNotBlank(pricing.getScriptName())) {
         click("//button[@aria-label='Edit Pending Profile']");
         pause2s();
         setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(15));
@@ -1616,7 +1618,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public MdSelect pricingScript;
 
     @FindBy(css = "md-input-container[label='container.shippers.pricing-billing-salesperson-discount-type'] div.readonly")
-    public PageElement pricingBillingSalespersonDicountType;
+    public PageElement pricingBillingSalespersonDiscountType;
 
     @FindBy(id = "discount-value")
     public TextBox discountValue;
@@ -1654,7 +1656,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-container")
     public CheckBox rtsCountryDefaultCheckbox;
 
-    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label span")
+    @FindBy(css = "md-input-container[label$='RTS Fee'] div.md-label")
     public PageElement rtsCountryDefaultText;
 
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
@@ -1724,11 +1726,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(id = "rts-charge")
     public TextBox rtsValue;
 
-    @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
-    public CheckBox codCountryDefaultCheckbox;
+    @FindBy(xpath = "//md-input-container[contains(@label,'COD Value')]/md-checkbox")
+    public MdCheckbox codCountryDefaultCheckbox;
 
     @FindBy(xpath = "//md-input-container[contains(@label,'Insured Value')]/md-checkbox")
-    public CheckBox insuranceCountryDefaultCheckbox;
+    public MdCheckbox insuranceCountryDefaultCheckbox;
 
     @FindBy(xpath = "//md-input-container[contains(@label,'RTS Fee')]/md-checkbox")
     public MdCheckbox rtsCountryDefaultCheckbox;
@@ -1981,5 +1983,54 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public UnsetAsMilkrunDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+  }
+
+  public static class AddAddressDialog extends MdDialog {
+
+    public AddAddressDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(id = "Contact Name")
+    public TextBox contactName;
+
+    @FindBy(id = "Contact Mobile Number")
+    public TextBox contactMobileNumber;
+
+    @FindBy(id = "Contact Email")
+    public TextBox contactEmail;
+
+    @FindBy(id = "Pickup Address 1")
+    public TextBox pickupAddress1;
+
+    @FindBy(id = "Pickup Address 2 / Unit Number")
+    public TextBox pickupAddress2;
+
+    @FindBy(id = "commons.country")
+    public MdSelect country;
+
+    @FindBy(id = "Pickup Postcode")
+    public TextBox pickupPostcode;
+
+    @FindBy(id = "Latitude")
+    public TextBox latitude;
+
+    @FindBy(id = "Longitude")
+    public TextBox longitude;
+
+    @FindBy(name = "Address Finder")
+    public NvIconTextButton addressFinder;
+
+    @FindBy(name = "commons.save-changes")
+    public NvApiTextButton saveChanges;
+
+    @FindBy(xpath = ".//md-tab-item[.='Address']")
+    public PageElement addressTab;
+
+    @FindBy(xpath = ".//md-tab-item[.='Milkrun Reservations']")
+    public PageElement milkrunReservationsTab;
+
+    @FindBy(name = "container.shippers.add-new-reservation")
+    public NvIconTextButton addNewReservation;
   }
 }

@@ -76,7 +76,6 @@ import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTabl
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.ACTION_NINJA_DASH_LOGIN;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.B2bShipperTable.CULUMN_BRANCH_ID;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
-import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -519,6 +518,16 @@ public class AllShippersSteps extends AbstractSteps {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         pricing.setComments(value);
       }
+      value = data.get("isDefaultIns");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("true")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
+              .check();
+        } else if (value.equalsIgnoreCase("false")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.uncheck();
+
+        }
+      }
       value = data.get("insuranceMinFee");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
@@ -560,6 +569,15 @@ public class AllShippersSteps extends AbstractSteps {
           pricing.setInsThreshold(value);
         }
       }
+      value = data.get("isDefaultCod");
+      if (StringUtils.isNotBlank(value)) {
+        if (value.equalsIgnoreCase("true")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
+              .check();
+        } else if (value.equalsIgnoreCase("false")) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.uncheck();
+        }
+      }
       value = data.get("codMinFee");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
@@ -585,16 +603,6 @@ public class AllShippersSteps extends AbstractSteps {
               .setValue(value);
           pricing.setCodPercentage(value);
         }
-      }
-      value = data.get("isDefaultIns");
-      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
-            .check();
-      }
-      value = data.get("isDefaultCod");
-      if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
-            .check();
       }
       value = data.get("isDefaultRts");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
@@ -1185,7 +1193,7 @@ public class AllShippersSteps extends AbstractSteps {
     ArrayList<String> tabs = new ArrayList<>(getWebDriver().getWindowHandles());
     getWebDriver().switchTo().window(tabs.get(1));
     getWebDriver().navigate().to(editSpecificShipperPageURL);
-    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(120);
+    allShippersPage.allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded(180);
     takesScreenshot();
   }
 

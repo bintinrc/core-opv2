@@ -21,7 +21,6 @@ import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.assertj.core.api.Assertions.*;
 
 @SuppressWarnings("unused")
 @ScenarioScoped
@@ -46,9 +45,8 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   @SuppressWarnings("unchecked")
   @And("Operator selects hub {string} and click load selection")
   public void operatorSelectsHubAndClickLoadSelection(String hubName) {
-    retryIfExpectedExceptionOccurred(() -> {
-          stationRouteMonitoringPage.selectHub(hubName);
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+    retryIfExpectedExceptionOccurred(() -> stationRouteMonitoringPage.selectHub(hubName), null,
+        LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, StaleElementReferenceException.class,
@@ -57,12 +55,12 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @And("Operator enters routeID in the Route filter")
-  public void operatorEntersRouteIDInTheRouteFilter() {
-    Long routeID = get(KEY_CREATED_ROUTE_ID);
-    retryIfExpectedExceptionOccurred(() -> {
-          stationRouteMonitoringPage.filterRoute(routeID.toString());
-        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+  @And("Operator enters routeID {string} in the Route filter")
+  public void operatorEntersRouteIDInTheRouteFilter(String routeID) {
+    routeID = resolveValue(routeID);
+    String finalRouteID = routeID;
+    retryIfExpectedExceptionOccurred(() -> stationRouteMonitoringPage.filterRoute(finalRouteID),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, StaleElementReferenceException.class,
@@ -79,6 +77,17 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
     String actualColumnValue = stationRouteMonitoringPage.getColumnValue(columnValue);
     Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
         expectedValue, Integer.parseInt(actualColumnValue));
+    takesScreenshot();
+  }
+
+  @Then("Operator verify value on Station Route Monitoring page for the {string} column is equal to {string}")
+  public void operatorVerifyValueOnStationRouteMonitoringPageForTheColumnValueIsEqualTo(
+      String columnName, String expectedValue) {
+    expectedValue = resolveValue(expectedValue);
+    StationRouteMonitoring columnValue = StationRouteMonitoring.valueOf(columnName);
+    String actualColumnValue = stationRouteMonitoringPage.getColumnValue(columnValue);
+    Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
+        expectedValue, actualColumnValue);
     takesScreenshot();
   }
 
@@ -166,6 +175,11 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
     trackingID = resolveValue(trackingID);
     stationRouteMonitoringPage.validateNavigationOfTrackingIDLink(trackingID, tableName);
     takesScreenshot();
+  }
+
+  @And("Operator saves old route")
+  public void operatorSavesOldRoute() {
+    put(KEY_OLD_ROUTE_ID, get("KEY_CREATED_ROUTE_ID"));
   }
 }
 

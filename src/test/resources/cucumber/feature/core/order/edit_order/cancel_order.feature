@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @EditOrder @CancelOrder @EditOrder1
+@OperatorV2 @Core @EditOrder @CancelOrder @EditOrder1 @RoutingModules
 Feature: Cancel Order
 
   @LaunchBrowser @ShouldAlwaysRun

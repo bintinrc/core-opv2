@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteLogs
+@OperatorV2 @Core @Routing @RouteLogs
 Feature: Route Logs - Merge Transactions
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -92,12 +92,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='ant-modal-confirm-content']")
   public WebElement dialogMessage;
 
+  @FindBy(xpath = "//span[@class='ant-modal-confirm-title']")
+  public List<WebElement> antModalConfirmTitleElements;
+
   public String ANT_MODAL_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]";
   public String ANT_MODAL_CONFIRM_TITLE_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//span[@class='ant-modal-confirm-title']";
   public String ANT_MODAL_CONFIRM_CONTENT_XPATH = "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[@class='ant-modal-confirm-content']";
 
   @FindBy(xpath = ".//button[.='Cancel']")
   public Button cancel;
+
+  @FindBy(xpath = ".//button[.='OK' or .='Proceed']")
+  public Button okorProceed;
 
   @FindBy(xpath = ".//button[.='OK']")
   public Button ok;
@@ -181,7 +187,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
   public TextBox pageTitle;
 
-  @FindBy(xpath = "//div//h3")
+  @FindBy(xpath = "//div//h1")
   public TextBox shipmentDetailPageShipmentId;
 
   @FindBy(xpath = "//div[label[.='Origin Hub']]//nv-autocomplete")
@@ -267,6 +273,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void scanBarcode(String trackingId) {
+    click(XPATH_BARCODE_SCAN);
     sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
   }
 
@@ -420,18 +427,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       try {
         String actualToastMessage = "";
         if(null == antNotificationMessage || antNotificationMessage.equals("")){
-          actualToastMessage = getAntTopText();
+          if (isElementExistFast("//div[@class='ant-message-notice']//span[2]")) {
+            actualToastMessage = getAntTopText();
+          } else
+            actualToastMessage = getAntTopTextV2() ;
         }else{
           actualToastMessage = antNotificationMessage;
         }
         antNotificationMessage = "";
-        assertThat("Shipment inbound toast message is the same", actualToastMessage,
-            equalTo(expectedToastMessage));
+        Assertions.assertThat(actualToastMessage).as("Shipment inbound toast message is the same").isEqualTo(expectedToastMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 10);
+    }, getCurrentMethodName(), 500, 2);
     pause5s();
   }
 
@@ -511,15 +520,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInTripDepartureDialog() {
-    String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
-    assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
+    if(null != antModalConfirmTitleElements){
+      String dialogTitleText = dialogTitle.getText();
+      Assertions.assertThat(dialogTitleText).as("Dialog title is the same").isEqualTo("Trip Departure");
 
-    String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
-    assertThat("Dialog message text is the same", dialogMessageText,
-        equalTo("Are you sure you want to start departure?"));
-
-    ok.waitUntilClickable();
-    ok.click();
+      String dialogMessageText = dialogMessage.getText();
+      Assertions.assertThat(dialogMessageText).as("Dialog message text is the same").isEqualTo("Are you sure you want to start departure?");
+    }
+    okorProceed.waitUntilClickable();
+    okorProceed.click();
     pause2s();
     antNotificationMessage = getAntNotificationMessage();
   }
@@ -686,11 +695,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void verifyShipmentDetailPageIsOpenedForShipmentWithId(String shipmentIdAsString) {
     pageTitle.waitUntilVisible();
     String expectedPageTitle = "Shipment Details";
-    assertEquals(expectedPageTitle, pageTitle.getText());
-
+    Assertions.assertThat(expectedPageTitle).isEqualTo(pageTitle.getText());
+    switchTo();
     shipmentDetailPageShipmentId.waitUntilVisible();
     String expectedShipmentIdString = f("Shipment ID : %s", shipmentIdAsString);
-    assertEquals(expectedShipmentIdString, shipmentDetailPageShipmentId.getText());
+    Assertions.assertThat(expectedShipmentIdString).isEqualTo(shipmentDetailPageShipmentId.getText());
   }
 
   public void verifyTripData(String expectedInboundHub, String expectedInboundType,
@@ -740,8 +749,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
     sendKeys(we, shipmentId);
     we.sendKeys(Keys.RETURN);
-    waitUntilVisibilityOfElementLocated("//input[contains(@value,'"+shipmentId+"')]");
-    waitUntilInvisibilityOfElementLocated("//td[contains(@class, 'tracking-id')][.='"+shipmentId+"]'");
   }
 
   public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
@@ -749,12 +756,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       try {
         waitUntilVisibilityOfElementLocated(XPATH_SMALL_SUCCESS_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-        assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(),500,2);
   }
 
   public void verifyScanTextAppearsInScanShipmentBox(String expectedSuccessMessage) {
@@ -763,24 +770,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String[] expected = expectedSuccessMessage.split("\n");
         waitUntilVisibilityOfElementLocated(XPATH_SCANTEXT_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SCANTEXT_MESSAGE).getText();
-        assertThat("ScanText message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+        Assertions.assertThat(actualSuccessMessage).as("ScanText message is equal").isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(),500,2);
   }
 
   public void verifySmallMessageAppearsInRemoveShipmentBox(String expectedRemoveMessage) {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String actualSuccessMessage = smallRemoveMessage.getText();
-        assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedRemoveMessage));
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedRemoveMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName());
+    }, getCurrentMethodName(),500,2);
 
   }
 
@@ -788,14 +795,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     shipmentToGo.waitUntilVisible();
     String shipmentToGoText = shipmentToGo.getText().trim();
     Long actualShipmentToGoCount = Long.valueOf(shipmentToGoText.split(" ")[0]);
-    assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    Assertions.assertThat(expectedTotalShipment).isEqualTo(actualShipmentToGoCount);
   }
 
   public void verifyShipmentToUnload(Long expectedTotalShipment) {
     shipmentToUnload.waitUntilVisible();
     String shipmentToUnloadText = shipmentToUnload.getText().trim();
     Long actualShipmentToGoCount = Long.valueOf(shipmentToUnloadText.split(" ")[0]);
-    assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    Assertions.assertThat(expectedTotalShipment).isEqualTo(actualShipmentToGoCount);
   }
 
   public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
@@ -803,7 +810,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     for (PageElement shipmentIdElement : shipmentIdList) {
       String currentShipmentId = shipmentIdElement.getText();
       if (shipmentId.equals(currentShipmentId)) {
-        assertEquals(shipmentId, currentShipmentId);
+        Assertions.assertThat(shipmentId).isEqualTo(currentShipmentId);
         shipmentIdElement.scrollIntoView();
         return;
       }

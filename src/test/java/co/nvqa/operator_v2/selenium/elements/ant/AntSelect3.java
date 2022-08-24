@@ -169,6 +169,10 @@ public class AntSelect3 extends PageElement {
 
   public void closeMenu() {
     String listBoxLocator = getListBoxLocator();
+    try {
+      waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
+    } catch (Exception ex) {
+    }
     if (isElementVisible(listBoxLocator, 0)) {
       jsClick();
     }

@@ -1472,7 +1472,7 @@ Feature: Priority Parcel in Hub
       | Ticket Status        | <Status>     |
 
     Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
+      | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder
@@ -1617,8 +1617,8 @@ Feature: Priority Parcel in Hub
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
 
     Examples:
-      | HubName       | HubId       | TileName                | ModalName               | Filter   | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
+      | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
+      | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Shipper Issue (uid:5cbabffd-dd14-4604-905b-191cfb44e93f)
@@ -3351,6 +3351,48 @@ Feature: Priority Parcel in Hub
     Examples:
       | HubName1     | HubId1     | HubId2     | HubName2     | TileName                | ModalName               | Filter      | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | {hub-id-9} | {hub-name-9} | Priority parcels in hub | Priority Parcels in Hub | Post-tagged | Please Confirm ETA of FSR Parcels to Proceed |
+
+  @ForceSuccessOrder @ArchiveRoute
+  Scenario Outline: Sort Priority Parcel in Hub Based on Time in Hub
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | orderTag | 5570 |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
+    And API Operator sweep parcel in the hub
+      | hubId | <HubId>                         |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator verifies that a table is displayed with following columns:
+      | Tracking ID/ Route ID |
+      | Address               |
+      | Granular Status       |
+      | Time in Hub           |
+      | Committed ETA         |
+      | Recovery Ticket Type  |
+      | Ticket Status         |
+      | Order Tags            |
+      | Size                  |
+      | Timeslot              |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID           |
+      | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
+    And Operators sorts and verifies that the column:"Time in Hub" is in descending order
+
+    Examples:
+      | HubId      | HubName      | TileName                | ModalName               |
+      | {hub-id-8} | {hub-name-8} | Priority parcels in hub | Priority Parcels in Hub |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
