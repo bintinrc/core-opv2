@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.sort.sort_vendor.ParcelDownloadConfig;
 import co.nvqa.operator_v2.selenium.page.SortBeltMonitoringPage;
 import co.nvqa.operator_v2.selenium.page.SortBeltMonitoringPage.SessionItem;
 import io.cucumber.guice.ScenarioScoped;
@@ -8,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import org.assertj.core.api.Assertions;
 import java.util.List;
@@ -35,7 +37,7 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
   }
 
   @And("Operator waits until sort belt monitoring page loaded")
-  public void operatorWaitUntilSortBeltPresetPageLoaded() {
+  public void operatorWaitUntilSortBeltMonitoringPageLoaded() {
     sortBeltMonitoringPage.switchTo();
     sortBeltMonitoringPage.waitUntilLoaded();
   }
@@ -65,6 +67,32 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
     }
   }
 
+  @When("Operator searches with created TID")
+    public void operatorSearchCreatedTID(){
+      operatorSearchWithValue(TRACKING_ID_FILTER, get(KEY_CREATED_ORDER_TRACKING_ID));
+  }
+
+  @When("Operator searches with {string} created TIDs")
+  public void operatorSearchCreatedTIDs(String numberOfTIDs){
+    Integer numberTIDs = Integer.parseInt(numberOfTIDs);
+    List<ParcelDownloadConfig> parcelDownloadConfigs = get(KEY_LIST_OF_SORT_BELT_DOWNLOADED_PARCEL_CONFIGS);
+    List<String> createdTrackingIDs = new ArrayList<String>();
+
+    for(int i = 0; i < numberTIDs; i++) {
+      operatorSearchWithValue(TRACKING_ID_FILTER, parcelDownloadConfigs.get(i).getTrackingId());
+      createdTrackingIDs.add(parcelDownloadConfigs.get(i).getTrackingId());
+    }
+
+    put(KEY_LIST_OF_SORT_BELT_PARCEL_TRACKING_ID, createdTrackingIDs);
+  }
+
+  @When("Operator searches with created ArmID")
+  public void operatorSearchCreatedArmID(){
+    List<Integer> createdArmTargets = get(KEY_LIST_OF_CREATED_SORT_BELT_PARCEL_ARM_ID);
+    operatorSearchWithValue(ARM_ID_FILTER, String.valueOf(createdArmTargets.get(0)));
+    put(KEY_CREATED_SORT_BELT_PARCEL_ARM_ID, createdArmTargets.get(0).toString());
+  }
+
   @When("Operator selects {string} as {string}")
   public void operatorSelectDate(String typeOfDate, String value) {
     switch (typeOfDate) {
@@ -77,6 +105,11 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
       default:
         LOGGER.warn("Cannot select date picker");
     }
+  }
+
+  @When("Operator selects created session")
+  public void selectCreatedSession(){
+    sortBeltMonitoringPage.selectSessionItemByName(get(KEY_CREATED_SESSION_ID));
   }
 
   @When("Operator selects first session")
@@ -158,6 +191,25 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
     List<String> actualTIDs = sortBeltMonitoringPage.getListOfTrackingIDs();
     this.assertThat("List of Tracking IDs", actualTIDs,
         Matchers.hasItems(expectedTIDs.toArray(new String[0])));
+  }
+
+  @Then("Operator verifies sort belt monitoring result has tracking ids displayed correctly")
+  public void operatorVerifyCreatedTrackingIDs() {
+    List<String> expectedTIDs = get(KEY_LIST_OF_SORT_BELT_PARCEL_TRACKING_ID);
+    List<String> actualTIDs = sortBeltMonitoringPage.getListOfTrackingIDs();
+    this.assertThat("Verify List of Tracking IDs displayed", actualTIDs,
+        Matchers.hasItems(expectedTIDs.toArray(new String[0])));
+  }
+
+  @Then("Operator verifies sort belt monitoring result has tracking id displayed")
+  public void operatorVerifyTrackingID() {
+    String actualTID = sortBeltMonitoringPage.getListOfTrackingIDs().get(0);
+    this.assertEquals("Verify Tracking ID displayed", get(KEY_CREATED_ORDER_TRACKING_ID), actualTID);
+  }
+
+  @Then("Operator verifies sort belt monitoring result has expected arm id displayed")
+  public void operatorVerifyArmID() {
+    operatorVerifyArmID(get(KEY_CREATED_SORT_BELT_PARCEL_ARM_ID));
   }
 
   @Then("Operator verifies sort belt monitoring result has arm ids matched {string}")
