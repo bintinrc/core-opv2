@@ -154,4 +154,26 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifiesNoDataDisplayOnAirportTrips(){
         airportTripManagementPage.verifyNoResultsFound();
     }
+
+    @Then("Operator click on 'Create Tofrom Airport Trip' button in Airport Management page")
+    public void operatorclickOnCreateToFromAirportTrip() {
+        airportTripManagementPage.clickOnCreateToFromAirportTrip();
+    }
+
+    @Then("Operator create new airport trip using below data:")
+    public void operatorCreateNewAirportTrip(Map<String, String> mapOfData) {
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.createNewAirportTrip(resolvedData);
+    }
+
+    @And("Verify the new airport trip {string} created success message")
+    public void verifySuccessMessageAirportTripCreation(String airportName) {
+        airportTripManagementPage.verifyAirportTripCreationSuccessMessage(airportName);
+    }
+
+    @Then("Operator verify {string} license driver {string} is not displayed on Create Airport Trip page:")
+    public void operatorverifyDriverNotDisplayed(String driverType, String driver) {
+        airportTripManagementPage.verifyDriverNotDisplayed(driver);
+    }
+
 }
