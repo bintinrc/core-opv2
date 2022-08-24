@@ -452,7 +452,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         LOGGER.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 5);
+    }, getCurrentMethodName(), 500, 2);
   }
 
   @Then("Operator verify scan text message {string} appears in Shipment Inbound Box")
@@ -465,7 +465,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         LOGGER.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 500, 5);
+    }, getCurrentMethodName(), 500, 2);
   }
 
   @Then("Operator verify small message {string} appears in Remove Shipment Container")
