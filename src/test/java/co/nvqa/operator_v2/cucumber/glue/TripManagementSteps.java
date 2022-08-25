@@ -13,6 +13,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ public class TripManagementSteps extends AbstractSteps {
 
     private TripManagementPage tripManagementPage;
     private MainPage mainPage;
+    private List<String> filterList = Arrays.asList("destinationHub","originHub","movementType","OneTimeOriginHub","OneTimeDestinationHub","OneTimeMovementType");
 
     public TripManagementSteps() {
     }
@@ -534,5 +537,21 @@ public class TripManagementSteps extends AbstractSteps {
     @Then("Operator verifies {string} with value {string} is not shown on Create One Trip page")
     public void operatorVerifiesInvalidDriver(String name, String value){
         tripManagementPage.verifyInvalidItem(name, value);
+    }
+
+    @And("Operator sets movement trips filter with data below:")
+    public void operatorSetsMovementTripsFilterWithDataBelow(Map<String, String> dataTableAsMap) {
+        final Map<String, String> inputMap = resolveKeyValues(dataTableAsMap);
+
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+            tripManagementPage.refreshPage_v1();
+            tripManagementPage.switchTo();
+
+            operatorClicksOnTab(inputMap.get("tab"));
+            for (String key: inputMap.keySet().stream().filter(k -> filterList.contains(k)).collect(
+                Collectors.toList())) {
+                tripManagementPage.selectValueFromFilterDropDownDirectly(key, inputMap.get(key));
+            }
+        }, "Retrying until field value is shown...");
     }
 }
