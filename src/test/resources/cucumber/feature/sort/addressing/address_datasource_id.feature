@@ -535,7 +535,6 @@ Feature: Address Datasource
       | kecamatan | {kecamatan-3} |
     Then Operator verifies no result found on Address Datasource page
 
-  @DeleteAddressDatasource
   Scenario: ID Address Datasource - Edit Row Form Duplicate Entry
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
@@ -589,7 +588,12 @@ Feature: Address Datasource
     And Operator verify the data source toast:
       | top  | Datasource Deleted |
       | body | 1 match deleted    |
-    When Operator refresh page
+    And Operator verify the data source toast disappears
+    And Operator verify the data source toast:
+      | top  | Datasource Updated |
+      | body | 1 match edited     |
+    And Operator verify the data source toast disappears
+    And Operator refresh page v1
     When Operator search the existing address datasource:
       | province  | {province-5}  |
       | kota      | {kota-5}      |
