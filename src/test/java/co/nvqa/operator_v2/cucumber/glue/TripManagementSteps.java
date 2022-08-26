@@ -433,8 +433,8 @@ public class TripManagementSteps extends AbstractSteps {
     }
 
     @Then("Operator verifies the Cancellation Reason are correct")
-    public void OperatorVerifiesCacellationReason(){
-        tripManagementPage.vefiryCancellationMessage();
+    public void OperatorVerifiesCancellationReason(){
+        tripManagementPage.verifyCancellationMessage();
     }
 
     @Then("Operator verifies the Cancel Trip button is {string}")
@@ -453,12 +453,12 @@ public class TripManagementSteps extends AbstractSteps {
     }
 
     @When("Operator clicks on Create One Time Trip Button")
-    public void OperatorclicksCreateOneTimeTripButton(){
+    public void operatorClicksCreateOneTimeTripButton(){
         tripManagementPage.clickCreateOneTimeTripButton();
     }
 
     @And("Operator verifies Create One Time Trip page is loaded")
-    public void operatorVerifiesItemsOnCreaOneTimeTripPage(){
+    public void operatorVerifiesItemsOnCreateOneTimeTripPage(){
         tripManagementPage.verifyCreateOneTimeTripPage();
     }
 
