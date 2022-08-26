@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @TripCancelTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @TripCancelTrip @cwf @run
 Feature: Movement Trip - Cancel Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -75,8 +75,6 @@ Feature: Movement Trip - Cancel Trip
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator assign driver to movement trip schedule
-    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
-    And API Operator updates movement trip status to transit
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
@@ -84,6 +82,8 @@ Feature: Movement Trip - Cancel Trip
     When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
+    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+    And API Operator updates movement trip status to transit
     When Operator clicks on "cancel" icon on the action column
     And Operator verifies the Cancel Trip button is "disable"
     And Operator select Cancellation Reason on Cancel Trip Page
@@ -91,6 +91,10 @@ Feature: Movement Trip - Cancel Trip
     And Operator verifies the Cancel Trip button is "enable"
     When Operator clicks "Cancel Trip" button on cancel trip dialog
     Then Operator verifies toast with message "Request failed with status code 400" is shown on movement page
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator clicks on Load Trip Button
     And Operator searches for Movement Trip based on status "transit"
     Then Operator verifies movement trip shown has status value "transit"
     And DB Operator verifies movement trip has event with status as below
@@ -165,16 +169,21 @@ Feature: Movement Trip - Cancel Trip
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator assign driver to movement trip schedule
-    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
-    And API Operator updates movement trip status to transit
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     And Operator refresh page
     When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
+    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+    And API Operator updates movement trip status to transit
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "No" button on cancel trip dialog
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
     Then Operator verifies movement trip shown has status value "transit"
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
