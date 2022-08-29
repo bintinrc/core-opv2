@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.ant.v4;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -38,16 +39,16 @@ public class AntCalendarPicker extends PageElement {
   @FindBy(xpath = CLEAR_XPATH)
   public PageElement clear;
 
-  public void sendDate(String value) {
+  public void setDate(String value) {
     if (clear.isDisplayedFast()) {
       clear.click();
     }
     pickerInput.sendKeys(value);
     pause1s();
-    clickf(CAL_ITEM_XPATH, value);
+    new Button(getWebDriver(), f(CAL_ITEM_XPATH, value)).click();
   }
 
   public void setValue(Date date) {
-    sendDate(DateFormatUtils.format(date, "yyyy-MM-dd"));
+    setDate(DateFormatUtils.format(date, "yyyy-MM-dd"));
   }
 }

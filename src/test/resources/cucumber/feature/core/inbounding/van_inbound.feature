@@ -16,6 +16,9 @@ Feature: Van Inbound
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubId | {hub-id}                                   |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
@@ -80,6 +83,15 @@ Feature: Van Inbound
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
       | granularStatus | Pending Pickup                    |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | hubId | {hub-id}                                   |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
@@ -115,6 +127,15 @@ Feature: Van Inbound
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
       | granularStatus | Pending Pickup                    |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | hubId | {hub-id}                                   |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
@@ -168,6 +189,15 @@ Feature: Van Inbound
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
       | granularStatus | Arrived At Sorting Hub            |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | hubId | {hub-id}                                   |
+    And API Operator sweep parcel:
+      | scan  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
+      | hubId | {hub-id}                                   |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     When Operator scan "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" tracking ID on Van Inbound Page
