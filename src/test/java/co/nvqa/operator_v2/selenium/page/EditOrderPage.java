@@ -428,8 +428,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(order.getFromContact());
     assertThat("From Address", airwayBill.getFromAddress(),
         containsString(order.getFromAddress1()));
-    assertThat("From Address", airwayBill.getFromAddress(),
-        containsString(order.getFromAddress2()));
+    assertThat("From Address", StringUtils.normalizeSpace(airwayBill.getFromAddress()),
+        containsString(StringUtils.normalizeSpace(order.getFromAddress2())));
     assertThat("Postcode In From Address", airwayBill.getFromAddress(),
         containsString(order.getFromPostcode()));
 
@@ -437,7 +437,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     Assertions.assertThat(airwayBill.getToContact()).as("To Contact")
         .isEqualTo(order.getToContact());
     assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress1()));
-    assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress2()));
+    assertThat("To Address", StringUtils.normalizeSpace(airwayBill.getToAddress()),
+        containsString(StringUtils.normalizeSpace(order.getToAddress2())));
     assertThat("Postcode In To Address", airwayBill.getToAddress(),
         containsString(order.getToPostcode()));
 
