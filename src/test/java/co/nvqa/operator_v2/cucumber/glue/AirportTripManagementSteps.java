@@ -34,12 +34,14 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @When("Operator fill the departure date for Airport Management")
     public void operatorFilltheDetailsInAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.fillDepartureDateDetails(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.fillDepartureDateDetails(resolvedData);
     }
 
     @When("Operator fill the Origin Or Destination for Airport Management")
     public void operatorFilltheOriginDetailsInAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.fillOrigDestDetails(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.fillOrigDestDetails(resolvedData);
     }
 
     @And("Verify operator cannot fill more than 4 Origin Or Destination for Airport Management")
@@ -55,7 +57,8 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Verify the parameters of loaded trips in Airport Management")
     public void verifyParametersinAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(resolvedData);
     }
 
     @And("Create a new flight trip with below data:")
@@ -229,16 +232,62 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorCreateNewAirportTrip(Map<String, String> mapOfData) {
         Map<String, String> resolvedData = resolveKeyValues(mapOfData);
         airportTripManagementPage.createNewAirportTrip(resolvedData);
+        String tripId =airportTripManagementPage.getAirportTripId();
+        put(KEY_CURRENT_MOVEMENT_TRIP_ID,tripId);
+        putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS,tripId);
     }
 
     @And("Verify the new airport trip {string} created success message")
     public void verifySuccessMessageAirportTripCreation(String airportName) {
-        airportTripManagementPage.verifyAirportTripCreationSuccessMessage(airportName);
+        String expectedMessage = resolveValue(airportName);
+        airportTripManagementPage.verifyAirportTripCreationSuccessMessage(expectedMessage);
     }
 
-    @Then("Operator verify {string} license driver {string} is not displayed on Create Airport Trip page:")
+    @Then("Operator verify {string} license driver {string} is not displayed on Create Airport Trip page")
     public void operatorverifyDriverNotDisplayed(String driverType, String driver) {
         airportTripManagementPage.verifyDriverNotDisplayed(driver);
     }
+
+    @Then("Operator verifies {string} with value {string} is not shown on Create Airport Trip page")
+    public void operatorVerifiesInvalidDriver(String name, String value) {
+        airportTripManagementPage.verifyInvalidItem(name, value);
+    }
+
+    @Then("Operator verifies same hub error messages on Create Airport Trip page")
+    public void OperatorVerifiesErrorMessage(){
+        airportTripManagementPage.getAndVerifySameHubErrorMessage();
+    }
+
+    @When("Operator fill new airport trip using data below:")
+    public void OperatorCreateOTTUsingSamHub(Map<String, String> mapOfData){
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.createAirportTripUsingData(resolvedMapOfData);
+    }
+
+    @Then("Operator verifies Submit button is disable on Create Airport Trip  page")
+    public void operatorVerifySubmitButton(){
+        airportTripManagementPage.verifySubmitButtonDisable();
+    }
+
+    @Then("Operator verifies duration time error messages on Create Airport Trip page")
+    public void operatorVerifiesDurationErrorMessage(){
+        airportTripManagementPage.getAndVerifyZeroDurationTimeErrorMessage();
+    }
+
+    @Then("Operator verifies past date picker {string} is disable on Create Airport Trip page")
+    public void operatorVerifiesPastDateDisable(String date){
+        airportTripManagementPage.verifyPastDayDisable(date);
+    }
+
+    @When("Operator removes text of {string} field on Create Airport Trip page")
+    public void operatorRemovesText(String fieldName){
+        airportTripManagementPage.clearTextonField(fieldName);
+    }
+
+    @Then("Operator verifies Mandatory require error message on {string} field")
+    public void operatorVerifiesMandatoryErrorMessage(String fieldName){
+        airportTripManagementPage.verifyMandatoryFieldErrorMessage(fieldName);
+    }
+
 
 }
