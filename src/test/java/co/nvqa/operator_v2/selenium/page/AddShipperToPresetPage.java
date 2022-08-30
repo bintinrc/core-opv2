@@ -7,7 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
-import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarRange;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import com.google.common.collect.ImmutableMap;
@@ -33,7 +33,7 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
   public PageElement tableSpinner;
 
   @FindBy(xpath = "//div[@class='filter-container'][.//div[.='Shipper Creation Date']]")
-  public AntIntervalCalendarPicker shipperCreationDateFilter;
+  public AntCalendarRange shipperCreationDateFilter;
 
   @FindBy(css = "[data-testid='load-button']")
   public AntButton loadSelection;
