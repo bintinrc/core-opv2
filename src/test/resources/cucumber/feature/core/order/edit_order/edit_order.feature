@@ -13,6 +13,22 @@ Feature: Edit Order
     And Operator print Airway Bill on Edit Order page
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
+  Scenario: Operator Print the Airway Bill On Edit Order Page - with unusual characters
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","address2":"é <br> проверка","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.45694483734937,"longitude":103.825580873988}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","address2":"é <br> проверка","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"},"delivery_instruction": "é <br> проверка"}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator print Airway Bill on Edit Order page
+    Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
+
+  Scenario: Operator Print the Airway Bill On Edit Order Page - with TH, VN, MM chars
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","address2":"ă, âêô, ơư, đ WHEELOCK PLACE အမှတ်၂၃၆ ကအေးရိပ်မွန်၅လမ","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.45694483734937,"longitude":103.825580873988}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","address2":"ă, âêô, ơư, đ WHEELOCK PLACE အမှတ်၂၃၆ ကအေးရိပ်မွန်၅လမ","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"},"delivery_instruction": "ă, âêô, ơư, đ WHEELOCK PLACE အမှတ်၂၃၆ ကအေးရိပ်မွန်၅လမ"}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator print Airway Bill on Edit Order page
+    Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
+
   @DeleteOrArchiveRoute
   Scenario: Operator View POD from Edit Order Page (uid:87f02736-7ccf-4d62-a3e3-fd81636a36ab)
     Given API Shipper create V4 order using data below:

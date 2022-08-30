@@ -199,6 +199,7 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   public void fetchRouteByRouteId(String hubName, Long routeId) {
     waitUntilInvisibilityOfToast(false);
+    waitWhilePageIsLoading(120);
     selectHub.selectValue(hubName);
     routeIdInput.setValue(routeId);
     routeIdContinue.click();
@@ -219,6 +220,7 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   public void fetchRouteByTrackingId(String hubName, String trackingId, Long routeId) {
     waitUntilInvisibilityOfToast(false);
+    waitWhilePageIsLoading(120);
     selectHub.selectValue(hubName);
     trackingIdInput.setValue(trackingId);
     trackingIdContinue.click();

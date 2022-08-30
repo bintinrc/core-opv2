@@ -705,14 +705,18 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     });
   }
 
+  @Given("^Create Route Groups page is loaded$")
+  public void pageIsLoaded() {
+    createRouteGroupsPage.inFrame(SimpleReactPage::waitUntilLoaded);
+  }
+
   @Given("^Operator set General Filters on Create Route Groups page:$")
   public void operatorSetGeneralFilters(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
 
     createRouteGroupsPage.inFrame(page -> {
-      page.waitUntilLoaded(3);
-
       String value;
+      page.waitUntilLoaded(2);
       if (finalData.containsKey("startDateTimeFrom") || finalData.containsKey("startDateTimeTo")) {
         if (!page.generalFiltersForm.startDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Start Datetime");
@@ -1175,9 +1179,6 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       String value;
       if (finalData.containsKey("shipmentDateFrom") || finalData.containsKey("shipmentDateTo")) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Date");
-        }
         value = finalData.get("shipmentDateFrom");
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setFromDate(value);
@@ -1190,8 +1191,6 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToHours("00");
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToMinutes("00");
         }
-      } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.isDisplayedFast()) {
-        createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.removeFilter();
       }
 
       if (finalData.containsKey("etaDateTimeFrom") || finalData.containsKey("etaDateTimeTo")) {
@@ -1286,27 +1285,16 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       }
 
       value = finalData.get("shipmentStatus");
+      createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.clearAll();
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Status");
-        }
-        createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.selectFilter(value);
-      } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.isDisplayedFast()) {
-        createRouteGroupsPage.shipmentFiltersForm.shipmentStatusFilter.removeFilter();
       }
 
       value = finalData.get("shipmentType");
+      createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.clearAll();
       if (StringUtils.isNotBlank(value)) {
-        if (!createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.isDisplayedFast()) {
-          createRouteGroupsPage.shipmentFiltersForm.addFilter.selectValue("Shipment Type");
-        }
-        createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.clearAll();
         createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.selectFilter(value);
-      } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.isDisplayedFast()) {
-        createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.removeFilter();
       }
-
       if (finalData.containsKey("transitDateTimeFrom") || finalData.containsKey(
           "transitDateTimeTo")) {
         if (!createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.isDisplayedFast()) {
@@ -1572,6 +1560,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       page.txnRsvnTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
       page.txnRsvnTable.filterByColumn(COLUMN_TYPE, expected.getType());
+      pause1s();
       List<TxnRsvn> actual = page.txnRsvnTable.readAllEntities();
       Assertions.assertThat(actual).as("List of found transactions").isNotEmpty();
       if (actual.size() == 1) {

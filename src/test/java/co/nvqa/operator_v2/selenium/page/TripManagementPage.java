@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.ShipmentInfo;
@@ -22,13 +21,13 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -161,6 +160,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   private static final String CREATE_TRIP_PAGE_DURATION_MINUTES_XPATH = "//input[@id = 'createAdhocTripForm_durationMinutes']";
   private static final String CREATE_TRIP_PAGE_DEPARTURE_DATE_XPATH = "//input[@id = 'createAdhocTripForm_departureDate']";
   private static final String CREATE_TRIP_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
+  private static final List<String> LIST_OF_CANCELLATION_MESSAGE = Arrays.asList("Natural disasters / Force majeure", "Cancellation of flight", "Change of schedule", "Low parcel volume", "Not onboard on MMDA yet", "System Issues");
 
   @FindBy(className = "ant-modal-wrap")
   public CancelTripModal cancelTripModal;
@@ -230,6 +230,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
   @FindBy(id = "movementType")
   public AntSelect movementTypeFilterPage;
+
+  @FindBy(xpath = "//label[text()='Cancellation reason']/following::input")
+  public TextBox cancellationReasonInput;
 
   private static String originHub = "//input[@id='originHub']";
   private static String movementType = "//input[@id='movementType']";
@@ -1008,41 +1011,35 @@ public class TripManagementPage extends OperatorV2SimplePage {
   }
 
   public void selectCancellationReason() {
-    //Create random interger from 1 to 6
-    int i = new Random().nextInt(5) + 1;
-    TestUtils.findElementAndClick(TRIP_CANCEL_PAGE_REASON_XPATH, "xpath", getWebDriver());
-    waitUntilElementIsClickable(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH, i));
-    TestUtils.findElementAndClick(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH, i), "xpath", getWebDriver());
+    // Create random integer from 1 to 6 and click nth option based on it
+    String cancellationMessage = String.format(TRIP_CANCEL_PAGE_MESSAGE_XPATH, new Random().nextInt(5) + 1);
+    cancellationReasonInput.waitUntilVisible();
+    cancellationReasonInput.click();
+    waitUntilElementIsClickable(cancellationMessage);
+    click(cancellationMessage);
   }
 
-  public void vefiryCancellationMessage() {
+  public void verifyCancellationMessage() {
+    /*
+      Use getAttribute("innerText") instead of getText() for elements that exist
+      but not visible on the page such as these options
+    */
     List<WebElement> messageListElements = findElementsByXpath(TRIP_CANCEL_PAGE_MESSAGE_LIST_XPATH);
-    List<String> messageList = new ArrayList<String>();
-    for (int i = 1; i <= messageListElements.size(); i++) {
-      messageList.add(getText(f(TRIP_CANCEL_PAGE_MESSAGE_XPATH, i)));
-    }
-    Assertions.assertThat(messageList.contains("Natural disasters / Force majeure"))
-        .as("Natural disasters / Force majeure is shown").isTrue();
-    Assertions.assertThat(messageList.contains("Cancellation of flight"))
-        .as("Cancellation of flight is shown").isTrue();
-    Assertions.assertThat(messageList.contains("Change of schedule"))
-        .as("Change of schedule is shown").isTrue();
-    Assertions.assertThat(messageList.contains("Low parcel volume"))
-        .as("Low parcel volume is shown").isTrue();
-    Assertions.assertThat(messageList.contains("Not onboard on MMDA yet"))
-        .as("Not onboard on MMDA yet is shown").isTrue();
-    Assertions.assertThat(messageList.contains("System Issues")).as("System Issues is shown")
-        .isTrue();
+    List<String> messageList = messageListElements.stream().map(we -> we.getAttribute("innerText")).collect(
+        Collectors.toList());
 
+    Assertions.assertThat(messageList)
+        .as("Cancellation messages displayed on dropdown are CORRECT")
+        .containsAll(LIST_OF_CANCELLATION_MESSAGE);
   }
 
   public void CancelTripButtonStatus(String status) {
     switch (status) {
       case "disable":
-//        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as(" Cancel Trip button is disable").isFalse();
+        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as("Cancel Trip button is disabled").isFalse();
         break;
       case "enable":
-//        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as("Cancel Trip button is enable").isTrue();
+        Assertions.assertThat(isClickable(TRIP_CANCEL_PAGE_CANCEL_BUTTON,1)).as("Cancel Trip button is enabled").isTrue();
         break;
 
     }

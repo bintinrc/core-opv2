@@ -258,7 +258,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
         StandardTestConstants.COUNTRY_CODE.toLowerCase(), orderId));
     pause1s();
     closeDialogIfVisible();
-    waitUntilInvisibilityOfLoadingOrder();
+    waitWhilePageIsLoading(120);
   }
 
   public void clickMenu(String parentMenuName, String childMenuName) {
@@ -411,11 +411,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void verifyAirwayBillContentsIsCorrect(Order order) {
+    verifyAirwayBillContentsIsCorrect(order, 0, "awb_" + order.getTrackingId());
+  }
+
+  public void verifyAirwayBillContentsIsCorrect(Order order, int index, String fileName) {
     String trackingId = order.getTrackingId();
-    String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_" + trackingId);
+    String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename(fileName);
     verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
     AirwayBill airwayBill = PdfUtils
-        .getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
+        .getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, index);
 
     Assertions.assertThat(airwayBill.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
 
@@ -424,8 +428,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(order.getFromContact());
     assertThat("From Address", airwayBill.getFromAddress(),
         containsString(order.getFromAddress1()));
-    assertThat("From Address", airwayBill.getFromAddress(),
-        containsString(order.getFromAddress2()));
+    assertThat("From Address", StringUtils.normalizeSpace(airwayBill.getFromAddress()),
+        containsString(StringUtils.normalizeSpace(order.getFromAddress2())));
     assertThat("Postcode In From Address", airwayBill.getFromAddress(),
         containsString(order.getFromPostcode()));
 
@@ -433,7 +437,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     Assertions.assertThat(airwayBill.getToContact()).as("To Contact")
         .isEqualTo(order.getToContact());
     assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress1()));
-    assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress2()));
+    assertThat("To Address", StringUtils.normalizeSpace(airwayBill.getToAddress()),
+        containsString(StringUtils.normalizeSpace(order.getToAddress2())));
     assertThat("Postcode In To Address", airwayBill.getToAddress(),
         containsString(order.getToPostcode()));
 
@@ -494,7 +499,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   public void verifyInboundIsSucceed() {
     String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
     assertThat("Different Result Returned", actualLatestEvent,
-        isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
+        isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN", "PARCEL ROUTING SCAN"));
   }
 
   public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected,
@@ -832,12 +837,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public String getStampId() {
     return getText("//div[@class='data-block']/label[text()='Stamp ID']/following-sibling::p");
-  }
-
-  public void waitUntilInvisibilityOfLoadingOrder() {
-    waitUntilInvisibilityOfElementLocated(
-        "//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]", 60);
-    pause100ms();
   }
 
   public String getTextOnTableEvent(int rowNumber, String columnDataClass) {

@@ -66,13 +66,13 @@ Feature: Add Shipper To Preset
       | shipperName | {KEY_CREATED_SHIPPER.name}                        |
       | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
     And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator select "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" filters preset on Shipment Management page
+    And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
   @DeleteShipper @@DeleteFilterTemplate @CloseNewWindows
   Scenario: Operator Add New Shipper to Existing Shipper Pickup Preset Filters on Add Shipper to Preset Page - Multiple Addresses - All Shippers (uid:fd702085-61cd-4aab-9f18-e8a556f45544)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Shipper Pickup Filter Template using data below:
       | name                      | TA_TEMPLATE_{gradle-current-date-yyyyMMddHHmmsss} |
       | value.reservationTimeFrom | {gradle-current-date-yyyy-MM-dd}                  |
@@ -120,7 +120,7 @@ Feature: Add Shipper To Preset
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
   Scenario: Operator Failed to Select Shipper Creation Date more than 7 Days Range on Add Shipper to Preset Page (uid:14437f95-98fd-4888-bea7-751d6baa540b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator applies filters on Add Shipper To Preset page using data below:
@@ -129,7 +129,7 @@ Feature: Add Shipper To Preset
     Then Operator verifies wrong dates toast is shown on Add Shipper To Preset page
 
   Scenario: Check Shipper Selection in Add Shipper to Preset Page (uid:c8c488bd-b4fd-4ce3-abfc-d2fe5105ea97)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     When Operator clicks Load Selection on Add Shipper To Preset page
@@ -147,7 +147,7 @@ Feature: Add Shipper To Preset
     Then Operator verify all rows are unselected on Add Shipper To Preset page
 
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download All Shown (uid:908ad032-fa7f-4f63-ac4b-39729d1c4754)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     And Operator clicks Load Selection on Add Shipper To Preset page
@@ -158,7 +158,7 @@ Feature: Add Shipper To Preset
 
   @DeleteShipper @CloseNewWindows
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Filtered Shipper (uid:4790da95-8173-4c53-a208-ab77052ebaff)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -394,7 +394,7 @@ Feature: Add Shipper To Preset
     Then Operator verify that CSV file contains all Shippers currently being shown on Add Shipper To Preset page
 
   Scenario: Operator Downloads List of Shippers CSV file in Add Shipper to Preset Page - Download Only Active Shipper (uid:01b78e6c-06ad-4e4d-b49c-963d458f5c2f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Pick Ups -> Add Shipper To Preset
     And Add Shipper To Preset page is loaded
     And Operator clicks Load Selection on Add Shipper To Preset page
