@@ -243,9 +243,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     @FindBy(xpath = "//input[@placeholder='Start date']")
     public TextBox Departure_StartDate;
-
-    @FindBy(xpath = "//span[@class='ant-select-clear']")
-    public List<PageElement> clearButtons;
+    
     public static String notificationMessage = "";
 
     public void verifyAirportTripMovementPageItems() {
