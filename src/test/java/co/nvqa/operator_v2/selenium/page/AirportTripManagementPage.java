@@ -2,11 +2,14 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -14,7 +17,12 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Meganathan Ramasamy
@@ -29,6 +37,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
     private static final String XPATH_CAL_DEPARTUREDATE = "//div[@class='ant-picker-panels']//td[@title='%s']";
+    private static final String XPATH_CAL_DEPARTUREDATE_TD_DISABLE = "//table[@class='ant-picker-content']//td[@title='%s' and contains(@class,'ant-picker-cell-disabled')]";
     private static final String XPATH_FACILITIES_INPUT = "//input[@id='facilities']";
     private static final String XPATH_DIV_STARTSWITH_TEMPLATE = "//div[starts-with(.,'%s')]";
     private static final String XPATH_DEPARTURE_DATE_TEXT = "//div[contains(text(), ' - ')][./div[.='Departure Date']]";
@@ -42,6 +51,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String XPATH_AIRPORT_FACILITY_COUNTRY_TEXT ="//h4[contains(.,'Airport Facility in')]";
     private static final String XPATH_TOTAL_LIST_OF_AIRPORTS ="//h4[contains(.,'Total: ')]";
     private static final String XPATH_LOADED_LIST_OF_AIRPORTS ="//span[contains(.,'Showing %s of %s results')]";
+    private static final String XPATH_DIV_TITLE = "//div[@title='%s']";
+    private static final String antpickerdropdownhidden = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]";
+    private static final String AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[contains(text(),'%s')]";
+    private static final String AIRPORT_TRIP_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
+    private static final String AIRPORT_TRIP_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+    public String departureTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
 
     @FindBy(xpath = "//input[@id='departure']")
     public PageElement departureInput;
@@ -196,6 +211,39 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button//strong[.='Back']")
     public PageElement backButton;
 
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_originFacility']")
+    public PageElement createToFromAirportForm_originFacility;
+
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_destinationFacility']")
+    public PageElement createToFromAirportForm_destinationFacility;
+
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_departureTime']")
+    public PageElement createToFromAirportForm_departureTime;
+
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_duration-hours']")
+    public PageElement createToFromAirportForm_duration_hours;
+
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_duration-minutes']")
+    public PageElement createToFromAirportForm_duration_minutes;
+
+    @FindBy(xpath = "//input[@id='createToFromAirportForm_departureDate']")
+    public PageElement createToFromAirportForm_departureDate;
+
+    @FindBy(xpath = "//div[@data-testid='assign-drivers-select']")
+    public PageElement createToFromAirportForm_drivers;
+
+    @FindBy(xpath = "//textarea[@id='createToFromAirportForm_comment']")
+    public PageElement createToFromAirportForm_comment;
+
+    @FindBy(xpath = "//button[@data-testid='submit-button']")
+    public PageElement createToFromAirportForm_submit;
+
+    @FindBy(xpath = "//input[@placeholder='End date']")
+    public TextBox Departure_EndDate;
+
+    @FindBy(xpath = "//input[@placeholder='Start date']")
+    public TextBox Departure_StartDate;
+    
     public static String notificationMessage = "";
 
     public void verifyAirportTripMovementPageItems() {
@@ -213,15 +261,13 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void fillDepartureDateDetails(Map<String, String> mapOfData) {
-        departureInput.click();
-        String startDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "yyyy-MM-dd");
-        String endDate = DateUtil.getPastFutureDate(mapOfData.get("endDate"), "yyyy-MM-dd");
-        if(mapOfData.get("startDate").startsWith("D-")){
-            click(XPATH_CAL_PREV_MONTH);
-        }
-        moveToElement(findElementByXpath(f(XPATH_CAL_DEPARTUREDATE, startDate)));
-        click(f(XPATH_CAL_DEPARTUREDATE, startDate));
-        click(f(XPATH_CAL_DEPARTUREDATE, endDate));
+        String startDate = mapOfData.get("startDate");
+        String endDate = mapOfData.get("endDate");
+        Departure_StartDate.click();
+        Departure_StartDate.sendKeys(startDate);
+        Departure_EndDate.click();
+        Departure_EndDate.sendKeys(endDate);
+        Departure_EndDate.sendKeys(Keys.ENTER);
     }
 
     public void fillOrigDestDetails(Map<String, String> mapOfData) {
@@ -256,8 +302,14 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Reload appear in Airport trip Management page").isTrue();
 
         String departureDate = findElementByXpath(XPATH_DEPARTURE_DATE_TEXT).getText();
-        String expDepartDate = DateUtil.getPastFutureDate(mapOfData.get("startDate"), "dd MMMM yyyy") + " - " +
-                DateUtil.getPastFutureDate(mapOfData.get("endDate"), "dd MMMM yyyy");
+        Format dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        String expDepartDate = null;
+        try {
+            expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("startDate"))) + " - " +
+                    dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("endDate")));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         Assertions.assertThat(departureDate.split("\n")[1])
                 .as("Departure Date value appear in Airport trip Management page")
                 .isEqualTo(expDepartDate);
@@ -508,7 +560,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(notificationMessage).as("Error message is same").contains(expError);
     }
 
-
     public void searchAirport(PageElement filter, String value){
         clearWebField(filter.getWebElement());
         filter.sendKeys(value);
@@ -677,4 +728,250 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(noResultsFound.isDisplayed()).as("Records are not present")
                 .isTrue();
     }
+
+    public void clickOnCreateToFromAirportTrip(){
+        createToFromAirportTrip.click();
+        switchToOtherWindow();
+        waitUntilPageLoaded();
+        switchTo();
+        Assertions.assertThat(findElementByXpath("//h3[.='Create To/from Airport Trip']",30).isDisplayed())
+                .as("Create To/from Airport Trip Title is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_originFacility.isDisplayed())
+                .as("Origin Facility is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_destinationFacility.isDisplayed())
+                .as("Destination facility is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_departureTime.isDisplayed())
+                .as("Departure time is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_duration_hours.isDisplayed())
+                .as("Duration hours is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_duration_minutes.isDisplayed())
+                .as("Duration minutes is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_departureDate.isDisplayed())
+                .as("Departure Date is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_drivers.isDisplayed())
+                .as("Drivers field is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_comment.isDisplayed())
+                .as("Comment field is displayed").isTrue();
+        Assertions.assertThat(createToFromAirportForm_submit.isEnabled())
+                .as("Submit button is disabled").isFalse();
+        waitUntilInvisibilityOfElementLocated("//div[.='Loading...']", 180);
+    }
+
+    public void createNewAirportTrip(Map<String, String> mapOfData) {
+        createToFromAirportForm_originFacility.click();
+        sendKeysAndEnterById("createToFromAirportForm_originFacility", mapOfData.get("originFacility"));
+
+        createToFromAirportForm_destinationFacility.click();
+        sendKeysAndEnterById("createToFromAirportForm_destinationFacility", mapOfData.get("destinationFacility"));
+
+        String[] hourtime = mapOfData.get("departureTime").split(":");
+        String hour = f(departureTimeXpath, 1, hourtime[0]);
+        String time = f(departureTimeXpath, 2, hourtime[1]);
+
+        createToFromAirportForm_departureTime.click();
+        moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
+        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+        moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
+        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+        TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']",
+                "xpath", getWebDriver());
+
+        createToFromAirportForm_duration_hours.click();
+        TestUtils.findElementAndClick(f(XPATH_DIV_TITLE, mapOfData.get("durationhour")), "xpath", getWebDriver());
+
+        createToFromAirportForm_duration_minutes.click();
+        sendKeysAndEnterById("createToFromAirportForm_duration-minutes", mapOfData.get("durationminutes"));
+
+        String departureDate = mapOfData.get("departureDate");
+        createToFromAirportForm_departureDate.click();
+        createToFromAirportForm_departureDate.sendKeys(departureDate);
+        createToFromAirportForm_departureDate.sendKeys(Keys.ENTER);
+
+        if(!mapOfData.get("drivers").equals("-")){
+            String[] drivers = mapOfData.get("drivers").split(";");
+            int count = 0;
+            for(String driver : drivers){
+                createToFromAirportForm_drivers.click();
+                sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                count++;
+                if(count>4){
+                    int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+                    Assertions.assertThat(selected)
+                            .as("Total maximum seleted drivers are 4").isEqualTo(4);
+                }
+            }
+        }
+
+        createToFromAirportForm_comment.sendKeys(mapOfData.get("comments"));
+
+        createToFromAirportForm_submit.click();
+    }
+
+    public void verifyAirportTripCreationSuccessMessage(String message) {
+        String actMessage = getAntTopText();
+        Assertions.assertThat(actMessage).as("Success message is same").contains(message);
+        Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed()).as("View Details link is visible");
+    }
+
+    public String getAirportTripId(){
+        String actMessage = getAntTopText();
+        if (actMessage !=null){
+            Matcher m = Pattern.compile("Trip(.+?)from").matcher(actMessage);
+            if (m.find()){
+                return m.group(1).trim();
+            }
+        }
+        return null;
+    }
+
+    public void verifyDriverNotDisplayed(String driver) {
+        retryIfRuntimeExceptionOccurred(() -> {
+            try {
+                waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+                createToFromAirportForm_drivers.click();
+                sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+                Assertions.assertThat(selected)
+                        .as("Invalid driver not displayed").isZero();
+            } catch (Throwable ex) {
+                LOGGER.error(ex.getMessage());
+                LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+                refreshPage();
+                switchTo();
+                throw new NvTestRuntimeException(ex.getCause());
+            }
+        }, 2);
+    }
+
+    public void verifyInvalidItem(String name, String value) {
+        switch (name) {
+            case "origin facility":
+                String originFacility = value;
+                createToFromAirportForm_originFacility.click();
+                createToFromAirportForm_originFacility.sendKeys(originFacility);
+                Assertions.assertThat(
+                                isElementExist(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, originFacility), 1L))
+                        .as("Disable Origin Hub is not displayed").isFalse();
+                createToFromAirportForm_originFacility.clear();
+                break;
+
+            case "destination facility":
+                String destinationFacility = value;
+                createToFromAirportForm_destinationFacility.click();
+                createToFromAirportForm_destinationFacility.sendKeys(destinationFacility);
+                Assertions.assertThat(
+                                isElementExist(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, destinationFacility), 1L))
+                        .as("Disable Destination Hub is not displayed").isFalse();
+                createToFromAirportForm_destinationFacility.clear();
+                break;
+
+            case "driver":
+                String driverUsername = value;
+                waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+                createToFromAirportForm_drivers.click();
+                createToFromAirportForm_drivers.sendKeys(driverUsername);
+                Assertions.assertThat(
+                                isElementExist(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, driverUsername), 1L))
+                        .as("Invalid Driver has not been displayed").isFalse();
+                break;
+        }
+    }
+
+    public void getAndVerifySameHubErrorMessage() {
+        String originHubErrorMsg = findElementByXpath(
+                f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_originFacility")).getText();
+        String destinationHubErrorMsg = findElementByXpath(
+                f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_destinationFacility")).getText();
+        boolean errorVerification = (
+                originHubErrorMsg.equals("Invalid. Please create warehouse to/from airport.")
+                        && destinationHubErrorMsg.equals("Invalid. Please create warehouse to/from airport."));
+
+        Assertions.assertThat(errorVerification).as("Invalid. Please create warehouse to/from airport.")
+                .isTrue();
+    }
+
+    public void getAndVerifyZeroDurationTimeErrorMessage(){
+        String ZeroDurationTimeErrorMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_duration-hours")).getText();
+
+        Assertions.assertThat(ZeroDurationTimeErrorMessage).as("Duration must be greater than 0")
+                .isEqualTo("Duration must be greater than 0");
+    }
+
+    public void createAirportTripUsingData(Map<String,String> resolvedMapOfData){
+
+        if (resolvedMapOfData.get("originFacility")!=null){
+            createToFromAirportForm_originFacility.click();
+            sendKeysAndEnterById("createToFromAirportForm_originFacility", resolvedMapOfData.get("originFacility"));
+        }
+        if (resolvedMapOfData.get("destinationFacility")!=null){
+            createToFromAirportForm_destinationFacility.click();
+            sendKeysAndEnterById("createToFromAirportForm_destinationFacility", resolvedMapOfData.get("destinationFacility"));
+        }
+        if (resolvedMapOfData.get("durationhour")!=null){
+            createToFromAirportForm_duration_hours.click();
+            pause1s();
+            TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, resolvedMapOfData.get("durationhour")), "xpath", getWebDriver());
+        }
+        if (resolvedMapOfData.get("durationminutes")!=null){
+            createToFromAirportForm_duration_minutes.click();
+            pause1s();
+            TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, resolvedMapOfData.get("durationminutes")), "xpath", getWebDriver());
+        }
+    }
+
+    public void verifySubmitButtonDisable(){
+        Assertions.assertThat(createToFromAirportForm_submit.isEnabled())
+                .as("Submit button is disabled").isFalse();
+    }
+
+    public void verifyPastDayDisable(String date){
+        createToFromAirportForm_departureDate.click();
+        Assertions.assertThat(isElementExist(f(XPATH_CAL_DEPARTUREDATE_TD_DISABLE,date),2)).as("Date picker for past date is disable").isTrue();
+    }
+
+    public void clearTextonField(String fieldName){
+
+        switch (fieldName){
+            case "Origin Facility":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_originFacility")).click();
+                break;
+            case "Destination Facility":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_destinationFacility")).click();
+                break;
+            case "Departure Time":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_departureTime")).click();
+                break;
+            case "Duration":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_duration-hours")).click();
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_duration-minutes")).click();
+                break;
+            case "Departure Date":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,"createToFromAirportForm_departureDate")).click();
+                break;
+        }
+    }
+
+    public void verifyMandatoryFieldErrorMessage(String fieldName){
+        String actualMessage ="";
+        String expectedMessage = "Please enter "+fieldName;
+        switch (fieldName){
+            case "Origin Facility":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_originFacility")).getText();
+                break;
+            case "Destination Facility":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_destinationFacility")).getText();
+                break;
+            case "Departure Time":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_departureTime")).getText();
+                break;
+            case "Duration":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_duration-hours")).getText();
+                break;
+            case "Departure Date":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_departureDate")).getText();
+                break;
+        }
+        Assertions.assertThat(actualMessage).as("Mandatory require error message is the same").isEqualTo(expectedMessage);
+    }
+
 }
