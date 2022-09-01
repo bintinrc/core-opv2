@@ -52,7 +52,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         airportTripManagementPage.clickOnLoadTripsAirportManagementDetails();
-        takesScreenshot();
     }
 
     @Then("Verify the parameters of loaded trips in Airport Management")
@@ -61,9 +60,13 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(resolvedData);
     }
 
-    @And("Create a new flight trip with below data:")
+    @And("Create a new flight trip using below data:")
     public void operatorCreateNewFlightTripInAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.createNewFlightTrip(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        airportTripManagementPage.createFlightTrip(resolvedData);
+        String tripId =airportTripManagementPage.getAirportTripId();
+        put(KEY_CURRENT_MOVEMENT_TRIP_ID,tripId);
+        putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS,tripId);
     }
 
     @And("Operator search the {string} column")
@@ -223,9 +226,16 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyNoResultsFound();
     }
 
-    @Then("Operator click on 'Create Tofrom Airport Trip' button in Airport Management page")
-    public void operatorclickOnCreateToFromAirportTrip() {
-        airportTripManagementPage.clickOnCreateToFromAirportTrip();
+    @Then("Operator click on {string} button in Airport Management page")
+    public void operatorclickOnCreateToFromAirportTrip(String button) {
+        switch (button){
+            case "Create Tofrom Airport Trip":
+                airportTripManagementPage.clickOnCreateToFromAirportTrip();
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.clickOnCreateFlightTrip();
+                break;
+        }
     }
 
     @Then("Operator create new airport trip using below data:")
