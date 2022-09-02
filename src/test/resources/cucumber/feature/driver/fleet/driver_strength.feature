@@ -350,8 +350,8 @@ Feature: Driver Strength
     And DB Operator get data of created driver
     And Operator load all data for driver on Driver Strength Page
     Then Operator verify driver strength params of created driver on Driver Strength page
-    And DB Operator verifies that 1 row is added for the change type: <ChangeType1> in account_audit_logs table in driver db
-    And DB Operator verifies that 1 row is added for the change type: <ChangeType2> in account_audit_logs table in driver db
+    And DB Operator verifies that 1 row is added for the change type: "<ChangeType1>" in account_audit_logs table in driver db
+    And DB Operator verifies that 1 row is added for the change type: "<ChangeType2>" in account_audit_logs table in driver db
     And Operator delete created driver on Driver Strength page
 
     Examples:
@@ -376,7 +376,7 @@ Feature: Driver Strength
     And DB Operator get data of created driver
     And Operator load all data for driver on Driver Strength Page
     Then Operator verify driver strength params of created driver on Driver Strength page
-    And DB Operator verifies that 2 rows are added for the change type: <ChangeType2> in account_audit_logs table in driver db
+    And DB Operator verifies that 2 rows are added for the change type: "<ChangeType2>" in account_audit_logs table in driver db
     And Operator delete created driver on Driver Strength page
 
     Examples:
