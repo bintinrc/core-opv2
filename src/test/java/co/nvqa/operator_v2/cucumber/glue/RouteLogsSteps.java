@@ -958,7 +958,7 @@ public class RouteLogsSteps extends AbstractSteps {
   @And("Operator filters route by {string} Route ID on Route Logs page")
   public void operatorFilterByRouteId(String routeId) {
     routeLogsPage.inFrame(() -> {
-      routeLogsPage.waitUntilLoaded();
+      routeLogsPage.waitUntilLoaded(60);
       routeLogsPage.routeIdInput.setValue(resolveValue(routeId));
       routeLogsPage.search.click();
       routeLogsPage.waitUntilLoaded(5);

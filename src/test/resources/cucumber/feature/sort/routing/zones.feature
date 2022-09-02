@@ -7,14 +7,14 @@ Feature: Zones
 
   @DeleteCreatedZone
   Scenario: Create Zone - RTS Type (uid:6e65d068-6884-4e72-8bf4-277bc94bb5ee)
-    Given Operator go to menu Routing -> Zones
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "RTS" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "RTS" zone's details are right
 
   @DeleteCreatedZone
   Scenario: Create Zone - Normal Type (uid:0d5e36c9-9e9c-4547-9339-04bbf3e7501c)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Zones
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "Normal" zone using "{hub-name}" hub
     Then Operator verifies that success react notification displayed:
       | top | Zone created successfully |
@@ -31,7 +31,7 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Update Zone - Normal Type to RTS Type (uid:d60632a4-27d5-4f98-8d20-caf835a00474)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Zones
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "Normal" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "Normal" zone's details are right
     When Operator changes the newly created Zone to be "RTS" zone
@@ -40,7 +40,7 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Update Zone -  RTS Type to Normal Type (uid:44d1e3f5-fe53-4a8d-8354-09da276b9099)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Zones
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
     When Operator creates "RTS" zone using "{hub-name}" hub
     Then Operator verifies that the newly created "RTS" zone's details are right
     When Operator changes the newly created Zone to be "Normal" zone
@@ -52,7 +52,7 @@ Feature: Zones
     And API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
-    Given Operator go to menu Routing -> Zones
+    Given Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator delete the new Zone
     Then Operator verify the new Zone is deleted successfully
 

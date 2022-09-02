@@ -354,10 +354,41 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.printWaybill(trackingId);
   }
 
+  @When("^Operator print Waybill for multiple orders on All Orders page$")
+  public void operatorPrintWaybillForMultipleOrdersOnAllOrdersPage() {
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption("Print Waybills");
+    allOrdersPage.printWaybillsDialog.waitUntilVisible();
+    allOrdersPage.printWaybillsDialog.checkbox.check();
+    allOrdersPage.printWaybillsDialog.downloadSelected.click();
+    allOrdersPage.printWaybillsDialog.forceClose();
+  }
+
   @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyWaybillContentsIsCorrect(order);
+  }
+
+  @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")
+  public void operatorVerifyThePrintedWaybillForMultipleOrderOnAllOrdersPageContainsCorrectInfo() {
+    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+    for (int i = 0; i < orders.size(); i++) {
+      boolean found = false;
+      for (int j = 0; j < orders.size(); j++) {
+        try {
+          allOrdersPage.editOrderPage.verifyAirwayBillContentsIsCorrect(orders.get(i), j,
+              "awb_a4_page_1");
+          found = true;
+          break;
+        } catch (AssertionError ex) {
+        }
+      }
+      Assertions.assertThat(found)
+          .withFailMessage(
+              "Correct info for order " + orders.get(i).getTrackingId() + " was not found")
+          .isTrue();
+    }
   }
 
   @When("^Operator resume order on All Orders page$")

@@ -480,9 +480,9 @@ Feature: Route Inbound Expected Scans
       | hubName    | {hub-name}             |
       | routeDate  | GET_FROM_CREATED_ROUTE |
     When Operator open C2C / Return Pickups dialog on Route Inbound page
-    Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
-      | shipperName       | scanned | total |
-      | {shipper-v4-name} | 0       | 1     |
+#    Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
+#      | shipperName       | scanned | total |
+#      | {shipper-v4-name} | 0       | 1     |
     When Operator click 'View orders or reservations' button for shipper #1 in C2C / Return Pickups Waypoints dialog
     Then Operator verify Orders table in C2C / Return Pickups Waypoints dialog using data below:
       | trackingId                                 | stampId                                    | location | type             | status  | cmiCount | routeInboundStatus |
