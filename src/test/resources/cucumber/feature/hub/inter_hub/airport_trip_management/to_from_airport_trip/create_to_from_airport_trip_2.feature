@@ -135,7 +135,7 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator fill new airport trip using data below:
       | originFacility      | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destinationFacility | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
-    Then Operator verifies same hub error messages on Create Airport Trip page
+    Then Operator verifies same hub error messages on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -165,7 +165,7 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator fill new airport trip using data below:
       | durationminutes  | 00                                        |
       | durationhour     | 00                                        |
-    Then Operator verifies duration time error messages on Create Airport Trip page
+    Then Operator verifies duration time error messages on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -192,7 +192,7 @@ Feature: Airport Trip Management - Load Trip 2
       | endDate                | {gradle-next-1-day-yyyy-MM-dd}                      |
       | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
     And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
-    Then Operator verifies past date picker "{gradle-previous-1-day-yyyy-MM-dd}" is disable on Create Airport Trip page
+    Then Operator verifies past date picker "{gradle-previous-1-day-yyyy-MM-dd}" is disable on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -221,8 +221,8 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
     And Operator fill new airport trip using data below:
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-    And Operator removes text of "Origin Facility" field on Create Airport Trip page
-    Then Operator verifies Mandatory require error message on "Origin Facility" field
+    And Operator removes text of "Origin Facility" field on "Create Airport Trip" page
+    Then Operator verifies Mandatory require error message of "Origin Facility" field on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @KillBrowser

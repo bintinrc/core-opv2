@@ -11,7 +11,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
@@ -70,7 +69,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String createFlightTrip_mawbId = "editForm_mawb";
     private static final String createFlightTrip_commentId = "editForm_comment";
     public String departureTimeXpath = "//div[contains(@class, 'ant-picker-dropdown') and not(contains(@class , 'ant-picker-dropdown-hidden'))]//div[@class='ant-picker-content']//ul[%s]//div[text()= '%s']";
-
+    private static final String TOAST_ERROR_MESSAGES_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[normalize-space(.)]";
 
     @FindBy(xpath = "//input[@id='departure']")
     public PageElement departureInput;
@@ -235,7 +234,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public PageElement createToFromAirportForm_departureTime;
 
     @FindBy(xpath = "//input[@id='createToFromAirportForm_duration-hours']")
-    public PageElement createToFromAirportForm_duration_hours;
+    public PageElement createToFromAirportForm_durationHours;
 
     @FindBy(xpath = "//input[@id='createToFromAirportForm_duration-minutes']")
     public PageElement createToFromAirportForm_duration_minutes;
@@ -795,7 +794,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Destination facility is displayed").isTrue();
         Assertions.assertThat(createToFromAirportForm_departureTime.isDisplayed())
                 .as("Departure time is displayed").isTrue();
-        Assertions.assertThat(createToFromAirportForm_duration_hours.isDisplayed())
+        Assertions.assertThat(createToFromAirportForm_durationHours.isDisplayed())
                 .as("Duration hours is displayed").isTrue();
         Assertions.assertThat(createToFromAirportForm_duration_minutes.isDisplayed())
                 .as("Duration minutes is displayed").isTrue();
@@ -829,7 +828,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']",
                 "xpath", getWebDriver());
 
-        createToFromAirportForm_duration_hours.click();
+        createToFromAirportForm_durationHours.click();
         TestUtils.findElementAndClick(f(XPATH_DIV_TITLE, mapOfData.get("durationhour")), "xpath", getWebDriver());
 
         createToFromAirportForm_duration_minutes.click();
@@ -898,50 +897,66 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         waitUntilInvisibilityOfElementLocated("//div[.='Loading...']", 180);
     }
 
-    public void createFlightTrip(Map<String, String> mapOfData) {
-        createFlightTrip_originAirport.click();
-        sendKeysAndEnterById(createFlightTrip_originAirportId, mapOfData.get("originFacility"));
+    public Boolean createFlightTrip(Map<String, String> mapOfData) {
 
-        createFlightTrip_destinationAirport.click();
-        sendKeysAndEnterById(createFlightTrip_destinationAirportId, mapOfData.get("destinationFacility"));
+        if (mapOfData.get("originFacility")!=null){
+            createFlightTrip_originAirport.click();
+            sendKeysAndEnterById(createFlightTrip_originAirportId, mapOfData.get("originFacility"));
+        }
 
-        String[] hourtime = mapOfData.get("departureTime").split(":");
-        String hour = f(departureTimeXpath, 1, hourtime[0]);
-        String time = f(departureTimeXpath, 2, hourtime[1]);
+        if (mapOfData.get("destinationFacility")!=null){
+            createFlightTrip_destinationAirport.click();
+            sendKeysAndEnterById(createFlightTrip_destinationAirportId, mapOfData.get("destinationFacility"));
+        }
 
-        createFlightTrip_departureTime.click();
-        moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
-        TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
-        moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
-        TestUtils.findElementAndClick(time, "xpath", getWebDriver());
-        TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']",
-                "xpath", getWebDriver());
+        if(mapOfData.get("departureTime")!=null){
+            String[] hourtime = mapOfData.get("departureTime").split(":");
+            String hour = f(departureTimeXpath, 1, hourtime[0]);
+            String time = f(departureTimeXpath, 2, hourtime[1]);
 
-        SetValueFromDropdownList(createFlightTrip_durationHours,mapOfData.get("durationhour"));
+            createFlightTrip_departureTime.click();
+            moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[1]");
+            TestUtils.findElementAndClick(hour, "xpath", getWebDriver());
+            moveToElementWithXpath(antpickerdropdownhidden + "//div[@class='ant-picker-content']//ul[2]");
+            TestUtils.findElementAndClick(time, "xpath", getWebDriver());
+            TestUtils.findElementAndClick(antpickerdropdownhidden + "//li[@class='ant-picker-ok']",
+                    "xpath", getWebDriver());
+        }
 
-        SetValueFromDropdownList(createFlightTrip_durationMinutes,mapOfData.get("durationminutes"));
+        if(mapOfData.get("durationhour")!=null)
+            SetValueFromDropdownList(createFlightTrip_durationHours,mapOfData.get("durationhour"));
 
-        createFlightTrip_departureDate.ClickSendKeysAndEnter(mapOfData.get("departureDate"));
+        if(mapOfData.get("durationminutes")!=null)
+            SetValueFromDropdownList(createFlightTrip_durationMinutes,mapOfData.get("durationminutes"));
 
-        SetValueFromDropdownList(createFlightTrip_originProcessingTimeHours,mapOfData.get("originProcesshours"));
+        if(mapOfData.get("departureDate")!=null)
+            createFlightTrip_departureDate.ClickSendKeysAndEnter(mapOfData.get("departureDate"));
 
-        SetValueFromDropdownList(createFlightTrip_originProcessingTimeMinutes,mapOfData.get("originProcessminutes"));
+        if(mapOfData.get("originProcesshours")!=null)
+            SetValueFromDropdownList(createFlightTrip_originProcessingTimeHours,mapOfData.get("originProcesshours"));
 
-        SetValueFromDropdownList(createFlightTrip_destinationProcessingTimeHours,mapOfData.get("destProcesshours"));
+        if(mapOfData.get("originProcessminutes")!=null)
+            SetValueFromDropdownList(createFlightTrip_originProcessingTimeMinutes,mapOfData.get("originProcessminutes"));
 
-        SetValueFromDropdownList(createFlightTrip_destinationProcessingTimeMinutes,mapOfData.get("destProcessminutes"));
+        if(mapOfData.get("destProcesshours")!=null)
+            SetValueFromDropdownList(createFlightTrip_destinationProcessingTimeHours,mapOfData.get("destProcesshours"));
 
-        if (mapOfData.get("flightnumber")!=null){
+        if(mapOfData.get("destProcessminutes")!=null)
+            SetValueFromDropdownList(createFlightTrip_destinationProcessingTimeMinutes,mapOfData.get("destProcessminutes"));
+
+        if (mapOfData.get("flightnumber")!=null)
             createFlightTrip_flightNo.sendKeys(mapOfData.get("flightnumber"));
-        }
 
-        if (mapOfData.get("mawb")!=null){
+        if (mapOfData.get("mawb")!=null)
             createFlightTrip_mawb.sendKeys(mapOfData.get("mawb"));
+
+        if (mapOfData.get("comments")!=null) createFlightTrip_comment.sendKeys(mapOfData.get("comments"));
+
+        if (submitButton.isEnabled()) {
+            submitButton.click();
+            if (isElementVisible("//div[@class='ant-message-notice']//span[2]",2)) return true;
         }
-
-        createFlightTrip_comment.sendKeys(mapOfData.get("comments"));
-
-        submitButton.click();
+        return false;
     }
 
     private void SetValueFromDropdownList(PageElement element,String value){
@@ -1025,24 +1040,52 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         }
     }
 
-    public void getAndVerifySameHubErrorMessage() {
-        String originHubErrorMsg = findElementByXpath(
-                f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_originFacility")).getText();
-        String destinationHubErrorMsg = findElementByXpath(
-                f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_destinationFacility")).getText();
-        boolean errorVerification = (
-                originHubErrorMsg.equals("Invalid. Please create warehouse to/from airport.")
-                        && destinationHubErrorMsg.equals("Invalid. Please create warehouse to/from airport."));
+    public void getAndVerifySameHubErrorMessage(String pageName) {
+        switch (pageName){
+            case "Create Airport Trip":
+                String originHubErrorMsg = findElementByXpath(
+                        f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_originFacility")).getText();
+                String destinationHubErrorMsg = findElementByXpath(
+                        f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_destinationFacility")).getText();
+                boolean errorVerification = (
+                        originHubErrorMsg.equals("Invalid. Please create warehouse to/from airport.")
+                                && destinationHubErrorMsg.equals("Invalid. Please create warehouse to/from airport."));
 
-        Assertions.assertThat(errorVerification).as("Invalid. Please create warehouse to/from airport.")
-                .isTrue();
+                Assertions.assertThat(errorVerification).as("Invalid. Please create warehouse to/from airport.")
+                        .isTrue();
+                break;
+            case "Create Flight Trip":
+                String originAirportMessage = findElementByXpath(
+                        f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_originAirportId)).getText();
+                String destinationAirportMessage = findElementByXpath(
+                        f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_destinationAirportId)).getText();
+                boolean errorMessage = (
+                        originAirportMessage.equals("Origin Airport and Destination Airport cannot be the same")
+                                && destinationAirportMessage.equals("Origin Airport and Destination Airport cannot be the same"));
+
+                Assertions.assertThat(errorMessage).as("Origin Airport and Destination Airport cannot be the same")
+                        .isTrue();
+                break;
+        }
+
     }
 
-    public void getAndVerifyZeroDurationTimeErrorMessage(){
-        String ZeroDurationTimeErrorMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_duration-hours")).getText();
+    public void getAndVerifyZeroDurationTimeErrorMessage(String pageName){
+        String ZeroDurationTimeErrorMessage ="";
+        switch (pageName){
+            case "Create Airport Trip":
+                ZeroDurationTimeErrorMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,"createToFromAirportForm_duration-hours")).getText();
+                Assertions.assertThat(ZeroDurationTimeErrorMessage).as("Duration must be greater than 0")
+                        .isEqualTo("Duration must be greater than 0");
+                break;
+            case "Create Flight Trip":
+                ZeroDurationTimeErrorMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_durationHoursId)).getText();
+                Assertions.assertThat(ZeroDurationTimeErrorMessage).as("Duration must be greater than 0")
+                        .isEqualTo("Flight Duration must be greater than 0");
+                break;
+        }
 
-        Assertions.assertThat(ZeroDurationTimeErrorMessage).as("Duration must be greater than 0")
-                .isEqualTo("Duration must be greater than 0");
+
     }
 
     public void createAirportTripUsingData(Map<String,String> resolvedMapOfData){
@@ -1056,7 +1099,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
             sendKeysAndEnterById("createToFromAirportForm_destinationFacility", resolvedMapOfData.get("destinationFacility"));
         }
         if (resolvedMapOfData.get("durationhour")!=null){
-            createToFromAirportForm_duration_hours.click();
+            createToFromAirportForm_durationHours.click();
             pause1s();
             TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, resolvedMapOfData.get("durationhour")), "xpath", getWebDriver());
         }
@@ -1072,8 +1115,16 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Submit button is disabled").isFalse();
     }
 
-    public void verifyPastDayDisable(String date){
-        createToFromAirportForm_departureDate.click();
+    public void verifyPastDayDisable(String date, String pageName){
+        switch (pageName){
+            case "Create Airport Trip":
+                createToFromAirportForm_departureDate.click();
+                break;
+            case "Create Flight Trip":
+                createFlightTrip_departureDate.click();
+                break;
+        }
+
         Assertions.assertThat(isElementExist(f(XPATH_CAL_DEPARTUREDATE_TD_DISABLE,date),2)).as("Date picker for past date is disable").isTrue();
     }
 
@@ -1099,7 +1150,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         }
     }
 
-    public void verifyMandatoryFieldErrorMessage(String fieldName){
+    public void verifyMandatoryFieldErrorMessageAirportPage(String fieldName){
         String actualMessage ="";
         String expectedMessage = "Please enter "+fieldName;
         switch (fieldName){
@@ -1120,6 +1171,78 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 break;
         }
         Assertions.assertThat(actualMessage).as("Mandatory require error message is the same").isEqualTo(expectedMessage);
+    }
+
+    public void verifyMandatoryFieldErrorMessageFlightTripPage(String fieldName){
+        String actualMessage ="";
+        String expectedMessage = "Please enter "+fieldName;
+        switch (fieldName){
+            case "Origin Airport":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_originAirportId)).getText();
+                break;
+            case "Destination Airport":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_destinationAirportId)).getText();
+                break;
+            case "Flight Schedule Departure Time":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_departureTimeId)).getText();
+                break;
+            case "Flight Duration":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_durationHoursId)).getText();
+                break;
+            case "Flight Departure Date":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_departureDateId)).getText();
+                break;
+            case "Processing Time at Origin Airport":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_originProcessingTimeHoursId)).getText();
+                break;
+            case "Processing Time at Destination Airport":
+                actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_destinationProcessingTimeHoursId)).getText();
+                break;
+        }
+        Assertions.assertThat(actualMessage).as("Mandatory require error message is the same").isEqualTo(expectedMessage);
+    }
+
+    public void clearTextonFieldOnFlightTrip(String fieldName){
+        switch (fieldName){
+            case "Origin Airport":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_originAirportId)).click();
+                break;
+            case "Destination Airport":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_destinationAirportId)).click();
+                break;
+            case "Flight Schedule Departure Time":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_departureTimeId)).click();
+                break;
+            case "Flight Duration":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_durationHoursId)).click();
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_durationMinutesId)).click();
+                break;
+            case "Flight Departure Date":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_departureDateId)).click();
+                break;
+            case "Processing Time at Origin Airport":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_originProcessingTimeHoursId)).click();
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_originProcessingTimeMinutesId)).click();
+                break;
+            case "Processing Time at Destination Airport":
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_destinationProcessingTimeHoursId)).click();
+                findElementByXpath(f(AIRPORT_TRIP_CLEAR_BUTTON_XPATH,createFlightTrip_destinationProcessingTimeMinutesId)).click();
+                break;
+        }
+    }
+    public void verifyMAWBerrorMessage(){
+        String actualMessage = findElementByXpath(f(AIRPORT_TRIP_PAGE_ERRORS_XPATH,createFlightTrip_mawbId)).getText();
+        Assertions.assertThat(actualMessage).as("MAWB error message is the same").isEqualTo("Invalid MAWB Format");
+    }
+
+    public void verifyToastErrorMessage(List<String> expectedMessages){
+
+        List<WebElement> ErrorMessagesElement = findElementsByXpath(TOAST_ERROR_MESSAGES_XPATH);
+        List<String> actualMessages = new ArrayList<>();
+        ErrorMessagesElement.forEach(e -> actualMessages.add(e.getText()));
+        Boolean compareResult = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
+        Assertions.assertThat(compareResult).as("Error message is the same").isTrue();
+
     }
 
 }
