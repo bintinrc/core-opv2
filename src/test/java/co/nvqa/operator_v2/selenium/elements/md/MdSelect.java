@@ -93,6 +93,10 @@ public class MdSelect extends PageElement {
     click(f(locator, getMenuId(), StringUtils.normalizeSpace(value)));
   }
 
+  public void setValue(String value) {
+    selectValue(value);
+  }
+
   public void selectValues(Iterable<String> values) {
     openMenu();
     String menuId = getMenuId();

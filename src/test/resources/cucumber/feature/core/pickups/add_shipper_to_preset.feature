@@ -115,7 +115,7 @@ Feature: Add Shipper To Preset
       | shipperName | {KEY_CREATED_SHIPPER.name}                        |
       | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
     And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator select "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" filters preset on Shipment Management page
+    When Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
@@ -445,7 +445,7 @@ Feature: Add Shipper To Preset
       | shipperName | {KEY_CREATED_SHIPPER.name}                        |
       | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
     And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator select "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" filters preset on Shipment Management page
+    And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
@@ -491,7 +491,7 @@ Feature: Add Shipper To Preset
       | shipperName | {KEY_CREATED_SHIPPER.name}                        |
       | presetName  | {KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name} |
     And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator select "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" filters preset on Shipment Management page
+    And Operator selects "{KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE.name}" Filter Preset on Shipper Pickups page
     Then Operator verifies filter parameters on Shipper Pickups page using data below:
       | shippers | {KEY_CREATED_SHIPPER.legacyId}-{KEY_CREATED_SHIPPER.name} |
 
