@@ -139,7 +139,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void clickAddNewDriver() {
-    final String xpathAddButton ="//span[.='Add New Driver']";
+    final String xpathAddButton = "//button[.='Add New Driver']";
     waitUntilVisibilityOfElementLocated(xpathAddButton);
     click(xpathAddButton);
     pause3s();
@@ -222,6 +222,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public void clickResignedOption(String resigned){
     pause2s();
     resignedFilter.click();
+    pause2s();
     if(resigned.equalsIgnoreCase("no")){
         click("//div[@label='Not Resigned']");
     } else {

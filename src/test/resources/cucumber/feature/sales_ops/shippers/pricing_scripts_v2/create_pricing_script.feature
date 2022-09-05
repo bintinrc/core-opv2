@@ -514,7 +514,7 @@ Feature: Pricing Scripts V2
       | comments     | OK           |
     Examples:
       | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              |
-      | Yes   | Dataset name | 17.12      | 1.12 | uid:313b70a4-3803-40cd-8872-b08da89e3281 |
+      | Yes   | is RTS = yes | 17.12      | 1.12 | uid:313b70a4-3803-40cd-8872-b08da89e3281 |
       | No    | is RTS = no  | 16.05      | 1.05 | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 |
 
   Scenario: Create Draft Pricing Script Failed - Not Fill Script Name and Script Description (uid:d5a25b08-13b9-442a-bd2c-ff5077e15371)

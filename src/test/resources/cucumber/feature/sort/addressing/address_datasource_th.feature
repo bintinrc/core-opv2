@@ -51,7 +51,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -167,7 +167,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -190,7 +190,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -221,7 +221,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -244,7 +244,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -284,7 +284,7 @@ Feature: Address Datasource
     Then Operator verifies the address datasource details in Row Details modal:
       | postcode | {datasource-postcode}     |
       | zone     | {KEY_ZONE_INFO.shortName} |
-      | hub      | {KEY_HUB_INFO.shortName}  |
+      | hub      | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
     And Operator verify the data source toast:
       | top  | Datasource Updated |
@@ -363,7 +363,7 @@ Feature: Address Datasource
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-1}, {longitude-1} |
       | zone    | {KEY_ZONE_INFO.shortName}   |
-      | hub     | {KEY_HUB_INFO.shortName}    |
+      | hub     | {KEY_HUB_INFO.name}         |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
