@@ -239,6 +239,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
+      tileValue = tileValue.substring(0, tileValue.indexOf(' '));
       LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
       return Integer.parseInt(tileValue);
     } catch (Exception e) {
@@ -282,19 +283,36 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
   }
 
-  public void openModalPopup(String modalTitle, String tileName) {
-    waitWhilePageIsLoading();
-    pause3s();
+  public void clickHamburgerIcon(String tileName) {
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName, tileName);
-    String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
-    closeIfModalDisplay();
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
     scrollIntoView(hamburger);
     hamburger.click();
+  }
+
+  public void openModalPopup(String modalTitle, String tileName) {
+    waitWhilePageIsLoading();
+    pause3s();
+    String titleXpath = f(MODAL_CONTENT_XPATH, modalTitle);
+    closeIfModalDisplay();
+    clickHamburgerIcon(tileName);
     waitUntilVisibilityOfElementLocated(titleXpath);
     WebElement modalContent = getWebDriver().findElement(By.xpath(titleXpath));
     Assert.assertTrue("Assert that modal pop-up is opened",
         modalContent.isDisplayed());
+  }
+
+  public void verifyRouteMonitoringPageIsOpenedInNewTab(String tileName) {
+    waitWhilePageIsLoading();
+    String windowHandle = getWebDriver().getWindowHandle();
+    pause3s();
+    closeIfModalDisplay();
+    clickHamburgerIcon(tileName);
+    switchToNewWindow();
+    waitWhilePageIsLoading();
+    pause3s();
+    Assertions.assertThat(getWebDriver().getCurrentUrl()).contains("/route-monitoring-paged");
+    closeAllWindows(windowHandle);
   }
 
   public void verifyModalPopupByName(String modalTitle) {
@@ -393,8 +411,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       LOGGER.info("Waiting for the tile value to load...");
       try {
         WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
-        actualCount = Double.parseDouble(tile.getText().replaceAll("\\$|\\,", "").trim());
+        String titlevalue = tile.getText().replaceAll("\\$|\\,", "").trim();
+        titlevalue = titlevalue.replaceAll("\\%|\\,", "").trim();
+        actualCount = Double.parseDouble(titlevalue);
       } catch (NumberFormatException nfe) {
+        nfe.printStackTrace();
         actualCount = -1;
       }
       return actualCount >= 0;
