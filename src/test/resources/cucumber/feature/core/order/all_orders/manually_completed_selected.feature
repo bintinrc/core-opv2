@@ -392,8 +392,8 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
-      | name        | FORCED SUCCESS                                                                                                                                                                                                                                              |
-      | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                                                       |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS (uid:435ba8e7-bb4b-4b77-8dc8-e3fc66bc0dfc)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -411,7 +411,7 @@ Feature: All Orders - Manually Completed Selected
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
-      | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page (uid:435ba8e7-bb4b-4b77-8dc8-e3fc66bc0dfc)
     Given Operator go to menu Utilities -> QRCode Printing
