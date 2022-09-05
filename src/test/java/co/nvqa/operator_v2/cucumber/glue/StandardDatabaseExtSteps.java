@@ -39,6 +39,7 @@ import com.google.common.collect.ImmutableList;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -1618,22 +1619,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @When("DB Operator verify sla in movement_events table is succeed for the following data:")
   public void dbOperatorVerifySlaInMovementEventsTableIsSucceedForTheFollowingData(
       Map<String, String> mapOfData) {
-    Map<String, String> resolvedMapData = resolveKeyValues(mapOfData);
-    String expectedExtData = resolvedMapData.get("extData");
-    String[] shipmentIds = resolvedMapData.get("shipmentIds").split(",");
-    List<Long> listShipmentIds = Arrays.stream(shipmentIds).map(Long::valueOf)
-        .collect(Collectors.toList());
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      Map<String, String> resolvedMapData = resolveKeyValues(mapOfData);
+      String expectedExtData = resolvedMapData.get("extData");
+      String[] shipmentIds = resolvedMapData.get("shipmentIds").split(",");
+      List<Long> listShipmentIds = Arrays.stream(shipmentIds).map(Long::valueOf)
+          .collect(Collectors.toList());
 
-    String expectedEvent = "SLA_CALCULATION";
-    String expectedStatus = "SUCCESS";
-    for (Long shipmentId : listShipmentIds) {
-      MovementEventEntity movementEventEntity = getHubJdbc()
-          .getMovementEventByShipmentId(shipmentId);
-      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
-      assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
-      pause1s();
-    }
+      String expectedEvent = "SLA_CALCULATION";
+      String expectedStatus = "SUCCESS";
+      for (Long shipmentId : listShipmentIds) {
+        MovementEventEntity movementEventEntity = getHubJdbc()
+            .getMovementEventByShipmentId(shipmentId);
+        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
+        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+        pause1s();
+      }
+    }, "Retrying until SLA is done calculated...", 10000, 20);
   }
 
   @Then("DB Operator verify sla in movement_events table from {string} to {string} is succeed for the following data:")
