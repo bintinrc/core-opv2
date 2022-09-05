@@ -250,7 +250,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order with COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -265,7 +267,8 @@ public class EditOrderSteps extends AbstractSteps {
     }
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -274,7 +277,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order without collecting COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();

@@ -222,6 +222,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     String url = getWebDriver().getCurrentUrl();
     shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
     if (!shipper.getActive()) {
+      waitWhilePageIsLoading();
       basicSettingsForm.shipperStatus.selectValue("Disabled");
       saveChanges.click();
       waitUntilInvisibilityOfToast("All changes saved successfully");

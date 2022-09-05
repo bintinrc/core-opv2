@@ -53,7 +53,6 @@ Feature: Shipment Management - Edit Shipment 2
   Scenario: Cancel Shipment with Pending Status (uid:192240e7-3534-48f3-91ee-242e08ac4342)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When API Operator change the status of the shipment into "Pending"
     And Operator click "Load All Selection" on Shipment Management page

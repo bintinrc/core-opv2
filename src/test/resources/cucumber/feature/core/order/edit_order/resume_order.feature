@@ -108,7 +108,10 @@ Feature: Resume Order
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    And API Driver failed the C2C/Return order pickup using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     And API Operator cancel created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page
