@@ -6,14 +6,19 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPage> {
 
@@ -49,6 +54,8 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
 
   @FindBy(css = "div.ant-table tr.ant-table-row td.ant-table-cell:nth-of-type(2)")
   public List<PageElement> armIDCells;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SortBeltMonitoringPage.class);
 
   public SortBeltMonitoringPage(WebDriver webDriver) {
     super(webDriver);
@@ -167,12 +174,31 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
   }
 
   public void selectSessionItemByName(String sessionName) {
-    Optional<SessionItem> sessionItem = listSessionItems.stream()
+    waitForSessionItemDisplayed(sessionName);
+    SessionItem session = listSessionItems.stream()
         .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
-        .findFirst();
-    sessionItem.get().click();
+        .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("No session [%s] found", sessionName)));
+    session.click();
     loadingIndicator.waitUntilInvisible(10);
   }
 
-
+  public void waitForSessionItemDisplayed(String sessionName) {
+    new FluentWait<>(getWebDriver())
+        .pollingEvery(Duration.ofSeconds(5))
+        .withTimeout(Duration.ofMinutes(2))
+        .ignoring(NoSuchElementException.class)
+        .until(webDriver -> {
+          LOGGER.info(String.format("Wait for the Session [%s] displayed..", sessionName));
+          SessionItem session = listSessionItems.stream()
+              .filter(item -> StringUtils.equals(item.getSessionName(), sessionName))
+              .findAny().orElse(null);
+          if (session != null) {
+           LOGGER.info(String.format("The Session [%s] is displayed!!", sessionName));
+            return true;
+          }
+          refreshPage_v1();
+          switchTo();
+          return false;
+        });
+  }
 }
