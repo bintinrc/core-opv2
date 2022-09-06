@@ -13,6 +13,7 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     And Operator validate and release Draft Script
     When Operator link Script to Shipper with ID and Name = "{shipper-v4-dummy-script-legacy-id}-{shipper-v4-dummy-script-name}"
+    Then Operator waits for 1 seconds
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{shipper-v4-dummy-script-global-id}"
 
   @HappyPath @DeleteNewlyCreatedShipper
