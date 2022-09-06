@@ -432,7 +432,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator opens Shipment Details page for shipment {value}")
   public void openShipmentDetailsPage(String shipmentId) {
     navigateTo(
-        f("%s/%s/new-shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
+        f("%s/%s/shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
     page.inFrame(() -> page.waitUntilLoaded());
     pause3s();
   }
