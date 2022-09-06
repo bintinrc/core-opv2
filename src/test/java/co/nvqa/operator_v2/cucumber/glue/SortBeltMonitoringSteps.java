@@ -223,6 +223,7 @@ public class SortBeltMonitoringSteps extends AbstractSteps {
 
   @Then("Operator verifies there is no results displayed in session list")
   public void verifyNoResultInSessionList() {
+    sortBeltMonitoringPage.emptySessionListText.waitUntilVisible();
     Assertions.assertThat(sortBeltMonitoringPage.emptySessionListText.isDisplayed())
         .as("Sort Belt Monitoring has no data in session list")
         .isTrue();
