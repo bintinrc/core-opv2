@@ -86,6 +86,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -189,6 +192,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -332,6 +338,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
