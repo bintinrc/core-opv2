@@ -38,7 +38,7 @@ public class SortBeltMonitoringPage extends SimpleReactPage<SortBeltMonitoringPa
   @FindBy(css = ".ant-skeleton")
   public PageElement loadingIndicator;
 
-  @FindBy(css = ".ant-select-selector")
+  @FindBy(css = ".ant-select-multiple .ant-select-selector")
   public AntSelect3 trackingIDSearchSelect;
 
   @FindBy(xpath = ".//input[@placeholder='Search Arm ID']")
