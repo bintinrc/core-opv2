@@ -57,7 +57,7 @@ Feature: Sort Belt Monitoring
     And Operator verifies Start time after "{gradle-previous-10-date-dd/MM/yyyy-HH:mm}"
 
   Scenario:  Check user able to filter the list by a list of specific Tracking IDs
-    Given API Operator creates new parcel download sessions with device id "2"
+    Given API Operator creates new parcel download sessions with device id "{sbm-device-id}"
     And Operator go to menu Sort -> Sort Belt Monitoring
     And Operator waits until sort belt monitoring page loaded
     And Operator clears all search fields
@@ -69,7 +69,7 @@ Feature: Sort Belt Monitoring
     Then Operator verifies there is no results displayed in tracking list
 
   Scenario: Check user is able to filter the list by a list of specific arm IDs
-    Given API Operator creates new parcel download sessions with device id "2"
+    Given API Operator creates new parcel download sessions with device id "{sbm-device-id}"
     And Operator go to menu Sort -> Sort Belt Monitoring
     And Operator waits until sort belt monitoring page loaded
     And Operator clears all search fields
