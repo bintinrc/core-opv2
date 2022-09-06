@@ -482,7 +482,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String changeReason = f("This reason is created by automation at %s.",
         CREATED_DATE_SDF.format(new Date()));
     manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("The order has been completed", true);
     return changeReason;

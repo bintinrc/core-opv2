@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AirportTripManagementSteps extends AbstractSteps{
@@ -52,7 +53,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         airportTripManagementPage.clickOnLoadTripsAirportManagementDetails();
-        takesScreenshot();
     }
 
     @Then("Verify the parameters of loaded trips in Airport Management")
@@ -61,9 +61,16 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(resolvedData);
     }
 
-    @And("Create a new flight trip with below data:")
+    @And("Create a new flight trip using below data:")
     public void operatorCreateNewFlightTripInAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.createNewFlightTrip(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        Boolean isCreateTripSuccess = airportTripManagementPage.createFlightTrip(resolvedData);
+        if (isCreateTripSuccess){
+            String tripId =airportTripManagementPage.getAirportTripId();
+            put(KEY_CURRENT_MOVEMENT_TRIP_ID,tripId);
+            putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS,tripId);
+        }
+
     }
 
     @And("Operator search the {string} column")
@@ -223,9 +230,16 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyNoResultsFound();
     }
 
-    @Then("Operator click on 'Create Tofrom Airport Trip' button in Airport Management page")
-    public void operatorclickOnCreateToFromAirportTrip() {
-        airportTripManagementPage.clickOnCreateToFromAirportTrip();
+    @Then("Operator click on {string} button in Airport Management page")
+    public void operatorclickOnCreateToFromAirportTrip(String button) {
+        switch (button){
+            case "Create Tofrom Airport Trip":
+                airportTripManagementPage.clickOnCreateToFromAirportTrip();
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.clickOnCreateFlightTrip();
+                break;
+        }
     }
 
     @Then("Operator create new airport trip using below data:")
@@ -253,9 +267,9 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyInvalidItem(name, value);
     }
 
-    @Then("Operator verifies same hub error messages on Create Airport Trip page")
-    public void OperatorVerifiesErrorMessage(){
-        airportTripManagementPage.getAndVerifySameHubErrorMessage();
+    @Then("Operator verifies same hub error messages on {string} page")
+    public void OperatorVerifiesErrorMessage(String pageName){
+        airportTripManagementPage.getAndVerifySameHubErrorMessage(pageName);
     }
 
     @When("Operator fill new airport trip using data below:")
@@ -269,24 +283,48 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifySubmitButtonDisable();
     }
 
-    @Then("Operator verifies duration time error messages on Create Airport Trip page")
-    public void operatorVerifiesDurationErrorMessage(){
-        airportTripManagementPage.getAndVerifyZeroDurationTimeErrorMessage();
+    @Then("Operator verifies duration time error messages on {string} page")
+    public void operatorVerifiesDurationErrorMessage(String pageName){
+        airportTripManagementPage.getAndVerifyZeroDurationTimeErrorMessage(pageName);
     }
 
-    @Then("Operator verifies past date picker {string} is disable on Create Airport Trip page")
-    public void operatorVerifiesPastDateDisable(String date){
-        airportTripManagementPage.verifyPastDayDisable(date);
+    @Then("Operator verifies past date picker {string} is disable on {string} page")
+    public void operatorVerifiesPastDateDisable(String date, String pageName){
+        airportTripManagementPage.verifyPastDayDisable(date,pageName);
     }
 
-    @When("Operator removes text of {string} field on Create Airport Trip page")
-    public void operatorRemovesText(String fieldName){
-        airportTripManagementPage.clearTextonField(fieldName);
+    @When("Operator removes text of {string} field on {string} page")
+    public void operatorRemovesText(String fieldName, String pageName){
+        switch (pageName){
+            case "Create Airport Trip":
+                airportTripManagementPage.clearTextonField(fieldName);
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.clearTextonFieldOnFlightTrip(fieldName);
+                break;
+        }
     }
 
-    @Then("Operator verifies Mandatory require error message on {string} field")
-    public void operatorVerifiesMandatoryErrorMessage(String fieldName){
-        airportTripManagementPage.verifyMandatoryFieldErrorMessage(fieldName);
+    @Then("Operator verifies Mandatory require error message of {string} field on {string} page")
+    public void operatorVerifiesMandatoryErrorMessage(String fieldName, String pageName){
+        switch (pageName){
+            case "Create Airport Trip":
+                airportTripManagementPage.verifyMandatoryFieldErrorMessageAirportPage(fieldName);
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.verifyMandatoryFieldErrorMessageFlightTripPage(fieldName);
+                break;
+        }
+    }
+
+    @Then("Operator verifies MAWB error messages on Create Flight Trip page")
+    public void operatorVerifiesMAWBerrorMessage(){
+        airportTripManagementPage.verifyMAWBerrorMessage();
+    }
+
+    @Then("Operator verifies toast messages below on Create Flight Trip page:")
+    public void operatorVerifiesErrorMessages(List<String> expectedError){
+        airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
 
