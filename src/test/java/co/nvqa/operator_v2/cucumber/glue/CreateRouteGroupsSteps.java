@@ -1187,7 +1187,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         }
         value = finalData.get("shipmentDateTo");
         if (StringUtils.isNotBlank(value)) {
-          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setFromDate(value);
+          createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.setToDate(value);
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToHours("00");
           createRouteGroupsPage.shipmentFiltersForm.shipmentDateFilter.selectToMinutes("00");
         }

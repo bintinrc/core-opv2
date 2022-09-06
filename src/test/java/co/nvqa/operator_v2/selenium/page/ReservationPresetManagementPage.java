@@ -59,8 +59,8 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div[ng-repeat='pendingTask in ctrl.pendingTasks']")
   public List<PendingTaskBlock> pendingTasks;
 
-  @FindBy(name = "container.reservation-preset-management.add-new-group")
-  public NvIconTextButton addNewGroup;
+  @FindBy(xpath = "(//div[contains(@class,'title')]//md-menu)[1]")
+  public MdMenu moreActions;
 
   public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
 
@@ -79,7 +79,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void addNewGroup(ReservationGroup reservationPreset) {
     waitUntilPageLoaded();
-    addNewGroup.click();
+    moreActions.selectOption("Add New Group");
     addNewGroupDialog.waitUntilVisible();
     addNewGroupDialog.fillForm(reservationPreset);
   }

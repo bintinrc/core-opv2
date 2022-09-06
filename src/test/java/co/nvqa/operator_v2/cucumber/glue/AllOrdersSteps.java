@@ -210,7 +210,9 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.manuallyCompleteOrderDialog.codCheckboxes.get(i).setValue(checked);
       }
     }
-    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    allOrdersPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }
@@ -223,7 +225,9 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    allOrdersPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }
