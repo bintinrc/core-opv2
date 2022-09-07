@@ -73,20 +73,19 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorCreatesAPresetUsingFilter(String filter) {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
     String presetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-            .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
 
     retryIfAssertionErrorOccurred(() -> {
-          addressingDownloadPage.filterButton.click();
-          pause1s();
-          addressingDownloadPage.selectPresetFilter(filterType);
-          Assertions.assertThat(
-                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
-              .isTrue();
-        },
-        "Clicking Filter for Preset");
+      addressingDownloadPage.filterButton.click();
+      pause1s();
+      addressingDownloadPage.selectPresetFilter(filterType);
+      Assertions.assertThat(
+              addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+          .isTrue();
+    }, "Clicking Filter for Preset");
 
     addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
         addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
@@ -139,8 +138,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.selectPresetEditModal.sendKeys(Keys.ENTER);
 
     String newPresetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-            .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
     pause2s();
     addressingDownloadPage.inputPresetName.sendKeys(newPresetName);
     addressingDownloadPage.mainPresetButtonInModal.click();
@@ -292,8 +291,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
           addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
       addressingDownloadPage.loadAddresses.click();
       Assertions.assertThat(addressingDownloadPage.addressDownloadTableResult.isDisplayed())
-          .as("Result table is displayed.")
-          .isTrue();
+          .as("Result table is displayed.").isTrue();
     }, "Clicking Load Addresses button until table is showing...");
   }
 
@@ -402,14 +400,13 @@ public class AddressingDownloadSteps extends AbstractSteps {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
 
     retryIfAssertionErrorOccurred(() -> {
-          addressingDownloadPage.filterButton.click();
-          pause1s();
-          addressingDownloadPage.selectPresetFilter(filterType);
-          Assertions.assertThat(
-                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
-              .isTrue();
-        },
-        "Clicking Filter for Preset");
+      addressingDownloadPage.filterButton.click();
+      pause1s();
+      addressingDownloadPage.selectPresetFilter(filterType);
+      Assertions.assertThat(
+              addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+          .isTrue();
+    }, "Clicking Filter for Preset");
 
     addressingDownloadPage.setPresetFilter(filterType);
   }
@@ -422,8 +419,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator input the new preset name")
   public void operatorInputTheNewPresetName() {
     String presetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-            .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
     put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);
