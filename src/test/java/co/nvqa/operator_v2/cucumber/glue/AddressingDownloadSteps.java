@@ -87,7 +87,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
               .isTrue();
         },
         "Clicking Filter for Preset");
-
+    addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
+        addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
     addressingDownloadPage.setPresetFilter(filterType);
     addressingDownloadPage.mainPresetButtonInModal.click();
     put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);
