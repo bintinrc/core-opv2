@@ -1636,7 +1636,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
         pause1s();
       }
-    }, "Retrying until SLA is done calculated...", 10000, 30);
+    }, "Retrying until SLA is done calculated...", 10000, 50);
   }
 
   @Then("DB Operator verify sla in movement_events table from {string} to {string} is succeed for the following data:")
