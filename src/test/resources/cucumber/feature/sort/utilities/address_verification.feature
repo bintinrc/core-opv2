@@ -110,7 +110,6 @@ Feature: Address Verification
       | name | VERIFY ADDRESS |
     And Operator verifies Zone is "{av-ooz-zone-short-name}" on Edit Order page
 
-
   Scenario: AV Non RTS orders - RTS zone exist
     When Operator go to menu Utilities -> Address Verification
     And Operator refresh page v1
