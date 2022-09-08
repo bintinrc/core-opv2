@@ -49,7 +49,7 @@ Feature: DP Administration - Distribution Point Partners
 
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario Outline: DP Administration - Create DP Partner In New React Page - <dataset_name> (<hiptest-uid>)
+  Scenario Outline: DP Administration - Create DP Partner - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed

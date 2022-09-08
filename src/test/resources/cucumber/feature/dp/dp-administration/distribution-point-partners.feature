@@ -5,16 +5,16 @@ Feature: DP Administration - Distribution Point Partners
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDpPartner
-  Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
-    Given Operator go to menu Distribution Points -> DP Administration
-    Given Operator add new DP Partner on DP Administration page with the following attributes:
-      | name         | GENERATED                            |
-      | pocName      | GENERATED                            |
-      | pocTel       | GENERATED                            |
-      | pocEmail     | GENERATED                            |
-      | restrictions | Created for test automation purposes |
-    Then Operator verify new DP Partner params
+#  @DeleteDpPartner
+#  Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
+#    Given Operator go to menu Distribution Points -> DP Administration
+#    Given Operator add new DP Partner on DP Administration page with the following attributes:
+#      | name         | GENERATED                            |
+#      | pocName      | GENERATED                            |
+#      | pocTel       | GENERATED                            |
+#      | pocEmail     | GENERATED                            |
+#      | restrictions | Created for test automation purposes |
+#    Then Operator verify new DP Partner params
 
   @DeleteDpPartner
   Scenario: DP Administration - Update DP Partner (uid:cb1ca5de-be07-4a3b-903e-955bf19dd2b1)
