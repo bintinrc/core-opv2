@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3 @runupdateaddress
+@OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3
 Feature: Edit Order Details
 
   @LaunchBrowser @ShouldAlwaysRun
