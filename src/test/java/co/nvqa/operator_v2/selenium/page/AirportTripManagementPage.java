@@ -1,27 +1,35 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
 
 /**
  * @author Meganathan Ramasamy
@@ -32,6 +40,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     public AirportTripManagementPage(WebDriver webDriver) {
         super(webDriver);
+        airportTable = new AirportTripManagementPage.AirportTable(webDriver);
     }
 
     private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -297,6 +306,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public PageElement createFlightTrip_comment;
 
     public static String notificationMessage = "";
+
+    public AirportTable airportTable;
 
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
@@ -1245,4 +1256,52 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     }
 
+    public static class AirportTable extends AntTableV3<AirTrip> {
+
+        public static final String COLUMN_START_HUB = "origin_hub_name";
+        public static final String COLUMN_AIRTRIP_ID = "trip_id";
+        public static final String COLUMN_END_HUB = "destination_hub_name";
+        public static final String COLUMN_DEPARTURE_DATETIME = "departure_date_time";
+//        public static final String COLUMN_DURATION = "duration";
+        public static final String COLUMN_MAWB = "mawb";
+        public static final String COLUMN_STATUS = "status";
+        public static final String COLUMN_COMMENTS = "comment";
+
+        public static final String ACTION_EDIT = "Edit";
+        public static final String ACTION_DETAILS = "Details";
+        public static final String ACTION_DELETE = "Cancel";
+
+        public AirportTable(WebDriver webDriver) {
+            super(webDriver);
+            setColumnLocators(
+                    ImmutableMap.<String, String>builder().put(COLUMN_END_HUB, "destination_hub_id")
+                            .put(COLUMN_AIRTRIP_ID, "trip_id").put(COLUMN_START_HUB, "origin_hub_id")
+                            .put(COLUMN_DEPARTURE_DATETIME, "departure_date_time")
+//                            .put(COLUMN_DURATION, "duration")
+                            .put(COLUMN_MAWB, "mawb").put(COLUMN_STATUS, "status")
+                            .put(COLUMN_COMMENTS, "comment").build());
+            setEntityClass(AirTrip.class);
+            setActionButtonLocatorTemplate(
+                    "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(@data-testid,'%s')]");
+            setActionButtonsLocators(
+                    ImmutableMap.of(
+                            ACTION_DETAILS, "view-trip-icon",
+                            ACTION_EDIT, "edit-trip-icon",
+                            ACTION_DELETE, "delete-trip-icon"));
+        }
+    }
+
+    private void waitWhileTableIsLoading() {
+        Wait<AirportTable> fWait = new FluentWait<>(airportTable)
+                .withTimeout(Duration.ofSeconds(20))
+                .pollingEvery(Duration.ofSeconds(1))
+                .ignoring(NoSuchElementException.class);
+        fWait.until(table -> table.getRowsCount() > 0);
+    }
+    public void validateAirTripInfo(Long AirtripId, AirTrip expectedAirtrip) {
+        airportTable.filterByColumn(COLUMN_AIRTRIP_ID, String.valueOf(AirtripId));
+        waitWhileTableIsLoading();
+        AirTrip actualAirTripInfo = airportTable.readEntity(1);
+        expectedAirtrip.compareWithActual(actualAirTripInfo);
+    }
 }

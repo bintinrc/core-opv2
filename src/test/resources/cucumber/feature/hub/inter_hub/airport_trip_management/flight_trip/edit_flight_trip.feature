@@ -29,18 +29,23 @@ Feature: Airport Trip Management - Edit Flight Trip
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}  |
       | flight_no           | 12345                                 |
       | mawb                | 123-12345679                          |
-#    Given Operator go to menu Inter-Hub -> Airport Trip Management
-#    And Operator verifies that the Airport Management Page is opened
-#    When Operator fill the departure date for Airport Management
-#      | startDate | {gradle-next-0-day-yyyy-MM-dd}    |
-#      | endDate   | {gradle-next-1-day-yyyy-MM-dd}    |
-#    When Operator fill the Origin Or Destination for Airport Management
-#      | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-#    And Operator click on 'Load Trips' on Airport Management
-#    Then Verify the parameters of loaded trips in Airport Management
-#      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
-#      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
-#      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
+    Given Operator go to menu Inter-Hub -> Airport Trip Management
+    And Operator verifies that the Airport Management Page is opened
+    When Operator fill the departure date for Airport Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd}    |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd}    |
+    When Operator fill the Origin Or Destination for Airport Management
+      | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
+    And Operator click on 'Load Trips' on Airport Management
+    Then Verify the parameters of loaded trips in Airport Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
+      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
+#    When Operator edit Airtrip on Airport Trip Management page:
+#      | tripID  | {KEY_CREATED_SHIPMENT_ID} |
+#      | comment | Automation update comments            |
+    And Operator verify parameters of air trip on Airport Trip Management page:
+      | comment | API automation created|
 #    And Operator click on 'Create Flight Trip' button in Airport Management page
 #    And Create a new flight trip using below data:
 #      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|

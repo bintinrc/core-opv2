@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -12,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_EDIT;
 
 public class AirportTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(AirportTripManagementSteps.class);
@@ -327,5 +332,23 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
+    @Then("Operator verify parameters of air trip on Airport Trip Management page:")
+    public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
+        data = resolveKeyValues(data);
+        data = StandardTestUtils.replaceDataTableTokens(data);
+        Long tripID = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
+        AirTrip aitrip = new AirTrip();
+        aitrip.fromMap(data);
+        aitrip.setTrip_id(tripID);
+        airportTripManagementPage.validateAirTripInfo(aitrip.getTrip_id(), aitrip);
+    }
+
+    @When("Operator edit Airtrip on Airport Trip Management page:")
+    public void operatorEditAirTripOnAirportTripPage(Map<String, String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.airportTable.clickActionButton(1,ACTION_EDIT);
+    }
 
 }
