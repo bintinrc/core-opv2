@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP
+@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP @CWF
 Feature: DP Administration - Distribution Point Partners
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -34,18 +34,17 @@ Feature: DP Administration - Distribution Point Partners
     Then The Dp Administration page is displayed
     And Operator refresh page
     And Operator click on Add Partner button on DP Administration React page
-    Then Operator Fill Dp Partner Details below :
-      | name                      | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | ERROR_CHECK_<key_dataset> | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+    And Operator define the DP Partner value "<input>" for key "<key_dataset>"
+    Then Operator Fill Dp Partner Details to Check The Error Status with key "<key_dataset>"
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                    |
-      | Empty Partner Name | NAME        | This field is required           |
-      | Empty POC Name     | POCNME      | This field is required           |
-      | Empty POC No       | POCNUM      | This field is required           |
-      | Empty Restrictions | RESTRICTION | This field is required           |
-      | Wrong Format Email | POCMAIL     | That doesn't look like an email. |
+      | dataset_name       | key_dataset | error_message                    | input     |
+      | Empty Partner Name | NAME        | This field is required           | abc       |
+      | Empty POC Name     | POCNME      | This field is required           | abc       |
+      | Empty POC No       | POCNUM      | This field is required           | +65746    |
+      | Empty Restrictions | RESTRICTION | This field is required           | abc       |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email. | @jlgkdg.c |
 
 
   @DeleteNewlyCreatedDpManagementPartner
@@ -102,16 +101,15 @@ Feature: DP Administration - Distribution Point Partners
     And Operator check the submitted data in the table
     And Operator get partner id
     Then Operator press edit partner button
-    Then Operator Fill Dp Partner Details below :
-      | name                      | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | ERROR_CHECK_<key_dataset> | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+    And Operator define the DP Partner value "<input>" for key "<key_dataset>"
+    Then Operator Fill Dp Partner Details to Check The Error Status with key "<key_dataset>"
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                          | form        | hiptest-uid                              |
-      | Empty Partner Name | NAME        | This field is required                 | name        | uid:069ee3a5-8cb2-4635-8e2f-f2c3099377fd |
-      | Empty POC Name     | POCNME      | This field is required                 | pocName     | uid:c410a9dd-077e-4440-932c-d34ef2921292 |
-      | Empty POC No       | POCNUM      | This field is required                 | pocTel      | uid:0259c76c-91e5-44b3-91bf-a9f88bc5e3ab |
-      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      | uid:704e42eb-3920-4b1a-99fc-844e39a520e1 |
-      | Empty Restrictions | RESTRICTION | This field is required                 | restriction | uid:40c4ce1e-e5ab-43ac-8cb0-e7c01ae83fcf |
-      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    | uid:0fe5eebf-b7b6-40cc-8d13-7b6576da02b9 |
+      | dataset_name       | key_dataset | error_message                          | form        | input     | hiptest-uid                              |
+      | Empty Partner Name | NAME        | This field is required                 | name        | abc       | uid:069ee3a5-8cb2-4635-8e2f-f2c3099377fd |
+      | Empty POC Name     | POCNME      | This field is required                 | pocName     | abc       | uid:c410a9dd-077e-4440-932c-d34ef2921292 |
+      | Empty POC No       | POCNUM      | This field is required                 | pocTel      | +65746    | uid:0259c76c-91e5-44b3-91bf-a9f88bc5e3ab |
+      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      | abc       | uid:704e42eb-3920-4b1a-99fc-844e39a520e1 |
+      | Empty Restrictions | RESTRICTION | This field is required                 | restriction | abc       | uid:40c4ce1e-e5ab-43ac-8cb0-e7c01ae83fcf |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    | @jlgkdg.c | uid:0fe5eebf-b7b6-40cc-8d13-7b6576da02b9 |

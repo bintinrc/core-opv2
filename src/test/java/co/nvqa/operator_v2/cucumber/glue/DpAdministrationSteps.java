@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -228,6 +227,11 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator define the DP Partner value {string} for key {string}")
+  public void operatorPressAddDpButton(String value, String key) {
+      put(key,value);
+  }
+
   @Then("Operator Fill Dp User Details below :")
   public void operatorFillDpUserDetails(DataTable dt) {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
@@ -329,6 +333,46 @@ public class DpAdministrationSteps extends AbstractSteps {
       }
     });
   }
+
+  @Then("Operator Fill Dp Partner Details to Check The Error Status with key {string}")
+  public void operatorFillDpPartnerDetailsForErrorChecking(String errorCheckKey) {
+    Partner partner = errorValueInitialize(errorCheckKey);
+
+    dpAdminReactPage.inFrame(() -> {
+        dpAdminReactPage.errorCheckDpPartner(partner, errorCheckKey);
+    });
+  }
+
+  public Partner errorValueInitialize(String errorKey){
+    Partner partner;
+    if (get(KEY_DP_MANAGEMENT_PARTNER) != null){
+      partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    } else {
+      partner = new Partner();
+    }
+
+    switch (errorKey) {
+      case "NAME":
+        partner.setName(get(errorKey));
+        break;
+      case "POCNME":
+        partner.setPocName(get(errorKey));
+        break;
+      case "!POCNUM":
+      case "POCNUM":
+        partner.setPocTel(get(errorKey));
+        break;
+      case "POCMAIL":
+        partner.setPocEmail(get(errorKey));
+        break;
+      case "RESTRICTION":
+        partner.setRestrictions(get(errorKey));
+        break;
+    }
+    return partner;
+  }
+
+
 
   @Then("Operator will check the error message is equal {string}")
   public void checkErrorMessageFromDpPartner(String errorMsg) {

@@ -419,6 +419,47 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   }
 
+  public void errorCheckDpPartner(Partner dpPartner, String errorKey) {
+    switch (errorKey){
+      case "NAME":
+        formPartnerName.forceClear();
+        formPartnerName.setValue(dpPartner.getName());
+        formPartnerName.forceClear();
+        break;
+      case "POCNME":
+        formPocName.forceClear();
+        formPocName.setValue(dpPartner.getPocName());
+        formPocName.forceClear();
+        break;
+      case "!POCNUM":
+        formPocNo.forceClear();
+        formPocNo.setValue(dpPartner.getPocTel());
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
+                ERROR_MSG_NOT_PHONE_NUM))
+            .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
+        break;
+      case "POCNUM":
+        formPocNo.forceClear();
+        formPocNo.setValue(dpPartner.getPocTel());
+        formPocNo.forceClear();
+        break;
+      case "RESTRICTION":
+        formRestrictions.forceClear();
+        formRestrictions.setValue(dpPartner.getRestrictions());
+        formRestrictions.forceClear();
+        break;
+      case "POCMAIL":
+        formPocEmail.forceClear();
+        formPocEmail.setValue(dpPartner.getPocEmail());
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
+                ERROR_MSG_NOT_EMAIL_FORMAT))
+            .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+        break;
+    }
+  }
+
 
   public void checkErrorMsg(String errMessage) {
     Assertions.assertThat(errorMsg.getText())
