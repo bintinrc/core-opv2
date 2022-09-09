@@ -41,11 +41,11 @@ Feature: Airport Trip Management - Edit Flight Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
       | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
-#    When Operator edit Airtrip on Airport Trip Management page:
-#      | tripID  | {KEY_CREATED_SHIPMENT_ID} |
-#      | comment | Automation update comments            |
-    And Operator verify parameters of air trip on Airport Trip Management page:
-      | comment | API automation created|
+    When Operator edit Airtrip on Airport Trip Management page:
+      | tripID  | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | comment | Automation update comments            |
+#    And Operator verify parameters of air trip on Airport Trip Management page:
+#      | comment | API automation created|
 #    And Operator click on 'Create Flight Trip' button in Airport Management page
 #    And Create a new flight trip using below data:
 #      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
