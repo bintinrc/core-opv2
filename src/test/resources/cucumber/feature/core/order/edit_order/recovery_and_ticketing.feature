@@ -1,7 +1,7 @@
 @OperatorV2 @Core @EditOrder @RecoveryAndTicketing @EditOrder3
 Feature: Recovery & Ticketing
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -238,6 +238,60 @@ Feature: Recovery & Ticketing
       | type       | PP                                 |
       | status     | Pending                            |
       | routeId    | null                               |
+
+  @Debug
+  Scenario: Operator Resolve Recovery Ticket with Outcome = Force Success
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT               |
+      | investigatingDepartment | Recovery                         |
+      | investigatingHub        | {hub-name}                       |
+      | ticketType              | DAMAGED                          |
+      | ticketSubType           | IMPROPER PACKAGING               |
+      | parcelLocation          | DAMAGED RACK                     |
+      | liability               | Shipper                          |
+      | damageDescription       | GENERATED                        |
+      | orderOutcomeDamaged     | NV NOT LIABLE - PARCEL DELIVERED |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name          |
+      | UPDATE STATUS |
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED                         |
+      | outcome | NV NOT LIABLE - PARCEL DELIVERED |
+    Then Operator verifies that success toast displayed:
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
+    When Operator refresh page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP  |
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | SUCCESS  |
+    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
+    And DB Operator verifies waypoints record:
+      | id     | {KEY_TRANSACTION.waypointId} |
+      | status | Pending                      |
+    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
+    And DB Operator verifies waypoints record:
+      | id     | {KEY_TRANSACTION.waypointId} |
+      | status | Success                      |
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | FORCED SUCCESS  |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
