@@ -209,6 +209,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
   public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
   public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
+  public static final String ERROR_MSG_FIELD_WRONG_FORMAT = "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )";
 
   public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
@@ -364,59 +365,69 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     formDpUserPassword.setValue(dpUser.getPassword());
   }
 
-  public void errorCheckDpPartner(Partner dpPartner) {
-
-    if (dpPartner.getName().contains("NAME")) {
-      formPartnerName.forceClear();
-      formPartnerName.setValue(dpPartner.getName());
-      formPartnerName.forceClear();
-    } else if (dpPartner.getName().contains("POCNME")) {
-      formPocName.forceClear();
-      formPocName.setValue(dpPartner.getPocName());
-      formPocName.forceClear();
-    } else if (dpPartner.getName().contains("!POCNUM")) {
-      if (dpPartner.getPocTel().equals("VALID")) {
+  public void errorCheckDpPartner(Partner dpPartner, String errorKey) {
+    switch (errorKey){
+      case "NAME":
+        formPartnerName.forceClear();
+        formPartnerName.setValue(dpPartner.getName());
+        formPartnerName.forceClear();
+        break;
+      case "!NAME":
+        formPartnerName.forceClear();
+        formPartnerName.setValue(dpPartner.getName());
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form Partner Name with wrong format : %s",
+                ERROR_MSG_FIELD_WRONG_FORMAT))
+            .isEqualTo(ERROR_MSG_FIELD_WRONG_FORMAT);
+        break;
+      case "POCNME":
+        formPocName.forceClear();
+        formPocName.setValue(dpPartner.getPocName());
+        formPocName.forceClear();
+        break;
+      case "!POCNME":
+        formPocName.forceClear();
+        formPocName.setValue(dpPartner.getPocName());
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC Name with wrong format : %s",
+                ERROR_MSG_FIELD_WRONG_FORMAT))
+            .isEqualTo(ERROR_MSG_FIELD_WRONG_FORMAT);
+        break;
+      case "!POCNUM":
         formPocNo.forceClear();
-        formPocNo.setValue(RandomStringUtils.random(10, true, false));
+        formPocNo.setValue(dpPartner.getPocTel());
         Assertions.assertThat(errorMsg.getText())
             .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
                 ERROR_MSG_NOT_PHONE_NUM))
             .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
-      }
-    }else if (dpPartner.getName().contains("POCNUM")) {
-      if (dpPartner.getPocTel().equals("VALID")) {
+        break;
+      case "POCNUM":
         formPocNo.forceClear();
-        formPocNo.setValue(RandomStringUtils.random(10, true, false));
+        formPocNo.setValue(dpPartner.getPocTel());
+        formPocNo.forceClear();
+        break;
+      case "RESTRICTION":
+        formRestrictions.forceClear();
+        formRestrictions.setValue(dpPartner.getRestrictions());
+        formRestrictions.forceClear();
+        break;
+      case "!RESTRICTION":
+        formRestrictions.forceClear();
+        formRestrictions.setValue(dpPartner.getRestrictions());
         Assertions.assertThat(errorMsg.getText())
-            .as(f("Error Message Exist after fill Form POC NO with wrong format (Not Number) : %s",
-                ERROR_MSG_NOT_PHONE_NUM))
-            .isEqualTo(ERROR_MSG_NOT_PHONE_NUM);
-        formPocNo.forceClear();
-
-        formPocNo.setValue(RandomStringUtils.random(10, false, true));
-        formPocNo.forceClear();
-      }
-    } else if (dpPartner.getName().contains("POCMAIL")) {
-      formPocEmail.forceClear();
-      formPocEmail.setValue(RandomStringUtils.random(10, true, false));
-      Assertions.assertThat(errorMsg.getText())
-          .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
-              ERROR_MSG_NOT_EMAIL_FORMAT))
-          .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
-      formPocEmail.forceClear();
-
-      formPocEmail.setValue(RandomStringUtils.random(10, false, true));
-      Assertions.assertThat(errorMsg.getText())
-          .as(f("Error Message Exist after fill Form POC Email with wrong format (Number): %s",
-              ERROR_MSG_NOT_EMAIL_FORMAT))
-          .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
-
-    } else if (dpPartner.getName().contains("RESTRICTION")) {
-      formRestrictions.forceClear();
-      formRestrictions.setValue(dpPartner.getRestrictions());
-      formRestrictions.forceClear();
+            .as(f("Error Message Exist after fill Form Restrictions with wrong format : %s",
+                ERROR_MSG_FIELD_WRONG_FORMAT))
+            .isEqualTo(ERROR_MSG_FIELD_WRONG_FORMAT);
+        break;
+      case "POCMAIL":
+        formPocEmail.forceClear();
+        formPocEmail.setValue(dpPartner.getPocEmail());
+        Assertions.assertThat(errorMsg.getText())
+            .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
+                ERROR_MSG_NOT_EMAIL_FORMAT))
+            .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+        break;
     }
-
   }
 
 
