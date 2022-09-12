@@ -597,8 +597,8 @@ Feature: Driver Strength
     And Operator verifies that the notice message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                                       | Message                                         |
-      | No       | {update_driver_details_prefilled_xlsx_invalid} | Invalid format! Please upload a valid CSV file. |
+      | Resigned | FileName                                       | Message                                              |
+      | No       | {update_driver_details_prefilled_xlsx_invalid} | Invalid file upload! Please upload a valid CSV file. |
 
   Scenario Outline: Cannot Bulk Update More than 200 Drivers (uid:0838cfce-c768-4d84-822e-d0a13781bdb9)
     Given Operator loads Operator portal home page
