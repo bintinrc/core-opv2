@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @ShipperPickups1
+@OperatorV2 @Core @ShipperPickups @ShipperPickups1
 Feature: Shipper Pickups - Assign & Remove Route Reservation
 
   @LaunchBrowser @ShouldAlwaysRun
