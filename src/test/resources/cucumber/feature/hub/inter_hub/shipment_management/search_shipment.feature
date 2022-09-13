@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment
 Feature: Shipment Management - Search Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -121,7 +121,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | endHubName   | {hub-name-2}              |
 
-  @DeleteShipment  @runthis
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type : Sea Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -179,18 +179,18 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentDate | {gradle-previous-1-day-yyyy-MM-dd}:00:00,{gradle-current-date-yyyy-MM-dd}:23:30 |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | AIR_HAUL                  |
+      | shipmentType | {shipment-type}           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
-      | status       | Pending                   |
-      | origHubName  | {hub-name}                |
+      | status       | {pending-status}          |
+      | startHubName | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | destHubName  | {hub-name-2}              |
+      | endHubName   | {hub-name-2}              |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -221,6 +221,6 @@ Feature: Shipment Management - Search Shipment
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
