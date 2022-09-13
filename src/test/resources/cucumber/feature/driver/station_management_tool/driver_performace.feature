@@ -38,7 +38,7 @@ Feature: Driver Performance
 
     Examples:
       | Hub | DriverName | DriverType | RouteDate  |
-      | JKB | Ganesha QA | DRIVER-1   | 2022-03-20 |
+      | JKB | Ganesha QA Test | Mitra - Fleet | 2022-09-07 |
 
   Scenario Outline: Load Driver Performance by Individual Route Date (uid:a1299b53-380f-4f04-9919-c4687f17724c)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -58,7 +58,7 @@ Feature: Driver Performance
 
     Examples:
       | Hub | DriverName | DriverType | RouteDate1 |
-      | JKB | Ganesha QA | DRIVER-1   | 2022-03-20 |
+      | JKB | Ganesha QA Test | Mitra - Fleet | 2022-09-07 |
 
   Scenario Outline: Create New Preset (uid:f52c604c-cf95-4c03-a6df-3b92787c194d)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -78,7 +78,7 @@ Feature: Driver Performance
       | driverTypes | <DriverType> |
     Examples:
       | Hub | DriverName | DriverType |
-      | JKB | Ganesha QA | DRIVER-1   |
+      | JKB | Ganesha QA Test | Mitra - Fleet |
 
   Scenario: Cannot Create Duplicate Preset (uid:96ac70b4-9393-49f6-896f-2668b3dfd040)
     Given Operator go to menu Shipper Support -> Blocked Dates
