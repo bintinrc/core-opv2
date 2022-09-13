@@ -6,7 +6,7 @@ Feature: Station Routing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver
-  Scenario: Operator Update Reservation Priority Level by CSV upload (uid:eb88c7d6-ef21-4226-9ffb-f171ce65716a)
+  Scenario: Operator Search Order to Assigned Driver on Station Routing
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new Driver using data below:
