@@ -236,6 +236,11 @@ Feature: Address Verification
     And API Operator get Addressing Zone from a lat long with type "STANDARD"
     Then Operator verifies waypoint details:
       | routingZoneId | {KEY_ZONE_INFO.legacyZoneId} |
+    And API Operator Get Addressing Zone by Legacy Id
+    Then Operator verifies zone details:
+      | legacyZoneId | {KEY_LIST_OF_ZONE_INFO.legacyZoneId} |
+      | latitude     | {KEY_LIST_OF_ZONE_INFO.latitude}     |
+      | longitude    | {KEY_LIST_OF_ZONE_INFO.longitude}    |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
