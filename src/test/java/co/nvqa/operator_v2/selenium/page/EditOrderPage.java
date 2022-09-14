@@ -2174,6 +2174,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
         if (StringUtils.isNotBlank(recoveryTicket.getDamageDescription())) {
           createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
         }
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
+        }
         break;
       }
       case RecoveryTicketsPage.TICKET_TYPE_MISSING: {
