@@ -196,9 +196,6 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | shipmentIds | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}|
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[4].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     And Operator scan and close shipment with data below:
       | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
