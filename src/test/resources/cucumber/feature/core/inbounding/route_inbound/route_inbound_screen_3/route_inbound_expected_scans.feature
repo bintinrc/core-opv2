@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @current
+@OperatorV2 @Core @Inbounding @RouteInbound
 Feature: Route Inbound Expected Scans
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -65,7 +65,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid) (uid:bb40e733-b68f-4fe3-85d3-17e98888b270)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -133,7 +133,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid) (uid:399467aa-4bf3-474f-ba8a-1b1857f1b571)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
