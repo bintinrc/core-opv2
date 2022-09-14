@@ -428,17 +428,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         }
     }
 
-    public void createNewFlightTrip(Map<String, String> mapOfData) {
-        createFlightTrip.click();
-        switchToOtherWindow();
-        waitUntilPageLoaded();
-        switchTo();
-        Assertions.assertThat(findElementByXpath("//h3[.='Create Flight Trip']").isDisplayed())
-                .as("End Of Table appear in Airport trip Management page").isTrue();
-        Assertions.assertThat(findElementByXpath("//input[@id='editForm_originAirport']").isDisplayed())
-                .as("End Of Table appear in Airport trip Management page").isTrue();
-    }
-
     public HashMap filterTheAirportTripsTable(String filter, String invalidData) {
         HashMap<String, String> map = new HashMap<>();
         String searchData;
@@ -1262,7 +1251,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         public static final String COLUMN_AIRTRIP_ID = "trip_id";
         public static final String COLUMN_END_HUB = "destination_hub_name";
         public static final String COLUMN_DEPARTURE_DATETIME = "departure_date_time";
-//        public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_MAWB = "mawb";
         public static final String COLUMN_STATUS = "status";
         public static final String COLUMN_COMMENTS = "comment";
@@ -1277,7 +1265,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                     ImmutableMap.<String, String>builder().put(COLUMN_END_HUB, "destination_hub_id")
                             .put(COLUMN_AIRTRIP_ID, "trip_id").put(COLUMN_START_HUB, "origin_hub_id")
                             .put(COLUMN_DEPARTURE_DATETIME, "departure_date_time")
-//                            .put(COLUMN_DURATION, "duration")
                             .put(COLUMN_MAWB, "mawb").put(COLUMN_STATUS, "status")
                             .put(COLUMN_COMMENTS, "comment").build());
             setEntityClass(AirTrip.class);
@@ -1304,4 +1291,47 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         AirTrip actualAirTripInfo = airportTable.readEntity(1);
         expectedAirtrip.compareWithActual(actualAirTripInfo);
     }
+
+    public void verifyDisableItemsOnEditPage(String pageName){
+        switch (pageName){
+            case "Flight Trip":
+                waitUntilVisibilityOfElementLocated("//h3[.='Edit Flight Trip']");
+                Assertions.assertThat(createFlightTrip_originAirport.getAttribute("disabled")).as("Edit origin Airport is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_destinationAirport.getAttribute("disabled")).as("Edit Destination Airport is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_departureDate.getAttribute("disabled")).as("Edit Departure Date is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_departureTime.getAttribute("disabled")).as("Edit Departure Time is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_durationHours.getAttribute("disabled")).as("Edit Duration Hours is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_durationMinutes.getAttribute("disabled")).as("Edit Duration Minutes is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_originProcessingTimeHours.getAttribute("disabled")).as("Edit Processing Time at Origin Airport is disabled").isEqualTo("true");
+                Assertions.assertThat(createFlightTrip_destinationProcessingTimeHours.getAttribute("disabled")).as("Edit Processing Time at Destination Airport is disabled").isEqualTo("true");
+                break;
+            case "ToFrom Airport Trip":
+                Assertions.assertThat(createToFromAirportForm_originFacility.getAttribute("disabled")).as("Edit Origin Facility is disabled").isEqualTo("true");
+                Assertions.assertThat(createToFromAirportForm_destinationFacility.getAttribute("disabled")).as("Edit Destination Facility is disabled").isEqualTo("true");
+                Assertions.assertThat(createToFromAirportForm_departureDate.getAttribute("disabled")).as("Edit Departure Date is disabled").isEqualTo("true");
+                Assertions.assertThat(createToFromAirportForm_departureTime.getAttribute("disabled")).as("Edit Departure Time is disabled").isEqualTo("true");
+                Assertions.assertThat(createToFromAirportForm_durationHours.getAttribute("disabled")).as("Edit Duration is disabled").isEqualTo("true");
+                break;
+        }
+    }
+
+    public void editAirportTripItems(Map<String,String> data){
+        String pageName = data.get("tripType");
+        switch (pageName){
+            case "Flight Trip":
+                if (data.get("comment")!=null)
+                    createFlightTrip_comment.clearAndSendkeysV2(data.get("comment"));
+                if (data.get("flight_no")!=null)
+                    createFlightTrip_flightNo.clearAndSendkeysV2(data.get("flight_no"));
+                if (data.get("mawb")!=null){
+                    if (!data.get("mawb").trim().equals("-")){
+                        createFlightTrip_mawb.clearAndSendkeysV2(data.get("mawb"));
+                    } else createFlightTrip_mawb.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+                }
+                break;
+
+        }
+        submitButton.click();
+    }
+
 }

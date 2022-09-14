@@ -164,10 +164,11 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    And API Operator verify new Hubs are created
+#    And API Operator verify new Hubs are created
+    And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[4].id}"
-    And API Operator reloads hubs cache
+
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new Driver using data below:
@@ -195,6 +196,9 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}|
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[4].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     And Operator scan and close shipment with data below:
       | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |

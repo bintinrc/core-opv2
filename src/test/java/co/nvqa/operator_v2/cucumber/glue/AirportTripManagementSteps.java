@@ -343,12 +343,22 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.validateAirTripInfo(aitrip.getTrip_id(), aitrip);
     }
 
-    @When("Operator edit Airtrip on Airport Trip Management page:")
+    @When("Operator open edit airport trip page with data below:")
     public void operatorEditAirTripOnAirportTripPage(Map<String, String> data){
         Map<String, String> resolvedData = resolveKeyValues(data);
         String tripID = resolvedData.get("tripID");
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
         airportTripManagementPage.airportTable.clickActionButton(1,ACTION_EDIT);
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+        airportTripManagementPage.verifyDisableItemsOnEditPage(resolvedData.get("tripType"));
+    }
+
+    @When("Operator edit data on Edit Trip page:")
+    public void operatorEditDataOnEditTripPage(Map<String,String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        airportTripManagementPage.editAirportTripItems(resolvedData);
     }
 
 }
