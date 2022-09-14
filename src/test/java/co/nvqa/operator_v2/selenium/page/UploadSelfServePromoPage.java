@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import java.io.File;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
@@ -12,13 +11,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePromoPage> {
 
-  public static final String CSV_FILENAME_PATTERN = "sample_csv";
+  public static final String UPLOAD_PRICING_PROFILE_FILENAME_PATTERN = "upload_pricing_profile_template";
 
   @FindBy(xpath = "//span[text()='Upload Pricing Profile With CSV']//parent::button")
   public Button uploadInvoicedOrdersButton;
 
-  @FindBy(name = "Download sample CSV template")
-  public NvIconTextButton downloadSampleCsvButton;
+  @FindBy(xpath = "//span[text()='Download Sample CSV Template']//parent::button")
+  public Button downloadSampleCsvButton;
 
   @FindBy(css = "div.ant-modal-content")
   public UploadBulkPricingProfileDialog uploadBulkPricingProfileDialog;
@@ -34,7 +33,12 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
     uploadInvoicedOrdersButton.click();
   }
 
+  public void downloadSampleCsvButton() {
+    downloadSampleCsvButton.click();
+  }
+
   public void verifyUploadBulkPricingProfileDialogIsDisplayed() {
+    uploadBulkPricingProfileDialog.waitUntilLoaded();
     uploadBulkPricingProfileDialog.isDisplayed();
     Assertions.assertThat(uploadBulkPricingProfileDialog.isDisplayed())
         .as("Upload Bulk Pricing Dialog is displayed").isTrue();
@@ -43,6 +47,18 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
   public String getNotificationMessageText() {
     antNotificationMessage.waitUntilVisible();
     return antNotificationMessage.getText();
+  }
+
+  public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {
+    verifyFileDownloadedSuccessfully(
+        getLatestDownloadedFilename(UPLOAD_PRICING_PROFILE_FILENAME_PATTERN),
+        expectedBody);
+  }
+
+  public void verifyDownloadErrorsCsvFileDownloadedSuccessfully(String expectedBody,
+      String filename) {
+    verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(filename),
+        expectedBody);
   }
 
   public static class UploadBulkPricingProfileDialog extends AntModal {
@@ -56,6 +72,10 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
     @FindBy(xpath = "//input[@data-testid='useFileSelect-element']")
     public PageElement browseInput;
 
+    @FindBy(xpath = "//button[.='Download Errors CSV']")
+    public Button downloadErrorsCsvButton;
+
+
     public UploadBulkPricingProfileDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -64,5 +84,8 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
       browseInput.sendKeys(file.getAbsolutePath());
     }
 
+    public void clickDownloadErrorsCsvButton() {
+      downloadErrorsCsvButton.click();
+    }
   }
 }

@@ -303,4 +303,12 @@ public class PageElement extends SimplePage {
     return retWebEl;
   }
 
+  public void ClickSendKeysAndEnter(CharSequence... keysToSend) {
+    WebElement we = this.webElement;
+    we.click();
+    we.sendKeys(keysToSend);
+    we.sendKeys(Keys.RETURN);
+    pause300ms();
+  }
+
 }

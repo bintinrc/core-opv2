@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -94,10 +93,11 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @Then("Downloaded CSV file contains correct DP Users data in new react page")
-  public void downloadedCsvFileContainsCorrectDpUsersDataInNewReactPage(Map<String, String> detailsAsMap) {
+  public void downloadedCsvFileContainsCorrectDpUsersDataInNewReactPage(
+      Map<String, String> detailsAsMap) {
     List<User> user = get(detailsAsMap.get("userList"));
     DpDetailsResponse dp = get(detailsAsMap.get("dp"));
-    dpAdminPage.verifyDownloadedFileContentNewReactPageDpUsers(user,dp);
+    dpAdminPage.verifyDownloadedFileContentNewReactPageDpUsers(user, dp);
   }
 
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
@@ -107,11 +107,12 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @When("Operator get DP Partners Data on DP Administration page")
-  public void operatorGetFirstDpPartnersDataOnDpAdministrationPage(Map<String, String> detailsAsMap) {
+  public void operatorGetFirstDpPartnersDataOnDpAdministrationPage(
+      Map<String, String> detailsAsMap) {
     co.nvqa.commons.model.dp.DpPartner dpPartner = resolveValue(detailsAsMap.get("dpPartnerList"));
     int countValue = Integer.parseInt(resolveValue(detailsAsMap.get("count")));
     List<DpPartner> dpPartners = new ArrayList<>();
-    for (int i = 0 ; i < countValue; i++){
+    for (int i = 0; i < countValue; i++) {
       Partner partner = dpPartner.getPartners().get(i);
       dpPartners.add(dpAdminReactPage.convertPartnerToDpPartner(partner));
     }
@@ -123,7 +124,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     co.nvqa.commons.model.dp.dp_user.DpUser dpUser = resolveValue(detailsAsMap.get("dpUsers"));
     int countValue = Integer.parseInt(resolveValue(detailsAsMap.get("count")));
     List<User> userList = new ArrayList<>();
-    for (int i = 0 ; i < countValue; i++){
+    for (int i = 0; i < countValue; i++) {
       User user = dpUser.getUsers().get(i);
       userList.add(user);
     }
@@ -211,7 +212,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
     dpAdminReactPage.inFrame(() -> {
       for (String extractDetail : extractDetails) {
-        String valueDetails = dpAdminReactPage.getDpUserElementByMap(extractDetail,dpUser);
+        String valueDetails = dpAdminReactPage.getDpUserElementByMap(extractDetail, dpUser);
         dpAdminReactPage.fillFilterDpUser(extractDetail, valueDetails);
         pause2s();
         dpAdminReactPage.readDpUserEntity(dpUser);
@@ -228,6 +229,11 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator define the DP Partner value {string} for key {string}")
+  public void operatorPressAddDpButton(String value, String key) {
+    put(key, value);
+  }
+
   @Then("Operator Fill Dp User Details below :")
   public void operatorFillDpUserDetails(DataTable dt) {
     List<DpUser> dpUsers = convertDataTableToList(dt, DpUser.class);
@@ -236,23 +242,23 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpUser.getFirstName() != null && dpUser.getFirstName().contains("ERROR_CHECK")) {
         dpAdminReactPage.errorCheckDpUser(dpUser);
       } else {
-        if (dpUser.getFirstName() != null){
+        if (dpUser.getFirstName() != null) {
           dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
         }
-        if (dpUser.getLastName() != null){
+        if (dpUser.getLastName() != null) {
           dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
         }
-        if (dpUser.getContactNo() != null){
+        if (dpUser.getContactNo() != null) {
           dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
         }
-        if (dpUser.getEmailId() != null){
+        if (dpUser.getEmailId() != null) {
           dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
         }
-        if (dpUser.getUsername() != null){
+        if (dpUser.getUsername() != null) {
           dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
-          put(KEY_DP_USER_USERNAME,dpUser.getUsername());
+          put(KEY_DP_USER_USERNAME, dpUser.getUsername());
         }
-        if (dpUser.getPassword() != null){
+        if (dpUser.getPassword() != null) {
           dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
         }
 
@@ -283,52 +289,90 @@ public class DpAdministrationSteps extends AbstractSteps {
     Partner partner = partners.get(0);
 
     dpAdminReactPage.inFrame(() -> {
-      if (partner.getName() != null && partner.getName().contains("ERROR_CHECK")) {
-        dpAdminReactPage.errorCheckDpPartner(partner);
-      } else {
-        if (partner.getName() != null) {
-          dpAdminReactPage.formPartnerName.setValue(partner.getName());
-        }
-        if (partner.getPocName() != null) {
-          if (!dpAdminReactPage.formPocName.getValue().equals("")) {
-            dpAdminReactPage.formPocName.forceClear();
-          }
-          dpAdminReactPage.formPocName.setValue(partner.getPocName());
-        }
-
-        if (partner.getPocTel() != null) {
-
-          if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
-            dpAdminReactPage.formPocNo.forceClear();
-          }
-
-          if (partner.getPocTel().equals("VALID")) {
-            partner.setPocTel(TestUtils.generatePhoneNumber());
-            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
-          } else {
-            dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
-          }
-        }
-
-        if (partner.getPocEmail() != null) {
-          dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
-        }
-        if (partner.getRestrictions() != null) {
-          dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
-        }
-        if (partner.getSendNotificationsToCustomer() != null
-            && partner.getSendNotificationsToCustomer()) {
-          dpAdminReactPage.buttonSendNotifications.click();
-        }
-
-        if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
-          partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
-        }
-
-        put(KEY_DP_MANAGEMENT_PARTNER, partner);
+      if (partner.getName() != null) {
+        dpAdminReactPage.formPartnerName.setValue(partner.getName());
       }
+      if (partner.getPocName() != null) {
+        if (!dpAdminReactPage.formPocName.getValue().equals("")) {
+          dpAdminReactPage.formPocName.forceClear();
+        }
+        dpAdminReactPage.formPocName.setValue(partner.getPocName());
+      }
+
+      if (partner.getPocTel() != null) {
+
+        if (!dpAdminReactPage.formPocNo.getValue().equals("")) {
+          dpAdminReactPage.formPocNo.forceClear();
+        }
+
+        if (partner.getPocTel().equals("VALID")) {
+          partner.setPocTel(TestUtils.generatePhoneNumber());
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        } else {
+          dpAdminReactPage.formPocNo.setValue(partner.getPocTel());
+        }
+      }
+
+      if (partner.getPocEmail() != null) {
+        dpAdminReactPage.formPocEmail.setValue(partner.getPocEmail());
+      }
+      if (partner.getRestrictions() != null) {
+        dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
+      }
+      if (partner.getSendNotificationsToCustomer() != null
+          && partner.getSendNotificationsToCustomer()) {
+        dpAdminReactPage.buttonSendNotifications.click();
+      }
+
+      if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
+        partner.setId(Long.valueOf(get(KEY_DP_PARTNER_ID)));
+      }
+
+      put(KEY_DP_MANAGEMENT_PARTNER, partner);
     });
   }
+
+  @Then("Operator Fill Dp Partner Details to Check The Error Status with key {string}")
+  public void operatorFillDpPartnerDetailsForErrorChecking(String errorCheckKey) {
+    Partner partner = errorValueInitialize(errorCheckKey);
+
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.errorCheckDpPartner(partner, errorCheckKey);
+    });
+  }
+
+  public Partner errorValueInitialize(String errorKey) {
+    Partner partner;
+    if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
+      partner = get(KEY_DP_MANAGEMENT_PARTNER);
+    } else {
+      partner = new Partner();
+    }
+
+    switch (errorKey) {
+      case "!NAME":
+      case "NAME":
+        partner.setName(get(errorKey));
+        break;
+      case "POCNME":
+      case "!POCNME":
+        partner.setPocName(get(errorKey));
+        break;
+      case "!POCNUM":
+      case "POCNUM":
+        partner.setPocTel(get(errorKey));
+        break;
+      case "POCMAIL":
+        partner.setPocEmail(get(errorKey));
+        break;
+      case "RESTRICTION":
+      case "!RESTRICTION":
+        partner.setRestrictions(get(errorKey));
+        break;
+    }
+    return partner;
+  }
+
 
   @Then("Operator will check the error message is equal {string}")
   public void checkErrorMessageFromDpPartner(String errorMsg) {
