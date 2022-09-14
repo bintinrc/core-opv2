@@ -56,11 +56,13 @@ public class LoginSteps extends AbstractSteps {
   @And("Operator login Operator portal with username = {string} and password = {string}")
   public void loginToOperatorV2WithoutURLValidation(String username, String password) {
     loginPage.loadPage();
+    pause2s();
 
     if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
       String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get()
           .getOperatorAccessToken();
       loginPage.forceLogin(operatorAccessToken);
+      pause5s();
     } else {
       loginPage.clickLoginButton();
       loginPage.enterCredential(username, password);
