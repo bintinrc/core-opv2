@@ -6,7 +6,7 @@ Feature: Parcel Sweeper Live
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Baseline Scenarios ddnt routed, route's hub = physical hub, route's date = today: Normal Order - e2e (uid:03123837-a53a-4e3d-8abf-9b06e7c3d1eb)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] Add delivery to route - [OPV2] Parcel sweeper in destination hub -  [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -74,7 +74,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Baseline Scenarios ddnt routed, route's hub = physical hub, route's date = today: Return Order - e2e (uid:74dd1f21-a95d-4a98-a6f0-b46a1992a369)
+  Scenario: [API] Order create return - [API] Create route - [API] Success pickup - [API] Global inbound - [API] Add delivery to route - [OPV2] Parcel sweeper in destination hub -  [API] Van inbound - [API] Success delivery
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
@@ -139,7 +139,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper On Hold Order - Resolve PENDING MISSING Ticket Type - e2e (uid:ea9d47e4-ea9f-4ada-90f7-7a133b211f85)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Create missing recovery ticket - [OPV2] Parcel sweeper in destination hub -  [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -238,7 +238,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper On Hold Order - DO NOT Resolve NON-MISSING Ticket Type - e2e (uid:b3648a2c-60d8-44e0-b43d-515471034a1f)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Create non missing recovery ticket - [OPV2] Parcel sweeper in destination hub - [API] Resolve recovery ticket - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -340,7 +340,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Order With Priority Level - e2e (uid:ec77bcd7-ff13-495f-86bc-fa49ce23e446)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] Assign priority level - [API] Add delivery to route - [OPV2] Parcel sweeper in destination hub -  [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -409,7 +409,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Order With Tag - e2e (uid:f31d9150-b346-4511-8b87-0164079294d8)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] Assign order tag - [API] Add delivery to route - [OPV2] Parcel sweeper in destination hub -  [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |

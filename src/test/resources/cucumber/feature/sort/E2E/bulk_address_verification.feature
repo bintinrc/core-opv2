@@ -6,7 +6,7 @@ Feature: Bulk Address Verification
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV RTS orders - RTS zone exist - e2e (uid:ecb5e1b6-90b8-4d33-9064-66c8c8bedd33)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] RTS the order - [OPV2] Bulk AV (RTS zone exist) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -53,7 +53,7 @@ Feature: Bulk Address Verification
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV RTS orders - RTS zone doesn't exist - e2e (uid:8b6139d1-69ca-43ac-80bd-cb4824268494)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] RTS the order - [OPV2] Bulk AV (RTS zone not exist) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -100,7 +100,7 @@ Feature: Bulk Address Verification
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV RTS orders - Zone is NULL - e2e (uid:30424e34-4ad0-4e55-a519-837ed25bc231)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [API] RTS the order - [OPV2] Bulk AV (RTS zone null) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -147,7 +147,7 @@ Feature: Bulk Address Verification
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV Non RTS orders - RTS zone exist - e2e (uid:4c802c78-b5b2-420b-8fbb-cb1e845ec4e1)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [OPV2] Bulk AV (RTS zone exist) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -192,7 +192,7 @@ Feature: Bulk Address Verification
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV Non RTS orders - RTS zone doesn't exist - e2e (uid:2a4ce197-12ab-461b-b1d6-9c15e934237d)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [OPV2] Bulk AV (RTS zone not exist) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -237,7 +237,7 @@ Feature: Bulk Address Verification
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Bulk AV Non RTS orders - Zone is NULL - e2e (uid:df78d4a9-069f-42c8-9e69-bc9978ccbba8)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Global inbound - [OPV2] Bulk AV (RTS zone null) - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
