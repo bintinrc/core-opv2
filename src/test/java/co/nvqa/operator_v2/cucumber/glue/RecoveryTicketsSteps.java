@@ -2,10 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,7 +27,9 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
   @When("^Operator create new ticket on page Recovery Tickets using data below:$")
   public void createNewTicket(Map<String, String> mapOfData) {
-    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    mapOfData = resolveKeyValues(mapOfData);
+    String trackingId = mapOfData.computeIfAbsent("trackingId",
+        k -> get(KEY_CREATED_ORDER_TRACKING_ID));
 
     String entrySource = mapOfData.get("entrySource");
     String investigatingDepartment = mapOfData.get("investigatingDepartment");
