@@ -164,7 +164,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-#    And API Operator verify new Hubs are created
+    And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[4].id}"
