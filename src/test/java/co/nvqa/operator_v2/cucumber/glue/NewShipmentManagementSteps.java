@@ -178,11 +178,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> {
-      page.shipmentIds.waitUntilVisible();
-      page.shipmentIds.setValue(shipmentIds);
-    }
-    );
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      reloadPage();
+      page.inFrame(() -> {
+            page.shipmentIds.waitUntilVisible();
+            page.shipmentIds.setValue(shipmentIds);
+          }
+      );
+    }, "Retry until page is loaded...");
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
