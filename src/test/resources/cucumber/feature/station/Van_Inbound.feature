@@ -333,9 +333,10 @@ Feature: Van Inbound
       | actionType | ADD                             |
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
-    And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
-    And Operator cancel the created shipment on Shipment Management page
+#    And Operator search shipments by given Ids on Shipment Management page:
+#      | {KEY_CREATED_SHIPMENT_ID} |
+    When API Operator cancels the shipment using below data:
+      | shipmentId | KEY_CREATED_SHIPMENT_ID |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
