@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -1306,6 +1307,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 Assertions.assertThat(createFlightTrip_destinationProcessingTimeHours.getAttribute("disabled")).as("Edit Processing Time at Destination Airport is disabled").isEqualTo("true");
                 break;
             case "ToFrom Airport Trip":
+                waitUntilVisibilityOfElementLocated("//h3[.='Edit To/from Airport Trip']");
                 Assertions.assertThat(createToFromAirportForm_originFacility.getAttribute("disabled")).as("Edit Origin Facility is disabled").isEqualTo("true");
                 Assertions.assertThat(createToFromAirportForm_destinationFacility.getAttribute("disabled")).as("Edit Destination Facility is disabled").isEqualTo("true");
                 Assertions.assertThat(createToFromAirportForm_departureDate.getAttribute("disabled")).as("Edit Departure Date is disabled").isEqualTo("true");
@@ -1329,9 +1331,48 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                     } else createFlightTrip_mawb.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
                 }
                 break;
+            case "ToFrom Airport Trip":
+                if (data.get("comment")!=null)
+                    createToFromAirportForm_comment.clearAndSendkeysV2(data.get("comment"));
+                if(!data.get("drivers").equals("-")){
+                    waitUntilInvisibilityOfElementLocated("//input[@id='createToFromAirportForm_drivers' and @disabled]",30);
+                    String[] drivers = data.get("drivers").split(",");
+                    int count = 0;
+                    for(String driver : drivers){
+                        createToFromAirportForm_drivers.click();
+                        sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                        count++;
+                        if(count>4){
+                            int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+                            Assertions.assertThat(selected)
+                                    .as("Total maximum seleted drivers are 4").isEqualTo(4);
+                        }
+                    }
+                }
+                break;
 
         }
+        pause1s();
         submitButton.click();
     }
-
+    public void verifyListDriver(List<Driver> middleMileDrivers) {
+        Boolean result = true;
+        String ActualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
+        List<String> AcutalDriversUsername = Arrays.asList(ActualDrivers.split(","));
+        List<String> ExpectedDriversUsename = getListDriverUsername(middleMileDrivers);
+        for (String driver : AcutalDriversUsername) {
+            driver = driver.replace("(main)", "").trim();
+            if (!ExpectedDriversUsename.contains(driver))
+                result = false;
+        }
+        Assertions.assertThat(result).as("Drivers are shown on Airport Trip Management page as expected")
+                .isTrue();
+    }
+    public List<String> getListDriverUsername(List<Driver> middleMileDrivers) {
+        List<String> ExpectedList = new ArrayList<>();
+        middleMileDrivers.forEach((e) -> {
+            ExpectedList.add(e.getFullName());
+        });
+        return ExpectedList;
+    }
 }
