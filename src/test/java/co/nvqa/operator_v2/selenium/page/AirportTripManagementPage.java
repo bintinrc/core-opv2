@@ -1335,19 +1335,22 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 if (data.get("comment")!=null)
                     createToFromAirportForm_comment.clearAndSendkeysV2(data.get("comment"));
                 if(!data.get("drivers").equals("-")){
-                    waitUntilInvisibilityOfElementLocated("//input[@id='createToFromAirportForm_drivers' and @disabled]",30);
-                    String[] drivers = data.get("drivers").split(",");
-                    int count = 0;
-                    for(String driver : drivers){
-                        createToFromAirportForm_drivers.click();
-                        sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
-                        count++;
-                        if(count>4){
-                            int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
-                            Assertions.assertThat(selected)
-                                    .as("Total maximum seleted drivers are 4").isEqualTo(4);
+                    retryIfRuntimeExceptionOccurred(() ->{
+                        waitUntilInvisibilityOfElementLocated("//input[@id='createToFromAirportForm_drivers' and @disabled]",30);
+                        waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+                        String[] drivers = data.get("drivers").split(",");
+                        int count = 0;
+                        for(String driver : drivers){
+                            createToFromAirportForm_drivers.click();
+                            sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                            count++;
+                            if(count>4){
+                                int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+                                Assertions.assertThat(selected)
+                                        .as("Total maximum seleted drivers are 4").isEqualTo(4);
+                            }
                         }
-                    }
+                    },5);
                 }
                 break;
 
