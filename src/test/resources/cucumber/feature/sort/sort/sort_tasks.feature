@@ -138,7 +138,6 @@ Feature: Sort Task
       | {sort-task-middle-tier} |
       | {sort-task-zone}        |
 
-
   @CloseNewWindows @DeleteNodes
   Scenario: Refresh Diagram - Add new nodes (uid:0ac79364-da2a-4a10-b310-0cfed70b1642)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -236,7 +235,6 @@ Feature: Sort Task
       | {sort-task-middle-tier} |
       | {sort-task-zone}        |
       | {sort-task-zone}        |
-
 
   Scenario: Searches parent node (uid:0761b4db-c350-4629-86c9-91cffd672f69)
     When Operator go to menu Sort -> Sort Tasks
