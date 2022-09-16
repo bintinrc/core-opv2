@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteManifest @happy-path @NV10325
+@OperatorV2 @Core @Routing @RouteManifest @happy-path
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun
