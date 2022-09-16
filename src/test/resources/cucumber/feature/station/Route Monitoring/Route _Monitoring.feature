@@ -1087,7 +1087,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: View Pickup Appointment Job in Route Monitoring - Add Multiple PA Jobs to Route
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1115,7 +1115,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending PA Job From Route
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1158,7 +1158,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: Show Updated Route Id & Driver Name of Routed PA Job in Route Monitoring
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1221,7 +1221,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - PA Job
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1251,7 +1251,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed PA Job
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1282,7 +1282,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1359,7 +1359,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       | Name                        | Address                 | Contact                 |
       | {hub-id-15} | {hub-name-15} | {PA_shipper-v4-pickup-name} | {PA_shipper-v4-address} | {PA_shipper-v4-contact} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1387,7 +1387,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1417,7 +1417,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1448,7 +1448,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Early PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
@@ -1478,7 +1478,7 @@ Feature: Route Monitoring V2
       | HubId       | HubName       |
       | {hub-id-15} | {hub-name-15} |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased
+  @ForceSuccessOrder @DeleteOrArchiveRoute @DeleteDriver @TimeBased @runpa
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Early PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Operator creates Pickup Appointment job
