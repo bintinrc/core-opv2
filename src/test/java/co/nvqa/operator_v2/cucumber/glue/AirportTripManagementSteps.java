@@ -330,6 +330,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Operator verifies toast messages below on Create Flight Trip page:")
     public void operatorVerifiesErrorMessages(List<String> expectedError){
+        expectedError = resolveValues(expectedError);
         airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
@@ -364,6 +365,17 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorEditDataOnEditTripPage(Map<String,String> data){
         Map<String, String> resolvedData = resolveKeyValues(data);
         airportTripManagementPage.editAirportTripItems(resolvedData);
+    }
+
+    @When("Operator departs trip {string} on Airport Trip Management page")
+    public void operatorDepartsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+//        airportTripManagementPage.airportTable.departTripButton.click();
+//        pause3s();
+//        airportTripManagementPage.confirmButton.click();
+        airportTripManagementPage.departTrip();
+        pause2s();
     }
 
 }
