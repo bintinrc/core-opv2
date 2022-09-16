@@ -1,4 +1,4 @@
-@StationManagement @StationRouteMonitoring
+@StationManagement @StationRouteMonitoring @RouteMonitoringV2
 Feature: Route Monitoring V2
 
   @LaunchBrowser @ShouldAlwaysRun
