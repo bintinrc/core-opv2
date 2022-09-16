@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.util.StandardTestUtils;
@@ -341,6 +342,10 @@ public class AirportTripManagementSteps extends AbstractSteps{
         aitrip.fromMap(data);
         aitrip.setTrip_id(tripID);
         airportTripManagementPage.validateAirTripInfo(aitrip.getTrip_id(), aitrip);
+        if (data.get("drivers")!=null){
+            List<Driver> expectedDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            airportTripManagementPage.verifyListDriver(expectedDrivers);
+        }
     }
 
     @When("Operator open edit airport trip page with data below:")

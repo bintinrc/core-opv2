@@ -13,9 +13,11 @@ Feature: Self-Serve Pricing Profile Creation Page
   Scenario: Upload Pricing Profiles with CSV - Invalid Format (uid:f9bcb24b-e528-4225-a924-89ac5047c9cf)
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | test |
-      | test |
+      | pricing_script_id       |
+      | {pricing-script-id-all} |
     Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
+    Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains "Missing header fields"
 
   Scenario: Upload Pricing Profiles with CSV - With Some Mandatory Fields Not Exist (uid:4354172a-4215-417f-9f41-715ee6102831)
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
@@ -23,6 +25,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
       | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
+    Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains "Missing header fields"
 
   @DeleteNewlyCreatedShipper
   Scenario: Upload Pricing Profiles with CSV - Shipper has existing pending profile (uid:996c2331-cf3a-4452-9118-7beb83e65dcc)
@@ -130,3 +134,81 @@ Feature: Self-Serve Pricing Profile Creation Page
     Then DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].id}"
+
+  @DeleteNewlyCreatedShipper
+  Scenario: Upload Pricing Profiles with CSV - Marketplace Shipper with Sub-Shipper who has their own Pricing Profile - Success Create Pricing Profiles with All Pricing Levers (uid:f847764e-4e5d-4c8c-bfbe-36af37f1375d)
+    Given API Operator create new 'marketplace' shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    # create subshipper with own pricing profile
+    And Operator waits for 1 seconds
+    Given API operator create new marketplace seller for marketplace id "{KEY_SHIPPER_ID}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_MARKETPLACE_SUB_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25,"rts_charge":-2,"billing_weight_logic" : "SHIPPER_GROSS_WEIGHT"}} |
+    Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
+    And Operator successfully uploads csv file with below data:
+      | shipper_id                             | global_id                        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+    Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_MARKETPLACE_SUB_SHIPPER.id}"
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details in CSV are correct
+    Then DB Operator fetches pricing lever details
+    And Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper
+  Scenario: Upload Pricing Profiles with CSV - Marketplace Shipper with Sub Shipper who Reference Parent's Pricing Profile - Success Create Pricing Profiles with All Pricing Levers (uid:c902b1ab-0804-4b91-bf8e-d9fd2714346a)
+    Given API Operator create new 'marketplace' shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    # create subshipper with linked pricing profile
+    And Operator waits for 1 seconds
+    Given API operator create new marketplace seller for marketplace id "{KEY_SHIPPER_ID}"
+    Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
+    And Operator successfully uploads csv file with below data:
+      | shipper_id                             | global_id                        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+    Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_MARKETPLACE_SUB_SHIPPER.id}"
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details in CSV are correct
+    Then DB Operator fetches pricing lever details
+    And Operator verifies the pricing lever details in the database
+
+  @DeleteNewlyCreatedShipper
+  Scenario: Upload Pricing Profiles with CSV - Corporate Shipper with Sub Shipper who has their own Pricing Profile - Success Create Pricing Profiles with All Pricing Levers (uid:04e29975-57c4-456f-a0e3-e7cb6f8e219b)
+    Given API Operator create new 'corporate' shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    # create corporate subshipper with own pricing profile
+    And Operator waits for 1 seconds
+    Given API operator create new corporate branch for corporate shipper id "{KEY_SHIPPER_ID}"
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CORPORATE_BRANCH.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25,"rts_charge":-2,"billing_weight_logic" : "SHIPPER_GROSS_WEIGHT"}} |
+    Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
+    And Operator successfully uploads csv file with below data:
+      | shipper_id                      | global_id                 | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+    Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_CORPORATE_BRANCH.id}"
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details in CSV are correct
+    Then DB Operator fetches pricing lever details
+    And Operator verifies the pricing lever details in the database
+
+
+  @DeleteNewlyCreatedShipper
+  Scenario: Upload Pricing Profiles with CSV - Corporate Shipper with Sub Shipper who Reference Parent's Pricing Profile - Success Create Pricing Profiles with All Pricing Levers (uid:cc54b789-a311-4c92-8616-12d3909c6971)
+    Given API Operator create new 'corporate' shipper
+    And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
+      | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
+    # create corporate subshipper with linked pricing profile
+    And Operator waits for 1 seconds
+    Given API operator create new corporate branch for corporate shipper id "{KEY_SHIPPER_ID}"
+    And Operator waits for 1 seconds
+    Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
+    And Operator successfully uploads csv file with below data:
+      | shipper_id                      | global_id                 | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+    Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_CORPORATE_BRANCH.id}"
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details in CSV are correct
+    Then DB Operator fetches pricing lever details
+    And Operator verifies the pricing lever details in the database
