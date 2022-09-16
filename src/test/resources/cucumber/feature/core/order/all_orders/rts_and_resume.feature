@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @testrts
+@OperatorV2 @Core @AllOrders
 Feature: All Orders - RTS & Resume
 
   @LaunchBrowser @ShouldAlwaysRun
