@@ -448,7 +448,48 @@ Feature: Airport Trip Management - Depart To From Airport Trip
     Then Operator verifies driver error messages below on Airport Trip Management page:
       |{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive |
       |{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive |
-    
+
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI
+  Scenario: Depart Airport to Airport Trip with Pending Status
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new airport using data below:
+      | system_id     | SG          |
+      | airportCode   | GENERATED   |
+      | airportName   | GENERATED   |
+      | city          | GENERATED   |
+      | latitude      | GENERATED   |
+      | longitude     | GENERATED   |
+    Given API Operator create new airport using data below:
+      | system_id     | SG          |
+      | airportCode   | GENERATED   |
+      | airportName   | GENERATED   |
+      | city          | GENERATED   |
+      | latitude      | GENERATED   |
+      | longitude     | GENERATED   |
+    And API Operator refresh Airports cache
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                         |
+      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id}|
+      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}|
+    Given Operator go to menu Inter-Hub -> Airport Trip Management
+    And Operator verifies that the Airport Management Page is opened
+    When Operator fill the departure date for Airport Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd}    |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd}    |
+    When Operator fill the Origin Or Destination for Airport Management
+      | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
+    And Operator click on 'Load Trips' on Airport Management
+    Then Verify the parameters of loaded trips in Airport Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
+      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
+    When Operator departs trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Airport Trip Management page
+    Then Operator verifies depart trip message "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" display on Airport Trip Management page
+    And Operator verifies action buttons below are disable:
+      |Edit           |
+      |Cancel         |
+      |assignDriver   |
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op
