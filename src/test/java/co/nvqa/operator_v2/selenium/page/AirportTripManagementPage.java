@@ -1451,7 +1451,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void verifyDepartedTripSuccessful(String expectedMessage){
-//        waitUntilVisibilityOfElementLocated("//div[@class='ant-notification-notice-message']");
         antNotificationMessage.waitUntilVisible();
         String actualMessage = getAntTopTextV2();
         Assertions.assertThat(actualMessage).as("Trip departed successfully").isEqualTo(expectedMessage);
@@ -1468,12 +1467,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         List<WebElement> messageLocators = findElementsByXpath("//div[@class='ant-notification-notice-message']//div");
         List<String> actualMessages = new ArrayList<>();
         messageLocators.forEach((element) -> {
-            System.out.println("Error meessage: "+ element.getText());
             actualMessages.add(element.getText());
         });
         Boolean result = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
-        expectedMessages.forEach(e -> System.out.println("Expect error: "+e));
-        actualMessages.forEach(e -> System.out.println("Actual error: "+e));
         Assertions.assertThat(result).as("Error message(s) are the same").isTrue();
     }
 }
