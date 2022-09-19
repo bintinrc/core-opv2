@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrder @CancelRTS @EditOrder3
+@OperatorV2 @Core @EditOrder @CancelRTS @EditOrder3 @current
 Feature: Cancel RTS
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip
   Scenario: Operator Cancel RTS from Edit Order Page (uid:d4419364-fa79-41db-8b2f-2367864463fb)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -22,7 +22,6 @@ Feature: Cancel RTS
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |

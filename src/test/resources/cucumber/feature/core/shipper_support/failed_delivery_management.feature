@@ -22,7 +22,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -72,7 +71,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -103,7 +101,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -136,7 +133,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -166,7 +162,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -196,7 +191,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -226,7 +220,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -255,7 +248,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -426,7 +418,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -486,7 +477,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
@@ -610,7 +600,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |

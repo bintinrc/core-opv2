@@ -21,7 +21,6 @@ Feature: All Orders - RTS & Resume
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver failed the delivery of the created parcel using data below:
-      | orderNumber            | 2           |
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 5           |
       | failureReasonIndexMode | FIRST       |
