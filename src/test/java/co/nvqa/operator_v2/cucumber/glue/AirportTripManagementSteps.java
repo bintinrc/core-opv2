@@ -330,6 +330,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Operator verifies toast messages below on Create Flight Trip page:")
     public void operatorVerifiesErrorMessages(List<String> expectedError){
+        expectedError = resolveValues(expectedError);
         airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
@@ -364,6 +365,31 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorEditDataOnEditTripPage(Map<String,String> data){
         Map<String, String> resolvedData = resolveKeyValues(data);
         airportTripManagementPage.editAirportTripItems(resolvedData);
+    }
+
+    @When("Operator departs trip {string} on Airport Trip Management page")
+    public void operatorDepartsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.departTrip();
+    }
+
+    @Then("Operator verifies depart trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesDepartTripMessageSuccess(String tripID){
+        tripID = resolveValue(tripID);
+        String expectedMessage = f("Trip %s departed",tripID);
+        airportTripManagementPage.verifyDepartedTripSuccessful(expectedMessage);
+    }
+
+    @Then("Operator verifies action buttons below are disable:")
+    public void operatorVerifiesActionButtonsAreDisable(List<String> actionButtons){
+        airportTripManagementPage.verifyActionButtonsAreDisabled(actionButtons);
+    }
+
+    @Then("Operator verifies driver error messages below on Airport Trip Management page:")
+    public void operatorVerifiesDriverErrorMessages(List<String> expectedErrorMessages){
+        expectedErrorMessages = resolveValues(expectedErrorMessages);
+        airportTripManagementPage.verifyDriverErrorMessages(expectedErrorMessages);
     }
 
 }
