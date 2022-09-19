@@ -190,7 +190,11 @@ Feature: Update Delivery Address with CSV
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     Given Operator go to menu New Features -> Update Delivery Address with CSV

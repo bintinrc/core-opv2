@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest @current
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteManifest
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
@@ -58,7 +58,7 @@ Feature: Route Manifest
       | delivery.status        | Fail                          |
       | delivery.failureReason | 6                             |
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest (uid:6351c21d-0221-4540-a02b-72a305e385cd)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -80,7 +80,7 @@ Feature: Route Manifest
       | reservation.status | Fail                       |
     And DB Operator verifies waypoint status is "FAIL"
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest (uid:46644aae-1191-4fed-8d85-32e391dc90d3)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -241,11 +241,6 @@ Feature: Route Manifest
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given API Driver failed the delivery of the created parcel
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success delivery waypoint from Route Manifest page
     And Operator refresh page
