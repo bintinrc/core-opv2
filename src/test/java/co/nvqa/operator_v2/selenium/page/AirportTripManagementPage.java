@@ -309,7 +309,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(id =createFlightTrip_commentId)
     public PageElement createFlightTrip_comment;
 
-    @FindBy(xpath ="//button[contains(@data-testid,'confirm-button')]")
+    @FindBy(css ="[data-testid$='confirm-button']")
     public Button confirmButton;
 
     public static String notificationMessage = "";
