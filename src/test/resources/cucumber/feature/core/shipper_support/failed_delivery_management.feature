@@ -21,7 +21,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason        | <reason>                                                                  |
@@ -67,7 +71,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason        | Other Reason                                                              |
@@ -94,7 +102,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator reschedule failed delivery order on next day
     Then Operator verifies that success toast displayed:
@@ -123,7 +135,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator reschedule failed delivery order on next 2 days
     Then Operator verify failed delivery order rescheduled on next 2 days successfully
@@ -149,7 +165,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS selected failed delivery order on next day
     Then Operator verify failed delivery order RTS-ed successfully
@@ -175,7 +195,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order on next day
     Then Operator verify failed delivery order RTS-ed successfully
@@ -201,7 +225,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator download CSV file of failed delivery order on Failed Delivery orders list
     Then Operator verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
@@ -226,7 +254,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     Then Operator verify the failed delivery order is listed on Failed Delivery orders list
     Examples:
@@ -393,7 +425,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason            | Other Reason                                                                   |
@@ -449,7 +485,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason           | Other Reason                                                                   |
@@ -569,7 +609,11 @@ Feature: Failed Delivery Management
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | orderNumber            | 2           |
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator wait until Failed Delivery Management page is loaded
     And Operator opens the same page in new tab
