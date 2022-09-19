@@ -128,6 +128,8 @@ Feature: Resume Order
       | status | Pending |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When Operator get "Pickup" transaction with status "Fail"
+    Then DB Operator verifies waypoint status is "FAIL"
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
@@ -178,6 +180,7 @@ Feature: Resume Order
     When Operator resume order on Edit Order page
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator get "Pickup" transaction with status "Fail"
     Then DB Operator verify the last Pickup transaction record of the created order:
       | status | Pending |
       | dnrId  | 0       |

@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
@@ -16,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
@@ -29,7 +33,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.*;
 
 /**
  * @author Meganathan Ramasamy
@@ -305,9 +309,15 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(id =createFlightTrip_commentId)
     public PageElement createFlightTrip_comment;
 
+    @FindBy(css ="[data-testid$='confirm-button']")
+    public Button confirmButton;
+
     public static String notificationMessage = "";
 
     public AirportTable airportTable;
+
+    @FindBy(className = "ant-modal-wrap")
+    public TripDepartureArrivalModal tripDepartureArrivalModal;
 
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
@@ -1258,6 +1268,16 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         public static final String ACTION_EDIT = "Edit";
         public static final String ACTION_DETAILS = "Details";
         public static final String ACTION_DELETE = "Cancel";
+        public static final String ACTION_ASSIGN_DRIVER = "assignDriver";
+
+        @FindBy(xpath = "//button[.='Depart']")
+        public Button departTripButton;
+
+        @FindBy(xpath = "//button[.='Arrive']")
+        public Button arriveTripButton;
+
+        @FindBy(xpath = "//button[.='Complete']")
+        public Button completeTripButton;
 
         public AirportTable(WebDriver webDriver) {
             super(webDriver);
@@ -1274,7 +1294,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                     ImmutableMap.of(
                             ACTION_DETAILS, "view-trip-icon",
                             ACTION_EDIT, "edit-trip-icon",
-                            ACTION_DELETE, "delete-trip-icon"));
+                            ACTION_DELETE, "delete-trip-icon",
+                            ACTION_ASSIGN_DRIVER, "assign-driver-icon"));
         }
     }
 
@@ -1306,6 +1327,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 Assertions.assertThat(createFlightTrip_destinationProcessingTimeHours.getAttribute("disabled")).as("Edit Processing Time at Destination Airport is disabled").isEqualTo("true");
                 break;
             case "ToFrom Airport Trip":
+                waitUntilVisibilityOfElementLocated("//h3[.='Edit To/from Airport Trip']");
                 Assertions.assertThat(createToFromAirportForm_originFacility.getAttribute("disabled")).as("Edit Origin Facility is disabled").isEqualTo("true");
                 Assertions.assertThat(createToFromAirportForm_destinationFacility.getAttribute("disabled")).as("Edit Destination Facility is disabled").isEqualTo("true");
                 Assertions.assertThat(createToFromAirportForm_departureDate.getAttribute("disabled")).as("Edit Departure Date is disabled").isEqualTo("true");
@@ -1329,9 +1351,125 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                     } else createFlightTrip_mawb.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
                 }
                 break;
+            case "ToFrom Airport Trip":
+                if (data.get("comment")!=null)
+                    createToFromAirportForm_comment.clearAndSendkeysV2(data.get("comment"));
+                if(!data.get("drivers").equals("-")){
+                    retryIfRuntimeExceptionOccurred(() ->{
+                        waitUntilInvisibilityOfElementLocated("//input[@id='createToFromAirportForm_drivers' and @disabled]",30);
+                        waitUntilVisibilityOfElementLocated("//span[.='Select to assign drivers']");
+                        String[] drivers = data.get("drivers").split(",");
+                        int count = 0;
+                        for(String driver : drivers){
+                            createToFromAirportForm_drivers.click();
+                            sendKeysAndEnterById("createToFromAirportForm_drivers", driver);
+                            count++;
+                            if(count>4){
+                                int selected = findElementsByXpath("//div[@class='ant-select-selection-overflow-item']").size();
+                                Assertions.assertThat(selected)
+                                        .as("Total maximum seleted drivers are 4").isEqualTo(4);
+                            }
+                        }
+                    },5);
+                }
+                break;
 
         }
+        pause1s();
         submitButton.click();
     }
+    public void verifyListDriver(List<Driver> middleMileDrivers) {
+        Boolean result = true;
+        String ActualDrivers = findElementByXpath("(//td[@class='drivers']//span)[last()]").getText();
+        List<String> AcutalDriversUsername = Arrays.asList(ActualDrivers.split(","));
+        List<String> ExpectedDriversUsename = getListDriverUsername(middleMileDrivers);
+        for (String driver : AcutalDriversUsername) {
+            driver = driver.replace("(main)", "").trim();
+            if (!ExpectedDriversUsename.contains(driver))
+                result = false;
+        }
+        Assertions.assertThat(result).as("Drivers are shown on Airport Trip Management page as expected")
+                .isTrue();
+    }
+    public List<String> getListDriverUsername(List<Driver> middleMileDrivers) {
+        List<String> ExpectedList = new ArrayList<>();
+        middleMileDrivers.forEach((e) -> {
+            ExpectedList.add(e.getFullName());
+        });
+        return ExpectedList;
+    }
 
+    public static class TripDepartureArrivalModal extends AntModal {
+
+        public TripDepartureArrivalModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[@class='ant-typography']/strong")
+        public PageElement PageMessage;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Origin Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement originFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Destination Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement destinationFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDepartureTime;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDuration;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Driver']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement Driver;
+
+        @FindBy(xpath = "//button[.='Submit']")
+        public Button confirmTrip;
+
+        @FindBy(xpath = "//button[.='No']")
+        public Button no;
+    }
+
+    public void departTrip() {
+        airportTable.departTripButton.waitUntilClickable();
+        airportTable.departTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Departure message appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Departure page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
+
+    public void verifyDepartedTripSuccessful(String expectedMessage){
+        antNotificationMessage.waitUntilVisible();
+        String actualMessage = getAntTopTextV2();
+        Assertions.assertThat(actualMessage).as("Trip departed successfully").isEqualTo(expectedMessage);
+    }
+
+    public void verifyActionButtonsAreDisabled(List<String> actionButtons){
+        actionButtons.forEach((button) ->{
+            Assertions.assertThat(airportTable.getActionButton(1,button).getAttribute("disabled")).as(f("Button %s is disabled",button)).isEqualTo("true");
+        });
+    }
+
+    public void verifyDriverErrorMessages(List<String> expectedMessages){
+        antNotificationMessage.waitUntilVisible();
+        List<WebElement> messageLocators = findElementsByXpath("//div[@class='ant-notification-notice-message']//div");
+        List<String> actualMessages = new ArrayList<>();
+        messageLocators.forEach((element) -> {
+            actualMessages.add(element.getText());
+        });
+        Boolean result = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
+        Assertions.assertThat(result).as("Error message(s) are the same").isTrue();
+    }
 }
