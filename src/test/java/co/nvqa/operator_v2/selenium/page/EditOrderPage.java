@@ -489,6 +489,16 @@ public class EditOrderPage extends OperatorV2SimplePage {
     return changeReason;
   }
 
+  public void confirmCompleteOrder(String reason, String reasonDescr) {
+    manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
+    if (StringUtils.isNotBlank(reasonDescr)) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    }
+    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    waitUntilInvisibilityOfToast("The order has been completed", true);
+  }
+
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
     Dimension expectedDimension = editedOrder.getDimensions();
     Assertions.assertThat(size.getText()).as("Order Details - Size")
