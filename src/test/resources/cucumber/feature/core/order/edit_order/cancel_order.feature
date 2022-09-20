@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @CancelOrder @EditOrder1 @RoutingModules @current
+@OperatorV2 @Core @EditOrder @CancelOrder @EditOrder1 @RoutingModules
 Feature: Cancel Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -185,7 +185,7 @@ Feature: Cancel Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - En-route to Sorting Hub (uid:426b4ab8-7ed3-4220-88e1-e36c2b87003b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
