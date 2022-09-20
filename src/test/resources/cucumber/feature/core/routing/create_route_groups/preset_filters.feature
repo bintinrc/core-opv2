@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CRG2
 Feature: Create Route Groups - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun
