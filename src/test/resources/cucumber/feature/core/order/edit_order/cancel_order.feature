@@ -200,7 +200,10 @@ Feature: Cancel Order
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    And API Driver failed the delivery of the created parcel
+    And API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     And API Operator delete or archive created route
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |

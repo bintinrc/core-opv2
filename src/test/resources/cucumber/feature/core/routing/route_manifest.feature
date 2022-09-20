@@ -241,11 +241,6 @@ Feature: Route Manifest
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
-    Given API Driver failed the delivery of the created parcel
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success delivery waypoint from Route Manifest page
     And Operator refresh page
