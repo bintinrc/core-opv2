@@ -1279,6 +1279,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         @FindBy(xpath = "//button[.='Complete']")
         public Button completeTripButton;
 
+        @FindBy(xpath = "//i[.='Completed']")
+        public PageElement completedTrackText;
+
         public AirportTable(WebDriver webDriver) {
             super(webDriver);
             setColumnLocators(
@@ -1472,4 +1475,46 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Boolean result = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
         Assertions.assertThat(result).as("Error message(s) are the same").isTrue();
     }
+
+    public void ArriveTrip() {
+        airportTable.arriveTripButton.waitUntilClickable();
+        airportTable.arriveTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Arrival page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
+
+    public void verifyArrivalTripSuccessful(String expectedMessage){
+        antNotificationMessage.waitUntilVisible();
+        String actualMessage = getAntTopTextV2();
+        Assertions.assertThat(actualMessage).as("Trip arrived successfully").isEqualTo(expectedMessage);
+    }
+
+    public void verifyButtonIsShown(String button){
+        switch (button.toUpperCase()){
+            case "COMPLETE":
+                Assertions.assertThat(airportTable.completeTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "ARRIVE":
+                Assertions.assertThat(airportTable.arriveTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "DEPART":
+                Assertions.assertThat(airportTable.departTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "COMPLETED":
+                Assertions.assertThat(airportTable.completedTrackText.isDisplayed()).as(f("%s text is shown",button.toUpperCase())).isTrue();
+        }
+    }
+
 }
