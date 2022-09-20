@@ -172,7 +172,7 @@ Feature: Shipment Van Inbound Without Trip Scanning 2
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning wrong Shipment -1 Into Van in hub "{hub-name}" on Shipment Inbound Scanning page
-    Then Operator verify small message "Shipment -1 can not be found." appears in Shipment Inbound Box
+    Then Operator verify small message "Shipment id -1 not found" appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Van Inbound Transit Shipment In Origin Hub (uid:43f4bacc-e862-4410-89b1-15be54463875)
