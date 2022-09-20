@@ -59,12 +59,12 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Start Hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator apply filters on Shipment Management Page:
       | startHubName | {hub-name} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {shipment-type}           |
+      | shipmentType | AIR_HAUL           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -74,12 +74,12 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - End Hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator apply filters on Shipment Management Page:
       | endHubName | {hub-name-2} |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {shipment-type}           |
+      | shipmentType | AIR_HAUL           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | currHubName  | {hub-name}                |
@@ -89,14 +89,14 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Type : Air Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | {shipment-dialog-type} |
       | shipmentStatus | {pending-status}       |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {shipment-type}           |
+      | shipmentType | AIR_HAUL           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -107,14 +107,14 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Type : Land Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{land-haul-shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | {land-haul-shipment-dialog-type} |
       | shipmentStatus | {pending-status}                 |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {land-haul-shipment-type} |
+      | shipmentType | LAND_HAUL |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -132,7 +132,7 @@ Feature: Shipment Management - Search Shipment
       | shipmentStatus | {pending-status}                |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {sea-haul-shipment-type}  |
+      | shipmentType | SEA_HAUL  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -143,14 +143,14 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Type : Others
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{others-shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "OTHERS" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | {others-shipment-dialog-type} |
       | shipmentStatus | {pending-status}              |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {others-shipment-type}    |
+      | shipmentType | OTHERS    |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -161,14 +161,14 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | {shipment-dialog-type} |
       | shipmentStatus | {pending-status}       |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {shipment-type}           |
+      | shipmentType | AIR_HAUL           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
@@ -179,13 +179,13 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-    And API Operator create new shipment with type "{shipment-type}" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
       | shipmentDate | {gradle-previous-1-day-yyyy-MM-dd}:00:00,{gradle-current-date-yyyy-MM-dd}:23:30 |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
-      | shipmentType | {shipment-type}           |
+      | shipmentType | AIR_HAUL           |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | {pending-status}          |
       | startHubName | {hub-name}                |
