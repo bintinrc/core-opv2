@@ -400,13 +400,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.ArriveTrip();
     }
 
-    @Then("Operator verifies arrival trip message {string} display on Airport Trip Management page")
-    public void operatorVerifiesArrivalTripMessageSuccess(String tripID){
-        tripID = resolveValue(tripID);
-        String expectedMessage = f("Trip %s arrived",tripID);
-        airportTripManagementPage.verifyArrivalTripSuccessful(expectedMessage);
-    }
-
     @Then("Operator verifies {string} button is shown on Airport Trip Management page")
     public void operatorVerifiesButtonIsShownOnAirTripPage(String button){
         airportTripManagementPage.verifyButtonIsShown(button);
