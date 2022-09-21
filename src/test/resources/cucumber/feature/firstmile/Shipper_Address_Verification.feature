@@ -31,7 +31,7 @@ Feature: Shipper Address Verification
       | name      | contact    | Address1          | country | postcode |
       | FirstMile | 6598984204 | FirstMile Address | SG      | 123456   |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @SystemIdNotSg @default-id
   Scenario Outline: [ID, MY, TH, PH, VN] New Shipper Address Without Lat Long is Created After Order Creation
     Given Operator loads Operator portal home page
     And Operator changes the country to "Indonesia"
