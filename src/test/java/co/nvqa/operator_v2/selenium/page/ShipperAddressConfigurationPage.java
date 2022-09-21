@@ -20,6 +20,8 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//input";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
+  public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
+  public static final String COLUMN_NAME = "Suggested Address URL";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -50,6 +52,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindAll(@FindBy(xpath = "//div[@class='BaseTable__row-cell' and @data-datakey='lat_long']//*[local-name()='svg' and contains (@class,'GaComponent__StyledAxleIconComponent')]"))
   private List<PageElement> greencheckMarks;
+
+  @FindBy(xpath = "//button[@data-pa-action='Download Addresses']")
+  public PageElement downloadAddressButton;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -118,6 +123,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   public void validateGreenCheckMarkNotDisplayed() {
     Assertions.assertThat(greencheckMarks.size()).isZero();
+  }
+
+  public void clickDownloadAddress() {
+    pause2s();
+    waitUntilVisibilityOfElementLocated(downloadAddressButton.getWebElement());
+    downloadAddressButton.click();
   }
 
 }

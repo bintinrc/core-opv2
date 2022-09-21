@@ -88,6 +88,21 @@ Feature: Shipper Address Configuration
       | Search by Shipper Name    | Shipper Name/Contact | Station - 09876576                            | shipper_name_contact |
       | Search by Shipper Contact | Shipper Name/Contact | Station - 09876576                            | shipper_name_contact |
 
+  Scenario: Download CSV of Shipper Address
+    Given Operator loads Operator portal home page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    When Operator loads Shipper Address Configuration page
+    And Operator selects "All" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator clicks on the Download Addresses button
+    And Operator verifies that the column headers are available on the downloaded file
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
