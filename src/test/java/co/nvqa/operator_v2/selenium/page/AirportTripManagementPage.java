@@ -1476,7 +1476,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(result).as("Error message(s) are the same").isTrue();
     }
 
-    public void ArriveTrip() {
+    public void ArriveTripAndVerifyItems() {
         airportTable.arriveTripButton.waitUntilClickable();
         airportTable.arriveTripButton.click();
         tripDepartureArrivalModal.waitUntilVisible();

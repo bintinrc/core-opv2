@@ -397,7 +397,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorArrivesTripOnAirportTripPage(String tripID){
         tripID = resolveValue(tripID);
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
-        airportTripManagementPage.ArriveTrip();
+        airportTripManagementPage.ArriveTripAndVerifyItems();
     }
 
     @Then("Operator verifies {string} button is shown on Airport Trip Management page")
