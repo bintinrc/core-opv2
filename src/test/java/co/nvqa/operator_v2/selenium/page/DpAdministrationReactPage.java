@@ -430,6 +430,30 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     }
   }
 
+  public void clearDpPartnerForm(String errorKey) {
+    switch (errorKey){
+      case "NAME":
+      case "!NAME":
+        formPartnerName.forceClear();
+        break;
+      case "POCNME":
+      case "!POCNME":
+        formPocName.forceClear();
+        break;
+      case "!POCNUM":
+      case "POCNUM":
+        formPocNo.forceClear();
+        break;
+      case "RESTRICTION":
+      case "!RESTRICTION":
+        formRestrictions.forceClear();
+        break;
+      case "POCMAIL":
+        formPocEmail.forceClear();
+        break;
+    }
+  }
+
 
   public void checkErrorMsg(String errMessage) {
     Assertions.assertThat(errorMsg.getText())

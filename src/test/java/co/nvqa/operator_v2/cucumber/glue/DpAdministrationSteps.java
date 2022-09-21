@@ -341,6 +341,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator clear the {string} from DP Partner form")
+  public void clearCertainForm(String errorCheckKey) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.clearDpPartnerForm(errorCheckKey);
+    });
+  }
+
   public Partner errorValueInitialize(String errorKey) {
     Partner partner;
     if (get(KEY_DP_MANAGEMENT_PARTNER) != null) {
