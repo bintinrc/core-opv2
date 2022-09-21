@@ -28,6 +28,9 @@ import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.COLUMN_NAME;
+import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.CSV_DOWNLOADED_FILENAME_PATTERN;
+
 
 @SuppressWarnings("unused")
 @ScenarioScoped
@@ -114,7 +117,20 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies that the column headers are available on the downloaded file")
+  public void operator_verifies_that_the_valid_error_message_is_updated_on_the_downloaded_file() {
+    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
+        CSV_DOWNLOADED_FILENAME_PATTERN);
+    shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
+        COLUMN_NAME, true);
+  }
 
+  @And("Operator clicks on the Download Addresses button")
+  public void operatorClicksOnTheDownloadAddressesButton() {
+    shipperAddressConfigurationPage.clickDownloadAddress();
+    takesScreenshot();
+
+  }
 }
 
 
