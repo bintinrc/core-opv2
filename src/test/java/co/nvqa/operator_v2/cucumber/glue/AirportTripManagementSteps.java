@@ -9,6 +9,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -391,5 +392,25 @@ public class AirportTripManagementSteps extends AbstractSteps{
         expectedErrorMessages = resolveValues(expectedErrorMessages);
         airportTripManagementPage.verifyDriverErrorMessages(expectedErrorMessages);
     }
+
+    @When("Operator arrives trip {string} on Airport Trip Management page")
+    public void operatorArrivesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.ArriveTripAndVerifyItems();
+    }
+
+    @Then("Operator verifies {string} button is shown on Airport Trip Management page")
+    public void operatorVerifiesButtonIsShownOnAirTripPage(String button){
+        airportTripManagementPage.verifyButtonIsShown(button);
+
+    }
+
+    @Then("Operator verifies trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesTripMessageSuccess(String tripMessage){
+        tripMessage = resolveValue(tripMessage);
+        airportTripManagementPage.verifyArrivalTripSuccessful(tripMessage);
+    }
+
 
 }
