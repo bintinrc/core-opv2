@@ -70,11 +70,11 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
 
     Examples:
-      | dataset_name              | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid                              |
-      | Invalid POC No            | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | uid:13991f78-4626-4920-adbd-2939d25c478c |
-      | Invalid Partner Name      | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:ff15623d-b2c4-4094-9082-0d0440b2e3e8 |
-      | Invalid POC Name          | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:0ba8ddac-60f2-4015-8911-fcf7cc93f5e3 |
-      | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:c707f35a-f992-49b2-bf1b-efe999c0a462 |
+      | dataset_name              | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid |
+      | Invalid POC No            | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | -           |
+      | Invalid Partner Name      | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | -           |
+      | Invalid POC Name          | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | -           |
+      | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | -           |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario Outline: DP Administration - Create DP Partner - <dataset_name> (<hiptest-uid>)
