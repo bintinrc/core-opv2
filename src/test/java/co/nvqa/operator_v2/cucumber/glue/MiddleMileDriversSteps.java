@@ -34,7 +34,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final DateTimeFormatter COMMENT_FORMATTER = DateUtil.DATE_TIME_FORMATTER;
   private static final String AUTO = "AUTO";
   private static final String RANDOM = "RANDOM";
-  private static final String PASSWORD = "password";
+  private static final String PASSWORD = "Ninjitsu89";
   private static final String COMMENTS = String
       .format("Created at : %s", COMMENT_FORMATTER.format(TODAY));
 
