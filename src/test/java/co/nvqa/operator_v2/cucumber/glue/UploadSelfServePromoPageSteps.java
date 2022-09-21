@@ -51,8 +51,10 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
   @And("Operator uploads csv file with below data:")
   public void operatorUploadsCsvFileWithBelowData(DataTable dt) {
     List<Pricing> pricingProfiles = resolveDataTableToList(dt, Pricing.class);
-    put(KEY_PRICING_PROFILE, pricingProfiles.get(0));
-    put(KEY_LIST_OF_PRICING_PROFILES, pricingProfiles);
+    if (Objects.nonNull(pricingProfiles)) {
+      put(KEY_PRICING_PROFILE, pricingProfiles.get(0));
+      put(KEY_LIST_OF_PRICING_PROFILES, pricingProfiles);
+    }
 
     File csvFile = getCsvFile(dt);
     uploadSelfServePromoPage.inFrame(() ->
@@ -180,6 +182,13 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
         .collect(Collectors.joining("\n"));
 
     uploadSelfServePromoPage.verifyDownloadErrorsCsvFileDownloadedSuccessfully(sb,
+        PRICING_PROFILE_ERRORS_CSV_FILENAME_PATTERN);
+  }
+
+  @Then("Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains {string}")
+  public void operatorVerifyDownloadErrorsCSVFileOnUploadSelfServePromoPageContains(
+      String expectedErrorMsg) {
+    uploadSelfServePromoPage.verifyDownloadErrorsCsvFileDownloadedSuccessfully(expectedErrorMsg,
         PRICING_PROFILE_ERRORS_CSV_FILENAME_PATTERN);
   }
 

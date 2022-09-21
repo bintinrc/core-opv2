@@ -13,6 +13,7 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
@@ -50,7 +51,7 @@ public class StationRouteMonitoringSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, StaleElementReferenceException.class,
-        InvalidElementStateException.class);
+        InvalidElementStateException.class, InvalidArgumentException.class);
     takesScreenshot();
   }
 

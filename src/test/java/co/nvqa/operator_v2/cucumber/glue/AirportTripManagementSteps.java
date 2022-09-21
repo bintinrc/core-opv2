@@ -1,6 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -12,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_EDIT;
 
 public class AirportTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(AirportTripManagementSteps.class);
@@ -324,8 +330,66 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Operator verifies toast messages below on Create Flight Trip page:")
     public void operatorVerifiesErrorMessages(List<String> expectedError){
+        expectedError = resolveValues(expectedError);
         airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
+    @Then("Operator verify parameters of air trip on Airport Trip Management page:")
+    public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
+        data = resolveKeyValues(data);
+        data = StandardTestUtils.replaceDataTableTokens(data);
+        Long tripID = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
+        AirTrip aitrip = new AirTrip();
+        aitrip.fromMap(data);
+        aitrip.setTrip_id(tripID);
+        airportTripManagementPage.validateAirTripInfo(aitrip.getTrip_id(), aitrip);
+        if (data.get("drivers")!=null){
+            List<Driver> expectedDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            airportTripManagementPage.verifyListDriver(expectedDrivers);
+        }
+    }
+
+    @When("Operator open edit airport trip page with data below:")
+    public void operatorEditAirTripOnAirportTripPage(Map<String, String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.airportTable.clickActionButton(1,ACTION_EDIT);
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+        airportTripManagementPage.verifyDisableItemsOnEditPage(resolvedData.get("tripType"));
+    }
+
+    @When("Operator edit data on Edit Trip page:")
+    public void operatorEditDataOnEditTripPage(Map<String,String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        airportTripManagementPage.editAirportTripItems(resolvedData);
+    }
+
+    @When("Operator departs trip {string} on Airport Trip Management page")
+    public void operatorDepartsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.departTrip();
+    }
+
+    @Then("Operator verifies depart trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesDepartTripMessageSuccess(String tripID){
+        tripID = resolveValue(tripID);
+        String expectedMessage = f("Trip %s departed",tripID);
+        airportTripManagementPage.verifyDepartedTripSuccessful(expectedMessage);
+    }
+
+    @Then("Operator verifies action buttons below are disable:")
+    public void operatorVerifiesActionButtonsAreDisable(List<String> actionButtons){
+        airportTripManagementPage.verifyActionButtonsAreDisabled(actionButtons);
+    }
+
+    @Then("Operator verifies driver error messages below on Airport Trip Management page:")
+    public void operatorVerifiesDriverErrorMessages(List<String> expectedErrorMessages){
+        expectedErrorMessages = resolveValues(expectedErrorMessages);
+        airportTripManagementPage.verifyDriverErrorMessages(expectedErrorMessages);
+    }
 
 }
