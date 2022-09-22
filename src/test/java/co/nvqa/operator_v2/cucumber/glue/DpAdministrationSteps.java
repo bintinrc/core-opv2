@@ -547,6 +547,17 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator will get the error from some field")
+  public void errorFieldMessage(Map<String, String> dataTableAsMap) {
+    String elementListCheck = dataTableAsMap.get("field");
+    String[] elementLists = elementListCheck.split(",");
+    dpAdminReactPage.inFrame(() -> {
+      for (String element : elementLists){
+        dpAdminReactPage.fieldErrorMsg(element);
+      }
+    });
+  }
+
 
   @Then("Operator get partner id")
   public void operatorGetPartnerId() {

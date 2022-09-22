@@ -22,3 +22,6 @@ Feature: DP Administration - Distribution Point
     Then Operator press save setting button
     And Operator will get the error from some mandatory field
       | field | Point Name,Short Name,Contact Number,Postcode,City,Point Address 1,Floor No,Unit No,Latitude,Longitude,Pudo Point Type,Service Type,Maximum Parcel Capacity,Buffer Capacity |
+
+    And Operator will get the error from some field
+      | field | Point Name,Short Name,City,External Store Id,Postcode,Floor No,Unit No,Latitude,Longitude,Maximum Parcel Capacity,Buffer Capacity,Maximum Parcel Stay |

@@ -279,6 +279,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String SERVICE_TYPE = "Service Type";
   public static final String MAXIMUM_PARCEL_CAPACITY = "Maximum Parcel Capacity";
   public static final String BUFFER_CAPACITY = "Buffer Capacity";
+  public static final String EXTERNAL_STORE_ID = "External Store Id";
+  public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
 
 
   public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
@@ -296,6 +298,21 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put(SERVICE_TYPE, "Service Type is required")
       .put(MAXIMUM_PARCEL_CAPACITY, "Actual Max Capacity is required")
       .put(BUFFER_CAPACITY, "Buffer Capacity is required")
+      .build();
+
+  public ImmutableMap<String, String> errorField = ImmutableMap.<String, String>builder()
+      .put(POINT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(SHORT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(CITY, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(EXTERNAL_STORE_ID, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(POSTCODE, "Please enter a valid number.")
+      .put(FLOOR_NO, "Please enter a valid number.")
+      .put(UNIT_NO, "Please enter a valid number.")
+      .put(LATITUDE, "Please enter a valid number.")
+      .put(LONGITUDE, "Please enter a valid number.")
+      .put(MAXIMUM_PARCEL_CAPACITY, "Please enter a valid number.")
+      .put(BUFFER_CAPACITY, "Please enter a valid number.")
+      .put(MAXIMUM_PARCEL_STAY, "Please enter a valid number.")
       .build();
 
 
@@ -357,6 +374,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void mandatoryFieldError(String field) {
     Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorMandatoryField.get(field))))
         .as(String.format("Error message from %s is exist: %s", field, errorMandatoryField.get(field)))
+        .isTrue();
+  }
+
+  public void fieldErrorMsg(String field) {
+    Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorField.get(field))))
+        .as(String.format("Error message from %s is exist: %s", field, errorField.get(field)))
         .isTrue();
   }
 
