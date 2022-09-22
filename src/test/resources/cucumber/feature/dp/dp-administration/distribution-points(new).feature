@@ -22,6 +22,9 @@ Feature: DP Administration - Distribution Point
     Then Operator press save setting button
     And Operator will get the error from some mandatory field
       | field | Point Name,Short Name,Contact Number,Postcode,City,Point Address 1,Floor No,Unit No,Latitude,Longitude,Pudo Point Type,Service Type,Maximum Parcel Capacity,Buffer Capacity |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName             | externalStoreId       | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpUserCheckManagement | onUserCheckManagement | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
 
     And Operator will get the error from some field
       | field | Point Name,Short Name,City,External Store Id,Postcode,Floor No,Unit No,Latitude,Longitude,Maximum Parcel Capacity,Buffer Capacity,Maximum Parcel Stay |

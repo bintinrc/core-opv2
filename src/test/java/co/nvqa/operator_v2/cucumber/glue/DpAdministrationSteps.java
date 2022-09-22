@@ -547,6 +547,15 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator fill the DP details")
+  public void operatorFillDpDetails(Map<String, String> dataTableAsMap) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dataTableAsMap.get("distributionPoint"));
+    dpAdminReactPage.inFrame(() -> {
+
+    });
+  }
+
+
   @When("Operator will get the error from some field")
   public void errorFieldMessage(Map<String, String> dataTableAsMap) {
     String elementListCheck = dataTableAsMap.get("field");

@@ -145,6 +145,28 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_password']")
   public TextBox formDpUserPassword;
 
+  @FindBy(xpath = "//input[@data-testid='field_point_name']")
+  public TextBox fieldPointName;
+
+  @FindBy(xpath = "//input[@data-testid='field_short_name']")
+  public TextBox fieldShortName;
+
+  @FindBy(xpath = "//input[@data-testid='field_contact_number']")
+  public TextBox fieldContactNumber;
+
+  @FindBy(xpath = "//input[@data-testid='field_external_store_id']")
+  public TextBox fieldExternalStoreId;
+
+  @FindBy(xpath = "//input[@data-testid='field_shipper_account_no']")
+  public TextBox fieldShipperAccountNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_postcode']")
+  public TextBox fieldPostcode;
+
+  @FindBy(xpath = "//input[@data-testid='field_city']")
+  public TextBox fieldCity;
+
+
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_partner_id']/span")
   public PageElement labelPartnerId;
 
@@ -222,7 +244,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
   public Button checkBoxFranchiseeDisabled;
 
-
   @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_return']")
   public Button checkBoxReturnService;
 
@@ -255,6 +276,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_FIELD_WRONG_FORMAT = "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )";
 
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
+  public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
+  public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
 
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
@@ -381,6 +404,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorField.get(field))))
         .as(String.format("Error message from %s is exist: %s", field, errorField.get(field)))
         .isTrue();
+  }
+
+  public void chooseShipperAccountDp(Long shipperId) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+  }
+
+  public void chooseShipperAssignedHub(String HubName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
   }
 
 
