@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment2
 Feature: Shipment Management - Search Shipment 2
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -19,9 +19,9 @@ Feature: Shipment Management - Search Shipment 2
       | id           | {KEY_CREATED_SHIPMENT_ID}                  |
       | status       | Pending                                    |
       | userId       | {operator-portal-uid}                      |
-      | startHubName | {hub-name}                                 |
+      | origHubName  | {hub-name}                                 |
       | currHubName  | {hub-name}                                 |
-      | endHubName   | {hub-name-2}                               |
+      | destHubName  | {hub-name-2}                               |
       | mawb         | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
   @DeleteShipment
@@ -50,9 +50,9 @@ Feature: Shipment Management - Search Shipment 2
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Completed                 |
       | userId       | {operator-portal-uid}     |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name-2}              |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Transit Date Time (uid:d78f101e-c251-46ec-9b14-0eef64804627)
@@ -81,11 +81,11 @@ Feature: Shipment Management - Search Shipment 2
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Transit                   |
       | userId       | {operator-portal-uid}     |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment  @runthis
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Last Inbound Hub (uid:7a2bf3c3-622d-4f31-9851-02ef7797ef1b)
     Given Operator go to menu Utilities -> QRCode Printing
     And Operator go to menu Inter-Hub -> Shipment Management
@@ -112,9 +112,9 @@ Feature: Shipment Management - Search Shipment 2
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Transit                   |
       | userId       | {operator-portal-uid}     |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments without Duplicate (uid:68b7217b-41a8-4259-9da8-e8ce68f0a7b0)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -169,6 +169,6 @@ Feature: Shipment Management - Search Shipment 2
     Then Operator verifies that error react notification displayed:
       | top | We cannot process more than 30 shipments |
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
