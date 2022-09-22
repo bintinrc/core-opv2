@@ -276,6 +276,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String LATITUDE = "Latitude";
   public static final String LONGITUDE = "Longitude";
   public static final String PUDO_POINT_TYPE = "Pudo Point Type";
+  public static final String SERVICE_TYPE = "Service Type";
+  public static final String MAXIMUM_PARCEL_CAPACITY = "Maximum Parcel Capacity";
+  public static final String BUFFER_CAPACITY = "Buffer Capacity";
 
 
   public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
@@ -290,6 +293,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put(LATITUDE, "Latitude is required")
       .put(LONGITUDE, "Longitude is required")
       .put(PUDO_POINT_TYPE, "type is required")
+      .put(SERVICE_TYPE, "Service Type is required")
+      .put(MAXIMUM_PARCEL_CAPACITY, "Actual Max Capacity is required")
+      .put(BUFFER_CAPACITY, "Buffer Capacity is required")
       .build();
 
 
