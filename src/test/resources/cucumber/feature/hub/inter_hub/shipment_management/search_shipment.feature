@@ -71,13 +71,13 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
     Examples:
-      | scenarioName | filterName | filterValue  |
-      | Start Hub    | startHub   | {hub-name}   |
-      | End Hub      | endHub     | {hub-name-2} |
+      | scenarioName    | filterName     | filterValue  |
+      | Origin Hub      | originHub      | {hub-name}   |
+      | Destination Hub | destinationHub | {hub-name-2} |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type : Air Haul
@@ -93,9 +93,9 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type : Land Haul
@@ -111,9 +111,9 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | LAND_HAUL                 |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type : Sea Haul
@@ -129,9 +129,9 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | SEA_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Type : Others
@@ -147,9 +147,9 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | OTHERS                    |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status
@@ -165,9 +165,9 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Date
@@ -182,14 +182,13 @@ Feature: Shipment Management - Search Shipment
       | shipmentType | AIR_HAUL                  |
       | id           | {KEY_CREATED_SHIPMENT_ID} |
       | status       | Pending                   |
-      | startHubName | {hub-name}                |
+      | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
-      | endHubName   | {hub-name-2}              |
+      | destHubName  | {hub-name-2}              |
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
@@ -203,7 +202,6 @@ Feature: Shipment Management - Search Shipment
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
