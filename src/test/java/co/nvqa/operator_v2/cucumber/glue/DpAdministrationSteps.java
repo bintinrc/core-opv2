@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Sergey Mishanin
@@ -36,6 +39,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
   }
@@ -510,6 +514,18 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpAdminReactPage.waitUntilVisibilityOfElementLocated(
           f("//h2[@data-testid='%s']", DP_LABEL));
       dpAdminReactPage.buttonAddDp.click();
+    });
+  }
+
+  @When("Operator check the form that all the checkbox element is exist base on the country setup")
+  public void checkFormCheckboxExistance(Map<String, String> dataTableAsMap) {
+    String elementListCheck = dataTableAsMap.get("elements");
+    String[] elementLists = elementListCheck.split(",");
+    dpAdminReactPage.inFrame(() -> {
+      for (String element : elementLists){
+        dpAdminReactPage.checkBoxValidationCheck.get(element).isDisplayed();
+        LOGGER.info(element + " is existed");
+      }
     });
   }
 

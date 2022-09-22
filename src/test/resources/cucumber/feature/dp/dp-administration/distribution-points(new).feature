@@ -17,3 +17,5 @@ Feature: DP Administration - Distribution Point
     Then The Dp page is displayed
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
+    Then Operator check the form that all the checkbox element is exist base on the country setup
+      | elements | RETAIL_POINT_NETWORK_ENABLED,FRANCHISEE_DISABLED,SEND_CHECK,PACK_CHECK,RETURN_CHECK,POST_DISABLED,CUSTOMER_COLLECT_CHECK,SELL_PACK_AT_POINT_CHECK |

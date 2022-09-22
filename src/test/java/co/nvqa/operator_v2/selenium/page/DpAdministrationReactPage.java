@@ -211,11 +211,75 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']/div/div[3]/span")
   public PageElement errorMsgUsernameDuplicate;
 
+
+  @FindBy(xpath = "//*[@value='RETAIL_POINT_NETWORK'][not(@disabled)]")
+  public Button checkBoxRetailPointNetwork;
+
+
+
+  @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_post'][not(@enabled)]")
+  public Button checkBoxServiceOfferedPostDisabled;
+
+  @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_pack'][not(@enabled)]")
+  public Button checkBoxServiceOfferedPackDisabled;
+
+  @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
+  public Button checkBoxFranchiseeDisabled;
+
+
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_return']")
+  public Button checkBoxReturnService;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_send']")
+  public Button checkBoxAllowShipperSend;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_customer_collect']")
+  public Button checkBoxAllowCustomerCollect;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_sell_packs_at_point']")
+  public Button checkBoxSellsPackAtPoint;
+
+
+
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_return']")
+  public Button checkBoxReturnServiceChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_send']")
+  public Button checkBoxAllowShipperSendChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_customer_collect']")
+  public Button checkBoxAllowCustomerCollectChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_sell_packs_at_point']")
+  public Button checkBoxSellsPackAtPointChecked;
+
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
   public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
   public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
   public static final String ERROR_MSG_FIELD_WRONG_FORMAT = "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )";
+
+  public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
+  public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
+  public static final String SEND_CHECK = "SEND_CHECK";
+  public static final String PACK_CHECK = "PACK_CHECK";
+  public static final String RETURN_CHECK = "RETURN_CHECK";
+  public static final String CUSTOMER_COLLECT_CHECK = "CUSTOMER_COLLECT_CHECK";
+  public static final String SELL_PACK_AT_POINT_CHECK = "SELL_PACK_AT_POINT_CHECK";
+  public static final String POST_DISABLED = "POST_DISABLED";
+
+  public ImmutableMap<String, Button> checkBoxValidationCheck = ImmutableMap.<String, Button>builder()
+      .put(RETAIL_POINT_NETWORK_ENABLED, checkBoxRetailPointNetwork)
+      .put(FRANCHISEE_DISABLED, checkBoxFranchiseeDisabled)
+      .put(SEND_CHECK, checkBoxAllowShipperSendChecked)
+      .put(PACK_CHECK, checkBoxSellsPackAtPointChecked)
+      .put(RETURN_CHECK, checkBoxReturnServiceChecked)
+      .put(POST_DISABLED, checkBoxServiceOfferedPostDisabled)
+      .put(CUSTOMER_COLLECT_CHECK, checkBoxAllowCustomerCollectChecked)
+      .put(SELL_PACK_AT_POINT_CHECK, checkBoxSellsPackAtPointChecked)
+      .build();
 
   public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
