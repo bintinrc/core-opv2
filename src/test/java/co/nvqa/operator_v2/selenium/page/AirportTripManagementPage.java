@@ -1495,7 +1495,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         pause1s();
     }
 
-    public void verifyArrivalTripSuccessful(String expectedMessage){
+    public void verifyTripMessageSuccessful(String expectedMessage){
         antNotificationMessage.waitUntilVisible();
         String actualMessage = getAntTopTextV2();
         Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
