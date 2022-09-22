@@ -216,16 +216,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public Button checkBoxRetailPointNetwork;
 
 
-
   @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_post'][not(@enabled)]")
   public Button checkBoxServiceOfferedPostDisabled;
 
-  @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_pack'][not(@enabled)]")
-  public Button checkBoxServiceOfferedPackDisabled;
-
   @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
   public Button checkBoxFranchiseeDisabled;
-
 
 
   @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_return']")
@@ -239,8 +234,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testid='checkbox_sell_packs_at_point']")
   public Button checkBoxSellsPackAtPoint;
-
-
 
 
   @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_return']")
@@ -261,6 +254,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
   public static final String ERROR_MSG_FIELD_WRONG_FORMAT = "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )";
 
+  public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
+
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
   public static final String SEND_CHECK = "SEND_CHECK";
@@ -269,6 +264,34 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String CUSTOMER_COLLECT_CHECK = "CUSTOMER_COLLECT_CHECK";
   public static final String SELL_PACK_AT_POINT_CHECK = "SELL_PACK_AT_POINT_CHECK";
   public static final String POST_DISABLED = "POST_DISABLED";
+
+  public static final String POINT_NAME = "Point Name";
+  public static final String SHORT_NAME = "Short Name";
+  public static final String CONTACT_NUMBER = "Contact Number";
+  public static final String POSTCODE = "Postcode";
+  public static final String CITY = "City";
+  public static final String POINT_ADDRESS_1 = "Point Address 1";
+  public static final String FLOOR_NO = "Floor No";
+  public static final String UNIT_NO = "Unit No";
+  public static final String LATITUDE = "Latitude";
+  public static final String LONGITUDE = "Longitude";
+  public static final String PUDO_POINT_TYPE = "Pudo Point Type";
+
+
+  public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
+      .put(POINT_NAME, "Name is required")
+      .put(SHORT_NAME, "Short Name is required")
+      .put(CONTACT_NUMBER, "Contact Number is required")
+      .put(POSTCODE, "Postal Code is required")
+      .put(CITY, "City is required")
+      .put(POINT_ADDRESS_1, "Address is required")
+      .put(FLOOR_NO, "Floor No. is required")
+      .put(UNIT_NO, "Unit No. is required")
+      .put(LATITUDE, "Latitude is required")
+      .put(LONGITUDE, "Longitude is required")
+      .put(PUDO_POINT_TYPE, "type is required")
+      .build();
+
 
   public ImmutableMap<String, Button> checkBoxValidationCheck = ImmutableMap.<String, Button>builder()
       .put(RETAIL_POINT_NETWORK_ENABLED, checkBoxRetailPointNetwork)
@@ -324,6 +347,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     dpPartner.setRestrictions(partner.getRestrictions());
     return dpPartner;
   }
+
+  public void mandatoryFieldError(String field) {
+    Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorMandatoryField.get(field))))
+        .as(String.format("Error message from %s is exist: %s", field, errorMandatoryField.get(field)))
+        .isTrue();
+  }
+
 
   public DpUser convertUserToDpUser(User user) {
     DpUser dpUser = new DpUser();
@@ -436,7 +466,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void errorCheckDpPartner(Partner dpPartner, String errorKey) {
-    switch (errorKey){
+    switch (errorKey) {
       case "NAME":
         formPartnerName.forceClear();
         formPartnerName.setValue(dpPartner.getName());
@@ -501,7 +531,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void clearDpPartnerForm(String errorKey) {
-    switch (errorKey){
+    switch (errorKey) {
       case "NAME":
       case "!NAME":
         formPartnerName.forceClear();

@@ -436,6 +436,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press save setting button")
+  public void pressSaveSetting() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSaveSettings.click();
+    });
+  }
+
   @Then("Operator fill the partner filter by {string}")
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
@@ -528,6 +535,18 @@ public class DpAdministrationSteps extends AbstractSteps {
       }
     });
   }
+
+  @When("Operator will get the error from some mandatory field")
+  public void errorMandatoryField(Map<String, String> dataTableAsMap) {
+    String elementListCheck = dataTableAsMap.get("field");
+    String[] elementLists = elementListCheck.split(",");
+    dpAdminReactPage.inFrame(() -> {
+      for (String element : elementLists){
+        dpAdminReactPage.mandatoryFieldError(element);
+      }
+    });
+  }
+
 
   @Then("Operator get partner id")
   public void operatorGetPartnerId() {
