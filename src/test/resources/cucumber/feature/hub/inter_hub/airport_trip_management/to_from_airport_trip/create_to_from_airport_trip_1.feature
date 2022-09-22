@@ -1,5 +1,5 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AirportLoadTrip1
-Feature: Airport Trip Management - Load Trip 1
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @CreateToFromAirportTrip1
+Feature: Airport Trip Management - Create To From Airport Trip 1
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
