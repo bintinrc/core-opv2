@@ -1495,10 +1495,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         pause1s();
     }
 
-    public void verifyArrivalTripSuccessful(String expectedMessage){
+    public void verifyTripMessageSuccessful(String expectedMessage){
         antNotificationMessage.waitUntilVisible();
         String actualMessage = getAntTopTextV2();
-        Assertions.assertThat(actualMessage).as("Trip arrived successfully").isEqualTo(expectedMessage);
+        Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
     }
 
     public void verifyButtonIsShown(String button){
@@ -1517,4 +1517,22 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         }
     }
 
+    public void CompleteTripAndVerifyItems() {
+        airportTable.completeTripButton.waitUntilClickable();
+        airportTable.completeTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Completion page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
 }

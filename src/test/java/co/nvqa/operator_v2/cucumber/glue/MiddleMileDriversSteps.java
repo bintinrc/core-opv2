@@ -12,9 +12,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -417,6 +419,35 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
     middleMileDriversPage.convertDateToUnixTimestamp(middleMileDriver.get(0));
     middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+  }
+
+  @When("Operator verifies UI elements in Middle Mile Driver Page on {string}")
+  public void operatorVerifiesUIElementsInMiddleMileDriverPage(String url) {
+    Map<String, String> dataTableAsMap = new HashMap<>();
+    dataTableAsMap.put("url", url);
+    operatorVerifiesUIElementsInMiddleMileDriverPage(dataTableAsMap);
+  }
+
+  @When("Operator verifies UI elements in Middle Mile Driver Page with data below")
+  public void operatorVerifiesUIElementsInMiddleMileDriverPage(Map<String, String> dataTableAsMap) {
+    String url = dataTableAsMap.get("url");
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      middleMileDriversPage.refreshPage();
+      operatorMovementTripPageIsLoaded();
+      if (dataTableAsMap.keySet().size() > 1) {
+        List<String> filterKeys = dataTableAsMap.keySet().stream()
+            .filter(k -> !k.equalsIgnoreCase("url")).collect(
+                Collectors.toList());
+        filterKeys.forEach(key -> {
+          String filterValue = resolveValue(dataTableAsMap.get(key));
+          operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(key, filterValue);
+        });
+      }
+      operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage();
+      VerifyURLinMiddleDriverPage(url);
+      operatorVerifiesThatTheDataShownHasTheSameValue();
+      operatorVerifyTheElementsAreShown();
+    }, "Retrying until UI is showing the right data...", 1000, 20);
   }
 
 //  @Then("API Fillter the list of driver")

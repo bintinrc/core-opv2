@@ -409,8 +409,13 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @Then("Operator verifies trip message {string} display on Airport Trip Management page")
     public void operatorVerifiesTripMessageSuccess(String tripMessage){
         tripMessage = resolveValue(tripMessage);
-        airportTripManagementPage.verifyArrivalTripSuccessful(tripMessage);
+        airportTripManagementPage.verifyTripMessageSuccessful(tripMessage);
     }
 
-
+    @When("Operator completes trip {string} on Airport Trip Management page")
+    public void operatorCompletesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.CompleteTripAndVerifyItems();
+    }
 }
