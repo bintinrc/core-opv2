@@ -157,7 +157,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_external_store_id']")
   public TextBox fieldExternalStoreId;
 
-  @FindBy(xpath = "//input[@data-testid='field_shipper_account_no']")
+  @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
 
   @FindBy(xpath = "//input[@data-testid='field_postcode']")
@@ -166,6 +166,35 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_city']")
   public TextBox fieldCity;
 
+  @FindBy(xpath = "//div[@data-testid='field_assigned_hub']/div/span/input")
+  public TextBox fieldAssignedHub;
+
+  @FindBy(xpath = "//input[@data-testid='field_point_address_1']")
+  public TextBox fieldPointAddress1;
+
+  @FindBy(xpath = "//input[@data-testid='field_point_address_2']")
+  public TextBox fieldPointAddress2;
+
+  @FindBy(xpath = "//input[@data-testid='field_floor_no']")
+  public TextBox fieldFloorNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_unit_no']")
+  public TextBox fieldUnitNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_latitude']")
+  public TextBox fieldLatitude;
+
+  @FindBy(xpath = "//input[@data-testid='field_longitude']")
+  public TextBox fieldLongitude;
+
+  @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
+  public PageElement fieldPudoPointType;
+
+  @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
+  public PageElement ninjaBoxPudoPointType;
+
+  @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Point']")
+  public PageElement ninjaPointPudoPointType;
 
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_partner_id']/span")
   public PageElement labelPartnerId;
@@ -233,10 +262,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']/div/div[3]/span")
   public PageElement errorMsgUsernameDuplicate;
 
+  @FindBy(xpath = "//input[@value='RETAIL_POINT_NETWORK']")
+  public PageElement checkBoxRetailPointNetwork;
 
   @FindBy(xpath = "//*[@value='RETAIL_POINT_NETWORK'][not(@disabled)]")
-  public Button checkBoxRetailPointNetwork;
-
+  public Button buttonRetailPointNetwork;
 
   @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_post'][not(@enabled)]")
   public Button checkBoxServiceOfferedPostDisabled;
@@ -340,7 +370,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
 
   public ImmutableMap<String, Button> checkBoxValidationCheck = ImmutableMap.<String, Button>builder()
-      .put(RETAIL_POINT_NETWORK_ENABLED, checkBoxRetailPointNetwork)
+      .put(RETAIL_POINT_NETWORK_ENABLED, buttonRetailPointNetwork)
       .put(FRANCHISEE_DISABLED, checkBoxFranchiseeDisabled)
       .put(SEND_CHECK, checkBoxAllowShipperSendChecked)
       .put(PACK_CHECK, checkBoxSellsPackAtPointChecked)
@@ -411,9 +441,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
   }
 
-  public void chooseShipperAssignedHub(String HubName) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
-    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+  public void chooseShipperAssignedHub(String hubName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
+    click(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
   }
 
 

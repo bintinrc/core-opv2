@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
@@ -175,7 +174,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   private String getResourcePath(String status) {
     String resourcePath;
-    if ("valid".equalsIgnoreCase(status)) {
+    if ("valid" .equalsIgnoreCase(status)) {
       resourcePath = "images/dpPhotoValidSize.png";
     } else {
       resourcePath = "images/dpPhotoInvalidSize.png";
@@ -529,7 +528,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     String elementListCheck = dataTableAsMap.get("elements");
     String[] elementLists = elementListCheck.split(",");
     dpAdminReactPage.inFrame(() -> {
-      for (String element : elementLists){
+      for (String element : elementLists) {
         dpAdminReactPage.checkBoxValidationCheck.get(element).isDisplayed();
         LOGGER.info(element + " is existed");
       }
@@ -541,7 +540,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     String elementListCheck = dataTableAsMap.get("field");
     String[] elementLists = elementListCheck.split(",");
     dpAdminReactPage.inFrame(() -> {
-      for (String element : elementLists){
+      for (String element : elementLists) {
         dpAdminReactPage.mandatoryFieldError(element);
       }
     });
@@ -551,6 +550,63 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorFillDpDetails(Map<String, String> dataTableAsMap) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dataTableAsMap.get("distributionPoint"));
     dpAdminReactPage.inFrame(() -> {
+      if (dpDetailsResponse.getName() != null) {
+        dpAdminReactPage.fieldPointName.setValue(dpDetailsResponse.getName());
+      }
+      if (dpDetailsResponse.getShortName() != null) {
+        dpAdminReactPage.fieldShortName.setValue(dpDetailsResponse.getShortName());
+      }
+      if (dpDetailsResponse.getContact() != null) {
+        dpAdminReactPage.fieldContactNumber.setValue(dpDetailsResponse.getContact());
+      }
+      if (dpDetailsResponse.getExternalStoreId() != null) {
+        dpAdminReactPage.fieldExternalStoreId.setValue(dpDetailsResponse.getExternalStoreId());
+      }
+      if (dpDetailsResponse.getShipperId() != null) {
+        dpAdminReactPage.fieldShipperAccountNo.setValue(dpDetailsResponse.getShipperId());
+        dpAdminReactPage.chooseShipperAccountDp(dpDetailsResponse.getShipperId());
+      }
+      if (dpDetailsResponse.getPostalCode() != null) {
+        dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
+      }
+      if (dpDetailsResponse.getCity() != null) {
+        dpAdminReactPage.fieldCity.setValue(dpDetailsResponse.getCity());
+      }
+      if (dpDetailsResponse.getHubName() != null) {
+        dpAdminReactPage.fieldAssignedHub.setValue(dpDetailsResponse.getHubName());
+        dpAdminReactPage.chooseShipperAssignedHub(dpDetailsResponse.getHubName());
+      }
+      if (dpDetailsResponse.getAddress1() != null) {
+        dpAdminReactPage.fieldPointAddress1.setValue(dpDetailsResponse.getAddress1());
+      }
+      if (dpDetailsResponse.getAddress2() != null) {
+        dpAdminReactPage.fieldPointAddress2.setValue(dpDetailsResponse.getAddress2());
+      }
+      if (dpDetailsResponse.getFloorNumber() != null) {
+        dpAdminReactPage.fieldFloorNo.setValue(dpDetailsResponse.getFloorNumber());
+      }
+      if (dpDetailsResponse.getUnitNumber() != null) {
+        dpAdminReactPage.fieldUnitNo.setValue(dpDetailsResponse.getUnitNumber());
+      }
+      if (dpDetailsResponse.getLatitude() != null) {
+        dpAdminReactPage.fieldLatitude.setValue(dpDetailsResponse.getLatitude());
+      }
+      if (dpDetailsResponse.getLongitude() != null) {
+        dpAdminReactPage.fieldLongitude.setValue(dpDetailsResponse.getLongitude());
+      }
+      if (dpDetailsResponse.getType() != null) {
+        dpAdminReactPage.fieldPudoPointType.click();
+        if (dpDetailsResponse.getType().equals("Ninja Box")) {
+          dpAdminReactPage.ninjaBoxPudoPointType.click();
+        } else if (dpDetailsResponse.getType().equals("Ninja Point")) {
+          dpAdminReactPage.ninjaPointPudoPointType.click();
+        }
+      }
+      if (dpDetailsResponse.getDpServiceType() != null) {
+        if (dpDetailsResponse.getDpServiceType().equals("RETAIL_POINT_NETWORK")){
+          dpAdminReactPage.checkBoxRetailPointNetwork.click();
+        }
+      }
 
     });
   }
@@ -561,7 +617,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     String elementListCheck = dataTableAsMap.get("field");
     String[] elementLists = elementListCheck.split(",");
     dpAdminReactPage.inFrame(() -> {
-      for (String element : elementLists){
+      for (String element : elementLists) {
         dpAdminReactPage.fieldErrorMsg(element);
       }
     });
