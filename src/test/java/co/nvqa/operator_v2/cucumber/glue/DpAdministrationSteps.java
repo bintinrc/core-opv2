@@ -424,6 +424,14 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("The Create and Edit Dp page is displayed")
+  public void createEditDpPageIsDisplayed() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonReturnToList.waitUntilVisible();
+      dpAdminReactPage.buttonSaveSettings.waitUntilVisible();
+    });
+  }
+
   @Then("Operator fill the partner filter by {string}")
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
