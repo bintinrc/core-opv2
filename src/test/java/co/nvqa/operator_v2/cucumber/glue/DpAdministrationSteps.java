@@ -233,7 +233,12 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
   @And("Operator define the DP Partner value {string} for key {string}")
-  public void operatorPressAddDpButton(String value, String key) {
+  public void defineDpParnerValue(String value, String key) {
+    put(key, value);
+  }
+
+  @And("Operator define the DP User value {string} for key {string}")
+  public void defineDpUserValue(String value, String key) {
     put(key, value);
   }
 
@@ -341,6 +346,14 @@ public class DpAdministrationSteps extends AbstractSteps {
 
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.errorCheckDpPartner(partner, errorCheckKey);
+    });
+  }
+
+  @Then("Operator Fill Dp User Details to Check The Error Status with key {string}")
+  public void operatorFillDpUserDetailsForErrorChecking(String errorCheckKey) {
+
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.errorCheckDpUser(get(errorCheckKey), errorCheckKey);
     });
   }
 

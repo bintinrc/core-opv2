@@ -59,7 +59,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator will get the error message that the username is duplicate
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: DP Administration - Create DP User - Validation check (uid:fca3060c-a44a-4893-8b0d-b542fb18e644)
+  Scenario Outline: DP Administration - Create DP User - Validation check
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -76,9 +76,15 @@ Feature: DP Administration - Distribution Point Users
     Then Operator press view DP User Button
     Then The Dp page is displayed
     And Operator press add user Button
-    When Operator Fill Dp User Details below :
-      | firstName   | lastName | contactNo | emailId   | username                                | password |
-      | ERROR_CHECK | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+    And Operator define the DP Partner value "<input>" for key "<key_dataset>"
+    Then Operator Fill Dp User Details to Check The Error Status with key "<key_dataset>"
+    And Operator will check the error message is equal "<error_message>"
+
+    Examples:
+      | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid |
+      | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | -           |
+      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | -           |
+      | invalid Username   | !USNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | -           |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
   Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)

@@ -70,11 +70,11 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
 
     Examples:
-      | dataset_name                                                                                                                  | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid                              |
-      | Invalid POC No                                                                                                                | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | uid:2efaba07-c86c-45b5-83d8-5c82f632fb4f |
-      | Invalid Partner Name                                                                                                          | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:51e38f33-29dc-4ba7-87c2-624e43ac3cb1 |
-      | Invalid POC Name                                                                                                              | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:179943b5-8d53-4486-a7a3-ab4386341818 |
-      | Invalid Restrictions name                                                                                                     | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:e1196875-4c30-4c76-9576-3f940e323295 |
+      | dataset_name              | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid                              |
+      | Invalid POC No            | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | uid:2efaba07-c86c-45b5-83d8-5c82f632fb4f |
+      | Invalid Partner Name      | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:51e38f33-29dc-4ba7-87c2-624e43ac3cb1 |
+      | Invalid POC Name          | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:179943b5-8d53-4486-a7a3-ab4386341818 |
+      | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:e1196875-4c30-4c76-9576-3f940e323295 |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario Outline: DP Administration - Create DP Partner - <dataset_name> (<hiptest-uid>)

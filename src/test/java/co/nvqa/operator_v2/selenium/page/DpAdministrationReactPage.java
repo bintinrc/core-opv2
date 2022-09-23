@@ -569,6 +569,25 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     formDpUserPassword.setValue(dpUser.getPassword());
   }
 
+  public void errorCheckDpUser(String value, String errorKey) {
+    switch (errorKey) {
+      case "!USFIRNME":
+        formDpUserFirstName.forceClear();
+        formDpUserFirstName.setValue(value);
+        break;
+      case "!USLANME":
+        formDpUserLastName.forceClear();
+        formDpUserLastName.setValue(value);
+        break;
+      case "!USNME":
+        formDpUserUsername.forceClear();
+        formDpUserUsername.setValue(value);
+        break;
+
+    }
+  }
+
+
   public void errorCheckDpPartner(Partner dpPartner, String errorKey) {
     switch (errorKey) {
       case "NAME":
