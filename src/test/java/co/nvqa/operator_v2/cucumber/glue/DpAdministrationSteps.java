@@ -616,6 +616,7 @@ public class DpAdministrationSteps extends AbstractSteps {
             dpDetailsResponse.getActualMaxCapacity());
       }
       if (dpDetailsResponse.getMaxParcelStayDuration() != null) {
+        dpAdminReactPage.fieldMaximumParcelStay.forceClear();
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
             dpDetailsResponse.getMaxParcelStayDuration());
       }
@@ -628,10 +629,10 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getIsHyperlocal() != null && dpDetailsResponse.getIsHyperlocal()) {
         dpAdminReactPage.checkBoxHyperLocal.click();
       }
-      if (dpDetailsResponse.getAutoReservationEnabled() != null && dpDetailsResponse.getAutoReservationEnabled()) {
+      if (dpDetailsResponse.getAutoReservationEnabled() != null
+          && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
-
 
 
     });
@@ -640,11 +641,116 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator will get the error from some field")
   public void errorFieldMessage(Map<String, String> dataTableAsMap) {
-    String elementListCheck = dataTableAsMap.get("field");
-    String[] elementLists = elementListCheck.split(",");
+    DpDetailsResponse dp = resolveValue(dataTableAsMap.get("distributionPoint"));
+    String pointName = dataTableAsMap.get("pName");
+    String shortName = dataTableAsMap.get("sName");
+    String city = dataTableAsMap.get("city");
+    String externalStoreId = dataTableAsMap.get("esId");
+    String postCode = dataTableAsMap.get("poCode");
+    String floorNo = dataTableAsMap.get("floorNo");
+    String unitNo = dataTableAsMap.get("unitNo");
+    String latitude = dataTableAsMap.get("latitude");
+    String longitude = dataTableAsMap.get("longitude");
+    String maximumParcelCapacity = dataTableAsMap.get("mcapacity");
+    String bufferCapacity = dataTableAsMap.get("bCapacity");
+    String maximumParcelStay = dataTableAsMap.get("mpStay");
     dpAdminReactPage.inFrame(() -> {
-      for (String element : elementLists) {
-        dpAdminReactPage.fieldErrorMsg(element);
+      String[] splitElement;
+      if (pointName != null) {
+        splitElement = pointName.split(",");
+        dpAdminReactPage.fieldPointName.forceClear();
+        dpAdminReactPage.fieldPointName.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldPointName.forceClear();
+        dpAdminReactPage.fieldPointName.setValue(dp.getName());
+      }
+      if (shortName != null) {
+        splitElement = shortName.split(",");
+        dpAdminReactPage.fieldShortName.forceClear();
+        dpAdminReactPage.fieldShortName.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldShortName.forceClear();
+        dpAdminReactPage.fieldShortName.setValue(dp.getShortName());
+      }
+      if (city != null) {
+        splitElement = city.split(",");
+        dpAdminReactPage.fieldCity.forceClear();
+        dpAdminReactPage.fieldCity.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldCity.forceClear();
+        dpAdminReactPage.fieldCity.setValue(dp.getCity());
+      }
+      if (externalStoreId != null) {
+        splitElement = externalStoreId.split(",");
+        dpAdminReactPage.fieldExternalStoreId.forceClear();
+        dpAdminReactPage.fieldExternalStoreId.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldExternalStoreId.forceClear();
+        dpAdminReactPage.fieldExternalStoreId.setValue(dp.getExternalStoreId());
+      }
+      if (postCode != null) {
+        splitElement = postCode.split(",");
+        dpAdminReactPage.fieldPostcode.forceClear();
+        dpAdminReactPage.fieldPostcode.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldPostcode.forceClear();
+        dpAdminReactPage.fieldPostcode.setValue(dp.getPostalCode());
+      }
+      if (floorNo != null) {
+        splitElement = floorNo.split(",");
+        dpAdminReactPage.fieldFloorNo.forceClear();
+        dpAdminReactPage.fieldFloorNo.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldFloorNo.forceClear();
+        dpAdminReactPage.fieldFloorNo.setValue(dp.getFloorNumber());
+      }
+      if (unitNo != null) {
+        splitElement = unitNo.split(",");
+        dpAdminReactPage.fieldUnitNo.forceClear();
+        dpAdminReactPage.fieldUnitNo.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldUnitNo.forceClear();
+        dpAdminReactPage.fieldUnitNo.setValue(dp.getUnitNumber());
+      }
+      if (latitude != null) {
+        splitElement = latitude.split(",");
+        dpAdminReactPage.fieldLatitude.forceClear();
+        dpAdminReactPage.fieldLatitude.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldLatitude.forceClear();
+        dpAdminReactPage.fieldLatitude.setValue(dp.getLatitude());
+      }
+      if (longitude != null) {
+        splitElement = longitude.split(",");
+        dpAdminReactPage.fieldLongitude.forceClear();
+        dpAdminReactPage.fieldLongitude.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldLongitude.forceClear();
+        dpAdminReactPage.fieldLongitude.setValue(dp.getLongitude());
+      }
+      if (maximumParcelCapacity != null) {
+        splitElement = maximumParcelCapacity.split(",");
+        dpAdminReactPage.fieldMaximumParcelCapacityForCollect.forceClear();
+        dpAdminReactPage.fieldMaximumParcelCapacityForCollect.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldMaximumParcelCapacityForCollect.forceClear();
+        dpAdminReactPage.fieldMaximumParcelCapacityForCollect.setValue(dp.getComputedMaxCapacity());
+      }
+      if (bufferCapacity != null) {
+        splitElement = bufferCapacity.split(",");
+        dpAdminReactPage.fieldBufferCapacity.forceClear();
+        dpAdminReactPage.fieldBufferCapacity.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldBufferCapacity.forceClear();
+        dpAdminReactPage.fieldBufferCapacity.setValue(dp.getActualMaxCapacity());
+      }
+      if (maximumParcelStay != null) {
+        splitElement = maximumParcelStay.split(",");
+        dpAdminReactPage.fieldMaximumParcelStay.forceClear();
+        dpAdminReactPage.fieldMaximumParcelStay.setValue(splitElement[0]);
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldMaximumParcelStay.forceClear();
+        dpAdminReactPage.fieldMaximumParcelStay.setValue(dp.getMaxParcelStayDuration());
       }
     });
   }
