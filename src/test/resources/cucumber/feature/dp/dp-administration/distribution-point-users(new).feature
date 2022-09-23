@@ -187,5 +187,5 @@ Feature: DP Administration - Distribution Point Users
     Examples:
       | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid                              |
       | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:1f7c54e8-9225-4581-8af6-683612763770 |
-      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:f503d35f-313a-4913-8213-1b2d4cb62363 |
-      | invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | uid:2fb74862-2dff-4649-a3af-375ec9010c3a |
+      | Invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:f503d35f-313a-4913-8213-1b2d4cb62363 |
+      | Invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | uid:2fb74862-2dff-4649-a3af-375ec9010c3a |
