@@ -6,7 +6,7 @@ Feature: DP Administration - Distribution Point
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Validation check
+  Scenario: Create DP - Validation check (uid:f701193b-2965-4ecf-8e56-0d854468f7dc)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
@@ -45,7 +45,7 @@ Feature: DP Administration - Distribution Point
       | mpStay            | abc,Maximum Parcel Stay           |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario: Update DP - Validation check
+  Scenario: Update DP - Validation check (uid:15a71188-4ee0-4713-8733-451b83eadebb)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
