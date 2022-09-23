@@ -284,9 +284,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
   public Button checkBoxFranchiseeDisabled;
 
-  @FindBy(xpath = "//input[@data-testid='checkbox_sell_packs_at_point']")
-  public PageElement checkBoxSellsPackAtPoint;
-
   @FindBy(xpath = "//input[@data-testid='checkbox_publicly_point_displayed']")
   public PageElement checkBoxPublicityPointDisplayed;
 
@@ -298,16 +295,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testid='checkbox_active_point']")
   public PageElement checkBoxActivePoint;
-
-  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_return']")
-  public Button checkBoxReturnService;
-
-  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_send']")
-  public Button checkBoxAllowShipperSend;
-
-  @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_customer_collect']")
-  public Button checkBoxAllowCustomerCollect;
-
 
   @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_return']")
   public Button checkBoxReturnServiceChecked;
