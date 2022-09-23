@@ -59,7 +59,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator will get the error message that the username is duplicate
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
-  Scenario Outline: DP Administration - Create DP User - Validation check
+  Scenario Outline: DP Administration - Create DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -81,10 +81,11 @@ Feature: DP Administration - Distribution Point Users
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid |
-      | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | -           |
-      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | -           |
-      | invalid Username   | !USNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | -           |
+      | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid                              |
+      | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:497b23e7-47b2-4738-9086-782e9312c185 |
+      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:415e01d6-c3dd-4bc3-aabd-8f6215ff8ef9 |
+      | invalid Username   | !USNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:3d6e01b8-a6ac-4ef2-9734-715f52abd377 |
+
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
   Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)
@@ -151,7 +152,7 @@ Feature: DP Administration - Distribution Point Users
       | searchDetails | username,firstName,lastName,email,contact |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp @SoftDeleteDpUser
-  Scenario Outline: DP Administration - Update DP User - Validation check
+  Scenario Outline: DP Administration - Update DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -184,7 +185,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid |
-      | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | -           |
-      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | -           |
-      | invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | -           |
+      | dataset_name       | key_dataset | error_message                                                                                                                 | input                    | hiptest-uid                              |
+      | Invalid First Name | !USFIRNME   | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:1f7c54e8-9225-4581-8af6-683612763770 |
+      | invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:f503d35f-313a-4913-8213-1b2d4cb62363 |
+      | invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | uid:2fb74862-2dff-4649-a3af-375ec9010c3a |
