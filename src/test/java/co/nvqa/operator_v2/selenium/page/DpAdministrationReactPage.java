@@ -582,6 +582,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
         break;
+      case "!USNME":
+        formDpUserUsername.forceClear();
+        formDpUserUsername.setValue(value);
+        break;
       case "!USEMAIL":
         formDpUserEmail.forceClear();
         formDpUserEmail.setValue(value);

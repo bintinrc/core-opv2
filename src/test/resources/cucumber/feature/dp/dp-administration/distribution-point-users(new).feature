@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @DpAdministration @DistributionPointUsersReact @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -58,7 +58,7 @@ Feature: DP Administration - Distribution Point Users
     Then Operator press submit user button
     And Operator will get the error message that the username is duplicate
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp
+  @DeleteNewlyCreatedDpManagementPartnerAndDp @RT
   Scenario Outline: DP Administration - Create DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
