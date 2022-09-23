@@ -527,6 +527,15 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator press edit user Button")
+  public void operatorPressEditUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonEditUser.click();
+    });
+  }
+
+
+
   @And("Operator press view DP User Button")
   public void operatorPressViewDpUserButton() {
     dpAdminReactPage.inFrame(() -> {

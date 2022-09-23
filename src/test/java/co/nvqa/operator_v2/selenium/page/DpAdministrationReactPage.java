@@ -34,6 +34,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_edit_partner']")
   public Button buttonEditPartner;
 
+  @FindBy(xpath = "//button[@data-testId='button_edit_user']")
+  public Button buttonEditUser;
+
   @FindBy(xpath = "//button[@data-testId='button_submit_dp_changes']")
   public Button buttonSubmitPartnerChanges;
 
@@ -579,9 +582,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
         break;
-      case "!USNME":
-        formDpUserUsername.forceClear();
-        formDpUserUsername.setValue(value);
+      case "!USEMAIL":
+        formDpUserEmail.forceClear();
+        formDpUserEmail.setValue(value);
         break;
 
     }

@@ -104,6 +104,9 @@ public class DpUser extends DataEntity<DpUser> {
   }
 
   public void setUsername(String username) {
+    if ("generated".equalsIgnoreCase(username)) {
+      username = TestUtils.generateAlphaNumericString(10);
+    }
     this.username = username;
   }
 
