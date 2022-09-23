@@ -187,6 +187,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_longitude']")
   public TextBox fieldLongitude;
 
+  @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_capacity_for_collect']")
+  public TextBox fieldMaximumParcelCapacityForCollect;
+
+  @FindBy(xpath = "//input[@data-testid='field_buffer_capacity']")
+  public TextBox fieldBufferCapacity;
+
+  @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
+  public TextBox fieldMaximumParcelStay;
+  
+
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
 

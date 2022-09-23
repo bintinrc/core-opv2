@@ -603,9 +603,21 @@ public class DpAdministrationSteps extends AbstractSteps {
         }
       }
       if (dpDetailsResponse.getDpServiceType() != null) {
-        if (dpDetailsResponse.getDpServiceType().equals("RETAIL_POINT_NETWORK")){
+        if (dpDetailsResponse.getDpServiceType().equals("RETAIL_POINT_NETWORK")) {
           dpAdminReactPage.checkBoxRetailPointNetwork.click();
         }
+      }
+      if (dpDetailsResponse.getComputedMaxCapacity() != null) {
+        dpAdminReactPage.fieldMaximumParcelCapacityForCollect.setValue(
+            dpDetailsResponse.getComputedMaxCapacity());
+      }
+      if (dpDetailsResponse.getActualMaxCapacity() != null) {
+        dpAdminReactPage.fieldBufferCapacity.setValue(
+            dpDetailsResponse.getActualMaxCapacity());
+      }
+      if (dpDetailsResponse.getMaxParcelStayDuration() != null) {
+        dpAdminReactPage.fieldMaximumParcelStay.setValue(
+            dpDetailsResponse.getMaxParcelStayDuration());
       }
 
     });
