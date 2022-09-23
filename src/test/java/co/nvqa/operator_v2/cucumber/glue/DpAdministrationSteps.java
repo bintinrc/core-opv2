@@ -464,6 +464,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press edit DP button")
+  public void operatorPressEditDpButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonDpEdit.click();
+    });
+  }
+
   @Then("Operator fill the Dp User filter by {string}")
   public void operatorFillTheDpUserFilter(String element) {
     DpUser dpUser = get(KEY_DP_USER);
