@@ -619,6 +619,20 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
             dpDetailsResponse.getMaxParcelStayDuration());
       }
+      if (dpDetailsResponse.getIsActive() != null && dpDetailsResponse.getIsActive()) {
+        dpAdminReactPage.checkBoxActivePoint.click();
+      }
+      if (dpDetailsResponse.getIsPublic() != null && dpDetailsResponse.getIsPublic()) {
+        dpAdminReactPage.checkBoxPublicityPointDisplayed.click();
+      }
+      if (dpDetailsResponse.getIsHyperlocal() != null && dpDetailsResponse.getIsHyperlocal()) {
+        dpAdminReactPage.checkBoxHyperLocal.click();
+      }
+      if (dpDetailsResponse.getAutoReservationEnabled() != null && dpDetailsResponse.getAutoReservationEnabled()) {
+        dpAdminReactPage.checkBoxAutoReservationEnabled.click();
+      }
+
+
 
     });
   }

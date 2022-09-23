@@ -195,7 +195,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
   public TextBox fieldMaximumParcelStay;
-  
+
 
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
@@ -284,6 +284,21 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
   public Button checkBoxFranchiseeDisabled;
 
+  @FindBy(xpath = "//input[@data-testid='checkbox_sell_packs_at_point']")
+  public PageElement checkBoxSellsPackAtPoint;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_publicly_point_displayed']")
+  public PageElement checkBoxPublicityPointDisplayed;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_hyperlocal']")
+  public PageElement checkBoxHyperLocal;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_auto_reservation_enabled']")
+  public PageElement checkBoxAutoReservationEnabled;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_active_point']")
+  public PageElement checkBoxActivePoint;
+
   @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_return']")
   public Button checkBoxReturnService;
 
@@ -292,9 +307,6 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testid='checkbox_service_offered_customer_collect']")
   public Button checkBoxAllowCustomerCollect;
-
-  @FindBy(xpath = "//input[@data-testid='checkbox_sell_packs_at_point']")
-  public Button checkBoxSellsPackAtPoint;
 
 
   @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_return']")
