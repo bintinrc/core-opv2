@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @ShipperPickups2
+@OperatorV2 @Core @ShipperPickups @ShipperPickups2 @ViewPickupPOD
 Feature: Shipper Pickups - View PODs Reservation
 
   @LaunchBrowser @ShouldAlwaysRun

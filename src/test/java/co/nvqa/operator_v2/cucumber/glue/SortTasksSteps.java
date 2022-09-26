@@ -287,6 +287,11 @@ public class SortTasksSteps extends AbstractSteps {
     String rtsZone = mapOfData.get("rtsZone");
     sortTasksPage.find.sendKeys(rtsZone);
     sortTasksPage.select.get(0).check();
+    retryIfAssertionErrorOccurred(() -> {
+      pause3s();
+      sortTasksPage.select.get(0).uncheck();
+      sortTasksPage.select.get(0).check();
+    }, "Sort Task not removed ");
     sortTasksPage.submit.click();
   }
 

@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -482,8 +484,15 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Given("New Stamp ID was generated")
   public void newStampIdWasGenerated() {
-    String stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(9).toUpperCase();
+    newStampIdWasGenerated("STAMP");
+  }
+
+  @Given("New Stamp ID with {value} prefix was generated")
+  public void newStampIdWasGenerated(String prefix) {
+    String trackingNumber = TestUtils.generateAlphaNumericString(9).toUpperCase();
+    String stampId = "NVSG" + prefix.toUpperCase() + trackingNumber;
     put(KEY_STAMP_ID, stampId);
+    put(KEY_TRACKING_NUMBER, trackingNumber);
   }
 
   @When("^Operator unable to change Stamp ID of the created order to \"(.+)\" on Edit order page$")
@@ -1619,6 +1628,20 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator verifies ticket status is {value} on Edit Order page")
+  public void updateRecoveryTicket(String data) {
+    String status = editOrderPage.recoveryTicket.getText();
+    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+    Matcher m = p.matcher(status);
+    if (m.matches()) {
+      Assertions.assertThat(m.group(1))
+          .as("Ticket status")
+          .isEqualToIgnoringCase(data);
+    } else {
+      fail("Could not get ticket status from string: " + status);
+    }
+  }
+
   @Then("Operator updates recovery ticket on Edit Order page:")
   public void updateRecoveryTicket(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -1650,7 +1673,7 @@ public class EditOrderSteps extends AbstractSteps {
       }
       editOrderPage.editTicketDialog.newInstructions.setValue(instruction);
     }
-    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
   }
 
   @When("^Operator create new recovery ticket on Edit Order page:$")

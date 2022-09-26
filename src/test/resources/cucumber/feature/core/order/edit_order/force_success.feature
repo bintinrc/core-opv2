@@ -320,7 +320,7 @@ Feature: Force Success
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                              |
-      | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page  - Without RTS (uid:000e6943-1682-40eb-a989-e1c466436d18)
     Given API Shipper create V4 order using data below:
@@ -337,7 +337,7 @@ Feature: Force Success
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
-      | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page  - With RTS Normal Parcel (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given API Shipper create V4 order using data below:
@@ -358,7 +358,7 @@ Feature: Force Success
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                              |
-      | description | Reason: {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
 
   Scenario: Disable Force Success On Hold Order with Active PETS Ticket (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And API Shipper create V4 order using data below:

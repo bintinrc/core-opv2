@@ -178,11 +178,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> {
-      page.shipmentIds.waitUntilVisible();
-      page.shipmentIds.setValue(shipmentIds);
-    }
-    );
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      reloadPage();
+      page.inFrame(() -> {
+            page.shipmentIds.waitUntilVisible();
+            page.shipmentIds.setValue(shipmentIds);
+          }
+      );
+    }, "Retry until page is loaded...");
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
@@ -432,7 +435,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator opens Shipment Details page for shipment {value}")
   public void openShipmentDetailsPage(String shipmentId) {
     navigateTo(
-        f("%s/%s/new-shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
+        f("%s/%s/shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
     page.inFrame(() -> page.waitUntilLoaded());
     pause3s();
   }

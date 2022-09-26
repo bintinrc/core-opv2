@@ -505,8 +505,8 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator switch to edit order page using direct URL
     And Operator verifies prior tag is displayed
+    When Operator switch to edit order page using direct URL
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 

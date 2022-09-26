@@ -303,4 +303,22 @@ public class PageElement extends SimplePage {
     return retWebEl;
   }
 
+  public void ClickSendKeysAndEnter(CharSequence... keysToSend) {
+    WebElement we = this.webElement;
+    we.click();
+    we.sendKeys(keysToSend);
+    we.sendKeys(Keys.RETURN);
+    pause300ms();
+  }
+  /*
+  Clear and send key version 2, using incase element has atribute "value"
+  and we can not use method clear() to delete text in textbox
+   */
+  public void clearAndSendkeysV2(CharSequence... keysToSend){
+    WebElement we = this.webElement;
+    we.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+    we.sendKeys(keysToSend);
+    pause300ms();
+  }
+
 }

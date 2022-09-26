@@ -239,7 +239,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
-      tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      if (tileValue.contains(" ")) {
+        tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      }
       LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
       return Integer.parseInt(tileValue);
     } catch (Exception e) {

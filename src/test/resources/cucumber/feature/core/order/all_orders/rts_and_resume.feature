@@ -20,7 +20,10 @@ Feature: All Orders - RTS & Resume
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given API Driver failed the delivery of the created parcel
+    Given API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 5           |
+      | failureReasonIndexMode | FIRST       |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
       | expectedStatus       | DELIVERY_FAIL        |

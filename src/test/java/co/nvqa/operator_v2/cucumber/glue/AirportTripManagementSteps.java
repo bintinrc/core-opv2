@@ -1,16 +1,24 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_EDIT;
 
 public class AirportTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(AirportTripManagementSteps.class);
@@ -52,7 +60,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator click on 'Load Trips' on Airport Management")
     public void operatorclickOnLoadTripsOnAirportManagement() {
         airportTripManagementPage.clickOnLoadTripsAirportManagementDetails();
-        takesScreenshot();
     }
 
     @Then("Verify the parameters of loaded trips in Airport Management")
@@ -61,9 +68,16 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyLoadedTripsPageInAirportManagementDetails(resolvedData);
     }
 
-    @And("Create a new flight trip with below data:")
+    @And("Create a new flight trip using below data:")
     public void operatorCreateNewFlightTripInAirportManagement(Map<String, String> mapOfData) {
-        airportTripManagementPage.createNewFlightTrip(mapOfData);
+        Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+        Boolean isCreateTripSuccess = airportTripManagementPage.createFlightTrip(resolvedData);
+        if (isCreateTripSuccess){
+            String tripId =airportTripManagementPage.getAirportTripId();
+            put(KEY_CURRENT_MOVEMENT_TRIP_ID,tripId);
+            putInList(KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS,tripId);
+        }
+
     }
 
     @And("Operator search the {string} column")
@@ -223,9 +237,16 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyNoResultsFound();
     }
 
-    @Then("Operator click on 'Create Tofrom Airport Trip' button in Airport Management page")
-    public void operatorclickOnCreateToFromAirportTrip() {
-        airportTripManagementPage.clickOnCreateToFromAirportTrip();
+    @Then("Operator click on {string} button in Airport Management page")
+    public void operatorclickOnCreateToFromAirportTrip(String button) {
+        switch (button){
+            case "Create Tofrom Airport Trip":
+                airportTripManagementPage.clickOnCreateToFromAirportTrip();
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.clickOnCreateFlightTrip();
+                break;
+        }
     }
 
     @Then("Operator create new airport trip using below data:")
@@ -253,9 +274,9 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifyInvalidItem(name, value);
     }
 
-    @Then("Operator verifies same hub error messages on Create Airport Trip page")
-    public void OperatorVerifiesErrorMessage(){
-        airportTripManagementPage.getAndVerifySameHubErrorMessage();
+    @Then("Operator verifies same hub error messages on {string} page")
+    public void OperatorVerifiesErrorMessage(String pageName){
+        airportTripManagementPage.getAndVerifySameHubErrorMessage(pageName);
     }
 
     @When("Operator fill new airport trip using data below:")
@@ -269,25 +290,132 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifySubmitButtonDisable();
     }
 
-    @Then("Operator verifies duration time error messages on Create Airport Trip page")
-    public void operatorVerifiesDurationErrorMessage(){
-        airportTripManagementPage.getAndVerifyZeroDurationTimeErrorMessage();
+    @Then("Operator verifies duration time error messages on {string} page")
+    public void operatorVerifiesDurationErrorMessage(String pageName){
+        airportTripManagementPage.getAndVerifyZeroDurationTimeErrorMessage(pageName);
     }
 
-    @Then("Operator verifies past date picker {string} is disable on Create Airport Trip page")
-    public void operatorVerifiesPastDateDisable(String date){
-        airportTripManagementPage.verifyPastDayDisable(date);
+    @Then("Operator verifies past date picker {string} is disable on {string} page")
+    public void operatorVerifiesPastDateDisable(String date, String pageName){
+        airportTripManagementPage.verifyPastDayDisable(date,pageName);
     }
 
-    @When("Operator removes text of {string} field on Create Airport Trip page")
-    public void operatorRemovesText(String fieldName){
-        airportTripManagementPage.clearTextonField(fieldName);
+    @When("Operator removes text of {string} field on {string} page")
+    public void operatorRemovesText(String fieldName, String pageName){
+        switch (pageName){
+            case "Create Airport Trip":
+                airportTripManagementPage.clearTextonField(fieldName);
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.clearTextonFieldOnFlightTrip(fieldName);
+                break;
+        }
     }
 
-    @Then("Operator verifies Mandatory require error message on {string} field")
-    public void operatorVerifiesMandatoryErrorMessage(String fieldName){
-        airportTripManagementPage.verifyMandatoryFieldErrorMessage(fieldName);
+    @Then("Operator verifies Mandatory require error message of {string} field on {string} page")
+    public void operatorVerifiesMandatoryErrorMessage(String fieldName, String pageName){
+        switch (pageName){
+            case "Create Airport Trip":
+                airportTripManagementPage.verifyMandatoryFieldErrorMessageAirportPage(fieldName);
+                break;
+            case "Create Flight Trip":
+                airportTripManagementPage.verifyMandatoryFieldErrorMessageFlightTripPage(fieldName);
+                break;
+        }
     }
 
+    @Then("Operator verifies MAWB error messages on Create Flight Trip page")
+    public void operatorVerifiesMAWBerrorMessage(){
+        airportTripManagementPage.verifyMAWBerrorMessage();
+    }
 
+    @Then("Operator verifies toast messages below on Create Flight Trip page:")
+    public void operatorVerifiesErrorMessages(List<String> expectedError){
+        expectedError = resolveValues(expectedError);
+        airportTripManagementPage.verifyToastErrorMessage(expectedError);
+    }
+
+    @Then("Operator verify parameters of air trip on Airport Trip Management page:")
+    public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data) {
+        data = resolveKeyValues(data);
+        data = StandardTestUtils.replaceDataTableTokens(data);
+        Long tripID = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
+        AirTrip aitrip = new AirTrip();
+        aitrip.fromMap(data);
+        aitrip.setTrip_id(tripID);
+        airportTripManagementPage.validateAirTripInfo(aitrip.getTrip_id(), aitrip);
+        if (data.get("drivers")!=null){
+            List<Driver> expectedDrivers = get(KEY_LIST_OF_CREATED_DRIVERS);
+            airportTripManagementPage.verifyListDriver(expectedDrivers);
+        }
+    }
+
+    @When("Operator open edit airport trip page with data below:")
+    public void operatorEditAirTripOnAirportTripPage(Map<String, String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.airportTable.clickActionButton(1,ACTION_EDIT);
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+        airportTripManagementPage.verifyDisableItemsOnEditPage(resolvedData.get("tripType"));
+    }
+
+    @When("Operator edit data on Edit Trip page:")
+    public void operatorEditDataOnEditTripPage(Map<String,String> data){
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        airportTripManagementPage.editAirportTripItems(resolvedData);
+    }
+
+    @When("Operator departs trip {string} on Airport Trip Management page")
+    public void operatorDepartsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.departTrip();
+    }
+
+    @Then("Operator verifies depart trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesDepartTripMessageSuccess(String tripID){
+        tripID = resolveValue(tripID);
+        String expectedMessage = f("Trip %s departed",tripID);
+        airportTripManagementPage.verifyDepartedTripSuccessful(expectedMessage);
+    }
+
+    @Then("Operator verifies action buttons below are disable:")
+    public void operatorVerifiesActionButtonsAreDisable(List<String> actionButtons){
+        airportTripManagementPage.verifyActionButtonsAreDisabled(actionButtons);
+    }
+
+    @Then("Operator verifies driver error messages below on Airport Trip Management page:")
+    public void operatorVerifiesDriverErrorMessages(List<String> expectedErrorMessages){
+        expectedErrorMessages = resolveValues(expectedErrorMessages);
+        airportTripManagementPage.verifyDriverErrorMessages(expectedErrorMessages);
+    }
+
+    @When("Operator arrives trip {string} on Airport Trip Management page")
+    public void operatorArrivesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.ArriveTripAndVerifyItems();
+    }
+
+    @Then("Operator verifies {string} button is shown on Airport Trip Management page")
+    public void operatorVerifiesButtonIsShownOnAirTripPage(String button){
+        airportTripManagementPage.verifyButtonIsShown(button);
+
+    }
+
+    @Then("Operator verifies trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesTripMessageSuccess(String tripMessage){
+        tripMessage = resolveValue(tripMessage);
+        airportTripManagementPage.verifyTripMessageSuccessful(tripMessage);
+    }
+
+    @When("Operator completes trip {string} on Airport Trip Management page")
+    public void operatorCompletesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.CompleteTripAndVerifyItems();
+    }
 }

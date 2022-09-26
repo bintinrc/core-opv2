@@ -62,12 +62,12 @@ Feature: Zones
     And API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Zones"
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
     Then Operator check all filters on Zones page work fine
 
   Scenario: Find and View Polygon of Normal Zone
     Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Routing -> Zones
+    When Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator click View Selected Polygons for zone id "{zone-id}"
     And Operator remove all selected zones on View Selected Polygons page
     And Operator add new "{zone-name-2}" zone on View Selected Polygons page
@@ -80,7 +80,7 @@ Feature: Zones
     And API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Zones"
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
     And Operator update the new Zone
     Then Operator verifies zone details on Zones page:
       | shortName   | {KEY_EDITED_ZONE.shortName}   |
@@ -97,7 +97,7 @@ Feature: Zones
     And API Operator create zone using data below:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Zones"
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
     And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
     And Operator download Zone CSV file
     Then Operator verify Zone CSV file is downloaded successfully
