@@ -34,11 +34,17 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_edit_partner']")
   public Button buttonEditPartner;
 
+  @FindBy(xpath = "//button[@data-testId='button_edit_user']")
+  public Button buttonEditUser;
+
   @FindBy(xpath = "//button[@data-testId='button_submit_dp_changes']")
   public Button buttonSubmitPartnerChanges;
 
   @FindBy(xpath = "//button[@data-testId='button_view_dps']")
   public Button buttonViewDps;
+
+  @FindBy(xpath = "//button[@data-testId='button_dp_edit']")
+  public Button buttonDpEdit;
 
   @FindBy(xpath = "//button[@data-testId='button_add_dp']")
   public Button buttonAddDp;
@@ -48,6 +54,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//button[@data-testId='button_add_user']")
   public Button buttonAddUser;
+
+  @FindBy(xpath = "//button[@data-testId='button_return_to_list']")
+  public Button buttonReturnToList;
+
+  @FindBy(xpath = "//button[@data-testId='button_save_settings']")
+  public Button buttonSaveSettings;
 
   @FindBy(xpath = "//button[@data-testId='button_submit']")
   public TextBox buttonSubmitDpUser;
@@ -139,6 +151,67 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-modal-body']//input[@data-testId='field_password']")
   public TextBox formDpUserPassword;
 
+  @FindBy(xpath = "//input[@data-testid='field_point_name']")
+  public TextBox fieldPointName;
+
+  @FindBy(xpath = "//input[@data-testid='field_short_name']")
+  public TextBox fieldShortName;
+
+  @FindBy(xpath = "//input[@data-testid='field_contact_number']")
+  public TextBox fieldContactNumber;
+
+  @FindBy(xpath = "//input[@data-testid='field_external_store_id']")
+  public TextBox fieldExternalStoreId;
+
+  @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
+  public TextBox fieldShipperAccountNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_postcode']")
+  public TextBox fieldPostcode;
+
+  @FindBy(xpath = "//input[@data-testid='field_city']")
+  public TextBox fieldCity;
+
+  @FindBy(xpath = "//div[@data-testid='field_assigned_hub']/div/span/input")
+  public TextBox fieldAssignedHub;
+
+  @FindBy(xpath = "//input[@data-testid='field_point_address_1']")
+  public TextBox fieldPointAddress1;
+
+  @FindBy(xpath = "//input[@data-testid='field_point_address_2']")
+  public TextBox fieldPointAddress2;
+
+  @FindBy(xpath = "//input[@data-testid='field_floor_no']")
+  public TextBox fieldFloorNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_unit_no']")
+  public TextBox fieldUnitNo;
+
+  @FindBy(xpath = "//input[@data-testid='field_latitude']")
+  public TextBox fieldLatitude;
+
+  @FindBy(xpath = "//input[@data-testid='field_longitude']")
+  public TextBox fieldLongitude;
+
+  @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_capacity_for_collect']")
+  public TextBox fieldMaximumParcelCapacityForCollect;
+
+  @FindBy(xpath = "//input[@data-testid='field_buffer_capacity']")
+  public TextBox fieldBufferCapacity;
+
+  @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
+  public TextBox fieldMaximumParcelStay;
+
+
+  @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
+  public PageElement fieldPudoPointType;
+
+  @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
+  public PageElement ninjaBoxPudoPointType;
+
+  @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Point']")
+  public PageElement ninjaPointPudoPointType;
+
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_partner_id']/span")
   public PageElement labelPartnerId;
 
@@ -205,11 +278,122 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']/div/div[3]/span")
   public PageElement errorMsgUsernameDuplicate;
 
+  @FindBy(xpath = "//input[@value='RETAIL_POINT_NETWORK']")
+  public PageElement checkBoxRetailPointNetwork;
+
+  @FindBy(xpath = "//*[@value='RETAIL_POINT_NETWORK'][not(@disabled)]")
+  public Button buttonRetailPointNetwork;
+
+  @FindBy(xpath = "//*[@data-testid='checkbox_service_offered_post'][not(@enabled)]")
+  public Button checkBoxServiceOfferedPostDisabled;
+
+  @FindBy(xpath = "//*[@value='FRANCHISEE'][not(@enabled)]")
+  public Button checkBoxFranchiseeDisabled;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_publicly_point_displayed']")
+  public PageElement checkBoxPublicityPointDisplayed;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_hyperlocal']")
+  public PageElement checkBoxHyperLocal;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_auto_reservation_enabled']")
+  public PageElement checkBoxAutoReservationEnabled;
+
+  @FindBy(xpath = "//input[@data-testid='checkbox_active_point']")
+  public PageElement checkBoxActivePoint;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_return']")
+  public Button checkBoxReturnServiceChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_send']")
+  public Button checkBoxAllowShipperSendChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_service_offered_customer_collect']")
+  public Button checkBoxAllowCustomerCollectChecked;
+
+  @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_sell_packs_at_point']")
+  public Button checkBoxSellsPackAtPointChecked;
+
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
   public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
   public static final String ERROR_MSG_FIELD_REQUIRED = "This field is required";
   public static final String ERROR_MSG_FIELD_WRONG_FORMAT = "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )";
+
+  public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
+  public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
+  public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
+
+  public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
+  public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
+  public static final String SEND_CHECK = "SEND_CHECK";
+  public static final String PACK_CHECK = "PACK_CHECK";
+  public static final String RETURN_CHECK = "RETURN_CHECK";
+  public static final String CUSTOMER_COLLECT_CHECK = "CUSTOMER_COLLECT_CHECK";
+  public static final String SELL_PACK_AT_POINT_CHECK = "SELL_PACK_AT_POINT_CHECK";
+  public static final String POST_DISABLED = "POST_DISABLED";
+
+  public static final String POINT_NAME = "Point Name";
+  public static final String SHORT_NAME = "Short Name";
+  public static final String CONTACT_NUMBER = "Contact Number";
+  public static final String POSTCODE = "Postcode";
+  public static final String CITY = "City";
+  public static final String POINT_ADDRESS_1 = "Point Address 1";
+  public static final String FLOOR_NO = "Floor No";
+  public static final String UNIT_NO = "Unit No";
+  public static final String LATITUDE = "Latitude";
+  public static final String LONGITUDE = "Longitude";
+  public static final String PUDO_POINT_TYPE = "Pudo Point Type";
+  public static final String SERVICE_TYPE = "Service Type";
+  public static final String MAXIMUM_PARCEL_CAPACITY = "Maximum Parcel Capacity";
+  public static final String BUFFER_CAPACITY = "Buffer Capacity";
+  public static final String EXTERNAL_STORE_ID = "External Store Id";
+  public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
+
+
+  public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
+      .put(POINT_NAME, "Name is required")
+      .put(SHORT_NAME, "Short Name is required")
+      .put(CONTACT_NUMBER, "Contact Number is required")
+      .put(POSTCODE, "Postal Code is required")
+      .put(CITY, "City is required")
+      .put(POINT_ADDRESS_1, "Address is required")
+      .put(FLOOR_NO, "Floor No. is required")
+      .put(UNIT_NO, "Unit No. is required")
+      .put(LATITUDE, "Latitude is required")
+      .put(LONGITUDE, "Longitude is required")
+      .put(PUDO_POINT_TYPE, "type is required")
+      .put(SERVICE_TYPE, "Service Type is required")
+      .put(MAXIMUM_PARCEL_CAPACITY, "Actual Max Capacity is required")
+      .put(BUFFER_CAPACITY, "Buffer Capacity is required")
+      .build();
+
+  public ImmutableMap<String, String> errorField = ImmutableMap.<String, String>builder()
+      .put(POINT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(SHORT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(CITY, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(EXTERNAL_STORE_ID, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(POSTCODE, "Please enter a valid number.")
+      .put(FLOOR_NO, "Please enter a valid number.")
+      .put(UNIT_NO, "Please enter a valid number.")
+      .put(LATITUDE, "please enter valid number.")
+      .put(LONGITUDE, "please enter valid number.")
+      .put(MAXIMUM_PARCEL_CAPACITY, "Please enter a valid number.")
+      .put(BUFFER_CAPACITY, "Please enter a valid number.")
+      .put(MAXIMUM_PARCEL_STAY, "Please enter a valid number.")
+      .build();
+
+
+  public ImmutableMap<String, Button> checkBoxValidationCheck = ImmutableMap.<String, Button>builder()
+      .put(RETAIL_POINT_NETWORK_ENABLED, buttonRetailPointNetwork)
+      .put(FRANCHISEE_DISABLED, checkBoxFranchiseeDisabled)
+      .put(SEND_CHECK, checkBoxAllowShipperSendChecked)
+      .put(PACK_CHECK, checkBoxSellsPackAtPointChecked)
+      .put(RETURN_CHECK, checkBoxReturnServiceChecked)
+      .put(POST_DISABLED, checkBoxServiceOfferedPostDisabled)
+      .put(CUSTOMER_COLLECT_CHECK, checkBoxAllowCustomerCollectChecked)
+      .put(SELL_PACK_AT_POINT_CHECK, checkBoxSellsPackAtPointChecked)
+      .build();
 
   public ImmutableMap<String, TextBox> textBoxDpPartnerFilter = ImmutableMap.<String, TextBox>builder()
       .put("id", filterPartnerId)
@@ -254,6 +438,29 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     dpPartner.setRestrictions(partner.getRestrictions());
     return dpPartner;
   }
+
+  public void mandatoryFieldError(String field) {
+    Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorMandatoryField.get(field))))
+        .as(String.format("Error message from %s is exist: %s", field, errorMandatoryField.get(field)))
+        .isTrue();
+  }
+
+  public void fieldErrorMsg(String field) {
+    Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorField.get(field))))
+        .as(String.format("Error message from %s is exist: %s", field, errorField.get(field)))
+        .isTrue();
+  }
+
+  public void chooseShipperAccountDp(Long shipperId) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+  }
+
+  public void chooseShipperAssignedHub(String hubName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
+    click(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
+  }
+
 
   public DpUser convertUserToDpUser(User user) {
     DpUser dpUser = new DpUser();
@@ -365,8 +572,31 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     formDpUserPassword.setValue(dpUser.getPassword());
   }
 
+  public void errorCheckDpUser(String value, String errorKey) {
+    switch (errorKey) {
+      case "!USFIRNME":
+        formDpUserFirstName.forceClear();
+        formDpUserFirstName.setValue(value);
+        break;
+      case "!USLANME":
+        formDpUserLastName.forceClear();
+        formDpUserLastName.setValue(value);
+        break;
+      case "!USNME":
+        formDpUserUsername.forceClear();
+        formDpUserUsername.setValue(value);
+        break;
+      case "!USEMAIL":
+        formDpUserEmail.forceClear();
+        formDpUserEmail.setValue(value);
+        break;
+
+    }
+  }
+
+
   public void errorCheckDpPartner(Partner dpPartner, String errorKey) {
-    switch (errorKey){
+    switch (errorKey) {
       case "NAME":
         formPartnerName.forceClear();
         formPartnerName.setValue(dpPartner.getName());
@@ -426,6 +656,30 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
             .as(f("Error Message Exist after fill Form POC Email with wrong format (Letters): %s",
                 ERROR_MSG_NOT_EMAIL_FORMAT))
             .isEqualTo(ERROR_MSG_NOT_EMAIL_FORMAT);
+        break;
+    }
+  }
+
+  public void clearDpPartnerForm(String errorKey) {
+    switch (errorKey) {
+      case "NAME":
+      case "!NAME":
+        formPartnerName.forceClear();
+        break;
+      case "POCNME":
+      case "!POCNME":
+        formPocName.forceClear();
+        break;
+      case "!POCNUM":
+      case "POCNUM":
+        formPocNo.forceClear();
+        break;
+      case "RESTRICTION":
+      case "!RESTRICTION":
+        formRestrictions.forceClear();
+        break;
+      case "POCMAIL":
+        formPocEmail.forceClear();
         break;
     }
   }
