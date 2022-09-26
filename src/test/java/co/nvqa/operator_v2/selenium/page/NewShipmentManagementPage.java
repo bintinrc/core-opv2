@@ -179,7 +179,27 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(css = "h1")
   public PageElement shipmentIdTitle;
 
+  @FindBy(xpath = "//div[@data-testid='shipment_status-filter-card']//button")
+  public Button showShipmentStatus;
+
+  @FindBy(xpath = "//div[@data-testid='shipment_type-filter-card']//button")
+  public Button showShipmentType;
+
+  @FindBy(xpath = "//div[@data-testid='shipment_status-filter-card']//span[@class='ant-select-clear']")
+  public Button clearShipmentStatus;
+
+  @FindBy(xpath = "//div[@data-testid='shipment_type-filter-card']//span[@class='ant-select-clear']")
+  public Button clearShipmentType;
+
+  @FindBy(xpath = "//div[@data-testid='shipment_status-filter-card']//div[@role='alert']")
+  public PageElement showErrorAlertShipmentStatus;
+
+  @FindBy(xpath = "//div[@data-testid='shipment_type-filter-card']//div[@role='alert']")
+  public PageElement showErrorAlertShipmentType;
+
   private static final String FILEPATH = TestConstants.TEMP_DIR;
+  private static final String FORM_SHIPMENT_TYPE_XPATH = "//div[@data-testid='shipment_type-filter-card']//div[@class='ant-select-selector']";
+  private static final String FORM_SHIPMENT_STATUS_XPATH = "//div[@data-testid='shipment_status-filter-card']//div[@class='ant-select-selector']";
 
   public NewShipmentManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -195,6 +215,14 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     for (String windowHandle : windowHandles) {
       getWebDriver().switchTo().window(windowHandle);
     }
+  }
+
+  public void hoverShipmentTypeForm(){
+    moveToElementWithXpath(FORM_SHIPMENT_TYPE_XPATH);
+  }
+
+  public void hoverShipmentStatusForm(){
+    moveToElementWithXpath(FORM_SHIPMENT_STATUS_XPATH);
   }
 
   public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder) {

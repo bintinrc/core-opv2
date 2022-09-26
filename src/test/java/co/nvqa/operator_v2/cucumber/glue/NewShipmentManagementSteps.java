@@ -55,6 +55,9 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID";
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME";
 
+  public static final String KEY_SHIPMENT_TYPE_ERROR_MESSAGE = "Please enter Shipment Type";
+  public static final String KEY_SHIPMENT_STATUS_ERROR_MESSAGE = "Please enter Shipment Status";
+
   public NewShipmentManagementSteps() {
   }
 
@@ -785,5 +788,67 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
     });
     assertions.assertAll();
+  }
+
+  @When("Operator click Hide \\(n) button in Shipment Status filter")
+  public void operatorClickHideNButtonInShipmentStatusFilter() {
+    page.inFrame(()-> {
+      page.showShipmentStatus.click();
+    });
+  }
+
+  @When("Operator click Hide \\(n) button in Shipment Type filter")
+  public void operatorClickHideNButtonInShipmentTypeFilter() {
+    page.inFrame(()-> {
+      page.showShipmentType.click();
+    });
+  }
+
+  @When("Operator click X icon button in the right corner of Shipment Type filter field")
+  public void operatorClickXIconButtonInTheRightCornerOfShipmentTypeFilterField() {
+    page.inFrame(()-> {
+      page.hoverShipmentTypeForm();
+      page.clearShipmentType.click();
+    });
+  }
+
+  @Then("Operator verify it shows Please enter shipment type error message")
+  public void operatorVerifyItShowsPleaseEnterShipmentTypeErrorMessage() {
+      page.inFrame(()-> {
+          Assertions.assertThat(page.showErrorAlertShipmentType.getText())
+                  .isEqualTo(KEY_SHIPMENT_TYPE_ERROR_MESSAGE);
+      });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Type")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentType() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
+  }
+
+  @When("Operator click X icon button in the right corner of Shipment Status filter field")
+  public void operatorClickXIconButtonInTheRightCornerOfShipmentStatusFilterField() {
+    page.inFrame(()-> {
+      page.hoverShipmentStatusForm();
+      page.clearShipmentStatus.click();
+    });
+  }
+
+  @Then("Operator verify it shows Please enter shipment status error message")
+  public void operatorVerifyItShowsPleaseEnterShipmentStatusErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showErrorAlertShipmentStatus.getText())
+              .isEqualTo(KEY_SHIPMENT_STATUS_ERROR_MESSAGE);
+    });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Status")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentStatus() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
   }
 }
