@@ -18,6 +18,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
@@ -849,13 +852,11 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorSelectShipmentDateOnShipmentManagementPage() {
     page.inFrame(() -> {
       page.waitUntilLoaded(1);
-        Calendar calPrevious2Week = Calendar.getInstance();
-        calPrevious2Week.setTime(new Date());
-        calPrevious2Week.add(Calendar.DATE, -14);
-        Date previous2Week = calPrevious2Week.getTime();
-
-        String fromDate = new SimpleDateFormat("yyyy-MM-dd").format(previous2Week);
-        page.shipmentDateFilter.setFromDate(fromDate);
+          LocalDateTime previous2Weeks = LocalDateTime.now().plusDays(-14);
+          String dateFormat = "yyyy-MM-dd";
+          DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
+          String fromDates = dateTimeFormatter.format(previous2Weeks);
+        page.shipmentDateFilter.setFromDate(fromDates);
     });
   }
 
