@@ -811,7 +811,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator verify it shows Please enter shipment type error message")
   public void operatorVerifyItShowsPleaseEnterShipmentTypeErrorMessage() {
       page.inFrame(()-> {
-          Assertions.assertThat(page.showErrorAlertShipmentType.getText())
+          Assertions.assertThat(page.showErrorAlertShipmentType.getText()).as("Showed error message of Shipment Type")
                   .isEqualTo("Please enter Shipment Type");
       });
   }
@@ -835,7 +835,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator verify it shows Please enter shipment status error message")
   public void operatorVerifyItShowsPleaseEnterShipmentStatusErrorMessage() {
     page.inFrame(()-> {
-      Assertions.assertThat(page.showErrorAlertShipmentStatus.getText())
+      Assertions.assertThat(page.showErrorAlertShipmentStatus.getText()).as("Showed error message of Shipment Status")
               .isEqualTo("Please enter Shipment Status");
     });
   }
@@ -863,7 +863,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator verify it shows The Shipment Date maximum range of selection error message")
   public void operatorVerifyItShowsTheShipmentDateMaximumRangeOfSelectionErrorMessage() {
     page.inFrame(()-> {
-      Assertions.assertThat(page.showErrorAlertShipmentDate.getText())
+      Assertions.assertThat(page.showErrorAlertShipmentDate.getText()).as("Entered the Shipment Date maximum range of selection is more than 7 days")
               .isEqualTo("The Shipment Date maximum range of selection is 7 days");
     });
   }
@@ -893,7 +893,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator verify it shows \"No Results Found\" error message")
   public void operatorVerifyItShowsNoResultsFoundErrorMessage() {
     page.inFrame(()-> {
-      Assertions.assertThat(page.showNoResultsFound.getText())
+      Assertions.assertThat(page.showNoResultsFound.getText()).as("Please set filter to no results found error message")
               .isEqualTo("No Results Found");
     });
   }
