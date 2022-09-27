@@ -1,25 +1,25 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AirportSearchTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AirportSearchTrip @cwf
 Feature: Airport Trip Management - Load Trip
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @run
   Scenario: Search by Destination Facility
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate              | D-20   |
-      | endDate                | D+1    |
+      | startDate | {gradle-previous-30-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd}      |
     When Operator fill the Origin Or Destination for Airport Management
-      | originOrDestination    | CDG (Airport);ERC (Airport)    |
+      | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
     Then Verify the parameters of loaded trips in Airport Management
-      | startDate             | D-20                              |
-      | endDate               | D+1                               |
-      | originOrDestination   | CDG (Airport), ERC (Airport)      |
+      | startDate           | {gradle-previous-30-day-yyyy-MM-dd} |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}      |
+      | originOrDestination | CDG (Airport), ERC (Airport)        |
     And Operator search the "Destination Facility" column
     And Verify only filtered results are displayed
 
