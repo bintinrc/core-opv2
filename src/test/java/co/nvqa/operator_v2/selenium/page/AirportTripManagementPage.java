@@ -309,7 +309,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(id =createFlightTrip_commentId)
     public PageElement createFlightTrip_comment;
 
-    @FindBy(css ="[data-testid$='confirm-button']")
+    @FindBy(css = "[data-testid$='confirm-button']")
     public Button confirmButton;
 
     public static String notificationMessage = "";
@@ -319,14 +319,24 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(className = "ant-modal-wrap")
     public TripDepartureArrivalModal tripDepartureArrivalModal;
 
+    private String getResolvedDate(String token) {
+        int increment = Integer.parseInt(token.substring(2)) * (token.charAt(1) == '+' ? 1 : -1);
+        Calendar calResolvedDate = Calendar.getInstance();
+        calResolvedDate.setTime(new Date());
+        calResolvedDate.add(Calendar.DATE, increment);
+        Date resolvedDate = calResolvedDate.getTime();
+
+        return new SimpleDateFormat("yyyy-MM-dd").format(resolvedDate);
+    }
+
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
         Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
-                .as("Load button appear in Airport trip Management page").isTrue();
+            .as("Load button appear in Airport trip Management page").isTrue();
         Assertions.assertThat(departureInput.isDisplayed())
-                .as("Departure input appear in Airport trip Management page").isTrue();
+            .as("Departure input appear in Airport trip Management page").isTrue();
         Assertions.assertThat(isElementEnabled("//button[.='Load Trips']"))
-                .as("Load Trips appear in Airport trip Management page").isFalse();
+            .as("Load Trips appear in Airport trip Management page").isFalse();
         Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
                 .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
         Assertions.assertThat(selectFacility.isDisplayed())
@@ -334,8 +344,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void fillDepartureDateDetails(Map<String, String> mapOfData) {
-        String startDate = mapOfData.get("startDate");
-        String endDate = mapOfData.get("endDate");
+        String startDate = getResolvedDate(mapOfData.get("startDate"));
+        String endDate = getResolvedDate(mapOfData.get("endDate"));
         Departure_StartDate.click();
         Departure_StartDate.sendKeys(startDate);
         Departure_EndDate.click();
@@ -378,8 +388,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Format dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         String expDepartDate;
         try {
-            expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("startDate"))) + " - " +
-                    dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("endDate")));
+            expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
+                getResolvedDate(mapOfData.get("startDate")))) + " - " +
+                dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
+                    getResolvedDate(mapOfData.get("endDate"))));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
