@@ -319,16 +319,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(className = "ant-modal-wrap")
     public TripDepartureArrivalModal tripDepartureArrivalModal;
 
-    private String getResolvedDate(String token) {
-        int increment = Integer.parseInt(token.substring(2)) * (token.charAt(1) == '+' ? 1 : -1);
-        Calendar calResolvedDate = Calendar.getInstance();
-        calResolvedDate.setTime(new Date());
-        calResolvedDate.add(Calendar.DATE, increment);
-        Date resolvedDate = calResolvedDate.getTime();
-
-        return new SimpleDateFormat("yyyy-MM-dd").format(resolvedDate);
-    }
-
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
         Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
@@ -344,8 +334,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void fillDepartureDateDetails(Map<String, String> mapOfData) {
-        String startDate = getResolvedDate(mapOfData.get("startDate"));
-        String endDate = getResolvedDate(mapOfData.get("endDate"));
+
+        String startDate = mapOfData.get("startDate");
+        String endDate = mapOfData.get("endDate");
+
         Departure_StartDate.click();
         Departure_StartDate.sendKeys(startDate);
         Departure_EndDate.click();
@@ -389,9 +381,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         String expDepartDate;
         try {
             expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
-                getResolvedDate(mapOfData.get("startDate")))) + " - " +
+                mapOfData.get("startDate"))) + " - " +
                 dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
-                    getResolvedDate(mapOfData.get("endDate"))));
+                    mapOfData.get("endDate")));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
