@@ -418,4 +418,11 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
         airportTripManagementPage.CompleteTripAndVerifyItems();
     }
+
+    @When("Operator cancel trip {string} on Airport Trip Management page")
+    public void operatorCacelsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.CancelTripAndVerifyItems();
+    }
 }
