@@ -251,22 +251,28 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.errorCheckDpUser(dpUser);
       } else {
         if (dpUser.getFirstName() != null) {
+          dpAdminReactPage.formDpUserFirstName.forceClear();
           dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
         }
         if (dpUser.getLastName() != null) {
+          dpAdminReactPage.formDpUserLastName.forceClear();
           dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
         }
         if (dpUser.getContactNo() != null) {
+          dpAdminReactPage.formDpUserContact.forceClear();
           dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
         }
         if (dpUser.getEmailId() != null) {
+          dpAdminReactPage.formDpUserEmail.forceClear();
           dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
         }
         if (dpUser.getUsername() != null) {
+          dpAdminReactPage.formDpUserUsername.forceClear();
           dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
           put(KEY_DP_USER_USERNAME, dpUser.getUsername());
         }
         if (dpUser.getPassword() != null) {
+          dpAdminReactPage.formDpUserPassword.forceClear();
           dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
         }
 
@@ -279,6 +285,13 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressSubmitUserButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitDpUser.click();
+    });
+  }
+
+  @Then("Operator press submit edit user button")
+  public void operatorPressSubmitEditUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitEditDpUser.click();
     });
   }
 
