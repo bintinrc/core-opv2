@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Warehouse to Airport Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -96,7 +96,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} cancelled" display on Airport Trip Management page
     And Operator verifies "CANCELLED" button is shown on Airport Trip Management page
 
-  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Airport to Warehouse Trip with Pending Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -230,7 +230,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies action buttons below are disable:
       |Cancel         |
 
-  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Cancel Airport to Warehouse Trip with Cancelled Status and No Assigned Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -276,7 +276,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies action buttons below are disable:
       |Cancel         |
 
-  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Cancel Airport to Airport Trip with Pending Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -320,7 +320,7 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies action buttons below are disable:
       |Cancel         |
 
-  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Cancel Airport to Airport Trip with Other Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
