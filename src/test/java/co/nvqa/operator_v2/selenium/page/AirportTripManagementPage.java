@@ -320,13 +320,18 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public TripDepartureArrivalModal tripDepartureArrivalModal;
 
     private String getResolvedDate(String token) {
-        int increment = Integer.parseInt(token.substring(2)) * (token.charAt(1) == '+' ? 1 : -1);
-        Calendar calResolvedDate = Calendar.getInstance();
-        calResolvedDate.setTime(new Date());
-        calResolvedDate.add(Calendar.DATE, increment);
-        Date resolvedDate = calResolvedDate.getTime();
+        try {
+            int increment = Integer.parseInt(token.substring(2)) * (token.charAt(1) == '+' ? 1 : -1);
+            Calendar calResolvedDate = Calendar.getInstance();
+            calResolvedDate.setTime(new Date());
+            calResolvedDate.add(Calendar.DATE, increment);
+            Date resolvedDate = calResolvedDate.getTime();
 
-        return new SimpleDateFormat("yyyy-MM-dd").format(resolvedDate);
+            return new SimpleDateFormat("yyyy-MM-dd").format(resolvedDate);
+        } catch (Exception e){
+            return token;
+        }
+
     }
 
     public void verifyAirportTripMovementPageItems() {
@@ -344,8 +349,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void fillDepartureDateDetails(Map<String, String> mapOfData) {
+
         String startDate = getResolvedDate(mapOfData.get("startDate"));
         String endDate = getResolvedDate(mapOfData.get("endDate"));
+
         Departure_StartDate.click();
         Departure_StartDate.sendKeys(startDate);
         Departure_EndDate.click();
