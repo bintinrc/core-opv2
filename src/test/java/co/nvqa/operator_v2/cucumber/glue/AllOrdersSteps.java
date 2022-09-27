@@ -187,6 +187,17 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, reason);
   }
 
+  @When("^Operator Force Success single order on All Orders page:$")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String changeReason = data.get("changeReason");
+    String reasonForChange = data.get("reasonForChange");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
+  }
+
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
       List<Map<String, String>> data) {

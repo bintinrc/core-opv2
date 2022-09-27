@@ -352,6 +352,20 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     return reason;
   }
 
+  public void forceSuccessOrders(String reason, String reasonDescr) {
+    clearFilterTableOrderByTrackingId();
+    selectAllShown();
+    actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
+    manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
+    if (StringUtils.isNotBlank(reasonDescr)) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    }
+    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    manuallyCompleteOrderDialog.waitUntilInvisible();
+    waitUntilInvisibilityOfToast("Complete Order");
+  }
+
   public void verifyOrderIsForceSuccessedSuccessfully(Order order) {
     String mainWindowHandle = getWebDriver().getWindowHandle();
     Long orderId = order.getId();
