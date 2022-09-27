@@ -197,6 +197,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   @FindBy(xpath = "//div[@data-testid='shipment_type-filter-card']//div[@role='alert']")
   public PageElement showErrorAlertShipmentType;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement showErrorAlertShipmentDate;
+
   private static final String FILEPATH = TestConstants.TEMP_DIR;
   private static final String FORM_SHIPMENT_TYPE_XPATH = "//div[@data-testid='shipment_type-filter-card']//div[@class='ant-select-selector']";
   private static final String FORM_SHIPMENT_STATUS_XPATH = "//div[@data-testid='shipment_status-filter-card']//div[@class='ant-select-selector']";

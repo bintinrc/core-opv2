@@ -17,12 +17,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -54,9 +50,6 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS = "KEY_SHIPMENT_MANAGEMENT_FILTERS";
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID";
   public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME";
-
-  public static final String KEY_SHIPMENT_TYPE_ERROR_MESSAGE = "Please enter Shipment Type";
-  public static final String KEY_SHIPMENT_STATUS_ERROR_MESSAGE = "Please enter Shipment Status";
 
   public NewShipmentManagementSteps() {
   }
@@ -816,7 +809,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyItShowsPleaseEnterShipmentTypeErrorMessage() {
       page.inFrame(()-> {
           Assertions.assertThat(page.showErrorAlertShipmentType.getText())
-                  .isEqualTo(KEY_SHIPMENT_TYPE_ERROR_MESSAGE);
+                  .isEqualTo("Please enter Shipment Type");
       });
   }
 
@@ -840,12 +833,49 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void operatorVerifyItShowsPleaseEnterShipmentStatusErrorMessage() {
     page.inFrame(()-> {
       Assertions.assertThat(page.showErrorAlertShipmentStatus.getText())
-              .isEqualTo(KEY_SHIPMENT_STATUS_ERROR_MESSAGE);
+              .isEqualTo("Please enter Shipment Status");
     });
   }
 
   @Then("Operator verify unable to load Shipment data without input Shipment Status")
   public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentStatus() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
+  }
+
+  @When("Operator select Shipment Date on Shipment Management page")
+  public void operatorSelectShipmentDateOnShipmentManagementPage() {
+    page.inFrame(() -> {
+      page.waitUntilLoaded(1);
+        Calendar calPrevious2Week = Calendar.getInstance();
+        calPrevious2Week.setTime(new Date());
+        calPrevious2Week.add(Calendar.DATE, -14);
+        Date previous2Week = calPrevious2Week.getTime();
+
+        String fromDate = new SimpleDateFormat("yyyy-MM-dd").format(previous2Week);
+        page.shipmentDateFilter.setFromDate(fromDate);
+    });
+  }
+
+  @Then("Operator verify it shows The Shipment Date maximum range of selection error message")
+  public void operatorVerifyItShowsTheShipmentDateMaximumRangeOfSelectionErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showErrorAlertShipmentDate.getText())
+              .isEqualTo("The Shipment Date maximum range of selection is 7 days");
+    });
+  }
+
+  @When("^Operator click \"Load Selection\" button on Shipment Management page$")
+  public void operatorClickButtonOnShipmentManagementPage() {
+      page.inFrame(() -> {
+        page.loadSelection.click();
+      });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Type and Shipment Status")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentTypeAndShipmentStatus() {
     page.inFrame(()-> {
       Assertions.assertThat(page.editFilters.isDisplayed())
               .isFalse();
