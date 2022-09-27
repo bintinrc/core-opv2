@@ -881,4 +881,19 @@ public class NewShipmentManagementSteps extends AbstractSteps {
               .isFalse();
     });
   }
+
+  @When("Operator search not found shipment id on Shipment Management table")
+  public void operatorSearchNotFoundShipmentIdOnShipmentManagementTable() {
+    page.inFrame(()-> {
+      page.shipmentIdInputFieldOnShipmentManagementTable.setValue(get(KEY_CREATED_SHIPMENT_ID).toString());
+    });
+  }
+
+  @Then("Operator verify it shows \"No Results Found\" error message")
+  public void operatorVerifyItShowsNoResultsFoundErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showNoResultsFound.getText())
+              .isEqualTo("No Results Found");
+    });
+  }
 }
