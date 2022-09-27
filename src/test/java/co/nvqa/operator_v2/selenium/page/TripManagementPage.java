@@ -809,6 +809,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case "No":
         cancelTripModal.no.click();
         break;
+      case "Cancel Flight Trip":
+        cancelTripModal.cancelFlightTrip.click();
+        break;
       default:
         NvLogger.warn("Button value is not found!");
     }
@@ -1679,6 +1682,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//button[.='Cancel Trip']")
     public Button cancelTrip;
+
+    @FindBy(xpath = "//button[.='Cancel Flight Trip']")
+    public Button cancelFlightTrip;
 
     @FindBy(xpath = "//button[.='No']")
     public Button no;
