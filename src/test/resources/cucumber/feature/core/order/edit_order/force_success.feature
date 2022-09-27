@@ -370,6 +370,74 @@ Feature: Force Success
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify menu item "Order Settings" > "Manually Complete Order" is disabled on Edit order page
 
+  Scenario Outline: Operator Force Success Order by Select Reason on Edit Order Page - <reason>
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page:
+      | changeReason | <reason> |
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Pickup" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order event on Edit order page using data below:
+      | name        | FORCED SUCCESS |
+      | description | <description>  |
+    Examples:
+      | reason                                | description                                                                                                                                                                                                                                             |
+      | 3PL completed delivery                | Reason: 3PL completed delivery RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                |
+      | Fraudulent parcels / Prohibited items | Reason: Fraudulent parcels / Prohibited items RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+      | Requested by shipper                  | Reason: Requested by shipper RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                  |
+      | Lazada returns                        | Reason: Lazada returns RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                        |
+      | XB fulfilment storage                 | Reason: XB fulfilment storage RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                 |
+
+  Scenario: Operator Force Success Order by Input Reason on Edit Order Page
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page:
+      | changeReason    | Others (fill in below) |
+      | reasonForChange | Force success by TA    |
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Pickup" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                                 |
+      | description | Reason: Others - Force success by TA RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
