@@ -5,6 +5,7 @@ import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Hours;
 import co.nvqa.commons.model.dp.dp_user.DpUser;
 import co.nvqa.commons.model.dp.dp_user.User;
+import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -162,6 +163,14 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagement(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
+
+    if (dpDetail.getShortName().equals("GENERATED")){
+      dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
+    }
+    if (dpDetail.getExternalStoreId().equals("GENERATED")){
+      dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
+    }
+
 
     Hours hours = new Hours();
     hours.setStartTime("08:00:00");

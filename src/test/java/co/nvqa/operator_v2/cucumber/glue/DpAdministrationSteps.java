@@ -1078,6 +1078,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @And("Operator verifies the newly created DP user data is deleted")
   public void verifyNewlyCreatedDpUserDeleted(Map<String, String> dataTableAsMap) {
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
-    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb);
+    String status = dataTableAsMap.get("status");
+    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb,status);
   }
 }
