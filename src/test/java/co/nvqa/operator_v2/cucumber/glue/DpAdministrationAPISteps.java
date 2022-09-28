@@ -93,6 +93,9 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagementUser(DataTable dt) {
     List<User> dpUsers = convertDataTableToList(dt, User.class);
     User dpUser = dpUsers.get(0);
+    if (dpUser.getUsername().equals("GENERATED")){
+      dpUser.setUsername(TestUtils.generateAlphaNumericString(6));
+    }
     put(KEY_CREATE_DP_MANAGEMENT_USER_REQUEST, dpUser);
   }
 
