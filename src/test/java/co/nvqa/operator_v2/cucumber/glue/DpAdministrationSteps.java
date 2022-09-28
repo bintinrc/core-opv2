@@ -817,6 +817,34 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press reset password button")
+  public void pressResetPasswordButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonResetPassword.click();
+    });
+  }
+
+  @Then("Operator press save reset password button")
+  public void pressSaveResetPasswordButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSaveResetPassword.click();
+    });
+  }
+
+  @Then("Operator fill the password changes")
+  public void fillResetPasswordChanges(Map<String, String> dataTableAsMap) {
+    String password = dataTableAsMap.get("password");
+    String confirmPassword = dataTableAsMap.get("confirmPassword");
+    dpAdminReactPage.inFrame(() -> {
+      if (password != null){
+        dpAdminReactPage.fieldPassword.setValue(password);
+      }
+      if (confirmPassword != null){
+        dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
+      }
+    });
+  }
+
   @And("Operator check the data again with pressing ascending and descending order :")
   public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);

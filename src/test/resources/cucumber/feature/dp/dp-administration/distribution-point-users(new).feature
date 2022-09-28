@@ -5,7 +5,7 @@ Feature: DP Administration - Distribution Point Users
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @DeleteDpUser
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Create DP User (uid:0146137a-6964-4985-a417-7bbd6035e5b7)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -87,7 +87,7 @@ Feature: DP Administration - Distribution Point Users
       | invalid Username   | !USNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:3d6e01b8-a6ac-4ef2-9734-715f52abd377 |
 
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @DeleteDpUser
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -123,7 +123,7 @@ Feature: DP Administration - Distribution Point Users
       | userList | DP_USER_LIST                      |
       | dp       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @DeleteDpUser
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Search DP User (uid:f254face-546e-410c-90dd-b23780cb40e2)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -151,7 +151,7 @@ Feature: DP Administration - Distribution Point Users
       | dpUser        | KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE    |
       | searchDetails | username,firstName,lastName,email,contact |
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @DeleteDpUser
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario Outline: DP Administration - Update DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -190,7 +190,7 @@ Feature: DP Administration - Distribution Point Users
       | Invalid Last Name  | !USLANME    | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:f503d35f-313a-4913-8213-1b2d4cb62363 |
       | Invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | uid:2fb74862-2dff-4649-a3af-375ec9010c3a |
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @DeleteDpUser
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Update DP User
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -224,6 +224,38 @@ Feature: DP Administration - Distribution Point Users
     And Operator verifies the newly created DP user data is right
       | dpUser   | KEY_DP_USER          |
       | dpUserDb | KEY_DATABASE_DP_USER |
+
+  @DeleteDpUser @DeleteNewlyCreatedDpManagementPartnerAndDp
+  Scenario: DP Administration - Update DP User - Reset Password Successfully
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name             | shipperId                                    | contact      | shortName         | externalStoreId   | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpCheckManagement | onCheckManagement | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Then Operator fill Detail for create DP Management User:
+      | firstName | lastName | contactNo    | email            | username                                | password |
+      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | USER{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+    And API Operator request to create DP Management User:
+      | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
+      | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
+      | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    And Operator fill the Dp list filter by "id"
+    Then Operator press view DP User Button
+    Then The Dp page is displayed
+    Then Operator press edit user Button
+    And Operator press reset password button
+    And Operator fill the password changes
+      | password        | miniso123 |
+      | confirmPassword | miniso123 |
+    Then Operator press save reset password button
+    And Operator waits for 5 seconds
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Delete Dp User

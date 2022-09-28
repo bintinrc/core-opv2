@@ -61,6 +61,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_save_settings']")
   public Button buttonSaveSettings;
 
+  @FindBy(xpath = "//button[@data-testid='button_reset_password']")
+  public Button buttonResetPassword;
+
+  @FindBy(xpath = "//button[@data-testid='button_save_password']")
+  public Button buttonSaveResetPassword;
+
   @FindBy(xpath = "//button[@data-testId='button_submit']")
   public TextBox buttonSubmitDpUser;
 
@@ -205,6 +211,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
   public TextBox fieldMaximumParcelStay;
 
+  @FindBy(xpath = "//input[@data-testid='field_password']")
+  public TextBox fieldPassword;
+
+  @FindBy(xpath = "//input[@data-testid='field_confirm_password']")
+  public TextBox fieldConfirmPassword;
 
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
