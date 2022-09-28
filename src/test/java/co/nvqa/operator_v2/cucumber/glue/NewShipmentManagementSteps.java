@@ -853,9 +853,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(() -> {
       page.waitUntilLoaded(1);
           LocalDateTime previous2Weeks = LocalDateTime.now().plusDays(-14);
-          String dateFormat = "yyyy-MM-dd";
-          DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
-          String fromDates = dateTimeFormatter.format(previous2Weeks);
+          String fromDates =  DateTimeFormatter.ofPattern("yyyy-MM-dd").format(previous2Weeks);
         page.shipmentDateFilter.setFromDate(fromDates);
     });
   }
