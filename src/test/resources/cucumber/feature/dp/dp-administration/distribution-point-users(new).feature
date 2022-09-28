@@ -219,6 +219,7 @@ Feature: DP Administration - Distribution Point Users
       | firstName | lastName | contactNo | emailId   |
       | Diaz      | Edited   | GENERATED | GENERATED |
     Then Operator press submit edit user button
+    And Operator waits for 5 seconds
     When DB Operator gets details for DP User from Hibernate
       | username | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE.username} |
     And Operator verifies the newly created DP user data is right
