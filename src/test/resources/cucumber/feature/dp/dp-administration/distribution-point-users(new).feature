@@ -318,7 +318,7 @@ Feature: DP Administration - Distribution Point Users
     Then The Edit Dp User popup is Displayed
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Delete Dp User
+  Scenario: DP Administration - Delete Dp User (uid:15116d9e-9569-44b4-b970-4884355f9195)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
