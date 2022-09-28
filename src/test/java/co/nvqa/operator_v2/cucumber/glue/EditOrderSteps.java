@@ -241,6 +241,15 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
+  @When("^Operator confirm manually complete order on Edit Order page:$")
+  public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String changeReason = data.get("changeReason");
+    String reasonForChange = data.get("reasonForChange");
+    editOrderPage.confirmCompleteOrder(changeReason, reasonForChange);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
+  }
+
   @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order page")
   public void verifyCodCollectedIsDisabled() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();

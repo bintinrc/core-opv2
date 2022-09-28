@@ -6,7 +6,7 @@ Feature: Shipment Management - Search Shipment
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Search Shipment by ID - Search <= 30 Shipments with Invalid Shipment (uid:bc7c0cdf-fbcb-4db2-8c0d-a16b39e617a5)
-  Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
@@ -63,7 +63,6 @@ Feature: Shipment Management - Search Shipment
   Scenario Outline: Search Shipment by Filter - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator apply filters on Shipment Management Page:
       | <filterName> | <filterValue> |
@@ -76,15 +75,14 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
     Examples:
-      | scenarioName | filterName     | filterValue  |
-      | Start Hub    | originHub      | {hub-name}   |
-      | End Hub      | destinationHub | {hub-name-2} |
+      | scenarioName    | filterName     | filterValue  |
+      | Origin Hub      | originHub      | {hub-name}   |
+      | Destination Hub | destinationHub | {hub-name-2} |
 
   @DeleteShipment
-  Scenario: Search Shipment by Filter - Shipment Type
+  Scenario: Search Shipment by Filter - Shipment Type : Air Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
@@ -100,15 +98,68 @@ Feature: Shipment Management - Search Shipment
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Type : Land Haul
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | Land Haul |
+      | shipmentStatus | Pending   |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | LAND_HAUL                 |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Pending                   |
+      | origHubName  | {hub-name}                |
+      | currHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Type : Sea Haul
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Operator create new shipment with type "SEA_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | Sea Haul |
+      | shipmentStatus | Pending  |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | SEA_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Pending                   |
+      | origHubName  | {hub-name}                |
+      | currHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Type : Others
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Operator create new shipment with type "OTHERS" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | Others  |
+      | shipmentStatus | Pending |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | OTHERS                    |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Pending                   |
+      | origHubName  | {hub-name}                |
+      | currHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
-      | shipmentType   | Air Haul |
-      | shipmentStatus | Pending  |
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Pending                |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of shipment on Shipment Management page:
       | shipmentType | AIR_HAUL                  |
@@ -122,7 +173,6 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator clear all filters on Shipment Management page
     When Operator apply filters on Shipment Management Page:
@@ -139,7 +189,6 @@ Feature: Shipment Management - Search Shipment
   Scenario: Search Shipment by ID - Search <= 30 Shipments Separated by Coma (,) or Space (uid:373d0602-6f7f-4669-afbb-e606dc6fa5d2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 2 shipment IDs
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
@@ -153,7 +202,6 @@ Feature: Shipment Management - Search Shipment
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

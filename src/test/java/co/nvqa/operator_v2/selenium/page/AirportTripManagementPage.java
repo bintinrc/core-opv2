@@ -5,8 +5,10 @@ import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
@@ -17,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
@@ -30,7 +33,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.*;
 
 /**
  * @author Meganathan Ramasamy
@@ -306,18 +309,24 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(id =createFlightTrip_commentId)
     public PageElement createFlightTrip_comment;
 
+    @FindBy(css = "[data-testid$='confirm-button']")
+    public Button confirmButton;
+
     public static String notificationMessage = "";
 
     public AirportTable airportTable;
 
+    @FindBy(className = "ant-modal-wrap")
+    public TripDepartureArrivalModal tripDepartureArrivalModal;
+
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
         Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
-                .as("Load button appear in Airport trip Management page").isTrue();
+            .as("Load button appear in Airport trip Management page").isTrue();
         Assertions.assertThat(departureInput.isDisplayed())
-                .as("Departure input appear in Airport trip Management page").isTrue();
+            .as("Departure input appear in Airport trip Management page").isTrue();
         Assertions.assertThat(isElementEnabled("//button[.='Load Trips']"))
-                .as("Load Trips appear in Airport trip Management page").isFalse();
+            .as("Load Trips appear in Airport trip Management page").isFalse();
         Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
                 .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
         Assertions.assertThat(selectFacility.isDisplayed())
@@ -325,8 +334,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void fillDepartureDateDetails(Map<String, String> mapOfData) {
+
         String startDate = mapOfData.get("startDate");
         String endDate = mapOfData.get("endDate");
+
         Departure_StartDate.click();
         Departure_StartDate.sendKeys(startDate);
         Departure_EndDate.click();
@@ -369,8 +380,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Format dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         String expDepartDate;
         try {
-            expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("startDate"))) + " - " +
-                    dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(mapOfData.get("endDate")));
+            expDepartDate = dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
+                mapOfData.get("startDate"))) + " - " +
+                dateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(
+                    mapOfData.get("endDate")));
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -576,8 +589,11 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     }
 
     public void verifyAirportCreationSuccessMessage(String airportName) {
-        String actMessage = getAntTopText();
-        Assertions.assertThat(actMessage).as("Success message is same").isEqualTo(airportName);
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->{
+            String actMessage = getAntTopText();
+            Assertions.assertThat(actMessage).as("Success message is same").isEqualTo(airportName);
+        },"Verify airport creation message", 500,2);
+
     }
 
     public void verifyNewlyCreatedAirport(Map<String, String> map) {
@@ -975,9 +991,11 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         }
     }
     public void verifyAirportTripCreationSuccessMessage(String message) {
-        String actMessage = getAntTopText();
-        Assertions.assertThat(actMessage).as("Success message is same").contains(message);
-        Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed()).as("View Details link is visible");
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(()->{
+            String actMessage = getAntTopText();
+            Assertions.assertThat(actMessage).as("Success message is same").contains(message);
+            Assertions.assertThat(findElementByXpath("//a[.='View Details']").isDisplayed()).as("View Details link is visible");
+        },"Verify Airport creation message", 500, 2);
     }
 
     public String getAirportTripId(){
@@ -1259,6 +1277,22 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         public static final String ACTION_EDIT = "Edit";
         public static final String ACTION_DETAILS = "Details";
         public static final String ACTION_DELETE = "Cancel";
+        public static final String ACTION_ASSIGN_DRIVER = "assignDriver";
+
+        @FindBy(xpath = "//button[.='Depart']")
+        public Button departTripButton;
+
+        @FindBy(xpath = "//button[.='Arrive']")
+        public Button arriveTripButton;
+
+        @FindBy(xpath = "//button[.='Complete']")
+        public Button completeTripButton;
+
+        @FindBy(xpath = "//i[.='Completed']")
+        public PageElement completedTrackText;
+
+        @FindBy(xpath = "//i[.='Cancelled']")
+        public PageElement cancelledTrackText;
 
         public AirportTable(WebDriver webDriver) {
             super(webDriver);
@@ -1275,7 +1309,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                     ImmutableMap.of(
                             ACTION_DETAILS, "view-trip-icon",
                             ACTION_EDIT, "edit-trip-icon",
-                            ACTION_DELETE, "delete-trip-icon"));
+                            ACTION_DELETE, "delete-trip-icon",
+                            ACTION_ASSIGN_DRIVER, "assign-driver-icon"));
         }
     }
 
@@ -1377,5 +1412,159 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
             ExpectedList.add(e.getFullName());
         });
         return ExpectedList;
+    }
+
+    public static class TripDepartureArrivalModal extends AntModal {
+
+        public TripDepartureArrivalModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[@class='ant-typography']/strong")
+        public PageElement PageMessage;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Origin Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement originFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Destination Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement destinationFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDepartureTime;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDuration;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Driver']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement Driver;
+
+        @FindBy(xpath = "//button[.='Submit']")
+        public Button confirmTrip;
+
+        @FindBy(xpath = "//button[.='No']")
+        public Button no;
+    }
+
+    public void departTrip() {
+        airportTable.departTripButton.waitUntilClickable();
+        airportTable.departTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Departure message appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Departure page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Departure page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
+
+    public void verifyDepartedTripSuccessful(String expectedMessage){
+        antNotificationMessage.waitUntilVisible();
+        String actualMessage = getAntTopTextV2();
+        Assertions.assertThat(actualMessage).as("Trip departed successfully").isEqualTo(expectedMessage);
+    }
+
+    public void verifyActionButtonsAreDisabled(List<String> actionButtons){
+        actionButtons.forEach((button) ->{
+            Assertions.assertThat(airportTable.getActionButton(1,button).getAttribute("disabled")).as(f("Button %s is disabled",button)).isEqualTo("true");
+        });
+    }
+
+    public void verifyDriverErrorMessages(List<String> expectedMessages){
+        antNotificationMessage.waitUntilVisible();
+        List<WebElement> messageLocators = findElementsByXpath("//div[@class='ant-notification-notice-message']//div");
+        List<String> actualMessages = new ArrayList<>();
+        messageLocators.forEach((element) -> {
+            actualMessages.add(element.getText());
+        });
+        Boolean result = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
+        Assertions.assertThat(result).as("Error message(s) are the same").isTrue();
+    }
+
+    public void ArriveTripAndVerifyItems() {
+        airportTable.arriveTripButton.waitUntilClickable();
+        airportTable.arriveTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Arrival page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Arrival page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
+
+    public void verifyTripMessageSuccessful(String expectedMessage){
+        antNotificationMessage.waitUntilVisible();
+        String actualMessage = getAntTopTextV2();
+        Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
+    }
+
+    public void verifyButtonIsShown(String button){
+        switch (button.toUpperCase()){
+            case "COMPLETE":
+                Assertions.assertThat(airportTable.completeTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "ARRIVE":
+                Assertions.assertThat(airportTable.arriveTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "DEPART":
+                Assertions.assertThat(airportTable.departTripButton.isDisplayed()).as(f("%s button is shown",button.toUpperCase())).isTrue();
+                break;
+            case "COMPLETED":
+                Assertions.assertThat(airportTable.completedTrackText.isDisplayed()).as(f("%s text is shown",button.toUpperCase())).isTrue();
+                break;
+            case "CANCELLED":
+                Assertions.assertThat(airportTable.cancelledTrackText.isDisplayed()).as(f("%s text is shown",button.toUpperCase())).isTrue();
+                break;
+        }
+    }
+
+    public void CompleteTripAndVerifyItems() {
+        airportTable.completeTripButton.waitUntilClickable();
+        airportTable.completeTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.confirmTrip.waitUntilClickable();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Completion page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Completion page").isTrue();
+        tripDepartureArrivalModal.confirmTrip.click();
+        pause1s();
+    }
+
+    public void CancelTripAndVerifyItems(){
+        airportTable.clickActionButton(1,ACTION_DELETE);
+        tripDepartureArrivalModal.waitUntilVisible();
+        Assertions.assertThat(tripDepartureArrivalModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Cancelled page").isTrue();
+
     }
 }

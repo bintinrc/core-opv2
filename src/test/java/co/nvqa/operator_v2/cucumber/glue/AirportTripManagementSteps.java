@@ -9,6 +9,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -330,6 +331,7 @@ public class AirportTripManagementSteps extends AbstractSteps{
 
     @Then("Operator verifies toast messages below on Create Flight Trip page:")
     public void operatorVerifiesErrorMessages(List<String> expectedError){
+        expectedError = resolveValues(expectedError);
         airportTripManagementPage.verifyToastErrorMessage(expectedError);
     }
 
@@ -366,4 +368,60 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.editAirportTripItems(resolvedData);
     }
 
+    @When("Operator departs trip {string} on Airport Trip Management page")
+    public void operatorDepartsTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.departTrip();
+    }
+
+    @Then("Operator verifies depart trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesDepartTripMessageSuccess(String tripID){
+        tripID = resolveValue(tripID);
+        String expectedMessage = f("Trip %s departed",tripID);
+        airportTripManagementPage.verifyDepartedTripSuccessful(expectedMessage);
+    }
+
+    @Then("Operator verifies action buttons below are disable:")
+    public void operatorVerifiesActionButtonsAreDisable(List<String> actionButtons){
+        airportTripManagementPage.verifyActionButtonsAreDisabled(actionButtons);
+    }
+
+    @Then("Operator verifies driver error messages below on Airport Trip Management page:")
+    public void operatorVerifiesDriverErrorMessages(List<String> expectedErrorMessages){
+        expectedErrorMessages = resolveValues(expectedErrorMessages);
+        airportTripManagementPage.verifyDriverErrorMessages(expectedErrorMessages);
+    }
+
+    @When("Operator arrives trip {string} on Airport Trip Management page")
+    public void operatorArrivesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.ArriveTripAndVerifyItems();
+    }
+
+    @Then("Operator verifies {string} button is shown on Airport Trip Management page")
+    public void operatorVerifiesButtonIsShownOnAirTripPage(String button){
+        airportTripManagementPage.verifyButtonIsShown(button);
+
+    }
+
+    @Then("Operator verifies trip message {string} display on Airport Trip Management page")
+    public void operatorVerifiesTripMessageSuccess(String tripMessage){
+        tripMessage = resolveValue(tripMessage);
+        airportTripManagementPage.verifyTripMessageSuccessful(tripMessage);
+    }
+
+    @When("Operator completes trip {string} on Airport Trip Management page")
+    public void operatorCompletesTripOnAirportTripPage(String tripID){
+        tripID = resolveValue(tripID);
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.CompleteTripAndVerifyItems();
+    }
+
+    @When("Operator cancel trip {value} on Airport Trip Management page")
+    public void operatorCacelsTripOnAirportTripPage(String tripID){
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.CancelTripAndVerifyItems();
+    }
 }
