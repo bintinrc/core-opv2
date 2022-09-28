@@ -317,7 +317,8 @@ Feature: DP Administration - Distribution Point Users
     And Operator press reset password button
     And Operator press back to user edit button
     Then The Edit Dp User popup is Displayed
-    
+
+  @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Delete Dp User (uid:15116d9e-9569-44b4-b970-4884355f9195)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
