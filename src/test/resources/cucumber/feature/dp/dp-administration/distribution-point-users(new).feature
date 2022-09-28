@@ -191,7 +191,7 @@ Feature: DP Administration - Distribution Point Users
       | Invalid Email      | !USEMAIL    | That doesn't look like an email.                                                                                              | {Alfa}<Express>          | uid:2fb74862-2dff-4649-a3af-375ec9010c3a |
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Update DP User
+  Scenario: DP Administration - Update DP user (uid:cfa0f458-4373-4927-b411-a653e5b9dc10)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -226,7 +226,7 @@ Feature: DP Administration - Distribution Point Users
       | dpUserDb | KEY_DATABASE_DP_USER |
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Update DP User - Reset Password Successfully
+  Scenario: DP Administration - Update DP User - Reset Password Successfully (uid:c969e718-4404-4652-8c04-06decadf38ea)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -258,7 +258,7 @@ Feature: DP Administration - Distribution Point Users
     And Operator waits for 5 seconds
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Update DP User - Reset Password Failed
+  Scenario: DP Administration - Update DP User - Reset Password Failed (uid:494cd400-a0b9-4142-acab-e777741756ac)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -289,7 +289,7 @@ Feature: DP Administration - Distribution Point Users
     Then Operator will get the error message "Password does not match!"
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Update DP User - Reset Password - Back to User Edit
+  Scenario: DP Administration - Update DP User - Reset Password - Back to User Edit (uid:30502542-9542-4cde-890f-10770a7ff62e)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
