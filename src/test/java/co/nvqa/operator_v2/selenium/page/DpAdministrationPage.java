@@ -759,6 +759,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .isEqualTo(dpUserDb.getEmail());
   }
 
+  public void verifyNewlyCreatedDpUserDeleted(co.nvqa.commons.model.dp.DpUser dpUserDb) {
+    Assertions.assertThat(dpUserDb.getDeletedAt())
+        .as("Deleted At from Dp User is Populated")
+        .isNotNull();
+
+  }
+
   public String getErrorMessage() {
     waitUntilVisibilityOfElementLocated(XPATH_PUDO_POINT_IFRAME);
     final WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);

@@ -1023,4 +1023,10 @@ public class DpAdministrationSteps extends AbstractSteps {
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
     dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb);
   }
+
+  @And("Operator verifies the newly created DP user data is deleted")
+  public void verifyNewlyCreatedDpUserDeleted(Map<String, String> dataTableAsMap) {
+    co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
+    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb);
+  }
 }
