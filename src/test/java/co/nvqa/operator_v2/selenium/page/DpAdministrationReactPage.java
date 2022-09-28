@@ -253,6 +253,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_last_name']/span")
   public PageElement labelUserLastName;
 
+  @FindBy(xpath = "//div[@class='ant-space-item']/span[contains(@class,'ant-typography')]")
+  public PageElement labelPasswordNotMatch;
+
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_email']/span")
   public PageElement labelUserEmail;
 

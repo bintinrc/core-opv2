@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,7 +175,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   private String getResourcePath(String status) {
     String resourcePath;
-    if ("valid" .equalsIgnoreCase(status)) {
+    if ("valid".equalsIgnoreCase(status)) {
       resourcePath = "images/dpPhotoValidSize.png";
     } else {
       resourcePath = "images/dpPhotoInvalidSize.png";
@@ -548,7 +549,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
 
-
   @And("Operator press view DP User Button")
   public void operatorPressViewDpUserButton() {
     dpAdminReactPage.inFrame(() -> {
@@ -831,15 +831,24 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator will get the error message {string}")
+  public void pressSaveResetPasswordButton(String errorMessage) {
+    dpAdminReactPage.inFrame(() -> {
+      Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
+          .as(f("error message '%s' appeared", errorMessage)).isEqualTo(errorMessage);
+    });
+  }
+
+
   @Then("Operator fill the password changes")
   public void fillResetPasswordChanges(Map<String, String> dataTableAsMap) {
     String password = dataTableAsMap.get("password");
     String confirmPassword = dataTableAsMap.get("confirmPassword");
     dpAdminReactPage.inFrame(() -> {
-      if (password != null){
+      if (password != null) {
         dpAdminReactPage.fieldPassword.setValue(password);
       }
-      if (confirmPassword != null){
+      if (confirmPassword != null) {
         dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
       }
     });
