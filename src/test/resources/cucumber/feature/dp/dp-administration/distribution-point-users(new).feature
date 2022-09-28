@@ -358,7 +358,7 @@ Feature: DP Administration - Distribution Point Users
       | status   | SUCCESS              |
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Delete Dp User - Wrong DP
+  Scenario: DP Administration - Delete Dp User - Wrong DP (uid:ef25d5d3-d575-4128-af02-5e56cc7cd46e)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
@@ -397,7 +397,7 @@ Feature: DP Administration - Distribution Point Users
       | status   | FAILED               |
 
   @DeleteDpManagementPartnerDpAndDpUser
-  Scenario: DP Administration - Delete Dp User - Wrong DP Partner
+  Scenario: DP Administration - Delete Dp User - Wrong DP Partner (uid:16a7cf1b-6778-48de-b69e-7ef163edc71c)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
