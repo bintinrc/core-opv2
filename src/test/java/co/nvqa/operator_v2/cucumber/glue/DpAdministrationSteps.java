@@ -824,6 +824,20 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press back to user edit button")
+  public void pressBackToUserEditButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonBackToUserEdit.click();
+    });
+  }
+
+  @Then("The Edit Dp User popup is Displayed")
+  public void editDpUserIsDisplayed() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.labelEditUserTitle.isDisplayed();
+    });
+  }
+
   @Then("Operator press save reset password button")
   public void pressSaveResetPasswordButton() {
     dpAdminReactPage.inFrame(() -> {

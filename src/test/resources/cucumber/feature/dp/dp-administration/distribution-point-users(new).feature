@@ -257,7 +257,7 @@ Feature: DP Administration - Distribution Point Users
     Then Operator press save reset password button
     And Operator waits for 5 seconds
 
-  @DeleteDpManagementPartnerDpAndDpUser @RT
+  @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update DP User - Reset Password Failed
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -287,6 +287,35 @@ Feature: DP Administration - Distribution Point Users
       | password        | miniso123 |
       | confirmPassword | daiso123  |
     Then Operator will get the error message "Password does not match!"
+
+  @DeleteDpManagementPartnerDpAndDpUser
+  Scenario: DP Administration - Update DP User - Reset Password - Back to User Edit
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name             | shipperId                                    | contact      | shortName         | externalStoreId   | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpCheckManagement | onCheckManagement | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Then Operator fill Detail for create DP Management User:
+      | firstName | lastName | contactNo    | email            | username                                | password |
+      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | USER{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+    And API Operator request to create DP Management User:
+      | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
+      | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
+      | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    And Operator fill the Dp list filter by "id"
+    Then Operator press view DP User Button
+    Then The Dp page is displayed
+    Then Operator press edit user Button
+    And Operator press reset password button
+    And Operator press back to user edit button
+    Then The Edit Dp User popup is Displayed
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Delete Dp User

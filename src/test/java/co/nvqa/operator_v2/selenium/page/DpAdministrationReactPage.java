@@ -64,6 +64,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testid='button_reset_password']")
   public Button buttonResetPassword;
 
+  @FindBy(xpath = "//button[@data-testid='button_back_to_user_edit']")
+  public Button buttonBackToUserEdit;
+
   @FindBy(xpath = "//button[@data-testid='button_save_password']")
   public Button buttonSaveResetPassword;
 
@@ -255,6 +258,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[@class='ant-space-item']/span[contains(@class,'ant-typography')]")
   public PageElement labelPasswordNotMatch;
+
+  @FindBy(xpath = "//div[@data-testid='edit-user-title']")
+  public PageElement labelEditUserTitle;
 
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_email']/span")
   public PageElement labelUserEmail;
