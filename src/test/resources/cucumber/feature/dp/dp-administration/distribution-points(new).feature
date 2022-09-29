@@ -73,7 +73,7 @@ Feature: DP Administration - Distribution Point
       | longitude         | abc,Longitude                     |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type
+  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type (uid:6f003723-fe55-4cdb-808c-92230ecba8eb)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
@@ -103,7 +103,7 @@ Feature: DP Administration - Distribution Point
       | auditMetadata | KEY_AUDIT_METADATA |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type
+  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type (uid:9bb9265c-0513-4abe-88f8-cde661391231)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
