@@ -98,6 +98,9 @@ Feature: DP Administration - Distribution Point
       | parameter | dpId                                        |
       | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
       | type      | CREATE                                      |
+    And Operator Check the Data from created DP is Right
+      | dp            | KEY_DP_DETAILS     |
+      | auditMetadata | KEY_AUDIT_METADATA |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type
@@ -125,3 +128,6 @@ Feature: DP Administration - Distribution Point
       | parameter | dpId                                        |
       | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
       | type      | CREATE                                      |
+    And Operator Check the Data from created DP is Right
+      | dp            | KEY_DP_DETAILS     |
+      | auditMetadata | KEY_AUDIT_METADATA |
