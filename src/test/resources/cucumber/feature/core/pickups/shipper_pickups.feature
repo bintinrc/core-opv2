@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules
+@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules @NV10380
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -167,7 +167,7 @@ Feature: Shipper Pickups
       | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].comments} |
       | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[2].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[2].comments} |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @NV10380FEATURE
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
