@@ -1,7 +1,7 @@
 @Sort @Inbounding @GlobalInbound @GlobalInboundPart3 @Saas @Inbound
 Feature: Global Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun @TAG
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -137,7 +137,7 @@ Feature: Global Inbound
       | status  | PENDING                                |
       | endDate | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
 
-  @CloseNewWindows @TAG
+  @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:d929ec0a-629b-4ab3-beae-47ef1fafc329)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -583,6 +583,6 @@ Feature: Global Inbound
     And Operator verify "HUB INBOUND SCAN" order event description on Edit order page
     And Operator verifies order weight is overridden based on the volumetric weight
 
-  @KillBrowser @ShouldAlwaysRun @TAG
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
