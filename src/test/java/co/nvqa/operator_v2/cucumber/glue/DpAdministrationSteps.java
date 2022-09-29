@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,7 +175,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   private String getResourcePath(String status) {
     String resourcePath;
-    if ("valid" .equalsIgnoreCase(status)) {
+    if ("valid".equalsIgnoreCase(status)) {
       resourcePath = "images/dpPhotoValidSize.png";
     } else {
       resourcePath = "images/dpPhotoInvalidSize.png";
@@ -251,22 +252,28 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.errorCheckDpUser(dpUser);
       } else {
         if (dpUser.getFirstName() != null) {
+          dpAdminReactPage.formDpUserFirstName.forceClear();
           dpAdminReactPage.formDpUserFirstName.setValue(dpUser.getFirstName());
         }
         if (dpUser.getLastName() != null) {
+          dpAdminReactPage.formDpUserLastName.forceClear();
           dpAdminReactPage.formDpUserLastName.setValue(dpUser.getLastName());
         }
         if (dpUser.getContactNo() != null) {
+          dpAdminReactPage.formDpUserContact.forceClear();
           dpAdminReactPage.formDpUserContact.setValue(dpUser.getContactNo());
         }
         if (dpUser.getEmailId() != null) {
+          dpAdminReactPage.formDpUserEmail.forceClear();
           dpAdminReactPage.formDpUserEmail.setValue(dpUser.getEmailId());
         }
         if (dpUser.getUsername() != null) {
+          dpAdminReactPage.formDpUserUsername.forceClear();
           dpAdminReactPage.formDpUserUsername.setValue(dpUser.getUsername());
           put(KEY_DP_USER_USERNAME, dpUser.getUsername());
         }
         if (dpUser.getPassword() != null) {
+          dpAdminReactPage.formDpUserPassword.forceClear();
           dpAdminReactPage.formDpUserPassword.setValue(dpUser.getPassword());
         }
 
@@ -279,6 +286,13 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressSubmitUserButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonSubmitDpUser.click();
+    });
+  }
+
+  @Then("Operator press submit edit user button")
+  public void operatorPressSubmitEditUserButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSubmitEditDpUser.click();
     });
   }
 
@@ -533,7 +547,6 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpAdminReactPage.buttonEditUser.click();
     });
   }
-
 
 
   @And("Operator press view DP User Button")
@@ -804,6 +817,57 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press reset password button")
+  public void pressResetPasswordButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonResetPassword.click();
+    });
+  }
+
+  @Then("Operator press back to user edit button")
+  public void pressBackToUserEditButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonBackToUserEdit.click();
+    });
+  }
+
+  @Then("The Edit Dp User popup is Displayed")
+  public void editDpUserIsDisplayed() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.labelEditUserTitle.isDisplayed();
+    });
+  }
+
+  @Then("Operator press save reset password button")
+  public void pressSaveResetPasswordButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonSaveResetPassword.click();
+    });
+  }
+
+  @Then("Operator will get the error message {string}")
+  public void pressSaveResetPasswordButton(String errorMessage) {
+    dpAdminReactPage.inFrame(() -> {
+      Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
+          .as(f("error message '%s' appeared", errorMessage)).isEqualTo(errorMessage);
+    });
+  }
+
+
+  @Then("Operator fill the password changes")
+  public void fillResetPasswordChanges(Map<String, String> dataTableAsMap) {
+    String password = dataTableAsMap.get("password");
+    String confirmPassword = dataTableAsMap.get("confirmPassword");
+    dpAdminReactPage.inFrame(() -> {
+      if (password != null) {
+        dpAdminReactPage.fieldPassword.setValue(password);
+      }
+      if (confirmPassword != null) {
+        dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
+      }
+    });
+  }
+
   @And("Operator check the data again with pressing ascending and descending order :")
   public void ascendingDataCheck(Map<String, String> searchSDetailsAsMap) {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
@@ -1009,5 +1073,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpUser dpUser = get(dataTableAsMap.get("dpUser"));
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
     dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb);
+  }
+
+  @And("Operator verifies the newly created DP user data is deleted")
+  public void verifyNewlyCreatedDpUserDeleted(Map<String, String> dataTableAsMap) {
+    co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
+    String status = dataTableAsMap.get("status");
+    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb,status);
   }
 }
