@@ -1,7 +1,7 @@
 @Sort @Inbounding @GlobalInbound @GlobalInboundPart3 @Saas @Inbound
 Feature: Global Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @TAG
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -78,7 +78,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                |
-      | endDate | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-3-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Express Service (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
@@ -97,7 +97,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                |
-      | endDate | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Next Day Service (uid:69d8cd89-bfd3-4e1a-ad04-ece038974e99)
@@ -116,7 +116,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                |
-      | endDate | {gradle-next-1-working-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-1-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Same Day (uid:79a946bb-aa72-4e5e-a063-9656f8826a7b)
@@ -135,9 +135,9 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                |
-      | endDate | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | endDate | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
 
-  @CloseNewWindows
+  @CloseNewWindows @TAG
   Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:d929ec0a-629b-4ab3-beae-47ef1fafc329)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -171,7 +171,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-day-yyyy-MM-dd}         |
-      | endDate   | {gradle-next-3-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-working-day-with-saturday-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
@@ -583,6 +583,6 @@ Feature: Global Inbound
     And Operator verify "HUB INBOUND SCAN" order event description on Edit order page
     And Operator verifies order weight is overridden based on the volumetric weight
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @TAG
   Scenario: Kill Browser
     Given no-op
