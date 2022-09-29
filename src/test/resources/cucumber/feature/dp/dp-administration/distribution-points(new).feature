@@ -94,6 +94,10 @@ Feature: DP Administration - Distribution Point
     And Operator get the value of DP ID
     When DB operator gets DP details from Hibernate
       | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    Then DB operator gets data from audit metadata
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+      | type      | CREATE                                      |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type
@@ -117,3 +121,7 @@ Feature: DP Administration - Distribution Point
     And Operator get the value of DP ID
     When DB operator gets DP details from Hibernate
       | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    Then DB operator gets data from audit metadata
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+      | type      | CREATE                                      |
