@@ -491,6 +491,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator get the value of DP ID")
+  public void operatorGetDpIdValue() {
+    dpAdminReactPage.inFrame(() -> {
+     put(KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID,dpAdminReactPage.labelDpId.getText());
+    });
+  }
+
   @Then("Operator press edit DP button")
   public void operatorPressEditDpButton() {
     dpAdminReactPage.inFrame(() -> {

@@ -91,6 +91,9 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets DP details from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type
@@ -111,4 +114,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-
+    And Operator get the value of DP ID
+    When DB operator gets DP details from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
