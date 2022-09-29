@@ -1,4 +1,4 @@
-@Sort @Utilities @BulkAddressVerification
+@Sort @Utilities @BulkAddressVerification @current
 Feature: Bulk Address Verification
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -24,7 +24,7 @@ Feature: Bulk Address Verification
     And Operator verifies waypoints are assigned to "RTS" rack sector upon bulk address verification
     Then Operator update successfully matched waypoints upon bulk address verification
     Then Operator verify Jaro Scores are created successfully
-
+@wip
   Scenario: Bulk AV RTS orders - RTS zone doesn't exist
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 5                                                                                                                                                                                                                                                                                                                                |

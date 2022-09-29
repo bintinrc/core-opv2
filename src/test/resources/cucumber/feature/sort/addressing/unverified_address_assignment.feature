@@ -1,4 +1,4 @@
-@Sort @UnverifiedAddressAssignment
+@Sort @UnverifiedAddressAssignment @current
 Feature: Unverified Address Assignment
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -22,7 +22,7 @@ Feature: Unverified Address Assignment
       | score   | 1.0                                              |
       | address | {KEY_CREATED_ORDER.buildCommaSeparatedToAddress} |
 
-  @DeleteAddress
+  @DeleteAddress @wip
   Scenario: Assign a Zone to Unverified Address
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
