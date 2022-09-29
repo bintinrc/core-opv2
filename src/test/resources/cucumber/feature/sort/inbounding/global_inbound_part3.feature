@@ -77,7 +77,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                                |
+      | status  | PENDING                                              |
       | endDate | {gradle-next-3-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
@@ -96,7 +96,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                                |
+      | status  | PENDING                                              |
       | endDate | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
@@ -115,7 +115,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                                |
+      | status  | PENDING                                              |
       | endDate | {gradle-next-1-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
@@ -134,7 +134,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                                |
+      | status  | PENDING                                              |
       | endDate | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
 
   @CloseNewWindows
@@ -169,8 +169,8 @@ Feature: Global Inbound
       | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                                |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd}         |
+      | status    | PENDING                                              |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd}                       |
       | endDate   | {gradle-next-3-working-day-with-saturday-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
@@ -204,9 +204,9 @@ Feature: Global Inbound
       | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                                |
-      | startDate | {gradle-next-1-day-yyyy-MM-dd}         |
-      | endDate   | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | status    | PENDING                                              |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | endDate   | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
@@ -354,7 +354,7 @@ Feature: Global Inbound
   Scenario: Inbound an International order - portation export (uid:a0364582-4f4a-4f8c-90e6-ded25c878348)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"International", "service_level":"Standard", "to":{"address": {"postcode": "319941"}},"parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
       | addressType       | global                                                                                                                                                                                                                                                                                                         |
     And Operator go to menu Inbounding -> Global Inbound
