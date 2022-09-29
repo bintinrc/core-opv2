@@ -206,7 +206,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-day-yyyy-MM-dd}         |
-      | endDate   | {gradle-next-2-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-2-working-day-with-saturday-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
