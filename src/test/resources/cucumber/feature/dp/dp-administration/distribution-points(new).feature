@@ -72,3 +72,62 @@ Feature: DP Administration - Distribution Point
       | latitude          | abc,Latitude                      |
       | longitude         | abc,Longitude                     |
 
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type (uid:6f003723-fe55-4cdb-808c-92230ecba8eb)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                           | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | AUDIA-ANJANI_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets DP details from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    Then DB operator gets data from audit metadata
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+      | type      | CREATE                                      |
+    And Operator Check the Data from created DP is Right
+      | dp            | KEY_DP_DETAILS     |
+      | auditMetadata | KEY_AUDIT_METADATA |
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type (uid:9bb9265c-0513-4abe-88f8-cde661391231)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                           | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type      | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | AUDIA-ANJANI_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets DP details from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    Then DB operator gets data from audit metadata
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+      | type      | CREATE                                      |
+    And Operator Check the Data from created DP is Right
+      | dp            | KEY_DP_DETAILS     |
+      | auditMetadata | KEY_AUDIT_METADATA |

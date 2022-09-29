@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
+import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -491,6 +492,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator get the value of DP ID")
+  public void operatorGetDpIdValue() {
+    dpAdminReactPage.inFrame(() -> {
+     put(KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID,dpAdminReactPage.labelDpId.getText());
+    });
+  }
+
   @Then("Operator press edit DP button")
   public void operatorPressEditDpButton() {
     dpAdminReactPage.inFrame(() -> {
@@ -866,6 +874,16 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
       }
     });
+  }
+
+  @Then("Operator Check the Data from created DP is Right")
+  public void checkCreatedDPData(Map<String, String> dataTableAsMap) {
+    co.nvqa.commons.model.dp.persisted_classes.Dp dp = resolveValue(dataTableAsMap.get("dp"));
+    AuditMetadata auditMetadata = resolveValue(dataTableAsMap.get("auditMetadata"));
+
+    if (auditMetadata != null){
+      dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp,auditMetadata);
+    }
   }
 
   @And("Operator check the data again with pressing ascending and descending order :")

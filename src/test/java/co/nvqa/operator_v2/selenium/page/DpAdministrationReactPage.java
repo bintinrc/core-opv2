@@ -3,11 +3,17 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
+import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
+import co.nvqa.commons.model.dp.persisted_classes.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
@@ -250,6 +256,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_username']/span")
   public PageElement labelUsername;
 
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_id']/span")
+  public PageElement labelDpId;
+
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_first_name']/span")
   public PageElement labelUserFirstName;
 
@@ -373,6 +382,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String EXTERNAL_STORE_ID = "External Store Id";
   public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
 
+  public static final String RETAIL_POINT_NETWORK = "RETAIL_POINT_NETWORK";
+  public static final String CREATE = "CREATE";
+  public static final String DPS = "dps";
 
   public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
       .put(POINT_NAME, "Name is required")
@@ -531,6 +543,47 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(errorMsgUsernameDuplicate.getText())
         .as(f("Error Message exist: %s", errorMsgUsernameDuplicate.getText()))
         .isEqualTo(f(ERROR_MSG_DUPLICATE_USERNAME, dpUser.getUsername()));
+  }
+
+  public void checkNewlyCreatedDpAndAuditMetadata(Dp dp, AuditMetadata auditMetadata) {
+    LocalDateTime ldt = LocalDateTime.now();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Assertions.assertThat(dp.getId())
+        .as(f("dp_qa_gl/dps: dp_id and dpms_id is same %s",dp.getId()))
+        .isEqualTo(dp.getDpmsId());
+
+    Assertions.assertThat(dp.getServiceType())
+        .as("dp_qa_gl/dps: type is RETAIL_POINT_NETWORK")
+        .isEqualTo(RETAIL_POINT_NETWORK);
+
+    Assertions.assertThat(auditMetadata.getRefId())
+        .as(f("dp_qa_gl/audit_metadata: ref_id is %s",auditMetadata.getRefId()))
+        .isNotNull();
+
+    Assertions.assertThat(auditMetadata.getAuthUserId())
+        .as(f("dp_qa_gl/audit_metadata: auth_user_id is %s",auditMetadata.getAuthUserId()))
+        .isNotNull();
+
+    Assertions.assertThat(auditMetadata.getType())
+        .as("dp_qa_gl/audit_metadata: type is CREATE")
+        .isEqualTo(CREATE);
+
+    Assertions.assertThat(auditMetadata.getTableName())
+        .as("dp_qa_gl/audit_metadata: table_name is dps")
+        .isEqualTo(DPS);
+
+    Assertions.assertThat(auditMetadata.getTableName())
+        .as("dp_qa_gl/audit_metadata: table_name is dps")
+        .isEqualTo(DPS);
+
+    Assertions.assertThat(sdf.format(auditMetadata.getTriggeredAt()))
+        .as("dp_qa_gl/audit_metadata: triggered_at is At Current Time")
+        .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
+
+    Assertions.assertThat(sdf.format(auditMetadata.getCreatedAt()))
+        .as("dp_qa_gl/audit_metadata: created_at is At Current Time")
+        .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
   }
 
   public void errorCheckDpUser(DpUser dpUser) {
