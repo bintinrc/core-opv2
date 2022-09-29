@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @SuggestRoute @NV10380
+@OperatorV2 @Core @AllOrders @SuggestRoute
 Feature: All Orders - Suggest Route
 
   @LaunchBrowser @ShouldAlwaysRun

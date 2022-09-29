@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @SuggestRoute @EditOrder2 @RoutingModules @NV10380
+@OperatorV2 @Core @EditOrder @SuggestRoute @EditOrder2 @RoutingModules
 Feature: Edit Order - Suggest Route
 
   @LaunchBrowser @ShouldAlwaysRun
