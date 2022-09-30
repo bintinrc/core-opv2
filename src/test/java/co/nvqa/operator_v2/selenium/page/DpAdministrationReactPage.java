@@ -379,7 +379,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
-  public static final String CHOOSE_LAT_LONG_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]";
+  public static final String CHOOSE_LAT_LONG_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
 
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
@@ -526,9 +526,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
   }
 
-  public void chooseLatLongSearch() {
-    moveToElementWithXpath(CHOOSE_LAT_LONG_FIRST_OPTIONS);
-    click(CHOOSE_LAT_LONG_FIRST_OPTIONS);
+  public void chooseLatLongSearch(String latLongSearchName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
+    moveToElementWithXpath(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
+    click(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
   }
 
 

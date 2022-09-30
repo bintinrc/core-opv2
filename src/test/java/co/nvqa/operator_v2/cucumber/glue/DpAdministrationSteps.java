@@ -640,9 +640,9 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.chooseShipperAccountDp(dpDetailsResponse.getShipperId());
       }
 
-      if (dpDetailsResponse.getLatLongSearch() != null) {
+      if (dpDetailsResponse.getLatLongSearch() != null && dpDetailsResponse.getLatLongSearchName() != null) {
         dpAdminReactPage.fieldLatLongSearch.setValue(dpDetailsResponse.getLatLongSearch());
-        dpAdminReactPage.chooseLatLongSearch();
+        dpAdminReactPage.chooseLatLongSearch(dpDetailsResponse.getLatLongSearchName());
       } else {
         if (dpDetailsResponse.getPostalCode() != null) {
           dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
