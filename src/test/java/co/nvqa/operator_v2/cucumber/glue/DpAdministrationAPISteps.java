@@ -173,6 +173,9 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     if (dpDetail.getExternalStoreId().equals("GENERATED")){
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
+    if (dpDetail.getHubName() != null){
+
+    }
 
 
     Hours hours = new Hours();

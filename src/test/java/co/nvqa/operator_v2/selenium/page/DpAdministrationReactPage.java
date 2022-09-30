@@ -404,10 +404,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .build();
 
   public ImmutableMap<String, String> errorField = ImmutableMap.<String, String>builder()
-      .put(POINT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(SHORT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(CITY, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(EXTERNAL_STORE_ID, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(POINT_NAME,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(SHORT_NAME,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(CITY,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(EXTERNAL_STORE_ID,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
       .put(POSTCODE, "Please enter a valid number.")
       .put(FLOOR_NO, "Please enter a valid number.")
       .put(UNIT_NO, "Please enter a valid number.")
@@ -476,7 +480,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void mandatoryFieldError(String field) {
     Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorMandatoryField.get(field))))
-        .as(String.format("Error message from %s is exist: %s", field, errorMandatoryField.get(field)))
+        .as(String.format("Error message from %s is exist: %s", field,
+            errorMandatoryField.get(field)))
         .isTrue();
   }
 
@@ -487,13 +492,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void chooseShipperAccountDp(Long shipperId) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
-    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
+    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
   }
 
   public void chooseShipperAssignedHub(String hubName) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
-    click(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+    click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
   }
 
 
@@ -550,7 +555,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Assertions.assertThat(dp.getId())
-        .as(f("dp_qa_gl/dps: dp_id and dpms_id is same %s",dp.getId()))
+        .as(f("dp_qa_gl/dps: dp_id and dpms_id is same %s", dp.getId()))
         .isEqualTo(dp.getDpmsId());
 
     Assertions.assertThat(dp.getServiceType())
@@ -558,11 +563,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(RETAIL_POINT_NETWORK);
 
     Assertions.assertThat(auditMetadata.getRefId())
-        .as(f("dp_qa_gl/audit_metadata: ref_id is %s",auditMetadata.getRefId()))
+        .as(f("dp_qa_gl/audit_metadata: ref_id is %s", auditMetadata.getRefId()))
         .isNotNull();
 
     Assertions.assertThat(auditMetadata.getAuthUserId())
-        .as(f("dp_qa_gl/audit_metadata: auth_user_id is %s",auditMetadata.getAuthUserId()))
+        .as(f("dp_qa_gl/audit_metadata: auth_user_id is %s", auditMetadata.getAuthUserId()))
         .isNotNull();
 
     Assertions.assertThat(auditMetadata.getType())
@@ -781,6 +786,30 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(dpPartner.getRestrictions())
         .as(f("Restrictions Is %s", dpPartner.getRestrictions()))
         .isEqualTo(labelRestrictions.getText());
+  }
+
+  public void readDpEntity(DpDetailsResponse dpDetails) {
+
+    Assertions.assertThat(filterDpId.getText())
+        .as(f("Dp Id Is %s", dpDetails.getId()))
+        .isEqualTo(Long.toString(dpDetails.getId()));
+
+    Assertions.assertThat(filterDpName.getText())
+        .as(f("Dp Name Is %s", dpDetails.getName()))
+        .isEqualTo(dpDetails.getName());
+
+    Assertions.assertThat(filterDpShortName.getText())
+        .as(f("Dp Short Name Is %s", dpDetails.getShortName()))
+        .isEqualTo(dpDetails.getShortName());
+
+    Assertions.assertThat(filterDpHub.getText())
+        .as(f("Dp Hub Is %s", dpDetails.getHub()))
+        .isEqualTo(dpDetails.getShortName());
+
+//        .put("hub", filterDpHub)
+//        .put("address", filterDpAddress)
+//        .put("direction", filterDpDirection)
+//        .put("activity", filterDpActivity)
   }
 
   public void readDpUserEntity(DpUser dpUser) {

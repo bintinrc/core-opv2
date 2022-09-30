@@ -205,6 +205,26 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator Search with Some DP Details :")
+  public void operatorVerifyDpDetails(Map<String, String> searchSDetailsAsMap) {
+    DpDetailsResponse dp = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpElementByMap(extractDetail, dp);
+        dpAdminReactPage.textBoxDpFilter.get(extractDetail).setValue(valueDetails);
+        pause2s();
+        dpAdminReactPage.readDpPartnerEntity(expected);
+        dpAdminReactPage.clearDpPartnerFilter(extractDetail);
+      }
+    });
+  }
+
   @And("Operator Search with Some DP User Details :")
   public void operatorVerifyDpUserDetails(Map<String, String> searchDetailsAsMap) {
     User user = resolveValue(searchDetailsAsMap.get("dpUser"));

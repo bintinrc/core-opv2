@@ -131,3 +131,20 @@ Feature: DP Administration - Distribution Point
     And Operator Check the Data from created DP is Right
       | dp            | KEY_DP_DETAILS     |
       | auditMetadata | KEY_AUDIT_METADATA |
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: DP Administration - Search Distribution Point
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Point Test", "poc_name": "Diaz DP TEST", "poc_tel": "DIAZ00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    And Operator Search with Some DP Partner Details :
+      | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
+
