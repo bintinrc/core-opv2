@@ -639,19 +639,33 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldShipperAccountNo.setValue(dpDetailsResponse.getShipperId());
         dpAdminReactPage.chooseShipperAccountDp(dpDetailsResponse.getShipperId());
       }
-      if (dpDetailsResponse.getPostalCode() != null) {
-        dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
+
+      if (dpDetailsResponse.getLatLongSearch() != null) {
+        dpAdminReactPage.fieldLatLongSearch.setValue(dpDetailsResponse.getLatLongSearch());
+        dpAdminReactPage.chooseLatLongSearch();
+      } else {
+        if (dpDetailsResponse.getPostalCode() != null) {
+          dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
+        }
+        if (dpDetailsResponse.getCity() != null) {
+          dpAdminReactPage.fieldCity.setValue(dpDetailsResponse.getCity());
+        }
+        if (dpDetailsResponse.getAddress1() != null) {
+          dpAdminReactPage.fieldPointAddress1.setValue(dpDetailsResponse.getAddress1());
+        }
+        if (dpDetailsResponse.getLatitude() != null) {
+          dpAdminReactPage.fieldLatitude.setValue(dpDetailsResponse.getLatitude());
+        }
+        if (dpDetailsResponse.getLongitude() != null) {
+          dpAdminReactPage.fieldLongitude.setValue(dpDetailsResponse.getLongitude());
+        }
       }
-      if (dpDetailsResponse.getCity() != null) {
-        dpAdminReactPage.fieldCity.setValue(dpDetailsResponse.getCity());
-      }
+
       if (dpDetailsResponse.getHubName() != null) {
         dpAdminReactPage.fieldAssignedHub.setValue(dpDetailsResponse.getHubName());
         dpAdminReactPage.chooseShipperAssignedHub(dpDetailsResponse.getHubName());
       }
-      if (dpDetailsResponse.getAddress1() != null) {
-        dpAdminReactPage.fieldPointAddress1.setValue(dpDetailsResponse.getAddress1());
-      }
+
       if (dpDetailsResponse.getAddress2() != null) {
         dpAdminReactPage.fieldPointAddress2.setValue(dpDetailsResponse.getAddress2());
       }
@@ -661,12 +675,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getUnitNumber() != null) {
         dpAdminReactPage.fieldUnitNo.setValue(dpDetailsResponse.getUnitNumber());
       }
-      if (dpDetailsResponse.getLatitude() != null) {
-        dpAdminReactPage.fieldLatitude.setValue(dpDetailsResponse.getLatitude());
-      }
-      if (dpDetailsResponse.getLongitude() != null) {
-        dpAdminReactPage.fieldLongitude.setValue(dpDetailsResponse.getLongitude());
-      }
+
       if (dpDetailsResponse.getType() != null) {
         dpAdminReactPage.fieldPudoPointType.click();
         if (dpDetailsResponse.getType().equals("Ninja Box")) {

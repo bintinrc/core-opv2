@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
+@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -132,7 +132,7 @@ Feature: DP Administration - Distribution Point
       | dp            | KEY_DP_DETAILS     |
       | auditMetadata | KEY_AUDIT_METADATA |
 
-  @DeleteNewlyCreatedDpManagementPartner @RT
+  @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Search Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Point Test", "poc_name": "Diaz DP TEST", "poc_tel": "DIAZ00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
@@ -148,4 +148,24 @@ Feature: DP Administration - Distribution Point
     Then The Dp page is displayed
     And Operator Search with Some DP Details :
       | searchDetails | id,name,shortName,address,direction,activity |
+
+  @DeleteNewlyCreatedDpManagementPartner
+# MASIH NGGAK BiSA
+  Scenario: Create DP - Input Address by Search via Lat Long
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration (New)
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                           | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | latLongSearch                         | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | AUDIA-ANJANI_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | 1.332297236850378, 103.83163293413674 | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+
 

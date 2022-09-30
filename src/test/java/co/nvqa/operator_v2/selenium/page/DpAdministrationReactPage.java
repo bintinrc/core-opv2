@@ -187,6 +187,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
 
+  @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
+  public TextBox fieldLatLongSearch;
+
   @FindBy(xpath = "//input[@data-testid='field_postcode']")
   public TextBox fieldPostcode;
 
@@ -376,6 +379,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
+  public static final String CHOOSE_LAT_LONG_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]";
 
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
@@ -520,6 +524,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void chooseShipperAssignedHub(String hubName) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
     click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+  }
+
+  public void chooseLatLongSearch() {
+    moveToElementWithXpath(CHOOSE_LAT_LONG_FIRST_OPTIONS);
+    click(CHOOSE_LAT_LONG_FIRST_OPTIONS);
   }
 
 
