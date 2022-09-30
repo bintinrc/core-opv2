@@ -103,6 +103,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String XPATH_PASSWORD_NINJA_POINT = "//input[@id='password']";
   private static final String XPATH_WELCOME_PAGE_NINJA_POINT = "//span[@data-key='welcome_back']";
 
+  private static final String SUCCESS = "SUCCESS";
+  private static final String FAILED = "FAILED";
+
   private final AddPartnerDialog addPartnerDialog;
   private final EditPartnerDialog editPartnerDialog;
   private final DpPartnersTable dpPartnersTable;
@@ -757,6 +760,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     Assertions.assertThat(dpUser.getEmailId())
         .as(f("Email from Dp User is %s", dpUserDb.getEmail()))
         .isEqualTo(dpUserDb.getEmail());
+  }
+
+  public void verifyNewlyCreatedDpUserDeleted(co.nvqa.commons.model.dp.DpUser dpUserDb,String status) {
+    if (status.equalsIgnoreCase(SUCCESS)){
+      Assertions.assertThat(dpUserDb.getDeletedAt())
+          .as("Deleted At from Dp User is Populated")
+          .isNotNull();
+    } else if (status.equalsIgnoreCase(FAILED)){
+      Assertions.assertThat(dpUserDb.getDeletedAt())
+          .as("Deleted At from Dp User is NULL")
+          .isNull();
+    }
   }
 
   public String getErrorMessage() {
