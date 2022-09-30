@@ -5,6 +5,7 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
+import co.nvqa.operator_v2.cucumber.glue.DpAdministrationSteps;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -19,6 +20,8 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Diaz Ilyasa
@@ -810,7 +813,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(labelRestrictions.getText());
   }
 
-  public void readDpEntity(DpDetailsResponse dpDetails) {
+  public void readDpEntity(DpDetailsResponse dpDetails, String element) {
+
+    Assertions.assertThat(element)
+        .as(f("Element Input is %s", element))
+        .isNotNull();
 
     Assertions.assertThat(labelDpId.getText())
         .as(f("Dp Id Is %s", dpDetails.getId()))

@@ -222,7 +222,7 @@ public class DpAdministrationSteps extends AbstractSteps {
         String valueDetails = dpAdminReactPage.getDpElementByMap(extractDetail, dp);
         dpAdminReactPage.textBoxDpFilter.get(extractDetail).setValue(valueDetails);
         pause2s();
-        dpAdminReactPage.readDpEntity(dp);
+        dpAdminReactPage.readDpEntity(dp,extractDetail);
         dpAdminReactPage.clearDpFilter(extractDetail);
       }
     });

@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -132,7 +132,7 @@ Feature: DP Administration - Distribution Point
       | dp            | KEY_DP_DETAILS     |
       | auditMetadata | KEY_AUDIT_METADATA |
 
-  @DeleteNewlyCreatedDpManagementPartner
+  @DeleteNewlyCreatedDpManagementPartner @RT
   Scenario: DP Administration - Search Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Point Test", "poc_name": "Diaz DP TEST", "poc_tel": "DIAZ00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
