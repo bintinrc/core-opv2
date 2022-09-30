@@ -876,8 +876,16 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editPickupDetailsDialog.senderContact.setValue(senderContact);
     editPickupDetailsDialog.senderEmail.setValue(senderEmail);
     editPickupDetailsDialog.internalNotes.setValue(internalNotes);
-    editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
-    editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+    if (StringUtils.isNotBlank(pickupDate)) {
+      editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
+    }
+    if (StringUtils.isNotBlank(pickupTimeslot)) {
+      editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+    }
+    editPickupDetailsDialog.shipperRequestedToChange.setValue(
+        Boolean.parseBoolean(mapOfData.getOrDefault("shipperRequestedToChange", "false")));
+    editPickupDetailsDialog.assignPickupLocation.setValue(
+        Boolean.parseBoolean(mapOfData.getOrDefault("assignPickupLocation", "false")));
     editPickupDetailsDialog.changeAddress.click();
     editPickupDetailsDialog.country.setValue(country);
     editPickupDetailsDialog.city.setValue(city);
@@ -885,7 +893,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editPickupDetailsDialog.address2.setValue(address2);
     editPickupDetailsDialog.postcode.setValue(postalCode);
     editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Pickup Details Updated", false);
   }
 
   public void updateDeliveryDetails(Map<String, String> mapOfData) {
@@ -1396,6 +1403,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(css = "[id^='commons.sender-contact']")
     public TextBox senderContact;
+
+    @FindBy(css = "[aria-label='Shipper requested to change']")
+    public MdCheckbox shipperRequestedToChange;
+
+    @FindBy(css = "[aria-label='Assign Pickup Location']")
+    public MdCheckbox assignPickupLocation;
 
     @FindBy(css = "[id^='commons.sender-email']")
     public TextBox senderEmail;
