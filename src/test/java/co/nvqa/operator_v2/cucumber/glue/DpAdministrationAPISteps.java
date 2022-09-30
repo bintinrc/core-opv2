@@ -174,7 +174,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
     if (dpDetail.getHubName() != null){
-
+      put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME,dpDetail.getHubName());
     }
 
 

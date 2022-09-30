@@ -253,6 +253,24 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_restrictions']/span")
   public PageElement labelRestrictions;
 
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_name']/span")
+  public PageElement labelDpName;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_shortname']/span")
+  public PageElement labelDpShortName;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_hub']/span")
+  public PageElement labelDpHub;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_address']/span")
+  public PageElement labelDpAddress;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_direction']/span")
+  public PageElement labelDpDirection;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_activity']/span")
+  public PageElement labelDpActivity;
+
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_username']/span")
   public PageElement labelUsername;
 
@@ -540,6 +558,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     textBoxDpPartnerFilter.get(field).forceClear();
   }
 
+  public void clearDpFilter(String field) {
+    textBoxDpFilter.get(field).forceClear();
+  }
+
   public void clearDpUserFilter(String field) {
     textBoxDpUserFilter.get(field).forceClear();
   }
@@ -790,26 +812,30 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void readDpEntity(DpDetailsResponse dpDetails) {
 
-    Assertions.assertThat(filterDpId.getText())
+    Assertions.assertThat(labelDpId.getText())
         .as(f("Dp Id Is %s", dpDetails.getId()))
         .isEqualTo(Long.toString(dpDetails.getId()));
 
-    Assertions.assertThat(filterDpName.getText())
+    Assertions.assertThat(labelDpName.getText())
         .as(f("Dp Name Is %s", dpDetails.getName()))
         .isEqualTo(dpDetails.getName());
 
-    Assertions.assertThat(filterDpShortName.getText())
+    Assertions.assertThat(labelDpShortName.getText())
         .as(f("Dp Short Name Is %s", dpDetails.getShortName()))
         .isEqualTo(dpDetails.getShortName());
 
-    Assertions.assertThat(filterDpHub.getText())
-        .as(f("Dp Hub Is %s", dpDetails.getHub()))
-        .isEqualTo(dpDetails.getShortName());
+    Assertions.assertThat(labelDpAddress.getText())
+        .as(f("Dp Address Is %s", dpDetails.getAddress1() + " " + dpDetails.getAddress2()))
+        .containsIgnoringCase(dpDetails.getAddress1() + " " + dpDetails.getAddress2());
 
-//        .put("hub", filterDpHub)
-//        .put("address", filterDpAddress)
-//        .put("direction", filterDpDirection)
-//        .put("activity", filterDpActivity)
+    Assertions.assertThat(labelDpDirection.getText())
+        .as(f("Dp Directions Is %s", dpDetails.getDirections()))
+        .isEqualTo(dpDetails.getDirections());
+
+    Assertions.assertThat(labelDpActivity.getText())
+        .as(f("Dp Activity Is %s", dpDetails.getIsActive() ? "Active" : "Inactive"))
+        .isEqualTo(dpDetails.getIsActive() ? "Active" : "Inactive");
+
   }
 
   public void readDpUserEntity(DpUser dpUser) {

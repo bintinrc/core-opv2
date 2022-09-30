@@ -208,6 +208,9 @@ public class DpAdministrationSteps extends AbstractSteps {
   @And("Operator Search with Some DP Details :")
   public void operatorVerifyDpDetails(Map<String, String> searchSDetailsAsMap) {
     DpDetailsResponse dp = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+    if (get(KEY_CREATE_DP_MANAGEMENT_HUB_NAME) != null){
+      dp.setHubName(get(KEY_CREATE_DP_MANAGEMENT_HUB_NAME).toString());
+    }
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
     String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
@@ -219,8 +222,8 @@ public class DpAdministrationSteps extends AbstractSteps {
         String valueDetails = dpAdminReactPage.getDpElementByMap(extractDetail, dp);
         dpAdminReactPage.textBoxDpFilter.get(extractDetail).setValue(valueDetails);
         pause2s();
-        dpAdminReactPage.readDpPartnerEntity(expected);
-        dpAdminReactPage.clearDpPartnerFilter(extractDetail);
+        dpAdminReactPage.readDpEntity(dp);
+        dpAdminReactPage.clearDpFilter(extractDetail);
       }
     });
   }
