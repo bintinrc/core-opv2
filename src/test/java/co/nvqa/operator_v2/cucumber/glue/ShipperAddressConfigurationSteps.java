@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.CSV_DOWNLOADED_FILENAME_PATTERN;
+import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.DOWNLOADED_CSV_FILENAME;
 
 
 @SuppressWarnings("unused")
@@ -130,6 +131,35 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.clickDownloadAddress();
     takesScreenshot();
 
+  }
+
+  @And("Operator clicks on the Update Addresses Lat Long button")
+  public void operatorClicksOnTheUpdateAddressesLatLongButton() {
+    shipperAddressConfigurationPage.clickUpdateAddressesLatLongButton();
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the Download CSV Template button")
+  public void operatorClicksOnTheDownloadCSVTemplateButton() {
+    shipperAddressConfigurationPage.clickDownloadCSVTemplateButton();
+    takesScreenshot();
+  }
+
+
+  @Then("Operator verifies header names are available in the downloaded CSV file")
+  public void verifyHeaderNamesInDownloadedCsv(List<String> headerNames) {
+    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
+        CSV_DOWNLOADED_FILENAME_PATTERN);
+    shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
+        COLUMN_NAME, true);
+    List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
+        DOWNLOADED_CSV_FILENAME);
+    actual.get(0);
+    String test = actual.get(0).toString();
+
+    Assertions.assertThat(actual)
+        .as("Header Names available in Downloaded CSV file")
+        .containsExactlyInAnyOrderElementsOf(resolveValues(headerNames));
   }
 }
 

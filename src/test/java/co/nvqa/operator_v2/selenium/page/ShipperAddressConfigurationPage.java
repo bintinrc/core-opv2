@@ -22,6 +22,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
   public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
   public static final String COLUMN_NAME = "Suggested Address URL";
+  public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -55,6 +56,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[@data-pa-action='Download Addresses']")
   public PageElement downloadAddressButton;
+
+  @FindBy(xpath = "//span[text()='Update Addresses Lat Long']/parent::button")
+  public PageElement updateAddressesLatLongButton;
+
+  @FindBy(xpath = "//span[text()='Download CSV Template']/parent::button")
+  public PageElement downloadCSVTemplateButton;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -122,13 +129,23 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void validateGreenCheckMarkNotDisplayed() {
-    Assertions.assertThat(greencheckMarks.size()).isZero();
+    Assertions.assertThat(greencheckMarks).isEmpty();
   }
 
   public void clickDownloadAddress() {
     pause2s();
     waitUntilVisibilityOfElementLocated(downloadAddressButton.getWebElement());
     downloadAddressButton.click();
+  }
+
+  public void clickUpdateAddressesLatLongButton() {
+    waitUntilVisibilityOfElementLocated(updateAddressesLatLongButton.getWebElement());
+    updateAddressesLatLongButton.click();
+  }
+
+  public void clickDownloadCSVTemplateButton() {
+    waitUntilVisibilityOfElementLocated(downloadCSVTemplateButton.getWebElement());
+    downloadCSVTemplateButton.click();
   }
 
 }
