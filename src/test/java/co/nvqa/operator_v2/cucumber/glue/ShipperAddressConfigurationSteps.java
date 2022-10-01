@@ -152,7 +152,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
         DOWNLOADED_CSV_FILENAME);
     String headers = actual.get(0).toString().replaceAll("^\"|\"$", "").replaceAll("^\"|\"$", "");
-    ;
     headerNames.forEach((e) -> {
       Assertions.assertThat(headers)
           .as("Validation for Header Names in Downloaded CSV file")
