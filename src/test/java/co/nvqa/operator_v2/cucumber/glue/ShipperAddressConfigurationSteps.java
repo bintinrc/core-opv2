@@ -148,18 +148,17 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @Then("Operator verifies header names are available in the downloaded CSV file")
   public void verifyHeaderNamesInDownloadedCsv(List<String> headerNames) {
-    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
-        CSV_DOWNLOADED_FILENAME_PATTERN);
-    shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
-        COLUMN_NAME, true);
+    headerNames = resolveValues(headerNames);
     List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
         DOWNLOADED_CSV_FILENAME);
-    actual.get(0);
-    String test = actual.get(0).toString();
+    String headers = actual.get(0).toString().replaceAll("^\"|\"$", "").replaceAll("^\"|\"$", "");
+    ;
+    headerNames.forEach((e) -> {
+      Assertions.assertThat(headers)
+          .as("Validation for Header Names in Downloaded CSV file")
+          .contains(e);
+    });
 
-    Assertions.assertThat(actual)
-        .as("Header Names available in Downloaded CSV file")
-        .containsExactlyInAnyOrderElementsOf(resolveValues(headerNames));
   }
 }
 

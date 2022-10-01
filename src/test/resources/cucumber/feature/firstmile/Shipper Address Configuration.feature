@@ -105,10 +105,6 @@ Feature: Shipper Address Configuration
 
   Scenario: Download CSV of Shipper Address Template
     Given Operator loads Operator portal home page
-    When API Operator creates shipper address using below data:
-      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
-      | withLatLong                 | NO                                                                                                                                                                                               |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
     And Operator selects "All" in the Address Status dropdown
     And Operator chooses start and end date on Address Creation date using the following data:
