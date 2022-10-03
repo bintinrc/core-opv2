@@ -41,6 +41,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -643,7 +644,10 @@ public class DpAdministrationSteps extends AbstractSteps {
 
       if (dpDetailsResponse.getLatLongSearch() != null && dpDetailsResponse.getLatLongSearchName() != null) {
         dpAdminReactPage.fieldLatLongSearch.setValue(dpDetailsResponse.getLatLongSearch());
-        dpAdminReactPage.chooseLatLongSearch(dpDetailsResponse.getLatLongSearchName());
+        dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getLatLongSearchName());
+      } else if (dpDetailsResponse.getAddressSearch() != null && dpDetailsResponse.getAddressSearchName() != null) {
+        dpAdminReactPage.fieldAddressSearch.setValue(dpDetailsResponse.getAddressSearch());
+        dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getAddressSearchName());
       } else {
         if (dpDetailsResponse.getPostalCode() != null) {
           dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
@@ -927,8 +931,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     if (auditMetadata != null){
       dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp,auditMetadata);
     } else if (condition != null){
-      if (condition.equals(CHECK_DP_SEARCH_LAT_LONG) && dpDetailsResponse != null){
-        dpAdminReactPage.checkNewlyCreatedDpBySearchLatLong(dp,dpDetailsResponse);
+      if ((condition.equals(CHECK_DP_SEARCH_LAT_LONG) || condition.equals(CHECK_DP_SEARCH_ADDRESS)) && dpDetailsResponse != null){
+        dpAdminReactPage.checkNewlyCreatedDpBySearchAddressLatLong(dp,dpDetailsResponse);
       }
     }
   }

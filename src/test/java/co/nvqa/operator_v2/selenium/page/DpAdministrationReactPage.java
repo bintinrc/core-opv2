@@ -5,7 +5,6 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
-import co.nvqa.operator_v2.cucumber.glue.DpAdministrationSteps;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -20,8 +19,6 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Diaz Ilyasa
@@ -189,6 +186,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
+
+  @FindBy(xpath = "//div[@data-testid='field_search_via_address_name']//input")
+  public TextBox fieldAddressSearch;
 
   @FindBy(xpath = "//input[@data-testid='field_postcode']")
   public TextBox fieldPostcode;
@@ -379,7 +379,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
-  public static final String CHOOSE_LAT_LONG_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
+  public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
 
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
@@ -526,10 +526,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
   }
 
-  public void chooseLatLongSearch(String latLongSearchName) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
-    moveToElementWithXpath(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
-    click(f(CHOOSE_LAT_LONG_FIRST_OPTIONS,latLongSearchName));
+  public void chooseFromSearch(String searchName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
+    moveToElementWithXpath(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
+    click(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
   }
 
 
@@ -626,11 +626,18 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
   }
 
-  public void checkNewlyCreatedDpBySearchLatLong(Dp dp, DpDetailsResponse dpDetailsResponse) {
+  public void checkNewlyCreatedDpBySearchAddressLatLong(Dp dp, DpDetailsResponse dpDetailsResponse) {
 
-    Assertions.assertThat(dpDetailsResponse.getLatLongSearchName().replace(" ", ""))
-        .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
-        .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+    if (dpDetailsResponse.getLatLongSearch() != null & dpDetailsResponse.getLatLongSearchName() != null){
+      Assertions.assertThat(dpDetailsResponse.getLatLongSearchName().replace(" ", ""))
+          .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
+          .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+    } else if (dpDetailsResponse.getAddressSearch() != null & dpDetailsResponse.getAddressSearchName() != null){
+      Assertions.assertThat(dpDetailsResponse.getAddressSearchName().replace(" ", ""))
+          .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
+          .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+    }
+
   }
 
   public void errorCheckDpUser(DpUser dpUser) {
