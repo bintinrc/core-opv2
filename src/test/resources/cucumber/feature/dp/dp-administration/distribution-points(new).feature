@@ -171,5 +171,10 @@ Feature: DP Administration - Distribution Point
     And Operator get the value of DP ID
     When DB operator gets DP details from Hibernate
       | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dp        | KEY_DP_DETAILS                   |
+      | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | condition | CHECK_DP_SEARCH_LAT_LONG         |
+
 
 

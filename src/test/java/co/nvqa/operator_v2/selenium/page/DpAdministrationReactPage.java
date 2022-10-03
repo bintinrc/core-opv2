@@ -626,6 +626,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
   }
 
+  public void checkNewlyCreatedDpBySearchLatLong(Dp dp, DpDetailsResponse dpDetailsResponse) {
+
+    Assertions.assertThat(dpDetailsResponse.getLatLongSearchName().replace(" ", ""))
+        .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
+        .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+  }
+
   public void errorCheckDpUser(DpUser dpUser) {
     formDpUserFirstName.setValue(dpUser.getFirstName());
     formDpUserFirstName.forceClear();

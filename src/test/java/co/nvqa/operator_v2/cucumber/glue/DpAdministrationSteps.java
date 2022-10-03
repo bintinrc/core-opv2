@@ -40,6 +40,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
+  private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -911,10 +912,24 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator Check the Data from created DP is Right")
   public void checkCreatedDPData(Map<String, String> dataTableAsMap) {
     co.nvqa.commons.model.dp.persisted_classes.Dp dp = resolveValue(dataTableAsMap.get("dp"));
-    AuditMetadata auditMetadata = resolveValue(dataTableAsMap.get("auditMetadata"));
+    String condition = dataTableAsMap.get("condition");
+    DpDetailsResponse dpDetailsResponse = null;
+    AuditMetadata auditMetadata = null;
+
+    if (dataTableAsMap.get("dpDetails") != null){
+      dpDetailsResponse = resolveValue(dataTableAsMap.get("dpDetails"));
+    }
+    if (dataTableAsMap.get("auditMetadata") != null){
+      auditMetadata = resolveValue(dataTableAsMap.get("auditMetadata"));
+    }
+
 
     if (auditMetadata != null){
       dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp,auditMetadata);
+    } else if (condition != null){
+      if (condition.equals(CHECK_DP_SEARCH_LAT_LONG) && dpDetailsResponse != null){
+        dpAdminReactPage.checkNewlyCreatedDpBySearchLatLong(dp,dpDetailsResponse);
+      }
     }
   }
 
