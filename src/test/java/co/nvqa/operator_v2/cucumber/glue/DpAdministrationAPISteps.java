@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.dp.Dp;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Hours;
-import co.nvqa.commons.model.dp.dp_user.DpUser;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.datatable.DataTable;
@@ -177,27 +176,73 @@ public class DpAdministrationAPISteps extends AbstractSteps {
       put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME,dpDetail.getHubName());
     }
 
+    Map<String, List<Hours>> openingHours = new HashMap<>();
+    Map<String, List<Hours>> operatingHours = new HashMap<>();
 
-    Hours hours = new Hours();
-    hours.setStartTime("08:00:00");
-    hours.setEndTime("21:00:00");
+    if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
+      openingHours = selectDayDateAvailable(null, true, true);
+    } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
+      if (dpDetail.getOperatingHoursDay().equals(KEY_SUNDAY_PICKUP_DAY)) {
+        String sundayPickupDay = get(KEY_SUNDAY_PICKUP_DAY);
+        openingHours = selectDayDateAvailable(sundayPickupDay, false, true);
+      } else if (!dpDetail.getIsTimestampSame()){
+        openingHours = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false,false);
+      } else {
+        openingHours = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
+      }
+    }
 
-    List<Hours> hourList = new ArrayList<>();
-    hourList.add(hours);
+    dpDetail.setOpeningHours(openingHours);
+    dpDetail.setOperatingHours(operatingHours);
 
-    Map<String, List<Hours>> workingHours = new HashMap<>();
-    workingHours.put("monday", hourList);
-    workingHours.put("tuesday", hourList);
-    workingHours.put("wednesday", hourList);
-    workingHours.put("thursday", hourList);
-    workingHours.put("friday", hourList);
-    workingHours.put("saturday", hourList);
-    workingHours.put("sunday", hourList);
-
-    dpDetail.setOpeningHours(workingHours);
-    dpDetail.setOperatingHours(workingHours);
-
+    put(KEY_CREATE_DP_MANAGEMENT_REQUEST, null);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
+  }
+
+  public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday, boolean isTimeStampSame) {
+    Map<String, List<Hours>> daysAvailable = new HashMap<>();
+    if (isEveryday) {
+      daysAvailable.put("monday", selectTimeStamp(true,null));
+      daysAvailable.put("tuesday", selectTimeStamp(true,null));
+      daysAvailable.put("wednesday", selectTimeStamp(true,null));
+      daysAvailable.put("thursday", selectTimeStamp(true,null));
+      daysAvailable.put("friday", selectTimeStamp(true,null));
+      daysAvailable.put("saturday", selectTimeStamp(true,null));
+      daysAvailable.put("sunday", selectTimeStamp(true,null));
+    } else if (!isTimeStampSame) {
+      String[] dayList = days.split(",");
+      for (int i = 0 ; i < dayList.length; i++){
+        daysAvailable.put(dayList[i], selectTimeStamp(false,i));
+      }
+    } else {
+      String[] dayList = days.split(",");
+      for (int i = 0 ; i < dayList.length; i++){
+        daysAvailable.put(dayList[i], selectTimeStamp(true,null));
+      }
+    }
+
+    return daysAvailable;
+  }
+
+  public List<Hours> selectTimeStamp (boolean isTimeStampSame, Integer index){
+    List<Hours> timeStamp = new ArrayList<>();
+    if (!isTimeStampSame && index != null){
+
+      Integer defaultStartHour = 10;
+      Integer defaultEndHour = 15;
+
+      Hours hours = new Hours();
+      hours.setStartTime((defaultStartHour + index) + ":00:00");
+      hours.setEndTime((defaultEndHour + index) +":00:00");
+      timeStamp.add(hours);
+    } else if (isTimeStampSame){
+      Hours hours = new Hours();
+      hours.setStartTime("08:00:00");
+      hours.setEndTime("21:00:00");
+
+      timeStamp.add(hours);
+    }
+    return timeStamp;
   }
 
   @When("Operator fill Detail for update DP Management:")
