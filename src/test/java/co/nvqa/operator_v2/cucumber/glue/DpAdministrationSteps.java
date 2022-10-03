@@ -4,6 +4,8 @@ import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
+import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -11,6 +13,7 @@ import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -41,6 +44,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
@@ -746,7 +750,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
 
-
   @When("Operator will get the error from some field")
   public void errorFieldMessage(Map<String, String> dataTableAsMap) {
     DpDetailsResponse dp = resolveValue(dataTableAsMap.get("distributionPoint"));
@@ -941,7 +944,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpDetailsResponse dpDetailsResponse = null;
     AuditMetadata auditMetadata = null;
 
-    if (dataTableAsMap.get("dp") != null){
+    if (dataTableAsMap.get("dp") != null) {
       dp = resolveValue(dataTableAsMap.get("dp"));
     }
     if (dataTableAsMap.get("dpDetails") != null) {
@@ -951,13 +954,35 @@ public class DpAdministrationSteps extends AbstractSteps {
       auditMetadata = resolveValue(dataTableAsMap.get("auditMetadata"));
     }
 
-
     if (auditMetadata != null) {
       dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp, auditMetadata);
     } else if (condition != null) {
       if ((condition.equals(CHECK_DP_SEARCH_LAT_LONG) || condition.equals(CHECK_DP_SEARCH_ADDRESS))
           && dpDetailsResponse != null) {
         dpAdminReactPage.checkNewlyCreatedDpBySearchAddressLatLong(dp, dpDetailsResponse);
+      } else if (condition.equals(CHECK_DP_OPENING_OPERATING_HOURS) && dpDetailsResponse != null) {
+        String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
+        List<DpOpeningHour> dpOpeningHours = resolveValue(dataTableAsMap.get("dpOpeningHours"));
+        List<DpOperatingHour> dpOperatingHours = resolveValue(dataTableAsMap.get("dpOperatingHours"));
+        ImmutableMap<String, Integer> dayNumberMap = ImmutableMap.<String, Integer>builder()
+            .put("monday", 1)
+            .put("tuesday", 2)
+            .put("wednesday", 3)
+            .put("thursday", 4)
+            .put("friday", 5)
+            .put("saturday", 6)
+            .put("sunday", 7)
+            .build();
+
+        for (String day : days) {
+          dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
+              dpDetailsResponse.getOpeningHours().get(day).get(0));
+        }
+
+        for (String day : days) {
+          dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
+              dpDetailsResponse.getOperatingHours().get(day).get(0));
+        }
       }
     }
   }

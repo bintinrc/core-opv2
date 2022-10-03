@@ -6,6 +6,8 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
+import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -14,7 +16,10 @@ import com.google.common.collect.ImmutableMap;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -622,32 +627,28 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isTrue();
   }
 
-  public void fillOpeningOperatingHour(String day, Hours hours, String fieldName){
+  public void fillOpeningOperatingHour(String day, Hours hours, String fieldName) {
     String startHour = hours.getStartTime();
     String[] splitStartHour = startHour.split(":");
 
     String endHour = hours.getEndTime();
     String[] splitEndHour = endHour.split(":");
 
-    String valueStartHourToFill = splitStartHour[0] +  " h "+splitStartHour[1] + " m";
-    String valueEndHourToFill = splitEndHour[0] +  " h "+splitEndHour[1] + " m";
+    String valueStartHourToFill = splitStartHour[0] + " h " + splitStartHour[1] + " m";
+    String valueEndHourToFill = splitEndHour[0] + " h " + splitEndHour[1] + " m";
 
-    if(fieldName.equals(OPENING_HOURS)){
+    if (fieldName.equals(OPENING_HOURS)) {
       textBoxOpeningStartTime.get(day).forceClear();
       textBoxOpeningStartTime.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
-//      ButtonConfirmingTime.click();
 
       textBoxOpeningEndTime.get(day).forceClear();
       textBoxOpeningEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
-//      ButtonConfirmingTimeLast.click();
-    } else if(fieldName.equals(OPERATING_HOURS)){
+    } else if (fieldName.equals(OPERATING_HOURS)) {
       textBoxOperatingStartTime.get(day).forceClear();
       textBoxOperatingStartTime.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
-//      ButtonConfirmingTime.click();
 
       textBoxOperatingEndTime.get(day).forceClear();
       textBoxOperatingEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
-//      ButtonConfirmingTimeLast.click();
     }
 
   }
@@ -663,9 +664,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   }
 
   public void chooseFromSearch(String searchName) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
-    moveToElementWithXpath(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
-    click(f(CHOOSE_SEARCH_FIRST_OPTIONS,searchName));
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
+    moveToElementWithXpath(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
+    click(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
   }
 
 
@@ -762,17 +763,56 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
   }
 
-  public void checkNewlyCreatedDpBySearchAddressLatLong(Dp dp, DpDetailsResponse dpDetailsResponse) {
+  public void checkNewlyCreatedDpBySearchAddressLatLong(Dp dp,
+      DpDetailsResponse dpDetailsResponse) {
 
-    if (dpDetailsResponse.getLatLongSearch() != null & dpDetailsResponse.getLatLongSearchName() != null){
+    if (dpDetailsResponse.getLatLongSearch() != null
+        & dpDetailsResponse.getLatLongSearchName() != null) {
       Assertions.assertThat(dpDetailsResponse.getLatLongSearchName().replace(" ", ""))
           .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
           .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
-    } else if (dpDetailsResponse.getAddressSearch() != null & dpDetailsResponse.getAddressSearchName() != null){
+    } else if (dpDetailsResponse.getAddressSearch() != null
+        & dpDetailsResponse.getAddressSearchName() != null) {
       Assertions.assertThat(dpDetailsResponse.getAddressSearchName().replace(" ", ""))
           .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
           .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
     }
+
+  }
+
+  public void checkOpeningTime(String day, Integer dayNumber,
+      List<DpOpeningHour> dpOpeningHours, Hours openingHour) {
+    dpOpeningHours = dpOpeningHours.stream().filter(days -> Objects.equals(days.getDayOfWeek(),
+        dayNumber)).collect(
+        Collectors.toList());
+
+    Assertions.assertThat(openingHour.getStartTime())
+        .as(f("dp_qa_gl/dp_opening_hours: start_time for %s is %s", day,
+            dpOpeningHours.get(0).getStartTime()))
+        .isEqualTo(dpOpeningHours.get(0).getStartTime());
+
+    Assertions.assertThat(openingHour.getEndTime())
+        .as(f("dp_qa_gl/dp_opening_hours: end_time for %s is %s", day,
+            dpOpeningHours.get(0).getEndTime()))
+        .isEqualTo(dpOpeningHours.get(0).getEndTime());
+
+  }
+
+  public void checkOperatingTime(String day, Integer dayNumber,
+      List<DpOperatingHour> dpOperatingHours, Hours OperatingHour) {
+    dpOperatingHours = dpOperatingHours.stream().filter(days -> Objects.equals(days.getDayOfWeek(),
+        dayNumber)).collect(
+        Collectors.toList());
+
+    Assertions.assertThat(OperatingHour.getStartTime())
+        .as(f("dp_qa_gl/dp_operating_hours: start_time for %s is %s", day,
+            dpOperatingHours.get(0).getStartTime()))
+        .isEqualTo(dpOperatingHours.get(0).getStartTime());
+
+    Assertions.assertThat(OperatingHour.getStartTime())
+        .as(f("dp_qa_gl/dp_operating_hours: end_time for %s is %s", day,
+            dpOperatingHours.get(0).getStartTime()))
+        .isEqualTo(dpOperatingHours.get(0).getStartTime());
 
   }
 
