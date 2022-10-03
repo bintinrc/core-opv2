@@ -176,24 +176,23 @@ public class DpAdministrationAPISteps extends AbstractSteps {
       put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME,dpDetail.getHubName());
     }
 
-    Map<String, List<Hours>> openingHours = new HashMap<>();
-    Map<String, List<Hours>> operatingHours = new HashMap<>();
+    Map<String, List<Hours>> defaultTime = new HashMap<>();
 
     if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
-      openingHours = selectDayDateAvailable(null, true, true);
+      defaultTime = selectDayDateAvailable(null, true, true);
     } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
       if (dpDetail.getOperatingHoursDay().equals(KEY_SUNDAY_PICKUP_DAY)) {
         String sundayPickupDay = get(KEY_SUNDAY_PICKUP_DAY);
-        openingHours = selectDayDateAvailable(sundayPickupDay, false, true);
+        defaultTime = selectDayDateAvailable(sundayPickupDay, false, true);
       } else if (!dpDetail.getIsTimestampSame()){
-        openingHours = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false,false);
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false,false);
       } else {
-        openingHours = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
       }
     }
 
-    dpDetail.setOpeningHours(openingHours);
-    dpDetail.setOperatingHours(operatingHours);
+    dpDetail.setOpeningHours(defaultTime);
+    dpDetail.setOperatingHours(defaultTime);
 
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, null);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
