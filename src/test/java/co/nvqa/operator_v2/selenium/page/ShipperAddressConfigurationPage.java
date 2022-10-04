@@ -23,6 +23,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
   public static final String COLUMN_NAME = "Suggested Address URL";
   public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
+  public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -62,6 +63,21 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//span[text()='Download CSV Template']/parent::button")
   public PageElement downloadCSVTemplateButton;
+
+  @FindBy(xpath = "//div[text()='Drag and drop CSV file here']")
+  public PageElement dragAndDropPath;
+
+  @FindAll(@FindBy(xpath = "//span[text()='Submit File']//parent::button"))
+  private List<PageElement> submitFileButton;
+
+  @FindBy(xpath = "//span[text()='Please review the errors and upload a valid file.']")
+  public PageElement errormessage2;
+
+  @FindBy(xpath = "//span[text()='Download Errors']/parent::button")
+  public PageElement downloadErrorsButton;
+
+  @FindBy(xpath = "//div[text()='Please upload a file with valid input!']")
+  public PageElement invalidFileErrorMessage;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -146,6 +162,35 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public void clickDownloadCSVTemplateButton() {
     waitUntilVisibilityOfElementLocated(downloadCSVTemplateButton.getWebElement());
     downloadCSVTemplateButton.click();
+  }
+
+  public void clickSubmitFileButton() {
+    if (submitFileButton.size() > 0) {
+      waitUntilVisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
+      submitFileButton.get(0).click();
+    }
+  }
+
+  public void validateUploadErrorMessageIsShown(String errorCount, String totalCount) {
+    pause5s();
+    String errorXpath = f(UPLOAD_ERROR_MESSAGE, errorCount, totalCount);
+    WebElement errorMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    waitUntilVisibilityOfElementLocated(errorMessage);
+    Assertions.assertThat(errorMessage.isDisplayed()).as("Validation for Upload error message")
+        .isTrue();
+    Assertions.assertThat(errormessage2.isDisplayed()).as("Validation for Upload error message")
+        .isTrue();
+  }
+
+  public void validateInvalidFileErrorMessageIsShown() {
+    pause5s();
+    Assertions.assertThat(invalidFileErrorMessage.isDisplayed())
+        .as("Validation for error message for Invalid input file").isTrue();
+  }
+
+  public void clickDownloadErrorsButton() {
+    waitUntilVisibilityOfElementLocated(downloadErrorsButton.getWebElement());
+    downloadErrorsButton.click();
   }
 
 }
