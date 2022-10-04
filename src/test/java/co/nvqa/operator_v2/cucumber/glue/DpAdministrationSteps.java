@@ -48,6 +48,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
+  public static final String SINGLE = "SINGLE";
+  public static final String NEXT = "NEXT";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -735,13 +737,31 @@ public class DpAdministrationSteps extends AbstractSteps {
         String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
 
         for (String day : days) {
-          dpAdminReactPage.fillOpeningOperatingHour(day,
-              dpDetailsResponse.getOpeningHours().get(day).get(0), OPENING_HOURS);
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++){
+            if (i == 0){
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOpeningHours().get(day).get(i),SINGLE ,OPENING_HOURS);
+            } else if (i == 1){
+              dpAdminReactPage.buttonAddTimeSlotOpeningHour.get(day).click();
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOpeningHours().get(day).get(i),NEXT ,OPENING_HOURS);
+            }
+
+          }
         }
 
         for (String day : days) {
-          dpAdminReactPage.fillOpeningOperatingHour(day,
-              dpDetailsResponse.getOperatingHours().get(day).get(0), OPERATING_HOURS);
+          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++){
+            if (i == 0){
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOperatingHours().get(day).get(i),SINGLE ,OPERATING_HOURS);
+            } else if (i == 1){
+              dpAdminReactPage.buttonAddTimeSlotOperatingHour.get(day).click();
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOperatingHours().get(day).get(i),NEXT ,OPERATING_HOURS);
+            }
+
+          }
         }
 
       }

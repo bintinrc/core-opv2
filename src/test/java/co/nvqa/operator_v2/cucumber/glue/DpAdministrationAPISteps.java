@@ -32,6 +32,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   private static final String UPDATE_SUCCESS = "Success";
   private static final String UPDATE_FAILED = "Failed";
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
+  private static final String OPERATING_HOURS_EVERYDAY_DOUBLE = "OPERATING_HOURS_EVERYDAY_DOUBLE";
 
   @Then("Operator need to check that the update is {string}")
   public void OperatorCheckUpdateDp(String occasion) {
@@ -92,7 +93,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagementUser(DataTable dt) {
     List<User> dpUsers = convertDataTableToList(dt, User.class);
     User dpUser = dpUsers.get(0);
-    if (dpUser.getUsername().equals("GENERATED")){
+    if (dpUser.getUsername().equals("GENERATED")) {
       dpUser.setUsername(TestUtils.generateAlphaNumericString(6));
     }
     put(KEY_CREATE_DP_MANAGEMENT_USER_REQUEST, dpUser);
@@ -166,14 +167,14 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
 
-    if (dpDetail.getShortName().equals("GENERATED")){
+    if (dpDetail.getShortName().equals("GENERATED")) {
       dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
     }
-    if (dpDetail.getExternalStoreId().equals("GENERATED")){
+    if (dpDetail.getExternalStoreId().equals("GENERATED")) {
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
-    if (dpDetail.getHubName() != null){
-      put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME,dpDetail.getHubName());
+    if (dpDetail.getHubName() != null) {
+      put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME, dpDetail.getHubName());
     }
 
     Map<String, List<Hours>> defaultTime = new HashMap<>();
@@ -181,11 +182,12 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
       defaultTime = selectDayDateAvailable(null, true, true);
     } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
-      if (dpDetail.getOperatingHoursDay().equals(KEY_SUNDAY_PICKUP_DAY)) {
-        String sundayPickupDay = get(KEY_SUNDAY_PICKUP_DAY);
-        defaultTime = selectDayDateAvailable(sundayPickupDay, false, true);
-      } else if (!dpDetail.getIsTimestampSame()){
-        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false,false);
+      if (dpDetail.getOperatingHoursDay().equals(OPERATING_HOURS_EVERYDAY_DOUBLE)) {
+        String days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+        defaultTime = selectDayDateAvailableDouble(days,2);
+        dpDetail.setOperatingHoursDay(days);
+      } else if (!dpDetail.getIsTimestampSame()) {
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, false);
       } else {
         defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
       }
@@ -198,43 +200,81 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
   }
 
-  public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday, boolean isTimeStampSame) {
+  public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday,
+      boolean isTimeStampSame) {
     Map<String, List<Hours>> daysAvailable = new HashMap<>();
     if (isEveryday) {
-      daysAvailable.put("monday", selectTimeStamp(true,null));
-      daysAvailable.put("tuesday", selectTimeStamp(true,null));
-      daysAvailable.put("wednesday", selectTimeStamp(true,null));
-      daysAvailable.put("thursday", selectTimeStamp(true,null));
-      daysAvailable.put("friday", selectTimeStamp(true,null));
-      daysAvailable.put("saturday", selectTimeStamp(true,null));
-      daysAvailable.put("sunday", selectTimeStamp(true,null));
+      daysAvailable.put("monday", selectTimeStamp(true, null));
+      daysAvailable.put("tuesday", selectTimeStamp(true, null));
+      daysAvailable.put("wednesday", selectTimeStamp(true, null));
+      daysAvailable.put("thursday", selectTimeStamp(true, null));
+      daysAvailable.put("friday", selectTimeStamp(true, null));
+      daysAvailable.put("saturday", selectTimeStamp(true, null));
+      daysAvailable.put("sunday", selectTimeStamp(true, null));
     } else if (!isTimeStampSame) {
       String[] dayList = days.split(",");
-      for (int i = 0 ; i < dayList.length; i++){
-        daysAvailable.put(dayList[i], selectTimeStamp(false,i));
+      for (int i = 0; i < dayList.length; i++) {
+        daysAvailable.put(dayList[i], selectTimeStamp(false, i));
       }
     } else {
       String[] dayList = days.split(",");
-      for (int i = 0 ; i < dayList.length; i++){
-        daysAvailable.put(dayList[i], selectTimeStamp(true,null));
+      for (int i = 0; i < dayList.length; i++) {
+        daysAvailable.put(dayList[i], selectTimeStamp(true, null));
       }
     }
 
     return daysAvailable;
   }
 
-  public List<Hours> selectTimeStamp (boolean isTimeStampSame, Integer index){
-    List<Hours> timeStamp = new ArrayList<>();
-    if (!isTimeStampSame && index != null){
+  public Map<String, List<Hours>> selectDayDateAvailableDouble(String days, int increment) {
+    Map<String, List<Hours>> daysAvailable = new HashMap<>();
+    int indexIncrement = 0;
 
-      Integer defaultStartHour = 10;
-      Integer defaultEndHour = 15;
+    String[] dayList = days.split(",");
+    for (int i = 0; i < dayList.length; i++) {
+      List<Hours> fetchTimeStamp = new ArrayList<>();
+      for (int j = 0; j < increment; j++) {
+        fetchTimeStamp.add(selectTimeStamp(false, indexIncrement).get(0));
+        indexIncrement++;
+      }
+      daysAvailable.put(dayList[i], fetchTimeStamp);
+    }
+
+    return daysAvailable;
+  }
+
+  public List<Hours> selectTimeStamp(boolean isTimeStampSame, Integer index) {
+    List<Hours> timeStamp = new ArrayList<>();
+    if (!isTimeStampSame && index != null) {
+
+      int defaultStartHour = 10;
+      int defaultEndHour = 15;
 
       Hours hours = new Hours();
-      hours.setStartTime((defaultStartHour + index) + ":00:00");
-      hours.setEndTime((defaultEndHour + index) +":00:00");
+      int startHourIncrement = (defaultStartHour + index);
+      int endHourIncrement = (defaultEndHour + index);
+
+      if (startHourIncrement > 23) {
+        defaultStartHour = 2;
+      }
+      if (endHourIncrement > 23) {
+        defaultEndHour = 2;
+      }
+
+      if ((defaultStartHour + index) < 10) {
+        hours.setStartTime("0" + (defaultStartHour + index) + ":00:00");
+      } else {
+        hours.setStartTime((defaultStartHour + index) + ":00:00");
+      }
+
+      if ((defaultEndHour + index) < 10) {
+        hours.setEndTime("0" + (defaultEndHour + index) + ":00:00");
+      } else {
+        hours.setEndTime((defaultEndHour + index) + ":00:00");
+      }
       timeStamp.add(hours);
-    } else if (isTimeStampSame){
+
+    } else if (isTimeStampSame) {
       Hours hours = new Hours();
       hours.setStartTime("08:00:00");
       hours.setEndTime("21:00:00");
