@@ -728,7 +728,8 @@ public class DpAdministrationSteps extends AbstractSteps {
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
-      if (dpDetailsResponse.getIsOperatingHours()
+      if (dpDetailsResponse.getIsOperatingHours() != null
+          && dpDetailsResponse.getIsOperatingHours()
           && dpDetailsResponse.getOperatingHoursDay() != null) {
 
         String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
