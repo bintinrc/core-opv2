@@ -2476,6 +2476,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void verifyTheSortCodeIsCorrect(String sortCode, File orderAirwayBillPdfAsByteArray) {
     String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
+    actualSortCode = actualSortCode.replaceAll("\\n|F O R  N I N J A  V A N  U S E", "");
     assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
 
