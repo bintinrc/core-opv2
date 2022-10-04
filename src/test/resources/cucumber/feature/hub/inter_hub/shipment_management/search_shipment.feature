@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment
 Feature: Shipment Management - Search Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @runthis
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -152,7 +152,7 @@ Feature: Shipment Management - Search Shipment
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
-  Scenario: Search Shipment by Filter - Shipment Status
+  Scenario: Search Shipment by Filter - Shipment Status : Pending
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -167,6 +167,108 @@ Feature: Shipment Management - Search Shipment
       | status       | Pending                   |
       | origHubName  | {hub-name}                |
       | currHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Status : Closed
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator put created parcel to shipment
+    And API Operator closes the created shipment
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Closed                 |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Closed                    |
+      | origHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Status : Transit
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator put created parcel to shipment
+    And API Operator closes the created shipment
+    And API Operator performs van inbound by updating shipment status using data below:
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
+      | hubCountry | SG                        |
+      | hubId      | {hub-id}                  |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Transit                |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Transit                   |
+      | origHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - Shipment Status : Completed
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator put created parcel to shipment
+    And API Operator performs hub inbound by updating shipment status using data below:
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
+      | hubCountry | SG                        |
+      | hubId      | {hub-id-2}                |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Completed              |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Completed                 |
+      | userId       | {operator-portal-uid}     |
+      | origHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
+
+  @DeleteShipment @runthis
+  Scenario: Search Shipment by Filter - Shipment Status : Cancelled
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inter-Hub -> Shipment Management
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When API Operator change the status of the shipment into "Cancelled"
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Cancelled              |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Cancelled                 |
+      | userId       | {operator-portal-uid}     |
+      | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
@@ -213,6 +315,6 @@ Feature: Shipment Management - Search Shipment
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @runthis
   Scenario: Kill Browser
     Given no-op
