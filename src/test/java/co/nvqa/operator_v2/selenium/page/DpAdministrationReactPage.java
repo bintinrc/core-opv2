@@ -809,10 +809,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
             dpOperatingHours.get(0).getStartTime()))
         .isEqualTo(dpOperatingHours.get(0).getStartTime());
 
-    Assertions.assertThat(OperatingHour.getStartTime())
+    Assertions.assertThat(OperatingHour.getEndTime())
         .as(f("dp_qa_gl/dp_operating_hours: end_time for %s is %s", day,
-            dpOperatingHours.get(0).getStartTime()))
-        .isEqualTo(dpOperatingHours.get(0).getStartTime());
+            dpOperatingHours.get(0).getEndTime()))
+        .isEqualTo(dpOperatingHours.get(0).getEndTime());
 
   }
 
