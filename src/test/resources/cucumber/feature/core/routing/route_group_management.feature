@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob1 @RouteGroupManagement
+@OperatorV2 @Core @Routing @RoutingJob1 @RouteGroupManagement @runtest
 Feature: Route Group Management
 
   @LaunchBrowser @ShouldAlwaysRun

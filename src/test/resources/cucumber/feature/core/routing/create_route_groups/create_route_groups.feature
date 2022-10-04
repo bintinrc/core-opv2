@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @runtest
 Feature: Create Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
