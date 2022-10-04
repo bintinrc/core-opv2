@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
+@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -263,8 +263,8 @@ Feature: DP Administration - Distribution Point
       | dpDetails        | KEY_CREATE_DP_MANAGEMENT_REQUEST |
       | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
 
-  @DeleteNewlyCreatedDpManagementPartner @RT
-  Scenario: Create DP - Use Default Opening and Operating Hours
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP - Add Multiple Opening and Operating Hours
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
