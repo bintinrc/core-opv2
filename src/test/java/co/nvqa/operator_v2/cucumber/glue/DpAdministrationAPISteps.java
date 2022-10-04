@@ -228,14 +228,12 @@ public class DpAdministrationAPISteps extends AbstractSteps {
 
   public Map<String, List<Hours>> selectDayDateAvailableDouble(String days, int increment) {
     Map<String, List<Hours>> daysAvailable = new HashMap<>();
-    int indexIncrement = 0;
 
     String[] dayList = days.split(",");
     for (int i = 0; i < dayList.length; i++) {
       List<Hours> fetchTimeStamp = new ArrayList<>();
       for (int j = 0; j < increment; j++) {
-        fetchTimeStamp.add(selectTimeStamp(false, indexIncrement).get(0));
-        indexIncrement++;
+        fetchTimeStamp.add(selectTimeStamp(false, i+j+1).get(0));
       }
       daysAvailable.put(dayList[i], fetchTimeStamp);
     }

@@ -283,15 +283,14 @@ Feature: DP Administration - Distribution Point
     Then Operator press save setting button
     And Operator waits for 5 seconds
     And Operator get the value of DP ID
-#    When DB operator gets DP Opening Hours Data from Hibernate
-#      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
-#    When DB operator gets DP Operating Hours Data from Hibernate
-#      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
-#    And Operator Check the Data from created DP is Right
-#      | dpOpeningHours   | KEY_DP_OPENING_HOUR_DETAILS      |
-#      | dpOperatingHours | KEY_DP_OPERATING_HOUR_DETAILS    |
-#      | dpDetails        | KEY_CREATE_DP_MANAGEMENT_REQUEST |
-#      | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
-
+    When DB operator gets DP Opening Hours Data from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    When DB operator gets DP Operating Hours Data from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpOpeningHours   | KEY_DP_OPENING_HOUR_DETAILS      |
+      | dpOperatingHours | KEY_DP_OPERATING_HOUR_DETAILS    |
+      | dpDetails        | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
 
 

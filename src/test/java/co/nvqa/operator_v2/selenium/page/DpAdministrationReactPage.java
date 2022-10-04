@@ -793,12 +793,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
         textBoxOpeningEndTime.get(day).forceClear();
         textBoxOpeningEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
-      } else if (iterate.equals(NEXT)){
+      } else if (iterate.equals(NEXT)) {
         textBoxOpeningStartTimeNext.get(day).forceClear();
         textBoxOpeningStartTimeNext.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
 
         textBoxOpeningEndTimeNext.get(day).forceClear();
-        textBoxOpeningEndTimeNext.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
+        textBoxOpeningEndTimeNext.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
       }
     } else if (fieldName.equals(OPERATING_HOURS)) {
 
@@ -808,7 +808,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
         textBoxOperatingEndTime.get(day).forceClear();
         textBoxOperatingEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
-      } else if (iterate.equals(NEXT)){
+      } else if (iterate.equals(NEXT)) {
         textBoxOperatingStartTimeNext.get(day).forceClear();
         textBoxOperatingStartTimeNext.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
 
@@ -948,37 +948,49 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void checkOpeningTime(String day, Integer dayNumber,
       List<DpOpeningHour> dpOpeningHours, Hours openingHour) {
-    dpOpeningHours = dpOpeningHours.stream().filter(days -> Objects.equals(days.getDayOfWeek(),
-        dayNumber)).collect(
-        Collectors.toList());
+    dpOpeningHours = dpOpeningHours.stream()
+        .filter(days -> Objects.equals(days.getDayOfWeek(), dayNumber))
+        .collect(Collectors.toList());
 
-    Assertions.assertThat(openingHour.getStartTime())
-        .as(f("dp_qa_gl/dp_opening_hours: start_time for %s is %s", day,
-            dpOpeningHours.get(0).getStartTime()))
-        .isEqualTo(dpOpeningHours.get(0).getStartTime());
+    for (DpOpeningHour doh : dpOpeningHours) {
+      if (openingHour.getStartTime().equals(doh.getStartTime())) {
+        Assertions.assertThat(openingHour.getStartTime())
+            .as(f("dp_qa_gl/dp_opening_hours: start_time for %s is %s", day,
+                doh.getStartTime()))
+            .isEqualTo(doh.getStartTime());
+      }
+      if (openingHour.getEndTime().equals(doh.getEndTime())) {
+        Assertions.assertThat(openingHour.getEndTime())
+            .as(f("dp_qa_gl/dp_opening_hours: end_time for %s is %s", day,
+                doh.getEndTime()))
+            .isEqualTo(doh.getEndTime());
+      }
+    }
 
-    Assertions.assertThat(openingHour.getEndTime())
-        .as(f("dp_qa_gl/dp_opening_hours: end_time for %s is %s", day,
-            dpOpeningHours.get(0).getEndTime()))
-        .isEqualTo(dpOpeningHours.get(0).getEndTime());
 
   }
 
   public void checkOperatingTime(String day, Integer dayNumber,
-      List<DpOperatingHour> dpOperatingHours, Hours OperatingHour) {
-    dpOperatingHours = dpOperatingHours.stream().filter(days -> Objects.equals(days.getDayOfWeek(),
-        dayNumber)).collect(
-        Collectors.toList());
+      List<DpOperatingHour> dpOperatingHours, Hours operatingHour) {
+    dpOperatingHours = dpOperatingHours.stream()
+        .filter(days -> Objects.equals(days.getDayOfWeek(), dayNumber))
+        .collect(
+            Collectors.toList());
 
-    Assertions.assertThat(OperatingHour.getStartTime())
-        .as(f("dp_qa_gl/dp_operating_hours: start_time for %s is %s", day,
-            dpOperatingHours.get(0).getStartTime()))
-        .isEqualTo(dpOperatingHours.get(0).getStartTime());
-
-    Assertions.assertThat(OperatingHour.getEndTime())
-        .as(f("dp_qa_gl/dp_operating_hours: end_time for %s is %s", day,
-            dpOperatingHours.get(0).getEndTime()))
-        .isEqualTo(dpOperatingHours.get(0).getEndTime());
+    for (DpOperatingHour doh : dpOperatingHours) {
+      if (operatingHour.getStartTime().equals(doh.getStartTime())) {
+        Assertions.assertThat(operatingHour.getStartTime())
+            .as(f("dp_qa_gl/dp_operating_hours: start_time for %s is %s", day,
+                doh.getStartTime()))
+            .isEqualTo(doh.getStartTime());
+      }
+      if (operatingHour.getEndTime().equals(doh.getEndTime())) {
+        Assertions.assertThat(operatingHour.getEndTime())
+            .as(f("dp_qa_gl/dp_operating_hours: end_time for %s is %s", day,
+                doh.getEndTime()))
+            .isEqualTo(doh.getEndTime());
+      }
+    }
 
   }
 

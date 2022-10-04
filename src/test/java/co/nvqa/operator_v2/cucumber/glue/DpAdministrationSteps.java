@@ -996,13 +996,17 @@ public class DpAdministrationSteps extends AbstractSteps {
             .build();
 
         for (String day : days) {
-          dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
-              dpDetailsResponse.getOpeningHours().get(day).get(0));
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++){
+            dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
+                dpDetailsResponse.getOpeningHours().get(day).get(i));
+          }
         }
 
         for (String day : days) {
-          dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
-              dpDetailsResponse.getOperatingHours().get(day).get(0));
+          for(int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++){
+            dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
+                dpDetailsResponse.getOperatingHours().get(day).get(i));
+          }
         }
       }
     }
