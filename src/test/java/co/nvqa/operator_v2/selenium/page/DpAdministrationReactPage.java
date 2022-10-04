@@ -194,6 +194,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public TextBox fieldOpeningStartHourSaturday;
   @FindBy(xpath = "//input[@id='reservationSlots.sunday[0].startTime']")
   public TextBox fieldOpeningStartHourSunday;
+
   @FindBy(xpath = "//input[@id='reservationSlots.monday[1].startTime']")
   public TextBox fieldOpeningStartHourMondayNext;
   @FindBy(xpath = "//input[@id='reservationSlots.tuesday[1].startTime']")
@@ -252,6 +253,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public TextBox fieldOperatingStartHourSaturday;
   @FindBy(xpath = "//input[@id='operatingHours.sunday[0].startTime']")
   public TextBox fieldOperatingStartHourSunday;
+
   @FindBy(xpath = "//input[@id='operatingHours.monday[1].startTime']")
   public TextBox fieldOperatingStartHourMondayNext;
   @FindBy(xpath = "//input[@id='operatingHours.tuesday[1].startTime']")
@@ -281,6 +283,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public TextBox fieldOperatingEndHourSaturday;
   @FindBy(xpath = "//input[@id='operatingHours.sunday[0].endTime']")
   public TextBox fieldOperatingEndHourSunday;
+
   @FindBy(xpath = "//input[@id='operatingHours.monday[1].endTime']")
   public TextBox fieldOperatingEndHourMondayNext;
   @FindBy(xpath = "//input[@id='operatingHours.tuesday[1].endTime']")
@@ -523,6 +526,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public Button buttonAddTimeSlotOperatingHoursSaturday;
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[8]/button[@data-testid='button_add_time_slot']")
   public Button buttonAddTimeSlotOperatingHoursSunday;
+
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
+  public PageElement buttonEditDaysIndividuallyOpeningHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//input[@data-testid='checkbox_edit_days_individually']")
+  public PageElement buttonEditDaysIndividuallyOperatingHours;
 
 
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";

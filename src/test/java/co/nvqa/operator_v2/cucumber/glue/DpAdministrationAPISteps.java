@@ -204,13 +204,13 @@ public class DpAdministrationAPISteps extends AbstractSteps {
       boolean isTimeStampSame) {
     Map<String, List<Hours>> daysAvailable = new HashMap<>();
     if (isEveryday) {
-      daysAvailable.put("monday", selectTimeStamp(true, null));
-      daysAvailable.put("tuesday", selectTimeStamp(true, null));
-      daysAvailable.put("wednesday", selectTimeStamp(true, null));
-      daysAvailable.put("thursday", selectTimeStamp(true, null));
-      daysAvailable.put("friday", selectTimeStamp(true, null));
-      daysAvailable.put("saturday", selectTimeStamp(true, null));
-      daysAvailable.put("sunday", selectTimeStamp(true, null));
+      daysAvailable.put("monday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("tuesday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("wednesday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("thursday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("friday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("saturday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("sunday", selectTimeStamp(isTimeStampSame, null));
     } else if (!isTimeStampSame) {
       String[] dayList = days.split(",");
       for (int i = 0; i < dayList.length; i++) {

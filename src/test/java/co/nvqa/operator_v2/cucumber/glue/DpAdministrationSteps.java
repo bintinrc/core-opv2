@@ -730,44 +730,58 @@ public class DpAdministrationSteps extends AbstractSteps {
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
-      if (dpDetailsResponse.getIsOperatingHours() != null
-          && dpDetailsResponse.getIsOperatingHours()
-          && dpDetailsResponse.getOperatingHoursDay() != null) {
+      if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
+          && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
+        dpAdminReactPage.buttonEditDaysIndividuallyOpeningHours.click();
+      }
+      if (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() != null
+          && !dpDetailsResponse.getEditDaysIndividuallyOperatingHours()) {
+        dpAdminReactPage.buttonEditDaysIndividuallyOperatingHours.click();
+      }
+      if (canFillOpeningOperatingHour(dpDetailsResponse)) {
 
         String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
 
         for (String day : days) {
-          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++){
-            if (i == 0){
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
+            if (i == 0) {
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                  dpDetailsResponse.getOpeningHours().get(day).get(i),SINGLE ,OPENING_HOURS);
-            } else if (i == 1){
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), SINGLE, OPENING_HOURS);
+            } else if (i == 1) {
               dpAdminReactPage.buttonAddTimeSlotOpeningHour.get(day).click();
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                  dpDetailsResponse.getOpeningHours().get(day).get(i),NEXT ,OPENING_HOURS);
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), NEXT, OPENING_HOURS);
             }
 
           }
         }
 
         for (String day : days) {
-          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++){
-            if (i == 0){
+          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
+            if (i == 0) {
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                  dpDetailsResponse.getOperatingHours().get(day).get(i),SINGLE ,OPERATING_HOURS);
-            } else if (i == 1){
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), SINGLE, OPERATING_HOURS);
+            } else if (i == 1) {
               dpAdminReactPage.buttonAddTimeSlotOperatingHour.get(day).click();
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                  dpDetailsResponse.getOperatingHours().get(day).get(i),NEXT ,OPERATING_HOURS);
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), NEXT, OPERATING_HOURS);
             }
 
           }
         }
 
       }
-
-
     });
+  }
+
+  public boolean canFillOpeningOperatingHour(DpDetailsResponse dpDetailsResponse) {
+    return dpDetailsResponse.getIsOperatingHours() != null
+        && dpDetailsResponse.getIsOperatingHours()
+        && dpDetailsResponse.getOperatingHoursDay() != null
+        && (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOpeningHours())
+        && (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOperatingHours());
   }
 
 
@@ -984,7 +998,8 @@ public class DpAdministrationSteps extends AbstractSteps {
       } else if (condition.equals(CHECK_DP_OPENING_OPERATING_HOURS) && dpDetailsResponse != null) {
         String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
         List<DpOpeningHour> dpOpeningHours = resolveValue(dataTableAsMap.get("dpOpeningHours"));
-        List<DpOperatingHour> dpOperatingHours = resolveValue(dataTableAsMap.get("dpOperatingHours"));
+        List<DpOperatingHour> dpOperatingHours = resolveValue(
+            dataTableAsMap.get("dpOperatingHours"));
         ImmutableMap<String, Integer> dayNumberMap = ImmutableMap.<String, Integer>builder()
             .put("monday", 1)
             .put("tuesday", 2)
@@ -996,14 +1011,14 @@ public class DpAdministrationSteps extends AbstractSteps {
             .build();
 
         for (String day : days) {
-          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++){
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
             dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
                 dpDetailsResponse.getOpeningHours().get(day).get(i));
           }
         }
 
         for (String day : days) {
-          for(int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++){
+          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
             dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
                 dpDetailsResponse.getOperatingHours().get(day).get(i));
           }
