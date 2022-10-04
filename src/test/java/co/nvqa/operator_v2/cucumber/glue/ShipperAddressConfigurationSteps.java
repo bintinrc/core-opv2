@@ -10,6 +10,12 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.COLUMN_NAME;
 import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.CSV_DOWNLOADED_FILENAME_PATTERN;
+import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.DOWNLOADED_CSV_FILENAME;
 
 
 @SuppressWarnings("unused")
@@ -117,18 +124,98 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies that the column headers are available on the downloaded file")
-  public void operator_verifies_that_the_valid_error_message_is_updated_on_the_downloaded_file() {
-    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
-        CSV_DOWNLOADED_FILENAME_PATTERN);
-    shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
-        COLUMN_NAME, true);
-  }
-
   @And("Operator clicks on the Download Addresses button")
   public void operatorClicksOnTheDownloadAddressesButton() {
     shipperAddressConfigurationPage.clickDownloadAddress();
     takesScreenshot();
+
+  }
+
+  @And("Operator clicks on the Update Addresses Lat Long button")
+  public void operatorClicksOnTheUpdateAddressesLatLongButton() {
+    shipperAddressConfigurationPage.clickUpdateAddressesLatLongButton();
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the Download CSV Template button")
+  public void operatorClicksOnTheDownloadCSVTemplateButton() {
+    shipperAddressConfigurationPage.clickDownloadCSVTemplateButton();
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the submit button")
+  public void operatorClicksOnTheSubmitButton() {
+    shipperAddressConfigurationPage.clickSubmitFileButton();
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies upload error message is displayed for error count {string} and total count {string}")
+  public void operatorVerifiesUploadErrorMessageIsDisplayed(String errorCount, String totalCount) {
+    shipperAddressConfigurationPage.validateUploadErrorMessageIsShown(errorCount, totalCount);
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies upload error message is displayed for invalid file")
+  public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFile() {
+    shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the Download Errors button")
+  public void operatorClicksOnTheDownloadErrorsButton() {
+    shipperAddressConfigurationPage.clickDownloadErrorsButton();
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that the following texts are available on the downloaded file")
+  public void operator_verifies_that_the_following_texts_are_available_on_the_downloaded_file(
+      List<String> expected) {
+    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
+        CSV_DOWNLOADED_FILENAME_PATTERN);
+    expected.forEach((expectedText) -> {
+      shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
+          expectedText, true);
+    });
+  }
+
+  @Then("Operator verifies header names are available in the downloaded CSV file {string}")
+  public void verifyHeaderNamesInDownloadedCsv(String fileName, List<String> headerNames) {
+    headerNames = resolveValues(headerNames);
+    fileName = resolveValue(fileName);
+    pause5s();
+    String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
+        fileName);
+    List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
+        downloadedCsvFile);
+    String headers = actual.get(0).toString().replaceAll("^\"|\"$", "").replaceAll("^\"|\"$", "");
+    headerNames.forEach((e) -> {
+      Assertions.assertThat(headers)
+          .as("Validation for Header Names in Downloaded CSV file")
+          .contains(e);
+    });
+
+  }
+
+  @And("Operator uploads csv file: {string} by browsing files")
+  public void operatorUploadsCsvFile(String fileName) {
+    fileName = resolveValue(fileName);
+    try {
+      ClassLoader classLoader = getClass().getClassLoader();
+      String Filepath = classLoader.getResource(fileName).toString();
+      shipperAddressConfigurationPage.dragAndDropPath.click();
+      pause3s();
+      StringSelection stringSelection = new StringSelection(Filepath);
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      clipboard.setContents(stringSelection, null);
+      Robot robot = new Robot();
+      robot.keyPress(KeyEvent.VK_CONTROL);
+      robot.keyPress(KeyEvent.VK_V);
+      robot.keyRelease(KeyEvent.VK_CONTROL);
+      robot.keyPress(KeyEvent.VK_ENTER);
+      shipperAddressConfigurationPage.clickSubmitFileButton();
+    } catch (AWTException e) {
+      e.printStackTrace();
+    }
 
   }
 }
