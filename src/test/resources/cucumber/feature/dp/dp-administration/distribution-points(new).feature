@@ -147,7 +147,7 @@ Feature: DP Administration - Distribution Point
     And Operator press view DP Button
     Then The Dp page is displayed
     And Operator Search with Some DP Details :
-      | searchDetails | id,name,shortName,address,direction,activity |
+      | searchDetails | id,name,shortName,hub,address,direction,activity |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Input Address by Search via Lat Long (uid:c7c810d1-8163-45e6-aa1b-3c6aaf29a35e)

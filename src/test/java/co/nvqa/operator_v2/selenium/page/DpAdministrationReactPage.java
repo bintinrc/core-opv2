@@ -1280,7 +1280,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("id", Long.toString(dp.getId()))
         .put("name", dp.getName())
         .put("shortName", dp.getShortName())
-        .put("hub", Long.toString(dp.getHubId()))
+        .put("hub", f("%s - %s",dp.getHubId(),dp.getHubName()))
         .put("address", dp.getAddress1())
         .put("direction", dp.getDirections())
         .put("activity", dp.getIsActive() ? "Active" : "Inactive")
