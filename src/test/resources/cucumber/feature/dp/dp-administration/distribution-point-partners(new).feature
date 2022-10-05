@@ -19,7 +19,7 @@ Feature: DP Administration - Distribution Point Partners
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "{default-partners-email}","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     And Operator refresh page
     Given Operator go to menu Distribution Points -> DP Administration (New)
     Then The Dp Administration page is displayed
@@ -61,8 +61,8 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
     And Operator clear the "<key_dataset>" from DP Partner form
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -84,8 +84,8 @@ Feature: DP Administration - Distribution Point Partners
     And Operator refresh page
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel         | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | <phone_number> | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel         | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | <phone_number> | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -103,8 +103,8 @@ Feature: DP Administration - Distribution Point Partners
     Then The Dp Administration page is displayed
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -124,8 +124,8 @@ Feature: DP Administration - Distribution Point Partners
     Then The Dp Administration page is displayed
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id

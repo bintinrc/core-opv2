@@ -8,7 +8,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Validation check (uid:f701193b-2965-4ecf-8e56-0d854468f7dc)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -47,7 +47,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update DP - Validation check (uid:15a71188-4ee0-4713-8733-451b83eadebb)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name             | shipperId                                    | contact      | shortName         | externalStoreId   | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | DpCheckManagement | onCheckManagement | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
@@ -75,7 +75,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type (uid:6f003723-fe55-4cdb-808c-92230ecba8eb)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -105,7 +105,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type (uid:9bb9265c-0513-4abe-88f8-cde661391231)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -135,7 +135,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Search Distribution Point (uid:db71c7b5-bba0-4ccf-8b3a-da428fc596c2)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Point Test", "poc_name": "Diaz DP TEST", "poc_tel": "DIAZ00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Point Test", "poc_name": "Diaz DP TEST", "poc_tel": "DIAZ00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | directions | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
@@ -152,7 +152,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Input Address by Search via Lat Long (uid:c7c810d1-8163-45e6-aa1b-3c6aaf29a35e)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -179,7 +179,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Input Address by Search via Address Name (uid:5062a478-dc55-48d6-856c-13af6347497a)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -206,7 +206,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Select Opening and Operating Hours (uid:4a96bbeb-e290-42e0-86a6-67884e807b0d)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -236,7 +236,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Use Default Opening and Operating Hours (uid:2efad90b-eadd-4097-88fc-51102bf19cdd)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -266,7 +266,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Add Multiple Opening and Operating Hours (uid:132479bb-9275-40ea-88a0-8344dfe99ebb)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -296,7 +296,7 @@ Feature: DP Administration - Distribution Point
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Without Edit Days individually (uid:55e770ae-9bd9-4c78-99e0-20e88f9f1af3)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration (New)
     And Operator refresh page
     Then The Dp Administration page is displayed
