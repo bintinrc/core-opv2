@@ -1,37 +1,17 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Driver;
-import co.nvqa.commons.model.sort.hub.AirTrip;
-import co.nvqa.commons.model.sort.hub.Airport;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.util.TestUtils;
-import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.Format;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * @author Son Ha
@@ -75,6 +55,37 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(searchByMAWBbutton.getAttribute("disabled")).as("Search by MAWB button is disable").isEqualTo("true");
     }
 
+    public void addShipmentToSearchBox(List<String> shipmentIDs){
+        searchByMAWBTextBox.click();
+        shipmentIDs.forEach((id) -> {
+            searchByMAWBTextBox.sendKeys(id);
+            searchByMAWBTextBox.sendKeys(Keys.RETURN);
+        });
+        verifyMAWBCounterAfterInputWAMB(shipmentIDs);
+        verifySearchByMAWBbuttonIsEnable();
+    }
+
+    public void verifyMAWBCounterAfterInputWAMB(List<String> shipmentIDs){
+        String expected ="";
+        // we can also use Function.identity() instead of c->c
+        Map<String ,Long > map = shipmentIDs.stream()
+                .collect( Collectors.groupingBy(c ->c , Collectors.counting())); ;
+
+        AtomicReference<Long> duplicatedCount = new AtomicReference<>(0L);
+        map.forEach((k , v ) -> duplicatedCount.set(duplicatedCount.get() + v - 1));
+
+        if (duplicatedCount.get()>0)
+            expected = f("%s entered (%s duplicate)",Integer.toString(map.size()),Long.toString(duplicatedCount.get()));
+         else
+            expected = f("%s entered",Integer.toString(map.size()));
+
+        Assertions.assertThat(mawbCounter.getText().trim()).as("counter is the same").isEqualTo(expected);
+
+    }
+
+    public void verifySearchByMAWBbuttonIsEnable(){
+        Assertions.assertThat(searchByMAWBbutton.getAttribute("disabled")).as("Search by MAWB button is enable").isEqualTo(null);
+    }
 
 
 }

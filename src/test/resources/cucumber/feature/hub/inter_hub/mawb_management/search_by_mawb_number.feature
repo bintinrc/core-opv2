@@ -7,16 +7,22 @@ Feature: MAWB Management - Search by MAWB number
 
   @DeleteShipments @RT
   Scenario: Select Some SID from Sum up Report and Update MAWB
-#    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-#    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-#    And API Operator link mawb for following shipment ids
-#      | mawb                 | RANDOM         |
-#      | destinationAirportId | {airport-id-1} |
-#      | originAirportId      | {airport-id-2} |
-#      | vendorId             | {vendor-id}    |
+    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+#      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+#      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
+#      | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[4]} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
 #    Then Operator verify Shipment Weight Dimension Load Shipment page UI
 #      | state | initial |
 #    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text

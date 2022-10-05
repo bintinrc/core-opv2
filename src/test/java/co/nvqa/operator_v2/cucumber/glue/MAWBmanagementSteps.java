@@ -13,9 +13,8 @@ import io.cucumber.java.en.When;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
@@ -44,5 +43,25 @@ public class MAWBmanagementSteps extends AbstractSteps{
         }
     }
 
+    @When("Operator add shipment IDs below to search by MAWB on MAWB Management page:")
+    public void operatorAddShipmentIDsToSearchByMAWB(List<String> shipmentIDs){
+        shipmentIDs = resolveValues(shipmentIDs);
+        List<String> listOfShipmentIDs = new ArrayList<>();
+        shipmentIDs.forEach((id) -> {
+            List<String> t = Arrays.asList(id.replaceAll("\\[|\\]| ","").split(","));
+            listOfShipmentIDs.addAll(t);
+        });
+        System.out.println(listOfShipmentIDs);
+        mawbManagementgPage.addShipmentToSearchBox(listOfShipmentIDs);
+    }
+
+    @When("Operator clicks on {string} button on MAWB Management Page")
+    public void operatorClicksOnButton(String button){
+        switch (button){
+            case "Search MAWB":
+                mawbManagementgPage.searchByMAWBbutton.click();
+                break;
+        }
+    }
 
 }
