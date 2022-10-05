@@ -28,6 +28,7 @@ Feature: Shipper Address Configuration
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","latitude":28.640084,"longitude":77.791013,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
@@ -50,6 +51,7 @@ Feature: Shipper Address Configuration
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","latitude":28.640084,"longitude":77.791013,"postcode":"124100","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
@@ -163,38 +165,6 @@ Feature: Shipper Address Configuration
       | Shipper ID #54321 not found |
       | Shipper ID #23423 not found |
 
-
-  Scenario: Unable to Update Shipper Addresses with Invalid Shipper ID
-    Given Operator loads Operator portal home page
-    When API Operator creates shipper address using below data:
-      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
-      | noOfAddress                 | 1                                                                                                                                                                                                |
-      | withLatLong                 | NO                                                                                                                                                                                               |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
-    When Operator loads Shipper Address Configuration page
-    And Operator selects "Unverified" in the Address Status dropdown
-    And Operator chooses start and end date on Address Creation date using the following data:
-      | From | {gradle-previous-1-day-dd/MM/yyyy} |
-      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
-    And Operator clicks on the load selection button
-    And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Addresses_with_Invalid_Shipper_ID.csv" by browsing files
-#    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Addresses_with_Invalid_Shipper_ID.csv" to bulk update the shipper address details
-    Then Operator verifies upload error message is displayed for error count "2" and total count "2"
-    And Operator clicks on the Download Errors button
-    Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
-      | Address ID           |
-      | Pickup Address       |
-      | Shipper ID           |
-      | Shipper Name/Contact |
-      | Latitude             |
-      | Longitude            |
-      | Failure Reasons      |
-    And Operator verifies that the following texts are available on the downloaded file
-      | Address id #999 Not Found |
-      | Address id #888 Not Found |
-
-
   Scenario: Unable to Update Shipper Addresses with Invalid Address ID
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
@@ -220,6 +190,9 @@ Feature: Shipper Address Configuration
       | Latitude             |
       | Longitude            |
       | Failure Reasons      |
+    And Operator verifies that the following texts are available on the downloaded file
+      | Address id #999 Not Found |
+      | Address id #888 Not Found |
 
 
   Scenario: Unable to Update Shipper Addresses with Invalid Input

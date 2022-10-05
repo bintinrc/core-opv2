@@ -465,7 +465,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -521,7 +521,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -775,7 +775,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -1002,7 +1002,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -1038,7 +1038,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Damaged (uid:0baddff7-c27b-4d03-890b-6b5399e906b0)
@@ -1250,7 +1250,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -1286,7 +1286,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Damaged (uid:dafb54ad-4ce5-45cb-b710-a54a321d3650)
@@ -1679,7 +1679,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Damaged (uid:fb550ebc-d73f-4ad4-bc46-0983a23cc5c8)
@@ -1926,7 +1926,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
 
   @ForceSuccessOrder @PriorityParcelSet1
