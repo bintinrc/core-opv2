@@ -697,7 +697,7 @@ Feature: Number of Damaged Parcels
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName        | ModalName       |
       | {hub-name-6} | {hub-id-6} | PARCEL ON HOLD | SHIPPER REQUEST | Damaged parcels | Damaged Parcels |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Shipper Issue Ticket Not Appears in Damaged Cases (uid:eb921d4a-638e-4301-a546-9d97a35986f7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -718,7 +718,7 @@ Feature: Number of Damaged Parcels
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |

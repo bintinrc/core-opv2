@@ -442,7 +442,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | FSRModalName                                 | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed | Successfully confirmed 1 ETA(s)! |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Priority Parcel in Hub by Recovery Ticket Type (uid:aaae82b8-355e-4081-81d6-43f6b6a1f1e7)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -465,7 +465,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -498,7 +498,7 @@ Feature: Priority Parcel in Hub
       | TicketType    | TicketSubType    | HubName      | HubId      | TileName                | ModalName               |
       | SHIPPER ISSUE | DUPLICATE PARCEL | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub |
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Debug
   Scenario Outline: Search Priority Parcel in Hub by Ticket Status (uid:ee55364a-d65e-4655-b037-f7915e243edb)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -521,7 +521,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -752,7 +752,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName1                                   | ModalName2              | SlackMessageContent | ToastMessage                     |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Please Confirm ETA of FSR Parcels to Proceed | Priority Parcels in Hub | GENERATED           | Successfully confirmed 1 ETA(s)! |
 
-  @Happypath @ForceSuccessOrder @PriorityParcelSet1
+  @Happypath @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of Pending Ticket Status - Recovery Ticket Type = Shipper Issue (uid:8fa5f052-59e4-4154-819b-718d4d891984)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -775,7 +775,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -979,7 +979,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status  | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CREATED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Shipper Issue (uid:9300f0ce-bdd6-4698-a794-3bddc5ee4a38)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1002,7 +1002,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -1038,7 +1038,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of In Progress Ticket Status - Recovery Ticket Type = Damaged (uid:0baddff7-c27b-4d03-890b-6b5399e906b0)
@@ -1226,7 +1226,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status      | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | IN PROGRESS | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Shipper Issue (uid:7e86bf11-0b25-42e1-baae-a875220d9fa5)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1250,7 +1250,7 @@ Feature: Priority Parcel in Hub
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -1286,7 +1286,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | ON HOLD | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of On Hold Ticket Status - Recovery Ticket Type = Damaged (uid:dafb54ad-4ce5-45cb-b710-a54a321d3650)
@@ -1620,7 +1620,7 @@ Feature: Priority Parcel in Hub
       | HubName      | HubId      | TileName                | ModalName               | Filter   | FSRModalTitle                                |
       | {hub-name-8} | {hub-id-8} | Priority parcels in hub | Priority Parcels in Hub | Unrouted | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Shipper Issue (uid:5cbabffd-dd14-4604-905b-191cfb44e93f)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1679,7 +1679,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
   @ForceSuccessOrder @PriorityParcelSet1
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Damaged (uid:fb550ebc-d73f-4ad4-bc46-0983a23cc5c8)
@@ -1744,7 +1744,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType | TicketSubType      | OrderOutcome     | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | DAMAGED    | IMPROPER PACKAGING | NV LIABLE - FULL | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel Exception (uid:bdfbf21c-2c6f-4c4a-9e42-587ceb475233)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1806,7 +1806,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel On Hold (uid:4b6d1c14-bef8-4df5-b6e6-620e83b776fe)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1867,7 +1867,7 @@ Feature: Priority Parcel in Hub
       | HubName       | HubId       | TicketType     | TicketSubType   | OrderOutcome    | Status          | TileName                | ModalName               | FSRModalTitle                                |
       | {hub-name-13} | {hub-id-13} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
-  @ForceSuccessOrder @PriorityParcelSet1
+  @ForceSuccessOrder @PriorityParcelSet1 @Debug
   Scenario Outline: View Priority Parcel of Cancelled Ticket Status - Recovery Ticket Type = Shipper Issue
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -1926,7 +1926,7 @@ Feature: Priority Parcel in Hub
 
     Examples:
       | HubName       | HubId       | TicketType    | TicketSubType    | OrderOutcome | Status    | TileName                | ModalName               | FSRModalTitle                                |
-      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
+      | {hub-name-13} | {hub-id-13} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | CANCELLED | Priority parcels in hub | Priority Parcels in Hub | Please Confirm ETA of FSR Parcels to Proceed |
 
 
   @ForceSuccessOrder @PriorityParcelSet1
