@@ -416,7 +416,7 @@ Feature: Number of Missing Parcels
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName1       | ModalName1      |
       | {hub-name-6} | {hub-id-6} | PARCEL ON HOLD | SHIPPER REQUEST | Missing parcels | Missing Parcels |
 
-  @Debug
+
   Scenario Outline: Shipper Issue Ticket Not Appears in Missing Cases (uid:f722c7f8-7dfe-43c2-9346-20e4e00259a3)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
