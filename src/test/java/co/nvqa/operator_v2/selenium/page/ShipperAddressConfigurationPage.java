@@ -67,6 +67,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[text()='Drag and drop CSV file here']")
   public PageElement dragAndDropPath;
 
+  @FindBy(xpath = "//input[@type='file']")
+  public PageElement fileUpload;
+
   @FindAll(@FindBy(xpath = "//span[text()='Submit File']//parent::button"))
   private List<PageElement> submitFileButton;
 
