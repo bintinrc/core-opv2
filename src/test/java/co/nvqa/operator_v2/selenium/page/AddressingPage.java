@@ -247,6 +247,13 @@ public class AddressingPage extends SimpleReactPage<AddressingPage> {
 
     @FindBy(xpath = ".//div[./div/label='Subdivision']//input")
     public PageElement subdivision;
+    @FindBy(xpath = ".//div[./div/label='Source']//input")
+    public PageElement source;
+    @FindBy(xpath = ".//div[./div/label='Address Type']//input")
+    public PageElement addresstype;
+    @FindBy(xpath = ".//div[./div/label='Score']//input")
+    public PageElement score;
+
   }
 
   public static class ConfirmDeleteModal extends AntModal {
