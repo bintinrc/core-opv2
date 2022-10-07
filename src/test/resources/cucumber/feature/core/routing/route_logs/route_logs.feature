@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @current
+@OperatorV2 @Core @Routing @RouteLogs
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -48,8 +48,6 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[1].comments} | {route-tag-name} |
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
-#    TODO DISABLED
-  @wip
   @DeleteOrArchiveRoute
   Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -156,9 +154,7 @@ Feature: Route Logs
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-
-#    TODO DISABLED
-  @wip
+    
   @DeleteOrArchiveRoute
   Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
     Given Operator go to menu Utilities -> QRCode Printing
