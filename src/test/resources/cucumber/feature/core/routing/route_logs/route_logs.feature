@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs
+@OperatorV2 @Core @Routing @RouteLogs @current
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -49,32 +49,33 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
 #    TODO DISABLED
-#  @DeleteOrArchiveRoute
-#  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
-#    Given Operator go to menu Utilities -> QRCode Printing
-#    And API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    And API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    When Operator go to menu Routing -> Route Logs
-#    And Operator set filter using data below and click 'Load Selection'
-#      | routeDateFrom | YESTERDAY  |
-#      | routeDateTo   | TODAY      |
-#      | hubName       | {hub-name} |
-#    And Operator bulk edits details of created routes using data below:
-#      | date       | {gradle-current-date-yyyy-MM-dd}        |
-#      | tags       | {route-tag-name}                        |
-#      | zone       | {zone-name}                             |
-#      | hub        | {hub-name}                              |
-#      | driverName | {ninja-driver-2-name}                   |
-#      | comments   | Route has been edited by automated test |
-#    Then Operator verifies that success react notification displayed:
-#      | top                | 2 Route(s) Updated |
-#      | waitUntilInvisible | true               |
-#    Then Operator verify routes details on Route Logs page using data below:
-#      | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
-#      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
-#      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
+  @wip
+  @DeleteOrArchiveRoute
+  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Routing -> Route Logs
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator bulk edits details of created routes using data below:
+      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | tags       | {route-tag-name}                        |
+      | zone       | {zone-name}                             |
+      | hub        | {hub-name}                              |
+      | driverName | {ninja-driver-2-name}                   |
+      | comments   | Route has been edited by automated test |
+    Then Operator verifies that success react notification displayed:
+      | top                | 2 Route(s) Updated |
+      | waitUntilInvisible | true               |
+    Then Operator verify routes details on Route Logs page using data below:
+      | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Multiple Routes from Route Logs Page (uid:03e47864-aa13-4dc3-8775-27f07257320b)
@@ -157,35 +158,36 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
 #    TODO DISABLED
-#  @DeleteOrArchiveRoute
-#  Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
-#    Given Operator go to menu Utilities -> QRCode Printing
-#    And API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    And Operator go to menu Routing -> Route Logs
-#    When Operator set filter using data below and click 'Load Selection'
-#      | routeDateFrom | YESTERDAY  |
-#      | routeDateTo   | TODAY      |
-#      | hubName       | {hub-name} |
-#    And Operator edits details of created route using data below:
-#      | date       | {gradle-current-date-yyyy-MM-dd}        |
-#      | tags       | {route-tag-name}                        |
-#      | hub        | {hub-name-2}                            |
-#      | driverName | {ninja-driver-2-name}                   |
-#      | comments   | Route has been edited by automated test |
-#    Then Operator verifies that success react notification displayed:
-#      | top                | 1 Route(s) Updated |
-#      | waitUntilInvisible | true               |
-#    Then Operator verify route details on Route Logs page using data below:
-#      | date           | {gradle-current-date-yyyy-MM-dd}        |
-#      | id             | {KEY_CREATED_ROUTE_ID}                  |
-#      | status         | PENDING                                 |
-#      | driverName     | {ninja-driver-2-name}                   |
-#      | hub            | {hub-name-2}                            |
-#      | zone           | {zone-name}                             |
-#      | driverTypeName | {driver-type-name-2}                    |
-#      | comments       | Route has been edited by automated test |
-#      | tags           | {route-tag-name}                        |
+  @wip
+  @DeleteOrArchiveRoute
+  Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator edits details of created route using data below:
+      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | tags       | {route-tag-name}                        |
+      | hub        | {hub-name-2}                            |
+      | driverName | {ninja-driver-2-name}                   |
+      | comments   | Route has been edited by automated test |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Updated |
+      | waitUntilInvisible | true               |
+    Then Operator verify route details on Route Logs page using data below:
+      | date           | {gradle-current-date-yyyy-MM-dd}        |
+      | id             | {KEY_CREATED_ROUTE_ID}                  |
+      | status         | PENDING                                 |
+      | driverName     | {ninja-driver-2-name}                   |
+      | hub            | {hub-name-2}                            |
+      | zone           | {zone-name}                             |
+      | driverTypeName | {driver-type-name-2}                    |
+      | comments       | Route has been edited by automated test |
+      | tags           | {route-tag-name}                        |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Tag to a Single Route on Route Logs Page (uid:47e4dfc2-b5e3-470a-a832-b99c85905f8a)
