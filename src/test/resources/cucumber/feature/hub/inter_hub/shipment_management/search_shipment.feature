@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment
 Feature: Shipment Management - Search Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -253,7 +253,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @runthis
+  @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status : Cancelled
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -315,6 +315,6 @@ Feature: Shipment Management - Search Shipment
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
