@@ -41,7 +41,7 @@ public class FinancialBatchReportSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     financialBatchReportsPage.switchTo();
     setFinancialBatchReportsData(mapOfData);
-    financialBatchReportsPage.generateReportBtn.click();
+    financialBatchReportsPage.generateReportBtn.jsClick();
   }
 
   public void setFinancialBatchReportsData(Map<String, String> mapOfData) {
