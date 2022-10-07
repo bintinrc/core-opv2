@@ -621,9 +621,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     switchToNewWindow();
     waitWhilePageIsLoading();
     String actualRouteId = routeManifestRouteId.getText().trim();
-    closeAllWindows(windowHandle);
     Assert.assertTrue("Assert that the search has results as expected after applying filters",
         actualRouteId.equalsIgnoreCase(expectedRouteId));
+    closeAllWindows(windowHandle);
   }
 
   public void loadOperatorPortal() {
