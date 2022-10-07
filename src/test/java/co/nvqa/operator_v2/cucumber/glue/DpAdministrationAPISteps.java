@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.dp.Dp;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Hours;
-import co.nvqa.commons.model.dp.dp_user.DpUser;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.datatable.DataTable;
@@ -33,6 +32,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   private static final String UPDATE_SUCCESS = "Success";
   private static final String UPDATE_FAILED = "Failed";
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
+  private static final String OPERATING_HOURS_EVERYDAY_DOUBLE = "OPERATING_HOURS_EVERYDAY_DOUBLE";
 
   @Then("Operator need to check that the update is {string}")
   public void OperatorCheckUpdateDp(String occasion) {
@@ -93,7 +93,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagementUser(DataTable dt) {
     List<User> dpUsers = convertDataTableToList(dt, User.class);
     User dpUser = dpUsers.get(0);
-    if (dpUser.getUsername().equals("GENERATED")){
+    if (dpUser.getUsername().equals("GENERATED")) {
       dpUser.setUsername(TestUtils.generateAlphaNumericString(6));
     }
     put(KEY_CREATE_DP_MANAGEMENT_USER_REQUEST, dpUser);
@@ -167,34 +167,119 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
 
-    if (dpDetail.getShortName().equals("GENERATED")){
+    if (dpDetail.getShortName().equals("GENERATED")) {
       dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
     }
-    if (dpDetail.getExternalStoreId().equals("GENERATED")){
+    if (dpDetail.getExternalStoreId().equals("GENERATED")) {
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
+    if (dpDetail.getHubName() != null) {
+      put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME, dpDetail.getHubName());
+    }
 
+    Map<String, List<Hours>> defaultTime = new HashMap<>();
 
-    Hours hours = new Hours();
-    hours.setStartTime("08:00:00");
-    hours.setEndTime("21:00:00");
+    if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
+      defaultTime = selectDayDateAvailable(null, true, true);
+    } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
+      if (dpDetail.getOperatingHoursDay().equals(OPERATING_HOURS_EVERYDAY_DOUBLE)) {
+        String days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+        defaultTime = selectDayDateAvailableDouble(days,2);
+        dpDetail.setOperatingHoursDay(days);
+      } else if (!dpDetail.getIsTimestampSame()) {
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, false);
+      } else {
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
+      }
+    }
 
-    List<Hours> hourList = new ArrayList<>();
-    hourList.add(hours);
+    dpDetail.setOpeningHours(defaultTime);
+    dpDetail.setOperatingHours(defaultTime);
 
-    Map<String, List<Hours>> workingHours = new HashMap<>();
-    workingHours.put("monday", hourList);
-    workingHours.put("tuesday", hourList);
-    workingHours.put("wednesday", hourList);
-    workingHours.put("thursday", hourList);
-    workingHours.put("friday", hourList);
-    workingHours.put("saturday", hourList);
-    workingHours.put("sunday", hourList);
-
-    dpDetail.setOpeningHours(workingHours);
-    dpDetail.setOperatingHours(workingHours);
-
+    put(KEY_CREATE_DP_MANAGEMENT_REQUEST, null);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
+  }
+
+  public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday,
+      boolean isTimeStampSame) {
+    Map<String, List<Hours>> daysAvailable = new HashMap<>();
+    if (isEveryday) {
+      daysAvailable.put("monday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("tuesday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("wednesday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("thursday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("friday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("saturday", selectTimeStamp(isTimeStampSame, null));
+      daysAvailable.put("sunday", selectTimeStamp(isTimeStampSame, null));
+    } else if (!isTimeStampSame) {
+      String[] dayList = days.split(",");
+      for (int i = 0; i < dayList.length; i++) {
+        daysAvailable.put(dayList[i], selectTimeStamp(false, i));
+      }
+    } else {
+      String[] dayList = days.split(",");
+      for (int i = 0; i < dayList.length; i++) {
+        daysAvailable.put(dayList[i], selectTimeStamp(true, null));
+      }
+    }
+
+    return daysAvailable;
+  }
+
+  public Map<String, List<Hours>> selectDayDateAvailableDouble(String days, int increment) {
+    Map<String, List<Hours>> daysAvailable = new HashMap<>();
+
+    String[] dayList = days.split(",");
+    for (int i = 0; i < dayList.length; i++) {
+      List<Hours> fetchTimeStamp = new ArrayList<>();
+      for (int j = 0; j < increment; j++) {
+        fetchTimeStamp.add(selectTimeStamp(false, i+j+1).get(0));
+      }
+      daysAvailable.put(dayList[i], fetchTimeStamp);
+    }
+
+    return daysAvailable;
+  }
+
+  public List<Hours> selectTimeStamp(boolean isTimeStampSame, Integer index) {
+    List<Hours> timeStamp = new ArrayList<>();
+    if (!isTimeStampSame && index != null) {
+
+      int defaultStartHour = 10;
+      int defaultEndHour = 15;
+
+      Hours hours = new Hours();
+      int startHourIncrement = (defaultStartHour + index);
+      int endHourIncrement = (defaultEndHour + index);
+
+      if (startHourIncrement > 23) {
+        defaultStartHour = 2;
+      }
+      if (endHourIncrement > 23) {
+        defaultEndHour = 2;
+      }
+
+      if ((defaultStartHour + index) < 10) {
+        hours.setStartTime("0" + (defaultStartHour + index) + ":00:00");
+      } else {
+        hours.setStartTime((defaultStartHour + index) + ":00:00");
+      }
+
+      if ((defaultEndHour + index) < 10) {
+        hours.setEndTime("0" + (defaultEndHour + index) + ":00:00");
+      } else {
+        hours.setEndTime((defaultEndHour + index) + ":00:00");
+      }
+      timeStamp.add(hours);
+
+    } else if (isTimeStampSame) {
+      Hours hours = new Hours();
+      hours.setStartTime("08:00:00");
+      hours.setEndTime("21:00:00");
+
+      timeStamp.add(hours);
+    }
+    return timeStamp;
   }
 
   @When("Operator fill Detail for update DP Management:")

@@ -123,6 +123,8 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
 
   public void clickViewScheduleButtonAndVerifiesScheduleIsOpened() {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH_MOVEMENT_VISUALIZATION));
+    pause5s();
+    waitUntilElementIsClickable(VIEW_SCHEDULE_BUTTON_INSIDE_MAP_XPATH);
     click(VIEW_SCHEDULE_BUTTON_INSIDE_MAP_XPATH);
     waitUntilVisibilityOfElementLocated(f(ELEMENT_USING_ID_XPATH, DIV_ELEMENT, DIALOG_ID));
     getWebDriver().switchTo().parentFrame();
