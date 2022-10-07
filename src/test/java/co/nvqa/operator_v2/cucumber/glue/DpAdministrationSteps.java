@@ -3,6 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
+import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
+import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -10,6 +13,7 @@ import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -39,6 +43,13 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_PARTNER_LABEL = "label_page_details";
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
+  private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
+  private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
+  public static final String OPENING_HOURS = "OPENING_HOURS";
+  public static final String OPERATING_HOURS = "OPERATING_HOURS";
+  public static final String SINGLE = "SINGLE";
+  public static final String NEXT = "NEXT";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationSteps.class);
 
   public DpAdministrationSteps() {
@@ -200,6 +211,29 @@ public class DpAdministrationSteps extends AbstractSteps {
         pause2s();
         dpAdminReactPage.readDpPartnerEntity(expected);
         dpAdminReactPage.clearDpPartnerFilter(extractDetail);
+      }
+    });
+  }
+
+  @And("Operator Search with Some DP Details :")
+  public void operatorVerifyDpDetails(Map<String, String> searchSDetailsAsMap) {
+    DpDetailsResponse dp = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE);
+    if (get(KEY_CREATE_DP_MANAGEMENT_HUB_NAME) != null) {
+      dp.setHubName(get(KEY_CREATE_DP_MANAGEMENT_HUB_NAME).toString());
+    }
+
+    searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
+    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        createDefaultTokens());
+    String[] extractDetails = searchDetailsData.split(",");
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String extractDetail : extractDetails) {
+        String valueDetails = dpAdminReactPage.getDpElementByMap(extractDetail, dp);
+        dpAdminReactPage.textBoxDpFilter.get(extractDetail).setValue(valueDetails);
+        pause2s();
+        dpAdminReactPage.readDpEntity(dp, extractDetail);
+        dpAdminReactPage.clearDpFilter(extractDetail);
       }
     });
   }
@@ -491,6 +525,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator get the value of DP ID")
+  public void operatorGetDpIdValue() {
+    dpAdminReactPage.inFrame(() -> {
+      put(KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID, dpAdminReactPage.labelDpId.getText());
+    });
+  }
+
   @Then("Operator press edit DP button")
   public void operatorPressEditDpButton() {
     dpAdminReactPage.inFrame(() -> {
@@ -608,19 +649,38 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldShipperAccountNo.setValue(dpDetailsResponse.getShipperId());
         dpAdminReactPage.chooseShipperAccountDp(dpDetailsResponse.getShipperId());
       }
-      if (dpDetailsResponse.getPostalCode() != null) {
-        dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
+
+      if (dpDetailsResponse.getLatLongSearch() != null
+          && dpDetailsResponse.getLatLongSearchName() != null) {
+        dpAdminReactPage.fieldLatLongSearch.setValue(dpDetailsResponse.getLatLongSearch());
+        dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getLatLongSearchName());
+      } else if (dpDetailsResponse.getAddressSearch() != null
+          && dpDetailsResponse.getAddressSearchName() != null) {
+        dpAdminReactPage.fieldAddressSearch.setValue(dpDetailsResponse.getAddressSearch());
+        dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getAddressSearchName());
+      } else {
+        if (dpDetailsResponse.getPostalCode() != null) {
+          dpAdminReactPage.fieldPostcode.setValue(dpDetailsResponse.getPostalCode());
+        }
+        if (dpDetailsResponse.getCity() != null) {
+          dpAdminReactPage.fieldCity.setValue(dpDetailsResponse.getCity());
+        }
+        if (dpDetailsResponse.getAddress1() != null) {
+          dpAdminReactPage.fieldPointAddress1.setValue(dpDetailsResponse.getAddress1());
+        }
+        if (dpDetailsResponse.getLatitude() != null) {
+          dpAdminReactPage.fieldLatitude.setValue(dpDetailsResponse.getLatitude());
+        }
+        if (dpDetailsResponse.getLongitude() != null) {
+          dpAdminReactPage.fieldLongitude.setValue(dpDetailsResponse.getLongitude());
+        }
       }
-      if (dpDetailsResponse.getCity() != null) {
-        dpAdminReactPage.fieldCity.setValue(dpDetailsResponse.getCity());
-      }
+
       if (dpDetailsResponse.getHubName() != null) {
         dpAdminReactPage.fieldAssignedHub.setValue(dpDetailsResponse.getHubName());
         dpAdminReactPage.chooseShipperAssignedHub(dpDetailsResponse.getHubName());
       }
-      if (dpDetailsResponse.getAddress1() != null) {
-        dpAdminReactPage.fieldPointAddress1.setValue(dpDetailsResponse.getAddress1());
-      }
+
       if (dpDetailsResponse.getAddress2() != null) {
         dpAdminReactPage.fieldPointAddress2.setValue(dpDetailsResponse.getAddress2());
       }
@@ -630,12 +690,7 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getUnitNumber() != null) {
         dpAdminReactPage.fieldUnitNo.setValue(dpDetailsResponse.getUnitNumber());
       }
-      if (dpDetailsResponse.getLatitude() != null) {
-        dpAdminReactPage.fieldLatitude.setValue(dpDetailsResponse.getLatitude());
-      }
-      if (dpDetailsResponse.getLongitude() != null) {
-        dpAdminReactPage.fieldLongitude.setValue(dpDetailsResponse.getLongitude());
-      }
+
       if (dpDetailsResponse.getType() != null) {
         dpAdminReactPage.fieldPudoPointType.click();
         if (dpDetailsResponse.getType().equals("Ninja Box")) {
@@ -675,9 +730,58 @@ public class DpAdministrationSteps extends AbstractSteps {
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
+      if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
+          && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
+        dpAdminReactPage.buttonEditDaysIndividuallyOpeningHours.click();
+      }
+      if (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() != null
+          && !dpDetailsResponse.getEditDaysIndividuallyOperatingHours()) {
+        dpAdminReactPage.buttonEditDaysIndividuallyOperatingHours.click();
+      }
+      if (canFillOpeningOperatingHour(dpDetailsResponse)) {
 
+        String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
 
+        for (String day : days) {
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
+            if (i == 0) {
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), SINGLE, OPENING_HOURS);
+            } else if (i == 1) {
+              dpAdminReactPage.buttonAddTimeSlotOpeningHour.get(day).click();
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), NEXT, OPENING_HOURS);
+            }
+
+          }
+        }
+
+        for (String day : days) {
+          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
+            if (i == 0) {
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), SINGLE, OPERATING_HOURS);
+            } else if (i == 1) {
+              dpAdminReactPage.buttonAddTimeSlotOperatingHour.get(day).click();
+              dpAdminReactPage.fillOpeningOperatingHour(day,
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), NEXT, OPERATING_HOURS);
+            }
+
+          }
+        }
+
+      }
     });
+  }
+
+  public boolean canFillOpeningOperatingHour(DpDetailsResponse dpDetailsResponse) {
+    return dpDetailsResponse.getIsOperatingHours() != null
+        && dpDetailsResponse.getIsOperatingHours()
+        && dpDetailsResponse.getOperatingHoursDay() != null
+        && (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOpeningHours())
+        && (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOperatingHours());
   }
 
 
@@ -866,6 +970,61 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
       }
     });
+  }
+
+  @Then("Operator Check the Data from created DP is Right")
+  public void checkCreatedDPData(Map<String, String> dataTableAsMap) {
+    String condition = dataTableAsMap.get("condition");
+    co.nvqa.commons.model.dp.persisted_classes.Dp dp = null;
+    DpDetailsResponse dpDetailsResponse = null;
+    AuditMetadata auditMetadata = null;
+
+    if (dataTableAsMap.get("dp") != null) {
+      dp = resolveValue(dataTableAsMap.get("dp"));
+    }
+    if (dataTableAsMap.get("dpDetails") != null) {
+      dpDetailsResponse = resolveValue(dataTableAsMap.get("dpDetails"));
+    }
+    if (dataTableAsMap.get("auditMetadata") != null) {
+      auditMetadata = resolveValue(dataTableAsMap.get("auditMetadata"));
+    }
+
+    if (auditMetadata != null) {
+      dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp, auditMetadata);
+    } else if (condition != null) {
+      if ((condition.equals(CHECK_DP_SEARCH_LAT_LONG) || condition.equals(CHECK_DP_SEARCH_ADDRESS))
+          && dpDetailsResponse != null) {
+        dpAdminReactPage.checkNewlyCreatedDpBySearchAddressLatLong(dp, dpDetailsResponse);
+      } else if (condition.equals(CHECK_DP_OPENING_OPERATING_HOURS) && dpDetailsResponse != null) {
+        String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
+        List<DpOpeningHour> dpOpeningHours = resolveValue(dataTableAsMap.get("dpOpeningHours"));
+        List<DpOperatingHour> dpOperatingHours = resolveValue(
+            dataTableAsMap.get("dpOperatingHours"));
+        ImmutableMap<String, Integer> dayNumberMap = ImmutableMap.<String, Integer>builder()
+            .put("monday", 1)
+            .put("tuesday", 2)
+            .put("wednesday", 3)
+            .put("thursday", 4)
+            .put("friday", 5)
+            .put("saturday", 6)
+            .put("sunday", 7)
+            .build();
+
+        for (String day : days) {
+          for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
+            dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
+                dpDetailsResponse.getOpeningHours().get(day).get(i));
+          }
+        }
+
+        for (String day : days) {
+          for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
+            dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
+                dpDetailsResponse.getOperatingHours().get(day).get(i));
+          }
+        }
+      }
+    }
   }
 
   @And("Operator check the data again with pressing ascending and descending order :")
@@ -1079,6 +1238,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void verifyNewlyCreatedDpUserDeleted(Map<String, String> dataTableAsMap) {
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
     String status = dataTableAsMap.get("status");
-    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb,status);
+    dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb, status);
   }
 }
