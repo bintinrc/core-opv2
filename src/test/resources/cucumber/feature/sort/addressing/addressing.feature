@@ -89,14 +89,14 @@ Feature: Addressing
       | waitUntilInvisible | true                   |
     And Operator searches "{KEY_CREATED_ADDRESSING.buildingNo}, {KEY_CREATED_ADDRESSING.buildingName}, {KEY_CREATED_ADDRESSING.streetName}" address on Addressing Page
     Then Operator verifies address on Addressing Page to Return Default Value:
-      | postcode    | {addressing-default-postcode}    |
-      | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
-      | province    | {addressing-default-province}    |
-      | city        | {addressing-default-city}        |
-      | source      | {addressing-default-source}      |
-      | addresstype | {addressing-default-addresstype} |
+      | postcode    | {addressing-default-postcode}     |
+      | streetName  | {addressing-default-streetname}   |
+      | latitude    | {addressing-default-latitude-id}  |
+      | longitude   | {addressing-default-longitude-id} |
+      | province    | {addressing-default-province}     |
+      | city        | {addressing-default-city}         |
+      | source      | {addressing-default-source}       |
+      | addresstype | {addressing-default-addresstype}  |
 
   @DeleteAddress
   Scenario: Add Address TH
@@ -110,14 +110,14 @@ Feature: Addressing
       | waitUntilInvisible | true                   |
     And Operator searches "{KEY_CREATED_ADDRESSING.buildingNo}, {KEY_CREATED_ADDRESSING.buildingName}, {KEY_CREATED_ADDRESSING.streetName}" address on Addressing Page
     Then Operator verifies address on Addressing Page to Return Default Value:
-      | postcode    | {addressing-default-postcode}    |
-      | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
-      | province    | {addressing-default-province}    |
-      | city        | {addressing-default-city}        |
-      | source      | {addressing-default-source}      |
-      | addresstype | {addressing-default-addresstype} |
+      | postcode    | {addressing-default-postcode}     |
+      | streetName  | {addressing-default-streetname}   |
+      | latitude    | {addressing-default-latitude-th}  |
+      | longitude   | {addressing-default-longitude-th} |
+      | province    | {addressing-default-province}     |
+      | city        | {addressing-default-city}         |
+      | source      | {addressing-default-source}       |
+      | addresstype | {addressing-default-addresstype}  |
 
   @DeleteAddress
   Scenario: Add Address VN
@@ -131,14 +131,14 @@ Feature: Addressing
       | waitUntilInvisible | true                   |
     And Operator searches "{KEY_CREATED_ADDRESSING.buildingNo}, {KEY_CREATED_ADDRESSING.buildingName}, {KEY_CREATED_ADDRESSING.streetName}" address on Addressing Page
     Then Operator verifies address on Addressing Page to Return Default Value:
-      | postcode    | {addressing-default-postcode}    |
-      | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
-      | province    | {addressing-default-province}    |
-      | city        | {addressing-default-city}        |
-      | source      | {addressing-default-source}      |
-      | addresstype | {addressing-default-addresstype} |
+      | postcode    | {addressing-default-postcode}     |
+      | streetName  | {addressing-default-streetname}   |
+      | latitude    | {addressing-default-latitude-vn}  |
+      | longitude   | {addressing-default-longitude-vn} |
+      | province    | {addressing-default-province}     |
+      | city        | {addressing-default-city}         |
+      | source      | {addressing-default-source}       |
+      | addresstype | {addressing-default-addresstype}  |
 
   @DeleteAddress
   Scenario: Add Address MY
@@ -152,14 +152,14 @@ Feature: Addressing
       | waitUntilInvisible | true                   |
     And Operator searches "{KEY_CREATED_ADDRESSING.buildingNo}, {KEY_CREATED_ADDRESSING.buildingName}, {KEY_CREATED_ADDRESSING.streetName}" address on Addressing Page
     Then Operator verifies address on Addressing Page to Return Default Value:
-      | postcode    | {addressing-default-postcode}    |
-      | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
-      | province    | {addressing-default-province}    |
-      | city        | {addressing-default-city}        |
-      | source      | {addressing-default-source}      |
-      | addresstype | {addressing-default-addresstype} |
+      | postcode    | {addressing-default-postcode}     |
+      | streetName  | {addressing-default-streetname}   |
+      | latitude    | {addressing-default-latitude-my}  |
+      | longitude   | {addressing-default-longitude-my} |
+      | province    | {addressing-default-province}     |
+      | city        | {addressing-default-city}         |
+      | source      | {addressing-default-source}       |
+      | addresstype | {addressing-default-addresstype}  |
 
   @DeleteAddres
   Scenario: Add Address PH
@@ -173,14 +173,14 @@ Feature: Addressing
       | waitUntilInvisible | true                   |
     And Operator searches "{KEY_CREATED_ADDRESSING.buildingNo}, {KEY_CREATED_ADDRESSING.buildingName}, {KEY_CREATED_ADDRESSING.streetName}" address on Addressing Page
     Then Operator verifies address on Addressing Page to Return Default Value:
-      | postcode    | {addressing-default-postcode}    |
-      | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
-      | province    | {addressing-default-province}    |
-      | city        | {addressing-default-city}        |
-      | source      | {addressing-default-source}      |
-      | addresstype | {addressing-default-addresstype} |
+      | postcode    | {addressing-default-postcode}     |
+      | streetName  | {addressing-default-streetname}   |
+      | latitude    | {addressing-default-latitude-ph}  |
+      | longitude   | {addressing-default-longitude-ph} |
+      | province    | {addressing-default-province}     |
+      | city        | {addressing-default-city}         |
+      | source      | {addressing-default-source}       |
+      | addresstype | {addressing-default-addresstype}  |
 
   @DeleteAddress
   Scenario: Create Order from Existing Address
