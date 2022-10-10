@@ -224,10 +224,18 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @runthis
+  @DeleteShipment @DeleteDriver @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Search Shipment by Filter - Shipment Status : Transit To Airport
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Shipment Management
+    Given API Operator create new airport using data below:
+      | system_id   | SG        |
+      | airportCode | GENERATED |
+      | airportName | GENERATED |
+      | city        | GENERATED |
+      | latitude    | GENERATED |
+      | longitude   | GENERATED |
+    And API Operator refresh Airports cache
+    And API Operator create 1 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -235,10 +243,55 @@ Feature: Shipment Management - Search Shipment
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator put created parcel to shipment
-    And API Operator performs van inbound by updating shipment status using data below:
-      | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
-      | hubCountry | SG                        |
-      | hubId      | {hub-id}                  |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Airport Trip Management
+    And Operator verifies that the Airport Management Page is opened
+    When Operator fill the departure date for Airport Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Airport Management
+      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} |
+    And Operator click on 'Load Trips' on Airport Management
+    Then Verify the parameters of loaded trips in Airport Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport) |
+    And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
+    And Operator create new airport trip using below data:
+      | originFacility      | {hub-name}                                |
+      | destinationFacility | {airport-name-1}                          |
+      | departureTime       | 12:00                                     |
+      | durationhour        | 01                                        |
+      | durationminutes     | 55                                        |
+      | departureDate       | {gradle-next-1-day-yyyy-MM-dd}            |
+      | drivers             | {KEY_LIST_OF_CREATED_DRIVERS[1].username} |
+      | comments            | Created by Automation                     |
+    And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {hub-name} (Warehouse) to {airport-name-1} (Airport) is created. View Details" created success message
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator refresh page
+    When Operator fill Shipment Inbound Scanning page with data below:
+      | inboundHub           | {hub-id} - {hub-name}                                                                                                           |
+      | inboundType          | Into Van                                                                                                                        |
+      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | movementTripSchedule | To ABC Test Airport                                                                                                             |
+    And Operator click start inbound
+    When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+    When Operator clicks end inbound button
+    And Operator clicks proceed in end inbound dialog "Van Inbound"
+    Then Operator verifies toast with message "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} departed" is shown on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator clear all filters on Shipment Management page
+    When Operator apply filters on Shipment Management Page:
+      | shipmentType   | {shipment-dialog-type} |
+      | shipmentStatus | Transit To Airport     |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType | AIR_HAUL                  |
+      | id           | {KEY_CREATED_SHIPMENT_ID} |
+      | status       | Transit to Airport        |
+      | userId       | {operator-portal-uid}     |
+      | origHubName  | {hub-name}                |
+      | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Status : Completed
