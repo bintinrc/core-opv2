@@ -91,8 +91,8 @@ Feature: Addressing
     Then Operator verifies address on Addressing Page to Return Default Value:
       | postcode    | {addressing-default-postcode}    |
       | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
+      | latitude    | {addressing-default-latitude-id}    |
+      | longitude   | {addressing-default-longitude-id}   |
       | province    | {addressing-default-province}    |
       | city        | {addressing-default-city}        |
       | source      | {addressing-default-source}      |
@@ -112,8 +112,8 @@ Feature: Addressing
     Then Operator verifies address on Addressing Page to Return Default Value:
       | postcode    | {addressing-default-postcode}    |
       | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
+      | latitude    | {addressing-default-latitude-th}    |
+      | longitude   | {addressing-default-longitude-th}   |
       | province    | {addressing-default-province}    |
       | city        | {addressing-default-city}        |
       | source      | {addressing-default-source}      |
@@ -133,8 +133,8 @@ Feature: Addressing
     Then Operator verifies address on Addressing Page to Return Default Value:
       | postcode    | {addressing-default-postcode}    |
       | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
+      | latitude    | {addressing-default-latitude-vn}    |
+      | longitude   | {addressing-default-longitude-vn}   |
       | province    | {addressing-default-province}    |
       | city        | {addressing-default-city}        |
       | source      | {addressing-default-source}      |
@@ -154,8 +154,8 @@ Feature: Addressing
     Then Operator verifies address on Addressing Page to Return Default Value:
       | postcode    | {addressing-default-postcode}    |
       | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
+      | latitude    | {addressing-default-latitude-my}    |
+      | longitude   | {addressing-default-longitude-my}   |
       | province    | {addressing-default-province}    |
       | city        | {addressing-default-city}        |
       | source      | {addressing-default-source}      |
@@ -175,8 +175,8 @@ Feature: Addressing
     Then Operator verifies address on Addressing Page to Return Default Value:
       | postcode    | {addressing-default-postcode}    |
       | streetName  | {addressing-default-streetname}  |
-      | latitude    | {addressing-default-latitude}    |
-      | longitude   | {addressing-default-longitude}   |
+      | latitude    | {addressing-default-latitude-ph}    |
+      | longitude   | {addressing-default-longitude-ph}   |
       | province    | {addressing-default-province}    |
       | city        | {addressing-default-city}        |
       | source      | {addressing-default-source}      |
