@@ -10,6 +10,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +46,19 @@ public class MAWBmanagementSteps extends AbstractSteps{
     }
 
     @When("Operator add shipment IDs below to search by MAWB on MAWB Management page:")
-    public void operatorAddShipmentIDsToSearchByMAWB(List<String> shipmentIDs){
-        shipmentIDs = resolveValues(shipmentIDs);
-        List<String> listOfShipmentIDs = new ArrayList<>();
-        shipmentIDs.forEach((id) -> {
-            List<String> t = Arrays.asList(id.replaceAll("\\[|\\]| ","").split(","));
-            listOfShipmentIDs.addAll(t);
+    public void operatorAddShipmentIDsToSearchByMAWB(List<String> listMAWBs){
+        listMAWBs = resolveValues(listMAWBs);
+        List<String> FinallistOfMAWBs = new ArrayList<>();
+        listMAWBs.forEach((id) -> {
+            List<String> items = new ArrayList<>();
+            if (id.contains("GENERATED 100 INVALID MAWB")){
+                for (int i = 0;i<100;i++)
+                    items.add(f("999-%s", RandomStringUtils.randomAlphabetic(6)));
+            } else
+                items = Arrays.asList(id.replaceAll("\\[|\\]| ","").split(","));
+            FinallistOfMAWBs.addAll(items);
         });
-        System.out.println(listOfShipmentIDs);
-        mawbManagementgPage.addShipmentToSearchBox(listOfShipmentIDs);
+        mawbManagementgPage.addShipmentToSearchBox(FinallistOfMAWBs);
     }
 
     @When("Operator clicks on {string} button on MAWB Management Page")
@@ -62,6 +68,36 @@ public class MAWBmanagementSteps extends AbstractSteps{
                 mawbManagementgPage.searchByMAWBbutton.click();
                 break;
         }
+
+    }
+
+    @Then("Operator verifies Search MAWB Management Page")
+    public void operatorVerifiesSearchMAWBPage(){
+        mawbManagementgPage.searchByMAWBbutton.waitUntilInvisible();
+        mawbManagementgPage.waitWhilePageIsLoading();
+        mawbManagementgPage.mawbtable.VerifySearchResultPage();
+    }
+
+    @Then("Operator verifies error message below on MAWB Management Page:")
+    public void operatorVerifiesErrorMAWBPage(String expectedMessage){
+        mawbManagementgPage.verifyErrorMessage(expectedMessage);
+    }
+
+    @When("Operator clicks to go back button on MAWB Management page")
+    public void operatorClicksGoBackButtonOnMAWBManagementPage(){
+        mawbManagementgPage.closeButton.click();
+    }
+
+    @Then("Operator verifies total {int} result show on MAWB Management Page")
+    public void operatorVerifiesTotalResult(int expectedNumber){
+        String expectedMessage = f("Showing %1$d of %1$d results",expectedNumber);
+        System.out.println(expectedMessage);
+        mawbManagementgPage.mawbtable.verifyTotalSearchRecord(expectedMessage);
+    }
+
+    @Then("Operator verifies error toast message on MAWB Management Page:")
+    public void operatorVerifiesErrorToastMessage(String expectedMessage){
+        Assertions.assertThat(mawbManagementgPage.getAntTopTextV2()).as("Error message is the same").isEqualTo(expectedMessage);
     }
 
 }
