@@ -85,13 +85,13 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
 
     Examples:
-      | dataset_name              | search_field         | search_value                                  | column_datakey       |
-      | Search by Address ID      | Address ID           | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | id                   |
-      | Search by Pickup Address  | Pickup Address       | 15SenokoRd,Singapore, SG, 000000              | pickup_address       |
-      | Search by Lat Long        | Lat Long             | 1.288147,103.740233                           | lat_long             |
-      | Search by Shipper ID      | Shipper ID           | 5356053                                       | shipper_id           |
-      | Search by Shipper Name    | Shipper Name/Contact | Station - 09876576                            | shipper_name_contact |
-      | Search by Shipper Contact | Shipper Name/Contact | Station - 09876576                            | shipper_name_contact |
+      | dataset_name              | search_field         | search_value                                     | column_datakey       |
+      | Search by Address ID      | Address ID           | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | id                   |
+      | Search by Pickup Address  | Pickup Address       | 15SenokoRd,Singapore, SG, 000000                 | pickup_address       |
+      | Search by Lat Long        | Lat Long             | 1.288147,103.740233                              | lat_long             |
+      | Search by Shipper ID      | Shipper ID           | 5356053                                          | shipper_id           |
+      | Search by Shipper Name    | Shipper Name/Contact | Station - 09876576                               | shipper_name_contact |
+      | Search by Shipper Contact | Shipper Name/Contact | Station - 09876576                               | shipper_name_contact |
 
   Scenario: Download CSV of Shipper Address
     Given Operator loads Operator portal home page
@@ -151,7 +151,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "lat_long" based on input in "1.288147,103.740233" in shipper address page
     Then Operator verifies that green check mark icon is not shown under the Lat Long
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Addresses_with_Invalid_Shipper_ID.csv" by browsing files
+    And Operator uploads csv file: "Unable_to_Update_Shipper_Addresses_with_Invalid_Shipper_ID.csv" by browsing files
     And Operator clicks on the Download Errors button
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID           |
@@ -179,7 +179,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Address_with_Invalid_Address_ID.csv" by browsing files
+    And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Address_ID.csv" by browsing files
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
@@ -191,8 +191,8 @@ Feature: Shipper Address Configuration
       | Longitude            |
       | Failure Reasons      |
     And Operator verifies that the following texts are available on the downloaded file
-      | Address id #999 Not Found |
-      | Address id #888 Not Found |
+      | Address id #991119 Not Found |
+      | Address id #881118 Not Found |
 
 
   Scenario: Unable to Update Shipper Addresses with Invalid Input
@@ -209,7 +209,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
+    And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
     Then Operator verifies upload error message is displayed for invalid file
 
 
@@ -227,7 +227,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Upload_Invalid_Formatted_Shipper_Address_File.xlsx" by browsing files
+    And Operator uploads csv file: "Unable_to_Upload_Invalid_Formatted_Shipper_Address_File.xlsx" by browsing files
     Then Operator verifies upload error message is displayed for invalid file
 
 
@@ -245,7 +245,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
+    And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
     Then Operator verifies upload error message is displayed for invalid file
 
 
@@ -263,7 +263,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Update Addresses Lat Long button
-    And Operator uploads csv file: "csv\firstMile\Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
+    And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
     Then Operator verifies upload error message is displayed for invalid file
 
   @KillBrowser @ShouldAlwaysRun

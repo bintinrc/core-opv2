@@ -225,9 +225,9 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | status_logs    | Open,Ready,Completed |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
-      | source          | <source>      |
-      | overall_balance | 2.27          |
-      | logs            | <amount>,2.27 |
+      | source          | <source>       |
+      | overall_balance | -2.77          |
+      | logs            | <amount>,-2.77 |
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is not in billing_qa_gl.invoiced_orders table
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is not in billing_qa_gl.invoiced_orders table
     Examples:

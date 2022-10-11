@@ -16,12 +16,14 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.ElementNotInteractableException;
@@ -199,23 +201,22 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @And("Operator uploads csv file: {string} by browsing files")
   public void operatorUploadsCsvFile(String fileName) {
     fileName = resolveValue(fileName);
-    try {
-      ClassLoader classLoader = getClass().getClassLoader();
-      String Filepath = classLoader.getResource(fileName).toString();
-      shipperAddressConfigurationPage.dragAndDropPath.click();
-      pause3s();
-      StringSelection stringSelection = new StringSelection(Filepath);
-      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      clipboard.setContents(stringSelection, null);
-      Robot robot = new Robot();
-      robot.keyPress(KeyEvent.VK_CONTROL);
-      robot.keyPress(KeyEvent.VK_V);
-      robot.keyRelease(KeyEvent.VK_CONTROL);
-      robot.keyPress(KeyEvent.VK_ENTER);
-      shipperAddressConfigurationPage.clickSubmitFileButton();
-    } catch (AWTException e) {
-      e.printStackTrace();
-    }
+    String Filepath =
+        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
+    shipperAddressConfigurationPage.fileUpload.sendKeys(Filepath);
+    shipperAddressConfigurationPage.clickSubmitFileButton();
+    takesScreenshot();
+  }
+
+  @And("Operator drag and drop csv file: {string}")
+  public void operatorDragAndDropCsvFile(String fileName) {
+    fileName = resolveValue(fileName);
+    String Filepath =
+        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
+    File file = new File(Filepath);
+    shipperAddressConfigurationPage.dragAndDrop(file,
+        shipperAddressConfigurationPage.fileUpload.getWebElement());
+    takesScreenshot();
 
   }
 }

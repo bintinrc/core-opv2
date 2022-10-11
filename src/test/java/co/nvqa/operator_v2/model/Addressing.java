@@ -24,6 +24,8 @@ public class Addressing extends DataEntity<Addressing> {
   private String state;
   private String area;
   private String subdivision;
+  private String source;
+  private String score;
 
   public Addressing() {
   }
@@ -82,6 +84,14 @@ public class Addressing extends DataEntity<Addressing> {
 
   public String getAddressType() {
     return addressType;
+  }
+
+  public String getSource() {
+    return source;
+  }
+
+  public String getScore() {
+    return score;
   }
 
   public void setAddressType(String addressType) {
