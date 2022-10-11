@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByMAWBnumber @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByMAWBnumber
 Feature: MAWB Management - Search by MAWB number
 
   @LaunchBrowser @ShouldAlwaysRun
