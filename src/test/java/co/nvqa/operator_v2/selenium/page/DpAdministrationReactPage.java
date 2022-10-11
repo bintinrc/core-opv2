@@ -1,10 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.Hours;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
+import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -13,9 +16,14 @@ import com.google.common.collect.ImmutableMap;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
@@ -172,6 +180,125 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_point_name']")
   public TextBox fieldPointName;
 
+  @FindBy(xpath = "//input[@id='reservationSlots.monday[0].startTime']")
+  public TextBox fieldOpeningStartHourMonday;
+  @FindBy(xpath = "//input[@id='reservationSlots.tuesday[0].startTime']")
+  public TextBox fieldOpeningStartHourTuesday;
+  @FindBy(xpath = "//input[@id='reservationSlots.wednesday[0].startTime']")
+  public TextBox fieldOpeningStartHourWednesday;
+  @FindBy(xpath = "//input[@id='reservationSlots.thursday[0].startTime']")
+  public TextBox fieldOpeningStartHourThursday;
+  @FindBy(xpath = "//input[@id='reservationSlots.friday[0].startTime']")
+  public TextBox fieldOpeningStartHourFriday;
+  @FindBy(xpath = "//input[@id='reservationSlots.saturday[0].startTime']")
+  public TextBox fieldOpeningStartHourSaturday;
+  @FindBy(xpath = "//input[@id='reservationSlots.sunday[0].startTime']")
+  public TextBox fieldOpeningStartHourSunday;
+
+  @FindBy(xpath = "//input[@id='reservationSlots.monday[1].startTime']")
+  public TextBox fieldOpeningStartHourMondayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.tuesday[1].startTime']")
+  public TextBox fieldOpeningStartHourTuesdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.wednesday[1].startTime']")
+  public TextBox fieldOpeningStartHourWednesdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.thursday[1].startTime']")
+  public TextBox fieldOpeningStartHourThursdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.friday[1].startTime']")
+  public TextBox fieldOpeningStartHourFridayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.saturday[1].startTime']")
+  public TextBox fieldOpeningStartHourSaturdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.sunday[1].startTime']")
+  public TextBox fieldOpeningStartHourSundayNext;
+
+  @FindBy(xpath = "//input[@id='reservationSlots.monday[0].endTime']")
+  public TextBox fieldOpeningEndHourMonday;
+  @FindBy(xpath = "//input[@id='reservationSlots.tuesday[0].endTime']")
+  public TextBox fieldOpeningEndHourTuesday;
+  @FindBy(xpath = "//input[@id='reservationSlots.wednesday[0].endTime']")
+  public TextBox fieldOpeningEndHourWednesday;
+  @FindBy(xpath = "//input[@id='reservationSlots.thursday[0].endTime']")
+  public TextBox fieldOpeningEndHourThursday;
+  @FindBy(xpath = "//input[@id='reservationSlots.friday[0].endTime']")
+  public TextBox fieldOpeningEndHourFriday;
+  @FindBy(xpath = "//input[@id='reservationSlots.saturday[0].endTime']")
+  public TextBox fieldOpeningEndHourSaturday;
+  @FindBy(xpath = "//input[@id='reservationSlots.sunday[0].endTime']")
+  public TextBox fieldOpeningEndHourSunday;
+  @FindBy(xpath = "//input[@id='reservationSlots.monday[1].endTime']")
+  public TextBox fieldOpeningEndHourMondayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.tuesday[1].endTime']")
+  public TextBox fieldOpeningEndHourTuesdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.wednesday[1].endTime']")
+  public TextBox fieldOpeningEndHourWednesdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.thursday[1].endTime']")
+  public TextBox fieldOpeningEndHourThursdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.friday[1].endTime']")
+  public TextBox fieldOpeningEndHourFridayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.saturday[1].endTime']")
+  public TextBox fieldOpeningEndHourSaturdayNext;
+  @FindBy(xpath = "//input[@id='reservationSlots.sunday[1].endTime']")
+  public TextBox fieldOpeningEndHourSundayNext;
+
+  @FindBy(xpath = "//input[@id='operatingHours.monday[0].startTime']")
+  public TextBox fieldOperatingStartHourMonday;
+  @FindBy(xpath = "//input[@id='operatingHours.tuesday[0].startTime']")
+  public TextBox fieldOperatingStartHourTuesday;
+  @FindBy(xpath = "//input[@id='operatingHours.wednesday[0].startTime']")
+  public TextBox fieldOperatingStartHourWednesday;
+  @FindBy(xpath = "//input[@id='operatingHours.thursday[0].startTime']")
+  public TextBox fieldOperatingStartHourThursday;
+  @FindBy(xpath = "//input[@id='operatingHours.friday[0].startTime']")
+  public TextBox fieldOperatingStartHourFriday;
+  @FindBy(xpath = "//input[@id='operatingHours.saturday[0].startTime']")
+  public TextBox fieldOperatingStartHourSaturday;
+  @FindBy(xpath = "//input[@id='operatingHours.sunday[0].startTime']")
+  public TextBox fieldOperatingStartHourSunday;
+
+  @FindBy(xpath = "//input[@id='operatingHours.monday[1].startTime']")
+  public TextBox fieldOperatingStartHourMondayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.tuesday[1].startTime']")
+  public TextBox fieldOperatingStartHourTuesdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.wednesday[1].startTime']")
+  public TextBox fieldOperatingStartHourWednesdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.thursday[1].startTime']")
+  public TextBox fieldOperatingStartHourThursdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.friday[1].startTime']")
+  public TextBox fieldOperatingStartHourFridayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.saturday[1].startTime']")
+  public TextBox fieldOperatingStartHourSaturdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.sunday[1].startTime']")
+  public TextBox fieldOperatingStartHourSundayNext;
+
+  @FindBy(xpath = "//input[@id='operatingHours.monday[0].endTime']")
+  public TextBox fieldOperatingEndHourMonday;
+  @FindBy(xpath = "//input[@id='operatingHours.tuesday[0].endTime']")
+  public TextBox fieldOperatingEndHourTuesday;
+  @FindBy(xpath = "//input[@id='operatingHours.wednesday[0].endTime']")
+  public TextBox fieldOperatingEndHourWednesday;
+  @FindBy(xpath = "//input[@id='operatingHours.thursday[0].endTime']")
+  public TextBox fieldOperatingEndHourThursday;
+  @FindBy(xpath = "//input[@id='operatingHours.friday[0].endTime']")
+  public TextBox fieldOperatingEndHourFriday;
+  @FindBy(xpath = "//input[@id='operatingHours.saturday[0].endTime']")
+  public TextBox fieldOperatingEndHourSaturday;
+  @FindBy(xpath = "//input[@id='operatingHours.sunday[0].endTime']")
+  public TextBox fieldOperatingEndHourSunday;
+
+  @FindBy(xpath = "//input[@id='operatingHours.monday[1].endTime']")
+  public TextBox fieldOperatingEndHourMondayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.tuesday[1].endTime']")
+  public TextBox fieldOperatingEndHourTuesdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.wednesday[1].endTime']")
+  public TextBox fieldOperatingEndHourWednesdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.thursday[1].endTime']")
+  public TextBox fieldOperatingEndHourThursdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.friday[1].endTime']")
+  public TextBox fieldOperatingEndHourFridayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.saturday[1].endTime']")
+  public TextBox fieldOperatingEndHourSaturdayNext;
+  @FindBy(xpath = "//input[@id='operatingHours.sunday[1].endTime']")
+  public TextBox fieldOperatingEndHourSundayNext;
+
   @FindBy(xpath = "//input[@data-testid='field_short_name']")
   public TextBox fieldShortName;
 
@@ -183,6 +310,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
+
+  @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
+  public TextBox fieldLatLongSearch;
+
+  @FindBy(xpath = "//div[@data-testid='field_search_via_address_name']//input")
+  public TextBox fieldAddressSearch;
 
   @FindBy(xpath = "//input[@data-testid='field_postcode']")
   public TextBox fieldPostcode;
@@ -252,6 +385,24 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_restrictions']/span")
   public PageElement labelRestrictions;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_name']/span")
+  public PageElement labelDpName;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_shortname']/span")
+  public PageElement labelDpShortName;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_hub']/span")
+  public PageElement labelDpHub;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_address']/span")
+  public PageElement labelDpAddress;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_direction']/span")
+  public PageElement labelDpDirection;
+
+  @FindBy(xpath = "//div[@data-testid='virtual-table.label_dp_activity']/span")
+  public PageElement labelDpActivity;
 
   @FindBy(xpath = "//div[@data-testid='virtual-table.label_username']/span")
   public PageElement labelUsername;
@@ -346,6 +497,42 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//span[contains(@class,'checked')]/input[@data-testid='checkbox_sell_packs_at_point']")
   public Button checkBoxSellsPackAtPointChecked;
 
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[2]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursMonday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[3]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursTuesday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[4]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursWednesday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[5]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursThursday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[6]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursFriday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[7]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursSaturday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]/div[@class='ant-card-body']/div[8]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOpeningHoursSunday;
+
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[2]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursMonday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[3]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursTuesday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[4]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursWednesday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[5]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursThursday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[6]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursFriday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[7]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursSaturday;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[8]/button[@data-testid='button_add_time_slot']")
+  public Button buttonAddTimeSlotOperatingHoursSunday;
+
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
+  public PageElement buttonEditDaysIndividuallyOpeningHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//input[@data-testid='checkbox_edit_days_individually']")
+  public PageElement buttonEditDaysIndividuallyOperatingHours;
+
+
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
   public static final String ERROR_MSG_NOT_EMAIL_FORMAT = "That doesn't look like an email.";
   public static final String ERROR_MSG_DUPLICATE_USERNAME = "Username '%s' not available, please specify another username";
@@ -355,6 +542,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
+  public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
+
+  public static final String SINGLE = "SINGLE";
+  public static final String NEXT = "NEXT";
+  public static final String OPENING_HOURS = "OPENING_HOURS";
+  public static final String OPERATING_HOURS = "OPERATING_HOURS";
 
   public static final String RETAIL_POINT_NETWORK_ENABLED = "RETAIL_POINT_NETWORK_ENABLED";
   public static final String FRANCHISEE_DISABLED = "FRANCHISEE_DISABLED";
@@ -386,6 +579,106 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String CREATE = "CREATE";
   public static final String DPS = "dps";
 
+  public ImmutableMap<String, TextBox> textBoxOpeningStartTime = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOpeningStartHourMonday)
+      .put("tuesday", fieldOpeningStartHourTuesday)
+      .put("wednesday", fieldOpeningStartHourWednesday)
+      .put("thursday", fieldOpeningStartHourThursday)
+      .put("friday", fieldOpeningStartHourFriday)
+      .put("saturday", fieldOpeningStartHourSaturday)
+      .put("sunday", fieldOpeningStartHourSunday)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOpeningStartTimeNext = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOpeningStartHourMondayNext)
+      .put("tuesday", fieldOpeningStartHourTuesdayNext)
+      .put("wednesday", fieldOpeningStartHourWednesdayNext)
+      .put("thursday", fieldOpeningStartHourThursdayNext)
+      .put("friday", fieldOpeningStartHourFridayNext)
+      .put("saturday", fieldOpeningStartHourSaturdayNext)
+      .put("sunday", fieldOpeningStartHourSundayNext)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOpeningEndTimeNext = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOpeningEndHourMondayNext)
+      .put("tuesday", fieldOpeningEndHourTuesdayNext)
+      .put("wednesday", fieldOpeningEndHourWednesdayNext)
+      .put("thursday", fieldOpeningEndHourThursdayNext)
+      .put("friday", fieldOpeningEndHourFridayNext)
+      .put("saturday", fieldOpeningEndHourSaturdayNext)
+      .put("sunday", fieldOpeningEndHourSundayNext)
+      .build();
+
+  public ImmutableMap<String, Button> buttonAddTimeSlotOpeningHour = ImmutableMap.<String, Button>builder()
+      .put("monday", buttonAddTimeSlotOpeningHoursMonday)
+      .put("tuesday", buttonAddTimeSlotOpeningHoursTuesday)
+      .put("wednesday", buttonAddTimeSlotOpeningHoursWednesday)
+      .put("thursday", buttonAddTimeSlotOpeningHoursThursday)
+      .put("friday", buttonAddTimeSlotOpeningHoursFriday)
+      .put("saturday", buttonAddTimeSlotOpeningHoursSaturday)
+      .put("sunday", buttonAddTimeSlotOpeningHoursSunday)
+      .build();
+
+  public ImmutableMap<String, Button> buttonAddTimeSlotOperatingHour = ImmutableMap.<String, Button>builder()
+      .put("monday", buttonAddTimeSlotOperatingHoursMonday)
+      .put("tuesday", buttonAddTimeSlotOperatingHoursTuesday)
+      .put("wednesday", buttonAddTimeSlotOperatingHoursWednesday)
+      .put("thursday", buttonAddTimeSlotOperatingHoursThursday)
+      .put("friday", buttonAddTimeSlotOperatingHoursFriday)
+      .put("saturday", buttonAddTimeSlotOperatingHoursSaturday)
+      .put("sunday", buttonAddTimeSlotOperatingHoursSunday)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOpeningEndTime = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOpeningEndHourMonday)
+      .put("tuesday", fieldOpeningEndHourTuesday)
+      .put("wednesday", fieldOpeningEndHourWednesday)
+      .put("thursday", fieldOpeningEndHourThursday)
+      .put("friday", fieldOpeningEndHourFriday)
+      .put("saturday", fieldOpeningEndHourSaturday)
+      .put("sunday", fieldOpeningEndHourSunday)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOperatingStartTime = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOperatingStartHourMonday)
+      .put("tuesday", fieldOperatingStartHourTuesday)
+      .put("wednesday", fieldOperatingStartHourWednesday)
+      .put("thursday", fieldOperatingStartHourThursday)
+      .put("friday", fieldOperatingStartHourFriday)
+      .put("saturday", fieldOperatingStartHourSaturday)
+      .put("sunday", fieldOperatingStartHourSunday)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOperatingStartTimeNext = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOperatingStartHourMondayNext)
+      .put("tuesday", fieldOperatingStartHourTuesdayNext)
+      .put("wednesday", fieldOperatingStartHourWednesdayNext)
+      .put("thursday", fieldOperatingStartHourThursdayNext)
+      .put("friday", fieldOperatingStartHourFridayNext)
+      .put("saturday", fieldOperatingStartHourSaturdayNext)
+      .put("sunday", fieldOperatingStartHourSundayNext)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOperatingEndTime = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOperatingEndHourMonday)
+      .put("tuesday", fieldOperatingEndHourTuesday)
+      .put("wednesday", fieldOperatingEndHourWednesday)
+      .put("thursday", fieldOperatingEndHourThursday)
+      .put("friday", fieldOperatingEndHourFriday)
+      .put("saturday", fieldOperatingEndHourSaturday)
+      .put("sunday", fieldOperatingEndHourSunday)
+      .build();
+
+  public ImmutableMap<String, TextBox> textBoxOperatingEndTimeNext = ImmutableMap.<String, TextBox>builder()
+      .put("monday", fieldOperatingEndHourMondayNext)
+      .put("tuesday", fieldOperatingEndHourTuesdayNext)
+      .put("wednesday", fieldOperatingEndHourWednesdayNext)
+      .put("thursday", fieldOperatingEndHourThursdayNext)
+      .put("friday", fieldOperatingEndHourFridayNext)
+      .put("saturday", fieldOperatingEndHourSaturdayNext)
+      .put("sunday", fieldOperatingEndHourSundayNext)
+      .build();
+
   public ImmutableMap<String, String> errorMandatoryField = ImmutableMap.<String, String>builder()
       .put(POINT_NAME, "Name is required")
       .put(SHORT_NAME, "Short Name is required")
@@ -404,10 +697,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .build();
 
   public ImmutableMap<String, String> errorField = ImmutableMap.<String, String>builder()
-      .put(POINT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(SHORT_NAME, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(CITY, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
-      .put(EXTERNAL_STORE_ID, "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(POINT_NAME,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(SHORT_NAME,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(CITY,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
+      .put(EXTERNAL_STORE_ID,
+          "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
       .put(POSTCODE, "Please enter a valid number.")
       .put(FLOOR_NO, "Please enter a valid number.")
       .put(UNIT_NO, "Please enter a valid number.")
@@ -476,7 +773,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void mandatoryFieldError(String field) {
     Assertions.assertThat(isElementExist(f(ERROR_MSG_ALERT_XPATH, errorMandatoryField.get(field))))
-        .as(String.format("Error message from %s is exist: %s", field, errorMandatoryField.get(field)))
+        .as(String.format("Error message from %s is exist: %s", field,
+            errorMandatoryField.get(field)))
         .isTrue();
   }
 
@@ -486,14 +784,63 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isTrue();
   }
 
+  public void fillOpeningOperatingHour(String day, Hours hours, String iterate, String fieldName) {
+    String startHour = hours.getStartTime();
+    String[] splitStartHour = startHour.split(":");
+
+    String endHour = hours.getEndTime();
+    String[] splitEndHour = endHour.split(":");
+
+    String valueStartHourToFill = splitStartHour[0] + " h " + splitStartHour[1] + " m";
+    String valueEndHourToFill = splitEndHour[0] + " h " + splitEndHour[1] + " m";
+
+    if (fieldName.equals(OPENING_HOURS)) {
+      if (iterate.equals(SINGLE)) {
+        textBoxOpeningStartTime.get(day).forceClear();
+        textBoxOpeningStartTime.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
+
+        textBoxOpeningEndTime.get(day).forceClear();
+        textBoxOpeningEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
+      } else if (iterate.equals(NEXT)) {
+        textBoxOpeningStartTimeNext.get(day).forceClear();
+        textBoxOpeningStartTimeNext.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
+
+        textBoxOpeningEndTimeNext.get(day).forceClear();
+        textBoxOpeningEndTimeNext.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
+      }
+    } else if (fieldName.equals(OPERATING_HOURS)) {
+
+      if (iterate.equals(SINGLE)) {
+        textBoxOperatingStartTime.get(day).forceClear();
+        textBoxOperatingStartTime.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
+
+        textBoxOperatingEndTime.get(day).forceClear();
+        textBoxOperatingEndTime.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
+      } else if (iterate.equals(NEXT)) {
+        textBoxOperatingStartTimeNext.get(day).forceClear();
+        textBoxOperatingStartTimeNext.get(day).sendKeysAndEnterNoXpath(valueStartHourToFill);
+
+        textBoxOperatingEndTimeNext.get(day).forceClear();
+        textBoxOperatingEndTimeNext.get(day).sendKeysAndEnterNoXpath(valueEndHourToFill);
+      }
+    }
+
+  }
+
   public void chooseShipperAccountDp(Long shipperId) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
-    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH,shipperId));
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
+    click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
   }
 
   public void chooseShipperAssignedHub(String hubName) {
-    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
-    click(f(CHOOSE_ASSIGNED_HUB_XPATH,hubName));
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+    click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+  }
+
+  public void chooseFromSearch(String searchName) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
+    moveToElementWithXpath(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
+    click(f(CHOOSE_SEARCH_FIRST_OPTIONS, searchName));
   }
 
 
@@ -535,6 +882,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     textBoxDpPartnerFilter.get(field).forceClear();
   }
 
+  public void clearDpFilter(String field) {
+    textBoxDpFilter.get(field).forceClear();
+  }
+
   public void clearDpUserFilter(String field) {
     textBoxDpUserFilter.get(field).forceClear();
   }
@@ -550,7 +901,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Assertions.assertThat(dp.getId())
-        .as(f("dp_qa_gl/dps: dp_id and dpms_id is same %s",dp.getId()))
+        .as(f("dp_qa_gl/dps: dp_id and dpms_id is same %s", dp.getId()))
         .isEqualTo(dp.getDpmsId());
 
     Assertions.assertThat(dp.getServiceType())
@@ -558,11 +909,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(RETAIL_POINT_NETWORK);
 
     Assertions.assertThat(auditMetadata.getRefId())
-        .as(f("dp_qa_gl/audit_metadata: ref_id is %s",auditMetadata.getRefId()))
+        .as(f("dp_qa_gl/audit_metadata: ref_id is %s", auditMetadata.getRefId()))
         .isNotNull();
 
     Assertions.assertThat(auditMetadata.getAuthUserId())
-        .as(f("dp_qa_gl/audit_metadata: auth_user_id is %s",auditMetadata.getAuthUserId()))
+        .as(f("dp_qa_gl/audit_metadata: auth_user_id is %s", auditMetadata.getAuthUserId()))
         .isNotNull();
 
     Assertions.assertThat(auditMetadata.getType())
@@ -584,6 +935,71 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     Assertions.assertThat(sdf.format(auditMetadata.getCreatedAt()))
         .as("dp_qa_gl/audit_metadata: created_at is At Current Time")
         .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
+  }
+
+  public void checkNewlyCreatedDpBySearchAddressLatLong(Dp dp,
+      DpDetailsResponse dpDetailsResponse) {
+
+    if (dpDetailsResponse.getLatLongSearch() != null
+        & dpDetailsResponse.getLatLongSearchName() != null) {
+      Assertions.assertThat(dpDetailsResponse.getLatLongSearchName().replace(" ", ""))
+          .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
+          .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+    } else if (dpDetailsResponse.getAddressSearch() != null
+        & dpDetailsResponse.getAddressSearchName() != null) {
+      Assertions.assertThat(dpDetailsResponse.getAddressSearchName().replace(" ", ""))
+          .as(f("dp_qa_gl/dps: Dp Address is %s", dp.getAddress1()))
+          .containsIgnoringCase(dp.getAddress1().replace(" ", ""));
+    }
+
+  }
+
+  public void checkOpeningTime(String day, Integer dayNumber,
+      List<DpOpeningHour> dpOpeningHours, Hours openingHour) {
+    dpOpeningHours = dpOpeningHours.stream()
+        .filter(days -> Objects.equals(days.getDayOfWeek(), dayNumber))
+        .collect(Collectors.toList());
+
+    for (DpOpeningHour doh : dpOpeningHours) {
+      if (openingHour.getStartTime().equals(doh.getStartTime())) {
+        Assertions.assertThat(openingHour.getStartTime())
+            .as(f("dp_qa_gl/dp_opening_hours: start_time for %s is %s", day,
+                doh.getStartTime()))
+            .isEqualTo(doh.getStartTime());
+      }
+      if (openingHour.getEndTime().equals(doh.getEndTime())) {
+        Assertions.assertThat(openingHour.getEndTime())
+            .as(f("dp_qa_gl/dp_opening_hours: end_time for %s is %s", day,
+                doh.getEndTime()))
+            .isEqualTo(doh.getEndTime());
+      }
+    }
+
+
+  }
+
+  public void checkOperatingTime(String day, Integer dayNumber,
+      List<DpOperatingHour> dpOperatingHours, Hours operatingHour) {
+    dpOperatingHours = dpOperatingHours.stream()
+        .filter(days -> Objects.equals(days.getDayOfWeek(), dayNumber))
+        .collect(
+            Collectors.toList());
+
+    for (DpOperatingHour doh : dpOperatingHours) {
+      if (operatingHour.getStartTime().equals(doh.getStartTime())) {
+        Assertions.assertThat(operatingHour.getStartTime())
+            .as(f("dp_qa_gl/dp_operating_hours: start_time for %s is %s", day,
+                doh.getStartTime()))
+            .isEqualTo(doh.getStartTime());
+      }
+      if (operatingHour.getEndTime().equals(doh.getEndTime())) {
+        Assertions.assertThat(operatingHour.getEndTime())
+            .as(f("dp_qa_gl/dp_operating_hours: end_time for %s is %s", day,
+                doh.getEndTime()))
+            .isEqualTo(doh.getEndTime());
+      }
+    }
+
   }
 
   public void errorCheckDpUser(DpUser dpUser) {
@@ -783,6 +1199,38 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .isEqualTo(labelRestrictions.getText());
   }
 
+  public void readDpEntity(DpDetailsResponse dpDetails, String element) {
+
+    Assertions.assertThat(element)
+        .as(f("Element Input is %s", element))
+        .isNotNull();
+
+    Assertions.assertThat(labelDpId.getText())
+        .as(f("Dp Id Is %s", dpDetails.getId()))
+        .isEqualTo(Long.toString(dpDetails.getId()));
+
+    Assertions.assertThat(labelDpName.getText())
+        .as(f("Dp Name Is %s", dpDetails.getName()))
+        .isEqualTo(dpDetails.getName());
+
+    Assertions.assertThat(labelDpShortName.getText())
+        .as(f("Dp Short Name Is %s", dpDetails.getShortName()))
+        .isEqualTo(dpDetails.getShortName());
+
+    Assertions.assertThat(labelDpAddress.getText())
+        .as(f("Dp Address Is %s", dpDetails.getAddress1() + " " + dpDetails.getAddress2()))
+        .containsIgnoringCase(dpDetails.getAddress1() + " " + dpDetails.getAddress2());
+
+    Assertions.assertThat(labelDpDirection.getText())
+        .as(f("Dp Directions Is %s", dpDetails.getDirections()))
+        .isEqualTo(dpDetails.getDirections());
+
+    Assertions.assertThat(labelDpActivity.getText())
+        .as(f("Dp Activity Is %s", dpDetails.getIsActive() ? "Active" : "Inactive"))
+        .isEqualTo(dpDetails.getIsActive() ? "Active" : "Inactive");
+
+  }
+
   public void readDpUserEntity(DpUser dpUser) {
     Assertions.assertThat(dpUser.getUsername()).as(f("username Is %s", dpUser.getUsername()))
         .isEqualTo(labelUsername.getText());
@@ -832,7 +1280,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("id", Long.toString(dp.getId()))
         .put("name", dp.getName())
         .put("shortName", dp.getShortName())
-        .put("hub", Long.toString(dp.getHubId()))
+        .put("hub", f("%s - %s",dp.getHubId(),dp.getHubName()))
         .put("address", dp.getAddress1())
         .put("direction", dp.getDirections())
         .put("activity", dp.getIsActive() ? "Active" : "Inactive")
