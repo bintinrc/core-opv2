@@ -620,6 +620,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     routeIdLink.click();
     switchToNewWindow();
     waitWhilePageIsLoading();
+    pause5s();
     String actualRouteId = routeManifestRouteId.getText().trim();
     Assert.assertTrue("Assert that the search has results as expected after applying filters",
         actualRouteId.equalsIgnoreCase(expectedRouteId));
