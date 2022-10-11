@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3 @orderdimension
+@OperatorV2 @Core @EditOrder @EditOrderDetails @EditOrder3 @orderdimensioneditorder
 Feature: Edit Order Details
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -143,7 +143,7 @@ Feature: Edit Order Details
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE SLA |
 
-  @orderdimension1
+  @orderdimensioneditorder1
   Scenario: Operator Edit Order Details on Edit Order page (uid:1884a911-4599-4faa-8d63-a9b984f1c989)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
