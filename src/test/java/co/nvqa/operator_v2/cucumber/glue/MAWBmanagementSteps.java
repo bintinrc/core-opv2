@@ -83,7 +83,7 @@ public class MAWBmanagementSteps extends AbstractSteps{
         mawbManagementgPage.closeButton.click();
     }
 
-    @Then("Operator verifies total {int} result show on MAWB Management Page")
+    @Then("Operator verifies total {int} results shown on MAWB Management Page")
     public void operatorVerifiesTotalResult(int expectedNumber){
         String expectedMessage = f("Showing %1$d of %1$d results",expectedNumber);
         mawbManagementgPage.mawbtable.verifyTotalSearchRecord(expectedMessage);

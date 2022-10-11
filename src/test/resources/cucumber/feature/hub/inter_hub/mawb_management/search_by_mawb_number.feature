@@ -103,7 +103,7 @@ Feature: MAWB Management - Search by MAWB number
       | Unable to find the following 1 MAWB:\nabcdeffff|
     Given Operator clicks to go back button on MAWB Management page
     Then Operator verifies Search MAWB Management Page
-    And Operator verifies total 5 result show on MAWB Management Page
+    And Operator verifies total 5 results shown on MAWB Management Page
 
   @DeleteShipments
   Scenario: Search by MAWB Number with Multiple Valid MAWB Number > 100
@@ -171,7 +171,7 @@ Feature: MAWB Management - Search by MAWB number
       | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies Search MAWB Management Page
-    And Operator verifies total 5 result show on MAWB Management Page
+    And Operator verifies total 5 results shown on MAWB Management Page
 
   @DeleteShipments
   Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number > 100
