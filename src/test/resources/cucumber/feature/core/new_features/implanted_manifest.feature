@@ -68,8 +68,9 @@ Feature: Implanted Manifest
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
-    When Operator creates manifest for "000000" reservation on Implanted Manifest page
-    Then Operator verifies that "Reservation ID not found! Please enter another Reservation ID" error toast message is displayed
+    When Operator creates manifest for "000001" reservation on Implanted Manifest page
+    Then Operator verifies that error toast displayed:
+      | top | Reservation or Job ID not found! Please enter another ID |
 
   Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Pending Reservation (uid:f88b803e-3992-4c04-8cf7-de10e37aaa9e)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -87,7 +88,8 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that "Not a success reservation!" error toast message is displayed
+    Then Operator verifies that error toast displayed:
+      | top | Not a success reservation! |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
@@ -121,7 +123,8 @@ Feature: Implanted Manifest
     And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that "Not a success reservation!" error toast message is displayed
+    Then Operator verifies that error toast displayed:
+      | top | Not a success reservation! |
     When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
@@ -163,7 +166,8 @@ Feature: Implanted Manifest
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that "No POD available!" error toast message is displayed
+    Then Operator verifies that error toast displayed:
+      | top | No POD available! |
     And Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |
@@ -198,7 +202,8 @@ Feature: Implanted Manifest
     And Operator clicks Create Manifest on Implanted Manifest page
     And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" barcode on Implanted Manifest page
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
-    Then Operator verifies that "POD and Manifest parcel count do not match." error toast message is displayed
+    Then Operator verifies that error toast displayed:
+      | top | POD and Manifest parcel count do not match. |
     And Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | {gradle-current-date-yyyy-MM-dd} |

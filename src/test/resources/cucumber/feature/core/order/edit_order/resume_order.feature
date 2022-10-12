@@ -108,7 +108,10 @@ Feature: Resume Order
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    And API Driver failed the C2C/Return order pickup using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     And API Operator cancel created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page
@@ -125,6 +128,8 @@ Feature: Resume Order
       | status | Pending |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When Operator get "Pickup" transaction with status "Fail"
+    Then DB Operator verifies waypoint status is "FAIL"
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
@@ -175,6 +180,7 @@ Feature: Resume Order
     When Operator resume order on Edit Order page
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator get "Pickup" transaction with status "Fail"
     Then DB Operator verify the last Pickup transaction record of the created order:
       | status | Pending |
       | dnrId  | 0       |

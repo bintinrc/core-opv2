@@ -187,6 +187,17 @@ public class AllOrdersSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, reason);
   }
 
+  @When("^Operator Force Success single order on All Orders page:$")
+  public void operatorForceSuccessSingleOrderOnAllOrdersPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String changeReason = data.get("changeReason");
+    String reasonForChange = data.get("reasonForChange");
+    String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    allOrdersPage.findOrdersWithCsv(ImmutableList.of(trackingId));
+    allOrdersPage.forceSuccessOrders(changeReason, reasonForChange);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
+  }
+
   @When("^Operator Force Success orders with COD collection on All Orders page:$")
   public void operatorForceSuccessSingleOrderOnAllOrdersPageWithCodCollection(
       List<Map<String, String>> data) {
@@ -210,7 +221,9 @@ public class AllOrdersSteps extends AbstractSteps {
         allOrdersPage.manuallyCompleteOrderDialog.codCheckboxes.get(i).setValue(checked);
       }
     }
-    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    allOrdersPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }
@@ -223,7 +236,9 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    allOrdersPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    allOrdersPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     allOrdersPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     pause2s();
   }
@@ -354,10 +369,41 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.printWaybill(trackingId);
   }
 
+  @When("^Operator print Waybill for multiple orders on All Orders page$")
+  public void operatorPrintWaybillForMultipleOrdersOnAllOrdersPage() {
+    allOrdersPage.selectAllShown();
+    allOrdersPage.actionsMenu.selectOption("Print Waybills");
+    allOrdersPage.printWaybillsDialog.waitUntilVisible();
+    allOrdersPage.printWaybillsDialog.checkbox.check();
+    allOrdersPage.printWaybillsDialog.downloadSelected.click();
+    allOrdersPage.printWaybillsDialog.forceClose();
+  }
+
   @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyWaybillContentsIsCorrect(order);
+  }
+
+  @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")
+  public void operatorVerifyThePrintedWaybillForMultipleOrderOnAllOrdersPageContainsCorrectInfo() {
+    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+    for (int i = 0; i < orders.size(); i++) {
+      boolean found = false;
+      for (int j = 0; j < orders.size(); j++) {
+        try {
+          allOrdersPage.editOrderPage.verifyAirwayBillContentsIsCorrect(orders.get(i), j,
+              "awb_a4_page_1");
+          found = true;
+          break;
+        } catch (AssertionError ex) {
+        }
+      }
+      Assertions.assertThat(found)
+          .withFailMessage(
+              "Correct info for order " + orders.get(i).getTrackingId() + " was not found")
+          .isTrue();
+    }
   }
 
   @When("^Operator resume order on All Orders page$")

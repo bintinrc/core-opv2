@@ -205,4 +205,52 @@ public class AddressingSteps extends AbstractSteps {
       assertions.assertAll();
     });
   }
+
+  @Then("Operator verifies address on Addressing Page to Return Default Value:")
+  public void operatorVerifiesAddressOnAddressingPageToReturnDefaultValue(
+      Map<String, String> data) {
+    Addressing expected = new Addressing(resolveKeyValues(data));
+    addressingPage.inFrame(page -> {
+      page.addressCardBtn.get(0).click();
+      SoftAssertions assertions = new SoftAssertions();
+      assertions.assertThat(page.addressCards.get(0).street.getValue())
+          .as("Street Name")
+          .isEqualTo(expected.getStreetName());
+      assertions.assertThat(page.addressCards.get(0).postcode.getValue())
+          .as("Postcode")
+          .isEqualTo(expected.getPostcode());
+      assertions.assertThat(page.addressCards.get(0).latitude.getValue())
+          .as("Latitude")
+          .isEqualTo(expected.getLatitude().toString());
+      assertions.assertThat(page.addressCards.get(0).longitude.getValue())
+          .as("Longitude")
+          .isEqualTo(expected.getLongitude().toString());
+      if (isNotBlank(expected.getProvince())) {
+        assertions.assertThat(page.addressCards.get(0).province.getValue())
+            .as("Province")
+            .isEqualTo(expected.getProvince());
+      }
+      if (isNotBlank(expected.getCity())) {
+        assertions.assertThat(page.addressCards.get(0).city.getValue())
+            .as("City")
+            .isEqualTo(expected.getCity());
+      }
+      if (isNotBlank(expected.getAddressType())) {
+        assertions.assertThat(page.addressCards.get(0).addresstype.getValue())
+            .as("AddressType")
+            .isEqualTo(expected.getAddressType());
+      }
+      if (isNotBlank(expected.getSource())) {
+        assertions.assertThat(page.addressCards.get(0).source.getValue())
+            .as("Source")
+            .isEqualTo(expected.getSource());
+      }
+      if (isNotBlank(expected.getScore())) {
+        assertions.assertThat(page.addressCards.get(0).score.getValue())
+            .as("Score")
+            .isEqualTo(expected.getSource());
+      }
+      assertions.assertAll();
+    });
+  }
 }

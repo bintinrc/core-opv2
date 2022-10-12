@@ -64,7 +64,7 @@ Feature: Shipment Hub Inbound Without Trip Scanning 2
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} in Shipment Inbound Scanning page
     Then Click on Yes, continue on dialog box
-    Then Operator verify scan text message "Destination Reached" appears in Shipment Inbound Box
+    Then Operator verify small message "{KEY_CREATED_SHIPMENT_ID} is an invalid shipment ID." appears in Shipment Inbound Box
 
   @DeleteShipment
   Scenario: Hub Inbound Completed Shipment Not In Destination Hub (uid:3eedde95-b367-4898-9ce1-a65427ac2241)

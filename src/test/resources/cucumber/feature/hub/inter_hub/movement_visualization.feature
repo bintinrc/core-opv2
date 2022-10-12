@@ -26,8 +26,8 @@ Feature: Movement Visualization
   Scenario: View Movement From Destination Hub (uid:d52f1a47-8b9e-49be-96e5-74265f83cfe2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
-    And Operator selects the Hub by name "{hub-relation-destination-hub-name}" for Hub Type "destination"
-    And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
+    And Operator selects the Hub by name "{hub-name-3}" for Hub Type "destination"
+    And API Operator gets all relations for "destination" Hub id "{hub-id-3}"
     And Operator clicks the selected Hub
     Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
     When Operator clicks the first result on the list shown on Movement Visualization Page
@@ -36,8 +36,8 @@ Feature: Movement Visualization
   Scenario: Clear Filter From Destination Hub (uid:cbc6906d-46a7-4f9e-8c31-11d557e6dfcc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
-    And Operator selects the Hub by name "{hub-relation-destination-hub-name}" for Hub Type "destination"
-    And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
+    And Operator selects the Hub by name "{hub-name-3}" for Hub Type "destination"
+    And API Operator gets all relations for "destination" Hub id "{hub-id-3}"
     And Operator clicks the selected Hub
     Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
     And Operator clears the filters in Movement Visualization Page

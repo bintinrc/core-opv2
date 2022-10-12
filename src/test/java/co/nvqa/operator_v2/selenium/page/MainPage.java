@@ -66,6 +66,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
     MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
     MAP_OF_END_URL.put("Station User Management", "admin/hubs");
+    MAP_OF_END_URL.put("Last Mile and RTS Zones", "zones");
   }
 
   public MainPage(WebDriver webDriver) {
@@ -125,10 +126,6 @@ public class MainPage extends OperatorV2SimplePage {
     closeDialogIfVisible();
     openNavigationPanel();
     String mainDashboard = grabEndURL(navTitle);
-    if (mainDashboard.contains("(new)")){
-      mainDashboard = mainDashboard.replace("(","");
-      mainDashboard = mainDashboard.replace(")","");
-    }
     clickNavigation(parentTitle, navTitle, mainDashboard);
   }
 

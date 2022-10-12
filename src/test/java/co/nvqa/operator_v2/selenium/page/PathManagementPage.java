@@ -498,7 +498,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
   }
 
   public void captureErrorNotification() {
-    pause3s();
+    antNotificationMessage.waitUntilVisible(300);
     if(antNotificationMessage.isDisplayed()){
       if(antNotificationDescription.isDisplayed()){
         notificationMessage = antNotificationDescription.getText();

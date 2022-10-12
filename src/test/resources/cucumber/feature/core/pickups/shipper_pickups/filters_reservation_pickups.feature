@@ -1,4 +1,4 @@
-@OperatorV2 @Core @PickUps @ShipperPickups @FilterReservation
+@OperatorV2 @Core @ShipperPickups @ShipperPickups2 @FilterReservation
 Feature: Shipper Pickups - Filter Reservation Pickup
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -41,7 +41,7 @@ Feature: Shipper Pickups - Filter Reservation Pickup
       | shipperId   | {shipper-v4-legacy-id}                   |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filters Reservation by Hub Name (<hiptest-uid>)
+  Scenario: Operator Filters Reservation by Hub Name
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id}    |
@@ -76,10 +76,10 @@ Feature: Shipper Pickups - Filter Reservation Pickup
       | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
       | zone     | {zone-full-name-3}               |
     Then Operator verify reservation details on Shipper Pickups page:
-      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
-      | shipperName | {shipper-v4-name}                        |
-      | routeId     | null                                     |
-      | driverName  | null                                     |
+      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}            |
+      | shipperName | ^{shipper-v4-name} - {shipper-v4-contact} \(\+\d+\) |
+      | routeId     | null                                                |
+      | driverName  | null                                                |
 
   Scenario: Operator Filters Reservation by Waypoint Status - PENDING (uid:f9641b05-1512-48f9-961d-b627e044c5a5)
     Given Operator go to menu Utilities -> QRCode Printing

@@ -35,7 +35,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
@@ -112,6 +116,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public PullSelectedFromRouteDialog pullSelectedFromRouteDialog;
+
+  @FindBy(css = "md-dialog")
+  public PrintWaybillsDialog printWaybillsDialog;
 
   @FindBy(css = "md-dialog")
   public ResumeSelectedDialog resumeSelectedDialog;
@@ -207,7 +214,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     filterPreset.waitUntilEnabled(60);
   }
 
-  private final EditOrderPage editOrderPage;
+  public final EditOrderPage editOrderPage;
 
   public AllOrdersPage(WebDriver webDriver) {
     this(webDriver, new EditOrderPage(webDriver));
@@ -337,11 +344,26 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     manuallyCompleteOrderDialog.waitUntilVisible();
     String reason = "Force success from automated test";
-    manuallyCompleteOrderDialog.changeReason.setValue(reason);
+    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    manuallyCompleteOrderDialog.reasonForChange.setValue(reason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     manuallyCompleteOrderDialog.waitUntilInvisible();
     waitUntilInvisibilityOfToast("Complete Order");
     return reason;
+  }
+
+  public void forceSuccessOrders(String reason, String reasonDescr) {
+    clearFilterTableOrderByTrackingId();
+    selectAllShown();
+    actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
+    manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
+    if (StringUtils.isNotBlank(reasonDescr)) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    }
+    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    manuallyCompleteOrderDialog.waitUntilInvisible();
+    waitUntilInvisibilityOfToast("Complete Order");
   }
 
   public void verifyOrderIsForceSuccessedSuccessfully(Order order) {
@@ -645,7 +667,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public void switchToEditOrderWindow(Long orderId) {
     switchToOtherWindow("order/" + orderId);
-    editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+    editOrderPage.waitWhilePageIsLoading(120);
   }
 
   public String getTextOnTableOrder(int rowNumber, String columnDataClass) {
@@ -731,8 +753,11 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.ordersWithCod']/td[2]//md-checkbox")
     public List<MdCheckbox> codCheckboxes;
 
+    @FindBy(css = "[id^='container.order.edit.reasons']")
+    public MdSelect changeReason;
+
     @FindBy(css = "[id^='container.order.edit.input-reason-for-change']")
-    public TextBox changeReason;
+    public TextBox reasonForChange;
 
     public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -991,29 +1016,29 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     selectAllShown();
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-            findElementByXpath("//button[@aria-label = 'Action']"));
+        findElementByXpath("//button[@aria-label = 'Action']"));
     pause2s();
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-            findElementByXpath("//button[@aria-label = 'Early Pickup']"));
+        findElementByXpath("//button[@aria-label = 'Early Pickup']"));
     pause2s();
     if ("Return To Sender".equalsIgnoreCase(action)) {
       ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-              findElementByXpath("//md-radio-button[@aria-label='Return To Sender']"));
+          findElementByXpath("//md-radio-button[@aria-label='Return To Sender']"));
       pause2s();
     }
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-            findElementByXpath("//button[@aria-label = 'Submit']"));
+        findElementByXpath("//button[@aria-label = 'Submit']"));
     pause2s();
-    if("date".equalsIgnoreCase(date)) {
+    if ("date".equalsIgnoreCase(date)) {
       getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
-              .clear();
+          .clear();
       pause1s();
       getWebDriver().findElement(By.xpath("//input[contains(@class,'datepicker-input')]"))
-              .sendKeys(formatter.format(today.plusDays(5)));
+          .sendKeys(formatter.format(today.plusDays(5)));
       pause2s();
     }
     ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
-            findElementByXpath("//button[@aria-label = 'Submit']"));
+        findElementByXpath("//button[@aria-label = 'Submit']"));
     ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='100%'");
   }
 
@@ -1028,52 +1053,67 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifyDriverCollect(
-          DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder, String trackingId) {
+      DatabaseCheckingDriverCollectOrder dbCheckingDriverCollectOrder, String trackingId) {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
     assertEquals("Barcode is different : ", dbCheckingDriverCollectOrder.getBarcode(), trackingId);
     assertEquals("DP Reservation Status is not the same : ",
-            dbCheckingDriverCollectOrder.getRsvnStatus(), "RELEASED");
-    assertEquals("DP Reservation Event Name is not the same : ", dbCheckingDriverCollectOrder.getRsvnEventName(), "DRIVER_COLLECTED");
+        dbCheckingDriverCollectOrder.getRsvnStatus(), "RELEASED");
+    assertEquals("DP Reservation Event Name is not the same : ",
+        dbCheckingDriverCollectOrder.getRsvnEventName(), "DRIVER_COLLECTED");
     assertEquals("DP Job Status is not the same : ", dbCheckingDriverCollectOrder.getJobStatus(),
-            "COMPLETED");
-    assertEquals("DP Job Order Status is not the same : ", dbCheckingDriverCollectOrder.getJobOrderStatus(), "SUCCESS");
+        "COMPLETED");
+    assertEquals("DP Job Order Status is not the same : ",
+        dbCheckingDriverCollectOrder.getJobOrderStatus(), "SUCCESS");
     assertEquals("Released To is not the same : ", dbCheckingDriverCollectOrder.getReleasedTo(),
-            "DRIVER");
+        "DRIVER");
     assertTrue("Released At is not the same : ",
-            dbCheckingDriverCollectOrder.getReleasedAt().toString()
-                    .startsWith(formatter.format(today)));
+        dbCheckingDriverCollectOrder.getReleasedAt().toString()
+            .startsWith(formatter.format(today)));
   }
 
   public void verifyOrderStatus(Order order, String status, String granularStatus) {
     assertTrue("Status is not correct", order.getStatus()
-            .equalsIgnoreCase(status));
+        .equalsIgnoreCase(status));
     assertTrue("Granular Status is not correct: ", order
-            .getGranularStatus().equalsIgnoreCase(granularStatus));
+        .getGranularStatus().equalsIgnoreCase(granularStatus));
   }
 
   public void databaseVerifyCustomerCollect(
-          DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder, String trackingId) {
+      DatabaseCheckingCustomerCollectOrder dbCheckingCustomerCollectOrder, String trackingId) {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
     assertEquals("Barcode is different : ", dbCheckingCustomerCollectOrder.getBarcode(),
-            trackingId);
+        trackingId);
     assertEquals("Released To is not the same : ", dbCheckingCustomerCollectOrder.getReleasedTo(),
-            "CUSTOMER");
+        "CUSTOMER");
     assertEquals("Reservation Event Name is not correct: ",
-            dbCheckingCustomerCollectOrder.getRsvnEventName(),
-            "DP_RELEASED_TO_CUSTOMER");
+        dbCheckingCustomerCollectOrder.getRsvnEventName(),
+        "DP_RELEASED_TO_CUSTOMER");
     assertTrue("Released At is not the same : ",
-            dbCheckingCustomerCollectOrder.getReleasedAt().toString()
-                    .startsWith(formatter.format(today)));
+        dbCheckingCustomerCollectOrder.getReleasedAt().toString()
+            .startsWith(formatter.format(today)));
     assertTrue("Collected At is not the same : ",
-            dbCheckingCustomerCollectOrder.getCollectedAt().toString()
-                    .startsWith(formatter.format(today)));
+        dbCheckingCustomerCollectOrder.getCollectedAt().toString()
+            .startsWith(formatter.format(today)));
     assertEquals("Status is not the same : ", dbCheckingCustomerCollectOrder.getStatus(),
-            "RELEASED");
+        "RELEASED");
     assertEquals("Source is not the same : ", dbCheckingCustomerCollectOrder.getSource(),
-            "OPERATOR");
+        "OPERATOR");
+  }
+
+  public static class PrintWaybillsDialog extends MdDialog {
+
+    @FindBy(css = "md-checkbox")
+    public MdCheckbox checkbox;
+
+    @FindBy(name = "container.order.list.download-selected")
+    public NvIconTextButton downloadSelected;
+
+    public PrintWaybillsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }

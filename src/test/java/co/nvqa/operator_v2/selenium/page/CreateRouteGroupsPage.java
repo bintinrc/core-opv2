@@ -236,7 +236,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     @FindBy(css = "input[data-testid='new-route-group-input']")
     public TextBox newRouteGroup;
 
-    @FindBy(css = "button[data-pa-label='Add Transactions/Reservations']")
+    @FindBy(css = "button[data-pa-label='Add Transactions/Reservations/PA Jobs']")
     public Button addTransactionsReservations;
 
     public AddToRouteGroupDialog(WebDriver webDriver, WebElement webElement) {

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs
+@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions
 Feature: Route Logs - Merge Transactions
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -50,13 +50,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "Pickup" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
       | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
       | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co | +6595557073    | +6595557073    | true               | uid:05fc0970-5666-4b38-a0c2-5625fd481688 |
@@ -81,13 +91,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
       | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              | uid:43d402e0-3439-4076-8c7a-ff2f79b4e6a3 |
@@ -112,13 +132,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "<transaction_type>" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
       | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
       | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | binti@test.co | +6595557073    | +6595557074    | true               | uid:1293cc94-0be1-4dfa-8a0c-ee049a008eb4 |
@@ -143,13 +173,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "<transaction_type>" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
       | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557074    | false              | uid:de3a73fa-5deb-4390-b5bf-7344473f59ec |
@@ -174,13 +214,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "<transaction_type>" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
       | top    | Transactions with 1 Routes Merged       |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies <transaction_type> transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2         | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
       | Pickup           | PP   | Return       | from      | generateTo      | binti@test.co | another@test.co | +6595557073    | +6595557073    | true               | uid:22d6a084-2967-4f1b-949f-9f7ee8d19d99 |
@@ -205,14 +255,23 @@ Feature: Route Logs - Merge Transactions
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
+    And API Operator get order details
+    And API Operator gets "Delivery" transaction waypoint ids of created orders
     When Operator merge transactions of created routes
+    And API Operator get order details
     Then Operator verifies that success react notification displayed:
-      | top                | Transactions with 1 Routes Merged       |
-      | bottom             | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-      | waitUntilInvisible | true                                    |
+      | top    | Transactions with 1 Routes Merged       |
+      | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
+    And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
+    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
+    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+    And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
+    And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
       | type | email_1       | email_2         | phone_number_1 |
       | DD   | binti@test.co | another@test.co | +6595557073    |

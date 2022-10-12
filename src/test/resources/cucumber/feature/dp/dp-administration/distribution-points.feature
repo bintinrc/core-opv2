@@ -6,68 +6,6 @@ Feature: DP Administration - Distribution Points
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @HardDeleteDp
-  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type (uid:6f003723-fe55-4cdb-808c-92230ecba8eb)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    Given Operator go to menu Distribution Points -> DP Administration
-    When Operator add new DP for the DP Partner on DP Administration page using existed partner with the following attributes:
-      | name                  | GENERATED                                                 |
-      | shortName             | GENERATED                                                 |
-      | contactNo             | GENERATED                                                 |
-      | externalStoreId       | GENERATED                                                 |
-      | shipperId             | 129623                                                    |
-      | postcode              | 677743                                                    |
-      | city                  | SG                                                        |
-      | address1              | 1 JELEBU ROAD                                             |
-      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
-      | floorNo               | 12                                                        |
-      | unitNo                | 11                                                        |
-      | hub                   | JKB                                                       |
-      | type                  | Ninja Point                                               |
-      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
-      | canShipperLodgeIn     | true                                                      |
-      | canCustomerCollect    | true                                                      |
-      | maxParcelStayDuration | 2                                                         |
-      | maxCap                | 1000000                                                   |
-      | capBuffer             | 1000000                                                   |
-      | activity              | active                                                    |
-    Then Operator verify new DP params
-    When DB Operator fetches dp details
-    And API DP get the DP Details by DP ID
-    Then Operator verifies dp Params with database
-
-  @HardDeleteDp
-  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Box Type (uid:9bb9265c-0513-4abe-88f8-cde661391231)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    Given Operator go to menu Distribution Points -> DP Administration
-    When Operator add new DP for the DP Partner on DP Administration page using existed partner with the following attributes:
-      | name                  | GENERATED                                                 |
-      | shortName             | GENERATED                                                 |
-      | contactNo             | GENERATED                                                 |
-      | externalStoreId       | GENERATED                                                 |
-      | shipperId             | 129623                                                    |
-      | postcode              | 677743                                                    |
-      | city                  | SG                                                        |
-      | address1              | 1 JELEBU ROAD                                             |
-      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
-      | floorNo               | 12                                                        |
-      | unitNo                | 11                                                        |
-      | hub                   | JKB                                                       |
-      | type                  | Ninja Box                                                 |
-      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
-      | canShipperLodgeIn     | true                                                      |
-      | canCustomerCollect    | true                                                      |
-      | maxParcelStayDuration | 2                                                         |
-      | maxCap                | 1000000                                                   |
-      | capBuffer             | 1000000                                                   |
-      | activity              | active                                                    |
-    Then Operator verify new DP params
-    When DB Operator fetches dp details
-    And API DP get the DP Details by DP ID
-    Then Operator verifies dp Params with database
-
-  @HardDeleteDp
   Scenario: DP Administration - Update Distribution Point - Ninja Point (uid:9f588a33-c2f9-45b2-a3ee-939bc5fe8e60)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"

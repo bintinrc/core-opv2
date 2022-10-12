@@ -217,7 +217,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}  |
       | longitude | {longitude-2} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
-    Then Operator verifies the address datasource details in Edit A Row modal:
+    Then Operator verifies the address datasource details in Row Details modal:
       | province     | {province-2}              |
       | municipality | {municipality-2}          |
       | barangay     | {barangay-2}              |
@@ -648,6 +648,74 @@ Feature: Address Datasource
       | latlong | {latitude-2}, {longitude-2} |
       | zone    | {KEY_ZONE_INFO.shortName}   |
       | hub     | {KEY_HUB_INFO.shortName}    |
+
+  @DeleteAddressDatasource
+  Scenario: PH Address Datasource - Edit Row - Whitelisted
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator clicks on Add a Row Button on Address Datasource Page
+    And Operator fills address parameters in Add a Row modal on Address Datasource page:
+      | latlong      | {latitude-1},{longitude-1} |
+      | province     | {province}                 |
+      | municipality | {municipality}             |
+      | barangay     | {barangay}                 |
+      | whitelisted  | True                       |
+    When Operator clicks on Add Button in Add a Row modal on Address Datasource page
+    When API Operator get Addressing Zone:
+      | latitude  | {latitude-1}  |
+      | longitude | {longitude-1} |
+    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    Then Operator verifies the address datasource details in Row Details modal:
+      | province     | {KEY_CREATED_ADDRESSING.province} |
+      | municipality | {KEY_CREATED_ADDRESSING.city}     |
+      | barangay     | {KEY_CREATED_ADDRESSING.district} |
+      | zone         | {KEY_ZONE_INFO.shortName}         |
+      | hub          | {KEY_HUB_INFO.shortName}          |
+    When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
+    And Operator verify the data source toast:
+      | top  | Datasource Updated |
+      | body | 1 match added      |
+    When Operator search the created address datasource:
+      | province     | {KEY_CREATED_ADDRESSING.province} |
+      | municipality | {KEY_CREATED_ADDRESSING.city}     |
+      | barangay     | {KEY_CREATED_ADDRESSING.district} |
+    Then Operator verifies new address datasource is added:
+      | province     | {KEY_CREATED_ADDRESSING.province}  |
+      | municipality | {KEY_CREATED_ADDRESSING.city}      |
+      | barangay     | {KEY_CREATED_ADDRESSING.district}  |
+      | latitude     | {KEY_CREATED_ADDRESSING.latitude}  |
+      | longitude    | {KEY_CREATED_ADDRESSING.longitude} |
+      | whitelisted  | True                               |
+    When Operator clicks on Edit Button on Address Datasource Page
+    And Operator fills address parameters in Edit Address modal on Address Datasource page:
+      | whitelisted | False |
+    When API Operator get Addressing Zone:
+      | latitude  | {latitude-1}  |
+      | longitude | {longitude-1} |
+    And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
+    When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
+    Then Operator verifies the address datasource details in Row Details modal:
+      | province     | {province}                |
+      | municipality | {municipality}            |
+      | barangay     | {barangay}                |
+      | zone         | {KEY_ZONE_INFO.shortName} |
+      | hub          | {KEY_HUB_INFO.shortName}  |
+    When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
+    And Operator verify the data source toast:
+      | top  | Datasource Updated |
+      | body | 1 match edited     |
+    When Operator refresh page
+    When Operator search the existing address datasource:
+      | province     | {province}     |
+      | municipality | {municipality} |
+      | barangay     | {barangay}     |
+    Then Operator verifies new address datasource is added:
+      | province     | {province}     |
+      | municipality | {municipality} |
+      | barangay     | {barangay}     |
+      | latitude     | {latitude-1}   |
+      | longitude    | {longitude-1}  |
+      | whitelisted  | False          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

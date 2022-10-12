@@ -10,18 +10,17 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.Comparators;
-import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Tristania Siagian
@@ -561,7 +560,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 editDriverDialog.licenseNumber.sendKeys(value);
                 break;
             case "licenseExpiryDate":
-                editDriverDialog.licenseExpiryDate.sendDate(value);
+              editDriverDialog.licenseExpiryDate.setDate(value);
                 break;
             case "licenseType":
                 editDriverDialog.selectLicenseType(value);
@@ -571,10 +570,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 click(f(SELECT_FILTER_VALUE_XPATH, value));
                 break;
             case "employmentStartDate":
-                editDriverDialog.employmentStartDate.sendDate(value);
+              editDriverDialog.employmentStartDate.setDate(value);
                 break;
             case "employmentEndDate":
-                editDriverDialog.employmentEndDate.sendDate(value);
+              editDriverDialog.employmentEndDate.setDate(value);
                 break;
         }
         editDriverDialog.save.click();

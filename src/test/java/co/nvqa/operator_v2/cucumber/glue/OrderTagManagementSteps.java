@@ -109,6 +109,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
         orderTagManagementPage.addFilter("Master Shipper");
       }
       orderTagManagementPage.masterShipperFilter.clearAll();
+      orderTagManagementPage.masterShipperFilter.waitUntilLoaded();
       orderTagManagementPage.masterShipperFilter.selectFilter(data.get("masterShipperName"));
     } else {
       if (orderTagManagementPage.masterShipperFilter.isDisplayedFast()) {
@@ -117,6 +118,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     }
 
     orderTagManagementPage.loadSelection.click();
+    orderTagManagementPage.waitWhilePageIsLoading();
   }
 
   @And("^Operator searches and selects orders created on Order Tag Management page$")

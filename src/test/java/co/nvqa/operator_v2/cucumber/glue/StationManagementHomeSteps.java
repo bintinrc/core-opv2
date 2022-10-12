@@ -9,15 +9,19 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +59,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
-        TimeoutException.class, InvalidElementStateException.class);
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class);
   }
 
   @When("Operator chooses the hub as {string} displayed in {string} and proceed")
@@ -99,6 +103,18 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
     stationManagementHomePage.closeIfModalDisplay();
     stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
+
+  @Then("Operator verifies that the Total Completion Rate:{string} is equal to {int}")
+  public void operator_verifies_that_the_Total_Completion_Rate_is_equal_to(String tileName,
+      Integer expectedCompletionRate) {
+    stationManagementHomePage.closeIfModalDisplay();
+    int TotalCompletionRate = stationManagementHomePage.getNumberFromTile(tileName);
+    takesScreenshot();
+    Assertions.assertThat(TotalCompletionRate)
+        .as("expected Value is not matching for Total Completion Rate : %s", tileName)
+        .isEqualTo(expectedCompletionRate);
+    takesScreenshot();
   }
 
   @Then("Operator verifies that the count in the second tile: {string} has increased by {int}")
@@ -219,6 +235,14 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_opens_modal_pop_up_through_hamburger_button_for_the_tile(String modalTitle,
       String tile) {
     stationManagementHomePage.openModalPopup(modalTitle, tile);
+  }
+
+  @And("Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: {string}")
+  public void operatorVerifiesThatRouteMonitoringPageIsOpenedOnClickingHamburgerButtonForTheTile(
+      String tileName) {
+    stationManagementHomePage.verifyRouteMonitoringPageIsOpenedInNewTab(tileName);
+    takesScreenshot();
+
   }
 
   @Then("Operator verifies that the table:{string} is displayed with following columns:")

@@ -42,7 +42,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[@class='ant-modal-content'][.//div[contains(.,'Create Route')]]")
   public CreateRouteDialog createRouteDialog;
 
-  @FindBy(css = ".load-selection button")
+  @FindBy(xpath = "//button[.='Load Selection']")
   public AntButton loadSelection;
 
   @FindBy(xpath = "//button[.='Search']")
@@ -191,7 +191,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   }
 
   public void setFilterAndLoadSelection(Date routeDateFrom, Date routeDateTo, String hubName) {
-    waitUntilLoaded();
+    waitUntilLoaded(60);
     routeDateFilter.setInterval(routeDateFrom, routeDateTo);
     if (StringUtils.isNotBlank(hubName)) {
       hubFilter.selectFilter(hubName);
@@ -205,6 +205,14 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
       super.waitUntilLoaded(1);
     } else {
       super.waitUntilLoaded(10);
+    }
+  }
+
+  public void waitUntilLoaded(int timeoutInSeconds) {
+    if (createRoute.isDisplayedFast()) {
+      super.waitUntilLoaded(1, timeoutInSeconds);
+    } else {
+      super.waitUntilLoaded(10, timeoutInSeconds);
     }
   }
 

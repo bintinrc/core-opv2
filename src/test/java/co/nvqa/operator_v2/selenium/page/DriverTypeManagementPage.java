@@ -54,6 +54,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "ng-pluralize")
   public PageElement rowsCount;
 
+  @FindBy(xpath = "//*[@type='submit']")
+  public PageElement submitButton;
+
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
 
@@ -63,6 +66,11 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     addDriverTypeDialog = new AddDriverTypeDialog(webDriver);
     editDriverTypeDialog = new EditDriverTypeDialog(webDriver);
     filtersForm = new FiltersForm(webDriver);
+  }
+
+  public void clickSubmitButton() {
+    waitUntilElementIsClickable(submitButton.getWebElement());
+    submitButton.click();
   }
 
   public FiltersForm filtersForm() {
@@ -144,7 +152,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     createDriverType.click();
     pause3s();
     addDriverTypeDialog.fillForm(driverTypeParams);
-    addDriverTypeDialog.submitForm();
+    clickSubmitButton();
   }
 
   public static class ConfirmDeleteDialog extends MdDialog {

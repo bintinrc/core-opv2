@@ -14,7 +14,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -138,8 +137,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
       }
       case TICKET_TYPE_SHIPPER_ISSUE: {
         createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-        createTicketDialog.orderOutcome
-            .searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
+        String outcome = recoveryTicket.getOrderOutcome();
+        if (StringUtils.isEmpty(outcome)) {
+          outcome = recoveryTicket.getOrderOutcomeDuplicateParcel();
+        }
+        createTicketDialog.orderOutcome.searchAndSelectValue(outcome);
         if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
           createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }

@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -969,6 +970,23 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
       friday.setValue(daysOfWeek.contains("friday"));
       saturday.setValue(daysOfWeek.contains("saturday"));
       sunday.setValue(daysOfWeek.contains("sunday"));
+    }
+
+    @Override
+    protected String getTableLocator() {
+      return StringUtils.isNotBlank(tableLocator) ? tableLocator
+          : "//div[contains(@class,'ant-table-body')]//table";
+    }
+
+    @Override
+    public int getRowsCount() {
+      if (StringUtils.isNotBlank(getTableLocator())) {
+        return executeInContext(getTableLocator(),
+            () -> getElementsCount(".//tbody/tr[not(@aria-hidden='true')]"));
+      } else {
+        return getElementsCount(
+            "//tbody//tr[not(@aria-hidden='true')][contains(@class,'ant-table-row')]");
+      }
     }
   }
 

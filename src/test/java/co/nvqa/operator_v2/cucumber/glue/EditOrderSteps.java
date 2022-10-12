@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -239,6 +241,15 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
+  @When("^Operator confirm manually complete order on Edit Order page:$")
+  public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String changeReason = data.get("changeReason");
+    String reasonForChange = data.get("reasonForChange");
+    editOrderPage.confirmCompleteOrder(changeReason, reasonForChange);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
+  }
+
   @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order page")
   public void verifyCodCollectedIsDisabled() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
@@ -250,7 +261,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order with COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -265,7 +278,8 @@ public class EditOrderSteps extends AbstractSteps {
     }
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -274,7 +288,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order without collecting COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
@@ -468,8 +484,15 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Given("New Stamp ID was generated")
   public void newStampIdWasGenerated() {
-    String stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(9).toUpperCase();
+    newStampIdWasGenerated("STAMP");
+  }
+
+  @Given("New Stamp ID with {value} prefix was generated")
+  public void newStampIdWasGenerated(String prefix) {
+    String trackingNumber = TestUtils.generateAlphaNumericString(9).toUpperCase();
+    String stampId = "NVSG" + prefix.toUpperCase() + trackingNumber;
     put(KEY_STAMP_ID, stampId);
+    put(KEY_TRACKING_NUMBER, trackingNumber);
   }
 
   @When("^Operator unable to change Stamp ID of the created order to \"(.+)\" on Edit order page$")
@@ -1605,6 +1628,20 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator verifies ticket status is {value} on Edit Order page")
+  public void updateRecoveryTicket(String data) {
+    String status = editOrderPage.recoveryTicket.getText();
+    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+    Matcher m = p.matcher(status);
+    if (m.matches()) {
+      Assertions.assertThat(m.group(1))
+          .as("Ticket status")
+          .isEqualToIgnoringCase(data);
+    } else {
+      fail("Could not get ticket status from string: " + status);
+    }
+  }
+
   @Then("Operator updates recovery ticket on Edit Order page:")
   public void updateRecoveryTicket(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -1636,7 +1673,7 @@ public class EditOrderSteps extends AbstractSteps {
       }
       editOrderPage.editTicketDialog.newInstructions.setValue(instruction);
     }
-    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
   }
 
   @When("^Operator create new recovery ticket on Edit Order page:$")

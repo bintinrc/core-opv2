@@ -1,11 +1,11 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @AddToShipment
 Feature: Add To Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder @Debug
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Add Parcel to Shipment (uid:d271a9e3-af5c-478f-9190-5661b2af9986)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
