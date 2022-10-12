@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @ForceSuccess @EditOrder2
+@OperatorV2 @Core @EditOrder @ForceSuccess @EditOrder2 @runnow
 Feature: Force Success
 
   @LaunchBrowser @ShouldAlwaysRun
