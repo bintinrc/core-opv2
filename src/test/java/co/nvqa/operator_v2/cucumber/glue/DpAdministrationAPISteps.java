@@ -5,6 +5,7 @@ import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Hours;
 import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
@@ -34,6 +35,10 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
   private static final String OPERATING_HOURS_EVERYDAY_DOUBLE = "OPERATING_HOURS_EVERYDAY_DOUBLE";
 
+  private static final String ALTERNATE_DP_ID_1 = "ALTERNATE_DP_ID_1";
+  private static final String ALTERNATE_DP_ID_2 = "ALTERNATE_DP_ID_2";
+  private static final String ALTERNATE_DP_ID_3 = "ALTERNATE_DP_ID_3";
+
   @Then("Operator need to check that the update is {string}")
   public void OperatorCheckUpdateDp(String occasion) {
     switch (occasion) {
@@ -60,6 +65,18 @@ public class DpAdministrationAPISteps extends AbstractSteps {
         break;
 
     }
+  }
+
+  @Then("Operator Set newly created dp for Alternate DP number {string}")
+  public void alternateDPNumber(String number) {
+    ImmutableMap<String, String> alternateDps = ImmutableMap.<String, String>builder()
+        .put("1", ALTERNATE_DP_ID_1)
+        .put("2", ALTERNATE_DP_ID_2)
+        .put("3", ALTERNATE_DP_ID_3)
+        .build();
+
+    Long dpDetailsResponseId = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE_ID);
+    put(alternateDps.get(number),dpDetailsResponseId);
   }
 
   @When("Operator fill Detail for create DP:")
