@@ -7,7 +7,7 @@ Feature: DP Administration - Distribution Point Partners
 
   @DeleteDpPartner
   Scenario: DP Administration - Download CSV DP Partners (uid:ccd24e58-8ae7-4410-8d20-831b6da979b1)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     Then The Dp Administration page is displayed
     And API Operator get DP Management partner list
     When Operator get DP Partners Data on DP Administration page
@@ -19,9 +19,9 @@ Feature: DP Administration - Distribution Point Partners
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Search DP partner (uid:2a3723b3-4584-492d-871e-52b439b2ade3)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "diaz.ilyasa@ninjavan.co","restrictions": "Only For Testing","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Partner Automation", "poc_name": "Diaz Ilyasa", "poc_tel": "DIAZ00123","poc_email": "{default-partners-email}","restrictions": "Only For Testing","send_notifications_to_customer": false } |
     And Operator refresh page
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     Then The Dp Administration page is displayed
     And Operator Search with Some DP Partner Details :
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
@@ -29,7 +29,7 @@ Feature: DP Administration - Distribution Point Partners
       | searchDetails | id,name,pocName,pocTel,pocEmail,restrictions |
 
   Scenario Outline: DP Administration - Create DP Partner - Check validation form - <dataset_name> (<hiptest-uid>)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator refresh page
@@ -51,7 +51,7 @@ Feature: DP Administration - Distribution Point Partners
       | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:c707f35a-f992-49b2-bf1b-efe999c0a462 |
 
   Scenario Outline: DP Administration - Create DP Partner - Additional check validation form - <dataset_name> (<hiptest-uid>)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator refresh page
@@ -61,8 +61,8 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
     And Operator clear the "<key_dataset>" from DP Partner form
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -78,14 +78,14 @@ Feature: DP Administration - Distribution Point Partners
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario Outline: DP Administration - Create DP Partner - <dataset_name> (<hiptest-uid>)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator refresh page
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel         | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | <phone_number> | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel         | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | <phone_number> | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -98,13 +98,13 @@ Feature: DP Administration - Distribution Point Partners
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: DP Administration - Update DP Partner (uid:cb1ca5de-be07-4a3b-903e-955bf19dd2b1)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id
@@ -119,13 +119,13 @@ Feature: DP Administration - Distribution Point Partners
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario Outline: DP Administration - Update DP Partner - Check validation form - <dataset_name> (<hiptest-uid>)
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator click on Add Partner button on DP Administration React page
     Then Operator Fill Dp Partner Details below :
-      | name                                    | pocName     | pocTel | pocEmail                | restrictions     | sendNotificationsToCustomer |
-      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | diaz.ilyasa@ninjavan.co | Only For Testing | true                        |
+      | name                                    | pocName     | pocTel | pocEmail                 | restrictions     | sendNotificationsToCustomer |
+      | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | Diaz Ilyasa | VALID  | {default-partners-email} | Only For Testing | true                        |
     Then Operator press submit button
     And Operator check the submitted data in the table
     And Operator get partner id

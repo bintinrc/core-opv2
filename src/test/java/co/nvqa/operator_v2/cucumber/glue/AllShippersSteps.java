@@ -2020,6 +2020,14 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.verifyPricingProfileDetails(pricingProfile, pricingProfileFromOPV2);
   }
 
+  @Then("Operator verifies shipper discount details is null")
+  public void operatorVerifiesShipperDiscountDetails() {
+    Pricing pricing = get(KEY_PRICING_PROFILE_DETAILS);
+    Assertions.assertThat(pricing.getShipperDiscountId()).as("Shipper Discount Id is null")
+        .isNull();
+  }
+
+
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
   public void verifyShipperType(String expected) {
     assertEquals("Shipper type", resolveValue(expected),

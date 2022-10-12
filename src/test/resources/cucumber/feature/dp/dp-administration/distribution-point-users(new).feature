@@ -8,12 +8,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Create DP User (uid:0146137a-6964-4985-a417-7bbd6035e5b7)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -24,8 +24,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username  | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | GENERATED | password |
+      | firstName | lastName | contactNo | emailId                 | username  | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | GENERATED | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
@@ -37,12 +37,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Create DP User - Username is duplicate (uid:4b65c669-4fc4-44b1-9205-2ea7b44cf247)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -53,20 +53,20 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username        | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | {dp-user-exist} | password |
+      | firstName | lastName | contactNo | emailId                 | username        | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | {dp-user-exist} | password |
     Then Operator press submit user button
     And Operator will get the error message that the username is duplicate
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario Outline: DP Administration - Create DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -90,19 +90,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username                                    | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | USERNAME{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | firstName | lastName | contactNo    | email                   | username                                    | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | USERNAME{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -126,19 +126,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Search DP User (uid:f254face-546e-410c-90dd-b23780cb40e2)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username  | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | GENERATED | password |
+      | firstName | lastName | contactNo    | email                   | username  | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | GENERATED | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -154,12 +154,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario Outline: DP Administration - Update DP User - Validation check - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -170,8 +170,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username  | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | GENERATED | password |
+      | firstName | lastName | contactNo | emailId                 | username  | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | GENERATED | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
@@ -193,19 +193,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update DP user (uid:cfa0f458-4373-4927-b411-a653e5b9dc10)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name             | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username  | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | GENERATED | password |
+      | firstName | lastName | contactNo    | email                   | username  | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | GENERATED | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -216,8 +216,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     Then Operator press edit user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   |
-      | Diaz      | Edited   | GENERATED | GENERATED |
+      | firstName | lastName | contactNo | emailId                 |
+      | Diaz      | Edited   | GENERATED | {default-dp-user-email} |
     Then Operator press submit edit user button
     And Operator waits for 5 seconds
     When DB Operator gets details for DP User from Hibernate
@@ -229,19 +229,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update DP User - Reset Password Successfully (uid:c969e718-4404-4652-8c04-06decadf38ea)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name             | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username  | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | GENERATED | password |
+      | firstName | lastName | contactNo    | email                   | username  | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | GENERATED | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -261,19 +261,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update DP User - Reset Password Failed (uid:494cd400-a0b9-4142-acab-e777741756ac)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name             | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username  | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | GENERATED | password |
+      | firstName | lastName | contactNo    | email                   | username  | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | GENERATED | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -292,19 +292,19 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update DP User - Reset Password - Back to User Edit (uid:30502542-9542-4cde-890f-10770a7ff62e)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name             | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Creation Test | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Then Operator fill Detail for create DP Management User:
-      | firstName | lastName | contactNo    | email            | username  | password |
-      | Diaz      | Ilyasa   | {dp-contact} | tested@email.com | GENERATED | password |
+      | firstName | lastName | contactNo    | email                   | username  | password |
+      | Diaz      | Ilyasa   | {dp-contact} | {default-dp-user-email} | GENERATED | password |
     And API Operator request to create DP Management User:
       | dpPartner | KEY_DP_MANAGEMENT_PARTNER             |
       | dp        | KEY_CREATE_DP_MANAGEMENT_RESPONSE     |
       | dpUser    | KEY_CREATE_DP_MANAGEMENT_USER_REQUEST |
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -321,12 +321,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: DP Administration - Delete Dp User (uid:15116d9e-9569-44b4-b970-4884355f9195)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -337,8 +337,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username                                | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | firstName | lastName | contactNo | emailId                 | username                                | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
@@ -360,12 +360,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Delete Dp User - Wrong DP (uid:ef25d5d3-d575-4128-af02-5e56cc7cd46e)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -376,8 +376,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username                                | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | firstName | lastName | contactNo | emailId                 | username                                | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
@@ -399,12 +399,12 @@ Feature: DP Administration - Distribution Point Users
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Delete Dp User - Wrong DP Partner (uid:16a7cf1b-6778-48de-b69e-7ef163edc71c)
     Given API Operator create new DP Management partner using data below:
-      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "duserview@ninjavan.co","restrictions": "Test View DP","send_notifications_to_customer": false } |
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
       | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
       | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
-    Given Operator go to menu Distribution Points -> DP Administration (New)
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -415,8 +415,8 @@ Feature: DP Administration - Distribution Point Users
     Then The Dp page is displayed
     And Operator press add user Button
     When Operator Fill Dp User Details below :
-      | firstName | lastName | contactNo | emailId   | username                                | password |
-      | Diaz      | Ilyasa   | GENERATED | GENERATED | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
+      | firstName | lastName | contactNo | emailId                 | username                                | password |
+      | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate

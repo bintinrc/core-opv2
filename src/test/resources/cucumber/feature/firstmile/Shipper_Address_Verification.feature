@@ -39,6 +39,7 @@ Feature: Shipper Address Verification
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                       |
+      | noOfAddress                 | 1                                                                                                                                                                                                     |
       | withLatLong                 | NO                                                                                                                                                                                                    |
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
     Given API Shipper create an order using below json as request body
@@ -124,7 +125,7 @@ Feature: Shipper Address Verification
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                       |
       | noOfAddress                 | 1                                                                                                                                                                                                     |
-      | withLatLong                 | YES                                                                                                                                                                                                   |
+      | withLatLong                 | NO                                                                                                                                                                                                    |
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
     Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
     Then DB Operator verifies that latlong is assigned in shipper address table for shipperID "{shipper-v4-id}"

@@ -140,9 +140,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public void clickAddNewDriver() {
     final String xpathAddButton = "//button[.='Add New Driver']";
+    pause3s();
     waitUntilVisibilityOfElementLocated(xpathAddButton);
     click(xpathAddButton);
-    pause3s();
   }
 
   public void addNewDriver(DriverInfo driverInfo) {
@@ -537,7 +537,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   public static class ContactDetailsMenu extends OperatorV2SimplePage {
 
     public static final String LOCATOR_LICENSE = "//div[@class='ant-popover-inner-content']/div/div[2]/span[2]";
-    public static final String LOCATOR_CONTACT = "//div[contains(@class, 'ant-col ant-col-24')]/div/div[1]/span[1]";
+    public static final String LOCATOR_CONTACT = "//div[contains(@class, 'ant-col ant-col-24')]/div/div[1]";
     public static final String LOCATOR_CONTACT_TYPE = "//div[@class='ant-col ant-col-24']/div/div[2]/span[1]";
     public static final String LOCATOR_COMMENTS = "//*[contains(@class,'md-active')]//*[@class='contact-info-comments']/div[contains(.,'Comments')]/div[2]";
 
