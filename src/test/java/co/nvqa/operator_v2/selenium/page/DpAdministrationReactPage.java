@@ -311,6 +311,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input")
+  public TextBox fieldAlternateDp1;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
+  public TextBox fieldAlternateDp2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input")
+  public TextBox fieldAlternateDp3;
+
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
 
@@ -541,6 +550,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
+  public static final String CHOOSE_ALTERNATIVE_DP_XPATH = "//div[@class='rc-virtual-list']//div[@class='ant-select-item-option-content'][contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
   public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
 
@@ -825,6 +835,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       }
     }
 
+  }
+
+  public void chooseAlternateDp(Long alternateDPId) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
   }
 
   public void chooseShipperAccountDp(Long shipperId) {
