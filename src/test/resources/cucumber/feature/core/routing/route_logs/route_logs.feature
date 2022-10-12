@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @verifyav
+@OperatorV2 @Core @Routing @RouteLogs
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -265,7 +265,7 @@ Feature: Route Logs
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
 
-  @DeleteOrArchiveRoute @verifyav1
+  @DeleteOrArchiveRoute
   Scenario: Operator Address Verify Route on Route Logs Page (uid:1e689de9-9f65-4447-8532-a775abbd9574)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
