@@ -1040,21 +1040,23 @@ public class DpAdministrationSteps extends AbstractSteps {
       } else if (condition.equals(CHECK_ALTERNATE_DP_DATA)) {
         DpSetting dpSetting = resolveValue(dataTableAsMap.get("dpSetting"));
         String[] dpsToRedirect = dpSetting.getDpsToRedirect().split(",");
-        for (String altDp : dpsToRedirect) {
-          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId1()
-              .toString().equals(altDp)) {
-            Assertions.assertThat(dpDetailsResponse.getAlternateDpId1().toString())
-                .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
-          }
-          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId2()
-              .toString().equals(altDp)) {
-            Assertions.assertThat(dpDetailsResponse.getAlternateDpId2().toString())
-                .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
-          }
-          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId3()
-              .toString().equals(altDp)) {
-            Assertions.assertThat(dpDetailsResponse.getAlternateDpId3().toString())
-                .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
+        if (dpDetailsResponse != null){
+          for (String altDp : dpsToRedirect) {
+            if (dpDetailsResponse.getAlternateDpId1() != null && dpDetailsResponse.getAlternateDpId1()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId1().toString())
+                  .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
+            }
+            if (dpDetailsResponse.getAlternateDpId2() != null && dpDetailsResponse.getAlternateDpId2()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId2().toString())
+                  .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
+            }
+            if (dpDetailsResponse.getAlternateDpId3() != null && dpDetailsResponse.getAlternateDpId3()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId3().toString())
+                  .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
+            }
           }
         }
       }
