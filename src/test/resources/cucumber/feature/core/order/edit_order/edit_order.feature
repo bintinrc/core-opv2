@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @EditOrder3 
+@OperatorV2 @Core @EditOrder @EditOrder3 @verifyav
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -52,7 +52,7 @@ Feature: Edit Order
       | driver              | {ninja-driver-name} |
       | verification method | NO_VERIFICATION     |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @verifyav1
   Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
