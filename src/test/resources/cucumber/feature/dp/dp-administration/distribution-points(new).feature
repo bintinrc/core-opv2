@@ -342,4 +342,11 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | condition | CHECK_ALTERNATE_DP_DATA          |
+      | dpSetting | KEY_DP_SETTINGS                  |

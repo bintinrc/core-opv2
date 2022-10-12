@@ -6,6 +6,7 @@ import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpSetting;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -45,6 +46,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
+  private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
@@ -1033,6 +1035,26 @@ public class DpAdministrationSteps extends AbstractSteps {
           for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
             dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
                 dpDetailsResponse.getOperatingHours().get(day).get(i));
+          }
+        }
+      } else if (condition.equals(CHECK_ALTERNATE_DP_DATA)) {
+        DpSetting dpSetting = resolveValue(dataTableAsMap.get("dpSetting"));
+        String[] dpsToRedirect = dpSetting.getDpsToRedirect().split(",");
+        for (String altDp : dpsToRedirect) {
+          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId1()
+              .toString().equals(altDp)) {
+            Assertions.assertThat(dpDetailsResponse.getAlternateDpId1().toString())
+                .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
+          }
+          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId2()
+              .toString().equals(altDp)) {
+            Assertions.assertThat(dpDetailsResponse.getAlternateDpId2().toString())
+                .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
+          }
+          if (dpDetailsResponse != null && dpDetailsResponse.getAlternateDpId3()
+              .toString().equals(altDp)) {
+            Assertions.assertThat(dpDetailsResponse.getAlternateDpId3().toString())
+                .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
           }
         }
       }
