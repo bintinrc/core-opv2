@@ -72,11 +72,11 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
             searchByMAWBTextBox.sendKeys(id);
             searchByMAWBTextBox.sendKeys(Keys.RETURN);
         });
-        verifyMAWBCounterAfterInputWAMB(listMAWBs);
+        verifyMAWBCounterAfterInputMAWB(listMAWBs);
         verifySearchByMAWBbuttonIsEnable();
     }
 
-    public void verifyMAWBCounterAfterInputWAMB(List<String> listMAWBs){
+    public void verifyMAWBCounterAfterInputMAWB(List<String> listMAWBs){
         String expected ="";
         // we can also use Function.identity() instead of c->c
         Map<String ,Long > map = listMAWBs.stream()
