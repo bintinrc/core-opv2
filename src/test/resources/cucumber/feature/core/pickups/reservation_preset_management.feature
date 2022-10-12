@@ -316,24 +316,21 @@ Feature: Reservation Preset Management
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
-      | isShipperActive               | true                  |
-      | shipperType                   | Normal                |
-      | ocVersion                     | v4                    |
-      | services                      | STANDARD              |
-      | trackingType                  | Fixed                 |
-      | isAllowCod                    | false                 |
-      | isAllowCashPickup             | true                  |
-      | isPrepaid                     | true                  |
-      | isAllowStagedOrders           | false                 |
-      | isMultiParcelShipper          | false                 |
-      | isDisableDriverAppReschedule  | false                 |
-      | pricingScriptName             | {pricing-script-name} |
-      | industryName                  | {industry-name}       |
-      | salesPerson                   | {sales-person}        |
-      | pickupAddressCount            | 1                     |
-      | address.1.milkrun.1.startTime | 3PM                   |
-      | address.1.milkrun.1.endTime   | 6PM                   |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+      | pickupAddressCount           | 1                     |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
     And Operator waits for 10 seconds
@@ -352,6 +349,10 @@ Feature: Reservation Preset Management
       | top | ^Created milkruns.* |
     And Operator go to menu Shipper -> All Shippers
     And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | address.1.milkrun.1.startTime | 3PM           |
+      | address.1.milkrun.1.endTime   | 6PM           |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Has Not Added to Milkrun Group
@@ -396,6 +397,10 @@ Feature: Reservation Preset Management
       | top | ^Created milkruns.* |
     And Operator go to menu Shipper -> All Shippers
     And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | address.1.milkrun.1.startTime | 3PM           |
+      | address.1.milkrun.1.endTime   | 6PM           |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Add Shipper Address To Milkrun Reservation via Upload CSV - Address Assign to Milkrun and Added to Milkrun Group
@@ -436,7 +441,7 @@ Feature: Reservation Preset Management
       | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
     Then Operator verifies that success toast displayed:
       | top                | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
-      | waitUntilInvisible | true
+      | waitUntilInvisible | true                                                                                         |
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                                              |
       | driver | {KEY_CREATED_DRIVER_INFO.firstName} {KEY_CREATED_DRIVER_INFO.lastName} |
@@ -448,6 +453,12 @@ Feature: Reservation Preset Management
       | {KEY_CREATED_SHIPPER.id} | {KEY_CREATED_ADDRESS.id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
+    And Operator go to menu Shipper -> All Shippers
+    And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | address.1.milkrun.1.startTime | 3PM           |
+      | address.1.milkrun.1.endTime   | 6PM           |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7 |
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup
   Scenario: Operator Delete Shipper Address To Milkrun Reservation via Upload CSV
@@ -497,32 +508,31 @@ Feature: Reservation Preset Management
       | top | ^Deleted milkruns.* |
     And Operator go to menu Shipper -> All Shippers
     And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | address.1.milkrun.isMilkrun | false |
 
-  @DeleteDriver @DeleteShipper @DeleteReservationGroup
+  @DeleteDriver @DeleteShipper @DeleteReservationGroup @CloseNewWindows
   Scenario: Operator Add and Delete Shipper Address To Milkrun Reservation via Upload CSV
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
     And Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
-      | isShipperActive               | true                  |
-      | shipperType                   | Normal                |
-      | ocVersion                     | v4                    |
-      | services                      | STANDARD              |
-      | trackingType                  | Fixed                 |
-      | isAllowCod                    | false                 |
-      | isAllowCashPickup             | true                  |
-      | isPrepaid                     | true                  |
-      | isAllowStagedOrders           | false                 |
-      | isMultiParcelShipper          | false                 |
-      | isDisableDriverAppReschedule  | false                 |
-      | pricingScriptName             | {pricing-script-name} |
-      | industryName                  | {industry-name}       |
-      | salesPerson                   | {sales-person}        |
-      | pickupAddressCount            | 1                     |
-      | address.1.milkrun.1.startTime | 3PM                   |
-      | address.1.milkrun.1.endTime   | 6PM                   |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+      | pickupAddressCount           | 1                     |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
     And Operator create new Shipper with basic settings using data below:
@@ -557,20 +567,30 @@ Feature: Reservation Preset Management
     And API Operator get created Reservation Group params
     And Operator waits for 10 seconds
     And Operator uploads CSV on Reservation Preset Management page:
-      | shipperId                            | addressId                | action | milkrunGroupId                     | days            | startTime | endTime |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_CREATED_ADDRESS.id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
+      | shipperId                            | addressId                           | action | milkrunGroupId                     | days            | startTime | endTime |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_LIST_OF_FOUND_ADDRESSES[1].id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
     And Operator uploads CSV on Reservation Preset Management page:
-      | shipperId                            | addressId                | action | milkrunGroupId                     |                 |       |       |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_CREATED_ADDRESS.id} | delete |                                    |                 |       |       |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[2].id} | {KEY_CREATED_ADDRESS.id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00 | 18:00 |
+      | shipperId                            | addressId                           | action | milkrunGroupId                     | days            | startTime | endTime |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_LIST_OF_FOUND_ADDRESSES[1].id} | delete | {KEY_CREATED_RESERVATION_GROUP_ID} |                 |           |         |  |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[2].id} | {KEY_LIST_OF_FOUND_ADDRESSES[2].id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
     Then Operator verifies that success toast displayed:
       | top | ^Deleted milkruns.* |
     And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{KEY_CREATED_SHIPPER.name}"
+    And Operator open Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | shipperId                   | {KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId} |
+      | address.1.milkrun.isMilkrun | false                                      |
+    And Operator go to menu Shipper -> All Shippers
+    And Operator open Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].name}"
+    Then Operator verify pickup address on Edit Shipper page:
+      | shipperId                     | {KEY_LIST_OF_CREATED_SHIPPERS[2].legacyId} |
+      | address.1.milkrun.1.startTime | 3PM                                        |
+      | address.1.milkrun.1.endTime   | 6PM                                        |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7                              |
 
   Scenario: Operator Download Sample CSV file for Create and Delete Pickup Reservation
     Given Operator go to menu Utilities -> QRCode Printing

@@ -134,9 +134,31 @@ public class AllShippersSteps extends AbstractSteps {
     putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
   }
 
+  @When("^Operator verify pickup address on Edit Shipper page:$")
+  public void verifyPickupAddress(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String shipperId = data.get("shipperId");
+    Shipper shipper;
+    if (StringUtils.isNotBlank(shipperId)) {
+      List<Shipper> shippers = get(KEY_LIST_OF_CREATED_SHIPPERS);
+      shipper = shippers.stream().filter(s -> s.getLegacyId().equals(Long.valueOf(shipperId)))
+          .findFirst().orElseThrow(() -> new IllegalArgumentException(
+              "Shipper with legacyId " + shipperId + " was not found"));
+    } else {
+      shipper = get(KEY_CREATED_SHIPPER);
+    }
+    List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
+    allShippersPage.allShippersCreateEditPage.clickTabItem("More Settings");
+    if (CollectionUtils.isNotEmpty(addresses)) {
+      for (int i = 0; i < addresses.size(); i++) {
+        fillMilkrunReservationsProperties(addresses.get(i), i + 1, resolveKeyValues(data));
+        allShippersPage.allShippersCreateEditPage.verifyPickupAddress(addresses.get(i));
+      }
+    }
+  }
+
   @When("Operator fail create new Shipper with basic settings using data below:")
-  public void operatorCreateNewShipperWithBasicSettingsFail(
-      Map<String, String> mapOfData) {
+  public void operatorCreateNewShipperWithBasicSettingsFail(Map<String, String> mapOfData) {
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     Shipper shipper = prepareShipperData(mapOfData);
     allShippersPage.createNewShipperFail(shipper);
@@ -188,12 +210,9 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   private <T> Map<String, T> extractSubmap(Map<String, T> map, String prefix) {
-    return map.entrySet().stream()
-        .filter(entry -> entry.getKey().startsWith(prefix))
-        .collect(Collectors.toMap(
-            entry -> StringUtils.removeStart(entry.getKey(), prefix + ".").trim(),
-            Map.Entry::getValue
-        ));
+    return map.entrySet().stream().filter(entry -> entry.getKey().startsWith(prefix)).collect(
+        Collectors.toMap(entry -> StringUtils.removeStart(entry.getKey(), prefix + ".").trim(),
+            Map.Entry::getValue));
   }
 
   private void fillMarketplaceProperties(Shipper shipper, Map<String, String> mapOfData) {
@@ -257,8 +276,13 @@ public class AllShippersSteps extends AbstractSteps {
 
     if (mapOfData.keySet().stream().anyMatch(key -> key.startsWith(milkrunPrefix))) {
       Map<String, String> milkrunData = extractSubmap(mapOfData, milkrunPrefix);
-      int reservationsCount = milkrunData.containsKey("reservationCount") ? Integer
-          .parseInt(milkrunData.get("reservationCount")) : 1;
+      String isMilkrun = milkrunData.get("isMilkrun");
+      if (StringUtils.equalsIgnoreCase(isMilkrun, "false")) {
+        address.setMilkRun(false);
+        return;
+      }
+      int reservationsCount = milkrunData.containsKey("reservationCount") ? Integer.parseInt(
+          milkrunData.get("reservationCount")) : 1;
 
       for (int j = 1; j <= reservationsCount; j++) {
         Map<String, String> reservationData = extractSubmap(milkrunData, String.valueOf(j));
@@ -284,8 +308,7 @@ public class AllShippersSteps extends AbstractSteps {
     value = mapOfData.get("days");
 
     if (StringUtils.isNotBlank(value)) {
-      List<Integer> days = Arrays.stream(value.split(","))
-          .map(d -> Integer.parseInt(d.trim()))
+      List<Integer> days = Arrays.stream(value.split(",")).map(d -> Integer.parseInt(d.trim()))
           .collect(Collectors.toList());
       ms.setDays(days);
     }
@@ -331,8 +354,8 @@ public class AllShippersSteps extends AbstractSteps {
     allShippersPage.quickSearchShipper(shipperName);
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     int i = 0;
-    boolean enabled = allShippersPage.shippersTable
-        .getActionButton("Ninja Dashboard Login (NEW)", 1).isEnabled();
+    boolean enabled = allShippersPage.shippersTable.getActionButton("Ninja Dashboard Login (NEW)",
+        1).isEnabled();
     while (i < 3 && !enabled) {
       allShippersPage.refreshPage();
       enabled = allShippersPage.shippersTable.getActionButton("Ninja Dashboard Login (NEW)", 1)
@@ -342,8 +365,8 @@ public class AllShippersSteps extends AbstractSteps {
     assertTrue("Ninja Dashboard Login (NEW) in row 1 is enabled", enabled);
     allShippersPage.shippersTable.clickActionButton(1, ACTION_DASH_LOGIN);
     allShippersPage.waitUntilNewWindowOrTabOpened();
-    allShippersPage
-        .switchToOtherWindowAndWaitWhileLoading(TestConstants.DASH_PORTAL_BASE_URL + "/home");
+    allShippersPage.switchToOtherWindowAndWaitWhileLoading(
+        TestConstants.DASH_PORTAL_BASE_URL + "/home");
   }
 
   @And("Operator open Edit Shipper Page of created shipper")
@@ -387,24 +410,22 @@ public class AllShippersSteps extends AbstractSteps {
     value = data.get("pricingScriptName");
     if (StringUtils.isNotBlank(value)) {
       assertThat("Pricing Script",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
-              .getValue(), Matchers.containsString(value));
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.getValue(),
+          Matchers.containsString(value));
     }
     value = data.get("type");
     if (StringUtils.isNotBlank(value)) {
       assertEquals("Salesperson Discount Type", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType
-              .getText());
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType.getText());
     }
     value = data.get("discount");
     if (StringUtils.equalsIgnoreCase("none", value)) {
       assertThat("Discount Value",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
-              .getValue(), Matchers.is(Matchers.emptyOrNullString()));
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue(),
+          Matchers.is(Matchers.emptyOrNullString()));
     } else if (StringUtils.isNotBlank(value)) {
       assertEquals("Discount Value", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
-              .getValue());
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue());
     }
     value = data.get("comments");
     if (StringUtils.isNotBlank(value)) {
@@ -414,49 +435,46 @@ public class AllShippersSteps extends AbstractSteps {
     value = data.get("insuranceMinFee");
     if (StringUtils.isNotBlank(value)) {
       assertEquals("Insurance Min Fee", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
-              .getValue());
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.getValue());
     }
     value = data.get("insurancePercentage");
     if (StringUtils.isNotBlank(value)) {
       assertEquals("Insurance Percentage", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-              .getValue());
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.getValue());
     }
     value = data.get("insuranceThreshold");
     if (StringUtils.isNotBlank(value)) {
       assertEquals("Insurance Threshold", value,
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-              .getValue());
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.getValue());
     }
     value = data.get("isDefaultIns");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
       assertTrue("Default Insurance",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
-              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.getAttribute(
+              "aria-checked").equalsIgnoreCase("true"));
     }
     value = data.get("isDefaultCod");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
       assertTrue("Default Cod",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
-              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.getAttribute(
+              "aria-checked").equalsIgnoreCase("true"));
     }
     value = data.get("isDefaultRts");
     if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
       assertTrue("Default Rts",
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
-              .getAttribute("aria-checked").equalsIgnoreCase("true"));
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox.getAttribute(
+              "aria-checked").equalsIgnoreCase("true"));
     }
     value = data.get("rtsChargeType");
     if (StringUtils.isNotBlank(value)) {
       if (value.equalsIgnoreCase("Surcharge")) {
-        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge
-            .getAttribute("class");
+        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge.getAttribute(
+            "class");
         assertThat("RTS Surcharge", attributeValue, Matchers.containsString("raised"));
       }
       if (value.equalsIgnoreCase("Discount")) {
-        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount
-            .getAttribute("class");
+        String attributeValue = allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount.getAttribute(
+            "class");
         assertThat("RTS Discount", attributeValue, Matchers.containsString("raised"));
       }
     }
@@ -484,22 +502,22 @@ public class AllShippersSteps extends AbstractSteps {
       String value = data.get("startDate");
       if (StringUtils.isNotBlank(value)) {
         LOGGER.info("Set Start date : {}", value);
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate
-            .simpleSetValue(value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(
+            value);
         pricing.setEffectiveDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("endDate");
       if (StringUtils.isNotBlank(value)) {
         LOGGER.info("Set End date : {}", value);
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate
-            .simpleSetValue(value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(
+            value);
         pricing.setContractEndDate(YYYY_MM_DD_SDF.parse(value));
       }
       value = data.get("pricingScriptName");
       if (StringUtils.isNotBlank(value)) {
         LOGGER.info("Set Pricing Script value : {}", value);
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript
-            .searchAndSelectValue(value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(
+            value);
       }
       value = data.get("discount");
       if (StringUtils.equalsIgnoreCase("none", value)) {
@@ -508,8 +526,8 @@ public class AllShippersSteps extends AbstractSteps {
         pricing.setDiscount(null);
       } else if (StringUtils.isNotBlank(value)) {
         LOGGER.info("Set Discount value : {}", value);
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue
-            .setValue(value);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.setValue(
+            value);
         pricing.setDiscount(value);
       }
       value = data.get("comments");
@@ -521,8 +539,7 @@ public class AllShippersSteps extends AbstractSteps {
       value = data.get("isDefaultIns");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("true")) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox
-              .check();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.check();
         } else if (value.equalsIgnoreCase("false")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceCountryDefaultCheckbox.uncheck();
 
@@ -532,48 +549,45 @@ public class AllShippersSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.clear();
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.sendKeys(
+              Keys.TAB);
           pricing.setInsMin(null);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin
-              .setValue(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceMin.setValue(
+              value);
           pricing.setInsMin(value);
         }
       }
       value = data.get("insurancePercentage");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-              .clear();
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.sendKeys(
+              Keys.TAB);
           pricing.setInsPercentage(null);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent
-              .setValue(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insurancePercent.setValue(
+              value);
           pricing.setInsPercentage(value);
         }
       }
       value = data.get("insuranceThreshold");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-              .clear();
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.clear();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.sendKeys(
+              Keys.TAB);
           pricing.setInsThreshold(null);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold
-              .setValue(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.insuranceThreshold.setValue(
+              value);
           pricing.setInsThreshold(value);
         }
       }
       value = data.get("isDefaultCod");
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("true")) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox
-              .check();
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.check();
         } else if (value.equalsIgnoreCase("false")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codCountryDefaultCheckbox.uncheck();
         }
@@ -582,12 +596,11 @@ public class AllShippersSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.clear();
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.sendKeys(
+              Keys.TAB);
           pricing.setCodMin(null);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin
-              .setValue(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codMin.setValue(value);
           pricing.setCodMin(value);
         }
       }
@@ -595,27 +608,24 @@ public class AllShippersSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         if (value.equalsIgnoreCase("none")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.clear();
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.sendKeys(
+              Keys.TAB);
           pricing.setCodPercentage(null);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent
-              .setValue(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.codPercent.setValue(
+              value);
           pricing.setCodPercentage(value);
         }
       }
       value = data.get("isDefaultRts");
       if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("true")) {
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
-            .check();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox.check();
       }
       value = data.get("rtsChargeType");
       if (StringUtils.isNotBlank(value)) {
         // need to uncheck Country Default Checkbox before changing RTS charge
-        if (!allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount
-            .isDisplayed()) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox
-              .uncheck();
+        if (!allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsDiscount.isDisplayed()) {
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsCountryDefaultCheckbox.uncheck();
         }
         if (value.equalsIgnoreCase("Surcharge")) {
           allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsSurcharge.click();
@@ -628,11 +638,11 @@ public class AllShippersSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.clear();
         if (value.equalsIgnoreCase("none")) {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue
-              .sendKeys(Keys.TAB);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.sendKeys(
+              Keys.TAB);
         } else {
-          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue
-              .sendKeys(value);
+          allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.rtsValue.sendKeys(
+              value);
         }
       }
       value = data.get("billingWeightLogic");
@@ -649,22 +659,20 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorVerifiesThatBillingWeightLogicIsNotAvailable() {
     Assertions.assertThat(
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.billingWeight.isDisplayed())
-        .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog")
-        .isFalse();
+        .as("Billing Weight Logic is not available in the Edit Pricing Profile Dialog").isFalse();
   }
 
   @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
   public void operatorSaveChangesPricingProfileOnEditShipperPage() {
-    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges
-        .clickAndWaitUntilDone();
+    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
     allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
   }
 
   @Then("^Operator save changes on Edit Shipper Page$")
   public void operatorSaveChangesOnEditShipperPage() {
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
-    allShippersPage.allShippersCreateEditPage
-        .waitUntilInvisibilityOfToast("All changes saved successfully");
+    allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
+        "All changes saved successfully");
     allShippersPage.allShippersCreateEditPage.backToShipperList();
     pause3s();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
@@ -704,8 +712,8 @@ public class AllShippersSteps extends AbstractSteps {
       String errorMessage = errorSaveDialog.message.getText();
       LOGGER.info(f("Error dialog is displayed : %s ", errorMessage));
 
-      if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage
-          .contains("DB constraints")) {
+      if ((errorMessage.contains("devsupport@ninjavan.co")) || errorMessage.contains(
+          "DB constraints")) {
         errorSaveDialog.forceClose();
         takesScreenshot();
         if (Objects.nonNull(allShippersPage.allShippersCreateEditPage.getToast())) {
@@ -746,8 +754,8 @@ public class AllShippersSteps extends AbstractSteps {
     pause1s();
     data = resolveKeyValues(data);
     String expectedErrorMsg = data.get("errorMessage");
-    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog
-        .verifyErrorMsgEditPricingScript(expectedErrorMsg);
+    allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.verifyErrorMsgEditPricingScript(
+        expectedErrorMsg);
   }
 
   @Then("^Operator verify the new Shipper is updated successfully$")
@@ -806,8 +814,8 @@ public class AllShippersSteps extends AbstractSteps {
     ShipperBasicSettings settings = new ShipperBasicSettings(resolveKeyValues(data));
     allShippersPage.allShippersCreateEditPage.fillBasicSettingsForm(settings);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
-    allShippersPage.allShippersCreateEditPage
-        .waitUntilInvisibilityOfToast("All changes saved successfully");
+    allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
+        "All changes saved successfully");
     allShippersPage.allShippersCreateEditPage.backToShipperList();
     pause3s();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
@@ -873,8 +881,8 @@ public class AllShippersSteps extends AbstractSteps {
     setSubShipperDefaults(shipper, resolveKeyValues(data));
     allShippersPage.allShippersCreateEditPage.fillSubShippersDefaults(shipper);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
-    allShippersPage.allShippersCreateEditPage
-        .waitUntilInvisibilityOfToast("All changes saved successfully", true);
+    allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast(
+        "All changes saved successfully", true);
   }
 
   @When("^Operator verifies Basic Settings on Edit Shipper page:$")
@@ -889,8 +897,7 @@ public class AllShippersSteps extends AbstractSteps {
   public void operatorVerifyPricingAndBillingSettings(Map<String, String> data) {
     allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
     PricingAndBillingSettings expected = new PricingAndBillingSettings(resolveKeyValues(data));
-    PricingAndBillingSettings actual = allShippersPage.allShippersCreateEditPage
-        .getPricingAndBillingSettings();
+    PricingAndBillingSettings actual = allShippersPage.allShippersCreateEditPage.getPricingAndBillingSettings();
     expected.compareWithActual(actual);
   }
 
@@ -914,8 +921,7 @@ public class AllShippersSteps extends AbstractSteps {
     distributionPoint.setAllowReturnsOnVault(true);
     distributionPoint.setVaultLogoUrl("https://vaultlogo" + dateUniqueString + ".com");
     distributionPoint.setAllowReturnsOnShipperLite(true);
-    distributionPoint
-        .setShipperLiteLogoUrl("https://shipperlitelogo" + dateUniqueString + ".com");
+    distributionPoint.setShipperLiteLogoUrl("https://shipperlitelogo" + dateUniqueString + ".com");
     shipper.setDistributionPoints(distributionPoint);
 
     allShippersPage.updateShipperDistributionPointSettings(shipper);
@@ -995,9 +1001,8 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
-  public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow
-      (
-          Map<String, String> mapOfData) {
+  public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(
+      Map<String, String> mapOfData) {
     String reservationDays = mapOfData.get("reservationDays");
     String autoReservationReadyTime = mapOfData.get("autoReservationReadyTime");
     String autoReservationLatestTime = mapOfData.get("autoReservationLatestTime");
@@ -1039,10 +1044,8 @@ public class AllShippersSteps extends AbstractSteps {
     reservation.setAutoReservationApproxVolume(autoReservationApproxVolume);
     reservation.setAllowedTypes(listOfAllowedTypes);
 
-    allShippersPage
-        .enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper,
-            createdAddress,
-            reservation);
+    allShippersPage.enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper,
+        createdAddress, reservation);
     put(KEY_CREATED_ADDRESS, createdAddress);
   }
 
@@ -1184,8 +1187,7 @@ public class AllShippersSteps extends AbstractSteps {
     }
 
     String editSpecificShipperPageURL = (f("%s/%s/shippers/%s",
-        TestConstants.OPERATOR_PORTAL_BASE_URL,
-        TestConstants.COUNTRY_CODE, shipperLegacyId));
+        TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipperLegacyId));
     pause10ms();
     getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     ((JavascriptExecutor) getWebDriver()).executeScript("window.open()");
@@ -1253,10 +1255,8 @@ public class AllShippersSteps extends AbstractSteps {
       pricing.setInsMin(insuranceMinFee);
       pricing.setRtsChargeType(rtsChargeType);
       pricing.setRtsChargeValue(rtsChargeValue);
-      pricing.setEffectiveDate(
-          Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
-      pricing.setContractEndDate(
-          Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
+      pricing.setEffectiveDate(Objects.nonNull(startDate) ? YYYY_MM_DD_SDF.parse(startDate) : null);
+      pricing.setContractEndDate(Objects.nonNull(endDate) ? YYYY_MM_DD_SDF.parse(endDate) : null);
       String country = COUNTRY_CODE;
       if (!country.equalsIgnoreCase("SG")) {
         if (Objects.isNull(billingWeightLogic)) {
@@ -1341,21 +1341,18 @@ public class AllShippersSteps extends AbstractSteps {
     pickupSettings.setDefaultStartTime("09:00");
     pickupSettings.setDefaultEndTime("22:00");
     if (mapOfData.containsKey("premiumPickupDailyLimit")) {
-      pickupSettings
-          .setPremiumPickupDailyLimit(Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
+      pickupSettings.setPremiumPickupDailyLimit(
+          Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
     }
     if (mapOfData.containsKey("pickupServiceTypeLevels")) {
-      List<ServiceTypeLevel> serviceTypeLevels = Arrays
-          .stream(mapOfData.get("pickupServiceTypeLevels").split(","))
-          .map(val ->
-          {
-            ServiceTypeLevel serviceTypeLevel = new ServiceTypeLevel();
-            String[] values = val.split(":");
-            serviceTypeLevel.setType(values[0].trim());
-            serviceTypeLevel.setLevel(values[1].trim());
-            return serviceTypeLevel;
-          })
-          .collect(Collectors.toList());
+      List<ServiceTypeLevel> serviceTypeLevels = Arrays.stream(
+          mapOfData.get("pickupServiceTypeLevels").split(",")).map(val -> {
+        ServiceTypeLevel serviceTypeLevel = new ServiceTypeLevel();
+        String[] values = val.split(":");
+        serviceTypeLevel.setType(values[0].trim());
+        serviceTypeLevel.setLevel(values[1].trim());
+        return serviceTypeLevel;
+      }).collect(Collectors.toList());
       pickupSettings.setServiceTypeLevel(serviceTypeLevels);
     }
     shipper.setPickup(pickupSettings);
@@ -1367,8 +1364,8 @@ public class AllShippersSteps extends AbstractSteps {
     Boolean isPrepaid = Boolean.parseBoolean(mapOfData.get("isPrepaid"));
     Boolean isAllowStagedOrders = Boolean.parseBoolean(mapOfData.get("isAllowStagedOrders"));
     Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
-    Boolean isDisableDriverAppReschedule = Boolean
-        .parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
+    Boolean isDisableDriverAppReschedule = Boolean.parseBoolean(
+        mapOfData.get("isDisableDriverAppReschedule"));
     String ocVersion = mapOfData.get("ocVersion");
     String servicesTemp = mapOfData.get("services");
     String trackingType = mapOfData.get("trackingType");
@@ -1390,8 +1387,8 @@ public class AllShippersSteps extends AbstractSteps {
     orderCreate.setAllowStagedOrders(isAllowStagedOrders);
     orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
     orderCreate.setIsCorporate(Boolean.parseBoolean(mapOfData.get("isCorporate")));
-    orderCreate
-        .setIsCorporateManualAWB(Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
+    orderCreate.setIsCorporateManualAWB(
+        Boolean.parseBoolean(mapOfData.get("isCorporateManualAWB")));
     orderCreate.setIsCorporateReturn(Boolean.parseBoolean(mapOfData.get("isCorporateReturn")));
     orderCreate.setIsCorporateDocument(Boolean.parseBoolean(mapOfData.get("isCorporateDocument")));
     shipper.setOrderCreate(orderCreate);
@@ -1473,18 +1470,16 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   @When("Operator set service type {string} to {string} on edit shipper page")
-  public void setServiceTypeOnShipperEditOrCreatePage(
-      String serviceType, String value) {
+  public void setServiceTypeOnShipperEditOrCreatePage(String serviceType, String value) {
     allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabel(serviceType, value);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
   }
 
   @When("Operator set service type {string} to {string} on Sub shippers Default Setting tab edit shipper page")
-  public void setServiceTypeOnSubShippersDefaultSettingTab(
-      String serviceType, String value) {
+  public void setServiceTypeOnSubShippersDefaultSettingTab(String serviceType, String value) {
     String model = "ctrl.data.marketplace.serviceType[key]";
-    allShippersPage.allShippersCreateEditPage
-        .clickToggleButtonByLabelAndModel(serviceType, model, value);
+    allShippersPage.allShippersCreateEditPage.clickToggleButtonByLabelAndModel(serviceType, model,
+        value);
     allShippersPage.allShippersCreateEditPage.saveChanges.click();
   }
 
@@ -1495,8 +1490,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator verifies toast {string} displayed on edit shipper page")
   public void verifiesToast(String msg) {
-    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message
-        .getText();
+    String actualMsg = allShippersPage.allShippersCreateEditPage.errorSaveDialog.message.getText();
     assertThat("Error message", actualMsg, Matchers.containsString(resolveValue(msg)));
   }
 
@@ -1505,9 +1499,8 @@ public class AllShippersSteps extends AbstractSteps {
     Pricing pricingProfile = get(KEY_PRICING_PROFILE);
     Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
     Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_PROFILE_OPV2);
-    allShippersPage
-        .verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb,
-            pricingProfileFromOPV2);
+    allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile,
+        pricingProfileFromDb, pricingProfileFromOPV2);
   }
 
   @Given("Operator changes the country to {string}")
@@ -1565,44 +1558,37 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator verifies corporate sub shipper is correct")
   public void operatorVerifiesCorporateSubShipper() {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page -> {
-          List<Shipper> subShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
-          List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<Shipper> subShipper = get(KEY_LIST_OF_B2B_SUB_SHIPPER);
+      List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
 
-          for (Shipper shipper : actualSubShipper) {
-            assertTrue(f("Check shipper with id %d on API", shipper.getId()), subShipper.stream()
-                .anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())));
-          }
-        });
+      for (Shipper shipper : actualSubShipper) {
+        assertTrue(f("Check shipper with id %d on API", shipper.getId()),
+            subShipper.stream().anyMatch(s -> s.getExternalRef().equals(shipper.getExternalRef())));
+      }
+    });
   }
 
   @When("Operator search corporate sub shipper by name with {string}")
   public void operatorFillNameSearchFieldOnSubShipperBBManagementPage(String searchValue) {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page ->
-            page.subShipperTable.filterByColumn("name", resolveValue(searchValue))
-        );
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.subShipperTable.filterByColumn("name", resolveValue(searchValue)));
     pause1s();
   }
 
   @Then("Operator verifies corporate sub shippers with name contains {string} is displayed")
   public void qaVerifySubShippersWithNameContainsIsDisplayedOnBBManagementPage(String shipperName) {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page -> {
-          List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
-          boolean isExist = actualSubShipper.stream()
-              .allMatch(s -> s.getName().contains(shipperName));
-          assertTrue(f("Check shippers name contain %s", shipperName), isExist);
-        });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      List<Shipper> actualSubShipper = page.subShipperTable.readAllEntities();
+      boolean isExist = actualSubShipper.stream().allMatch(s -> s.getName().contains(shipperName));
+      assertTrue(f("Check shippers name contain %s", shipperName), isExist);
+    });
   }
 
   @When("Operator search corporate sub shipper by email with {string}")
   public void operatorFillEmailSearchFieldOnSubShipperBBManagementPage(String searchValue) {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page -> page.subShipperTable
-            .filterByColumn("email", resolveValue(searchValue))
-        );
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.subShipperTable.filterByColumn("email", resolveValue(searchValue)));
     pause1s();
   }
 
@@ -1619,23 +1605,19 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator create corporate sub shipper with data below:")
   public void createCorporateSubShipper(Map<String, String> mapOfData) {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page -> {
-              pause2s();
-              page.addSubShipper.click();
-              fillNewSubShipperData(0, resolveKeyValues(mapOfData));
-              page.createSubShipperAccount.click();
-              pause1s();
-            }
-        );
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      pause2s();
+      page.addSubShipper.click();
+      fillNewSubShipperData(0, resolveKeyValues(mapOfData));
+      page.createSubShipperAccount.click();
+      pause1s();
+    });
   }
 
   @When("Operator verifies success notification {string} is displayed on Corporate sub shippers tab")
   public void checkSuccessNotification(String expected) {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page ->
-            page.waitUntilInvisibilityOfNotification(resolveValue(expected), true)
-        );
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.waitUntilInvisibilityOfNotification(resolveValue(expected), true));
   }
 
   private void fillNewSubShipperData(int index, Map<String, String> data) {
@@ -1643,21 +1625,19 @@ public class AllShippersSteps extends AbstractSteps {
     generateBranchData(data);
 
     String id = data.get("branchId");
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.branchId.get(index).setValue(id);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.branchId.get(index).setValue(id);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, id);
     put(KEY_SUB_SHIPPER_SELLER_ID, id);
 
     String fixedName = data.get("name");
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.name.get(index).setValue(fixedName);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.name.get(index).setValue(fixedName);
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, fixedName);
     put(KEY_SHIPPER_NAME, fixedName);
 
     String fixedEmail = data.get("email");
     putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, fixedEmail);
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.email.get(index).setValue(fixedEmail);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.email.get(index)
+        .setValue(fixedEmail);
   }
 
   private void generateBranchData(Map<String, String> data) {
@@ -1693,29 +1673,26 @@ public class AllShippersSteps extends AbstractSteps {
   }
 
   @When("Operator bulk create corporate sub shippers with data below:")
-  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws
-      IOException {
+  public void bulkCreateCorporateSubShipper(List<Map<String, String>> data) throws IOException {
     uploadFileBulkCreateCorporateSubShipper(data);
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage
-        .inFrame(page -> page.createSubShipperAccount.click());
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.createSubShipperAccount.click());
   }
 
   @When("Operator upload bulk create corporate sub shippers file with data below:")
   public void uploadFileBulkCreateCorporateSubShipper(List<Map<String, String>> data)
       throws IOException {
-    List<String> rows = data.stream()
-        .map(row -> {
-          row = resolveKeyValues(row);
-          pause100ms();
-          generateBranchData(row);
-          putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
-          put(KEY_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
-          putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, row.get("name"));
-          put(KEY_SHIPPER_NAME, row.get("name"));
-          putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, row.get("email"));
-          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
-        })
-        .collect(Collectors.toList());
+    List<String> rows = data.stream().map(row -> {
+      row = resolveKeyValues(row);
+      pause100ms();
+      generateBranchData(row);
+      putInList(KEY_LIST_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+      put(KEY_SUB_SHIPPER_SELLER_ID, row.get("branchId"));
+      putInList(KEY_LIST_SUB_SHIPPER_SELLER_NAME, row.get("name"));
+      put(KEY_SHIPPER_NAME, row.get("name"));
+      putInList(KEY_LIST_SUB_SHIPPER_SELLER_EMAIL, row.get("email"));
+      return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+    }).collect(Collectors.toList());
     rows.add(0, "Branch ID (External Ref),Name,Email");
     File file = TestUtils.createFileOnTempFolder(
         String.format("create-order-update_%s.csv", generateDateUniqueString()));
@@ -1746,9 +1723,8 @@ public class AllShippersSteps extends AbstractSteps {
   public void qaVerifySubShipperWithSellerIdIsDisplayedOnBBManagementPage() {
     List<String> expectedSellerIds = get(KEY_LIST_SUB_SHIPPER_SELLER_ID);
 
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page ->
-        expectedSellerIds.forEach(expectedSellerId ->
-        {
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> expectedSellerIds.forEach(expectedSellerId -> {
           boolean isSubShipperExist;
           boolean isNextPageDisabled = false;
           List<Shipper> actualSubShipper;
@@ -1766,13 +1742,11 @@ public class AllShippersSteps extends AbstractSteps {
                 page.nextPage.click();
               }
             }
-          }
-          while (!isSubShipperExist && !isNextPageDisabled);
+          } while (!isSubShipperExist && !isNextPageDisabled);
 
           Assertions.assertThat(isSubShipperExist)
               .as("Sub shipper exist with id: " + expectedSellerId).isTrue();
-        })
-    );
+        }));
   }
 
   @When("Operator click edit action button for newly created corporate sub shipper")
@@ -1817,19 +1791,18 @@ public class AllShippersSteps extends AbstractSteps {
 
   @When("Operator click edit action button for first corporate sub shipper")
   public void operatorClickEditActionButtonForSubShipperOnBBManagementPage() {
-    allShippersPage.allShippersCreateEditPage
-        .b2bManagementPage.inFrame(page -> {
-          String name = page.subShipperTable.getColumnText(1, NAME_COLUMN_LOCATOR_KEY);
-          put(KEY_SHIPPER_NAME, name);
-          page.subShipperTable.clickActionButton(1, "Edit");
-        });
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
+      String name = page.subShipperTable.getColumnText(1, NAME_COLUMN_LOCATOR_KEY);
+      put(KEY_SHIPPER_NAME, name);
+      page.subShipperTable.clickActionButton(1, "Edit");
+    });
   }
 
   @Then("Operator verifies corporate sub shipper details page is displayed")
   public void qaVerifyShipperDetailsPageWithIdIsDisplayed() {
     String shipperName = get(KEY_SHIPPER_NAME);
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage
-        .shipperDetailsDisplayed(shipperName);
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.shipperDetailsDisplayed(
+        shipperName);
   }
 
   @Then("Operator verifies error message {string} is displayed on b2b management page")
@@ -1845,8 +1818,7 @@ public class AllShippersSteps extends AbstractSteps {
       List<String> errorMessages) {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<String> actualErrorMsg = page.bulkCreationErrorMessage.stream()
-          .map(PageElement::getNormalizedText)
-          .collect(Collectors.toList());
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
       assertThat("List of bulk create error messages", actualErrorMsg,
           Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
     });
@@ -1857,8 +1829,7 @@ public class AllShippersSteps extends AbstractSteps {
       List<String> errorMessages) {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       List<String> actualErrorMsg = page.bulkCreationWarningMessage.stream()
-          .map(PageElement::getNormalizedText)
-          .collect(Collectors.toList());
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
       assertThat("List of bulk create warning messages", actualErrorMsg,
           Matchers.containsInAnyOrder(errorMessages.toArray(new String[0])));
     });
@@ -1866,19 +1837,17 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator clicks Go Back button on b2b management page")
   public void clickGoBack() {
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page ->
-        page.goBack.click()
-    );
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.goBack.click());
   }
 
   @Then("Before You Go modal is displayed with {string} message on b2b management page")
   public void checkBeforeYouGoModal(String message) {
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
-          page.beforeYouGoModal.waitUntilVisible();
-          assertEquals("Modal message", resolveValue(message),
-              page.beforeYouGoModal.message.getNormalizedText());
-        }
-    );
+      page.beforeYouGoModal.waitUntilVisible();
+      assertEquals("Modal message", resolveValue(message),
+          page.beforeYouGoModal.message.getNormalizedText());
+    });
   }
 
   @Then("Operator clicks Cancel button on Before You Go modal on b2b management page")
@@ -1891,18 +1860,16 @@ public class AllShippersSteps extends AbstractSteps {
 
   @Then("Operator downloads error log on b2b management page")
   public void downloadErrorLog() {
-    allShippersPage.allShippersCreateEditPage.b2bManagementPage
-        .inFrame(page -> page.downloadErrorLog.click());
+    allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(
+        page -> page.downloadErrorLog.click());
   }
 
   @Then("bulk shipper creation error log file contains data:")
   public void checkErrorLogFile(List<Map<String, String>> data) {
-    List<String> rows = data.stream()
-        .map(row -> {
-          row = resolveKeyValues(row);
-          return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
-        })
-        .collect(Collectors.toList());
+    List<String> rows = data.stream().map(row -> {
+      row = resolveKeyValues(row);
+      return row.get("branchId") + "," + row.get("name") + "," + row.get("email");
+    }).collect(Collectors.toList());
     rows.add(0, "Branch ID (External Ref),Name,Email");
     allShippersPage.allShippersCreateEditPage.b2bManagementPage.inFrame(page -> {
       File file = Paths.get(StandardTestConstants.TEMP_DIR, "template.csv").toFile();
@@ -1937,78 +1904,72 @@ public class AllShippersSteps extends AbstractSteps {
         softAssertions.assertThat(pricingLeversFromDb.getCodMinFee()).as("COD min fee is null")
             .isNull();
       } else {
-        softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee())).
-            as("COD min fee is correct").isEqualTo(codMin);
+        softAssertions.assertThat(NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodMinFee()))
+            .as("COD min fee is correct").isEqualTo(codMin);
       }
     }
     String codPercentage = pricingProfile.getCodPercentage();
     if (Objects.nonNull(codPercentage) && !codPercentage.equalsIgnoreCase("-")) {
       if (codPercentage.equalsIgnoreCase("[country default]")) {
         softAssertions.assertThat(pricingLeversFromDb.getCodPercentage())
-            .as("COD min percentage is null")
-            .isNull();
+            .as("COD min percentage is null").isNull();
       } else {
         softAssertions.assertThat(
-                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage())).
-            as("COD percentage fee is correct").isEqualTo(codPercentage);
+                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getCodPercentage()))
+            .as("COD percentage fee is correct").isEqualTo(codPercentage);
       }
     }
     String insMin = pricingProfile.getInsMin();
     if (Objects.nonNull(insMin) && !insMin.equalsIgnoreCase("-")) {
       if (insMin.equalsIgnoreCase("[country default]")) {
         softAssertions.assertThat(pricingLeversFromDb.getInsuranceMinFee())
-            .as("Insurance min is null")
-            .isNull();
+            .as("Insurance min is null").isNull();
       } else {
         softAssertions.assertThat(
-                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee())).
-            as("Insurance min fee is correct").isEqualTo(insMin);
+                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceMinFee()))
+            .as("Insurance min fee is correct").isEqualTo(insMin);
       }
     }
     String insPercentage = pricingProfile.getInsPercentage();
     if (Objects.nonNull(insPercentage) && !insPercentage.equalsIgnoreCase("-")) {
       if (insPercentage.equalsIgnoreCase("[country default]")) {
         softAssertions.assertThat(pricingLeversFromDb.getInsurancePercentage())
-            .as("Insurance Percentage is null")
-            .isNull();
+            .as("Insurance Percentage is null").isNull();
       } else {
         softAssertions.assertThat(
-                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage())).
-            as("Insurance Percentage is correct").isEqualTo(insPercentage);
+                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsurancePercentage()))
+            .as("Insurance Percentage is correct").isEqualTo(insPercentage);
       }
     }
     String insThreshold = pricingProfile.getInsPercentage();
     if (Objects.nonNull(insThreshold) && !insThreshold.equalsIgnoreCase("-")) {
       if (insThreshold.equalsIgnoreCase("[country default]")) {
         softAssertions.assertThat(pricingLeversFromDb.getInsuranceThreshold())
-            .as("Threshold is null")
-            .isNull();
+            .as("Threshold is null").isNull();
       } else {
         softAssertions.assertThat(
-                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold())).
-            as("Insurance Threshold fee is correct").isEqualTo(insThreshold);
+                NO_TRAILING_ZERO_DF.format(pricingLeversFromDb.getInsuranceThreshold()))
+            .as("Insurance Threshold fee is correct").isEqualTo(insThreshold);
       }
     }
     String rtsChargeType = pricingProfile.getRtsChargeType();
     if (Objects.nonNull(rtsChargeType)) {
       Double rtsChargeDb = pricingLeversFromDb.getRtsCharge();
       if (rtsChargeType.equalsIgnoreCase("Discount")) {
-        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a negative value")
-            .isNegative();
+        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a negative value").isNegative();
       }
       if (rtsChargeType.equalsIgnoreCase("Surcharge")) {
-        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a positive value")
-            .isPositive();
+        softAssertions.assertThat(rtsChargeDb).as("RTS charge is a positive value").isPositive();
       }
     }
     BillingWeightEnum billingWeight = pricingProfile.getBillingWeight();
     if (Objects.nonNull(billingWeight)) {
       if (billingWeight.getCode().equalsIgnoreCase("Legacy")) {
-        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
-            as("Billing Weight Logic is null").isNull();
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic())
+            .as("Billing Weight Logic is null").isNull();
       } else {
-        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic()).
-            as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
+        softAssertions.assertThat(pricingLeversFromDb.getBillingWeightLogic())
+            .as("Billing Weight Logic is correct").isEqualTo(pricingProfile.getBillingWeight());
       }
     }
   }
@@ -2031,8 +1992,7 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies shipper type is {string} on Edit Shipper page")
   public void verifyShipperType(String expected) {
     assertEquals("Shipper type", resolveValue(expected),
-        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly
-            .getValue());
+        allShippersPage.allShippersCreateEditPage.basicSettingsForm.shipperTypeReadOnly.getValue());
   }
 
   @And("Operator verifies the pricing profile is referred to parent shipper {string}")
@@ -2044,8 +2004,7 @@ public class AllShippersSteps extends AbstractSteps {
         "This is a Marketplace Seller / Corporate Branch that refers to its parent's profile(s). To see cascaded profiles,",
         allShippersPage.getReferParentsProfileText());
 
-    String parentShipperPageURL = (f("%s/%s/shippers/%s",
-        TestConstants.OPERATOR_PORTAL_BASE_URL,
+    String parentShipperPageURL = (f("%s/%s/shippers/%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
         TestConstants.COUNTRY_CODE, parentShipperLegacyId));
     assertEquals("Parent Shipper link mismatch", parentShipperPageURL,
         allShippersPage.getReferParentsProfileLink());
@@ -2054,9 +2013,8 @@ public class AllShippersSteps extends AbstractSteps {
   @Then("Operator search for marketplace sub shipper by shipper name and get sub shipper id")
   public void operatorSearchForMarketplaceSubShipperByShipperNameAndGetSubShipperId() {
     Marketplace marketplaceSubShipper = get(KEY_MARKETPLACE_SUB_SHIPPER);
-    String legacyId = allShippersPage.allShippersCreateEditPage
-        .searchMarketplaceSubshipperAndGetLegacyId("name",
-            marketplaceSubShipper.getSellerCompanyName());
+    String legacyId = allShippersPage.allShippersCreateEditPage.searchMarketplaceSubshipperAndGetLegacyId(
+        "name", marketplaceSubShipper.getSellerCompanyName());
     put(KEY_SUBSHIPPER_LEGACY_ID, legacyId);
   }
 
@@ -2065,10 +2023,8 @@ public class AllShippersSteps extends AbstractSteps {
       Map<String, String> dataTableAsMap) {
     String actualText;
     if (dataTableAsMap.containsKey("rtsCharge")) {
-      actualText = allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.rtsCountryDefaultText
-          .getText();
-      assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"),
-          actualText);
+      actualText = allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.rtsCountryDefaultText.getText();
+      assertEquals("Rts Charge country default text ", dataTableAsMap.get("rtsCharge"), actualText);
     }
   }
 
