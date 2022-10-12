@@ -1,4 +1,4 @@
-@Sort @Utilities @AddressVerification
+@Sort @Utilities @AddressVerification @runav
 Feature: Address Verification
 
   @LaunchBrowser @ShouldAlwaysRun
