@@ -1,4 +1,4 @@
-#@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules @runsuggestroute
+#@OperatorV2 @Core @PickUps @ShipperPickups @RoutingModules
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -167,7 +167,7 @@ Feature: Shipper Pickups
       | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[1].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].comments} |
       | {shipper-v4-legacy-id} | ^{shipper-v4-name}.* | {KEY_LIST_OF_CREATED_ADDRESSES[2].to1LineAddressWithPostcode} | null    | null       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].priorityLevel} | not null | not null | REGULAR         | PENDING           | ^{gradle-current-date-yyyy-MM-dd}.* | null        | {KEY_LIST_OF_CREATED_RESERVATIONS[2].approxVolume} | null          | {KEY_LIST_OF_CREATED_RESERVATIONS[2].comments} |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
@@ -199,7 +199,7 @@ Feature: Shipper Pickups
       | id                                       | routeId                | driverName          |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations (uid:e1d9c28e-57d9-48c5-b43d-752165695637)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
@@ -574,7 +574,7 @@ Feature: Shipper Pickups
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, Suggested Route Found (uid:3a7616b6-5402-4cdb-9e10-2440f2fe8605)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -607,7 +607,7 @@ Feature: Shipper Pickups
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, No Suggested Route Found (uid:f59fc4ef-b127-4fc6-8eac-4f5a53bbf2cf)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
@@ -638,7 +638,7 @@ Feature: Shipper Pickups
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
     And Operator verifies no route suggested for selected reservations
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, Suggested Route Found (uid:b4da89d4-6041-4649-9b00-89b54671bcac)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create multiple shipper addresses V2 using data below:
@@ -672,7 +672,7 @@ Feature: Shipper Pickups
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
 
-  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, No Suggested Route Found (uid:4911902f-a1a4-4b4a-9a5b-6705728fcfb6)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
@@ -706,7 +706,7 @@ Feature: Shipper Pickups
     Then Operator verifies that "No waypoints to suggest after filtering!" error toast message is displayed
     And Operator verifies no route suggested for selected reservations
 
-  @DeleteOrArchiveRoute @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @SuggestRoute
   Scenario: Operator Failed to Bulk Suggest Route - Routed Reservation (uid:ffa0334b-b5af-4d1f-a0b9-6a0529090828)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -726,7 +726,7 @@ Feature: Shipper Pickups
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
-  @DeleteOrArchiveRoute @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @SuggestRoute
   Scenario: Operator Failed to Bulk Suggest Route - Success Reservation (uid:0d89c71c-51e5-4519-93f5-16f0fd81922c)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -762,7 +762,7 @@ Feature: Shipper Pickups
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
-  @DeleteOrArchiveRoute @SuggestRoute @runsuggestroute1
+  @DeleteOrArchiveRoute @SuggestRoute
   Scenario: Operator Failed to Bulk Suggest Route - Failed Reservation (uid:252dbcbb-832f-4a82-89b0-4ffed96b83d2)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
