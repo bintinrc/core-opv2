@@ -157,6 +157,12 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies upload success message is displayed for success count {string}")
+  public void operatorVerifiesUploadSuccessMessageIsDisplayed(String successCount) {
+    shipperAddressConfigurationPage.validateUploadSuccessMessageIsShown(successCount);
+    takesScreenshot();
+  }
+
   @Then("Operator verifies upload error message is displayed for invalid file")
   public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFile() {
     shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
@@ -166,6 +172,24 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @And("Operator clicks on the Download Errors button")
   public void operatorClicksOnTheDownloadErrorsButton() {
     shipperAddressConfigurationPage.clickDownloadErrorsButton();
+    takesScreenshot();
+  }
+
+  @And("Operator closes modal popup window")
+  public void operatorClicksOnCloseModalButton() {
+    shipperAddressConfigurationPage.closeModal();
+    takesScreenshot();
+  }
+
+  @And("Operator clicks on the {string} button")
+  public void Operator_clicks_on_the_button(String buttonText) {
+    retryIfExpectedExceptionOccurred(
+        () -> shipperAddressConfigurationPage.clickButton(buttonText),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, StaleElementReferenceException.class,
+        InvalidElementStateException.class, InvalidArgumentException.class);
     takesScreenshot();
   }
 
@@ -219,6 +243,21 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
 
   }
+
+  @Then("Operator updates the CSV file with below data:")
+  public void operator_updates_the_csv_file_with_below_data(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    int columnIndex = Integer.parseInt(data.get("columnIndex"));
+    int rowIndex = Integer.parseInt(data.get("rowIndex"));
+    String fileName = data.get("fileName");
+    String value = data.get("value");
+    String Filepath =
+        System.getProperty("user.dir") + "\\src\\test\\resources\\csv\\firstMile\\" + fileName;
+    File file = new File(Filepath);
+    shipperAddressConfigurationPage.updateCSVFile(Filepath, columnIndex, rowIndex, value);
+
+  }
+
 }
 
 

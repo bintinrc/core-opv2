@@ -1,9 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Date;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -24,6 +29,8 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String COLUMN_NAME = "Suggested Address URL";
   public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
+  public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
+  public static final String BUTTON = "//span[text()='%s']/parent::button";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -81,6 +88,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[text()='Please upload a file with valid input!']")
   public PageElement invalidFileErrorMessage;
+
+  @FindBy(xpath = "//button[@aria-label='Close']")
+  public PageElement closePopModal;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -185,6 +195,22 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
+  public void validateUploadSuccessMessageIsShown(String errorCount) {
+    pause1s();
+    String errorXpath = f(UPLOAD_SUCCESS_MESSAGE, errorCount);
+    WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
+        .isTrue();
+  }
+
+  public void clickButton(String buttonText) {
+    pause1s();
+    switchToShipperAddressConfigurationFrame();
+    String errorXpath = f(BUTTON, buttonText);
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(errorXpath));
+    buttonXpath.click();
+  }
+
   public void validateInvalidFileErrorMessageIsShown() {
     pause5s();
     Assertions.assertThat(invalidFileErrorMessage.isDisplayed())
@@ -194,6 +220,24 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public void clickDownloadErrorsButton() {
     waitUntilVisibilityOfElementLocated(downloadErrorsButton.getWebElement());
     downloadErrorsButton.click();
+  }
+
+  public void closeModal() {
+    waitUntilVisibilityOfElementLocated(closePopModal.getWebElement());
+    closePopModal.click();
+  }
+
+  public void updateCSVFile(String filepath, int columnNumber, int rowNumber, String value) {
+    try {
+      CSVReader csvReader = new CSVReader(new FileReader(filepath));
+      List<String[]> allData = csvReader.readAll();
+      allData.get(rowNumber)[columnNumber] = value;
+      CSVWriter csvWriter = new CSVWriter(new FileWriter(filepath));
+      csvWriter.writeAll(allData);
+      csvWriter.flush();
+    } catch (Exception e) {
+      throw new NvTestRuntimeException("Could not update the CSV file " + filepath, e);
+    }
   }
 
 }

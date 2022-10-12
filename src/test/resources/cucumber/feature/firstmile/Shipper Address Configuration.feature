@@ -266,6 +266,149 @@ Feature: Shipper Address Configuration
     And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files
     Then Operator verifies upload error message is displayed for invalid file
 
+
+  Scenario: Success Bulk Update Shipper Addresses Lat Long
+    Given Operator loads Operator portal home page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 2                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success_Bulk_Update_All_Shipper_Addresses.csv    |
+      | rowIndex    | 1                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success_Bulk_Update_All_Shipper_Addresses.csv    |
+      | rowIndex    | 2                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Update Lat Long" button
+    And Operator selects "Unverified" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator clicks on the Update Addresses Lat Long button
+    And Operator uploads csv file: "Success_Bulk_Update_All_Shipper_Addresses.csv" by browsing files
+    Then Operator verifies upload success message is displayed for success count "2"
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+
+
+  Scenario: Success Bulk Update Duplicate Shipper Addresses Lat Long
+    Given Operator loads Operator portal home page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 1                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success_Bulk_Update_Duplicate_Shipper_Addresses.csv |
+      | rowIndex    | 1                                                   |
+      | columnIndex | 0                                                   |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}    |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success_Bulk_Update_Duplicate_Shipper_Addresses.csv |
+      | rowIndex    | 2                                                   |
+      | columnIndex | 0                                                   |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}    |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Update Lat Long" button
+    And Operator selects "Unverified" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator clicks on the Update Addresses Lat Long button
+    And Operator uploads csv file: "Success_Bulk_Update_Duplicate_Shipper_Addresses.csv" by browsing files
+    Then Operator verifies upload success message is displayed for success count "1"
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "1.2,50.5" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+
+
+  Scenario: Unable to Bulk Update Some Shipper Addresses
+    Given Operator loads Operator portal home page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 2                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Unable_to_bulk_update_some_addresses.csv         |
+      | rowIndex    | 1                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Unable_to_bulk_update_some_addresses.csv         |
+      | rowIndex    | 2                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Update Lat Long" button
+    And Operator selects "Unverified" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator clicks on the Update Addresses Lat Long button
+    And Operator uploads csv file: "Unable_to_bulk_update_some_addresses.csv" by browsing files
+    Then Operator verifies upload error message is displayed for error count "1" and total count "3"
+    And Operator clicks on the Download Errors button
+    Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
+      | Address ID      |
+      | Pickup Address  |
+      | Shipper ID      |
+      | Latitude        |
+      | Longitude       |
+      | Failure Reasons |
+    And Operator verifies that the following texts are available on the downloaded file
+      | Address id #991119 Not Found |
+    And Operator closes modal popup window
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+
+
+  Scenario: Unable to Bulk Update All Shipper Addresses
+    Given Operator loads Operator portal home page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 2                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Update Lat Long" button
+    And Operator selects "Unverified" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator clicks on the Update Addresses Lat Long button
+    And Operator uploads csv file: "Unable_to_Bulk_Update_All_Shipper_Addresses.csv" by browsing files
+    Then Operator verifies upload error message is displayed for error count "2" and total count "2"
+    And Operator clicks on the Download Errors button
+    Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
+      | Address ID      |
+      | Pickup Address  |
+      | Shipper ID      |
+      | Latitude        |
+      | Longitude       |
+      | Failure Reasons |
+    And Operator verifies that the following texts are available on the downloaded file
+      | Address id #991119 Not Found |
+      | Address id #881118 Not Found |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
