@@ -67,6 +67,18 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator Set newly created dp for Alternate DP number {string}")
+  public void alternateDPNumber(String number) {
+    ImmutableMap<String, String> alternateDps = ImmutableMap.<String, String>builder()
+        .put("1", ALTERNATE_DP_ID_1)
+        .put("2", ALTERNATE_DP_ID_2)
+        .put("3", ALTERNATE_DP_ID_3)
+        .build();
+
+    Long dpDetailsResponseId = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE_ID);
+    put(alternateDps.get(number),dpDetailsResponseId);
+  }
+
   @When("Operator fill Detail for create DP:")
   public void ninjaPointVUserFillDetailForCreateDp(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);

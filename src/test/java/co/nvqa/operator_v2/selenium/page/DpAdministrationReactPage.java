@@ -8,6 +8,7 @@ import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
 import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
+import co.nvqa.operator_v2.cucumber.glue.DpAdministrationSteps;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -24,9 +25,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Diaz Ilyasa
@@ -314,11 +318,20 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input")
   public TextBox fieldAlternateDp1;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input[@disabled]")
+  public TextBox fieldAlternateDp1Disabled;
+
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
   public TextBox fieldAlternateDp2;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input[@disabled]")
+  public TextBox fieldAlternateDp2Disabled;
+
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input")
   public TextBox fieldAlternateDp3;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input[@disabled]")
+  public TextBox fieldAlternateDp3Disabled;
 
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
@@ -588,6 +601,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String RETAIL_POINT_NETWORK = "RETAIL_POINT_NETWORK";
   public static final String CREATE = "CREATE";
   public static final String DPS = "dps";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationReactPage.class);
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTime = ImmutableMap.<String, TextBox>builder()
       .put("monday", fieldOpeningStartHourMonday)
@@ -841,6 +855,16 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
     click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
   }
+
+  public void chooseInvalidAlternateDp(Long alternateDPId) {
+    try {
+      waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+      click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    } catch (TimeoutException te) {
+      LOGGER.info("Alternate DP Not Found");
+    }
+  }
+
 
   public void chooseShipperAccountDp(Long shipperId) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
@@ -1295,7 +1319,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("id", Long.toString(dp.getId()))
         .put("name", dp.getName())
         .put("shortName", dp.getShortName())
-        .put("hub", f("%s - %s",dp.getHubId(),dp.getHubName()))
+        .put("hub", f("%s - %s", dp.getHubId(), dp.getHubName()))
         .put("address", dp.getAddress1())
         .put("direction", dp.getDirections())
         .put("activity", dp.getIsActive() ? "Active" : "Inactive")

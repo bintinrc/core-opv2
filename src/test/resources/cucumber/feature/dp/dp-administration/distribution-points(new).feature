@@ -462,3 +462,42 @@ Feature: DP Administration - Distribution Point
       | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
       | condition | CHECK_ALTERNATE_DP_DATA          |
       | dpSetting | KEY_DP_SETTINGS                  |
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - check validation where alternative dp should be active and can customer collect enabled -  DP not found - SG
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name              | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User ALT3 | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    And Operator Set newly created dp for Alternate DP number "3"
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED  |
+      | alternateDp2 | DISABLED |
+      | alternateDp3 | DISABLED |
+    When Operator fill Detail for create DP Management:
+      | name                           | shipperId                                    | contact      | shortName              | externalStoreId        | alternateDpId1      | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | isTimestampSame | isOperatingHours | operatingHoursDay                                        | editDaysIndividuallyOpeningHours | editDaysIndividuallyOperatingHours |
+      | AUDIA-ANJANI_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | {alternate-dp-id-1} | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | true            | true             | monday,tuesday,wednesday,thursday,friday,saturday,sunday | false                            | false                              |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED  |
+      | alternateDp2 | ENABLED  |
+      | alternateDp3 | DISABLED |
+    And Operator fill the alternate DP details
+      | alternateDp2 | {alternate-dp-id-2} |
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED |
+      | alternateDp2 | ENABLED |
+      | alternateDp3 | ENABLED |
+    Then Operator fill the invalid alternate DP details
+      | alternateDp3 | ALTERNATE_DP_ID_3 |
