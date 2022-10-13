@@ -1039,8 +1039,14 @@ public class DpAdministrationSteps extends AbstractSteps {
         }
       } else if (condition.equals(CHECK_ALTERNATE_DP_DATA)) {
         DpSetting dpSetting = resolveValue(dataTableAsMap.get("dpSetting"));
-        String[] dpsToRedirect = dpSetting.getDpsToRedirect().split(",");
-        if (dpDetailsResponse != null){
+        String[] dpsToRedirect;
+        if (dpSetting.getDpsToRedirect() != null){
+          dpsToRedirect = dpSetting.getDpsToRedirect().split(",");
+        } else {
+          dpsToRedirect = null;
+        }
+
+        if (dpDetailsResponse != null && dpsToRedirect != null){
           for (String altDp : dpsToRedirect) {
             if (dpDetailsResponse.getAlternateDpId1() != null && dpDetailsResponse.getAlternateDpId1()
                 .toString().equals(altDp)) {
@@ -1058,6 +1064,8 @@ public class DpAdministrationSteps extends AbstractSteps {
                   .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
             }
           }
+        } else {
+          LOGGER.info("DP Has No Alternate DP");
         }
       }
     }
