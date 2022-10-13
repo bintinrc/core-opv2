@@ -708,72 +708,66 @@ public class DpAdministrationSteps extends AbstractSteps {
     Long alternateDP1;
     Long alternateDP2;
     Long alternateDP3;
+    boolean validationStatus = map.get("validationStatus").equalsIgnoreCase("VALID");
     if (map.get("alternateDp1") != null) {
-      alternateDP1 = Long.parseLong(map.get("alternateDp1"));
+      if (get(map.get("alternateDp1")) != null){
+        alternateDP1 = get(map.get("alternateDp1"));
+      } else {
+        alternateDP1 = Long.parseLong(map.get("alternateDp1"));
+      }
     } else {
       alternateDP1 = null;
     }
+
     if (map.get("alternateDp2") != null) {
-      alternateDP2 = Long.parseLong(map.get("alternateDp2"));
+      if (get(map.get("alternateDp2")) != null){
+        alternateDP2 = get(map.get("alternateDp2"));
+      } else {
+        alternateDP2 = Long.parseLong(map.get("alternateDp2"));
+      }
     } else {
       alternateDP2 = null;
     }
+
     if (map.get("alternateDp3") != null) {
-      alternateDP3 = Long.parseLong(map.get("alternateDp3"));
+      if (get(map.get("alternateDp3")) != null){
+        alternateDP3 = get(map.get("alternateDp3"));
+      } else {
+        alternateDP3 = Long.parseLong(map.get("alternateDp3"));
+      }
     } else {
       alternateDP3 = null;
     }
 
     dpAdminReactPage.inFrame(() -> {
-      if (alternateDP1 != null) {
-        dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
-        dpAdminReactPage.chooseAlternateDp(alternateDP1);
+      if (validationStatus){
+        if (alternateDP1 != null) {
+          dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
+          dpAdminReactPage.chooseAlternateDp(alternateDP1);
+        }
+        if (alternateDP2 != null) {
+          dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
+          dpAdminReactPage.chooseAlternateDp(alternateDP2);
+        }
+        if (alternateDP3 != null) {
+          dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
+          dpAdminReactPage.chooseAlternateDp(alternateDP3);
+        }
+      } else {
+        if (alternateDP1 != null) {
+          dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP1);
+        }
+        if (alternateDP2 != null) {
+          dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP2);
+        }
+        if (alternateDP3 != null) {
+          dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP3);
+        }
       }
-      if (alternateDP2 != null) {
-        dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
-        dpAdminReactPage.chooseAlternateDp(alternateDP2);
-      }
-      if (alternateDP3 != null) {
-        dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
-        dpAdminReactPage.chooseAlternateDp(alternateDP3);
-      }
-    });
-  }
 
-  @When("Operator fill the invalid alternate DP details")
-  public void invalidAlternateDP(Map<String, String> dataTableAsMap) {
-    Map<String, String> map = resolveKeyValues(dataTableAsMap);
-    Long alternateDP1;
-    Long alternateDP2;
-    Long alternateDP3;
-    if (map.get("alternateDp1") != null) {
-      alternateDP1 = get(map.get("alternateDp1"));
-    } else {
-      alternateDP1 = null;
-    }
-    if (map.get("alternateDp2") != null) {
-      alternateDP2 = get(map.get("alternateDp2"));
-    } else {
-      alternateDP2 = null;
-    }
-    if (map.get("alternateDp3") != null) {
-      alternateDP3 = get(map.get("alternateDp3"));
-    } else {
-      alternateDP3 = null;
-    }
-    dpAdminReactPage.inFrame(() -> {
-      if (alternateDP1 != null) {
-        dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
-        dpAdminReactPage.chooseInvalidAlternateDp(alternateDP1);
-      }
-      if (alternateDP2 != null) {
-        dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
-        dpAdminReactPage.chooseInvalidAlternateDp(alternateDP2);
-      }
-      if (alternateDP3 != null) {
-        dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
-        dpAdminReactPage.chooseInvalidAlternateDp(alternateDP3);
-      }
     });
   }
 
