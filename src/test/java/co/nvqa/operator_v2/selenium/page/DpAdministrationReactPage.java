@@ -404,6 +404,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Select another')]")
   public PageElement elementSelectAnotherDPAlternate;
 
+  @FindBy(xpath = "//div[@class='ant-modal-content']/button[@class='ant-modal-close']")
+  public PageElement elementCancelDPAlternate;
+
   @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
   public PageElement ninjaBoxPudoPointType;
 

@@ -563,6 +563,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator press cancel choose DP Alternate Button")
+  public void operatorPressCancelChooseDPAlternateButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.elementCancelDPAlternate.click();
+    });
+  }
+
   @Then("Operator get the value of DP ID")
   public void operatorGetDpIdValue() {
     dpAdminReactPage.inFrame(() -> {
