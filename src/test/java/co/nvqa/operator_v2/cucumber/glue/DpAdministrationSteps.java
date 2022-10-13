@@ -542,6 +542,20 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator will get the popup message for alternate DP number {string}")
+  public void operatorWillGetPopupMsg(String numberOfDp) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.popupMsgAlternateDP(numberOfDp);
+    });
+  }
+
+  @When("Operator press update DP Alternate Button")
+  public void operatorPressUpdateDPAlternateButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.elementUpdateDPAlternate.click();
+    });
+  }
+
   @Then("Operator get the value of DP ID")
   public void operatorGetDpIdValue() {
     dpAdminReactPage.inFrame(() -> {

@@ -503,7 +503,7 @@ Feature: DP Administration - Distribution Point
       | alternateDp3 | ALTERNATE_DP_ID_3 |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - add 3 alternative DPs - search by DP short name - save settings - success create DP - SG
+  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click update button - SG
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -520,3 +520,8 @@ Feature: DP Administration - Distribution Point
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     When Operator press clear alternate DP number "2"
+    Then Operator will get the popup message for alternate DP number "3"
+    And Operator press update DP Alternate Button
+    When Operator press clear alternate DP number "1"
+    Then Operator will get the popup message for alternate DP number "2"
+    And Operator press update DP Alternate Button

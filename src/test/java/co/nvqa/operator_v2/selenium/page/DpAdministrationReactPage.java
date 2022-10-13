@@ -324,6 +324,11 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-clear']")
   public PageElement buttonClearAlternateDp1;
 
+  @FindBy(xpath = "//div[@role='document']//div[@class='ant-modal-body']/div/div/div[1]")
+  public PageElement elementRemoveMsg1;
+  @FindBy(xpath = "//div[@role='document']//div[@class='ant-modal-body']/div/div/div[2]")
+  public PageElement elementRemoveMsg2;
+
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
   public TextBox fieldAlternateDp2;
 
@@ -392,6 +397,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
+
+  @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Update')]")
+  public PageElement elementUpdateDPAlternate;
 
   @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
   public PageElement ninjaBoxPudoPointType;
@@ -606,6 +614,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String BUFFER_CAPACITY = "Buffer Capacity";
   public static final String EXTERNAL_STORE_ID = "External Store Id";
   public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
+  public static final String POPUP_CHANGE_ALTERNATE_DP_MSG = "Select another distribution point or update field to Alternate Distribution Point ID %s?";
 
   public static final String RETAIL_POINT_NETWORK = "RETAIL_POINT_NETWORK";
   public static final String CREATE = "CREATE";
@@ -863,6 +872,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void chooseAlternateDp(Long alternateDPId) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
     click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+  }
+
+  public void popupMsgAlternateDP(String alternateDpId) {
+    String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG,alternateDpId);
+    Assertions.assertThat(elementRemoveMsg1.getText() + " " + elementRemoveMsg2.getText()).as(f("Popup message is: %s",popupMsg))
+        .isEqualTo(popupMsg);
   }
 
   public void chooseInvalidAlternateDp(Long alternateDPId) {
