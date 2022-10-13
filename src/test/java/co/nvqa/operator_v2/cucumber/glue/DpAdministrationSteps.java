@@ -11,6 +11,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -525,6 +526,19 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       String fillInValue = dpAdminReactPage.getDpElementByMap(element, newlyCreatedDpDetails);
       dpAdminReactPage.textBoxDpFilter.get(element).setValue(fillInValue);
+    });
+  }
+
+  @When("Operator press clear alternate DP number {string}")
+  public void operatorPressClearAlternateDPNumber(String numberOfDp) {
+    ImmutableMap<String, PageElement> clearNumberOfDp = ImmutableMap.<String, PageElement>builder()
+        .put("1", dpAdminReactPage.buttonClearAlternateDp1)
+        .put("2", dpAdminReactPage.buttonClearAlternateDp2)
+        .put("3", dpAdminReactPage.buttonClearAlternateDp3)
+        .build();
+
+    dpAdminReactPage.inFrame(() -> {
+      clearNumberOfDp.get(numberOfDp).click();
     });
   }
 

@@ -321,17 +321,26 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input[@disabled]")
   public TextBox fieldAlternateDp1Disabled;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp1;
+
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
   public TextBox fieldAlternateDp2;
 
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input[@disabled]")
   public TextBox fieldAlternateDp2Disabled;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp2;
+
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input")
   public TextBox fieldAlternateDp3;
 
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input[@disabled]")
   public TextBox fieldAlternateDp3Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp3;
 
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
