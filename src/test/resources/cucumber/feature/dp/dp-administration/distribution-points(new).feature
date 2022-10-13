@@ -324,7 +324,7 @@ Feature: DP Administration - Distribution Point
       | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - Only add 1 alternative DP - Search DP by DP ID - save settings - success create DP - SG
+  Scenario: Create new DP - Only add 1 alternative DP - Search DP by DP ID - save settings - success create DP - SG (uid:c2bfe629-af59-4677-9d57-fef685f51550)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -352,7 +352,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - Only add 2 alternative DP - Search DP by DP ID - save settings - success create DP - SG
+  Scenario: Create new DP - Only add 2 alternative DPs - search by DP name - save settings - success create DP - SG (uid:e23c05f6-8d5c-47e5-817a-1a68006c8a0d)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -380,7 +380,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - add 3 alternative DPs - search by DP short name - save settings - success create DP - SG
+  Scenario: Create new DP - add 3 alternative DPs - search by DP short name - save settings - success create DP - SG (uid:917227aa-a39d-4048-a07d-a22fcf78c778)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -408,7 +408,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - alternative DPs are empty - Save settings - success create DP - SG
+  Scenario: Create new DP - alternative DPs are empty - Save settings - success create DP - SG (uid:a1acb03d-7d92-4b05-af92-f0cca3908b0c)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -436,7 +436,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - Add Pick! & 711 DP as alternative dp - Save Settings - success create DP - SG
+  Scenario: Create new DP - Add Pick! & 711 DP as alternative dp - Save Settings - success create DP - SG (uid:7f3b85d7-7518-47ed-936f-b1132221df4d)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -467,11 +467,6 @@ Feature: DP Administration - Distribution Point
   Scenario: Create New DP - check validation where alternative dp should be active and can customer collect enabled -  DP not found - SG
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
-    When Operator fill Detail for create DP Management:
-      | name              | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User ALT3 | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
-    Then API Operator request to create DP Management
-    And Operator Set newly created dp for Alternate DP number "3"
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
@@ -505,7 +500,7 @@ Feature: DP Administration - Distribution Point
       | validationStatus | INVALID           |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click update button - SG
+  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click update button - SG (uid:6f22a1b4-a860-441e-ab76-b9db00c394fb)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -539,7 +534,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click select another button - SG
+  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click select another button - SG (uid:32b6dd2c-a5c9-4047-bdd0-34442ab35b2c)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -576,7 +571,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - input duplicate dp as alternative DP - save settings - SG
+  Scenario: Create new DP - input duplicate dp as alternative DP - save settings - SG (uid:2580ab62-f911-4993-a934-8531f39fcb31)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -607,7 +602,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - Alternate DP field only shown on SG - SG
+  Scenario: Create new DP - Alternate DP field only shown on SG - SG (uid:f1c1d5e0-aa54-457a-bfed-207d19e991fc)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -638,7 +633,7 @@ Feature: DP Administration - Distribution Point
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click cancel button - SG
+  Scenario: Create new DP - remove selected alternative dp - modal confirmation shown - click cancel button - SG (uid:0348ec3a-a3e5-4001-978c-d2e0e3bde49f)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration

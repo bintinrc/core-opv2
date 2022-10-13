@@ -35,10 +35,6 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
   private static final String OPERATING_HOURS_EVERYDAY_DOUBLE = "OPERATING_HOURS_EVERYDAY_DOUBLE";
 
-  private static final String ALTERNATE_DP_ID_1 = "ALTERNATE_DP_ID_1";
-  private static final String ALTERNATE_DP_ID_2 = "ALTERNATE_DP_ID_2";
-  private static final String ALTERNATE_DP_ID_3 = "ALTERNATE_DP_ID_3";
-
   @Then("Operator need to check that the update is {string}")
   public void OperatorCheckUpdateDp(String occasion) {
     switch (occasion) {
@@ -67,17 +63,6 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     }
   }
 
-  @Then("Operator Set newly created dp for Alternate DP number {string}")
-  public void alternateDPNumber(String number) {
-    ImmutableMap<String, String> alternateDps = ImmutableMap.<String, String>builder()
-        .put("1", ALTERNATE_DP_ID_1)
-        .put("2", ALTERNATE_DP_ID_2)
-        .put("3", ALTERNATE_DP_ID_3)
-        .build();
-
-    Long dpDetailsResponseId = get(KEY_CREATE_DP_MANAGEMENT_RESPONSE_ID);
-    put(alternateDps.get(number),dpDetailsResponseId);
-  }
 
   @When("Operator fill Detail for create DP:")
   public void ninjaPointVUserFillDetailForCreateDp(DataTable dt) {
