@@ -31,10 +31,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     And Operator will get the error from some field
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST  |
-      | pName             | audia &^$#,Point Name             |
-      | sName             | audia &^$#,Short Name             |
-      | city              | {Jakarta}<Selatan>,City           |
-      | esId              | {Alfa}<Express>,External Store Id |
       | poCode            | abc,Postcode                      |
       | floorNo           | abc,Floor No                      |
       | unitNo            | abc,Unit No                       |
@@ -63,9 +59,6 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator will get the error from some field
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
-      | pName             | audia &^$#,Point Name             |
-      | city              | {Jakarta}<Selatan>,City           |
-      | esId              | {Alfa}<Express>,External Store Id |
       | poCode            | abc,Postcode                      |
       | floorNo           | abc,Floor No                      |
       | unitNo            | abc,Unit No                       |
