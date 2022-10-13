@@ -27,6 +27,7 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
 
   public static final String CSV_FILENAME_PATTERN = "automation_upload_pricing_profiles.csv";
   public static final String PRICING_PROFILE_ERRORS_CSV_FILENAME_PATTERN = "upload_pricing_profile_errors";
+  public static final String PRICING_PROFILE_ERROR_UPLOAD_PRICING_PROFILE_CSV_FILENAME_PATTERN = "pricing_profile_errors";
   private static final Logger LOGGER = LoggerFactory.getLogger(UploadSelfServePromoPageSteps.class);
   private UploadSelfServePromoPage uploadSelfServePromoPage;
 
@@ -174,6 +175,13 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
     );
   }
 
+  @Then("Operator clicks Download Error Upload Pricing Profile CSV on Upload Self Serve Promo Page")
+  public void operatorClicksDownloadErrorUploadPricingProfileCSVOnUploadSelfServePromoPage() {
+    uploadSelfServePromoPage.inFrame(() ->
+        uploadSelfServePromoPage.clickDownloadErrorUploadPricingProfileCsvButton()
+    );
+  }
+
   @Then("Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:")
   public void operatorVerifyDownloadErrorsCSVFileOnUploadSelfServePromoPageIsDownloadedSuccessfullyWithBelowData(
       DataTable dt) {
@@ -183,6 +191,16 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
 
     uploadSelfServePromoPage.verifyDownloadErrorsCsvFileDownloadedSuccessfully(sb,
         PRICING_PROFILE_ERRORS_CSV_FILENAME_PATTERN);
+  }
+
+  @Then("Operator verify Download Error Upload Pricing Profile CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:")
+  public void operatorVerifyDownloadErrorUPPCSVFileOnUploadSelfServePromoPageIsDownloadedSuccessfullyWithBelowData(
+      DataTable dt) {
+    List<List<String>> rows = resolveListOfLists(dt.asLists());
+    String sb = rows.stream().map(row -> String.join(",", row)).collect(Collectors.joining("\n"));
+
+    uploadSelfServePromoPage.verifyDownloadErrorsCsvFileDownloadedSuccessfully(sb,
+        PRICING_PROFILE_ERROR_UPLOAD_PRICING_PROFILE_CSV_FILENAME_PATTERN);
   }
 
   @Then("Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains {string}")
