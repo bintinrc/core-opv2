@@ -324,9 +324,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-clear']")
   public PageElement buttonClearAlternateDp1;
 
-  @FindBy(xpath = "//div[@role='document']//div[@class='ant-modal-body']/div/div/div[1]")
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[1]")
   public PageElement elementRemoveMsg1;
-  @FindBy(xpath = "//div[@role='document']//div[@class='ant-modal-body']/div/div/div[2]")
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[2]")
   public PageElement elementRemoveMsg2;
 
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
