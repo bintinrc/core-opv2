@@ -1135,21 +1135,43 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void errorCheckDpUser(String value, String errorKey) {
     switch (errorKey) {
-      case "!USFIRNME":
+      case "USFIRNME":
         formDpUserFirstName.forceClear();
         formDpUserFirstName.setValue(value);
+        formDpUserFirstName.forceClear();
         break;
-      case "!USLANME":
+      case "USLANME":
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
+        formDpUserLastName.forceClear();
         break;
-      case "!USNME":
+      case "CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        formDpUserContact.forceClear();
+        break;
+      case "!CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        break;
+      case "USNME":
         formDpUserUsername.forceClear();
         formDpUserUsername.setValue(value);
+        formDpUserUsername.forceClear();
+        break;
+      case "PWORD":
+        formDpUserPassword.forceClear();
+        formDpUserPassword.setValue(value);
+        formDpUserPassword.forceClear();
         break;
       case "!USEMAIL":
         formDpUserEmail.forceClear();
         formDpUserEmail.setValue(value);
+        break;
+      case "USEMAIL":
+        formDpUserEmail.forceClear();
+        formDpUserEmail.setValue(value);
+        formDpUserEmail.forceClear();
         break;
 
     }
