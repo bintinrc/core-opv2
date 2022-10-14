@@ -168,10 +168,10 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
 
-    if (dpDetail.getShortName().equals("GENERATED")) {
+    if (dpDetail.getShortName() != null && dpDetail.getShortName().equals("GENERATED")) {
       dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
     }
-    if (dpDetail.getExternalStoreId().equals("GENERATED")) {
+    if (dpDetail.getExternalStoreId() != null && dpDetail.getExternalStoreId().equals("GENERATED")) {
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
     if (dpDetail.getHubName() != null) {

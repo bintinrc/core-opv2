@@ -7,6 +7,7 @@ Feature: DP Administration - Data Cleaning
       | {default-partners-email}         |
       | {default-partners-dp-email}      |
       | {default-partners-dp-user-email} |
+      | {default-partners-dp-edit-email} |
     Then API Operator delete DP management partner
       | dpPartners | KEY_LIST_DATABASE_DP_PARTNER |
 
