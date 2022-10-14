@@ -62,6 +62,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     }
   }
 
+
   @When("Operator fill Detail for create DP:")
   public void ninjaPointVUserFillDetailForCreateDp(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
@@ -184,7 +185,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
       if (dpDetail.getOperatingHoursDay().equals(OPERATING_HOURS_EVERYDAY_DOUBLE)) {
         String days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
-        defaultTime = selectDayDateAvailableDouble(days,2);
+        defaultTime = selectDayDateAvailableDouble(days, 2);
         dpDetail.setOperatingHoursDay(days);
       } else if (!dpDetail.getIsTimestampSame()) {
         defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, false);
@@ -233,7 +234,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     for (int i = 0; i < dayList.length; i++) {
       List<Hours> fetchTimeStamp = new ArrayList<>();
       for (int j = 0; j < increment; j++) {
-        fetchTimeStamp.add(selectTimeStamp(false, i+j+1).get(0));
+        fetchTimeStamp.add(selectTimeStamp(false, i + j + 1).get(0));
       }
       daysAvailable.put(dayList[i], fetchTimeStamp);
     }
