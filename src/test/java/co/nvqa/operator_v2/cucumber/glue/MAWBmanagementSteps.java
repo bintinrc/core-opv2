@@ -37,6 +37,9 @@ public class MAWBmanagementSteps extends AbstractSteps{
             case "Search by MAWB Number":
                 mawbManagementgPage.verifySearchByMawbUI();
                 break;
+            case "Search by Vendor":
+                mawbManagementgPage.verifySearchByVendorUI();
+                break;
         }
     }
 
@@ -92,6 +95,13 @@ public class MAWBmanagementSteps extends AbstractSteps{
     @Then("Operator verifies error toast message on MAWB Management Page:")
     public void operatorVerifiesErrorToastMessage(String expectedMessage){
         Assertions.assertThat(mawbManagementgPage.getAntTopTextV2()).as("Error message is the same").isEqualTo(expectedMessage);
+    }
+
+    @Given("Operator searchs by vendor following data below on MAWB Management page:")
+    public void operatorSearchsByVendor(Map<String,String> data){
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        mawbManagementgPage.SearchByVendorInputData(resolvedData);
+
     }
 
 }
