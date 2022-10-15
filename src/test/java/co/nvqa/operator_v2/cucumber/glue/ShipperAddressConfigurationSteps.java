@@ -252,7 +252,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     String fileName = data.get("fileName");
     String value = data.get("value");
     String Filepath =
-        System.getProperty("user.dir") + "\\src\\test\\resources\\csv\\firstMile\\" + fileName;
+        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     File file = new File(Filepath);
     shipperAddressConfigurationPage.updateCSVFile(Filepath, columnIndex, rowIndex, value);
 
