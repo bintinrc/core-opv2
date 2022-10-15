@@ -189,6 +189,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator clicks on the Update Addresses Lat Long button
     And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Address_ID.csv" by browsing files
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
