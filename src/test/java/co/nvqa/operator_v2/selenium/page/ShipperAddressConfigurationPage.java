@@ -214,7 +214,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public void VerificationOfURL(String buttonText) {
     waitWhilePageIsLoading();
     Assertions.assertThat(getWebDriver().getCurrentUrl().endsWith(buttonText))
-        .as("Validation for page URL");
+        .as("Validation for page URL").isTrue();
     LOGGER.info(getWebDriver().getCurrentUrl());
   }
 
