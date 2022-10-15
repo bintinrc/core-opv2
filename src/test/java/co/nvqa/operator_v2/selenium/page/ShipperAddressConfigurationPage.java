@@ -211,6 +211,13 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     buttonXpath.click();
   }
 
+  public void VerificationOfURL(String buttonText) {
+    waitWhilePageIsLoading();
+    Assertions.assertThat(getWebDriver().getCurrentUrl().endsWith(buttonText))
+        .as("Validation for page URL");
+    LOGGER.info(getWebDriver().getCurrentUrl());
+  }
+
   public void validateInvalidFileErrorMessageIsShown() {
     pause5s();
     Assertions.assertThat(invalidFileErrorMessage.isDisplayed())

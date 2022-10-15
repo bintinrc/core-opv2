@@ -258,6 +258,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   }
 
+  @Then("Operator verifies page url ends with {string}")
+  public void operatorVerifiesPageUrlEndsWith(String expectedTest) {
+    shipperAddressConfigurationPage.VerificationOfURL(expectedTest);
+  }
 }
 
 
