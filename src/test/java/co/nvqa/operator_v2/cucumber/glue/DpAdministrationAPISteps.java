@@ -9,10 +9,8 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 import org.assertj.core.api.Assertions;
 
 /**
@@ -194,6 +192,13 @@ public class DpAdministrationAPISteps extends AbstractSteps {
       }
     }
 
+    if (dpDetail.getDpPhoto() != null) {
+      File file = null;
+      file = getDpPhoto(getResourcePath(dpDetail.getDpPhoto()));
+      dpDetail.setDpPhotoFile(file);
+    }
+
+
     dpDetail.setOpeningHours(defaultTime);
     dpDetail.setOperatingHours(defaultTime);
 
@@ -201,6 +206,20 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
   }
 
+  private File getDpPhoto(String resourcePath) {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    return new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
+  }
+
+  private String getResourcePath(String status) {
+    String resourcePath;
+    if ("valid".equalsIgnoreCase(status)) {
+      resourcePath = "images/dpPhotoValidSize.png";
+    } else {
+      resourcePath = "images/dpPhotoInvalidSize.png";
+    }
+    return resourcePath;
+  }
   public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday,
       boolean isTimeStampSame) {
     Map<String, List<Hours>> daysAvailable = new HashMap<>();
