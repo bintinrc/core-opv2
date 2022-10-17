@@ -24,7 +24,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-rts-zone-latitude}  |
@@ -59,7 +59,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-zone-latitude}  |
@@ -94,7 +94,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-ooz-zone-latitude}  |
@@ -127,7 +127,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-rts-zone-latitude-2}  |
@@ -160,7 +160,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-zone-latitude}  |
@@ -193,7 +193,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-ooz-zone-latitude}  |
@@ -226,7 +226,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     When Operator assign "{av-zone-name}" zone to the last address on Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Success assign to zone |
@@ -375,6 +375,6 @@ Feature: Address Verification
     Then Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @WIP
   Scenario: Kill Browser
     Given no-op
