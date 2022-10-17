@@ -17,8 +17,8 @@ Feature: COD
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | column         | description                        |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | cod_min_fee    | cod_min_fee should not be blank    |
-      | 2   | {KEY_LEGACY_SHIPPER_ID} | cod_percentage | cod_percentage should not be blank |
+      | 2   | {KEY_LEGACY_SHIPPER_ID} | cod_min_fee    | cod_min_fee should not be blank    |
+      | 3   | {KEY_LEGACY_SHIPPER_ID} | cod_percentage | cod_percentage should not be blank |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
   @DeleteNewlyCreatedShipper
@@ -35,7 +35,7 @@ Feature: COD
     Then Operator clicks Download Error Upload Pricing Profile CSV on Upload Self Serve Promo Page
     Then Operator verify Download Error Upload Pricing Profile CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | global_id        | message                                              | reason           |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD percentage cannot be negative or more than 100%. | Validation Error |
+      | 2   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD percentage cannot be negative or more than 100%. | Validation Error |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
   @DeleteNewlyCreatedShipper
@@ -52,7 +52,7 @@ Feature: COD
     Then Operator clicks Download Error Upload Pricing Profile CSV on Upload Self Serve Promo Page
     Then Operator verify Download Error Upload Pricing Profile CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | global_id        | message                                              | reason           |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD percentage cannot be negative or more than 100%. | Validation Error |
+      | 2   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD percentage cannot be negative or more than 100%. | Validation Error |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
   @DeleteNewlyCreatedShipper
@@ -69,5 +69,5 @@ Feature: COD
     Then Operator clicks Download Error Upload Pricing Profile CSV on Upload Self Serve Promo Page
     Then Operator verify Download Error Upload Pricing Profile CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | global_id        | message                             | reason           |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD minimum fee cannot be negative. | Validation Error |
+      | 2   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | COD minimum fee cannot be negative. | Validation Error |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"

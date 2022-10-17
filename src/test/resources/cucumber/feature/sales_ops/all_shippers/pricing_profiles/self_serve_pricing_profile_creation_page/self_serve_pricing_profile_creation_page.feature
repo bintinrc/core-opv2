@@ -61,7 +61,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | column         | description                                        |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | effective_date | The effective date must be after the current date. |
+      | 2   | {KEY_LEGACY_SHIPPER_ID} | effective_date | The effective date must be after the current date. |
 
   @DeleteNewlyCreatedShipper
   Scenario: Upload Pricing Profiles with CSV - CSV file contains 2 rows that has same Shipper ID (uid:be64b64f-db89-4098-b4a5-72d8dd0d6ec4)
