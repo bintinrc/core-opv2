@@ -160,3 +160,26 @@ Feature: DP Administration - Distribution Point Edit
     Then Operator check the alternate DP is shown in DP Edit page
       | dpList    | ADP1                             |
       | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Edit existing DP - Alternative DPs empty - Save settings - Success - SG
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-edit-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test Edit | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
+    And Operator waits for 5 seconds
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
+    And Operator waits for 5 seconds
