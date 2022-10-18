@@ -167,11 +167,11 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagement(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
-
-    if (dpDetail.getShortName() != null && dpDetail.getShortName().equals("GENERATED")) {
+    
+    if (("GENERATED").equals(dpDetail.getShortName())) {
       dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
     }
-    if (dpDetail.getExternalStoreId() != null && dpDetail.getExternalStoreId().equals("GENERATED")) {
+    if (("GENERATED").equals(dpDetail.getExternalStoreId())) {
       dpDetail.setExternalStoreId(TestUtils.generateAlphaNumericString(6));
     }
     if (dpDetail.getHubName() != null) {
