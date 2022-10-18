@@ -654,6 +654,19 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     pause3s();
   }
 
+  public void verifyURLOpenedOnClickingHyperlink(String linkName, String expectedURL) {
+    WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
+    scrollIntoView(navLink);
+    navLink.click();
+    switchToNewWindow();
+    waitWhilePageIsLoading();
+    pause10s();
+    Assertions.assertThat(getWebDriver().getCurrentUrl()).
+        as("Assert that the expected page has opened in new tab from navigation links").
+        isEqualTo(expectedURL);
+    closeAllWindowsExceptCurrentWindow();
+  }
+
   @FindBy(css = "button[class*='btn-icon']")
   private PageElement arrowIcon;
 

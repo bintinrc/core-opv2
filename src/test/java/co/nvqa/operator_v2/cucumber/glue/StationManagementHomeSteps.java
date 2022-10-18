@@ -357,6 +357,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.verifyPageOpenedOnClickingHyperlink(linkName, pageName);
   }
 
+  @Then("Operator verifies that the URL {string} is loaded on new tab on clicking the link:{string}")
+  public void operator_verifies_that_the_URL_is_loaded_on_new_tab_on_clicking_the_link(
+      String ExpectedURL, String linkName) {
+    stationManagementHomePage.verifyURLOpenedOnClickingHyperlink(linkName, ExpectedURL);
+  }
+
   @Then("Operator verifies that the text:{string} is displayed on the hub modal selection")
   public void operator_verifies_that_the_text_is_displayed_on_the_hub_modal_selection(
       String modalText) {
