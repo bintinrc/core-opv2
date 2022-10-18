@@ -536,24 +536,21 @@ Feature: Reservation Preset Management
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
     And Operator create new Shipper with basic settings using data below:
-      | isShipperActive               | true                  |
-      | shipperType                   | Normal                |
-      | ocVersion                     | v4                    |
-      | services                      | STANDARD              |
-      | trackingType                  | Fixed                 |
-      | isAllowCod                    | false                 |
-      | isAllowCashPickup             | true                  |
-      | isPrepaid                     | true                  |
-      | isAllowStagedOrders           | false                 |
-      | isMultiParcelShipper          | false                 |
-      | isDisableDriverAppReschedule  | false                 |
-      | pricingScriptName             | {pricing-script-name} |
-      | industryName                  | {industry-name}       |
-      | salesPerson                   | {sales-person}        |
-      | pickupAddressCount            | 1                     |
-      | address.1.milkrun.1.startTime | 3PM                   |
-      | address.1.milkrun.1.endTime   | 6PM                   |
-      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | false                 |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | false                 |
+      | isMultiParcelShipper         | false                 |
+      | isDisableDriverAppReschedule | false                 |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+      | pickupAddressCount           | 1                     |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
     And Operator waits for 10 seconds
@@ -573,19 +570,17 @@ Feature: Reservation Preset Management
       | top | ^Created milkruns.* |
     And Operator uploads CSV on Reservation Preset Management page:
       | shipperId                            | addressId                           | action | milkrunGroupId                     | days            | startTime | endTime |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_LIST_OF_FOUND_ADDRESSES[1].id} | delete | {KEY_CREATED_RESERVATION_GROUP_ID} |                 |           |         |  |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {KEY_LIST_OF_FOUND_ADDRESSES[1].id} | delete | {KEY_CREATED_RESERVATION_GROUP_ID} |                 |           |         |
       | {KEY_LIST_OF_CREATED_SHIPPERS[2].id} | {KEY_LIST_OF_FOUND_ADDRESSES[2].id} | add    | {KEY_CREATED_RESERVATION_GROUP_ID} | "1,2,3,4,5,6,7" | 15:00     | 18:00   |
     Then Operator verifies that success toast displayed:
       | top | ^Created milkruns.* |
     Then Operator verifies that success toast displayed:
       | top | ^Deleted milkruns.* |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].name}"
+    And Operator opens Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId}"
     Then Operator verify pickup address on Edit Shipper page:
       | shipperId                   | {KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId} |
       | address.1.milkrun.isMilkrun | false                                      |
-    And Operator go to menu Shipper -> All Shippers
-    And Operator open Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].name}"
+    And Operator opens Edit Shipper Page of shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].legacyId}"
     Then Operator verify pickup address on Edit Shipper page:
       | shipperId                     | {KEY_LIST_OF_CREATED_SHIPPERS[2].legacyId} |
       | address.1.milkrun.1.startTime | 3PM                                        |

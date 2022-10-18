@@ -348,6 +348,11 @@ public class AllShippersSteps extends AbstractSteps {
     pause2s();
   }
 
+  @Then("Operator opens Edit Shipper Page of shipper {value}")
+  public void operatorOpenEditsShipperPageOfShipper(String legacyId) {
+    allShippersPage.allShippersCreateEditPage.openPage(legacyId);
+  }
+
   @Then("^Operator login to Ninja Dash as shipper \"(.+)\" from All Shippers page$")
   public void loginToDash(String shipperName) {
     shipperName = resolveValue(shipperName);
