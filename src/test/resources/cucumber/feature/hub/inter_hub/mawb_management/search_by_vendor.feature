@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor
 Feature: MAWB Management - Search by Vendor
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -273,7 +273,7 @@ Feature: MAWB Management - Search by Vendor
     Then Operator verifies Mandatory require error message of "MAWB Destination Airport" field on MAWB Management page
     And Operator verifies button "Search by Vendor" is disalbe on MAWB Management page
 
-  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs @RT
+  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs
   Scenario: Search by Vendor with Valid Filter - Remove previous value of Flight Trip Departure Date
     Given API Operator create new airport using data below:
       | system_id     | SG          |
