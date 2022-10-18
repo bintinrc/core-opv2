@@ -317,8 +317,8 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
-  @When("Operator edit Shipment on Shipment Management page:")
-  public void operatorEditShipment(Map<String, String> data) {
+  @When("Operator input form edit Shipment on Shipment Management page:")
+  public void operatorInputFormEditShipmentOnShipmentManagementPage(Map<String, String> data) {
     Map<String, String> resolvedData = resolveKeyValues(data);
     String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
@@ -337,6 +337,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       if (resolvedData.containsKey("comments")) {
         page.editShipmentDialog.comments.setValue(resolvedData.get("comments"));
       }
+    });
+  }
+
+  @When("Operator edit Shipment on Shipment Management page:")
+  public void operatorEditShipment(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      this.operatorInputFormEditShipmentOnShipmentManagementPage(resolvedData);
       page.editShipmentDialog.saveChanges.click();
     });
   }
@@ -709,6 +717,15 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator input form bulk update shipment with data below:")
+  public void operatorInputFormBulkUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+
+    page.inFrame(() -> {
+      page.inputFormBulkUpdateShipment(resolvedMapOfData);
+    });
+  }
+
   @When("Operator bulk update shipment with data below:")
   public void operatorBulkUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
@@ -893,6 +910,61 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     page.inFrame(()-> {
       Assertions.assertThat(page.showNoResultsFound.getText()).as("Please set filter to no results found error message")
               .isEqualTo("No Results Found");
+    });
+  }
+
+  @Then("^Operator verify error message \"Origin Hub and Destination Hub cannot be the same\" is shown")
+  public void operatorVerifyErrorMessageOriginHubAndDestinationHubCannotBeTheSameIsShown() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editShipmentDialog.startHubError.getText()).as("Showed error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+    });
+  }
+
+  @And("Operator verify {string} on edit popup is disable")
+  public void operatorVerifyOnEditPopupIsDisable(String disabledButton) {
+    Button button;
+    switch (disabledButton.toLowerCase()) {
+      case "save changes button":
+        button = page.editShipmentDialog.saveChanges;
+        break;
+      default:
+        throw new IllegalStateException("Unknown button name " + disabledButton);
+    }
+    page.inFrame(() -> Assertions.assertThat(button.isEnabled())
+            .withFailMessage(disabledButton + " is enabled").isFalse());
+  }
+
+  @Then("^Operator verify error message \"Origin Hub and Destination Hub cannot be the same\" is showing on Bulk Update dialog")
+  public void operatorVerifyErrorMessageIsShowingOnBulkUpdateDialog() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.bulkUpdateShipmentDialog.originHubError.getText()).as("Showing error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+      Assertions.assertThat(page.bulkUpdateShipmentDialog.destinationHubError.getText()).as("Showing error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+    });
+  }
+
+  @And("Operator verify {string} on bulk update is disable")
+  public void operatorVerifyOnBulkUpdateIsDisable(String disabledButton) {
+    Button button;
+    switch (disabledButton.toLowerCase()) {
+      case "apply to selected button":
+        button = page.bulkUpdateShipmentDialog.applyToSelected;
+        break;
+      default:
+        throw new IllegalStateException("Unknown button name " + disabledButton);
+    }
+    page.inFrame(() -> Assertions.assertThat(button.isEnabled())
+            .withFailMessage(disabledButton + " is enabled").isFalse());
+  }
+
+  @Then("^Operator verify error message \"Failed. Error: Shipment Origin Hub and Destination Hub cannot be the same\" is shown")
+  public void operatorVerifyBulkUpdateErrorMessageIsShown() {
+    page.inFrame(()-> {
+      page.shipmentToBeUpdatedTable.waitUntilVisible();
+      Assertions.assertThat(page.shipmentToBeUpdatedTable.originDestinationHubError.getText()).as("Showing Failed. Error: Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Shipment Origin Hub and Destination Hub cannot be the same");
     });
   }
 }
