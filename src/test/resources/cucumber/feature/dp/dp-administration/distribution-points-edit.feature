@@ -221,7 +221,7 @@ Feature: DP Administration - Distribution Point Edit
       | dpSetting | KEY_DP_SETTINGS                  |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Edit existing DP - Inactive alternative dp - DP not shown on list - SG
+  Scenario: Edit existing DP - Alternative dp with can_customer_collect = false - Not eligible - SG
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-edit-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
