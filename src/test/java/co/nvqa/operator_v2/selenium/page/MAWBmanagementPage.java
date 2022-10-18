@@ -31,7 +31,13 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     }
     public amwbTableModal mawbtable;
     private static final String MAWB_MANAGEMENR_SEARCH_HEADER_XPATH = "//h4[text() = '%s']";
+    private static final String MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+    private static final String MAWB_MANAGEMENR_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
     private static final String searchByMAWBTextBoxId = "search-by-mawb-ref-form_searchMawbRefs";
+    private static final String searchByVendor_mawbVendorId = "search-by-vendor-form_mawbVendor";
+    private static final String searchByVendor_mawbOriginAirportId = "search-by-vendor-form_mawbOriginAirport";
+    private static final String searchByVendor_mawbDestinationAirportId = "search-by-vendor-form_mawbDestinationAirport";
+    private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
 
 
     @FindBy(xpath = "//span[@class='ant-typography']")
@@ -39,6 +45,18 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
     @FindBy(id = searchByMAWBTextBoxId)
     public TextBox searchByMAWBTextBox;
+
+    @FindBy(id = searchByVendor_mawbOriginAirportId)
+    public TextBox mawbOriginAirportTextBox;
+
+    @FindBy(id = searchByVendor_mawbVendorId)
+    public TextBox mawbVendorTextBox;
+
+    @FindBy(id = searchByVendor_mawbDestinationAirportId)
+    public TextBox mawbDestinationAirportTextBox;
+
+    @FindBy(id = searchByVendor_flightTripDepartureDateId)
+    public TextBox flightTripDepartureDateTextBox;
 
     @FindBy(css = "[data-testid = 'mawb-counter']")
     public PageElement mawbCounter;
@@ -52,6 +70,9 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//button[@data-testid='result-error-close-button']//span")
     public Button closeButton;
 
+    @FindBy(css = "[data-testid = 'search-by-vendor-button']")
+    public Button searchByVendorButton;
+
 
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
@@ -64,6 +85,17 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         mawbCounter.waitUntilVisible();
         Assertions.assertThat(mawbCounter.getText()).as("counter is zero").contains("0 entered");
         Assertions.assertThat(searchByMAWBbutton.getAttribute("disabled")).as("Search by MAWB button is disable").isEqualTo("true");
+    }
+
+    public void verifySearchByVendorUI(){
+        waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by Vendor"));
+        Assertions.assertThat(findElementByXpath(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by Vendor")).isDisplayed())
+                .as("Search by Vendor Header is display").isTrue();
+        Assertions.assertThat(mawbVendorTextBox.isDisplayed()).as("MAWB Vendor dropdown is display").isTrue();
+        Assertions.assertThat(mawbOriginAirportTextBox.isDisplayed()).as("MAWB Origin Airport dropdown is display").isTrue();
+        Assertions.assertThat(mawbDestinationAirportTextBox.isDisplayed()).as("MAWB Destination Airport dropdown is display").isTrue();
+        Assertions.assertThat(flightTripDepartureDateTextBox.isDisplayed()).as("Flight Trip Departure Date dropdown is display").isTrue();
+        Assertions.assertThat(searchByVendorButton.getAttribute("disabled")).as("Search by Vendor button is disable").isEqualTo("true");
     }
 
     public void addShipmentToSearchBox(List<String> listMAWBs){
@@ -121,6 +153,12 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         @FindBy(xpath = "//button[@class='ant-btn ant-btn-primary']")
         public PageElement ManifestButton;
 
+        @FindBy(xpath ="//span[text()='Reload Search']")
+        public Button reloadButton;
+
+        @FindBy(xpath ="//button[@class='ant-btn']//span[@class='anticon anticon-sync anticon-spin']")
+        public PageElement reloadSpin;
+
         public void VerifySearchResultPage(){
             String LIST_OF_MAWB_ELEMENTS = "//div[contains(@class,'table-container')]//table//tr//th[contains(@class,'%s')]";
             backToFilter.waitUntilVisible();
@@ -164,6 +202,69 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(closeButton.isDisplayed()).as("Go back or Confirm button is displayed").isTrue();
     }
 
+    public void SearchByVendorInputData(Map<String,String> resolvedMapOfData){
+
+        if(resolvedMapOfData.get("mawbVendor") !=null){
+            mawbVendorTextBox.click();
+            sendKeysAndEnterById(searchByVendor_mawbVendorId, resolvedMapOfData.get("mawbVendor"));
+        }
+        if(resolvedMapOfData.get("mawbOriginAirport") !=null){
+            mawbOriginAirportTextBox.click();
+            sendKeysAndEnterById(searchByVendor_mawbOriginAirportId, resolvedMapOfData.get("mawbOriginAirport"));
+        }
+        if(resolvedMapOfData.get("mawbDestinationAirport") !=null){
+            mawbDestinationAirportTextBox.click();
+            sendKeysAndEnterById(searchByVendor_mawbDestinationAirportId, resolvedMapOfData.get("mawbDestinationAirport"));
+        }
+        if(resolvedMapOfData.get("flightTripDepartureDate") !=null){
+            flightTripDepartureDateTextBox.click();
+            sendKeysAndEnterById(searchByVendor_flightTripDepartureDateId, resolvedMapOfData.get("flightTripDepartureDate"));
+        }
+
+    }
+
+    public void clearTextonField(String fieldName){
+        String MAWB_MANAGEMENT_DEPARTURE_DATE_CLEAR_XPATH= "//input[@id='search-by-vendor-form_flightTripDepartureDate']/following-sibling::span[contains(@class ,'clear')]";
+
+        switch (fieldName){
+            case "MAWB Vendor":
+                findElementByXpath(f(MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH,searchByVendor_mawbVendorId)).click();
+                break;
+            case "MAWB Origin Airport":
+                findElementByXpath(f(MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH,searchByVendor_mawbOriginAirportId)).click();
+                break;
+            case "MAWB Destination Airport":
+                findElementByXpath(f(MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH,searchByVendor_mawbDestinationAirportId)).click();
+                break;
+            case "Flight Trip Departure Date":
+                findElementByXpath(MAWB_MANAGEMENT_DEPARTURE_DATE_CLEAR_XPATH).click();
+                break;
+        }
+    }
+
+    public void verifyMandatoryFieldErrorMessageMAWBPage(String fieldName){
+        String actualMessage ="";
+        String expectedMessage = "Please enter "+fieldName;
+        switch (fieldName){
+            case "MAWB Vendor":
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByVendor_mawbVendorId)).getText();
+                break;
+            case "MAWB Origin Airport":
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByVendor_mawbOriginAirportId)).getText();
+                break;
+            case "MAWB Destination Airport":
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByVendor_mawbDestinationAirportId)).getText();
+                break;
+            case "Flight Trip Departure Date":
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByVendor_flightTripDepartureDateId)).getText();
+                break;
+        }
+        Assertions.assertThat(actualMessage).as("Mandatory require error message is the same").isEqualTo(expectedMessage);
+    }
+
+    public void verifySearchByVendorbuttonIsEnable(){
+        Assertions.assertThat(searchByVendorButton.getAttribute("disabled")).as("Search by Vendor button is enable").isEqualTo(null);
+    }
 
 
 }

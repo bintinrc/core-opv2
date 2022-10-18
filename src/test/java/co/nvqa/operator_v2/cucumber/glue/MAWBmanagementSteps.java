@@ -37,6 +37,9 @@ public class MAWBmanagementSteps extends AbstractSteps{
             case "Search by MAWB Number":
                 mawbManagementgPage.verifySearchByMawbUI();
                 break;
+            case "Search by Vendor":
+                mawbManagementgPage.verifySearchByVendorUI();
+                break;
         }
     }
 
@@ -61,6 +64,16 @@ public class MAWBmanagementSteps extends AbstractSteps{
         switch (button){
             case "Search MAWB":
                 mawbManagementgPage.searchByMAWBbutton.click();
+                break;
+            case "Search by Vendor":
+                mawbManagementgPage.searchByVendorButton.click();
+                break;
+
+            case "Reload":
+                mawbManagementgPage.mawbtable.reloadButton.click();
+                pause1s();
+                mawbManagementgPage.mawbtable.reloadSpin.waitUntilInvisible();
+                pause1s();
                 break;
         }
 
@@ -92,6 +105,35 @@ public class MAWBmanagementSteps extends AbstractSteps{
     @Then("Operator verifies error toast message on MAWB Management Page:")
     public void operatorVerifiesErrorToastMessage(String expectedMessage){
         Assertions.assertThat(mawbManagementgPage.getAntTopTextV2()).as("Error message is the same").isEqualTo(expectedMessage);
+    }
+
+    @Given("Operator searchs by vendor following data below on MAWB Management page:")
+    public void operatorSearchsByVendor(Map<String,String> data){
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        pause3s();
+        mawbManagementgPage.SearchByVendorInputData(resolvedData);
+
+    }
+
+    @When("Operator removes text of {string} field on MAWB Management page")
+    public void operatorRemovesText(String fieldName){
+        mawbManagementgPage.clearTextonField(fieldName);
+    }
+
+    @Then("Operator verifies Mandatory require error message of {string} field on MAWB Management page")
+    public void operatorVerifiesMandatoryErrorMessage(String fieldName){
+        mawbManagementgPage.verifyMandatoryFieldErrorMessageMAWBPage(fieldName);
+
+    }
+
+    @Then("Operator verifies button {string} is disalbe on MAWB Management page")
+    public void operatorVerifiesButtonIsDisable(String button){
+        switch (button){
+            case "Search by Vendor":
+                Assertions.assertThat(mawbManagementgPage.searchByVendorButton.getAttribute("disabled"))
+                        .as("Search by Vendor button is disable").isEqualTo("true");
+                break;
+        }
     }
 
 }

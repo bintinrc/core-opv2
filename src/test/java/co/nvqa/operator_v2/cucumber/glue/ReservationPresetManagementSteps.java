@@ -1,12 +1,17 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.PendingTaskBlock;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
 
@@ -80,6 +85,44 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     reservationPresetManagementPage.assignShipperDialog.waitUntilVisible();
     reservationPresetManagementPage.assignShipperDialog.group.selectValue(group);
     reservationPresetManagementPage.assignShipperDialog.assignShipper.clickAndWaitUntilDone();
+  }
+
+  @Then("^Operator uploads CSV on Reservation Preset Management page:$")
+  public void assignPendingTask(List<Map<String, String>> data) {
+    data = resolveListOfMaps(data);
+    List<String> rows = new ArrayList<>();
+    rows.add("shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time");
+    data.forEach(map -> {
+      rows.add(map.getOrDefault("shipperId", "") + "," + map.getOrDefault("addressId", "") + ","
+          + map.getOrDefault("action", "") + ","
+          + map.getOrDefault("milkrunGroupId", "") + "," + map.getOrDefault("days", "") + ","
+          + map.getOrDefault("startTime", "") + ","
+          + map.getOrDefault("endTime", ""));
+    });
+    String content = StringUtils.join(rows, "\n");
+    File file = StandardTestUtils.createFile("bulk-milkrun-action.csv", content);
+    reservationPresetManagementPage.overviewTab.click();
+    reservationPresetManagementPage.actionsMenu.selectOption("Upload CSV");
+    reservationPresetManagementPage.uploadCsvDialog.waitUntilVisible();
+    reservationPresetManagementPage.uploadCsvDialog.selectFile.setValue(file);
+    reservationPresetManagementPage.uploadCsvDialog.submit.clickAndWaitUntilDone();
+  }
+
+  @Then("Operator downloads sample CSV on Reservation Preset Management page")
+  public void downloadCsv() {
+    reservationPresetManagementPage.overviewTab.click();
+    reservationPresetManagementPage.actionsMenu.selectOption("Download Sample CSV");
+  }
+
+  @Then("^sample CSV file on Reservation Preset Management page is downloaded successfully$")
+  public void operatorVerifySampleCsvFileIsDownloadedSuccessfully() {
+    reservationPresetManagementPage.verifyFileDownloadedSuccessfully("bulk-milkrun-action.csv",
+        "shipper_id,address_id,action,milkrun_group_id,days,start_time,end_time\n"
+            + "101,901,add,12363,1,9:00,12:00\n"
+            + "102,902,add,23241,\"1, 2\",12:00,15:00\n"
+            + "103,903,add,32412,\"1, 2, 3\",15:00,19:00\n"
+            + "108,908,delete,32132,,,\n"
+            + "109,909,delete,32133,,,\n");
   }
 
   @Then("^Operator unassign pending task on Reservation Preset Management page:$")
