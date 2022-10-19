@@ -507,6 +507,15 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator will receiving error message because of Duplicate Dps")
+  public void duplicateDpError() {
+    dpAdminReactPage.inFrame(() -> {
+      Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
+          .as("Distribution point is Duplicate").containsIgnoringCase("duplicate");
+    });
+  }
+
+
   @Then("Operator fill the partner filter by {string}")
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
@@ -601,21 +610,21 @@ public class DpAdministrationSteps extends AbstractSteps {
             dpDetailsResponse.getAlternateDpId1().toString())) {
 
           Assertions.assertThat(dp)
-              .as(f("Alternate DP 1 Field is %s on Display",dp))
+              .as(f("Alternate DP 1 Field is %s on Display", dp))
               .containsIgnoringCase(dpDetailsResponse.getAlternateDpId1().toString());
 
         } else if (dpDetailsResponse.getAlternateDpId2() != null && dp.contains(
             dpDetailsResponse.getAlternateDpId2().toString())) {
 
           Assertions.assertThat(dp)
-              .as(f("Alternate DP 2 Field is %s on Display",dp))
+              .as(f("Alternate DP 2 Field is %s on Display", dp))
               .containsIgnoringCase(dpDetailsResponse.getAlternateDpId2().toString());
 
         } else if (dpDetailsResponse.getAlternateDpId3() != null && dp.contains(
             dpDetailsResponse.getAlternateDpId3().toString())) {
 
           Assertions.assertThat(dp)
-              .as(f("Alternate DP 3 Field is %s on Display",dp))
+              .as(f("Alternate DP 3 Field is %s on Display", dp))
               .containsIgnoringCase(dpDetailsResponse.getAlternateDpId3().toString());
 
         }

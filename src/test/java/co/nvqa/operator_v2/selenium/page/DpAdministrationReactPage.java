@@ -399,6 +399,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_confirm_password']")
   public TextBox fieldConfirmPassword;
 
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-content']/div/div")
+  public PageElement elementErrorCreatingDP;
+
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
 
