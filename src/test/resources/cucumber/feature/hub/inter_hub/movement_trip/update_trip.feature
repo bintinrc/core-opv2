@@ -1,4 +1,4 @@
-@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip
+@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip @CWF
 Feature: Movement Trip - Update Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -507,7 +507,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
@@ -541,7 +541,9 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name}" is shown on movement page without closing
+    Then Operator verifies one of toast with message is shown on movement page without closing
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name} |
+      | Driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}, {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} is still in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} from {KEY_LIST_OF_CREATED_HUBS[1].name} to {hub-relation-destination-hub-name} |
     And Operator click force trip completion
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" is shown on movement page
