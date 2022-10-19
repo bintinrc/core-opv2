@@ -507,11 +507,11 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator will receiving error message because of Duplicate Dps")
-  public void duplicateDpError() {
+  @Then("Operator will receiving error message pop-up {string}")
+  public void duplicateDpError(String popUpMsg) {
     dpAdminReactPage.inFrame(() -> {
       Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
-          .as("Distribution point is Duplicate").containsIgnoringCase("duplicate");
+          .as(f("Distribution point is Error because of %s",popUpMsg)).containsIgnoringCase(popUpMsg);
     });
   }
 
@@ -760,11 +760,10 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator fill the alternate DP details")
   public void fillAlternateDP(Map<String, String> dataTableAsMap) {
-    Map<String, String> map = resolveKeyValues(dataTableAsMap);
-    Long alternateDP1 = getDpIdValue(map.get("alternateDp1"));
-    Long alternateDP2 = getDpIdValue(map.get("alternateDp2"));
-    Long alternateDP3 = getDpIdValue(map.get("alternateDp3"));
-    boolean validationStatus = map.get("validationStatus").equalsIgnoreCase("VALID");
+    Long alternateDP1 = getDpIdValue(dataTableAsMap.get("alternateDp1"));
+    Long alternateDP2 = getDpIdValue(dataTableAsMap.get("alternateDp2"));
+    Long alternateDP3 = getDpIdValue(dataTableAsMap.get("alternateDp3"));
+    boolean validationStatus = dataTableAsMap.get("validationStatus").equalsIgnoreCase("VALID");
 
     dpAdminReactPage.inFrame(() -> {
       if (validationStatus) {
