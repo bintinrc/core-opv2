@@ -182,6 +182,7 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   public void ninjaPointVUserFillDetailForCreateDpManagement(DataTable dt) {
     List<DpDetailsResponse> dpDetails = convertDataTableToList(dt, DpDetailsResponse.class);
     DpDetailsResponse dpDetail = dpDetails.get(0);
+    List<Long> dpsToRedirect = new ArrayList<>();
 
     if (("GENERATED").equals(dpDetail.getShortName())) {
       dpDetail.setShortName(TestUtils.generateAlphaNumericString(6));
@@ -192,10 +193,16 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     if (dpDetail.getHubName() != null) {
       put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME, dpDetail.getHubName());
     }
-    if (get(LIST_OF_ALTERNATE_DPS) != null){
-      dpDetail.setDpsToRedirect(get(LIST_OF_ALTERNATE_DPS));
+    if (dpDetail.getAlternateDpId1() != null){
+      dpsToRedirect.add(dpDetail.getAlternateDpId1());
     }
-
+    if (dpDetail.getAlternateDpId2() != null){
+      dpsToRedirect.add(dpDetail.getAlternateDpId2());
+    }
+    if (dpDetail.getAlternateDpId3() != null){
+      dpsToRedirect.add(dpDetail.getAlternateDpId3());
+    }
+    dpDetail.setDpsToRedirect(dpsToRedirect);
     Map<String, List<Hours>> defaultTime = new HashMap<>();
 
     if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
