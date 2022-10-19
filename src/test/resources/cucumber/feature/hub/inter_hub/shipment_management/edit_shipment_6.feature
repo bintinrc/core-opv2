@@ -90,7 +90,7 @@ Feature: Shipment Management - Edit Shipment 6
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
       | startHub | {hub-name-2} |
-    Then Operator verify error message "Failed. Error: Shipment Origin Hub and Destination Hub cannot be the same" is shown
+    Then Operator verify error message "Failed. Error: Shipment Origin Hub and Destination Hub cannot be the same" is shown on bulk update page
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Update Destination Hub - select same hub with Origin Hub
@@ -104,7 +104,7 @@ Feature: Shipment Management - Edit Shipment 6
     And Operator selects all shipments and click bulk update button under the apply action
     When Operator bulk update shipment with data below:
       | endHub | {hub-name} |
-    Then Operator verify error message "Failed. Error: Shipment Origin Hub and Destination Hub cannot be the same" is shown
+    Then Operator verify error message "Shipment Origin Hub and Destination Hub cannot be the same" is shown on bulk update page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

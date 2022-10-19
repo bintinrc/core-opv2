@@ -959,12 +959,13 @@ public class NewShipmentManagementSteps extends AbstractSteps {
             .withFailMessage(disabledButton + " is enabled").isFalse());
   }
 
-  @Then("^Operator verify error message \"Failed. Error: Shipment Origin Hub and Destination Hub cannot be the same\" is shown")
-  public void operatorVerifyBulkUpdateErrorMessageIsShown() {
+  @Then("Operator verify error message {string} is shown on bulk update page")
+  public void operatorVerifyErrorMessageIsShownOnBulkUpdatePage(String message) {
     page.inFrame(()-> {
       page.shipmentToBeUpdatedTable.waitUntilVisible();
-      Assertions.assertThat(page.shipmentToBeUpdatedTable.originDestinationHubError.getText()).as("Showing Failed. Error: Origin Hub and Destination Hub cannot be the same")
-              .isEqualTo("Shipment Origin Hub and Destination Hub cannot be the same");
+      Assertions.assertThat(page.shipmentToBeUpdatedTable.originDestinationHubError.getText())
+              .as("Showing error message Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo(message);
     });
   }
 }
