@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage> {
 
-  @FindBy(xpath = "//button[@data-testid='virtual-table.button_download_csv']")
+  @FindBy(xpath = "//button[@data-testid='button-download-csv']")
   public Button buttonDownloadCsv;
 
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
