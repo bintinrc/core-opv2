@@ -33,7 +33,6 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   private static final String UPDATE_FAILED = "Failed";
   private static final String INVALID_DELETE_DP = "Invalid Delete DP";
   private static final String OPERATING_HOURS_EVERYDAY_DOUBLE = "OPERATING_HOURS_EVERYDAY_DOUBLE";
-  private static final String LIST_OF_ALTERNATE_DPS = "LIST_OF_ALTERNATE_DPS";
 
   @Then("Operator need to check that the update is {string}")
   public void OperatorCheckUpdateDp(String occasion) {
@@ -162,20 +161,6 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     }
     dpDetail.setDpsToRedirect(dpsToRedirect);
     put(KEY_CREATE_DP_MANAGEMENT_REQUEST, dpDetail);
-  }
-
-  @Then("Operator set a value for an Alternate dps")
-  public void setAlternateDPsforNewDp(Map<String, String> dpToRedirectValues) {
-    dpToRedirectValues = resolveKeyValues(dpToRedirectValues);
-    if (dpToRedirectValues.get("alternateDp1") != null) {
-      putInList(LIST_OF_ALTERNATE_DPS, Long.parseLong(dpToRedirectValues.get("alternateDp1")));
-    }
-    if (dpToRedirectValues.get("alternateDp2") != null) {
-      putInList(LIST_OF_ALTERNATE_DPS, Long.parseLong(dpToRedirectValues.get("alternateDp2")));
-    }
-    if (dpToRedirectValues.get("alternateDp3") != null) {
-      putInList(LIST_OF_ALTERNATE_DPS, Long.parseLong(dpToRedirectValues.get("alternateDp3")));
-    }
   }
 
   @When("Operator fill Detail for create DP Management:")
