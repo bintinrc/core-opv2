@@ -6,7 +6,7 @@ Feature: DP Administration - Distribution Point Edit
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Edit existing DP - Add 3 alternative DPs - Save settings - SG
+  Scenario: Edit existing DP - Add 3 alternative DPs - Save settings - SG (uid:c3350858-d3bb-46fd-bde0-6b3e4d34989d)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-edit-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
