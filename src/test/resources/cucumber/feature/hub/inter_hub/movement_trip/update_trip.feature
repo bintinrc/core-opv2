@@ -1,4 +1,4 @@
-@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip @CWF
+@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip
 Feature: Movement Trip - Update Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -507,7 +507,7 @@ Feature: Movement Trip - Update Trip
     And Operator depart trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]} departed" is shown on movement page
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver @RT
+  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Multiple Drivers Still In Transit for Same Trip (uid:4203b43a-1aec-43dd-b791-84e4a071f791)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:
