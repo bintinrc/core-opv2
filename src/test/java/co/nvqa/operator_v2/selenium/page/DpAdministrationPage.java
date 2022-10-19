@@ -542,7 +542,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualUser.getLastName()).as("User Last Name is correct")
           .isEqualTo(user.getLastName());
       Assertions.assertThat(actualUser.getContactNo()).as("Contact Number is correct")
-          .isEqualTo("'"+user.getContactNo());
+          .isEqualTo(user.getContactNo());
       Assertions.assertThat(actualUser.getEmail()).as("Email is correct")
           .isEqualTo(user.getEmail());
     }
@@ -571,7 +571,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
-          .isEqualTo("'" + expectedDpPartner.getPocTel());
+          .isEqualTo(expectedDpPartner.getPocTel());
 
       if (expectedDpPartner.getPocEmail() == null || expectedDpPartner.getPocEmail().equals("")) {
         Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
