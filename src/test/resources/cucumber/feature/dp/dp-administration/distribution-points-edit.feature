@@ -553,3 +553,56 @@ Feature: DP Administration - Distribution Point Edit
     Then Operator press save setting button
     And Operator waits for 5 seconds
     And Operator will receiving error message pop-up "Dp to redirect cannot be same as the original Dp"
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Edit existing DP - remove selected alternative dp - modal confirmation shown - click cancel button - SG
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-edit-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | alternateDpId1      | alternateDpId2      | alternateDpId3      | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test Edit | {shipper-create-new-dp-management-legacy-id} | {alternate-dp-id-1} | {alternate-dp-id-2} | {alternate-dp-id-3} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
+    And Operator waits for 5 seconds
+    When Operator press clear alternate DP number "1"
+    Then Operator will get the popup message for alternate DP number "2"
+    And Operator press cancel choose DP Alternate Button
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED  |
+      | alternateDp2 | DISABLED |
+      | alternateDp3 | DISABLED |
+    And Operator fill the alternate DP details
+      | alternateDp1     | {alternate-dp-id-1} |
+      | validationStatus | VALID               |
+    When Operator press clear alternate DP number "2"
+    Then Operator will get the popup message for alternate DP number "3"
+    And Operator press cancel choose DP Alternate Button
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED  |
+      | alternateDp2 | ENABLED  |
+      | alternateDp3 | DISABLED |
+    And Operator fill the alternate DP details
+      | alternateDp2     | {alternate-dp-id-2} |
+      | validationStatus | VALID               |
+    When Operator press clear alternate DP number "3"
+    When Operator check disabled alternate DP form
+      | alternateDp1 | ENABLED |
+      | alternateDp2 | ENABLED |
+      | alternateDp3 | ENABLED |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | condition | CHECK_ALTERNATE_DP_DATA          |
+      | dpSetting | KEY_DP_SETTINGS                  |
