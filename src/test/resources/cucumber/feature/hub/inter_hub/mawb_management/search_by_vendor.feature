@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor
 Feature: MAWB Management - Search by Vendor
 
   @LaunchBrowser @ShouldAlwaysRun

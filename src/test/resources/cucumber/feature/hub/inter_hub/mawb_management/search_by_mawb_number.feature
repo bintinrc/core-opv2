@@ -123,7 +123,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies error toast message on MAWB Management Page:
       |We cannot process more than 100 MAWB number|
 
-  @DeleteShipments @DeleteCreatedMAWBs
+  @DeleteShipments
   Scenario: Search by MAWB Number with Multiple Invalid MAWB Number > 100
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
