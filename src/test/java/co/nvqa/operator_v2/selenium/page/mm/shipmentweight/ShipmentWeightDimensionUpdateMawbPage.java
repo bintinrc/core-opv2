@@ -41,6 +41,9 @@ public class ShipmentWeightDimensionUpdateMawbPage  extends SimpleReactPage<Ship
   @FindBy(css = "[data-testid='mawb-update-submit-button']")
   public Button updateMawbBtn;
 
+  @FindBy(xpath = "//div[@class = 'ant-modal-confirm-btns']//span[text()='Confirm Update']")
+  public Button confirmButton;
+
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightUpdateMawbTableRow> shipmentWeightNvTable;
 
