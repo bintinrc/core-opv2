@@ -5,7 +5,7 @@ Feature: MAWB Management - Search by MAWB number
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Single Valid MAWB Number
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -35,7 +35,7 @@ Feature: MAWB Management - Search by MAWB number
     Given Operator clicks to go back button on MAWB Management page
 
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Single Duplicate MAWB Number
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -53,7 +53,7 @@ Feature: MAWB Management - Search by MAWB number
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies Search MAWB Management Page
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Valid MAWB Number <= 100
     Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -83,7 +83,7 @@ Feature: MAWB Management - Search by MAWB number
       | Cannot find any MAWB. Try different search criteria. |
     Given Operator clicks to go back button on MAWB Management page
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Valid and Invalid MAWB Number <= 100
     Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -105,7 +105,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies Search MAWB Management Page
     And Operator verifies total 5 results shown on MAWB Management Page
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Valid MAWB Number > 100
     Given API Operator create multiple 110 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -123,7 +123,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies error toast message on MAWB Management Page:
       |We cannot process more than 100 MAWB number|
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Invalid MAWB Number > 100
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
@@ -135,7 +135,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies error toast message on MAWB Management Page:
       |We cannot process more than 100 MAWB number|
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Valid and Invalid MAWB Number > 100
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -154,7 +154,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies error toast message on MAWB Management Page:
       |We cannot process more than 100 MAWB number|
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number <= 100
     Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -173,7 +173,7 @@ Feature: MAWB Management - Search by MAWB number
     Then Operator verifies Search MAWB Management Page
     And Operator verifies total 5 results shown on MAWB Management Page
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number > 100
     Given API Operator create multiple 101 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
