@@ -8,7 +8,6 @@ import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.Dp;
 import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
-import co.nvqa.operator_v2.cucumber.glue.DpAdministrationSteps;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -23,8 +22,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -37,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage> {
 
-  @FindBy(xpath = "//button[@data-testid='virtual-table.button_download_csv']")
+  @FindBy(xpath = "//button[@data-testid='button-download-csv']")
   public Button buttonDownloadCsv;
 
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
@@ -347,6 +344,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-clear']")
   public PageElement buttonClearAlternateDp3;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId1;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId2;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId3;
+
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
 
@@ -394,6 +398,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//input[@data-testid='field_confirm_password']")
   public TextBox fieldConfirmPassword;
+
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-content']/div/div")
+  public PageElement elementErrorCreatingDP;
 
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
@@ -626,6 +633,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String CREATE = "CREATE";
   public static final String DPS = "dps";
   private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationReactPage.class);
+
+  public ImmutableMap<String, PageElement> getAlternateDpText = ImmutableMap.<String, PageElement>builder()
+      .put("ADP1", elementAlternateDPId1)
+      .put("ADP2", elementAlternateDPId2)
+      .put("ADP3", elementAlternateDPId3)
+      .build();
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTime = ImmutableMap.<String, TextBox>builder()
       .put("monday", fieldOpeningStartHourMonday)
