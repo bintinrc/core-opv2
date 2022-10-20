@@ -905,8 +905,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Processing Time Minutes at Destination Airport is displayed").isTrue();
         Assertions.assertThat(createFlightTrip_flightNo.isDisplayed())
                 .as("Flight Number is displayed").isTrue();
-        Assertions.assertThat(createFlightTrip_mawb.isDisplayed())
-                .as("MAWB is displayed").isTrue();
         Assertions.assertThat(createFlightTrip_comment.isDisplayed())
                 .as("Comment field is displayed").isTrue();
         Assertions.assertThat(submitButton.isEnabled())
