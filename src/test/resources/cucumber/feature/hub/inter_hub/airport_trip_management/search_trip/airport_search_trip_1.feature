@@ -90,7 +90,7 @@ Feature: Airport Trip Management - Search Airport Trip 1
     And Operator search the "Duration" column
     And Verify only filtered results are displayed
 
-  Scenario: Search by MAWB
+  Scenario: Search by Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
@@ -104,7 +104,7 @@ Feature: Airport Trip Management - Search Airport Trip 1
       | startDate  | {gradle-previous-10-day-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
       | originOrDestination | ABC (Airport), 123 (Airport) |
-    And Operator search the "MAWB" column
+    And Operator search the "Flight Number" column
     And Verify only filtered results are displayed
 
   Scenario: Search by Driver
