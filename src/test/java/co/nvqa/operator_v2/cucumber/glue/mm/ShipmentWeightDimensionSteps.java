@@ -860,6 +860,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .isNull();
 
     shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
+    if(shipmentWeightDimensionUpdateMawbPage.confirmButton.waitUntilVisible(1)){
+      shipmentWeightDimensionUpdateMawbPage.confirmButton.click();
+    }
     shipmentWeightSumUpreport.waitUntilLoaded();
   }
 
