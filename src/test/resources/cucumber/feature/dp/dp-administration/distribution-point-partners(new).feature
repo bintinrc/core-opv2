@@ -39,16 +39,13 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name              | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid                              |
-      | Empty Partner Name        | NAME         | This field is required                                                                                                        | abc                      | uid:be66a290-cb2a-49ec-b4ac-88e221172a46 |
-      | Empty POC Name            | POCNME       | This field is required                                                                                                        | abc                      | uid:0b74eb08-7eaf-486f-94ad-e1adc99b04f9 |
-      | Empty POC No              | POCNUM       | This field is required                                                                                                        | +65746                   | uid:dd7c5e95-21d2-41b5-adcc-169e12a0c039 |
-      | Empty Restrictions        | RESTRICTION  | This field is required                                                                                                        | abc                      | uid:488e1065-b0f4-4336-b98b-a70449fdaa37 |
-      | Wrong Format Email        | POCMAIL      | That doesn't look like an email.                                                                                              | @jlgkdg.c                | uid:fedb91ca-d2f5-4332-8f69-10977790c0b9 |
-      | Invalid POC No            | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | uid:13991f78-4626-4920-adbd-2939d25c478c |
-      | Invalid Partner Name      | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:ff15623d-b2c4-4094-9082-0d0440b2e3e8 |
-      | Invalid POC Name          | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:0ba8ddac-60f2-4015-8911-fcf7cc93f5e3 |
-      | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:c707f35a-f992-49b2-bf1b-efe999c0a462 |
+      | dataset_name       | key_dataset | error_message                          | input        | hiptest-uid                              |
+      | Empty Partner Name | NAME        | This field is required                 | abc          | uid:be66a290-cb2a-49ec-b4ac-88e221172a46 |
+      | Empty POC Name     | POCNME      | This field is required                 | abc          | uid:0b74eb08-7eaf-486f-94ad-e1adc99b04f9 |
+      | Empty POC No       | POCNUM      | This field is required                 | +65746       | uid:dd7c5e95-21d2-41b5-adcc-169e12a0c039 |
+      | Empty Restrictions | RESTRICTION | This field is required                 | abc          | uid:488e1065-b0f4-4336-b98b-a70449fdaa37 |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | @jlgkdg.c    | uid:fedb91ca-d2f5-4332-8f69-10977790c0b9 |
+      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | 36456dfhdfhd | uid:13991f78-4626-4920-adbd-2939d25c478c |
 
   Scenario Outline: DP Administration - Create DP Partner - Additional check validation form - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Distribution Points -> DP Administration
@@ -70,11 +67,8 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator need to make sure that the id and dpms partner id from newly created dp partner is same
 
     Examples:
-      | dataset_name              | key_dataset  | error_message                                                                                                                 | input                    | hiptest-uid                              |
-      | Invalid POC No            | !POCNUM      | That doesn't look like a phone number.                                                                                        | 36456dfhdfhd             | uid:2efaba07-c86c-45b5-83d8-5c82f632fb4f |
-      | Invalid Partner Name      | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Mir$@&(Aziz)             | uid:51e38f33-29dc-4ba7-87c2-624e43ac3cb1 |
-      | Invalid POC Name          | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | Aziz~Ichwanul?{Ninjavan} | uid:179943b5-8d53-4486-a7a3-ab4386341818 |
-      | Invalid Restrictions name | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | {Alfa}<Express>          | uid:e1196875-4c30-4c76-9576-3f940e323295 |
+      | dataset_name   | key_dataset | error_message                          | input        | hiptest-uid                              |
+      | Invalid POC No | !POCNUM     | That doesn't look like a phone number. | 36456dfhdfhd | uid:2efaba07-c86c-45b5-83d8-5c82f632fb4f |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario Outline: DP Administration - Create DP Partner - <dataset_name> (<hiptest-uid>)
@@ -135,13 +129,10 @@ Feature: DP Administration - Distribution Point Partners
     And Operator will check the error message is equal "<error_message>"
 
     Examples:
-      | dataset_name         | key_dataset  | error_message                                                                                                                 | form        | input                    | hiptest-uid                              |
-      | Empty Partner Name   | NAME         | This field is required                                                                                                        | name        | abc                      | uid:069ee3a5-8cb2-4635-8e2f-f2c3099377fd |
-      | Empty POC Name       | POCNME       | This field is required                                                                                                        | pocName     | abc                      | uid:c410a9dd-077e-4440-932c-d34ef2921292 |
-      | Empty POC No         | POCNUM       | This field is required                                                                                                        | pocTel      | +65746                   | uid:0259c76c-91e5-44b3-91bf-a9f88bc5e3ab |
-      | Invalid POC No       | !POCNUM      | That doesn't look like a phone number.                                                                                        | pocTel      | abc                      | uid:704e42eb-3920-4b1a-99fc-844e39a520e1 |
-      | Empty Restrictions   | RESTRICTION  | This field is required                                                                                                        | restriction | abc                      | uid:40c4ce1e-e5ab-43ac-8cb0-e7c01ae83fcf |
-      | Wrong Format Email   | POCMAIL      | That doesn't look like an email.                                                                                              | pocEmail    | @jlgkdg.c                | uid:0fe5eebf-b7b6-40cc-8d13-7b6576da02b9 |
-      | Invalid Partner Name | !NAME        | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | name        | Mir$@&(Aziz)             | uid:1d774855-bb82-4ae3-b78c-10b79370f98d |
-      | Invalid POC Name     | !POCNME      | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | pocName     | Aziz~Ichwanul?{Ninjavan} | uid:59687fab-c590-4b89-b12b-216af809b507 |
-      | Invalid Restrictions | !RESTRICTION | Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( ) | restriction | {Alfa}<Express>          | uid:dddd6e43-3167-4205-8471-3100331f692a |
+      | dataset_name       | key_dataset | error_message                          | form        | input     | hiptest-uid                              |
+      | Empty Partner Name | NAME        | This field is required                 | name        | abc       | uid:069ee3a5-8cb2-4635-8e2f-f2c3099377fd |
+      | Empty POC Name     | POCNME      | This field is required                 | pocName     | abc       | uid:c410a9dd-077e-4440-932c-d34ef2921292 |
+      | Empty POC No       | POCNUM      | This field is required                 | pocTel      | +65746    | uid:0259c76c-91e5-44b3-91bf-a9f88bc5e3ab |
+      | Invalid POC No     | !POCNUM     | That doesn't look like a phone number. | pocTel      | abc       | uid:704e42eb-3920-4b1a-99fc-844e39a520e1 |
+      | Empty Restrictions | RESTRICTION | This field is required                 | restriction | abc       | uid:40c4ce1e-e5ab-43ac-8cb0-e7c01ae83fcf |
+      | Wrong Format Email | POCMAIL     | That doesn't look like an email.       | pocEmail    | @jlgkdg.c | uid:0fe5eebf-b7b6-40cc-8d13-7b6576da02b9 |

@@ -462,8 +462,32 @@ Feature: Add To Shipment 4
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator clicks Create Shipment on Add to Shipment page
-    Then Operator verifies mandatory fields in Create Shipment modal on Add to Shipment page
-    And Operator verifies Create Shipment button is disabled in Create Shipment modal on Add to Shipment page
+    And Operator set values in Create Shipment modal on Add to Shipment page:
+      | originHub      | {hub-name}                                          |
+      | destinationHub | {hub-name-2}                                        |
+      | shipmentType   | Air Haul                                            |
+      | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
+    Then Operator verifies that Created new shipment notification displayed
+    And Operator go to menu Inter-Hub -> Shipment Management
+    And Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_CREATED_SHIPMENT_ID} |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | shipmentType    | AIR_HAUL                                            |
+      | id              | {KEY_CREATED_SHIPMENT_ID}                           |
+      | userId          | {operator-portal-uid}                               |
+      | entrySource     | MANUAL                                              |
+      | createdAt       | ^{gradle-current-date-yyyy-MM-dd}.*                 |
+      | transitAt       | null                                                |
+      | status          | Pending                                             |
+      | origHubName     | {hub-name}                                          |
+      | currHubName     | {hub-name}                                          |
+      | destHubName     | {hub-name-2}                                        |
+      | arrivalDatetime | null                                                |
+      | sla             | null                                                |
+      | ordersCount     | 0                                                   |
+      | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
+      | mawb            | null                                                |
 
   @DeleteShipment
   Scenario: Create New Shipment - with selected same origin and destination hub

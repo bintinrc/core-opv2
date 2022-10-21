@@ -6,10 +6,12 @@ import co.nvqa.commons.model.dp.dp_user.User;
 import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
+import co.nvqa.commons.model.dp.persisted_classes.DpSetting;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationReactPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +48,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
+  private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   public static final String OPENING_HOURS = "OPENING_HOURS";
   public static final String OPERATING_HOURS = "OPERATING_HOURS";
@@ -503,6 +507,15 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator will receiving error message pop-up {string}")
+  public void duplicateDpError(String popUpMsg) {
+    dpAdminReactPage.inFrame(() -> {
+      Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
+          .as(f("Distribution point is Error because of %s",popUpMsg)).containsIgnoringCase(popUpMsg);
+    });
+  }
+
+
   @Then("Operator fill the partner filter by {string}")
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
@@ -525,6 +538,47 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator press clear alternate DP number {string}")
+  public void operatorPressClearAlternateDPNumber(String numberOfDp) {
+    ImmutableMap<String, PageElement> clearNumberOfDp = ImmutableMap.<String, PageElement>builder()
+        .put("1", dpAdminReactPage.buttonClearAlternateDp1)
+        .put("2", dpAdminReactPage.buttonClearAlternateDp2)
+        .put("3", dpAdminReactPage.buttonClearAlternateDp3)
+        .build();
+
+    dpAdminReactPage.inFrame(() -> {
+      clearNumberOfDp.get(numberOfDp).click();
+    });
+  }
+
+  @When("Operator will get the popup message for alternate DP number {string}")
+  public void operatorWillGetPopupMsg(String numberOfDp) {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.popupMsgAlternateDP(numberOfDp);
+    });
+  }
+
+  @When("Operator press update DP Alternate Button")
+  public void operatorPressUpdateDPAlternateButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.elementUpdateDPAlternate.click();
+    });
+  }
+
+  @When("Operator press Select Another DP Alternate Button")
+  public void operatorPressSelectAnotherDPAlternateButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.elementSelectAnotherDPAlternate.click();
+    });
+  }
+
+  @When("Operator press cancel choose DP Alternate Button")
+  public void operatorPressCancelChooseDPAlternateButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.elementCancelDPAlternate.click();
+    });
+  }
+
   @Then("Operator get the value of DP ID")
   public void operatorGetDpIdValue() {
     dpAdminReactPage.inFrame(() -> {
@@ -536,6 +590,46 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressEditDpButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonDpEdit.click();
+    });
+  }
+
+  @Then("Operator check the alternate DP is shown in DP Edit page")
+  public void alternateDPShownInDPEdit(Map<String, String> dataTableAsMap) {
+    String alternateDPList = dataTableAsMap.get("dpList");
+    DpDetailsResponse dpDetailsResponse = get(dataTableAsMap.get("dpDetails"));
+    String[] dpList = alternateDPList.split(",");
+    List<String> dpListFromDisplay = new ArrayList<>();
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String dp : dpList) {
+        dpListFromDisplay.add(dpAdminReactPage.getAlternateDpText.get(dp).getText());
+      }
+
+      for (String dp : dpListFromDisplay) {
+        if (dpDetailsResponse.getAlternateDpId1() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId1().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 1 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId1().toString());
+
+        } else if (dpDetailsResponse.getAlternateDpId2() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId2().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 2 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId2().toString());
+
+        } else if (dpDetailsResponse.getAlternateDpId3() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId3().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 3 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId3().toString());
+
+        }
+      }
+
     });
   }
 
@@ -629,6 +723,94 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator check disabled alternate DP form")
+  public void checkDisabledAlternateDPForm(Map<String, String> dataTableAsMap) {
+    Map<String, String> map = resolveKeyValues(dataTableAsMap);
+    boolean alternateDp1 = map.get("alternateDp1").equalsIgnoreCase("ENABLED");
+    boolean alternateDp2 = map.get("alternateDp2").equalsIgnoreCase("ENABLED");
+    boolean alternateDp3 = map.get("alternateDp3").equalsIgnoreCase("ENABLED");
+
+    dpAdminReactPage.inFrame(() -> {
+      if (alternateDp1) {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp1.isDisplayed())
+            .as("Alternate DP 1 Field is Enabled").isTrue();
+      } else {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp1Disabled.isDisplayed())
+            .as("Alternate DP 1 Field is Disabled").isTrue();
+      }
+
+      if (alternateDp2) {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp2.isDisplayed())
+            .as("Alternate DP 2 Field is Enabled").isTrue();
+      } else {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp2Disabled.isDisplayed())
+            .as("Alternate DP 2 Field is Disabled").isTrue();
+      }
+
+      if (alternateDp3) {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp3.isDisplayed())
+            .as("Alternate DP 3 Field is Enabled").isTrue();
+      } else {
+        Assertions.assertThat(dpAdminReactPage.fieldAlternateDp3Disabled.isDisplayed())
+            .as("Alternate DP 3 Field is Disabled").isTrue();
+      }
+    });
+
+  }
+
+  @When("Operator fill the alternate DP details")
+  public void fillAlternateDP(Map<String, String> dataTableAsMap) {
+    Long alternateDP1 = getDpIdValue(dataTableAsMap.get("alternateDp1"));
+    Long alternateDP2 = getDpIdValue(dataTableAsMap.get("alternateDp2"));
+    Long alternateDP3 = getDpIdValue(dataTableAsMap.get("alternateDp3"));
+    boolean validationStatus = dataTableAsMap.get("validationStatus").equalsIgnoreCase("VALID");
+
+    dpAdminReactPage.inFrame(() -> {
+      if (validationStatus) {
+        if (alternateDP1 != null) {
+          dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
+          dpAdminReactPage.chooseAlternateDp(alternateDP1);
+        }
+        if (alternateDP2 != null) {
+          dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
+          dpAdminReactPage.chooseAlternateDp(alternateDP2);
+        }
+        if (alternateDP3 != null) {
+          dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
+          dpAdminReactPage.chooseAlternateDp(alternateDP3);
+        }
+      } else {
+        if (alternateDP1 != null) {
+          dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP1);
+        }
+        if (alternateDP2 != null) {
+          dpAdminReactPage.fieldAlternateDp2.setValue(alternateDP2);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP2);
+        }
+        if (alternateDP3 != null) {
+          dpAdminReactPage.fieldAlternateDp3.setValue(alternateDP3);
+          dpAdminReactPage.chooseInvalidAlternateDp(alternateDP3);
+        }
+      }
+
+    });
+  }
+
+  private Long getDpIdValue(String dpId) {
+    Long dpIdValue;
+    if (dpId != null) {
+      if (get(dpId) != null) {
+        dpIdValue = get(dpId);
+      } else {
+        dpIdValue = Long.parseLong(dpId);
+      }
+    } else {
+      dpIdValue = null;
+    }
+    return dpIdValue;
+  }
+
   @When("Operator fill the DP details")
   public void operatorFillDpDetails(Map<String, String> dataTableAsMap) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dataTableAsMap.get("distributionPoint"));
@@ -648,6 +830,18 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getShipperId() != null) {
         dpAdminReactPage.fieldShipperAccountNo.setValue(dpDetailsResponse.getShipperId());
         dpAdminReactPage.chooseShipperAccountDp(dpDetailsResponse.getShipperId());
+      }
+      if (dpDetailsResponse.getAlternateDpId1() != null) {
+        dpAdminReactPage.fieldAlternateDp1.setValue(dpDetailsResponse.getAlternateDpId1());
+        dpAdminReactPage.chooseAlternateDp(dpDetailsResponse.getAlternateDpId1());
+      }
+      if (dpDetailsResponse.getAlternateDpId2() != null) {
+        dpAdminReactPage.fieldAlternateDp2.setValue(dpDetailsResponse.getAlternateDpId2());
+        dpAdminReactPage.chooseAlternateDp(dpDetailsResponse.getAlternateDpId2());
+      }
+      if (dpDetailsResponse.getAlternateDpId3() != null) {
+        dpAdminReactPage.fieldAlternateDp3.setValue(dpDetailsResponse.getAlternateDpId3());
+        dpAdminReactPage.chooseAlternateDp(dpDetailsResponse.getAlternateDpId3());
       }
 
       if (dpDetailsResponse.getLatLongSearch() != null
@@ -1022,6 +1216,39 @@ public class DpAdministrationSteps extends AbstractSteps {
             dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
                 dpDetailsResponse.getOperatingHours().get(day).get(i));
           }
+        }
+      } else if (condition.equals(CHECK_ALTERNATE_DP_DATA)) {
+        DpSetting dpSetting = resolveValue(dataTableAsMap.get("dpSetting"));
+        String[] dpsToRedirect;
+        if (dpSetting.getDpsToRedirect() != null) {
+          dpsToRedirect = dpSetting.getDpsToRedirect().split(",");
+        } else {
+          dpsToRedirect = null;
+        }
+
+        if (dpDetailsResponse != null && dpsToRedirect != null) {
+          for (String altDp : dpsToRedirect) {
+            if (dpDetailsResponse.getAlternateDpId1() != null
+                && dpDetailsResponse.getAlternateDpId1()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId1().toString())
+                  .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
+            }
+            if (dpDetailsResponse.getAlternateDpId2() != null
+                && dpDetailsResponse.getAlternateDpId2()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId2().toString())
+                  .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
+            }
+            if (dpDetailsResponse.getAlternateDpId3() != null
+                && dpDetailsResponse.getAlternateDpId3()
+                .toString().equals(altDp)) {
+              Assertions.assertThat(dpDetailsResponse.getAlternateDpId3().toString())
+                  .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
+            }
+          }
+        } else {
+          LOGGER.info("DP Has No Alternate DP");
         }
       }
     }
