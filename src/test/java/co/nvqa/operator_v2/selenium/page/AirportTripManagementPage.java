@@ -120,8 +120,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//th[contains(@class,'duration')]//input")
     public PageElement airportDurationFilter;
 
-    @FindBy(xpath = "//th[contains(@class,'mawb')]//input")
-    public PageElement airportMawbFilter;
+    @FindBy(xpath = "//th[contains(@class,'flight_no')]//input")
+    public PageElement airportFlightFilter;
 
     @FindBy(xpath = "//th[contains(@class,'drivers')]//input")
     public PageElement airportDriversFilter;
@@ -418,8 +418,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Departure Date Time Filter appear in Airport trip Management page").isTrue();
         Assertions.assertThat(airportDurationFilter.isDisplayed())
                 .as("Duration Filter appear in Airport trip Management page").isTrue();
-        Assertions.assertThat(airportMawbFilter.isDisplayed())
-                .as("Mawb Filter appear in Airport trip Management page").isTrue();
+        Assertions.assertThat(airportFlightFilter.isDisplayed())
+                .as("Flight Number Filter appear in Airport trip Management page").isTrue();
         Assertions.assertThat(airportDriversFilter.isDisplayed())
                 .as("Drivers Filter appear in Airport trip Management page").isTrue();
         Assertions.assertThat(airportStatusFilter.isDisplayed())
@@ -481,12 +481,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 map.put("FIRST_DATA", searchData);
                 sendKeys(airportDurationFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
-            case "MAWB":
+            case "Flight Number":
                 map.put("COLUMN_NO", "6");
                 searchData = invalidData.equals("") ? findElementByXpath(f(XPATH_TABLE_FIRST_ROW, 1, 6)).getText() : invalidData;
                 map.put("FIRST_DATA", searchData);
-                airportMawbFilter.click();
-                sendKeys(airportMawbFilter.getWebElement(), map.get("FIRST_DATA"));
+                airportFlightFilter.click();
+                sendKeys(airportFlightFilter.getWebElement(), map.get("FIRST_DATA"));
                 break;
             case "Driver":
                 map.put("COLUMN_NO", "7");
@@ -905,8 +905,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Processing Time Minutes at Destination Airport is displayed").isTrue();
         Assertions.assertThat(createFlightTrip_flightNo.isDisplayed())
                 .as("Flight Number is displayed").isTrue();
-        Assertions.assertThat(createFlightTrip_mawb.isDisplayed())
-                .as("MAWB is displayed").isTrue();
         Assertions.assertThat(createFlightTrip_comment.isDisplayed())
                 .as("Comment field is displayed").isTrue();
         Assertions.assertThat(submitButton.isEnabled())
