@@ -89,7 +89,7 @@ Feature: Edit Order Details
       | name        | UPDATE CONTACT INFORMATION                                                                                                       |
       | description | ^To Name changed.*to test sender name.*To Email changed.*to test@mail\.com.*To Contact changed.*\+9727894434.*.*Is Rts changed.* |
     And Operator verify order event on Edit order page using data below:
-      | name        | UPDATE SLA                                                                                                                        |
+      | name        | UPDATE SLA                                                                                     |
       | description | ^Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE AV |
@@ -151,6 +151,50 @@ Feature: Edit Order Details
     And Operator click Order Settings -> Edit Order Details on Edit Order page
     When Operator Edit Order Details on Edit Order page
     Then Operator Edit Order Details on Edit Order page successfully
+
+  Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator click Pickup -> Edit Pickup Details on Edit Order page
+    And API Operator get order details
+    And Operator update Pickup Details on Edit Order Page
+      | senderName               | test sender name          |
+      | senderContact            | +9727894434               |
+      | senderEmail              | test@mail.com             |
+      | internalNotes            | test internalNotes        |
+      | pickupDate               | {{next-1-day-yyyy-MM-dd}} |
+      | pickupTimeslot           | 9AM - 12PM                |
+      | country                  | Singapore                 |
+      | city                     | Singapore                 |
+      | address1                 | 116 Keng Lee Rd           |
+      | address2                 | 15                        |
+      | postalCode               | 308402                    |
+      | shipperRequestedToChange | true                      |
+      | assignPickupLocation     | true                      |
+    Then Operator verifies that success toast displayed:
+      | top                | Pickup Details Updated |
+      | waitUntilInvisible | true                   |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE SLA |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
+    And DB Operator verify Pickup transaction record of order "KEY_CREATED_ORDER_ID":
+      | address1 | 116 Keng Lee Rd  |
+      | address2 | 15               |
+      | postcode | 308402           |
+      | city     | Singapore        |
+      | country  | Singapore        |
+      | name     | test sender name |
+      | email    | test@mail.com    |
+      | contact  | +9727894434      |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

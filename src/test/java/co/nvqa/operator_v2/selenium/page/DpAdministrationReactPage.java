@@ -22,18 +22,19 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Diaz Ilyasa
  */
 public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage> {
 
-  @FindBy(xpath = "//button[@data-testid='virtual-table.button_download_csv']")
+  @FindBy(xpath = "//button[@data-testid='button-download-csv']")
   public Button buttonDownloadCsv;
 
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
@@ -311,6 +312,45 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input")
+  public TextBox fieldAlternateDp1;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input[@disabled]")
+  public TextBox fieldAlternateDp1Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp1;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[1]")
+  public PageElement elementRemoveMsg1;
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[2]")
+  public PageElement elementRemoveMsg2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
+  public TextBox fieldAlternateDp2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input[@disabled]")
+  public TextBox fieldAlternateDp2Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input")
+  public TextBox fieldAlternateDp3;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input[@disabled]")
+  public TextBox fieldAlternateDp3Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp3;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId1;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId2;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId3;
+
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
 
@@ -359,8 +399,20 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_confirm_password']")
   public TextBox fieldConfirmPassword;
 
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-content']/div/div")
+  public PageElement elementErrorCreatingDP;
+
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
+
+  @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Update')]")
+  public PageElement elementUpdateDPAlternate;
+
+  @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Select another')]")
+  public PageElement elementSelectAnotherDPAlternate;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']/button[@class='ant-modal-close']")
+  public PageElement elementCancelDPAlternate;
 
   @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
   public PageElement ninjaBoxPudoPointType;
@@ -541,6 +593,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
+  public static final String CHOOSE_ALTERNATIVE_DP_XPATH = "//div[@class='rc-virtual-list']//div[@class='ant-select-item-option-content'][contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
   public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
 
@@ -574,10 +627,18 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String BUFFER_CAPACITY = "Buffer Capacity";
   public static final String EXTERNAL_STORE_ID = "External Store Id";
   public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
+  public static final String POPUP_CHANGE_ALTERNATE_DP_MSG = "Select another distribution point or update field to Alternate Distribution Point ID %s?";
 
   public static final String RETAIL_POINT_NETWORK = "RETAIL_POINT_NETWORK";
   public static final String CREATE = "CREATE";
   public static final String DPS = "dps";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationReactPage.class);
+
+  public ImmutableMap<String, PageElement> getAlternateDpText = ImmutableMap.<String, PageElement>builder()
+      .put("ADP1", elementAlternateDPId1)
+      .put("ADP2", elementAlternateDPId2)
+      .put("ADP3", elementAlternateDPId3)
+      .build();
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTime = ImmutableMap.<String, TextBox>builder()
       .put("monday", fieldOpeningStartHourMonday)
@@ -827,6 +888,27 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   }
 
+  public void chooseAlternateDp(Long alternateDPId) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+  }
+
+  public void popupMsgAlternateDP(String alternateDpId) {
+    String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG,alternateDpId);
+    Assertions.assertThat(elementRemoveMsg1.getText() + " " + elementRemoveMsg2.getText()).as(f("Popup message is: %s",popupMsg))
+        .isEqualTo(popupMsg);
+  }
+
+  public void chooseInvalidAlternateDp(Long alternateDPId) {
+    try {
+      waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+      click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    } catch (TimeoutException te) {
+      LOGGER.info("Alternate DP Not Found");
+    }
+  }
+
+
   public void chooseShipperAccountDp(Long shipperId) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
     click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
@@ -1066,21 +1148,43 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void errorCheckDpUser(String value, String errorKey) {
     switch (errorKey) {
-      case "!USFIRNME":
+      case "USFIRNME":
         formDpUserFirstName.forceClear();
         formDpUserFirstName.setValue(value);
+        formDpUserFirstName.forceClear();
         break;
-      case "!USLANME":
+      case "USLANME":
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
+        formDpUserLastName.forceClear();
         break;
-      case "!USNME":
+      case "CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        formDpUserContact.forceClear();
+        break;
+      case "!CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        break;
+      case "USNME":
         formDpUserUsername.forceClear();
         formDpUserUsername.setValue(value);
+        formDpUserUsername.forceClear();
+        break;
+      case "PWORD":
+        formDpUserPassword.forceClear();
+        formDpUserPassword.setValue(value);
+        formDpUserPassword.forceClear();
         break;
       case "!USEMAIL":
         formDpUserEmail.forceClear();
         formDpUserEmail.setValue(value);
+        break;
+      case "USEMAIL":
+        formDpUserEmail.forceClear();
+        formDpUserEmail.setValue(value);
+        formDpUserEmail.forceClear();
         break;
 
     }
@@ -1280,7 +1384,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("id", Long.toString(dp.getId()))
         .put("name", dp.getName())
         .put("shortName", dp.getShortName())
-        .put("hub", f("%s - %s",dp.getHubId(),dp.getHubName()))
+        .put("hub", f("%s - %s", dp.getHubId(), dp.getHubName()))
         .put("address", dp.getAddress1())
         .put("direction", dp.getDirections())
         .put("activity", dp.getIsActive() ? "Active" : "Inactive")
