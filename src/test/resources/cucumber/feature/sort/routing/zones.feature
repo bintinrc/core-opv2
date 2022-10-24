@@ -144,7 +144,6 @@ Feature: Zones
       | longitude | {zone-longitude-3}           |
       | type      | RTS                          |
 
-
-  @KillBrowser @ShouldAlwaysRun @TAG
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
