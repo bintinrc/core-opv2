@@ -102,6 +102,49 @@ Feature: Zones
     And Operator download Zone CSV file
     Then Operator verify Zone CSV file is downloaded successfully
 
-  @KillBrowser @ShouldAlwaysRun
+  @DeleteCreatedZone
+  Scenario: Set Coordinates Polygon of Normal Zone
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
+    And API Operator create zone using data below:
+      | hubName | {hub-name} |
+      | hubId   | {hub-id}   |
+    And Operator click View Selected Polygons for zone id "{KEY_CREATED_ZONE.id}"
+    And Operator click Zones in zone drawing page
+    And Operator click Create Polygon in zone drawing page
+    And Operator click Set Coordinates in zone drawing page
+      | latitude  | {zone-latitude-3}  |
+      | longitude | {zone-longitude-3} |
+    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
+    Then Operator verifies zone details on Zones page:
+      | shortName | {KEY_CREATED_ZONE.shortName} |
+      | name      | {KEY_CREATED_ZONE.name}      |
+      | hubName   | {KEY_CREATED_ZONE.hubName}   |
+      | latitude  | {zone-latitude-3}            |
+      | longitude | {zone-longitude-3}           |
+      | type      | STANDARD                     |
+
+  @DeleteCreatedZone
+  Scenario: Set Coordinates Polygon of RTS Zone
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
+    When Operator creates "RTS" zone using "{hub-name}" hub
+    And Operator click View Selected Polygons for zone name "{KEY_CREATED_ZONE.name}"
+    And Operator click RTS Zones in zone drawing page
+    And Operator click Create Polygon in zone drawing page
+    And Operator click Set Coordinates in zone drawing page
+      | latitude  | {zone-latitude-3}  |
+      | longitude | {zone-longitude-3} |
+    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
+    Then Operator verifies zone details on Zones page:
+      | shortName | {KEY_CREATED_ZONE.shortName} |
+      | name      | {KEY_CREATED_ZONE.name}      |
+      | hubName   | {KEY_CREATED_ZONE.hubName}   |
+      | latitude  | {zone-latitude-3}            |
+      | longitude | {zone-longitude-3}           |
+      | type      | RTS                          |
+
+
+  @KillBrowser @ShouldAlwaysRun @TAG
   Scenario: Kill Browser
     Given no-op
