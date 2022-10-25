@@ -1,7 +1,7 @@
 @OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @test
   Scenario: Login to Operator Portal V2,
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -1031,7 +1031,3 @@ Feature: DP Administration - Distribution Point
       | {dp-contact}  |  clear       |
     When Operator press return to list button
     Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
-
-
-
-
