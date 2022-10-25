@@ -14,6 +14,14 @@ Feature: Third Party Order Management
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
     Then Operator verify the new mapping is created successfully
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | TRANSFERRED TO THIRD PARTY |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: CREATE_THIRD_PARTY_ORDER |
 
   Scenario: Operator Edit Third Party Order (uid:c0683282-fc84-4b36-a6ad-3a77bb0efc0a)
     Given Operator go to menu Shipper Support -> Blocked Dates
