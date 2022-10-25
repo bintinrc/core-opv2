@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -7,8 +8,10 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.data.Offset;
 
 public class FinancialBatchSteps extends AbstractSteps {
 
@@ -69,8 +72,20 @@ public class FinancialBatchSteps extends AbstractSteps {
     mapOfData = resolveKeyValues(mapOfData);
     SoftAssertions softAssertions = new SoftAssertions();
     if (mapOfData.containsKey("overallBalance")) {
-      softAssertions.assertThat(financialBatchPage.getOverallBalance())
-          .as("Overall Balance is correct").isEqualTo(mapOfData.get("overallBalance"));
+      String expectedOverallBalance = mapOfData.get("overallBalance");
+      String expectedBalanceValue = StringUtils.substringBetween(expectedOverallBalance, "$", "(")
+          .trim().replace(",", "");
+      String expectedBalanceType = StringUtils.substringBetween(expectedOverallBalance, "(", ")");
+
+      String actualOverallBalance = financialBatchPage.getOverallBalance();
+      String actualBalanceValue = StringUtils.substringBetween(actualOverallBalance, "$", "(");
+      String actualBalanceType = StringUtils.substringBetween(actualOverallBalance, "(", ")");
+
+      softAssertions.assertThat(getDoubleValueForPricing(actualBalanceValue))
+          .as("Overall Balance Value is correct")
+          .isEqualTo(getDoubleValueForPricing(expectedBalanceValue), Offset.offset(0.9));
+      softAssertions.assertThat(actualBalanceType)
+          .as("Overall Balance Type is correct").isEqualTo(expectedBalanceType);
     }
     if (mapOfData.containsKey("date")) {
       softAssertions.assertThat(financialBatchPage.getDate()).as("Date is correct")
@@ -81,39 +96,54 @@ public class FinancialBatchSteps extends AbstractSteps {
           .isEqualTo(mapOfData.get("shipperName"));
     }
     if (mapOfData.containsKey("debitTotalCOD")) {
-      softAssertions.assertThat(financialBatchPage.getDebitCod()).as("Debit Total COD is correct")
-          .isEqualTo(mapOfData.get("debitTotalCOD"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitCod()))
+          .as("Debit Total COD is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalCOD")), Offset.offset(0.9));
     }
     if (mapOfData.containsKey("debitTotalFee")) {
-      softAssertions.assertThat(financialBatchPage.getDebitFee()).as("Debit Total Fee is correct")
-          .isEqualTo(mapOfData.get("debitTotalFee"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitFee()))
+          .as("Debit Total Fee is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalFee")), Offset.offset(0.9));
     }
     if (mapOfData.containsKey("debitTotalAdjustment")) {
-      softAssertions.assertThat(financialBatchPage.getDebitAdjustment())
-          .as("Debit Total Adjustment is correct").isEqualTo(mapOfData.get("debitTotalAdjustment"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitAdjustment()))
+          .as("Debit Total Adjustment is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalAdjustment")),
+              Offset.offset(0.9));
     }
     if (mapOfData.containsKey("debitNettBalance")) {
-      softAssertions.assertThat(financialBatchPage.getDebitNettBalance())
-          .as("Debit Nett Balance is correct").isEqualTo(mapOfData.get("debitNettBalance"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitNettBalance()))
+          .as("Debit Nett Balance is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitNettBalance")),
+              Offset.offset(0.9));
     }
     if (mapOfData.containsKey("creditTotalCOD")) {
-      softAssertions.assertThat(financialBatchPage.getCreditCod()).as("Credit Total COD is correct")
-          .isEqualTo(mapOfData.get("creditTotalCOD"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditCod()))
+          .as("Credit Total COD is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalCOD")), Offset.offset(0.9));
     }
     if (mapOfData.containsKey("creditTotalFee")) {
-      softAssertions.assertThat(financialBatchPage.getCreditFee()).as("Credit Total Fee is correct")
-          .isEqualTo(mapOfData.get("creditTotalFee"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditFee()))
+          .as("Credit Total Fee is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalFee")), Offset.offset(0.9));
     }
     if (mapOfData.containsKey("creditTotalAdjustment")) {
-      softAssertions.assertThat(financialBatchPage.getCreditAdjustment())
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditAdjustment()))
           .as("Credit Total Adjustment is correct")
-          .isEqualTo(mapOfData.get("creditTotalAdjustment"));
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalAdjustment")),
+              Offset.offset(0.9));
     }
     if (mapOfData.containsKey("creditNettBalance")) {
-      softAssertions.assertThat(financialBatchPage.getCreditNettBalance())
-          .as("Credit Nett Balance is correct").isEqualTo(mapOfData.get("creditNettBalance"));
+      softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditNettBalance()))
+          .as("Credit Nett Balance is correct")
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditNettBalance")),
+              Offset.offset(0.9));
     }
     softAssertions.assertAll();
+  }
+
+  private Double getDoubleValueForPricing(String value) {
+    return StandardTestUtils.getDoubleValue(value.trim().replace(",", ""));
   }
 
   @Then("Operator verifies error message is displayed in Financial Batch page")
