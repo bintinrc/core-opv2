@@ -116,6 +116,9 @@ Feature: All Orders - RTS & Resume
       | status | PENDING |
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders (uid:07ae3956-3711-4994-8de4-94d43ca93edf)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -139,6 +142,9 @@ Feature: All Orders - RTS & Resume
       | status | PENDING |
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
