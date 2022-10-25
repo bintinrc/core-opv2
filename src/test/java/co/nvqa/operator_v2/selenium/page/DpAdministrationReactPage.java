@@ -40,6 +40,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testid='virtual-table.button_download_csv']")
   public Button buttonDownloadCsv;
 
+  @FindBy(xpath = "//button[@data-testid='button_download_csv']")
+  public Button DpButtonDownloadCsv;
+
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
   public Button buttonAddPartner;
 

@@ -99,6 +99,14 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator click on the distribution points Download CSV File button")
+  public void operatorClickOnDistributionPointDownloadCsvFileButton() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.DpButtonDownloadCsv.click();
+      pause5s();
+    });
+  }
+
   @Then("Downloaded CSV file contains correct DP Partners data")
   public void downloadedCsvFileContainsCorrectDpPartnersData() {
     List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
@@ -118,6 +126,16 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpDetailsResponse dp = get(detailsAsMap.get("dp"));
     dpAdminPage.verifyDownloadedFileContentNewReactPageDpUsers(user, dp);
   }
+
+  @Then("Downloaded CSV file contains correct DP data in new react page")
+  public void downloadedCsvFileContainsCorrectDpDataInNewReactPage(
+          Map<String, String> detailsAsMap) {
+    final List<Dp> dpParams = get(KEY_DP_DETAILS);
+    List<Dp> dpParam = get(detailsAsMap.get("KEY_DP_DETAILS"));
+    dpAdminPage.verifyDownloadedDpFileContent(dpParams);
+  }
+
+
 
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
   public void operatorGetFirstDpPartnersParamsOnDpAdministrationPage(int count) {
@@ -500,6 +518,13 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator press return to list button")
+  public void pressReturnToList() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonReturnToList.click();
+    });
+  }
+
   @Then("Operator press save setting button")
   public void pressSaveSetting() {
     dpAdminReactPage.inFrame(() -> {
@@ -570,7 +595,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  @Then("Operator get the value of DP ID")
+  @Then("Orapetor get the value of DP ID")
   public void operatorGetDpIdValue() {
     dpAdminReactPage.inFrame(() -> {
       put(KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID, dpAdminReactPage.labelDpId.getText());
