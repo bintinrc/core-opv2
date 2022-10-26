@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
@@ -35,6 +36,19 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
 
   @FindBy(className = "ant-modal-wrap")
   public ConfirmDeleteModal confirmDeleteDialog;
+
+  @FindBy(xpath = "//button[.='View Selected Polygons']")
+  public Button viewSelectedPolygons;
+
+  @FindBy(xpath = "//button[@data-testid='bulk-edit-polygons-button']")
+  public Button bulkEditPolygons;
+
+  @FindBy(xpath = "//input[@accept='.kml']")
+  public FileInput uploadKmlFileInput;
+
+  @FindBy(xpath = "//button[@data-testid='select-button']")
+  public FileInput selectKmlFile;
+  public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
 
   public ZonesTable zonesTable;
 
