@@ -155,18 +155,34 @@ public class FinancialBatchReportSteps extends AbstractSteps {
           .as("Total COD is correct")
           .isEqualTo(mapOfData.get("totalCOD"));
     }
+    if (mapOfData.containsKey("CODAdjustment")) {
+      softAssertions.assertThat(financialBatchReportEntryCsv.getCodAdjustment())
+          .as("COD Adjustment is correct")
+          .isEqualTo(mapOfData.get("CODAdjustment"));
+    }
+    if (mapOfData.containsKey("totalAdjustedCOD")) {
+      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalAdjustedCod())
+          .as("Total Adjusted COD is correct")
+          .isEqualTo(mapOfData.get("totalAdjustedCOD"));
+    }
     if (mapOfData.containsKey("totalFees")) {
       softAssertions.assertThat(financialBatchReportEntryCsv.getTotalFees())
           .as("Total Fees is correct")
           .isEqualTo(mapOfData.get("totalFees"));
     }
-    if (mapOfData.containsKey("totalAdjustment")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalAdjustment())
-          .as("Total Adjustment is correct").isEqualTo(mapOfData.get("totalAdjustment"));
+    if (mapOfData.containsKey("FeesAdjustment")) {
+      softAssertions.assertThat(financialBatchReportEntryCsv.getFeesAdjustment())
+          .as("Fees Adjustment is correct")
+          .isEqualTo(mapOfData.get("FeesAdjustment"));
     }
-    if (mapOfData.containsKey("balance")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getBalance())
-          .as("Balance is correct").isEqualTo(mapOfData.get("balance"));
+    if (mapOfData.containsKey("totalAdjustedFees")) {
+      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalAdjustedFees())
+          .as("Total Adjusted Fees is correct")
+          .isEqualTo(mapOfData.get("totalAdjustedFees"));
+    }
+    if (mapOfData.containsKey("AmountOwingToFromShipper")) {
+      softAssertions.assertThat(financialBatchReportEntryCsv.getAmountOwingToFromShipper())
+          .as("Balance is correct").isEqualTo(mapOfData.get("AmountOwingToFromShipper"));
     }
     softAssertions.assertAll();
   }
