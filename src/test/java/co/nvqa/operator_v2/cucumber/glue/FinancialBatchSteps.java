@@ -15,6 +15,7 @@ import org.assertj.core.data.Offset;
 
 public class FinancialBatchSteps extends AbstractSteps {
 
+  public static final double OFFSET_VALUE = 0.09;
   private FinancialBatchPage financialBatchPage;
 
   @Override
@@ -83,7 +84,7 @@ public class FinancialBatchSteps extends AbstractSteps {
 
       softAssertions.assertThat(getDoubleValueForPricing(actualBalanceValue))
           .as("Overall Balance Value is correct")
-          .isEqualTo(getDoubleValueForPricing(expectedBalanceValue), Offset.offset(0.9));
+          .isEqualTo(getDoubleValueForPricing(expectedBalanceValue), Offset.offset(OFFSET_VALUE));
       softAssertions.assertThat(actualBalanceType)
           .as("Overall Balance Type is correct").isEqualTo(expectedBalanceType);
     }
@@ -98,46 +99,50 @@ public class FinancialBatchSteps extends AbstractSteps {
     if (mapOfData.containsKey("debitTotalCOD")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitCod()))
           .as("Debit Total COD is correct")
-          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalCOD")), Offset.offset(0.9));
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalCOD")),
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("debitTotalFee")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitFee()))
           .as("Debit Total Fee is correct")
-          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalFee")), Offset.offset(0.9));
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalFee")),
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("debitTotalAdjustment")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitAdjustment()))
           .as("Debit Total Adjustment is correct")
           .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitTotalAdjustment")),
-              Offset.offset(0.9));
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("debitNettBalance")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getDebitNettBalance()))
           .as("Debit Nett Balance is correct")
           .isEqualTo(getDoubleValueForPricing(mapOfData.get("debitNettBalance")),
-              Offset.offset(0.9));
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("creditTotalCOD")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditCod()))
           .as("Credit Total COD is correct")
-          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalCOD")), Offset.offset(0.9));
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalCOD")),
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("creditTotalFee")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditFee()))
           .as("Credit Total Fee is correct")
-          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalFee")), Offset.offset(0.9));
+          .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalFee")),
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("creditTotalAdjustment")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditAdjustment()))
           .as("Credit Total Adjustment is correct")
           .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditTotalAdjustment")),
-              Offset.offset(0.9));
+              Offset.offset(OFFSET_VALUE));
     }
     if (mapOfData.containsKey("creditNettBalance")) {
       softAssertions.assertThat(getDoubleValueForPricing(financialBatchPage.getCreditNettBalance()))
           .as("Credit Nett Balance is correct")
           .isEqualTo(getDoubleValueForPricing(mapOfData.get("creditNettBalance")),
-              Offset.offset(0.9));
+              Offset.offset(OFFSET_VALUE));
     }
     softAssertions.assertAll();
   }
