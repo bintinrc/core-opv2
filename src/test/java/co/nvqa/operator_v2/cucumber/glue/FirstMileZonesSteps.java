@@ -1,16 +1,23 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.FirstMileZonesPage;
+import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
@@ -25,6 +32,9 @@ import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_SHOR
 public class FirstMileZonesSteps extends AbstractSteps {
 
   private FirstMileZonesPage firstMileZonesPage;
+  private ZonesSelectedPolygonsPage zonesSelectedPolygonsPage;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(FirstMileZonesSteps.class);
 
   public FirstMileZonesSteps() {
   }
@@ -32,6 +42,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
   @Override
   public void init() {
     firstMileZonesPage = new FirstMileZonesPage(getWebDriver());
+    zonesSelectedPolygonsPage = new ZonesSelectedPolygonsPage(getWebDriver());
   }
 
   @When("Operator creates first mile zone using {string} hub")
@@ -226,5 +237,146 @@ public class FirstMileZonesSteps extends AbstractSteps {
       page.addFmZoneDialog.waitUntilInvisible();
     });
     put(KEY_CREATED_ZONE, zone);
+  }
+
+  @And("Operator click View Selected Polygons for First Mile Zones name {string}")
+  public void operatorClickViewSelectedPolygonsForFirstMileZonesName(String zoneName) {
+    firstMileZonesPage.waitUntilLoaded();
+    firstMileZonesPage.inFrame(page -> {
+      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_NAME, resolveValue(zoneName));
+      firstMileZonesPage.zonesTable.selectRow(1);
+      firstMileZonesPage.viewSelectedPolygons.click();
+      firstMileZonesPage.waitUntilPageLoaded();
+    });
+  }
+
+  @And("Operator click Zones in First Mile Zones drawing page")
+  public void operatorClickZonesInFirstMileZonesDrawingPage() {
+    zonesSelectedPolygonsPage.inFrame(
+        () -> zonesSelectedPolygonsPage.zonesPanel.zones.get(0).click());
+  }
+
+  @And("Operator click Create Polygon in First Mile Zones drawing page")
+  public void operatorClickCreatePolygonInFirstMileZonesDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.createZonePolygon.click();
+  }
+
+  @And("Operator click Set Coordinates in First Mile Zones drawing page")
+  public void operatorClickSetCoordinatesInFirstMileZonesDrawingPage(Map<String, String> data) {
+    String latitude = data.get("latitude");
+    String longitude = data.get("longitude");
+    zonesSelectedPolygonsPage.setCoordinate.click();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.clear();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.setValue(latitude);
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.clear();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.setValue(longitude);
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+  }
+
+  @When("Operator clicks Bulk Edit Polygons button in First Mile Zones Page")
+  public void operatorClicksBulkEditPolygonsButtonInFirstMileZonesPage() {
+    firstMileZonesPage.waitUntilLoaded();
+    firstMileZonesPage.switchTo();
+    firstMileZonesPage.bulkEditPolygons.click();
+  }
+
+  private File getKmlFile(String resourcePath) {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    return new File(Objects.requireNonNull(classLoader.getResource(resourcePath)).getFile());
+  }
+
+  @And("Operator upload a KML file {string} in First Mile Zones")
+  public void operatorUploadAKMLFileInFirstMileZones(String fileName) {
+    final String kmlFileName = "kml/" + fileName;
+    File file = null;
+    file = getKmlFile(kmlFileName);
+    firstMileZonesPage.uploadKmlFileInput.sendKeys(file);
+    firstMileZonesPage.selectKmlFile.click();
+  }
+
+  @And("Operator clicks save button in first mile zone drawing page")
+  public void operatorClicksSaveButtonInFirstMileZoneDrawingPage() {
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+  }
+
+  @Then("Operator verifies that error react notification displayed in First Mile Zones Page:")
+  public void operatorVerifiesThatErrorReactNotificationDisplayedInFirstMileZonesPage(
+      Map<String, String> data) {
+    firstMileZonesPage.inFrame(() -> {
+      Map<String, String> finalData = resolveKeyValues(data);
+      boolean waitUntilInvisible = Boolean.parseBoolean(
+          finalData.getOrDefault("waitUntilInvisible", "false"));
+      long start = new Date().getTime();
+      AntNotification toastInfo;
+      do {
+        toastInfo = firstMileZonesPage.noticeNotifications.stream().filter(toast -> {
+          String actualTop = toast.message.getNormalizedText();
+          LOGGER.info("Found notification: " + actualTop);
+          String value = finalData.get("top");
+          if (StringUtils.isNotBlank(value)) {
+            if (value.startsWith("^")) {
+              if (!actualTop.matches(value)) {
+                return false;
+              }
+            } else {
+              if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
+                return false;
+              }
+            }
+          }
+          value = finalData.get("bottom");
+          if (StringUtils.isNotBlank(value)) {
+            String actual = toast.description.getNormalizedText();
+            if (value.startsWith("^")) {
+              return actual.matches(value);
+            } else {
+              return StringUtils.equalsIgnoreCase(value, actual);
+            }
+          }
+          return true;
+        }).findFirst().orElse(null);
+      } while (toastInfo == null && new Date().getTime() - start < 20000);
+      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed").isTrue();
+      if (toastInfo != null && waitUntilInvisible) {
+        toastInfo.waitUntilInvisible();
+      }
+    });
+  }
+
+  @Then("Make sure First Mile Zone updated with correct vertex count {string}")
+  public void makeSureFirstMileZoneUpdatedWithCorrectVertexCount(String vertexcount) {
+    zonesSelectedPolygonsPage.switchTo();
+    String actual = zonesSelectedPolygonsPage.vertexcount.getText();
+    Assertions.assertThat(actual.equalsIgnoreCase(vertexcount))
+        .as("Count is Correct")
+        .isTrue();
+  }
+
+  @And("Operator make sure is redirected to First Mile Zone Drawing page")
+  public void operatorMakeSureIsRedirectedToFirstMileZoneDrawingPage() {
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.sideToolbar.waitUntilVisible();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+    Assertions.assertThat(
+            zonesSelectedPolygonsPage.zoneDrawingHeader.isDisplayed() &&
+                zonesSelectedPolygonsPage.saveZoneDrawingButton.isDisplayed()
+        )
+        .as("Zone Drawing page is loaded")
+        .isTrue();
+  }
+
+  @Then("Operator verifies first mile zone polygon details:")
+  public void operatorVerifiesFirstMileZonePolygonDetails(Map<String, String> data) {
+    Zone expected = new Zone(resolveKeyValues(data));
+    Zone actual = get(KEY_ZONE_POLYGONS_AS_JSON);
+    expected.compareWithActual(actual);
   }
 }

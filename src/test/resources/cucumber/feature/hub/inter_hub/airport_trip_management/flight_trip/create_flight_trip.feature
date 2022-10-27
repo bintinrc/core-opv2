@@ -48,47 +48,8 @@ Feature: Airport Trip Management - Create Flight Trip
       | destProcesshours    | 00                                        |
       | destProcessminutes  | 09                                        |
       | flightnumber        | 123456                                    |
-      | mawb                | 123-12345677                              |
       | comments            | Created by Automation                     |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport) to {KEY_CREATED_AIRPORT_LIST[2].airport_code} (Airport) is created. View Details" created success message
-
-  @DeleteCreatedAirports @DeleteAirportsViaAPI
-  Scenario: Create Flight Trip with Invalid MAWB
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new airport using data below:
-      | system_id     | SG          |
-      | airportCode   | GENERATED   |
-      | airportName   | GENERATED   |
-      | city          | GENERATED   |
-      | latitude      | GENERATED   |
-      | longitude     | GENERATED   |
-    Given API Operator create new airport using data below:
-      | system_id     | SG          |
-      | airportCode   | GENERATED   |
-      | airportName   | GENERATED   |
-      | city          | GENERATED   |
-      | latitude      | GENERATED   |
-      | longitude     | GENERATED   |
-    And API Operator refresh Airports cache
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
-      | startDate | {gradle-next-0-day-yyyy-MM-dd}    |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd}    |
-    When Operator fill the Origin Or Destination for Airport Management
-      | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
-      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
-      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
-      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
-    And Operator click on 'Create Flight Trip' button in Airport Management page
-    And Create a new flight trip using below data:
-      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].airport_code}|
-      | mawb                | 123-1234                              |
-    Then Operator verifies MAWB error messages on Create Flight Trip page
-    And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Create Flight Trip with disabled Airport
@@ -134,7 +95,6 @@ Feature: Airport Trip Management - Create Flight Trip
       | destProcesshours    | 00                                        |
       | destProcessminutes  | 09                                        |
       | flightnumber        | 123456                                    |
-      | mawb                | 123-12345677                              |
       | comments            | Created by Automation                     |
     Then Operator verifies toast messages below on Create Flight Trip page:
       |Status: 404                                                      |

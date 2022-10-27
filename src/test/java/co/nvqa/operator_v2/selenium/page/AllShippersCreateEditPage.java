@@ -1677,7 +1677,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
 
-    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    @FindBy(css = "md-select[placeholder$='Select billing weight logic']")
     public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")

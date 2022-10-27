@@ -70,7 +70,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
     And Operator search the "Duration" column with invalid data "INVALID"
     And Operator verifies that no data appear on Airport Trips page
 
-  Scenario: No Data Shown when Search by MAWB
+  Scenario: No Data Shown when Search by Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
@@ -80,7 +80,7 @@ Feature: Airport Trip Management - Search Airport Trip 2
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
-    And Operator search the "MAWB" column with invalid data "INVALID"
+    And Operator search the "Flight Number" column with invalid data "INVALID"
     And Operator verifies that no data appear on Airport Trips page
 
   Scenario: No Data Shown when Search by Driver
