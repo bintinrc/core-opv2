@@ -1,12 +1,12 @@
-@OperatorV2 @DistributionPoints2ReactPage @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
+@OperatorV2 @DistributionPoints2ReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2,
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpManagementPartner @RT
-  Scenario: Create new DP - Only add 2 alternative DPs - search by DP name - save settings - success create DP - SG (uid:e23c05f6-8d5c-47e5-817a-1a68006c8a0d)
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP - Select Opening and Operating Hours - Apply first day slots to all days
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
