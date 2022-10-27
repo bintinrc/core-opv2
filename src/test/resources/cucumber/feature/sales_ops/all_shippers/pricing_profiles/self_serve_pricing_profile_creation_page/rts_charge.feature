@@ -42,7 +42,7 @@ Feature: RTS
       | 2   | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | RTS Charge must be in between -100% and 100%.        | Validation Error |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShippers
   Scenario: Upload Bulk Pricing Profiles CSV - RTS Charge, Surcharge and RTS Charge, Discount (uid:11269b06-3bb8-4595-bdda-65a4ebe027f9)
      # shipper 1
     Given API Operator create new 'normal' shipper

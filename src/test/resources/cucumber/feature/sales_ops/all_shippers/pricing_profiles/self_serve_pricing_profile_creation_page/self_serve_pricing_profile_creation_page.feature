@@ -110,7 +110,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     Then DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShippers
   Scenario: Upload Pricing Profiles with CSV - Create Pricing Profiles with More Than 5 Shippers with Shipper that Has Invalid Pricing Profiles - Valid CSV File (uid:8c85d9e5-f4f4-4a55-b84a-702cc4a59d38)
     # shipper 1
     Given API Operator create new 'normal' shipper

@@ -23,7 +23,7 @@ Feature: Billing Weight Logic
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShippers
   Scenario: Upload Bulk Pricing Profiles CSV With Billing Weight Logic (uid:80e22696-fa30-449c-bcf4-c14bd56e9f0b)
      # shipper 1
     Given API Operator create new 'normal' shipper
