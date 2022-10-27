@@ -581,8 +581,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOpeningHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//button[@data-testid='button_apply_to_all_days']")
+  public PageElement buttonApplyFirstDaySlotsOpeningHours;
+
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOperatingHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//button[@data-testid='button_apply_to_all_days']")
+  public PageElement buttonApplyFirstDaySlotsOperatingHours;
 
 
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";

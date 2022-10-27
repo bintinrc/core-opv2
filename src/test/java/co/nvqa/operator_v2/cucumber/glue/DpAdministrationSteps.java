@@ -511,7 +511,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void duplicateDpError(String popUpMsg) {
     dpAdminReactPage.inFrame(() -> {
       Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
-          .as(f("Distribution point is Error because of %s",popUpMsg)).containsIgnoringCase(popUpMsg);
+          .as(f("Distribution point is Error because of %s", popUpMsg))
+          .containsIgnoringCase(popUpMsg);
     });
   }
 
@@ -964,6 +965,14 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         }
 
+      }
+      if (dpDetailsResponse.getApplyFirstDayOpeningHours() != null
+          && dpDetailsResponse.getApplyFirstDayOpeningHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOpeningHours.click();
+      }
+      if (dpDetailsResponse.getApplyFirstDayOperatingHours() != null
+          && dpDetailsResponse.getApplyFirstDayOperatingHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOperatingHours.click();
       }
     });
   }
