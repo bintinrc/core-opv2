@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @SelfServePricingProfile
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @SelfServePricingProfile @mad
 Feature: Billing Weight Logic
 
   Background: Login to Operator Portal V2
