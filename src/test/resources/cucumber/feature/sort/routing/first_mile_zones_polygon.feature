@@ -1,7 +1,7 @@
 @Sort @Routing @FirstMileZonesPolygon
 Feature: Fist Mile Zones
 
-  @LaunchBrowser @ShouldAlwaysRun @TAG
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -51,7 +51,6 @@ Feature: Fist Mile Zones
       | name    | {first-mile-zone-name}  |
       | polygon | {single-simple-polygon} |
 
-  @TAG
   Scenario: Bulk Edit Polygons - Multiple First Mile Zone - Mix Polygon (Simple and Multi)
     Given Operator go to menu Routing -> First Mile Zones
     And Operator refresh page v1
@@ -79,6 +78,6 @@ Feature: Fist Mile Zones
       | name    | {first-mile-zone-name-3} |
       | polygon | {many-mix-polygon-3}     |
 
-  @KillBrowser @ShouldAlwaysRun @TAG
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
