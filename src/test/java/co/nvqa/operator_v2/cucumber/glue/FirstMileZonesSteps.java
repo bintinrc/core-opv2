@@ -372,4 +372,11 @@ public class FirstMileZonesSteps extends AbstractSteps {
         .as("Zone Drawing page is loaded")
         .isTrue();
   }
+
+  @Then("Operator verifies first mile zone polygon details:")
+  public void operatorVerifiesFirstMileZonePolygonDetails(Map<String, String> data) {
+    Zone expected = new Zone(resolveKeyValues(data));
+    Zone actual = get(KEY_ZONE_POLYGONS_AS_JSON);
+    expected.compareWithActual(actual);
+  }
 }
