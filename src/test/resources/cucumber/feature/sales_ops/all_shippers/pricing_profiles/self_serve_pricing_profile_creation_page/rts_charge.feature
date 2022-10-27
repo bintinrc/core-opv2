@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @SelfServePricingProfile @mad
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @SelfServePricingProfile
 Feature: RTS
 
   Background: Login to Operator Portal V2
