@@ -534,6 +534,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='checkbox_auto_reservation_enabled']")
   public PageElement checkBoxAutoReservationEnabled;
 
+  @FindBy(xpath = "//input[@data-testid='reserved_cutoff_time']")
+  public TextBox formAutoReservationCutOff;
+
   @FindBy(xpath = "//input[@data-testid='checkbox_active_point']")
   public PageElement checkBoxActivePoint;
 
@@ -578,6 +581,38 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public Button buttonAddTimeSlotOperatingHoursSaturday;
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[8]/button[@data-testid='button_add_time_slot']")
   public Button buttonAddTimeSlotOperatingHoursSunday;
+
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursMonday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursTuesday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursWednesday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursThursday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursFriday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursSaturday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursSunday;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursMonday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursTuesday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursWednesday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursThursday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursFriday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursSaturday;
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursSunday;
+
 
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOpeningHours;
@@ -653,6 +688,27 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("friday", fieldOpeningStartHourFriday)
       .put("saturday", fieldOpeningStartHourSaturday)
       .put("sunday", fieldOpeningStartHourSunday)
+      .build();
+
+  public ImmutableMap<String, PageElement> cutOffOpeningHour = ImmutableMap.<String, PageElement>builder()
+      .put("monday", buttonCutOffOpeningHoursMonday)
+      .put("tuesday", buttonCutOffOpeningHoursTuesday)
+      .put("wednesday", buttonCutOffOpeningHoursWednesday)
+      .put("thursday", buttonCutOffOpeningHoursThursday)
+      .put("friday", buttonCutOffOpeningHoursFriday)
+      .put("saturday", buttonCutOffOpeningHoursSaturday)
+      .put("sunday", buttonCutOffOpeningHoursSunday)
+      .build();
+
+
+  public ImmutableMap<String, PageElement> cutOffOperatingHour = ImmutableMap.<String, PageElement>builder()
+      .put("monday", buttonCutOffOperatingHoursMonday)
+      .put("tuesday", buttonCutOffOperatingHoursTuesday)
+      .put("wednesday", buttonCutOffOperatingHoursWednesday)
+      .put("thursday", buttonCutOffOperatingHoursThursday)
+      .put("friday", buttonCutOffOperatingHoursFriday)
+      .put("saturday", buttonCutOffOperatingHoursSaturday)
+      .put("sunday", buttonCutOffOperatingHoursSunday)
       .build();
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTimeNext = ImmutableMap.<String, TextBox>builder()
@@ -897,6 +953,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
     click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
   }
+
+  public void fillAutoReservationCutoffTime(String cutoffTime) {
+    formAutoReservationCutOff.forceClear();
+    String []cutoffTimeElement = cutoffTime.split(":");
+    String cutOffTimeFill = f("%s h %s m",cutoffTimeElement[0],cutoffTimeElement[1]);
+    formAutoReservationCutOff.sendKeysAndEnterNoXpath(cutOffTimeFill);
+  }
+
 
   public void popupMsgAlternateDP(String alternateDpId) {
     String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG,alternateDpId);

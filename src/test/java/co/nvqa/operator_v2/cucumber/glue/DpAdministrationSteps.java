@@ -47,6 +47,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_RESERVATION_DATA = "CHECK_DP_RESERVATION_DATA";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
@@ -925,6 +926,10 @@ public class DpAdministrationSteps extends AbstractSteps {
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
+      if (dpDetailsResponse.getAutoReservationCutOffTime() != null) {
+        dpAdminReactPage.fillAutoReservationCutoffTime(
+            dpDetailsResponse.getAutoReservationCutOffTime());
+      }
       if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
           && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
         dpAdminReactPage.buttonEditDaysIndividuallyOpeningHours.click();
@@ -963,6 +968,17 @@ public class DpAdministrationSteps extends AbstractSteps {
             }
 
           }
+        }
+
+      }
+      if (dpDetailsResponse.getCutOffDay() != null) {
+        String[] cutOffDay = dpDetailsResponse.getCutOffDay().split(",");
+
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOpeningHour.get(day).click();
+        }
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOperatingHour.get(day).click();
         }
 
       }
@@ -1258,6 +1274,17 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         } else {
           LOGGER.info("DP Has No Alternate DP");
+        }
+      } else if (condition.equals(CHECK_DP_RESERVATION_DATA)) {
+        DpSetting dpSetting = get(KEY_DP_SETTINGS);
+        if (dpDetailsResponse != null && dpSetting != null) {
+          Assertions.assertThat(dpSetting.getCutOffTime())
+              .as(f("Dp Auto Reservation Cut-Off Time Is %s", dpSetting.getCutOffTime()))
+              .contains(dpDetailsResponse.getAutoReservationCutOffTime());
+
+          Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       }
     }
