@@ -583,34 +583,34 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public Button buttonAddTimeSlotOperatingHoursSunday;
 
 
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursMonday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursTuesday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursWednesday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursThursday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursFriday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursSaturday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOpeningHoursSunday;
 
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursMonday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursTuesday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursWednesday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursThursday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursFriday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursSaturday;
-  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursSunday;
 
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[2]//span[@class='ant-picker-clear']")
