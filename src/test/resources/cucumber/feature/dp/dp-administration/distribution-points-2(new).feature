@@ -6,7 +6,7 @@ Feature: DP Administration - Distribution Point
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Select Opening and Operating Hours - Apply first day slots to all days
+  Scenario: Create DP - Select Opening and Operating Hours - Apply first day slots to all days (uid:30cc5f87-e915-42bf-8469-219e0d9061d1)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -36,7 +36,7 @@ Feature: DP Administration - Distribution Point
       | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Select Opening and Operating Hours - Apply first day slots to all days
+  Scenario: Create DP - Auto-reservation Enabled - Remove and Select pickup cut off time (uid:57694f1b-93f0-417f-b45a-507d660d3cef)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -64,7 +64,7 @@ Feature: DP Administration - Distribution Point
       | condition  | CHECK_DP_RESERVATION_DATA        |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Auto-reservation Enabled - Remove and Manually type the pickup cut off time
+  Scenario: Create DP - Auto-reservation Enabled - Remove and Manually type the pickup cut off time (uid:4ae08f4e-6172-4396-bddf-27ae86a5f401)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -114,12 +114,12 @@ Feature: DP Administration - Distribution Point
     Then Operator will receiving error message pop-up "Invalid date"
 
     Examples:
-      | dataset_name           | key_dataset     | hiptest-uid |
-      | Remove Opening Hours   | opening_hours   |             |
-      | Remove Operating Hours | operating_hours |             |
+      | dataset_name           | key_dataset     | hiptest-uid                              |
+      | Remove Opening Hours   | opening_hours   | uid:473ea5cc-b572-4b8e-ae6a-163782d8db5a |
+      | Remove Operating Hours | operating_hours | uid:36c3e561-a985-4544-a67c-e2b84a262b3a |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Select Opening Hours - Apply opening hours for operating hours
+  Scenario: Create DP - Select Opening Hours - Apply opening hours for operating hours (uid:113b62e5-0ff6-4c2d-b98f-acd3eb012966)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
@@ -149,7 +149,7 @@ Feature: DP Administration - Distribution Point
       | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario: Create DP - Remove all opening and operating timeslots - Return error
+  Scenario: Create DP - Remove all opening and operating timeslots - Return error (uid:96bca34a-40c2-4bc9-a78d-1d291bcdb6b2)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
