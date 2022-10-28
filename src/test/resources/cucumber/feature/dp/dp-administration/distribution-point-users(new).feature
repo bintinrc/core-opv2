@@ -381,10 +381,6 @@ Feature: DP Administration - Distribution Point Users
       | firstName | lastName | contactNo | emailId                 | username                                | password |
       | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
-    And Operator waits for 2 seconds
-    And Operator refresh page
-    Then The Dp page is displayed
-    And Operator waits for 3 seconds
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
       | username | {KEY_DP_USER_USERNAME} |
@@ -424,10 +420,6 @@ Feature: DP Administration - Distribution Point Users
       | firstName | lastName | contactNo | emailId                 | username                                | password |
       | Diaz      | Ilyasa   | GENERATED | {default-dp-user-email} | AUTO{gradle-next-0-day-yyyyMMddHHmmsss} | password |
     Then Operator press submit user button
-    And Operator waits for 2 seconds
-    And Operator refresh page
-    Then The Dp page is displayed
-    And Operator waits for 3 seconds
     And Operator fill the Dp User filter by "username"
     When DB Operator gets details for DP User from Hibernate
       | username | {KEY_DP_USER_USERNAME} |
