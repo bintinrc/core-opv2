@@ -838,9 +838,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put(UNIT_NO, "Please enter a valid number.")
       .put(LATITUDE, "please enter valid number.")
       .put(LONGITUDE, "please enter valid number.")
-      .put(MAXIMUM_PARCEL_CAPACITY, "Please enter a valid number.")
-      .put(BUFFER_CAPACITY, "Please enter a valid number.")
-      .put(MAXIMUM_PARCEL_STAY, "Please enter a valid number.")
+      .put(MAXIMUM_PARCEL_CAPACITY, "please enter valid number.")
+      .put(BUFFER_CAPACITY, "please enter valid number.")
+      .put(MAXIMUM_PARCEL_STAY, "please enter valid number.")
       .build();
 
 
