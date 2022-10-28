@@ -92,7 +92,7 @@ Feature: DP Administration - Distribution Point
       | condition  | CHECK_DP_RESERVATION_DATA        |
 
   @DeleteNewlyCreatedDpManagementPartner
-  Scenario Outline: Create DP - Clear the opening or operating timeslot - Return error - <dataset_name>(<hiptest-uid>)
+  Scenario Outline: Create DP - Clear the opening or operating timeslot - Return error - <dataset_name> (<hiptest-uid>)
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     Given Operator go to menu Distribution Points -> DP Administration
