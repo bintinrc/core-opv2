@@ -147,3 +147,24 @@ Feature: DP Administration - Distribution Point
       | dpOperatingHours | KEY_DP_OPERATING_HOUR_DETAILS    |
       | dpDetails        | KEY_CREATE_DP_MANAGEMENT_REQUEST |
       | condition        | CHECK_DP_OPENING_OPERATING_HOURS |
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP - Remove all opening and operating timeslots - Return error
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-create-dp-2-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | type      | address_1      | address_2      | city      | postalCode       | hubId | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | autoReservationCutOffTime | cutOffDay                                                |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | directions | false            | {dp-service-type} | Ninja Box | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | 1     | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   | 19:30                     | monday,tuesday,wednesday,thursday,friday,saturday,sunday |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator will receiving error message pop-up "Missing opening/operating hours for DP"
