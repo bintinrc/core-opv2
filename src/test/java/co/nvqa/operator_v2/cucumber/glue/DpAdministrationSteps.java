@@ -813,6 +813,17 @@ public class DpAdministrationSteps extends AbstractSteps {
     return dpIdValue;
   }
 
+  @When("Operator delete the opening and operating hours {string}")
+  public void operatorDeleteTheOpeningAndOperatingHours(String hourKey) {
+    dpAdminReactPage.inFrame(() -> {
+      if ("opening_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOpeningHoursDay();
+      } else if ("operating_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOperatingHoursDay();
+      }
+    });
+  }
+
   @When("Operator fill the DP details")
   public void operatorFillDpDetails(Map<String, String> dataTableAsMap) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dataTableAsMap.get("distributionPoint"));

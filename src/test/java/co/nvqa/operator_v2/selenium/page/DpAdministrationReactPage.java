@@ -613,6 +613,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
   public PageElement buttonCutOffOperatingHoursSunday;
 
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[2]//span[@class='ant-picker-clear']")
+  public PageElement buttonRemoveFirstOpeningHour;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[2]//span[@class='ant-picker-clear']")
+  public PageElement buttonRemoveFirstOperatingHour;
+
 
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOpeningHours;
@@ -1462,4 +1468,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     return dpElement.get(map);
   }
 
+  public void removeOpeningHoursDay() {
+    moveToElementWithXpath("//input[@id='reservationSlots.monday[0].startTime']");
+    buttonRemoveFirstOpeningHour.click();
+    buttonRemoveFirstOpeningHour.click();
+  }
+
+  public void removeOperatingHoursDay() {
+    moveToElementWithXpath("//input[@id='operatingHours.monday[0].startTime']");
+    buttonRemoveFirstOperatingHour.click();
+    buttonRemoveFirstOperatingHour.click();
+  }
 }
