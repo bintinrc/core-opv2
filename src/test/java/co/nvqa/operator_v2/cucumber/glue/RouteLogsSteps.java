@@ -1037,6 +1037,7 @@ public class RouteLogsSteps extends AbstractSteps {
           value = finalData.get("bottom");
           if (StringUtils.isNotBlank(value)) {
             String actual = toast.description.getNormalizedText();
+            LOGGER.info("Found description: " + actual);
             if (value.startsWith("^")) {
               return actual.matches(value);
             } else {

@@ -5,12 +5,20 @@ import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.Coverage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.hibernate.AssertionFailure;
 
+import static co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.AreasTable.ACTION_ACTION;
 import static co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.AreasTable.COLUMN_AREA;
+import static co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.AreasTable.COLUMN_FALLBACK_DRIVER;
+import static co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.AreasTable.COLUMN_KEYWORDS;
+import static co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.AreasTable.COLUMN_PRIMARY_DRIVER;
 
 /**
  * @author Sergey Mishanin
@@ -49,7 +57,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
         page.createNewCoverageDialog.areaVariation.setValue(finalData.get("areaVariation"));
       }
       if (finalData.containsKey("keyword")) {
-        page.createNewCoverageDialog.keyword.setValue(finalData.get("keyword"));
+        page.createNewCoverageDialog.keyword.setValue(
+            StringUtils.join(splitAndNormalize(finalData.get("keyword")), "\n"));
       }
       if (finalData.containsKey("primaryDriver")) {
         page.createNewCoverageDialog.primaryDriver.selectValue(finalData.get("primaryDriver"));
@@ -69,29 +78,67 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.waitUntilLoaded(2);
       page.newCoverageCreatedDialog.waitUntilVisible();
       if (finalData.containsKey("area")) {
-        assertions.assertThat(page.newCoverageCreatedDialog.area.getText())
-            .as("Area")
+        assertions.assertThat(page.newCoverageCreatedDialog.area.getText()).as("Area")
             .isEqualTo(finalData.get("area"));
       }
       if (finalData.containsKey("primaryDriver")) {
         assertions.assertThat(page.newCoverageCreatedDialog.primaryDriver.getText())
-            .as("Primary Driver")
-            .isEqualTo(finalData.get("primaryDriver"));
+            .as("Primary Driver").isEqualTo(finalData.get("primaryDriver"));
       }
       if (finalData.containsKey("fallbackDriver")) {
         assertions.assertThat(page.newCoverageCreatedDialog.fallbackDriver.getText())
-            .as("Fallback Driver")
-            .isEqualTo(finalData.get("fallbackDriver"));
+            .as("Fallback Driver").isEqualTo(finalData.get("fallbackDriver"));
+      }
+
+      if (finalData.containsKey("keywordsAdded")) {
+        assertions.assertThat(page.newCoverageCreatedDialog.keywordsAdded.getText())
+            .as("Keywords added").contains(finalData.get("keywordsAdded"));
       }
       if (finalData.containsKey("keywords")) {
         assertions.assertThat(
-                page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText).collect(
-                    Collectors.toList()))
-            .as("Keywords")
+                page.newCoverageCreatedDialog.keywords.stream().map(PageElement::getText)
+                    .collect(Collectors.toList())).as("Keywords")
             .containsExactlyInAnyOrderElementsOf(splitAndNormalize(finalData.get("keywords")));
       }
     });
     assertions.assertAll();
+  }
+
+  @When("Operator verify data on Transfer duplicate keywords dialog:")
+  public void verifyTransferDuplicateKeywords(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      page.waitUntilLoaded(2);
+      page.transferDuplicateKeywordsDialog.waitUntilVisible();
+      if (finalData.containsKey("area")) {
+        assertions.assertThat(page.transferDuplicateKeywordsDialog.area.getText()).as("Area")
+            .isEqualTo(finalData.get("area"));
+      }
+      if (finalData.containsKey("primaryDriver")) {
+        assertions.assertThat(page.transferDuplicateKeywordsDialog.primaryDriver.getText())
+            .as("Primary Driver").isEqualTo(finalData.get("primaryDriver"));
+      }
+      if (finalData.containsKey("fallbackDriver")) {
+        assertions.assertThat(page.transferDuplicateKeywordsDialog.fallbackDriver.getText())
+            .as("Fallback Driver").isEqualTo(finalData.get("fallbackDriver"));
+      }
+      if (finalData.containsKey("keyword")) {
+        assertions.assertThat(page.transferDuplicateKeywordsDialog.keyword.getText()).as("Keyword")
+            .isEqualTo(finalData.get("keyword"));
+      }
+    });
+    assertions.assertAll();
+  }
+
+  @When("Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog")
+  public void clickNoDontTransfer() {
+    page.inFrame(() -> page.transferDuplicateKeywordsDialog.no.click());
+  }
+
+  @When("Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog")
+  public void clickYesTransfer() {
+    page.inFrame(() -> page.transferDuplicateKeywordsDialog.yes.click());
   }
 
   @When("Operator close New coverage created dialog")
@@ -103,12 +150,171 @@ public class StationRouteKeywordSteps extends AbstractSteps {
   public void verifyCoverageDisplayed(Map<String, String> data) {
     Coverage expected = new Coverage(resolveKeyValues(data));
     page.inFrame(() -> {
+      page.areasTable.clearColumnFilters();
       page.areasTable.filterByColumn(COLUMN_AREA, expected.getArea());
+      pause2s();
       Assertions.assertThat(page.areasTable.getRowsCount())
-          .withFailMessage("Coverage is not displayed: " + expected)
-          .isPositive();
-      Coverage actual = page.areasTable.readEntity(1);
-      expected.compareWithActual(actual);
+          .withFailMessage("Coverage is not displayed: " + expected).isPositive();
+      List<Coverage> actual = page.areasTable.readAllEntities();
+      actual.stream().filter(expected::matchedTo).findFirst()
+          .orElseThrow(() -> new AssertionFailure("Coverage was not found: " + expected));
+    });
+  }
+
+  @When("Operator verify coverage is not displayed on Station Route Keyword page:")
+  public void verifyCoverageIsNotDisplayed(Map<String, String> data) {
+    Coverage expected = new Coverage(resolveKeyValues(data));
+    page.inFrame(() -> {
+      page.areasTable.clearColumnFilters();
+      page.areasTable.filterByColumn(COLUMN_AREA, expected.getArea());
+      pause2s();
+      List<Coverage> actual = page.areasTable.readAllEntities();
+      Assertions.assertThat(actual.stream().noneMatch(expected::matchedTo))
+          .withFailMessage("Unexpected coverage is displayed:" + expected)
+          .isTrue();
+    });
+  }
+
+  @When("Operator open coverage settings for {value} area on Station Route Keyword page")
+  public void openCoverageSettings(String area) {
+    page.inFrame(() -> {
+      page.areasTable.filterByColumn(COLUMN_AREA, area);
+      Assertions.assertThat(page.areasTable.getRowsCount())
+          .withFailMessage("Coverage is not displayed for area: " + area).isPositive();
+      page.areasTable.clickActionButton(1, ACTION_ACTION);
+    });
+  }
+
+  @When("Operator open coverage settings on Station Route Keyword page:")
+  public void openCoverageSettings(Map<String, String> data) {
+    filterCoverages(data);
+    page.inFrame(() -> {
+      Assertions.assertThat(page.areasTable.getRowsCount())
+          .withFailMessage("Coverage is not displayed for area: " + data).isPositive();
+      page.areasTable.clickActionButton(1, ACTION_ACTION);
+    });
+  }
+
+  @When("Operator filter coverages on Station Route Keyword page:")
+  public void filterCoverages(Map<String, String> data) {
+    Coverage expected = new Coverage(resolveKeyValues(data));
+    page.inFrame(() -> {
+      page.areasTable.clearColumnFilters();
+      if (StringUtils.isNotBlank(expected.getArea())) {
+        page.areasTable.filterByColumn(COLUMN_AREA, expected.getArea());
+      }
+      if (CollectionUtils.isNotEmpty(expected.getKeywords())) {
+        page.areasTable.filterByColumn(COLUMN_KEYWORDS, expected.getKeywords().get(0));
+      }
+      if (StringUtils.isNotBlank(expected.getPrimaryDriver())) {
+        page.areasTable.filterByColumn(COLUMN_PRIMARY_DRIVER, expected.getPrimaryDriver());
+      }
+      if (StringUtils.isNotBlank(expected.getFallbackDriver())) {
+        page.areasTable.filterByColumn(COLUMN_FALLBACK_DRIVER, expected.getFallbackDriver());
+      }
+    });
+  }
+
+  @When("Operator add keywords on Station Route Keyword page:")
+  public void addKeywords(List<String> keywords) {
+    page.inFrame(() -> {
+      page.addKeywords.click();
+      page.addKeywordsTab.newKeywords.setValue(StringUtils.join(resolveValues(keywords), "\n"));
+      page.addKeywordsTab.save.click();
+    });
+  }
+
+  @When("Operator remove keywords on Station Route Keyword page:")
+  public void deleteKeywords(List<String> keywords) {
+    List<String> finalKeywords = resolveValues(keywords);
+    page.inFrame(() -> {
+      page.removeKeywords.click();
+      int count = page.removeKeywordsTab.keywords.size();
+      for (int i = 0; i < count; i++) {
+        if (finalKeywords.contains(page.removeKeywordsTab.keywords.get(i).getText())) {
+          page.removeKeywordsTab.checkboxes.get(i).check();
+        }
+      }
+      page.removeKeywordsTab.remove.click();
+    });
+  }
+
+  @When("Operator verify keywords on Remove keywords tab on Station Route Keyword page:")
+  public void verify(List<String> keywords) {
+    page.inFrame(() -> {
+      page.removeKeywords.click();
+      page.removeKeywordsTab.waitUntilVisible();
+      Assertions.assertThat(
+              page.removeKeywordsTab.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
+          .as("List of keywords")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
+    });
+  }
+
+  @When("Operator verify keywords on Remove keywords dialog:")
+  public void verifyRemoveKeywordsDialog(List<String> keywords) {
+    page.inFrame(() -> {
+      page.removeKeywordsDialog.waitUntilVisible();
+      Assertions.assertThat(
+              page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
+          .as("List of keywords to remove")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
+    });
+  }
+
+  @When("Operator click 'Yes, remove' button on Remove keywords dialog:")
+  public void clickYesRemove() {
+    page.inFrame(() -> {
+      page.removeKeywordsDialog.waitUntilVisible();
+      page.removeKeywordsDialog.yes.click();
+    });
+  }
+
+  @When("Operator remove coverage on Station Route Keyword page")
+  public void removeCoverage() {
+    page.inFrame(() -> {
+      page.removeCoverage.click();
+      page.yesRemove.click();
+    });
+  }
+
+  @When("Operator verify keywords on Add Keywords tab on Station Route Keyword page:")
+  public void verifyKeywords(List<String> keywords) {
+    page.inFrame(() -> {
+      page.addKeywords.click();
+      List<String> actual = page.addKeywordsTab.keywords.stream().map(PageElement::getText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual).as("List of keywords")
+          .containsExactlyInAnyOrderElementsOf(keywords);
+    });
+  }
+
+  @When("Operator verify filter results on Station Route Keyword page:")
+  public void verifyFilterCoverages(Map<String, String> data) {
+    Coverage expected = new Coverage(resolveKeyValues(data));
+    page.inFrame(() -> {
+      List<Coverage> actual = page.areasTable.readAllEntities();
+      if (StringUtils.isNotBlank(expected.getArea())) {
+        Assertions.assertThat(actual).as("Barangay/City").allSatisfy(
+            coverage -> Assertions.assertThat(coverage.getArea()).contains(expected.getArea()));
+      }
+      if (CollectionUtils.isNotEmpty(expected.getKeywords())) {
+        Assertions.assertThat(actual).as("Address keywords").allSatisfy(
+            coverage -> Assertions.assertThat(coverage.getKeywords())
+                .anyMatch(k -> StringUtils.contains(k, expected.getKeywords().get(0))));
+      }
+      if (StringUtils.isNotBlank(expected.getPrimaryDriver())) {
+        Assertions.assertThat(actual).as("Primary Driver").allSatisfy(
+            coverage -> Assertions.assertThat(coverage.getPrimaryDriver())
+                .contains(expected.getPrimaryDriver()));
+      }
+      if (StringUtils.isNotBlank(expected.getFallbackDriver())) {
+        Assertions.assertThat(actual).as("Fallback Driver").allSatisfy(
+            coverage -> Assertions.assertThat(coverage.getFallbackDriver())
+                .contains(expected.getFallbackDriver()));
+      }
     });
   }
 }

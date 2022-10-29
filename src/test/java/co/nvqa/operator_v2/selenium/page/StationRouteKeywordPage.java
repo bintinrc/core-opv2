@@ -2,13 +2,16 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,11 +27,36 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
   @FindBy(xpath = ".//button[.='Create new coverage']")
   public Button createNewCoverage;
 
+  @FindBy(css = "label[title='Add keywords']")
+  public Button addKeywords;
+
+  @FindBy(css = "label[title='Remove coverage']")
+  public Button removeCoverage;
+
+  @FindBy(css = "label[title='Remove keywords']")
+  public Button removeKeywords;
+
+  @FindBy(css = "button[data-pa-label='Yes, remove']")
+  public Button yesRemove;
+
+  @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
+  public AddKeywordsTab addKeywordsTab;
+
+  @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
+  public RemoveKeywordsTab removeKeywordsTab;
+
   @FindBy(css = ".ant-modal")
   public CreateNewCoverageDialog createNewCoverageDialog;
 
   @FindBy(css = ".ant-modal")
   public NewCoverageCreatedDialog newCoverageCreatedDialog;
+
+  @FindBy(css = ".ant-modal")
+  public TransferDuplicateKeywordsDialog transferDuplicateKeywordsDialog;
+
+  @FindBy(css = ".ant-modal")
+  public RemoveKeywordsDialog removeKeywordsDialog;
+
   public AreasTable areasTable;
 
   public StationRouteKeywordPage(WebDriver webDriver) {
@@ -39,6 +67,9 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
   public static class AreasTable extends AntTableV2<Coverage> {
 
     public static final String COLUMN_AREA = "area";
+    public static final String COLUMN_KEYWORDS = "keywords";
+    public static final String COLUMN_PRIMARY_DRIVER = "primaryDriver";
+    public static final String COLUMN_FALLBACK_DRIVER = "fallbackDriver";
 
     public static final String ACTION_ACTION = "Action";
 
@@ -47,9 +78,9 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
       setColumnLocators(
           ImmutableMap.<String, String>builder()
               .put(COLUMN_AREA, "area")
-              .put("keywords", "keywordString")
-              .put("primaryDriverName", "primaryDriverName")
-              .put("fallbackDriverName", "fallbackDriverName")
+              .put(COLUMN_KEYWORDS, "keywordString")
+              .put(COLUMN_PRIMARY_DRIVER, "primaryDriverName")
+              .put(COLUMN_FALLBACK_DRIVER, "fallbackDriverName")
               .build());
       setEntityClass(Coverage.class);
       setActionButtonsLocators(ImmutableMap.of(ACTION_ACTION, "Action"));
@@ -59,8 +90,8 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
   public static class Coverage extends DataEntity<Coverage> {
 
     private String area;
-    private String primaryDriverName;
-    private String fallbackDriverName;
+    private String primaryDriver;
+    private String fallbackDriver;
     private List<String> keywords;
 
     public Coverage() {
@@ -78,20 +109,20 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
       this.area = area;
     }
 
-    public String getPrimaryDriverName() {
-      return primaryDriverName;
+    public String getPrimaryDriver() {
+      return primaryDriver;
     }
 
-    public void setPrimaryDriverName(String primaryDriverName) {
-      this.primaryDriverName = primaryDriverName;
+    public void setPrimaryDriver(String primaryDriver) {
+      this.primaryDriver = primaryDriver;
     }
 
-    public String getFallbackDriverName() {
-      return fallbackDriverName;
+    public String getFallbackDriver() {
+      return fallbackDriver;
     }
 
-    public void setFallbackDriverName(String fallbackDriverName) {
-      this.fallbackDriverName = fallbackDriverName;
+    public void setFallbackDriver(String fallbackDriver) {
+      this.fallbackDriver = fallbackDriver;
     }
 
     public List<String> getKeywords() {
@@ -148,11 +179,101 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
     @FindBy(xpath = ".//table[@data-testid='simple-table']//tr[3]/td[2]")
     public PageElement fallbackDriver;
 
+    @FindBy(xpath = ".//label[contains(.,'keywords added')]")
+    public PageElement keywordsAdded;
+
     @FindBy(xpath = ".//div[@data-testid='inner-element']//div[@role='gridcell']//span[@class]")
     public List<PageElement> keywords;
 
     @FindBy(css = "button[data-pa-label='Close']")
     public Button close;
+
+  }
+
+  public static class TransferDuplicateKeywordsDialog extends AntModal {
+
+    public TransferDuplicateKeywordsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(xpath = ".//div[@data-datakey='0']")
+    public PageElement area;
+
+    @FindBy(xpath = ".//div[@data-datakey='1']")
+    public PageElement keyword;
+
+    @FindBy(xpath = ".//div[@data-datakey='2']")
+    public PageElement primaryDriver;
+
+    @FindBy(xpath = ".//div[@data-datakey='3']")
+    public PageElement fallbackDriver;
+
+    @FindBy(css = "button[data-pa-label='Back']")
+    public Button back;
+
+    @FindBy(css = "button[data-pa-label='No, don\\'t transfer']")
+    public Button no;
+
+    @FindBy(css = "button[data-pa-label='Yes, transfer']")
+    public Button yes;
+
+  }
+
+  public static class AddKeywordsTab extends PageElement {
+
+    public AddKeywordsTab(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public AddKeywordsTab(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+    }
+
+    @FindBy(css = "div[data-datakey='data']")
+    public List<PageElement> keywords;
+
+    @FindBy(css = "textarea")
+    public TextBox newKeywords;
+
+    @FindBy(css = "button[data-pa-label='Save']")
+    public Button save;
+
+  }
+
+  public static class RemoveKeywordsTab extends PageElement {
+
+    public RemoveKeywordsTab(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public RemoveKeywordsTab(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+    }
+
+    @FindBy(css = "div[data-datakey='value']")
+    public List<PageElement> keywords;
+
+    @FindBy(css = "div[data-datakey='__checkbox__'] input")
+    public List<CheckBox> checkboxes;
+
+    @FindBy(css = "button[data-pa-action='Remove keywords']")
+    public Button remove;
+
+  }
+
+  public static class RemoveKeywordsDialog extends AntModal {
+
+    public RemoveKeywordsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "div[data-datakey='0']")
+    public List<PageElement> keywords;
+
+    @FindBy(css = "button[data-pa-label='Yes, remove']")
+    public Button yes;
 
   }
 }
