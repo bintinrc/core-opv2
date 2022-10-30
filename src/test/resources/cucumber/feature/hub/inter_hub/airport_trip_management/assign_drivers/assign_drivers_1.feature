@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AssignDrivers1
 Feature: Airport Trip Management - Assign Drivers 1
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -137,7 +137,7 @@ Feature: Airport Trip Management - Assign Drivers 1
     And Operator clicks Save button on Assign Driver popup
     Then Operator successful message "%s driver(s) successfully assigned to the trip" display on Assigned Driver popup
 
-  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteDriver @runthis
+  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteDriver
   Scenario: Assign more than Four Drivers To/from Airport Trip - Airport Trip Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -346,6 +346,6 @@ Feature: Airport Trip Management - Assign Drivers 1
     Then Operator verify Assign Driver button is disabled on Airport Trip page
 
 
-  @KillBrowser @runthis
+  @KillBrowser
   Scenario: Kill Browser
     Given no-op
