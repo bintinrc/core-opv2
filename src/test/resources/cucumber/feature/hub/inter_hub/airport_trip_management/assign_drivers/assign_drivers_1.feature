@@ -345,7 +345,6 @@ Feature: Airport Trip Management - Assign Drivers 1
       | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
     Then Operator verify Assign Driver button is disabled on Airport Trip page
 
-
   @KillBrowser
   Scenario: Kill Browser
     Given no-op
