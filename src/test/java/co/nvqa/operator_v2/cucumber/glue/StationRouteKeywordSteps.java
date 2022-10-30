@@ -52,6 +52,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.createNewCoverageDialog.waitUntilVisible();
       if (finalData.containsKey("area")) {
         page.createNewCoverageDialog.area.setValue(finalData.get("area"));
+        putInList(KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
       }
       if (finalData.containsKey("areaVariation")) {
         page.createNewCoverageDialog.areaVariation.setValue(finalData.get("areaVariation"));
