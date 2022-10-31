@@ -424,4 +424,55 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
         airportTripManagementPage.CancelTripAndVerifyItems();
     }
+
+    @When("Operator click assign driver button to trip {value} on Airport Trip Management page")
+    public void operatorAssignDriverToTripOnAirportTripManagementPage(String tripID) {
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.AssignDriversAndVerifyItems();
+    }
+
+    @And("Operator clicks Save button on Assign Driver popup")
+    public void operatorClicksSaveButtonOnAssignDriverPopup() {
+        airportTripManagementPage.SaveAssignDriver();
+    }
+
+    @And("Operator selects multiple drivers on Airport Trip Management using data below:")
+    public void operatorAssignMultipleDriversOnAirportTripManagementUsingDataBelow(Map<String,String> mapOfData) {
+        Map<String,String> resolvedKeyOfData = resolveKeyValues(mapOfData);
+        List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+        airportTripManagementPage.selectMultipleDrivers(resolvedKeyOfData, middleMileDriver);
+    }
+
+    @Then("Operator successful message {string} display on Assigned Driver popup")
+    public void operatorSuccessfulMessageDisplayOnAssignedDriverPopup(String message) {
+        List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+        airportTripManagementPage.verifyTripMessageSuccessful(f(message, middleMileDriver.size()));
+    }
+
+    @Then("Operator verifies driver with value {string} is not shown on Airport Trip Management page")
+    public void operatorVerifiesWithValueIsNotShownOnAirportManagementPage(String driverUsername) {
+        airportTripManagementPage.assignDriversToTripModal.addDriver.click();
+        airportTripManagementPage.verifyInvalidDriver(driverUsername);
+    }
+
+    @And("Operator clicks Unassign All button on Assign Driver popup")
+    public void operatorClicksUnassignAllButtonOnAssignDriverPopup() {
+        pause3s();
+        airportTripManagementPage.assignDriversToTripModal.unassignAllDrivers.click();
+        pause2s();
+    }
+
+    @Then("Operator successful message {string} for unassign driver display on Assigned Driver popup")
+    public void operatorSuccessfulMessageForUnassignDriverDisplayOnAssignedDriverPopup(String message) {
+        airportTripManagementPage.verifySuccessUnassignAllDrivers(message);
+    }
+
+    @Then("Operator verify Assign Driver button is disabled on Airport Trip page")
+    public void operatorVerifyAssignDriverButtonIsDisabledOnAirportTripPage() {
+    }
+
+    @And("Operator search created flight trip {value} on Airport Trip table")
+    public void operatorSearchCreatedFlightTripOnAirportTripTable(String tripID) {
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+    }
 }
