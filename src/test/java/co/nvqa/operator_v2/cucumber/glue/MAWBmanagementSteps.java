@@ -136,4 +136,23 @@ public class MAWBmanagementSteps extends AbstractSteps{
         }
     }
 
+    @When("Operator performs record offload MAWB following data below:")
+    public void filterMAWB(Map<String,String>data){
+        Map<String,String> resolvedData = resolveKeyValues(data);
+
+        mawbManagementgPage.filterMAWB(resolvedData.get("mawb"));
+        mawbManagementgPage.fillOffloadData(resolvedData);
+    }
+
+    @When("Operator clicks offload update button on Record Offload MAWB Page")
+    public void operatorClicksOffloadUpdateButton(){
+        mawbManagementgPage.recordOffload.OffloadUpdateButton.click();
+        mawbManagementgPage.recordOffload.OffloadUpdateButton.waitUntilInvisible();
+    }
+
+    @Then("Operator verifies record offload successful message")
+    public void operatorVerifiesRecordOffloadSuccessfulMessage(){
+        mawbManagementgPage.verifyOffloadMessageSuccessful("Successfully updated offload.");
+    }
+
 }
