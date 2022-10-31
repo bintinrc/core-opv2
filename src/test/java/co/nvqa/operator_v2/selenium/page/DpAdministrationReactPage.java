@@ -10,6 +10,7 @@ import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
@@ -24,7 +25,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -969,8 +969,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
 
   public void popupMsgAlternateDP(String alternateDpId) {
-    String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG,alternateDpId);
-    Assertions.assertThat(elementRemoveMsg1.getText() + " " + elementRemoveMsg2.getText()).as(f("Popup message is: %s",popupMsg))
+    String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG, alternateDpId);
+    Assertions.assertThat(elementRemoveMsg1.getText() + " " + elementRemoveMsg2.getText())
+        .as(f("Popup message is: %s", popupMsg))
         .isEqualTo(popupMsg);
   }
 

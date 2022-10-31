@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -1037,6 +1037,7 @@ public class RouteLogsSteps extends AbstractSteps {
           value = finalData.get("bottom");
           if (StringUtils.isNotBlank(value)) {
             String actual = toast.description.getNormalizedText();
+            LOGGER.info("Found description: " + actual);
             if (value.startsWith("^")) {
               return actual.matches(value);
             } else {
