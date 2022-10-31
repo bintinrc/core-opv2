@@ -78,6 +78,7 @@ Feature: Remove Coverage
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
+    And DB Operator verifies that sr_coverages record was deleted for "{KEY_LIST_OF_COVERAGE_ID[1]}" coverageId
     And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
