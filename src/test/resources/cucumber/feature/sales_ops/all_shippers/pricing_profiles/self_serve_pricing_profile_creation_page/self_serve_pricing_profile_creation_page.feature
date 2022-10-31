@@ -15,7 +15,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator uploads csv file with below data:
       | pricing_script_id       |
       | {pricing-script-id-all} |
-    Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains "Missing header fields"
 
@@ -24,7 +24,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator uploads csv file with below data:
       | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
       | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-    Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains "Missing header fields"
 
@@ -42,7 +42,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator uploads csv file with below data:
       | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-    Then Operator verifies error message "Validate file successfully" in Upload Self Serve Promo Page
+    Then Operator verifies toast message "Validate file successfully" in Upload Self Serve Promo Page
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
       | top    | Network Request Error                                                                 |
@@ -57,7 +57,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator uploads csv file with below data:
       | shipper_id              | global_id        | pricing_script_id       | effective_date                 | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-current-date-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-    Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | column         | description                                        |
@@ -110,7 +110,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     Then DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShippers
   Scenario: Upload Pricing Profiles with CSV - Create Pricing Profiles with More Than 5 Shippers with Shipper that Has Invalid Pricing Profiles - Valid CSV File (uid:8c85d9e5-f4f4-4a55-b84a-702cc4a59d38)
     # shipper 1
     Given API Operator create new 'normal' shipper
