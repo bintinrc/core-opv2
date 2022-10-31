@@ -190,6 +190,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator find {value} zone on Zones page")
   public void findZone(String zoneName) {
+    zonesPage.switchTo();
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zoneName);
@@ -493,5 +494,47 @@ public class ZonesSteps extends AbstractSteps {
             zonesPage.isElementExist(String.format(ZonesPage.BULK_ZONE_UPDATE_ERROR_TITLE, errorTitle)))
         .as(String.format("Update dialog shows correct error title: %s", errorTitle))
         .isTrue();
+  }
+
+  @And("Operator click Zones in zone drawing page")
+  public void operatorClickZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.inFrame(
+        () -> zonesSelectedPolygonsPage.zonesPanel.zones.get(0).click());
+  }
+
+  @And("Operator click Set Coordinates in zone drawing page")
+  public void operatorClickSetCoordinatesInZoneDrawingPage(Map<String, String> data) {
+    String latitude = data.get("latitude");
+    String longitude = data.get("longitude");
+    zonesSelectedPolygonsPage.setCoordinate.click();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.clear();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.setValue(latitude);
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.clear();
+    zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.setValue(longitude);
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+  }
+
+  @And("Operator click Create Polygon in zone drawing page")
+  public void operatorClickCreatePolygonInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
+    zonesSelectedPolygonsPage.createZonePolygon.click();
+  }
+
+  @And("Operator click View Selected Polygons for zone name {string}")
+  public void operatorClickViewSelectedPolygonsForZoneName(String zoneName) {
+    zonesPage.inFrame(page -> {
+      zonesPage.zonesTable.filterByColumn(COLUMN_NAME, resolveValue(zoneName));
+      zonesPage.zonesTable.selectRow(1);
+      zonesPage.viewSelectedPolygons.click();
+      zonesSelectedPolygonsPage.waitUntilPageLoaded();
+    });
+  }
+
+  @And("Operator click RTS Zones in zone drawing page")
+  public void operatorClickRTSZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.inFrame(
+        () -> zonesSelectedPolygonsPage.zonesRTSPanel.zones.get(0).click());
   }
 }

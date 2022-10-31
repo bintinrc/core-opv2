@@ -178,29 +178,35 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     if (dpDetail.getHubName() != null) {
       put(KEY_CREATE_DP_MANAGEMENT_HUB_NAME, dpDetail.getHubName());
     }
-    if (dpDetail.getAlternateDpId1() != null){
+    if (dpDetail.getAlternateDpId1() != null) {
       dpsToRedirect.add(dpDetail.getAlternateDpId1());
     }
-    if (dpDetail.getAlternateDpId2() != null){
+    if (dpDetail.getAlternateDpId2() != null) {
       dpsToRedirect.add(dpDetail.getAlternateDpId2());
     }
-    if (dpDetail.getAlternateDpId3() != null){
+    if (dpDetail.getAlternateDpId3() != null) {
       dpsToRedirect.add(dpDetail.getAlternateDpId3());
     }
     dpDetail.setDpsToRedirect(dpsToRedirect);
     Map<String, List<Hours>> defaultTime = new HashMap<>();
 
     if (dpDetail.getOperatingHoursDay() == null || !dpDetail.getIsOperatingHours()) {
-      defaultTime = selectDayDateAvailable(null, true, true);
+      defaultTime = selectDayDateAvailable(null, true, true, null);
     } else if (dpDetail.getIsOperatingHours() && dpDetail.getOperatingHoursDay() != null) {
       if (dpDetail.getOperatingHoursDay().equals(OPERATING_HOURS_EVERYDAY_DOUBLE)) {
         String days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
         defaultTime = selectDayDateAvailableDouble(days, 2);
         dpDetail.setOperatingHoursDay(days);
+      } else if (dpDetail.getOperatingHoursDay().contains("everydayOpeningOperating")) {
+        String[] spesificTime = dpDetail.getOperatingHoursDay().split("!");
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), true, false,
+            f("%s!%s", spesificTime[1], spesificTime[2]));
+        String days = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
+        dpDetail.setOperatingHoursDay(days);
       } else if (!dpDetail.getIsTimestampSame()) {
-        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, false);
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, false, null);
       } else {
-        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true);
+        defaultTime = selectDayDateAvailable(dpDetail.getOperatingHoursDay(), false, true, null);
       }
     }
 
@@ -212,16 +218,27 @@ public class DpAdministrationAPISteps extends AbstractSteps {
   }
 
   public Map<String, List<Hours>> selectDayDateAvailable(String days, boolean isEveryday,
-      boolean isTimeStampSame) {
+      boolean isTimeStampSame, String specificHours) {
     Map<String, List<Hours>> daysAvailable = new HashMap<>();
     if (isEveryday) {
-      daysAvailable.put("monday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("tuesday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("wednesday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("thursday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("friday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("saturday", selectTimeStamp(isTimeStampSame, null));
-      daysAvailable.put("sunday", selectTimeStamp(isTimeStampSame, null));
+      if (specificHours != null) {
+        daysAvailable.put("monday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("tuesday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("wednesday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("thursday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("friday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("saturday", selectSpecificTimeStamp(specificHours));
+        daysAvailable.put("sunday", selectSpecificTimeStamp(specificHours));
+      } else {
+        daysAvailable.put("monday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("tuesday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("wednesday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("thursday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("friday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("saturday", selectTimeStamp(isTimeStampSame, null));
+        daysAvailable.put("sunday", selectTimeStamp(isTimeStampSame, null));
+      }
+
     } else if (!isTimeStampSame) {
       String[] dayList = days.split(",");
       for (int i = 0; i < dayList.length; i++) {
@@ -292,6 +309,17 @@ public class DpAdministrationAPISteps extends AbstractSteps {
     }
     return timeStamp;
   }
+
+  public List<Hours> selectSpecificTimeStamp(String specificHours) {
+    String[] specificHoursElement = specificHours.split("!");
+    List<Hours> timeStamp = new ArrayList<>();
+    Hours hours = new Hours();
+    hours.setStartTime(f("%s:00",specificHoursElement[0]));
+    hours.setEndTime(f("%s:00",specificHoursElement[1]));
+    timeStamp.add(hours);
+    return timeStamp;
+  }
+
 
   @When("Operator fill Detail for update DP Management:")
   public void ninjaPointVUserFillDetailForUpdateDpManagement(DataTable dt) {
