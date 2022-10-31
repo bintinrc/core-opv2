@@ -393,6 +393,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
   public TextBox fieldMaximumParcelStay;
 
+  @FindBy(xpath = "//input[@data-testid='file_add_photo_of_pudo_point']")
+  public TextBox fieldPhotoOfPudoPoint;
+
   @FindBy(xpath = "//input[@data-testid='field_password']")
   public TextBox fieldPassword;
 
