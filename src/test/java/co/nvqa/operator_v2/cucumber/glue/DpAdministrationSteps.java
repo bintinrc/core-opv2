@@ -1124,16 +1124,14 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator verifies that the cut off time for {string} is {string}")
   public void operatorVerifiesTheCutOffTime(String dpDetails, String expectedCutOffTime) {
-    DpDetailsResponse dpDetailsResponse = null;
-    dpDetailsResponse = resolveValue(dpDetails);
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
       dpAdminPage.verifyCutOffTime(expectedCutOffTime, dpDetailsResponse.getCutoffHour());
     takesScreenshot();
   }
 
   @When("Operator verifies auto reservation for dp {string} is {string}")
   public void dbOperatorFetchesAutoReservationForDp(String dpDetails, String status) {
-    DpDetailsResponse dpDetailsResponse = null;
-    dpDetailsResponse = resolveValue(dpDetails);
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
 
     if ("Enabled".equalsIgnoreCase(status)) {
       Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation enabled").isTrue();
@@ -1144,8 +1142,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator verifies the image for {string} is {string}")
   public void operatorVerifiesTheImageIs(String dpDetails,String status) {
-    DpDetailsResponse dpDetailsResponse = null;
-    dpDetailsResponse = resolveValue(dpDetails);
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
     if ("present".equalsIgnoreCase(status)) {
       assertNotEquals("dp image status is incorrect", dpDetailsResponse.getDpPhotoFile(), null);
     }else{
