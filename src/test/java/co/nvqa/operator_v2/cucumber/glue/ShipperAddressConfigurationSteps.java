@@ -182,6 +182,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   }
 
   @And("Operator clicks on the {string} button")
+  @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
     retryIfExpectedExceptionOccurred(
         () -> shipperAddressConfigurationPage.clickButton(buttonText),
