@@ -64,9 +64,12 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String XPATH_LOADED_LIST_OF_AIRPORTS ="//span[contains(.,'Showing %s of %s results')]";
     private static final String XPATH_DIV_TITLE = "//div[@title='%s']";
     private static final String antpickerdropdownhidden = "//div[contains(@class,'ant-picker-dropdown') and not(contains(@class,'ant-picker-dropdown-hidden'))]";
+
     private static final String AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]//div[text()='%s']";
     private static final String AIRPORT_TRIP_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
     private static final String AIRPORT_TRIP_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
+    private static final String AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id='assignDriversForm_driverNames_%d']";
+
     private static final String CREATE_FLIGHT_TRIP_SELECTED_TEXT_XPATH = "//input[@id='%s']/parent::span/following-sibling::span[@class='ant-select-selection-item']";
     private static final String createFlightTrip_originAirportId = "editForm_originAirport";
     private static final String createFlightTrip_destinationAirportId = "editForm_destinationAirport";
@@ -318,6 +321,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     @FindBy(className = "ant-modal-wrap")
     public TripDepartureArrivalModal tripDepartureArrivalModal;
+
+    @FindBy(className = "ant-modal-wrap")
+    public AssignDriversToTripModal assignDriversToTripModal;
 
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
@@ -1276,6 +1282,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         public static final String ACTION_DETAILS = "Details";
         public static final String ACTION_DELETE = "Cancel";
         public static final String ACTION_ASSIGN_DRIVER = "assignDriver";
+        public static final String ACTION_DISABLED_ASSIGN_DRIVER = "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(@data-testid,'assign-driver-icon') and @disabled]";
 
         @FindBy(xpath = "//button[.='Depart']")
         public Button departTripButton;
@@ -1563,6 +1570,91 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 .as("Expected Departure Time appear in Trip Cancelled page").isTrue();
         Assertions.assertThat(tripDepartureArrivalModal.expectedDuration.isDisplayed())
                 .as("Expected Duration appear in Trip Cancelled page").isTrue();
+    }
 
+    public static class AssignDriversToTripModal extends AntModal {
+
+        public AssignDriversToTripModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-col' and contains(text(),'Assign')]")
+        public PageElement PageMessage;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Origin Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement originFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Destination Facility']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement destinationFacility;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDepartureTime;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDuration;
+
+        @FindBy(xpath = "//button[.='Add Driver']")
+        public Button addDriver;
+
+        @FindBy(xpath = "//button[.='Add Driver' and @disabled]")
+        public Button disabledAddDriver;
+
+        @FindBy(xpath = "//div[contains(@class, 'remove-link')]")
+        public Button removeDriver;
+
+        @FindBy(xpath = "//button[.='Unassign All']")
+        public Button unassignAllDrivers;
+
+        @FindBy(xpath = "//button[.='Save']")
+        public Button saveButton;
+    }
+
+    public void AssignDriversAndVerifyItems(){
+        airportTable.clickActionButton(1,ACTION_ASSIGN_DRIVER);
+        assignDriversToTripModal.waitUntilVisible();
+        Assertions.assertThat(assignDriversToTripModal.PageMessage.isDisplayed())
+                .as("Trip Arrival message appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(assignDriversToTripModal.originFacility.isDisplayed())
+                .as("Origin Facility appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(assignDriversToTripModal.destinationFacility.isDisplayed())
+                .as("Destination Facility appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(assignDriversToTripModal.expectedDepartureTime.isDisplayed())
+                .as("Expected Departure Time appear in Trip Cancelled page").isTrue();
+        Assertions.assertThat(assignDriversToTripModal.expectedDuration.isDisplayed())
+                .as("Expected Duration appear in Trip Cancelled page").isTrue();
+    }
+
+    public void selectMultipleDrivers(Map<String, String> resolvedMapOfData, List<Driver> middleMileDrivers){
+        int numberOfDrivers = Integer.parseInt(resolvedMapOfData.get("assignDrivers"));
+        int maxAssignDrivers = numberOfDrivers > 4 ? 4 : numberOfDrivers;
+        for (int i = 0; i < maxAssignDrivers; i++) {
+            assignDriversToTripModal.addDriver.click();
+            TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i), "xpath", getWebDriver());
+            sendKeysAndEnter(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i), middleMileDrivers.get(i).getUsername());
+        }
+        if (numberOfDrivers > maxAssignDrivers) {
+            assignDriversToTripModal.disabledAddDriver.isDisplayed();
+        }
+    }
+
+    public void verifyInvalidDriver(String driverUsername) {
+        int i = 0;
+        TestUtils.findElementAndClick(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i), "xpath", getWebDriver());
+        sendKeys(f(AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH, i), driverUsername);
+        Assertions.assertThat(
+                        isElementExist(f(AIRPORT_TRIP_PAGE_DROPDOWN_LIST_XPATH, driverUsername), 1L))
+                .as("Invalid Driver has not been displayed").isFalse();
+    }
+
+    public void verifySuccessUnassignAllDrivers(String message) {
+        antNotificationMessage.waitUntilVisible();
+        String actualMessage = getAntTopTextV2();
+        Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(message);
+
+    }
+
+    public void SaveAssignDriver(){
+        assignDriversToTripModal.saveButton.click();
     }
 }
