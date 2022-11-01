@@ -1758,8 +1758,4 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyAssignDriverFieldNotAppearInAirportFlightTripDetail() {
         Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_DRIVER_XPATH, 5)).as("Driver field doesn't appear in Airport Flight Trip details page").isFalse();
     }
-
-    public void clickViewDetailsButtonOnFlightTrip() {
-
-    }
 }
