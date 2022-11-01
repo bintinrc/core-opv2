@@ -33,53 +33,46 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver  @RT
-  Scenario: Record Offload Created MAWB
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  Scenario: Record Offload In-transit to Airport MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator adds order to shipment:
-      | shipmentId | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}                                                                                   |
-      | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
-    And API Operator closes all the created shipments
-    Given API Operator create new air trip with data below:
-      | airtripType         | TO_FROM_AIRPORT_TRIP                |
-      | originFacility      | {hub-id}   |
-      | destinationFacility | {airport-hub-id-1}|
     And API Operator create 1 new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}"
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
+      | vendorId             | {vendor-id}    |
     Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP                           |
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                   |
       | originFacility      | {airport-hub-id-1}  |
       | destinationFacility | {airport-hub-id-2}  |
       | flight_no           | 12345                                 |
-    Given API Operator create new air trip with data below:
-      | airtripType         | TO_FROM_AIRPORT_TRIP                |
-      | originFacility      | {airport-hub-id-2}   |
-      | destinationFacility | {hub-id-2}|
-    And API Operator create 1 new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to airhaul trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[3]}"
-    And API Operator depart trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}"
-
-    Given API Operator shipment inbound scan with airport trip with data below:
-      | tripId      | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
-      | scanValue   | {KEY_CREATED_SHIPMENT_ID}                     |
-      | hubSystemId | sg                                            |
-      | hubId       | {mawb-hub-id-1}                       |
-      | actionType  | ADD                                           |
-      | scanType    | SHIPMENT_VAN_INBOUND                          |
-
-
-
+      | mawb | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
@@ -99,22 +92,78 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  Scenario: Record Offload Handed Over to Airline MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator create 1 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
 
-
-  Scenario: Search by MAWB Number with Single Invalid MAWB Number
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
+      | vendorId             | {vendor-id}    |
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                   |
+      | originFacility      | {airport-hub-id-1}  |
+      | destinationFacility | {airport-hub-id-2}  |
+      | flight_no           | 12345                                 |
+      | mawb | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{airport-hub-id-1}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}                     |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_HUB_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{airport-hub-id-1}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_hub_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
     Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | abcdef |
+      | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error message below on MAWB Management Page:
-      | Cannot find any MAWB. Try different search criteria. |
-    Given Operator clicks to go back button on MAWB Management page
-
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
 
   @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Single Duplicate MAWB Number
+  Scenario: Record Offload Manifest MAWB
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
@@ -126,149 +175,305 @@ Feature: MAWB Management - Record Offload 1
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
     Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB[1]} |
-      | {KEY_LIST_OF_CREATED_MAWB[1]} |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies Search MAWB Management Page
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Valid MAWB Number <= 100
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
       | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies Search MAWB Management Page
+    Given Operator performs manifest MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}"
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
 
-  Scenario: Search by MAWB Number with Multiple Invalid MAWB Number <= 100
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | abcdef |
-      | abc123 |
-      | abc456 |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error message below on MAWB Management Page:
-      | Cannot find any MAWB. Try different search criteria. |
-    Given Operator clicks to go back button on MAWB Management page
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Valid and Invalid MAWB Number <= 100
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  Scenario: Record Offload Departed MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator create 1 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
       | vendorId             | {vendor-id}    |
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                   |
+      | originFacility      | {airport-hub-id-1}  |
+      | destinationFacility | {airport-hub-id-2}  |
+      | flight_no           | 12345                                 |
+      | mawb | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{airport-hub-id-1}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}                     |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_HUB_INBOUND                          |
+    And API Operator end shipment inbound with trip in hub id "{airport-hub-id-1}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_hub_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    And API Operator depart flight trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
     Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB} |
-      | abcdeffff                  |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error message below on MAWB Management Page:
-      | Unable to find the following 1 MAWB:\nabcdeffff|
-    Given Operator clicks to go back button on MAWB Management page
-    Then Operator verifies Search MAWB Management Page
-    And Operator verifies total 5 results shown on MAWB Management Page
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Valid MAWB Number > 100
-    Given API Operator create multiple 110 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB} |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
-
-  @DeleteShipments
-  Scenario: Search by MAWB Number with Multiple Invalid MAWB Number > 100
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | GENERATED 100 INVALID MAWB |
-      | adasdasdasdsd              |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Valid and Invalid MAWB Number > 100
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | GENERATED 100 INVALID MAWB |
-      | {KEY_LIST_OF_CREATED_MAWB} |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number <= 100
-    Given API Operator create multiple 5 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB} |
       | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies Search MAWB Management Page
-    And Operator verifies total 5 results shown on MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number > 100
-    Given API Operator create multiple 101 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  Scenario: Record Offload Arrived MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator create 1 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
       | vendorId             | {vendor-id}    |
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                   |
+      | originFacility      | {airport-hub-id-1}  |
+      | destinationFacility | {airport-hub-id-2}  |
+      | flight_no           | 12345                                 |
+      | mawb | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{airport-hub-id-1}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}                     |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_HUB_INBOUND                          |
+    And API Operator end shipment inbound with trip in hub id "{airport-hub-id-1}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_hub_inbound                          |
+      | driverId | {KEY_CREATED_DRIVER.id}                       |
+    And API Operator depart flight trip "{KEY_LIST_OF_AIRHAUL_FLIGHT_TRIPS[1].trip_id}"
+    And API Operator arrive flight trip "{KEY_LIST_OF_AIRHAUL_FLIGHT_TRIPS[1].trip_id}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
     Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
       | {KEY_LIST_OF_CREATED_MAWB} |
-      | {KEY_LIST_OF_CREATED_MAWB[1]} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
+
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  Scenario: Record Offload Delivered MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator create 2 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
+      | vendorId             | {vendor-id}    |
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {airport-hub-id-2}   |
+      | destinationFacility | {hub-id-2}|
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    And API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    And API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    And API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id-2}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}                     |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_HUB_INBOUND                          |
+    And API Operator end shipment inbound with trip in hub id "{hub-id-2}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id} |
+      | scanType | shipment_hub_inbound                          |
+      | driverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                       |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
+
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @RT
+  Scenario: Record Offload Partially Delivered MAWB
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM            |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"-","postcode":"102600","city":"-","country":"SG"}}} |
+    Given API Operator put created parcel to shipment
+    Given API Operator closes the created shipment
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator create 2 new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator link mawb to multiple shipment ids
+      | mawb                 | RANDOM              |
+      | destinationAirportId | {airport-id-2} |
+      | originAirportId      | {airport-id-1} |
+      | vendorId             | {vendor-id}    |
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {hub-id}   |
+      | destinationFacility | {airport-hub-id-1}|
+    Given API Operator create new air trip with data below:
+      | airtripType         | TO_FROM_AIRPORT_TRIP    |
+      | originFacility      | {airport-hub-id-2}   |
+      | destinationFacility | {hub-id-2}|
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    When API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to airhaul trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}         |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_VAN_INBOUND                          |
+    Then API Operator end shipment inbound with trip in hub id "{hub-id}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id} |
+      | scanType | shipment_van_inbound                          |
+      | driverId | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                       |
+    Then API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    Then API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[1].trip_id}"
+    And API Operator depart trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    And API Operator arrive trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    And API Operator complete trip "{KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id}"
+    Given API Operator shipment inbound scan in hub id "{hub-id-2}" with trip with data below:
+      | tripId     | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id} |
+      | scanValue  | {KEY_CREATED_SHIPMENT_ID}                     |
+      | actionType | ADD                                           |
+      | scanType   | SHIPMENT_HUB_INBOUND                          |
+    And API Operator end shipment inbound with trip in hub id "{hub-id-2}" with data below:
+      | systemId | sg                                            |
+      | tripId   | {KEY_LIST_OF_AIRHAUL_TOFROM_TRIPS[2].trip_id} |
+      | scanType | shipment_hub_inbound                          |
+      | driverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                       |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks offload update button on Record Offload MAWB Page
+    Then Operator verifies record offload successful message
 
   @KillBrowser
   Scenario: Kill Browser

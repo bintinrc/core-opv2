@@ -82,6 +82,12 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     @FindBy(className = "ant-modal-wrap")
     public RecordOffloadModal recordOffload;
 
+    @FindBy(id = "manifest_form_is_aware")
+    public PageElement manifestConfirmCheckbox;
+
+    @FindBy(css ="[data-testid = 'submit-manifest-button']")
+    public Button submitManifest;
+
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
         Assertions.assertThat(findElementByXpath(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number")).isDisplayed())
@@ -176,6 +182,9 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         @FindBy(xpath ="//button[@class='ant-btn']//span[@class='anticon anticon-sync anticon-spin']")
         public PageElement reloadSpin;
 
+        @FindBy(xpath = "//button//span[contains(text(),'Manifest MAWB')]")
+        public PageElement manifestButton;
+
         public void VerifySearchResultPage(){
             String LIST_OF_MAWB_ELEMENTS = "//div[contains(@class,'table-container')]//table//tr//th[contains(@class,'%s')]";
             backToFilter.waitUntilVisible();
@@ -213,7 +222,15 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         }
     }
 
-    private void waitWhileTableIsLoading() {
+    public void manifestMAWB(){
+        waitUntilVisibilityOfElementLocated("//div[text()='Manifest MAWB']");
+        manifestConfirmCheckbox.click();
+        submitManifest.click();
+        submitManifest.waitUntilInvisible();
+    }
+
+
+    public void waitWhileTableIsLoading() {
         Wait<MAWBmanagementPage.amwbTableModal> fWait = new FluentWait<>(mawbtable)
                 .withTimeout(Duration.ofSeconds(20))
                 .pollingEvery(Duration.ofSeconds(1))

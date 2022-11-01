@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.COLUMN_MAWB;
+
 
 public class MAWBmanagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(MAWBmanagementSteps.class);
@@ -153,6 +155,15 @@ public class MAWBmanagementSteps extends AbstractSteps{
     @Then("Operator verifies record offload successful message")
     public void operatorVerifiesRecordOffloadSuccessfulMessage(){
         mawbManagementgPage.verifyOffloadMessageSuccessful("Successfully updated offload.");
+    }
+
+    @When("Operator performs manifest MAWB {value}")
+    public void operatorManifestMAWB(String mawb){
+        mawbManagementgPage.mawbtable.filterByColumn(COLUMN_MAWB, mawb);
+        mawbManagementgPage.waitWhileTableIsLoading();
+        mawbManagementgPage.mawbtable.selectRow(1);
+        mawbManagementgPage.mawbtable.manifestButton.click();
+        mawbManagementgPage.manifestMAWB();
     }
 
 }
