@@ -683,3 +683,199 @@ Feature: DP Administration - Distribution Point
       | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
       | condition | CHECK_ALTERNATE_DP_DATA          |
       | dpSetting | KEY_DP_SETTINGS                  |
+
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP with Auto-reservation Enabled and Cutoff Time (uid:23117956-184a-46c4-b657-fba62c5b2557)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | HUSSAM-SHAFAF_NINJA_123 | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 10 seconds
+    And Operator get the value of DP ID
+    When DB operator gets DP details from Hibernate
+      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    Then Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "15:30:00"
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP with Auto-reservation Enabled and Default Cutoff Time (uid:82f0e08c-83a0-4ca3-88ed-a433756f41f9)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode  | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE     | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
+
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create DP - Auto Reservation Disabled (uid:72a1c15d-3253-4009-bd50-3a9875516380)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    And Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator verifies auto reservation for dp "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "disabled"
+    And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - Short name is duplicate - Return Error (uid:c61d83b1-dd57-4bfc-8ffc-315980a55609)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName           | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP             | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+    And Operator will get the error from some field
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
+      | shortName         | short_name TEST-DP                |
+
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - External Store ID is Duplicate - Return Error (uid:1c5bf620-8782-49cd-843d-4da1e50ab281)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | TESTING-NewDP          | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+    And Operator will get the error from some field
+      | distributionPoint       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
+      | externalStoreId         | external_store_id TESTING-NewDP   |
+
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error (uid:5e810b71-6531-4be7-bcaa-4527ab217fcb)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP                | TESTING-NewDP          | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+    And Operator will get the error from some field
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
+      | externalStoreId   | external_store_id TESTING-NewDP   |
+      | shortName         | short_name TEST-DP                |
+
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - Upload DP Photos - Right Dimensions (uid:832a25fb-e77d-47a0-8b44-03d0ac98f1e3)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto  |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid    |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - Upload DP Photos - Wrong Dimension (uid:76be1fe1-8fe1-4cdb-8899-d5e8ff6dc11c)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | images     |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | invalid    |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not present"
+
+  @DeleteNewlyCreatedDpManagementPartner
+  Scenario: Create New DP - Upload DP Photos - Delete DP Photo (uid:e5cd0a1d-323a-42b8-93a2-013f8bd49921)
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto  |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid    |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+  ## edit DP steps will be in seperate PR
+#    When Operator deletes the dp image and "save settings"
+#    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not present"

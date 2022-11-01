@@ -924,6 +924,10 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
             dpDetailsResponse.getMaxParcelStayDuration());
       }
+      if (dpDetailsResponse.getDpPhoto() != null) {
+        dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
+                dpDetailsResponse.getDpPhotoFile());
+      }
       if (dpDetailsResponse.getIsActive() != null && dpDetailsResponse.getIsActive()) {
         dpAdminReactPage.checkBoxActivePoint.click();
       }
@@ -1200,6 +1204,35 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldConfirmPassword.setValue(confirmPassword);
       }
     });
+  }
+
+  @Then("Operator verifies that the cut off time for {string} is {string}")
+  public void operatorVerifiesTheCutOffTime(String dpDetails, String expectedCutOffTime) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+      dpAdminPage.verifyCutOffTime(expectedCutOffTime, dpDetailsResponse.getCutoffHour());
+    takesScreenshot();
+  }
+
+  @When("Operator verifies auto reservation for dp {string} is {string}")
+  public void dbOperatorFetchesAutoReservationForDp(String dpDetails, String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+
+    if ("Enabled".equalsIgnoreCase(status)) {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation enabled").isTrue();
+    } else {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation disabled").isFalse();
+    }
+  }
+
+  @Then("Operator verifies the image for {string} is {string}")
+  public void operatorVerifiesTheImageIs(String dpDetails,String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+    if ("present".equalsIgnoreCase(status)) {
+      assertNotEquals("dp image status is incorrect", dpDetailsResponse.getDpPhotoFile(), null);
+    }else{
+      assertEquals("dp image status is incorrect", dpDetailsResponse.getDpPhoto(), null);
+    }
+
   }
 
   @Then("Operator Check the Data from created DP is Right")
