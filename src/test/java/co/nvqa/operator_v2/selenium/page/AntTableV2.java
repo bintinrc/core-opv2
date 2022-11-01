@@ -92,7 +92,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   @Override
   public AbstractTable<T> filterByColumn(String columnId, String value) {
-    String xpath = f(COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN, columnId);
+    String xpath = f(COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
@@ -100,7 +100,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
       select.selectValue(value);
     } else {
-      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnId);
+      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
