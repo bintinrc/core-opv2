@@ -315,22 +315,19 @@ Feature: Airport Trip Management - Assign Drivers 1
       | city        | GENERATED |
       | latitude    | GENERATED |
       | longitude   | GENERATED |
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
+    Given API Operator create new airport using data below:
+      | system_id   | SG        |
+      | airportCode | GENERATED |
+      | airportName | GENERATED |
+      | city        | GENERATED |
+      | latitude    | GENERATED |
+      | longitude   | GENERATED |
     And API Operator refresh Airports cache
     Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP                           |
-      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id}  |
-      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}  |
-      | flight_no           | 12345                                 |
-      | mawb                | 123-12345679                          |
+      | airtripType         | FLIGHT_TRIP                          |
+      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id} |
+      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id} |
+      | flight_no           | 12345                                |
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management

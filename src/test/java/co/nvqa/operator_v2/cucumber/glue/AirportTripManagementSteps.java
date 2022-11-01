@@ -499,11 +499,4 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifyAssignDriverFieldNotAppearInAirportFlightTripDetailsPage() {
         airportTripManagementPage.verifyAssignDriverFieldNotAppearInAirportFlightTripDetail();
     }
-
-    @And("Operator clicks View Details button on successful created flight trip page")
-    public void operatorClicksViewDetailsButtonOnSuccessfulCreatedFlightTripPage() {
-        airportTripManagementPage.viewDetailsOnFlightTrip.click();
-        airportTripManagementPage.switchToOtherWindow();
-        airportTripManagementPage.waitUntilPageLoaded();
-    }
 }

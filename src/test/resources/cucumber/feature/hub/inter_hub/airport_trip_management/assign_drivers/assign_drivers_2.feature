@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AssignDrivers2
 Feature: Airport Trip Management - Assign Drivers 2
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -326,7 +326,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Unassign All button on Assign Driver popup
     And Operator clicks Save button on Assign Driver popup
 
-  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @runthis
+  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Cannot Assign Driver to Flight Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -336,16 +336,19 @@ Feature: Airport Trip Management - Assign Drivers 2
       | city        | GENERATED |
       | latitude    | GENERATED |
       | longitude   | GENERATED |
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
+    Given API Operator create new airport using data below:
+      | system_id   | SG        |
+      | airportCode | GENERATED |
+      | airportName | GENERATED |
+      | city        | GENERATED |
+      | latitude    | GENERATED |
+      | longitude   | GENERATED |
     And API Operator refresh Airports cache
+    Given API Operator create new air trip with data below:
+      | airtripType         | FLIGHT_TRIP                          |
+      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id} |
+      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id} |
+      | flight_no           | 12345                                |
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
@@ -358,24 +361,11 @@ Feature: Airport Trip Management - Assign Drivers 2
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport) |
-    And Operator click on 'Create Flight Trip' button in Airport Management page
-    And Create a new flight trip using below data:
-      | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-      | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].airport_code}|
-      | departureTime       | 12:00                                     |
-      | durationhour        | 09                                       |
-      | durationminutes     | 25                                        |
-      | departureDate       | {gradle-next-1-day-yyyy-MM-dd}            |
-      | originProcesshours  | 00                                        |
-      | originProcessminutes| 10                                        |
-      | destProcesshours    | 00                                        |
-      | destProcessminutes  | 09                                        |
-      | flightnumber        | 123456                                    |
-      | comments            | Created by Automation                     |
-    And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport) to {KEY_CREATED_AIRPORT_LIST[2].airport_code} (Airport) is created. View Details" created success message
-    And Operator clicks View Details button on successful created flight trip page
+    When Operator opens view Airport Trip page with data below:
+      | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
+      | tripType | Flight Trip                                |
     And Operator verify Assign Driver field not appear in Airport Flight Trip Details page
 
-  @KillBrowser @runthis
+  @KillBrowser
   Scenario: Kill Browser
     Given no-op
