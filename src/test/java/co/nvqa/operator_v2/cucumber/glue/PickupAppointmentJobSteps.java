@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.PickupAppointmentJobPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -40,6 +41,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
     @And("^Operator select shipper id/name = \"([^\"]*)\" in Shipper ID/Name field")
     public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
        pickupAppointmentJobPage.getCreateOrEditJobElement().setShipperIDInField(shipperId);
+       put(KEY_LEGACY_SHIPPER_ID, shipperId);
     }
 
     @And("^Operator select address = \"([^\"]*)\" in Shipper Address field")
@@ -128,6 +130,23 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         assertNotEquals("The new created Pickup Jobs is shown in the Calendar",
                 pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
                 listOFPickupJobsBeforeEditNewJob.size());
+    }
+
+    @And("^Complete Pickup Job With Route Id")
+    public void completePickupJobWithRouteId(Map<String, String> dataTable) {
+        final String startDay = dataTable.get("startDay");
+        final String endDay = dataTable.get("endDay");
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        String shipperId = get(KEY_LEGACY_SHIPPER_ID);
+        operatorLoadsShipperAddressConfigurationPage();
+        pickupAppointmentJobPage.selectDataRangeByTitle(startDay,endDay);
+        pickupAppointmentJobPage.setShipperIDInField(shipperId);
+        pickupAppointmentJobPage.clickLoadSelectionButton();
+        pickupAppointmentJobPage.clickEditButton();
+        pickupAppointmentJobPage.setRouteId(String.valueOf(routeId));
+        pickupAppointmentJobPage.clickUpdateRouteButton();
+        pickupAppointmentJobPage.clickSuccessJobButton();
+
     }
 
     // This method can be removed once redirection to Shipper Address is added in operator V2 menu

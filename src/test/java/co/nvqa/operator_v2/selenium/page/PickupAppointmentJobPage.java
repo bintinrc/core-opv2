@@ -4,41 +4,100 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
-import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.PageFactoryFinder;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 public class PickupAppointmentJobPage extends OperatorV2SimplePage {
-    @FindBy(css = "input[aria-owns=shipper_list]")
+    @FindBy(css = "#shippers")
     public PageElement shipperIDField;
+
+    @FindBy(css = "#dateRange")
+    public Button selectDateRange;
 
     @FindBy(css = "div.ant-collapse-extra button")
     public Button createEditJobButton;
 
-    @FindBy(css = "button[type=submit]")
-    public NvApiTextButton loadSelection;
+    @FindBy(css="[type='submit']")
+    public PageElement loadSelection;
 
-    @FindBy(css = "#shippers")
-    public NvFilterBox shippersFilter;
+    @FindBy(css = ".BaseTable__table-frozen-left .BaseTable__row-cell-text")
+    public  PageElement jobIdElement;
+
+    @FindBy(css = ".ant-collapse-content-box")
+    public PageElement contentBox;
+
+    @FindBy(css = "[data-testid='resultTable.editButton']")
+    public PageElement editButton;
+
+    @FindBy(css = "")
+    public PageElement routeIdInput;
+
+    @FindBy(css = "")
+    public PageElement updateRouteButton;
+
+    @FindBy(css = "")
+    public PageElement successJobButton;
 
     @FindBy(css = "#__next")
     private CreateOrEditJobElement createOrEditJobElement;
     public final String ID_NEXT = "__next";
     public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
+    public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shipper_list_0']";
+
+    public final String CALENDAR_DAY_BY_TITLE_LOCATOR = "td[title='%s']";
 
     public PickupAppointmentJobPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    public void clickLoadSelectionButton(){
+        contentBox.click();
+        loadSelection.click();
+        waitUntilVisibilityOfElementLocated(jobIdElement.getWebElement());
+    }
+
+    public void clickEditButton(){
+        editButton.click();
+    }
+
+    public void setRouteId(String routeId){
+        waitUntilVisibilityOfElementLocated(routeIdInput.getWebElement());
+        routeIdInput.sendKeys(routeId);
+        waitUntilVisibilityOfElementLocated("verifyLocator");
+        routeIdInput.sendKeys(Keys.ENTER);
+    }
+
+    public void clickUpdateRouteButton(){
+        updateRouteButton.click();
+    }
+
+    public void clickSuccessJobButton(){
+        waitUntilVisibilityOfElementLocated(successJobButton.getWebElement());
+        successJobButton.click();
+    }
+
+    public String getJobIdText(){
+        return jobIdElement.getText();
+    }
+
+    public void setShipperIDInField(String shipperID) {
+        sendTextInFieldAndChooseData(shipperIDField, shipperID, VERIFY_SHIPPER_FIELD_LOCATOR);
+    }
+
+    private void sendTextInFieldAndChooseData(PageElement field, String data, String verifyLocator) {
+        field.sendKeys(data);
+        waitUntilVisibilityOfElementLocated(verifyLocator);
+        field.sendKeys(Keys.ENTER);
+    }
+
+    public void selectDataRangeByTitle(String dayStart, String dayEnd) {
+        selectDateRange.click();
+        waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
+        webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))).click();
+        webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd))).click();
     }
 
     public static class CreateOrEditJobElement extends PageElement {
@@ -113,7 +172,6 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
             waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
             webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))).click();
             webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd))).click();
-            waitUntilVisibilityOfElementLocated(createButton.getWebElement());
         }
 
         public void selectTimeRangeByDataTime(String timeRange) {
@@ -140,6 +198,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
                 default:
                     chooseCorrectTimeRange(String.format(TIME_RANGE_NUMBER_OF_LIST, 6));
             }
+            waitUntilVisibilityOfElementLocated(createButton.getWebElement());
         }
 
         private void chooseCorrectTimeRange(String timeRangeListNumber) {
@@ -192,7 +251,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
         @FindBy(xpath = "//span[span[text()='Jobs created for the following dates:']]//following-sibling::span")
         public TextBox dates;
 
-        @FindBy(xpath = "div.ant-modal-footer button")
+        @FindBy(css = "div.ant-modal-footer button")
         public Button okButton;
 
         public JobCreatedModalWindowElement(WebDriver webDriver, WebElement webElement) {
