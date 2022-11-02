@@ -8,6 +8,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -15,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Array;
-import java.util.*;
+
 
 import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.COLUMN_MAWB;
 
