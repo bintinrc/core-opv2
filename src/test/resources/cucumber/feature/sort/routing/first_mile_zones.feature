@@ -102,6 +102,26 @@ Feature: Fist Mile Zones
     When Operator update first mile zone with empty field in one of the mandatory field
     Then Operator verifies Submit Button in First Mile Zone edit dialog is Disabled
 
+  @DeleteCreatedFirstMileZone
+  Scenario: Set Coordinates Polygon of First Mile Zone
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu "Routing" -> "First Mile Zones"
+    When Operator creates first mile zone using "{hub-name}" hub
+    And Operator click View Selected Polygons for First Mile Zones name "{KEY_CREATED_ZONE.name}"
+    And Operator click Zones in First Mile Zones drawing page
+    And Operator click Create Polygon in First Mile Zones drawing page
+    And Operator click Set Coordinates in First Mile Zones drawing page
+      | latitude  | {zone-latitude-3}  |
+      | longitude | {zone-longitude-3} |
+    When Operator refresh page
+    Then Operator verifies first mile zone details on First Mile Zones page:
+      | shortName   | {KEY_CREATED_ZONE.shortName}   |
+      | name        | {KEY_CREATED_ZONE.name}        |
+      | hubName     | {KEY_CREATED_ZONE.hubName}     |
+      | latitude    | {zone-latitude-3}              |
+      | longitude   | {zone-longitude-3}             |
+      | description | {KEY_CREATED_ZONE.description} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

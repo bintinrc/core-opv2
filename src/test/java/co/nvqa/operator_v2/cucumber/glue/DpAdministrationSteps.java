@@ -47,6 +47,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_RESERVATION_DATA = "CHECK_DP_RESERVATION_DATA";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
@@ -531,6 +532,16 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator will receiving error message pop-up {string}")
+  public void duplicateDpError(String popUpMsg) {
+    dpAdminReactPage.inFrame(() -> {
+      Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
+          .as(f("Distribution point is Error because of %s", popUpMsg))
+          .containsIgnoringCase(popUpMsg);
+    });
+  }
+
+
   @Then("Operator fill the partner filter by {string}")
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
@@ -605,6 +616,46 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressEditDpButton() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.buttonDpEdit.click();
+    });
+  }
+
+  @Then("Operator check the alternate DP is shown in DP Edit page")
+  public void alternateDPShownInDPEdit(Map<String, String> dataTableAsMap) {
+    String alternateDPList = dataTableAsMap.get("dpList");
+    DpDetailsResponse dpDetailsResponse = get(dataTableAsMap.get("dpDetails"));
+    String[] dpList = alternateDPList.split(",");
+    List<String> dpListFromDisplay = new ArrayList<>();
+
+    dpAdminReactPage.inFrame(() -> {
+      for (String dp : dpList) {
+        dpListFromDisplay.add(dpAdminReactPage.getAlternateDpText.get(dp).getText());
+      }
+
+      for (String dp : dpListFromDisplay) {
+        if (dpDetailsResponse.getAlternateDpId1() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId1().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 1 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId1().toString());
+
+        } else if (dpDetailsResponse.getAlternateDpId2() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId2().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 2 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId2().toString());
+
+        } else if (dpDetailsResponse.getAlternateDpId3() != null && dp.contains(
+            dpDetailsResponse.getAlternateDpId3().toString())) {
+
+          Assertions.assertThat(dp)
+              .as(f("Alternate DP 3 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId3().toString());
+
+        }
+      }
+
     });
   }
 
@@ -735,14 +786,13 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator fill the alternate DP details")
   public void fillAlternateDP(Map<String, String> dataTableAsMap) {
-    Map<String, String> map = resolveKeyValues(dataTableAsMap);
-    Long alternateDP1 = getDpIdValue(map.get("alternateDp1"));
-    Long alternateDP2 = getDpIdValue(map.get("alternateDp2"));
-    Long alternateDP3 = getDpIdValue(map.get("alternateDp3"));
-    boolean validationStatus = map.get("validationStatus").equalsIgnoreCase("VALID");
+    Long alternateDP1 = getDpIdValue(dataTableAsMap.get("alternateDp1"));
+    Long alternateDP2 = getDpIdValue(dataTableAsMap.get("alternateDp2"));
+    Long alternateDP3 = getDpIdValue(dataTableAsMap.get("alternateDp3"));
+    boolean validationStatus = dataTableAsMap.get("validationStatus").equalsIgnoreCase("VALID");
 
     dpAdminReactPage.inFrame(() -> {
-      if (validationStatus){
+      if (validationStatus) {
         if (alternateDP1 != null) {
           dpAdminReactPage.fieldAlternateDp1.setValue(alternateDP1);
           dpAdminReactPage.chooseAlternateDp(alternateDP1);
@@ -773,10 +823,10 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
-  private Long getDpIdValue (String dpId){
+  private Long getDpIdValue(String dpId) {
     Long dpIdValue;
-    if (dpId != null){
-      if (get(dpId) != null){
+    if (dpId != null) {
+      if (get(dpId) != null) {
         dpIdValue = get(dpId);
       } else {
         dpIdValue = Long.parseLong(dpId);
@@ -785,6 +835,17 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpIdValue = null;
     }
     return dpIdValue;
+  }
+
+  @When("Operator delete the opening and operating hours {string}")
+  public void operatorDeleteTheOpeningAndOperatingHours(String hourKey) {
+    dpAdminReactPage.inFrame(() -> {
+      if ("opening_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOpeningHoursDay();
+      } else if ("operating_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOperatingHoursDay();
+      }
+    });
   }
 
   @When("Operator fill the DP details")
@@ -887,6 +948,10 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
             dpDetailsResponse.getMaxParcelStayDuration());
       }
+      if (dpDetailsResponse.getDpPhoto() != null) {
+        dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
+                dpDetailsResponse.getDpPhotoFile());
+      }
       if (dpDetailsResponse.getIsActive() != null && dpDetailsResponse.getIsActive()) {
         dpAdminReactPage.checkBoxActivePoint.click();
       }
@@ -899,6 +964,10 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getAutoReservationEnabled() != null
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
+      }
+      if (dpDetailsResponse.getAutoReservationCutOffTime() != null) {
+        dpAdminReactPage.fillAutoReservationCutoffTime(
+            dpDetailsResponse.getAutoReservationCutOffTime());
       }
       if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
           && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
@@ -940,6 +1009,25 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         }
 
+      }
+      if (dpDetailsResponse.getCutOffDay() != null) {
+        String[] cutOffDay = dpDetailsResponse.getCutOffDay().split(",");
+
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOpeningHour.get(day).click();
+        }
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOperatingHour.get(day).click();
+        }
+
+      }
+      if (dpDetailsResponse.getApplyFirstDayOpeningHours() != null
+          && dpDetailsResponse.getApplyFirstDayOpeningHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOpeningHours.click();
+      }
+      if (dpDetailsResponse.getApplyFirstDayOperatingHours() != null
+          && dpDetailsResponse.getApplyFirstDayOperatingHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOperatingHours.click();
       }
     });
   }
@@ -1142,6 +1230,35 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies that the cut off time for {string} is {string}")
+  public void operatorVerifiesTheCutOffTime(String dpDetails, String expectedCutOffTime) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+      dpAdminPage.verifyCutOffTime(expectedCutOffTime, dpDetailsResponse.getCutoffHour());
+    takesScreenshot();
+  }
+
+  @When("Operator verifies auto reservation for dp {string} is {string}")
+  public void dbOperatorFetchesAutoReservationForDp(String dpDetails, String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+
+    if ("Enabled".equalsIgnoreCase(status)) {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation enabled").isTrue();
+    } else {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation disabled").isFalse();
+    }
+  }
+
+  @Then("Operator verifies the image for {string} is {string}")
+  public void operatorVerifiesTheImageIs(String dpDetails,String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+    if ("present".equalsIgnoreCase(status)) {
+      assertNotEquals("dp image status is incorrect", dpDetailsResponse.getDpPhotoFile(), null);
+    }else{
+      assertEquals("dp image status is incorrect", dpDetailsResponse.getDpPhoto(), null);
+    }
+
+  }
+
   @Then("Operator Check the Data from created DP is Right")
   public void checkCreatedDPData(Map<String, String> dataTableAsMap) {
     String condition = dataTableAsMap.get("condition");
@@ -1225,6 +1342,17 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         } else {
           LOGGER.info("DP Has No Alternate DP");
+        }
+      } else if (condition.equals(CHECK_DP_RESERVATION_DATA)) {
+        DpSetting dpSetting = get(KEY_DP_SETTINGS);
+        if (dpDetailsResponse != null && dpSetting != null) {
+          Assertions.assertThat(dpSetting.getCutOffTime())
+              .as(f("Dp Auto Reservation Cut-Off Time Is %s", dpSetting.getCutOffTime()))
+              .contains(dpDetailsResponse.getAutoReservationCutOffTime());
+
+          Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       }
     }

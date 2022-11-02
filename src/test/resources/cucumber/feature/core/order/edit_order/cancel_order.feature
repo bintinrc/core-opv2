@@ -54,6 +54,9 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
       | name | CANCEL |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                     |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Pending\nNew Order Status: Cancelled\n\nReason: CANCEL |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verify Delivery waypoint of the created order using data below:
@@ -95,6 +98,9 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
       | name | CANCEL |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                             |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Van en-route to pickup\nNew Granular Status: Cancelled\n\nOld Order Status: Transit\nNew Order Status: Cancelled\n\nReason: CANCEL |
     And Operator verify order event on Edit order page using data below:
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
@@ -148,6 +154,9 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
       | name | CANCEL |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                      |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pickup fail\nNew Granular Status: Cancelled\n\nOld Order Status: Pickup fail\nNew Order Status: Cancelled\n\nReason: CANCEL |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And Operator save the last DELIVERY transaction of the created order as "KEY_TRANSACTION_AFTER"
@@ -181,6 +190,9 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
       | name | CANCEL |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Staging\nNew Granular Status: Cancelled\n\nOld Order Status: Staging\nNew Order Status: Cancelled\n\nReason: CANCEL |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
