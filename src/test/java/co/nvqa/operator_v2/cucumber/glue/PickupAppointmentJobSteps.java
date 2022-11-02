@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.PickupAppointmentJobPage;
 import io.cucumber.guice.ScenarioScoped;
-import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -132,21 +131,74 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
                 listOFPickupJobsBeforeEditNewJob.size());
     }
 
+    @And("^QA verify the new created Pickup Jobs is not shown in the Calendar")
+    public void verifyTheNewCreatedPickupJobsIsNotShownInTheCalendar() {
+        assertEquals("The new created Pickup Jobs is shown in the Calendar",
+                pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
+                listOFPickupJobsBeforeEditNewJob.size());
+    }
+
     @And("^Complete Pickup Job With Route Id")
-    public void completePickupJobWithRouteId(Map<String, String> dataTable) {
+    public void completePickupJobWithRouteId() {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        operatorLoadsShipperAddressConfigurationPage();
+        pickupAppointmentJobPage
+                .clickEditButton()
+                .setRouteId(String.valueOf(routeId))
+                .clickUpdateRouteButton()
+                .clickSuccessJobButton();
+    }
+
+    @And("^Operator load selection job by date range and shipper")
+    public void loadSelectionJobByDateRangeAndShipper(Map<String, String> dataTable) {
         final String startDay = dataTable.get("startDay");
         final String endDay = dataTable.get("endDay");
-        Long routeId = get(KEY_CREATED_ROUTE_ID);
         String shipperId = get(KEY_LEGACY_SHIPPER_ID);
         operatorLoadsShipperAddressConfigurationPage();
-        pickupAppointmentJobPage.selectDataRangeByTitle(startDay,endDay);
-        pickupAppointmentJobPage.setShipperIDInField(shipperId);
-        pickupAppointmentJobPage.clickLoadSelectionButton();
-        pickupAppointmentJobPage.clickEditButton();
-        pickupAppointmentJobPage.setRouteId(String.valueOf(routeId));
-        pickupAppointmentJobPage.clickUpdateRouteButton();
-        pickupAppointmentJobPage.clickSuccessJobButton();
+        pickupAppointmentJobPage
+                .selectDataRangeByTitle(startDay,endDay)
+                .setShipperIDInField(shipperId)
+                .clickLoadSelectionButton();
+    }
 
+    /*The method of choosing custom time according to the criteria is the time on the startTime and endTime.
+    When the specified time is less than 10, it is necessary to write like in the example
+       Example:
+      | startTime | 9:00  |
+      | endTime   | 12:00 |
+      */
+    @And("^Operator select customised time range from Select time range")
+    public void  selectCustomisedTimeRange(Map<String, String> dataTable) {
+        final String readyBy = dataTable.get("readyBy");
+        final String latestBy = dataTable.get("latestBy");
+
+        int readyByNumber = Integer.parseInt(readyBy.substring(0, readyBy.indexOf(":")));
+        int differentBetweenLatestByAndReadyBy = Integer.parseInt(latestBy.substring(0, latestBy.indexOf(":"))) - readyByNumber;
+
+        pickupAppointmentJobPage.getCreateOrEditJobElement().selectCustomTimeAndElement(readyByNumber, pickupAppointmentJobPage.getCreateOrEditJobElement().readyByField);
+        pickupAppointmentJobPage.getCreateOrEditJobElement().selectCustomTimeAndElement(differentBetweenLatestByAndReadyBy, pickupAppointmentJobPage.getCreateOrEditJobElement().latestByField);
+
+    }
+
+    @Then("QA verify the {int} Job displayed on the Pickup Jobs page")
+    public void verifyTheNewJobCreatedOnThePickupJobsPage(Integer numberJobs) {
+        assertEquals("The new Job created on the Pickup Jobs page",
+                pickupAppointmentJobPage.getNumberOfJobs(),numberJobs);
+    }
+
+    @And("^Operator get Job Id from Pickup Jobs page")
+    public void operatorGetJobIdFromPickupJobsPage() {
+        List<String> jobId = pickupAppointmentJobPage.getJobIdsText();
+        putInList(KEY_LIST_OF_PICKUP_JOB_IDS, jobId);
+    }
+
+    @And("QA verify error message shown on the modal and close by message body {string}")
+    public void verifyErrorMessageShownOnTheModalAndClose(String messagesBody) {
+        pickupAppointmentJobPage.waitUntilInvisibilityOfToast("Network Request Error");
+        pickupAppointmentJobPage.getCreateOrEditJobElement().verifyMessageInToastModalIsDisplayed(messagesBody);
+        while (pickupAppointmentJobPage.isElementExistFast("//*[contains(@class,'toast-error')]")) {
+            pickupAppointmentJobPage.closeToast();
+        }
     }
 
     // This method can be removed once redirection to Shipper Address is added in operator V2 menu
