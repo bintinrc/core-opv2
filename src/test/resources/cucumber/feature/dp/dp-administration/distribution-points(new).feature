@@ -684,10 +684,6 @@ Feature: DP Administration - Distribution Point
       | condition | CHECK_ALTERNATE_DP_DATA          |
       | dpSetting | KEY_DP_SETTINGS                  |
 
-  <<<<<<< HEAD
-  =======
-
-  >>>>>>> master
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP with Auto-reservation Enabled and Cutoff Time (uid:23117956-184a-46c4-b657-fba62c5b2557)
     Given API Operator create new DP Management partner using data below:
@@ -733,10 +729,6 @@ Feature: DP Administration - Distribution Point
     And Operator waits for 5 seconds
     And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
 
-  <<<<<<< HEAD
-  =======
-
-  >>>>>>> master
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Auto Reservation Disabled (uid:72a1c15d-3253-4009-bd50-3a9875516380)
     Given API Operator create new DP Management partner using data below:
@@ -778,10 +770,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | shortName         | short_name TEST-DP                |
 
-  <<<<<<< HEAD
-  =======
-
-  >>>>>>> master
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - External Store ID is Duplicate - Return Error (uid:1c5bf620-8782-49cd-843d-4da1e50ab281)
     Given API Operator create new DP Management partner using data below:
@@ -801,10 +789,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | externalStoreId         | external_store_id TESTING-NewDP   |
 
-  <<<<<<< HEAD
-  =======
-
-  >>>>>>> master
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error (uid:5e810b71-6531-4be7-bcaa-4527ab217fcb)
     Given API Operator create new DP Management partner using data below:
@@ -825,10 +809,6 @@ Feature: DP Administration - Distribution Point
       | externalStoreId   | external_store_id TESTING-NewDP   |
       | shortName         | short_name TEST-DP                |
 
-  <<<<<<< HEAD
-  =======
-
-  >>>>>>> master
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Upload DP Photos - Right Dimensions (uid:832a25fb-e77d-47a0-8b44-03d0ac98f1e3)
     Given API Operator create new DP Management partner using data below:
