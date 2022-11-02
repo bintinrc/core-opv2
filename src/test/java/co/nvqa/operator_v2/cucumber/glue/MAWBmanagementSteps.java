@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,5 +166,50 @@ public class MAWBmanagementSteps extends AbstractSteps{
         mawbManagementgPage.mawbtable.manifestButton.click();
         mawbManagementgPage.manifestMAWB();
     }
+
+    @Then("Operator verifies error message {string} under {string} field on Record Offload Page")
+    public void operatorVerifiesErrorMessageOnOffloadPage(String message, String fieldName){
+        String fieldId = "";
+        switch (fieldName){
+            case "Total Offloaded pcs":
+                fieldId = mawbManagementgPage.recordOffload.offloadTotalId;
+                mawbManagementgPage.verifyExplainErrorMessage(message,fieldId);
+                break;
+            case "Total Offloaded Weight":
+                fieldId = mawbManagementgPage.recordOffload.offloadTotalWeightId;
+                mawbManagementgPage.verifyExplainErrorMessage(message,fieldId);
+                break;
+        }
+    }
+
+    @Given("Operator clears text in filed {string} on Record Offload Page")
+    public void operatorClearsTextinFiled(String fieldname){
+        switch (fieldname){
+            case "Total Offloaded pcs":
+                mawbManagementgPage.recordOffload.OffloadTotal.click();
+                mawbManagementgPage.recordOffload.OffloadTotal.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+                break;
+        }
+    }
+
+    @Given("Operator clicks close button on Record Offload Page")
+    public void operatorClicksCloseButtonOnRecordOffloadPage(){
+        mawbManagementgPage.recordOffload.close();
+    }
+
+    @Then("Operator verifies all fileds on Record Offload are empty")
+    public void operatorVerifiesAllFieldsAreEmpty(Map<String, String>data){
+        Map<String,String> resolvedData = resolveKeyValues(data);
+
+        mawbManagementgPage.filterMAWB(resolvedData.get("mawb"));
+        mawbManagementgPage.verifyAllRecordOffloadFieldsIsEmpty();
+    }
+
+    @Then("Operator verifies notification error message on MAWB Management Page")
+    public void operatorVerifiesNotificationErrorMessage(){
+        mawbManagementgPage.recordOffload.OffloadUpdateButton.click();
+        Assertions.assertThat(mawbManagementgPage.noticeErrorMessage.isDisplayed()).as("Error message is display").isTrue();
+    }
+
 
 }

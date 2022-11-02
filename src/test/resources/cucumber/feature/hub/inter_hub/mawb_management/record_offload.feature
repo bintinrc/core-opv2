@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @RecordOffload1 @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @RecordOffload1
 Feature: MAWB Management - Record Offload 1
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -33,7 +33,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload In-transit to Airport MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -92,7 +92,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload Handed Over to Airline MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -103,7 +103,6 @@ Feature: MAWB Management - Record Offload 1
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator create 1 new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM              |
       | destinationAirportId | {airport-id-2} |
@@ -191,7 +190,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload Departed MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -261,7 +260,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload Arrived MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -332,7 +331,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Shipper create V4 order using data below:
@@ -403,7 +402,7 @@ Feature: MAWB Management - Record Offload 1
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @RT
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteDriver @ForceSuccessOrder
   Scenario: Record Offload Partially Delivered MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -474,6 +473,123 @@ Feature: MAWB Management - Record Offload 1
       | comments             | Automation update                   |
     And Operator clicks offload update button on Record Offload MAWB Page
     Then Operator verifies record offload successful message
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Record Offload with Total Offloaded pcs <= 0
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | -1                                  |
+    Then Operator verifies error message "Must be greater than 0" under "Total Offloaded pcs" field on Record Offload Page
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Record Offload with Total Offloaded pcs is Empty
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 2                                  |
+    And Operator clears text in filed "Total Offloaded pcs" on Record Offload Page
+    Then Operator verifies error message "Please enter Total Offloaded pcs" under "Total Offloaded pcs" field on Record Offload Page
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Record Offload with Total Offloaded Weight <= 0
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | -1                                  |
+    Then Operator verifies error message "Must be greater than 0" under "Total Offloaded Weight" field on Record Offload Page
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Close Record Offload with all field already filled
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | totalOffloadedWeight | 1                                   |
+      | nextFlight           | 12345                               |
+      | departerTime         | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+      | offload_reason       | RANDOM                              |
+      | comments             | Automation update                   |
+    And Operator clicks close button on Record Offload Page
+    Then Operator verifies all fileds on Record Offload are empty
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Close Record Offload with all field already filled
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | RANDOM         |
+      | destinationAirportId | {airport-id-1} |
+      | originAirportId      | {airport-id-2} |
+      | vendorId             | {vendor-id}    |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> MAWB Management
+    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
+    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
+      | {KEY_LIST_OF_CREATED_MAWB} |
+    And Operator clicks on "Search MAWB" button on MAWB Management Page
+    Then Operator verifies Search MAWB Management Page
+    When Operator performs record offload MAWB following data below:
+      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+      | totalOffloadedPcs    | 1                                   |
+      | departerTime         | {gradle-next-2-day-yyyy-MM-dd-HH-mm}|
+      | arrivalTime          | {gradle-next-1-day-yyyy-MM-dd-HH-mm}|
+    Then Operator verifies notification error message on MAWB Management Page
 
   @KillBrowser
   Scenario: Kill Browser

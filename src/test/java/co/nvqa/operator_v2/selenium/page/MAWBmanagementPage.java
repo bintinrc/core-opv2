@@ -88,6 +88,9 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     @FindBy(css ="[data-testid = 'submit-manifest-button']")
     public Button submitManifest;
 
+    @FindBy(xpath ="//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]")
+    public PageElement noticeErrorMessage;
+
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
         Assertions.assertThat(findElementByXpath(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number")).isDisplayed())
@@ -401,6 +404,20 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
             String actMessage = getAntTopText();
             Assertions.assertThat(actMessage).as("Success message is same").contains(expectedMessage);
         },"Verify MAWB Offload message", 500, 3);
+    }
+
+    public void verifyExplainErrorMessage(String expectedMessage, String fieldId){
+        String actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,fieldId)).getText();
+        Assertions.assertThat(actualMessage.equalsIgnoreCase(expectedMessage)).as("Error message is the same!").isTrue();
+    }
+
+    public void verifyAllRecordOffloadFieldsIsEmpty(){
+        Assertions.assertThat(recordOffload.OffloadTotal.getAttribute("value")).as("Total Offloaded pcs is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadTotalWeight.getAttribute("value")).as("Total Offloaded Weight is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadNextFlightNo.getAttribute("value")).as("Next Flight Number is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadDepartureTime.getAttribute("value")).as("Estimated Flight Departure Date & Time is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadArrivalTime.getAttribute("value")).as("Estimated Flight Arrival Date & Time is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadComments.getText()).as("Comments is empty").isEqualTo("");
     }
 
 
