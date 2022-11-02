@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -2172,11 +2172,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void createTicket(RecoveryTicket recoveryTicket) {
-    waitUntilPageLoaded();
     String trackingId = recoveryTicket.getTrackingId();
     String ticketType = recoveryTicket.getTicketType();
 
     createTicketDialog.waitUntilVisible();
+    waitWhilePageIsLoading(120);
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());

@@ -534,7 +534,7 @@ Feature: Recovery & Ticketing
       | TICKET RESOLVED  |
 
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RESUME DELIVERY
-    Given API Shipper create V4 order using data below:
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator cancel created order
@@ -557,27 +557,24 @@ Feature: Recovery & Ticketing
       | top | ^Ticket ID : .* updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order page
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify transaction on Edit order page using data below:
-      | type   | PICKUP    |
-      | status | CANCELLED |
+      | type   | PICKUP  |
+      | status | SUCCESS |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY  |
-      | status | CANCELLED |
-    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
-    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
+      | type   | DELIVERY |
+      | status | FAIL     |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
     And Operator verify order events on Edit order page using data below:
-      | name            |
-      | UPDATE STATUS   |
-      | TICKET UPDATED  |
-      | TICKET RESOLVED |
+      | name             |
+      | UPDATE STATUS    |
+      | RESCHEDULE       |
+      | REVERT COMPLETED |
+      | TICKET UPDATED   |
+      | TICKET RESOLVED  |
 
   Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = RTS
     Given API Shipper create V4 order using data below:
@@ -604,27 +601,28 @@ Feature: Recovery & Ticketing
       | top | ^Ticket ID : .* updated |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order page
-    Then Operator verify order status is "Cancelled" on Edit Order page
-    And Operator verify order granular status is "Cancelled" on Edit Order page
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
     And Operator verify transaction on Edit order page using data below:
-      | type   | PICKUP    |
-      | status | CANCELLED |
+      | type   | PICKUP  |
+      | status | SUCCESS |
     And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY  |
-      | status | CANCELLED |
-    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
-    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
-    And DB Operator verifies waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
+      | type   | DELIVERY |
+      | status | FAIL     |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | PENDING  |
     And Operator verify order events on Edit order page using data below:
-      | name            |
-      | UPDATE STATUS   |
-      | TICKET UPDATED  |
-      | TICKET RESOLVED |
+      | name             |
+      | UPDATE STATUS    |
+      | REVERT COMPLETED |
+      | RESCHEDULE       |
+      | RTS              |
+      | TICKET UPDATED   |
+      | TICKET RESOLVED  |
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = RTS
     Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
@@ -754,6 +752,114 @@ Feature: Recovery & Ticketing
     Then Operator verifies ticket status is "RESOLVED" on Edit Order page
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = RELABELLED TO SEND
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator force succeed created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | PARCEL EXCEPTION   |
+      | ticketSubType           | COMPLETED ORDER    |
+      | liability               | Shipper            |
+      | orderOutcome            | RELABELLED TO SEND |
+    When Operator refresh page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED           |
+      | outcome | RELABELLED TO SEND |
+    Then Operator verifies that success toast displayed:
+      | top | ^Ticket ID : .* updated |
+    When Operator refresh page
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order page
+    And Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | SUCCESS  |
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+
+  Scenario: Operator Resolve Recovery Ticket with Completed Order & Outcome = XMAS CAGE
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator force succeed created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | PARCEL EXCEPTION   |
+      | ticketSubType           | COMPLETED ORDER    |
+      | liability               | Shipper            |
+      | orderOutcome            | XMAS CAGE          |
+    When Operator refresh page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED  |
+      | outcome | XMAS CAGE |
+    Then Operator verifies that success toast displayed:
+      | top | ^Ticket ID : .* updated |
+    When Operator refresh page
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order page
+    And Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY |
+      | status | SUCCESS  |
+    And Operator verify order events on Edit order page using data below:
+      | name            |
+      | UPDATE STATUS   |
+      | TICKET UPDATED  |
+      | TICKET RESOLVED |
+
+  Scenario: Operator Resolve Recovery Ticket with Cancelled Order & Outcome = XMAS CAGE
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator cancel created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | PARCEL EXCEPTION   |
+      | ticketSubType           | CANCELLED ORDER    |
+      | liability               | Shipper            |
+      | orderOutcome            | XMAS CAGE          |
+    When Operator refresh page
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status  | RESOLVED  |
+      | outcome | XMAS CAGE |
+    Then Operator verifies that success toast displayed:
+      | top | ^Ticket ID : .* updated |
+    When Operator refresh page
+    Then Operator verifies ticket status is "RESOLVED" on Edit Order page
+    And Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY  |
+      | status | CANCELLED |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | PICKUP    |
+      | status | CANCELLED |
     And Operator verify order events on Edit order page using data below:
       | name            |
       | UPDATE STATUS   |
