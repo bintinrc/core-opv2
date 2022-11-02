@@ -71,43 +71,15 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String AIRPORT_TRIP_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
     private static final String AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id='assignDriversForm_driverNames_%d']";
     private static final String AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH = "//h4[@class='ant-typography' and normalize-space()]";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH = "//div[text()='%s' and @role='tab']";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH = "//div[contains(@id,'%s')]//div[contains(@class,'ant-table-body')]";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-%s']";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH = "//span[text()='%s']/ancestor::div[@class='ant-col']";
 
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_STATUS_XPATH = "//span[text()='Status']/ancestor::div[@class='ant-col']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_ORIGIN_FACILITY_XPATH = "//div[@class='ant-card-body']//span[text()='Origin Facility']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_DESTINATION_FACILITY_XPATH = "//div[@class='ant-card-body']//span[text()='Destination Facility']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_EXPECTED_DEPARTURE_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Departure Date Time']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_EXPECTED_DURATION_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Duration Time']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_ACTUAL_DEPARTURE_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Departure Time']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_ACTUAL_ARRIVAL_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Arrival Time']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_SHIPMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Shipments']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_PARCELS_XPATH = "//div[@class='ant-card-body']//span[text()='Parcels']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_TRIP_PASSWORD_XPATH = "//div[@class='ant-card-body']//span[text()='Trip Password']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_COMMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Comments']//ancestor::div[@class='ant-space-item']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_DRIVER_XPATH = "//div[@class='ant-card-body']//div[text()='Driver']//ancestor::div[@class='ant-spin-container']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
-    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_SHIPMENTS_TAB_XPATH = "//div[text()='Shipments' and @role='tab']";
-
+    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH = "//div[@class='ant-card-body']//div[text()='Driver']//ancestor::div[@class='ant-spin-container']";
+    private static final String TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_COMMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Comments']//ancestor::div[@class='ant-space-item']";
     private static final String TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_PAGE_MESSAGE_XPATH = "//div[@class='ant-space-item']//div[@class='ant-row']//div[contains(text(),'Assign')]";
-    private static final String TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_ORIGIN_FACILITY_XPATH = "//div[@class='ant-modal-content']//span[text()='Origin Facility']/ancestor::div[contains(@class,'ant-col')]";
-    private static final String TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_DESTINATION_FACILITY_XPATH = "//div[@class='ant-modal-content']//span[text()='Destination Facility']/ancestor::div[contains(@class,'ant-col')]";
-    private static final String TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_EXPECTED_DEPARTURE_TIME_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Departure Time']/ancestor::div[contains(@class,'ant-col')]";
-    private static final String TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_EXPECTED_DURATION_XPATH = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]";
-
-    private static final String FLIGHT_TRIP_DETAIL_STATUS_XPATH = "//span[text()='Status']/ancestor::div[@class='ant-col']";
-    private static final String FLIGHT_TRIP_DETAIL_ORIGIN_FACILITY_XPATH = "//div[@class='ant-card-body']//span[text()='Origin Facility']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_DESTINATION_FACILITY_XPATH = "//div[@class='ant-card-body']//span[text()='Destination Facility']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_EXPECTED_FLIGHT_DEPARTURE_DATE_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Flight Departure Date Time']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_EXPECTED_DURATION_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Expected Duration Time']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_PROCESSING_TIME_AT_ORIGIN_AIRPORT_XPATH = "//div[@class='ant-card-body']//span[text()='Processing Time at Origin Airport']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_PROCESSING_TIME_AT_DESTINATION_AIRPORT_XPATH = "//div[@class='ant-card-body']//span[text()='Processing Time at Destination Airport']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_ACTUAL_DEPARTURE_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Departure Time']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_ACTUAL_ARRIVAL_TIME_XPATH = "//div[@class='ant-card-body']//span[text()='Actual Arrival Time']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_PARCELS_XPATH = "//div[@class='ant-card-body']//span[text()='Parcels']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_TRIP_PASSWORD_XPATH = "//div[@class='ant-card-body']//span[text()='Trip Password']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_FLIGHT_NUMBER_XPATH = "//div[@class='ant-card-body']//span[text()='Flight Number']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_COMMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Comments']//ancestor::div[@class='ant-space-item']";
-    private static final String FLIGHT_TRIP_DETAIL_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
-//    private static final String FLIGHT_TRIP_VIEW_DETAILS_XPATH = "//a[@class='ant-typography']";
+    private static final String TO_FROM_AIRPORT_TRIP_ON_ASSIGN_DRIVER_POPUP_XPATH = "//div[@class='ant-modal-content']//span[text()='%s']/ancestor::div[contains(@class,'ant-col')]";
 
     private static final String CREATE_FLIGHT_TRIP_SELECTED_TEXT_XPATH = "//input[@id='%s']/parent::span/following-sibling::span[@class='ant-select-selection-item']";
     private static final String createFlightTrip_originAirportId = "editForm_originAirport";
@@ -368,7 +340,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public Button assignDriverOnAirportTripDetails;
 
     @FindBy(xpath = "//a[@class='ant-typography']")
-    public static Button viewDetailsOnFlightTrip;
+    public static Button viewDetailsActionLink;
 
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
@@ -1709,39 +1681,39 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 waitUntilVisibilityOfElementLocated(AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH);
                 String actualToFromTripId = getText(AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH);
                 Assertions.assertThat(actualToFromTripId).as("Trip ID is correct").contains(tripId);
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_STATUS_XPATH, 5)).as("Trip Status appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_ORIGIN_FACILITY_XPATH, 5)).as("Origin Facility appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_DESTINATION_FACILITY_XPATH, 5)).as("Destination Facility appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_EXPECTED_DEPARTURE_TIME_XPATH, 5)).as("Expected Departure Date Time appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_EXPECTED_DURATION_TIME_XPATH, 5)).as("Expected Duration Time appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_ACTUAL_DEPARTURE_TIME_XPATH, 5)).as("Actual Departure Time appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_ACTUAL_ARRIVAL_TIME_XPATH, 5)).as("Actual Arrival Time appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_SHIPMENTS_XPATH, 5)).as("Shipments appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PARCELS_XPATH, 5)).as("Parcels appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_TRIP_PASSWORD_XPATH, 5)).as("Trip Password appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_DRIVER_XPATH, 5)).as("Driver appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_COMMENTS_XPATH, 5)).as("Comments appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_TRIP_EVENTS_TAB_XPATH, 5)).as("Trip Events tab appear in To From Airport Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_SHIPMENTS_TAB_XPATH, 5)).as("Shipment tab appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Status"), 5)).as("Trip Status appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Origin Facility"), 5)).as("Origin Facility appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Destination Facility"), 5)).as("Destination Facility appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Expected Departure Date Time"), 5)).as("Expected Departure Date Time appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Expected Duration Time"), 5)).as("Expected Duration Time appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Actual Departure Time"), 5)).as("Actual Departure Time appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Actual Arrival Time"), 5)).as("Actual Arrival Time appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Shipments"), 5)).as("Shipments appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Parcels"), 5)).as("Parcels appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Trip Password"), 5)).as("Trip Password appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH, 5)).as("Driver appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_COMMENTS_XPATH, 5)).as("Comments appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isClickable(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events"), 5)).as("Trip Events tab appear in To From Airport Trip details page").isTrue();
+                Assertions.assertThat(isClickable(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Shipments"), 5)).as("Shipments tab appear in To From Airport Trip details page").isTrue();
                 break;
             case "Flight Trip":
                 waitUntilVisibilityOfElementLocated(AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH);
                 String actualFlightTripId = getText(AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH);
                 Assertions.assertThat(actualFlightTripId).as("Trip ID is correct").contains(tripId);
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_STATUS_XPATH, 5)).as("Trip Status appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_ORIGIN_FACILITY_XPATH, 5)).as("Origin Facility appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_DESTINATION_FACILITY_XPATH, 5)).as("Destination Facility appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_EXPECTED_FLIGHT_DEPARTURE_DATE_TIME_XPATH, 5)).as("Expected Flight Departure Date Time appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_EXPECTED_DURATION_TIME_XPATH, 5)).as("Expected Duration Time appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_PROCESSING_TIME_AT_ORIGIN_AIRPORT_XPATH, 5)).as("Processing Time At Origin Airport appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_PROCESSING_TIME_AT_DESTINATION_AIRPORT_XPATH, 5)).as("Processing Time At Destination Airport appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_ACTUAL_DEPARTURE_TIME_XPATH, 5)).as("Actual Departure Time appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_ACTUAL_ARRIVAL_TIME_XPATH, 5)).as("Actual Arrival Time appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_PARCELS_XPATH, 5)).as("Parcels appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_TRIP_PASSWORD_XPATH, 5)).as("Trip Password appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_FLIGHT_NUMBER_XPATH, 5)).as("Flight Number appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isElementVisible(FLIGHT_TRIP_DETAIL_COMMENTS_XPATH, 5)).as("Comments appear in Airport Flight Trip details page").isTrue();
-                Assertions.assertThat(isClickable(FLIGHT_TRIP_DETAIL_TRIP_EVENTS_TAB_XPATH, 5)).as("Trip Events tab appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Status"), 5)).as("Trip Status appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Origin Facility"), 5)).as("Origin Facility appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Destination Facility"), 5)).as("Destination Facility appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Expected Flight Departure Date Time"), 5)).as("Expected Flight Departure Date Time appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Expected Duration Time"), 5)).as("Expected Duration Time appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Processing Time at Origin Airport"), 5)).as("Processing Time At Origin Airport appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Processing Time at Destination Airport"), 5)).as("Processing Time At Destination Airport appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Actual Departure Time"), 5)).as("Actual Departure Time appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Actual Arrival Time"), 5)).as("Actual Arrival Time appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Parcels"), 5)).as("Parcels appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Trip Password"), 5)).as("Trip Password appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH, "Flight Number"), 5)).as("Flight Number appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_COMMENTS_XPATH, 5)).as("Comments appear in Airport Flight Trip details page").isTrue();
+                Assertions.assertThat(isClickable(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events"), 5)).as("Trip Events tab appear in Airport Flight Trip details page").isTrue();
                 break;
         }
     }
@@ -1749,13 +1721,45 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyAssignDriverItemsOnTripDetail() {
         assignDriversToTripModal.waitUntilVisible();
         Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_PAGE_MESSAGE_XPATH, 5)).as("Assign Driver message appear in Assign Driver popup To From Airport Trip Details page").isTrue();
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_ORIGIN_FACILITY_XPATH, 5)).as("Origin Facility appear in Assign Driver popup To From Airport Trip Details page").isTrue();
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_DESTINATION_FACILITY_XPATH, 5)).as("Destination Facility appear in Assign Driver popup To From Airport Trip Details page").isTrue();
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_EXPECTED_DEPARTURE_TIME_XPATH, 5)).as("Expected Departure Time appear in Assign Driver popup To From Airport Trip Details page").isTrue();
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_ASSIGN_DRIVER_EXPECTED_DURATION_XPATH, 5)).as("Expected Duration appear in Assign Driver popup To From Airport Trip Details page").isTrue();
+        Assertions.assertThat(isElementVisible(f(TO_FROM_AIRPORT_TRIP_ON_ASSIGN_DRIVER_POPUP_XPATH, "Origin Facility"), 5)).as("Origin Facility appear in Assign Driver popup To From Airport Trip Details page").isTrue();
+        Assertions.assertThat(isElementVisible(f(TO_FROM_AIRPORT_TRIP_ON_ASSIGN_DRIVER_POPUP_XPATH, "Destination Facility"), 5)).as("Destination Facility appear in Assign Driver popup To From Airport Trip Details page").isTrue();
+        Assertions.assertThat(isElementVisible(f(TO_FROM_AIRPORT_TRIP_ON_ASSIGN_DRIVER_POPUP_XPATH, "Expected Departure Time"), 5)).as("Expected Departure Time appear in Assign Driver popup To From Airport Trip Details page").isTrue();
+        Assertions.assertThat(isElementVisible(f(TO_FROM_AIRPORT_TRIP_ON_ASSIGN_DRIVER_POPUP_XPATH, "Expected Duration"), 5)).as("Expected Duration appear in Assign Driver popup To From Airport Trip Details page").isTrue();
     }
 
     public void verifyAssignDriverFieldNotAppearInAirportFlightTripDetail() {
-        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_DRIVER_XPATH, 5)).as("Driver field doesn't appear in Airport Flight Trip details page").isFalse();
+        Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH, 5)).as("Driver field doesn't appear in Airport Flight Trip details page").isFalse();
+    }
+
+    public void verifyTabElementOnAirportTripDetailsPage(String tabName) {
+        switch (tabName) {
+            case "Trip Events":
+                waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events"));
+                findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events")).click();
+                WebElement tripEventsTableBody = findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH, "events"));
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "created-at"), 5)).as("Time appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "event"), 5)).as("Event appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "status"), 5)).as("Status appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "hub-name"), 5)).as("Inbound Hub appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "user-id"), 5)).as("User ID appear in Trip Events tab table").isTrue();
+                executeScript("arguments[0].scrollLeft = arguments[0].offsetWidth;", tripEventsTableBody);
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "distance"), 5)).as("Distance appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "approver"), 5)).as("Approver appear in Trip Events tab table").isTrue();
+                break;
+            case "Shipments":
+                waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Shipments"));
+                findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Shipments")).click();
+                WebElement shipmentsTableBody = findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH, "shipments"));
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-id"), 5)).as("Shipment ID appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "origin-hub-name"), 5)).as("Origin Hub appear in Shipments table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "last-inbound-hub-name"), 5)).as("Last Inbound Hub appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "destination-hub-name"), 5)).as("Destination Hub appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-type"), 5)).as("Shipment Type appear in Shipments tab table").isTrue();
+                executeScript("arguments[0].scrollLeft = arguments[0].offsetWidth;", shipmentsTableBody);
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-status"), 5)).as("Status appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "sla"), 5)).as("SLA appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "orders-count"), 5)).as("Parcels appear in Shipments tab table").isTrue();
+                break;
+        }
     }
 }

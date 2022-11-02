@@ -499,4 +499,25 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifyAssignDriverFieldNotAppearInAirportFlightTripDetailsPage() {
         airportTripManagementPage.verifyAssignDriverFieldNotAppearInAirportFlightTripDetail();
     }
+
+    @When("Operator clicks View Details action link on successful toast created to from airport trip")
+    public void operatorClicksViewDetailsActionLinkOnSuccessfulToastCreatedToFromAirportTrip() {
+        airportTripManagementPage.viewDetailsActionLink.click();
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+    }
+
+    @Then("Operator verifies it direct to trip details page with data below:")
+    public void operatorVerifyItDirectToTripDetailsPageWithDataBelow(Map<String,String> data) {
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        String tripType = resolvedData.get("tripType");
+        airportTripManagementPage.verifyAirportTripDetailPageItem(tripType, tripID);
+    }
+
+    @And("Operator verifies the element of {string} tab on Airport Trip details page are correct")
+    public void operatorVerifiesTheElementOfTabOnAirportTripDetailsPageAreCorrect(String tabName) {
+        airportTripManagementPage.verifyTabElementOnAirportTripDetailsPage(tabName);
+    }
 }
