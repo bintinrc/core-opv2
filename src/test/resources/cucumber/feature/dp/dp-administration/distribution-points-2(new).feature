@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
+@OperatorV2 @DistributionPoints2ReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
