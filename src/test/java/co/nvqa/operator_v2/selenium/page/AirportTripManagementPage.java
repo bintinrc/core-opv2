@@ -71,6 +71,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String AIRPORT_TRIP_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
     private static final String AIRPORT_TRIP_PAGE_ASSIGN_DRIVER_XPATH = "//input[@id='assignDriversForm_driverNames_%d']";
     private static final String AIRPORT_TRIP_DETAIL_PAGE_TRIP_ID_XPATH = "//h4[@class='ant-typography' and normalize-space()]";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH = "//div[text()='%s' and @role='tab']";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH = "//div[contains(@id,'%s')]//div[contains(@class,'ant-table-body')]";
+    private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-%s']";
 
     private static final String TO_FROM_AIRPORT_TRIP_DETAIL_STATUS_XPATH = "//span[text()='Status']/ancestor::div[@class='ant-col']";
     private static final String TO_FROM_AIRPORT_TRIP_DETAIL_ORIGIN_FACILITY_XPATH = "//div[@class='ant-card-body']//span[text()='Origin Facility']//ancestor::div[@class='ant-space-item']";
@@ -107,7 +110,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String FLIGHT_TRIP_DETAIL_FLIGHT_NUMBER_XPATH = "//div[@class='ant-card-body']//span[text()='Flight Number']//ancestor::div[@class='ant-space-item']";
     private static final String FLIGHT_TRIP_DETAIL_COMMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Comments']//ancestor::div[@class='ant-space-item']";
     private static final String FLIGHT_TRIP_DETAIL_TRIP_EVENTS_TAB_XPATH = "//div[text()='Trip Events' and @role='tab']";
-//    private static final String FLIGHT_TRIP_VIEW_DETAILS_XPATH = "//a[@class='ant-typography']";
 
     private static final String CREATE_FLIGHT_TRIP_SELECTED_TEXT_XPATH = "//input[@id='%s']/parent::span/following-sibling::span[@class='ant-select-selection-item']";
     private static final String createFlightTrip_originAirportId = "editForm_originAirport";
@@ -368,7 +370,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public Button assignDriverOnAirportTripDetails;
 
     @FindBy(xpath = "//a[@class='ant-typography']")
-    public static Button viewDetailsOnFlightTrip;
+    public static Button viewDetailsActionLink;
 
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
@@ -1757,5 +1759,37 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     public void verifyAssignDriverFieldNotAppearInAirportFlightTripDetail() {
         Assertions.assertThat(isElementVisible(TO_FROM_AIRPORT_TRIP_DETAIL_DRIVER_XPATH, 5)).as("Driver field doesn't appear in Airport Flight Trip details page").isFalse();
+    }
+
+    public void verifyTabElementOnAirportTripDetailsPage(String tabName) {
+        switch (tabName) {
+            case "Trip Events":
+                waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events"));
+                findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Trip Events")).click();
+                WebElement tripEventsTableBody = findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH, "events"));
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "created-at"), 5)).as("Time appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "event"), 5)).as("Event appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "status"), 5)).as("Status appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "hub-name"), 5)).as("Inbound Hub appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "user-id"), 5)).as("User ID appear in Trip Events tab table").isTrue();
+                executeScript("arguments[0].scrollLeft = arguments[0].offsetWidth;", tripEventsTableBody);
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "distance"), 5)).as("Distance appear in Trip Events tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "approver"), 5)).as("Approver appear in Trip Events tab table").isTrue();
+                break;
+            case "Shipments":
+                waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Shipments"));
+                findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_XPATH, "Shipments")).click();
+                WebElement shipmentsTableBody = findElementByXpath(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH, "shipments"));
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-id"), 5)).as("Shipment ID appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "origin-hub-name"), 5)).as("Origin Hub appear in Shipments table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "last-inbound-hub-name"), 5)).as("Last Inbound Hub appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "destination-hub-name"), 5)).as("Destination Hub appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-type"), 5)).as("Shipment Type appear in Shipments tab table").isTrue();
+                executeScript("arguments[0].scrollLeft = arguments[0].offsetWidth;", shipmentsTableBody);
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "shipment-status"), 5)).as("Status appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "sla"), 5)).as("SLA appear in Shipments tab table").isTrue();
+                Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "orders-count"), 5)).as("Parcels appear in Shipments tab table").isTrue();
+                break;
+        }
     }
 }

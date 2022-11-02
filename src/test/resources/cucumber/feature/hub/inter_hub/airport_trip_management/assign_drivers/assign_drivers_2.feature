@@ -276,7 +276,7 @@ Feature: Airport Trip Management - Assign Drivers 2
     And Operator clicks Assign Driver button on Airport Trip details page
     Then Operator verifies driver with value "{inactive-driver-username}" is not shown on Airport Trip Management page
 
-  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI
+  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteDriver
   Scenario: Unassign All Drivers To/from Airport Trip - Trip Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
