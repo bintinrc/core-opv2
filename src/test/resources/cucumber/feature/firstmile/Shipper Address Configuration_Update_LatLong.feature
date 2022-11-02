@@ -1,11 +1,11 @@
-@FirstMile @ShipperAddressConfiguration
+@FirstMile @ShipperAddressConfiguration @UpdateLatLong
 Feature: Shipper Address Configuration
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-@Debug
+
   Scenario: Filter Unverified Shipper Address
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
