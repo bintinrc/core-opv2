@@ -684,8 +684,6 @@ Feature: DP Administration - Distribution Point
       | condition | CHECK_ALTERNATE_DP_DATA          |
       | dpSetting | KEY_DP_SETTINGS                  |
 
-
-
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP with Auto-reservation Enabled and Cutoff Time (uid:23117956-184a-46c4-b657-fba62c5b2557)
     Given API Operator create new DP Management partner using data below:
@@ -731,7 +729,6 @@ Feature: DP Administration - Distribution Point
     And Operator waits for 5 seconds
     And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
 
-
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Auto Reservation Disabled (uid:72a1c15d-3253-4009-bd50-3a9875516380)
     Given API Operator create new DP Management partner using data below:
@@ -773,7 +770,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | shortName         | short_name TEST-DP                |
 
-
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - External Store ID is Duplicate - Return Error (uid:1c5bf620-8782-49cd-843d-4da1e50ab281)
     Given API Operator create new DP Management partner using data below:
@@ -792,7 +788,6 @@ Feature: DP Administration - Distribution Point
     And Operator will get the error from some field
       | distributionPoint       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | externalStoreId         | external_store_id TESTING-NewDP   |
-
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error (uid:5e810b71-6531-4be7-bcaa-4527ab217fcb)
@@ -813,7 +808,6 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | externalStoreId   | external_store_id TESTING-NewDP   |
       | shortName         | short_name TEST-DP                |
-
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Upload DP Photos - Right Dimensions (uid:832a25fb-e77d-47a0-8b44-03d0ac98f1e3)
@@ -939,7 +933,6 @@ Feature: DP Administration - Distribution Point
       | dpDetails | KEY_CREATE_DP_MANAGEMENT_REQUEST |
       | condition | CHECK_DP_SEARCH_LAT_LONG         |
 
-
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update Distribution Point - Ninja Point
     Given API Operator create new DP Management partner using data below:
@@ -1062,7 +1055,6 @@ Feature: DP Administration - Distribution Point
     Then Operator will get the error from some field
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
       | externalStoreId   | external_store_id TESTING-NewDP   |
-
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Update Existing DP - External Store ID is NULL - Success Update (uid:8067639b-8ceb-4b72-94ec-831afb3a1938)
@@ -1228,4 +1220,3 @@ Feature: DP Administration - Distribution Point
       | {dp-contact}  |  clear       |
     When Operator press return to list button
     Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
-
