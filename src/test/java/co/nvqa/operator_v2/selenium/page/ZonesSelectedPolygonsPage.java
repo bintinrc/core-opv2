@@ -67,6 +67,9 @@ public class ZonesSelectedPolygonsPage extends SimpleReactPage {
   @FindBy(xpath = ".//button[.//*[@data-icon='plus']]")
   public Button createZonePolygon;
 
+  @FindBy(xpath = "//span[@class='vertex-count']")
+  public PageElement vertexcount;
+
   public ZonesSelectedPolygonsPage(WebDriver webDriver) {
     super(webDriver);
   }

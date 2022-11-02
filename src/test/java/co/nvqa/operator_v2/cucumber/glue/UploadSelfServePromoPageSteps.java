@@ -132,12 +132,12 @@ public class UploadSelfServePromoPageSteps extends AbstractSteps {
     uploadSelfServePromoPage.verifyCsvFileDownloadedSuccessfully(expectedString);
   }
 
-  @Then("Operator verifies error message {string} in Upload Self Serve Promo Page")
-  public void operatorVerifiesErrorMessageInUploadSelfServePromoPage(String expectedErrorMsg) {
+  @Then("Operator verifies toast message {string} in Upload Self Serve Promo Page")
+  public void operatorVerifiesToastMessageInUploadSelfServePromoPage(String expectedToastMsg) {
     uploadSelfServePromoPage.inFrame(() -> {
       String validateNotificationText = uploadSelfServePromoPage.getNotificationMessageText();
-      Assertions.assertThat(validateNotificationText).as("Expected Error Msg is visible")
-          .isEqualTo(expectedErrorMsg);
+      Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
+          .isEqualTo(expectedToastMsg);
     });
   }
 

@@ -169,7 +169,7 @@ Feature: Update MAWB 5 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | 1234567890          |
+      | mawb        | 1231237890          |
       | vendor      | {vendor-name-id-2}    |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |

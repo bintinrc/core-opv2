@@ -47,6 +47,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String DP_LABEL = "label_distribution_points";
   private static final String DP_USER_LIST = "DP_USER_LIST";
   private static final String CHECK_DP_SEARCH_LAT_LONG = "CHECK_DP_SEARCH_LAT_LONG";
+  private static final String CHECK_DP_RESERVATION_DATA = "CHECK_DP_RESERVATION_DATA";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
@@ -511,7 +512,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void duplicateDpError(String popUpMsg) {
     dpAdminReactPage.inFrame(() -> {
       Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
-          .as(f("Distribution point is Error because of %s",popUpMsg)).containsIgnoringCase(popUpMsg);
+          .as(f("Distribution point is Error because of %s", popUpMsg))
+          .containsIgnoringCase(popUpMsg);
     });
   }
 
@@ -811,6 +813,17 @@ public class DpAdministrationSteps extends AbstractSteps {
     return dpIdValue;
   }
 
+  @When("Operator delete the opening and operating hours {string}")
+  public void operatorDeleteTheOpeningAndOperatingHours(String hourKey) {
+    dpAdminReactPage.inFrame(() -> {
+      if ("opening_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOpeningHoursDay();
+      } else if ("operating_hours".equalsIgnoreCase(hourKey)){
+        dpAdminReactPage.removeOperatingHoursDay();
+      }
+    });
+  }
+
   @When("Operator fill the DP details")
   public void operatorFillDpDetails(Map<String, String> dataTableAsMap) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dataTableAsMap.get("distributionPoint"));
@@ -911,6 +924,10 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
             dpDetailsResponse.getMaxParcelStayDuration());
       }
+      if (dpDetailsResponse.getDpPhoto() != null) {
+        dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
+                dpDetailsResponse.getDpPhotoFile());
+      }
       if (dpDetailsResponse.getIsActive() != null && dpDetailsResponse.getIsActive()) {
         dpAdminReactPage.checkBoxActivePoint.click();
       }
@@ -923,6 +940,10 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getAutoReservationEnabled() != null
           && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
+      }
+      if (dpDetailsResponse.getAutoReservationCutOffTime() != null) {
+        dpAdminReactPage.fillAutoReservationCutoffTime(
+            dpDetailsResponse.getAutoReservationCutOffTime());
       }
       if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
           && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
@@ -964,6 +985,25 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         }
 
+      }
+      if (dpDetailsResponse.getCutOffDay() != null) {
+        String[] cutOffDay = dpDetailsResponse.getCutOffDay().split(",");
+
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOpeningHour.get(day).click();
+        }
+        for (String day : cutOffDay) {
+          dpAdminReactPage.cutOffOperatingHour.get(day).click();
+        }
+
+      }
+      if (dpDetailsResponse.getApplyFirstDayOpeningHours() != null
+          && dpDetailsResponse.getApplyFirstDayOpeningHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOpeningHours.click();
+      }
+      if (dpDetailsResponse.getApplyFirstDayOperatingHours() != null
+          && dpDetailsResponse.getApplyFirstDayOperatingHours()) {
+        dpAdminReactPage.buttonApplyFirstDaySlotsOperatingHours.click();
       }
     });
   }
@@ -1166,6 +1206,35 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies that the cut off time for {string} is {string}")
+  public void operatorVerifiesTheCutOffTime(String dpDetails, String expectedCutOffTime) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+      dpAdminPage.verifyCutOffTime(expectedCutOffTime, dpDetailsResponse.getCutoffHour());
+    takesScreenshot();
+  }
+
+  @When("Operator verifies auto reservation for dp {string} is {string}")
+  public void dbOperatorFetchesAutoReservationForDp(String dpDetails, String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+
+    if ("Enabled".equalsIgnoreCase(status)) {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation enabled").isTrue();
+    } else {
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation disabled").isFalse();
+    }
+  }
+
+  @Then("Operator verifies the image for {string} is {string}")
+  public void operatorVerifiesTheImageIs(String dpDetails,String status) {
+    DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
+    if ("present".equalsIgnoreCase(status)) {
+      assertNotEquals("dp image status is incorrect", dpDetailsResponse.getDpPhotoFile(), null);
+    }else{
+      assertEquals("dp image status is incorrect", dpDetailsResponse.getDpPhoto(), null);
+    }
+
+  }
+
   @Then("Operator Check the Data from created DP is Right")
   public void checkCreatedDPData(Map<String, String> dataTableAsMap) {
     String condition = dataTableAsMap.get("condition");
@@ -1249,6 +1318,17 @@ public class DpAdministrationSteps extends AbstractSteps {
           }
         } else {
           LOGGER.info("DP Has No Alternate DP");
+        }
+      } else if (condition.equals(CHECK_DP_RESERVATION_DATA)) {
+        DpSetting dpSetting = get(KEY_DP_SETTINGS);
+        if (dpDetailsResponse != null && dpSetting != null) {
+          Assertions.assertThat(dpSetting.getCutOffTime())
+              .as(f("Dp Auto Reservation Cut-Off Time Is %s", dpSetting.getCutOffTime()))
+              .contains(dpDetailsResponse.getAutoReservationCutOffTime());
+
+          Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       }
     }
