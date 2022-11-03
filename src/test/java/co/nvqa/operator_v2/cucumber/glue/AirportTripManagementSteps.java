@@ -467,10 +467,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifySuccessUnassignAllDrivers(message);
     }
 
-    @Then("Operator verify Assign Driver button is disabled on Airport Trip page")
-    public void operatorVerifyAssignDriverButtonIsDisabledOnAirportTripPage() {
-    }
-
     @And("Operator search created flight trip {value} on Airport Trip table")
     public void operatorSearchCreatedFlightTripOnAirportTripTable(String tripID) {
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
