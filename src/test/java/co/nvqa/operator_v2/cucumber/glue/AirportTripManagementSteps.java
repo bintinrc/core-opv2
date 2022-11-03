@@ -13,12 +13,12 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.View;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.COLUMN_AIRTRIP_ID;
-import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AirportTable.*;
 
 public class AirportTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(AirportTripManagementSteps.class);
@@ -474,5 +474,50 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator search created flight trip {value} on Airport Trip table")
     public void operatorSearchCreatedFlightTripOnAirportTripTable(String tripID) {
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+    }
+
+    @When("Operator opens view Airport Trip page with data below:")
+    public void operatorOpensViewAirportTripPageWithDataBelow(Map<String,String> data) {
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        String tripType = resolvedData.get("tripType");
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
+        airportTripManagementPage.airportTable.clickActionButton(1, ACTION_DETAILS);
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+        airportTripManagementPage.verifyAirportTripDetailPageItem(tripType, tripID);
+    }
+
+    @And("Operator clicks Assign Driver button on Airport Trip details page")
+    public void operatorClicksAssignDriverButtonOnAirportTripDetailsPage() {
+        airportTripManagementPage.assignDriverOnAirportTripDetails.click();
+        airportTripManagementPage.verifyAssignDriverItemsOnTripDetail();
+    }
+
+    @And("Operator verify Assign Driver field not appear in Airport Flight Trip Details page")
+    public void operatorVerifyAssignDriverFieldNotAppearInAirportFlightTripDetailsPage() {
+        airportTripManagementPage.verifyAssignDriverFieldNotAppearInAirportFlightTripDetail();
+    }
+
+    @When("Operator clicks View Details action link on successful toast created to from airport trip")
+    public void operatorClicksViewDetailsActionLinkOnSuccessfulToastCreatedToFromAirportTrip() {
+        airportTripManagementPage.viewDetailsActionLink.click();
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+    }
+
+    @Then("Operator verifies it direct to trip details page with data below:")
+    public void operatorVerifyItDirectToTripDetailsPageWithDataBelow(Map<String,String> data) {
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        String tripType = resolvedData.get("tripType");
+        airportTripManagementPage.verifyAirportTripDetailPageItem(tripType, tripID);
+    }
+
+    @And("Operator verifies the element of {string} tab on Airport Trip details page are correct")
+    public void operatorVerifiesTheElementOfTabOnAirportTripDetailsPageAreCorrect(String tabName) {
+        airportTripManagementPage.verifyTabElementOnAirportTripDetailsPage(tabName);
     }
 }

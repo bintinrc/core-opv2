@@ -270,6 +270,9 @@ Feature: Implanted Manifest
     And Operator verify order event on Edit order page using data below:
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID (uid:027dfab6-19b3-4157-af2e-7e924ed45660)
