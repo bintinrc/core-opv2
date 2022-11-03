@@ -525,4 +525,9 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifiesTripStatusIsOnAirportTripDetailsPage(String tripStatus) {
         airportTripManagementPage.verifyTripStatusOnAirportTripDetailsPage(tripStatus);
     }
+
+    @Then("Operator verify {string} button is disabled on Airport Trip page")
+    public void operatorVerifyButtonIsDisabledOnAirportTripPage(String actionButton) {
+        airportTripManagementPage.verifyActionsButtonIsDisabledOnAirportTripPage(actionButton);
+    }
 }
