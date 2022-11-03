@@ -75,6 +75,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_TABLE_BODY_XPATH = "//div[contains(@id,'%s')]//div[contains(@class,'ant-table-body')]";
     private static final String AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH = "//div[@class='ant-spin-container']//span[@data-testid='column-title-%s']";
     private static final String AIRPORT_TRIP_DETAIL_PAGE_BODY_XPATH = "//span[text()='%s']/ancestor::div[@class='ant-col']";
+    private static final String AIRPORT_TRIP_DETAILS_PAGE_STATUS_XPATH = "//ancestor::div[@class='ant-col' and contains(.,'%s')]";
 
     private static final String TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_DRIVER_XPATH = "//div[@class='ant-card-body']//div[text()='Driver']//ancestor::div[@class='ant-spin-container']";
     private static final String TO_FROM_AIRPORT_TRIP_DETAIL_PAGE_COMMENTS_XPATH = "//div[@class='ant-card-body']//span[text()='Comments']//ancestor::div[@class='ant-space-item']";
@@ -1761,5 +1762,10 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAIL_PAGE_TAB_ELEMENT_XPATH, "orders-count"), 5)).as("Parcels appear in Shipments tab table").isTrue();
                 break;
         }
+    }
+
+    public void verifyTripStatusOnAirportTripDetailsPage(String tripStatus) {
+        waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAILS_PAGE_STATUS_XPATH, tripStatus));
+        Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAILS_PAGE_STATUS_XPATH, tripStatus), 5)).as("Trip Status appear in Airport Trip Management page").isTrue();
     }
 }
