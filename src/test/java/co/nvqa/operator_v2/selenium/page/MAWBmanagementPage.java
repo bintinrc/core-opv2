@@ -9,14 +9,20 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.*;
 
 /**
  * @author Son Ha
@@ -27,7 +33,7 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
     public MAWBmanagementPage(WebDriver webDriver) {
         super(webDriver);
-        mawbtable = new amwbTableModal(webDriver);
+        mawbtable = new MAWBmanagementPage.amwbTableModal(webDriver);
     }
     public amwbTableModal mawbtable;
     private static final String MAWB_MANAGEMENR_SEARCH_HEADER_XPATH = "//h4[text() = '%s']";
@@ -73,6 +79,17 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     @FindBy(css = "[data-testid = 'search-by-vendor-button']")
     public Button searchByVendorButton;
 
+    @FindBy(className = "ant-modal-wrap")
+    public RecordOffloadModal recordOffload;
+
+    @FindBy(id = "manifest_form_is_aware")
+    public PageElement manifestConfirmCheckbox;
+
+    @FindBy(css ="[data-testid = 'submit-manifest-button']")
+    public Button submitManifest;
+
+    @FindBy(xpath ="//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]")
+    public PageElement noticeErrorMessage;
 
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
@@ -130,18 +147,27 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(searchByMAWBbutton.getAttribute("disabled")).as("Search by MAWB button is enable").isEqualTo(null);
     }
 
-    public static class amwbTableModal extends AntTableV3 {
+    public static class amwbTableModal extends AntTableV3<AirTrip> {
 
+
+        public static final String COLUMN_MAWB = "mawb_ref";
+        public static final String COLUMN_STATUS = "status";
+        public static final String COLUMN_VENDOR_NAME = "vendor_name";
+//        public static final String COLUMN_NO = "_counter";
         public static final String ACTION_OFFLOAD = "Offload";
         public static final String ACTION_DETAILS = "Details";
         public amwbTableModal(WebDriver webDriver) {
             super(webDriver);
-//            setActionButtonLocatorTemplate(
-//                    "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(text(),'%s')]");
-//            setActionButtonsLocators(
-//                    ImmutableMap.of(
-//                            ACTION_DETAILS, "View Details",
-//                            ACTION_OFFLOAD, "Record Offload"));
+            setColumnLocators(
+                    ImmutableMap.<String, String>builder().put(COLUMN_MAWB, "mawb")
+                            .put(COLUMN_STATUS, "status")
+                            .put(COLUMN_VENDOR_NAME, "vendor_name").build());
+            setActionButtonLocatorTemplate(
+                    "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(text(),'%s')]");
+            setActionButtonsLocators(
+                    ImmutableMap.of(
+                            ACTION_DETAILS, "View Details",
+                            ACTION_OFFLOAD, "Record Offload"));
         }
 
         @FindBy(css = "[data-testid='back-to-filter-button']")
@@ -158,6 +184,9 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
         @FindBy(xpath ="//button[@class='ant-btn']//span[@class='anticon anticon-sync anticon-spin']")
         public PageElement reloadSpin;
+
+        @FindBy(xpath = "//button//span[contains(text(),'Manifest MAWB')]")
+        public PageElement manifestButton;
 
         public void VerifySearchResultPage(){
             String LIST_OF_MAWB_ELEMENTS = "//div[contains(@class,'table-container')]//table//tr//th[contains(@class,'%s')]";
@@ -196,6 +225,27 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         }
     }
 
+    public void manifestMAWB(){
+        waitUntilVisibilityOfElementLocated("//div[text()='Manifest MAWB']");
+        manifestConfirmCheckbox.click();
+        submitManifest.click();
+        submitManifest.waitUntilInvisible();
+    }
+
+
+    public void waitWhileTableIsLoading() {
+        Wait<MAWBmanagementPage.amwbTableModal> fWait = new FluentWait<>(mawbtable)
+                .withTimeout(Duration.ofSeconds(20))
+                .pollingEvery(Duration.ofSeconds(1))
+                .ignoring(NoSuchElementException.class);
+        fWait.until(table -> table.getRowsCount() > 0);
+    }
+
+    public void filterMAWB(String mawb) {
+        mawbtable.filterByColumn(COLUMN_MAWB, mawb);
+        waitWhileTableIsLoading();
+        mawbtable.clickActionButton(1,ACTION_OFFLOAD);
+    }
     public void verifyErrorMessage(String expectedMessage){
         ErrorMessage.waitUntilVisible();
         Assertions.assertThat(ErrorMessage.getText()).as("Error message is the same").isEqualTo(expectedMessage);
@@ -264,6 +314,110 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
     public void verifySearchByVendorbuttonIsEnable(){
         Assertions.assertThat(searchByVendorButton.getAttribute("disabled")).as("Search by Vendor button is enable").isEqualTo(null);
+    }
+
+    public static class RecordOffloadModal extends AntModal {
+
+        public RecordOffloadModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+        public static final String OFFLOAD_REASON_MESSAGE_XPATH = "(//div[@class='ant-select-item-option-content'])[%d]";
+        public static final String offloadTotalId = "offloadForm_total_offload";
+        public static final String offloadTotalWeightId = "offloadForm_total_offload_weight";
+        public static final String offloadNextFlightNoId = "offloadForm_next_flight_no";
+        public static final String offloadDepartureTimeId = "offloadForm_next_flight_departure_time";
+        public static final String offloadArrivalTimeId = "offloadForm_next_flight_arrival_time";
+        public static final String offloadCommentsId = "offloadForm_comments";
+
+
+        @FindBy(id = offloadTotalId)
+        public PageElement OffloadTotal;
+
+        @FindBy(id = offloadTotalWeightId)
+        public PageElement OffloadTotalWeight;
+
+        @FindBy(id = offloadNextFlightNoId)
+        public PageElement OffloadNextFlightNo;
+
+        @FindBy(id = offloadDepartureTimeId)
+        public PageElement OffloadDepartureTime;
+
+        @FindBy(id = offloadArrivalTimeId)
+        public PageElement OffloadArrivalTime;
+
+        @FindBy(xpath = "//label[text()='Reasons of Offload']/following::input")
+        public TextBox OffloadReasonInput;
+
+        @FindBy(id = offloadCommentsId)
+        public PageElement OffloadComments;
+
+        @FindBy(css ="[data-testid = 'update-record-offload-button']")
+        public Button OffloadUpdateButton;
+
+        public void selectOffloadReason() {
+            // Create random integer from 1 to 7 and click nth option based on it
+            String offloadReasonMessage = String.format(OFFLOAD_REASON_MESSAGE_XPATH, new Random().nextInt(6) + 1);
+            OffloadReasonInput.click();
+            waitUntilElementIsClickable(offloadReasonMessage);
+            click(offloadReasonMessage);
+        }
+
+    }
+
+    public void fillOffloadData(Map<String,String> data){
+        pause300ms();
+        recordOffload.OffloadTotal.waitUntilVisible();
+
+        if (data.get("totalOffloadedWeight")!=null){
+            recordOffload.OffloadTotalWeight.click();
+            sendKeysAndEnterById(recordOffload.offloadTotalWeightId,data.get("totalOffloadedWeight"));
+        }
+        if (data.get("nextFlight")!=null){
+            recordOffload.OffloadNextFlightNo.click();
+            sendKeysAndEnterById(recordOffload.offloadNextFlightNoId,data.get("nextFlight"));
+        }
+        if (data.get("departerTime")!=null){
+            recordOffload.OffloadDepartureTime.click();
+            sendKeysAndEnterById(recordOffload.offloadDepartureTimeId,data.get("departerTime"));
+
+        }
+        if (data.get("arrivalTime")!=null){
+            recordOffload.OffloadArrivalTime.click();
+            sendKeysAndEnterById(recordOffload.offloadArrivalTimeId,data.get("arrivalTime"));
+
+        }
+        if (data.get("comments")!=null){
+            recordOffload.OffloadComments.click();
+            recordOffload.OffloadComments.sendKeys(data.get("comments"));
+
+        }
+        if (data.get("offload_reason")!=null){
+            recordOffload.selectOffloadReason();
+        }
+        recordOffload.OffloadTotal.click();
+        recordOffload.OffloadTotal.sendKeys(data.get("totalOffloadedPcs"));
+    }
+
+    public void verifyOffloadMessageSuccessful(String expectedMessage){
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(()->{
+            String actMessage = getAntTopText();
+            Assertions.assertThat(actMessage).as("Success message is same").contains(expectedMessage);
+        },"Verify MAWB Offload message", 500, 3);
+    }
+
+    public void verifyExplainErrorMessage(String expectedMessage, String fieldId){
+        String actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,fieldId)).getText();
+        Assertions.assertThat(actualMessage.equalsIgnoreCase(expectedMessage)).as("Error message is the same!").isTrue();
+    }
+
+    public void verifyAllRecordOffloadFieldsIsEmpty(){
+        Assertions.assertThat(recordOffload.OffloadTotal.getAttribute("value")).as("Total Offloaded pcs is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadTotalWeight.getAttribute("value")).as("Total Offloaded Weight is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadNextFlightNo.getAttribute("value")).as("Next Flight Number is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadDepartureTime.getAttribute("value")).as("Estimated Flight Departure Date & Time is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadArrivalTime.getAttribute("value")).as("Estimated Flight Arrival Date & Time is empty").isEqualTo("");
+        Assertions.assertThat(recordOffload.OffloadComments.getText()).as("Comments is empty").isEqualTo("");
     }
 
 
