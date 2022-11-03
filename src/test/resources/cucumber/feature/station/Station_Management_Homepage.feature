@@ -185,6 +185,32 @@ Feature: Station Management Homepage
       | Country  | HubName      | Header1                      | Header2 | PageName              | LinkName          |
       | Thailand | {hub-name-7} | Standard Operating Procedure | Reports | PCF Management System | Petty Cash Claims |
 
+  Scenario Outline: [SG, MY, PH] Be an FSR Ninja Training Navigation Panel
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
+      | Route Engine - Zonal Routing |
+      | Parcel Sweeper Live          |
+      | Shipment Management          |
+      | Shipment Inbound             |
+      | Van Inbound                  |
+      | Route Log                    |
+      | Outbound Monitoring          |
+      | Route Monitoring             |
+      | Route Inbound                |
+      | Recovery                     |
+    And Operator verifies that the following navigation links are displayed under the header:"<Header2>"
+      | Driver Performance Report |
+      | COD Report                |
+    And Operator verifies that the following navigation links are displayed under the header:"<Header3>"
+      | Be an FSR Ninja Training |
+    Then Operator verifies that the URL "<URL>" is loaded on new tab on clicking the link:"<LinkName>"
+
+    Examples:
+      | HubName      | Header1                      | Header2 | Header3 | URL                                      | LinkName                 |
+      | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://sgp-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

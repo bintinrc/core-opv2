@@ -4,6 +4,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -92,6 +93,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@aria-label='Close']")
   public PageElement closePopModal;
 
+  @FindBy(xpath = "//*[@id='address-pickup-type-drop-down']//div[@class='ant-select-selector']")
+  public AntSelect pickupType;
+
+  @FindBy(xpath = "//*[@class='ant-select-clear']")
+  public PageElement clearDropdown;
+
 
   public void switchToShipperAddressConfigurationFrame() {
     if (pageFrame.size() > 0) {
@@ -128,6 +135,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(addressStatusSelect.getWebElement());
     addressStatusSelect.selectValue(addressStatus);
 
+  }
+
+  public void selectPickupType(List<String> pickuptype) {
+    switchToShipperAddressConfigurationFrame();
+    clearDropdown.click();
+    pickupType.selectValues(pickuptype);
   }
 
   public void filterBy(String filterCriteria, String filterValue) {
@@ -213,8 +226,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   public void VerificationOfURL(String buttonText) {
     waitWhilePageIsLoading();
-    Assertions.assertThat(getWebDriver().getCurrentUrl().endsWith(buttonText))
-        .as("Validation for page URL").isTrue();
+    Assertions.assertThat(getWebDriver().getCurrentUrl()).endsWith(buttonText);
     LOGGER.info(getWebDriver().getCurrentUrl());
   }
 

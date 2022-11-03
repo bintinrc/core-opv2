@@ -202,6 +202,49 @@ Feature: English (SG, MY, PH)
       | HubName      | Language | TileText     |
       | {hub-name-9} | English  | For Shipment |
 
+  Scenario Outline: English Tooltip for N+0 Pickup Rates
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
+      | % of orders that were created and picked up today over all orders created today. |
+    And Operator verifies that the mouseover text is not displayed on moving away from the tile title
+
+    Examples:
+      | HubName        | Country | TileText         |
+      | {hub-name-1vn} | Vietnam | N+0 Pickup Rates |
+
+  Scenario Outline: English Tooltip for Addresses with No Job Created
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
+      | Shipper addresses with pending parcels to pick up but no jobs created. |
+    And Operator verifies that the mouseover text is not displayed on moving away from the tile title
+
+    Examples:
+      | HubName        | Country | TileText                       |
+      | {hub-name-1vn} | Vietnam | Addresses with no jobs created |
+
+  Scenario Outline: English Tooltip for Addresses with Unrouted Jobs
+    Given Operator loads Operator portal home page
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
+      | Shipper addresses with jobs that are not routed to any drivers yet. |
+    And Operator verifies that the mouseover text is not displayed on moving away from the tile title
+
+    Examples:
+      | HubName        | Country | TileText                     |
+      | {hub-name-1vn} | Vietnam | Addresses with unrouted jobs |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
