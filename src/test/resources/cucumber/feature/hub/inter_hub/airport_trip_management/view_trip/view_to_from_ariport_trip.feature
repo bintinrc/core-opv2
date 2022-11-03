@@ -44,6 +44,7 @@ Feature: Airport Trip Management - View Trip To/from Airport Trip Details
     When Operator opens view Airport Trip page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
+    Then Operator verifies trip status is "PENDING" on Airport Trip details page
     And Operator verifies the element of "Trip Events" tab on Airport Trip details page are correct
 
   @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI
