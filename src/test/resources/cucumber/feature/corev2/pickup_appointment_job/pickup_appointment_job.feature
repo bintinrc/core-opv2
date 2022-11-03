@@ -8,8 +8,8 @@ Feature: Create Pickup Appointment Job
   @CreateNewPickupJobs
   Scenario: Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create/edit job button on this top right corner of the page
-    And Operator select shipper id/name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID/Name field
+    And Operator click on Create or edit job button on this top right corner of the page
+    And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
 
     And Get Pickup Jobs from Calendar
@@ -50,7 +50,7 @@ Feature: Create Pickup Appointment Job
       | status          | READY_FOR_ROUTING                               |
 
     Then API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And Operator load selection job by date range and shipper
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -59,8 +59,8 @@ Feature: Create Pickup Appointment Job
   @CreateNewPickupJobsOverlappingDateAndTime
   Scenario: Create new pickup jobs on Pickup Jobs page calendar view - overlapping date and time
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create/edit job button on this top right corner of the page
-    And Operator select shipper id/name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID/Name field
+    And Operator click on Create or edit job button on this top right corner of the page
+    And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
 
     And Get Pickup Jobs from Calendar
@@ -127,7 +127,7 @@ Feature: Create Pickup Appointment Job
       | status          | READY_FOR_ROUTING                               |
 
     Then API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And Operator load selection job by date range and shipper
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -136,16 +136,16 @@ Feature: Create Pickup Appointment Job
   @CreateNewCustomisedPickupJobsPremiumShipper
   Scenario: Create new Customised pickup jobs on Pickup Jobs page calendar view - Premium shipper
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create/edit job button on this top right corner of the page
-    And Operator select shipper id/name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID/Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator click on Create or edit job button on this top right corner of the page
+    And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
+    And Operator select address = "{premium-shipper-pickup-appointment-1-address}" in Shipper Address field
 
     And Get Pickup Jobs from Calendar
 
     Then Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar
-      | shipperId      | {normal-shipper-pickup-appointment-1-id}      |
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperId      | {premium-shipper-pickup-appointment-1-id}      |
+      | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
+      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
     And Operator verify Create button in displayed
 
     When Operator select the data range
@@ -161,8 +161,8 @@ Feature: Create Pickup Appointment Job
     And Operator click on Submit button
 
     Then QA verify Job created modal displayed with following format
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
+      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
       | startTime      | 09:00                                         |
       | endTime        | 12:00                                         |
       | startDay       | {gradle-next-1-day-yyyy-MM-dd}                |
@@ -176,12 +176,12 @@ Feature: Create Pickup Appointment Job
 
     Then QA verify the 1 Job displayed on the Pickup Jobs page
     And QA verify Pickup Job created on control_qa_gl.pickup_appointment_jobs
-      | globalShipperId | {normal-shipper-pickup-appointment-1-global-id} |
+      | globalShipperId | {premium-shipper-pickup-appointment-1-global-id} |
       | date            | {gradle-next-1-day-yyyy-MM-dd}                  |
       | status          | READY_FOR_ROUTING                               |
 
     Then API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And Operator load selection job by date range and shipper
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -190,8 +190,8 @@ Feature: Create Pickup Appointment Job
   @CreateNewCustomisedPickupJobsStandardShipper
   Scenario: Create new Customised pickup jobs on Pickup Jobs page calendar view - Standard shipper
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create/edit job button on this top right corner of the page
-    And Operator select shipper id/name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID/Name field
+    And Operator click on Create or edit job button on this top right corner of the page
+    And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
 
     And Get Pickup Jobs from Calendar
@@ -225,7 +225,7 @@ Feature: Create Pickup Appointment Job
     And QA verify the new created Pickup Jobs is not shown in the Calendar
 
     Then API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And Operator load selection job by date range and shipper
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |

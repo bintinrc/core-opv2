@@ -32,28 +32,28 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         getWebDriver().switchTo().frame(0);
     }
 
-    @And("^Operator click on Create/edit job button on this top right corner of the page")
+    @And("Operator click on Create or edit job button on this top right corner of the page")
     public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
         pickupAppointmentJobPage.clickOnCreateOrEditJob();
     }
 
-    @And("^Operator select shipper id/name = \"([^\"]*)\" in Shipper ID/Name field")
+    @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
     public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
        pickupAppointmentJobPage.getCreateOrEditJobElement().setShipperIDInField(shipperId);
        put(KEY_LEGACY_SHIPPER_ID, shipperId);
     }
 
-    @And("^Operator select address = \"([^\"]*)\" in Shipper Address field")
+    @And("Operator select address = {string} in Shipper Address field")
     public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
         pickupAppointmentJobPage.getCreateOrEditJobElement().setShipperAddressField(shipperAddress);
     }
 
-    @And("^Get Pickup Jobs from Calendar")
+    @And("Get Pickup Jobs from Calendar")
     public void getPickupJobsFromCalendar() {
         listOFPickupJobsBeforeEditNewJob = pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar();
     }
 
-    @Then("^Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar")
+    @Then("Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar")
     public void operatorVerifyShipperIDAndAddressAreDisplayed(Map<String, String> dataTable) {
         final String shipperId = dataTable.get("shipperId");
         final String shipperName = dataTable.get("shipperName");
@@ -65,13 +65,13 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
                 pickupAppointmentJobPage.getCreateOrEditJobElement().isElementDisplayedByTitle(shipperAddress));
     }
 
-    @And("^Operator verify Create button in displayed")
+    @And("Operator verify Create button in displayed")
     public void isCreateButtonDisplayed() {
         assertTrue("Create button is displayed",
                 pickupAppointmentJobPage.getCreateOrEditJobElement().isCreateButtonDisplayed());
     }
 
-    @When("^Operator select the data range")
+    @When("Operator select the data range")
     public void selectDataRange(Map<String, String> dataTable) {
         final String startDay = dataTable.get("startDay");
         final String endDay = dataTable.get("endDay");
@@ -79,7 +79,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         pickupAppointmentJobPage.getCreateOrEditJobElement().selectDataRangeByTitle(startDay, endDay);
     }
 
-    @And("^Operator select time slot from Select time range field")
+    @And("Operator select time slot from Select time range field")
     public void selectTimeSlotFromSelectTimeRangeField(Map<String, String> dataTable) {
         final String startTime = dataTable.get("startTime");
         final String endTime = dataTable.get("endTime");
@@ -88,12 +88,12 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         pickupAppointmentJobPage.getCreateOrEditJobElement().selectTimeRangeByDataTime(timeRange);
     }
 
-    @And("^Operator click on Submit button")
+    @And("Operator click on Submit button")
     public void clickOnSubmitButton() {
         pickupAppointmentJobPage.getCreateOrEditJobElement().clickOnCreateButton();
     }
 
-    @Then("^QA verify Job created modal displayed with following format")
+    @Then("QA verify Job created modal displayed with following format")
     public void QAVerifyJobCreatedModalWindow(Map<String, String> dataTable) {
         final String shipperName = dataTable.get("shipperName");
         final String shipperAddress = dataTable.get("shipperAddress");
@@ -124,21 +124,21 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         pickupAppointmentJobPage.getJobCreatedModalWindowElement().clickOnOKButton();
     }
 
-    @And("^QA verify the new created Pickup Jobs is shown in the Calendar")
+    @And("QA verify the new created Pickup Jobs is shown in the Calendar")
     public void verifyTheNewCreatedPickupJobsIsShownInTheCalendar() {
         assertNotEquals("The new created Pickup Jobs is shown in the Calendar",
                 pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
                 listOFPickupJobsBeforeEditNewJob.size());
     }
 
-    @And("^QA verify the new created Pickup Jobs is not shown in the Calendar")
+    @And("QA verify the new created Pickup Jobs is not shown in the Calendar")
     public void verifyTheNewCreatedPickupJobsIsNotShownInTheCalendar() {
         assertEquals("The new created Pickup Jobs is shown in the Calendar",
                 pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
                 listOFPickupJobsBeforeEditNewJob.size());
     }
 
-    @And("^Complete Pickup Job With Route Id")
+    @And("Complete Pickup Job With Route Id")
     public void completePickupJobWithRouteId() {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         operatorLoadsShipperAddressConfigurationPage();
@@ -149,7 +149,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
                 .clickSuccessJobButton();
     }
 
-    @And("^Operator load selection job by date range and shipper")
+    @And("Operator load selection job by date range and shipper")
     public void loadSelectionJobByDateRangeAndShipper(Map<String, String> dataTable) {
         final String startDay = dataTable.get("startDay");
         final String endDay = dataTable.get("endDay");
@@ -167,7 +167,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
       | startTime | 9:00  |
       | endTime   | 12:00 |
       */
-    @And("^Operator select customised time range from Select time range")
+    @And("Operator select customised time range from Select time range")
     public void  selectCustomisedTimeRange(Map<String, String> dataTable) {
         final String readyBy = dataTable.get("readyBy");
         final String latestBy = dataTable.get("latestBy");
@@ -186,7 +186,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
                 pickupAppointmentJobPage.getNumberOfJobs(),numberJobs);
     }
 
-    @And("^Operator get Job Id from Pickup Jobs page")
+    @And("Operator get Job Id from Pickup Jobs page")
     public void operatorGetJobIdFromPickupJobsPage() {
         List<String> jobId = pickupAppointmentJobPage.getJobIdsText();
         putInList(KEY_LIST_OF_PICKUP_JOB_IDS, jobId);
