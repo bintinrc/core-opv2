@@ -520,4 +520,9 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifiesTheElementOfTabOnAirportTripDetailsPageAreCorrect(String tabName) {
         airportTripManagementPage.verifyTabElementOnAirportTripDetailsPage(tabName);
     }
+
+    @Then("Operator verifies trip status is {string} on Airport Trip details page")
+    public void operatorVerifiesTripStatusIsOnAirportTripDetailsPage(String tripStatus) {
+        airportTripManagementPage.verifyTripStatusOnAirportTripDetailsPage(tripStatus);
+    }
 }
