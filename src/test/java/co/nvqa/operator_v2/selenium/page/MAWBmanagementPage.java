@@ -3,10 +3,18 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -18,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.*;
+
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -39,12 +47,15 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     private static final String MAWB_MANAGEMENR_SEARCH_HEADER_XPATH = "//h4[text() = '%s']";
     private static final String MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
     private static final String MAWB_MANAGEMENR_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
+
+    private static final String MAWB_MANIFEST_UPLOAD_FILE_INFOR = "//div[@class='ant-upload-list-item-info']//a[contains(@title,'%s')]";
     private static final String searchByMAWBTextBoxId = "search-by-mawb-ref-form_searchMawbRefs";
     private static final String searchByVendor_mawbVendorId = "search-by-vendor-form_mawbVendor";
     private static final String searchByVendor_mawbOriginAirportId = "search-by-vendor-form_mawbOriginAirport";
     private static final String searchByVendor_mawbDestinationAirportId = "search-by-vendor-form_mawbDestinationAirport";
     private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
 
+    private static final String FILEPATH = TestConstants.TEMP_DIR;
 
     @FindBy(xpath = "//span[@class='ant-typography']")
     public PageElement searchMAWBtextInfor;
@@ -87,6 +98,12 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
     @FindBy(css ="[data-testid = 'submit-manifest-button']")
     public Button submitManifest;
+
+    @FindBy(css = "[data-testid = 'upload-manifest-attachment']")
+    public FileInput manifestUploadFile;
+
+    @FindBy(xpath = "//div[@class='ant-upload-list-item-progress']")
+    public PageElement fileUploadProgress;
 
     @FindBy(xpath ="//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]")
     public PageElement noticeErrorMessage;
@@ -418,6 +435,33 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(recordOffload.OffloadDepartureTime.getAttribute("value")).as("Estimated Flight Departure Date & Time is empty").isEqualTo("");
         Assertions.assertThat(recordOffload.OffloadArrivalTime.getAttribute("value")).as("Estimated Flight Arrival Date & Time is empty").isEqualTo("");
         Assertions.assertThat(recordOffload.OffloadComments.getText()).as("Comments is empty").isEqualTo("");
+    }
+
+    public void uploadFileOnManifestPage(String filename){
+        String fullPath = FILEPATH+filename;
+        System.out.println(fullPath);
+        createFile(fullPath, 100);
+        waitUntilVisibilityOfElementLocated("//div[text()='Manifest MAWB']");
+        pause300ms();
+        manifestUploadFile.setValue(fullPath);
+        waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,filename));
+        fileUploadProgress.waitUntilInvisible();
+        pause300ms();
+    }
+
+    public void createFile(final String filename, final long sizeInBytes) {
+        try{
+            File file = new File(filename);
+            file.createNewFile();
+
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            raf.setLength(sizeInBytes);
+            raf.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
 

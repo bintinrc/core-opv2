@@ -171,6 +171,8 @@ public class MAWBmanagementSteps extends AbstractSteps {
     mawbManagementgPage.waitWhileTableIsLoading();
     mawbManagementgPage.mawbtable.selectRow(1);
     mawbManagementgPage.mawbtable.manifestButton.click();
+
+    mawbManagementgPage.uploadFileOnManifestPage("s1.txt");
     mawbManagementgPage.manifestMAWB();
   }
 
