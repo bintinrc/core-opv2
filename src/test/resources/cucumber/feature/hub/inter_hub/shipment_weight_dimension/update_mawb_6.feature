@@ -13,10 +13,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-        | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -33,8 +33,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | tgn-1234567           |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | tgn-1234567         |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -47,10 +47,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -67,8 +67,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | TGN-1234567           |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | TGN-1234567         |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -81,10 +81,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -101,8 +101,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | Tgn-1234567          |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | Tgn-1234567         |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -115,10 +115,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -135,8 +135,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | abc1234          |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | abc1234             |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -149,10 +149,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -169,8 +169,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | ABC1234          |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | ABC1234             |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -183,10 +183,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -203,8 +203,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | Abc1234          |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | Abc1234             |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -217,10 +217,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -237,8 +237,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | abc12345         |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | abc12345            |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -251,10 +251,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -271,8 +271,8 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | ABC12345         |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | ABC12345            |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
@@ -285,10 +285,10 @@ Feature: Update MAWB 6 - ID
     Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
-      | mawb                 | 123-12345678         |
+      | mawb                 | 123-12345678      |
       | destinationAirportId | {airport-id-id-1} |
       | originAirportId      | {airport-id-id-2} |
-      | vendorId             | {vendor-id-id-1}    |
+      | vendorId             | {vendor-id-id-1}  |
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verify Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
@@ -305,8 +305,110 @@ Feature: Update MAWB 6 - ID
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | Abc12345        |
-      | vendor      | {vendor-name-id-2}    |
+      | mawb        | Abc12345            |
+      | vendor      | {vendor-name-id-2}  |
+      | origin      | {airport-name-id-2} |
+      | destination | {airport-name-id-1} |
+    Then Operator click update button on shipment weight update mawb page
+    And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Update MAWB for ID with Format tbn + <dash> + 10 digits lower-case
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | 123-12345678      |
+      | destinationAirportId | {airport-id-id-1} |
+      | originAirportId      | {airport-id-id-2} |
+      | vendorId             | {vendor-id-id-1}  |
+    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state | initial |
+    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state             | search_valid |
+      | numberOfShipments | 1            |
+    When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
+    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+      | expectedNumOfRows | 1 |
+    And Operator select all data on Shipment Weight Dimension Table
+    When Operator click update MAWB button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Update MAWB page UI
+    When Operator update MAWB information on shipment weight dimension page with following data
+      | mawb        | tbn-1234567890      |
+      | vendor      | {vendor-name-id-2}  |
+      | origin      | {airport-name-id-2} |
+      | destination | {airport-name-id-1} |
+    Then Operator click update button on shipment weight update mawb page
+    And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Update MAWB for ID with Format TBN + <dash> + 10 digits upper-case
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | 123-12345678      |
+      | destinationAirportId | {airport-id-id-1} |
+      | originAirportId      | {airport-id-id-2} |
+      | vendorId             | {vendor-id-id-1}  |
+    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state | initial |
+    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state             | search_valid |
+      | numberOfShipments | 1            |
+    When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
+    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+      | expectedNumOfRows | 1 |
+    And Operator select all data on Shipment Weight Dimension Table
+    When Operator click update MAWB button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Update MAWB page UI
+    When Operator update MAWB information on shipment weight dimension page with following data
+      | mawb        | TBN-1234567890      |
+      | vendor      | {vendor-name-id-2}  |
+      | origin      | {airport-name-id-2} |
+      | destination | {airport-name-id-1} |
+    Then Operator click update button on shipment weight update mawb page
+    And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
+
+  @DeleteShipments @DeleteCreatedMAWBs
+  Scenario: Update MAWB for ID with Format Tbn + <dash> + 10 digits mix-case
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Indonesia"
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-id-1} to hub id = {hub-id-id-2}
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | 123-12345678      |
+      | destinationAirportId | {airport-id-id-1} |
+      | originAirportId      | {airport-id-id-2} |
+      | vendorId             | {vendor-id-id-1}  |
+    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state | initial |
+    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state             | search_valid |
+      | numberOfShipments | 1            |
+    When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
+    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+      | expectedNumOfRows | 1 |
+    And Operator select all data on Shipment Weight Dimension Table
+    When Operator click update MAWB button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Update MAWB page UI
+    When Operator update MAWB information on shipment weight dimension page with following data
+      | mawb        | Tbn-1234567890      |
+      | vendor      | {vendor-name-id-2}  |
       | origin      | {airport-name-id-2} |
       | destination | {airport-name-id-1} |
     Then Operator click update button on shipment weight update mawb page
