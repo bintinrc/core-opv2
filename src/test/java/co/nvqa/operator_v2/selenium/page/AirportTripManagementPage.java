@@ -1301,6 +1301,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         public static final String ACTION_DELETE = "Cancel";
         public static final String ACTION_ASSIGN_DRIVER = "assignDriver";
         public static final String ACTION_DISABLED_ASSIGN_DRIVER = "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(@data-testid,'assign-driver-icon') and @disabled]";
+        public static final String ACTION_ASSIGN_MAWB = "assignMAWB";
+        public static final String ACTION_DISABLED_BUTTON = "//tbody/tr[%d]//td[contains(@class,'actions')]//*[contains(@data-testid,'%s') and @disabled]";
 
         @FindBy(xpath = "//button[.='Depart']")
         public Button departTripButton;
@@ -1333,7 +1335,8 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                             ACTION_DETAILS, "view-trip-icon",
                             ACTION_EDIT, "edit-trip-icon",
                             ACTION_DELETE, "delete-trip-icon",
-                            ACTION_ASSIGN_DRIVER, "assign-driver-icon"));
+                            ACTION_ASSIGN_DRIVER, "assign-driver-icon",
+                            ACTION_ASSIGN_MAWB, "assign-mawb-button"));
         }
     }
 
@@ -1767,5 +1770,16 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public void verifyTripStatusOnAirportTripDetailsPage(String tripStatus) {
         waitUntilVisibilityOfElementLocated(f(AIRPORT_TRIP_DETAILS_PAGE_STATUS_XPATH, tripStatus));
         Assertions.assertThat(isElementVisible(f(AIRPORT_TRIP_DETAILS_PAGE_STATUS_XPATH, tripStatus), 5)).as("Trip Status appear in Airport Trip Management page").isTrue();
+    }
+
+    public void verifyActionsButtonIsDisabledOnAirportTripPage(String actionsButton) {
+        switch (actionsButton) {
+            case "Assign Driver":
+                Assertions.assertThat(isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "assign-driver-icon"), 5)).as("Assign Driver button is disabled on Airport Trip page").isTrue();
+                break;
+            case "Assign MAWB":
+                Assertions.assertThat(isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "assign-mawb-button"), 5)).as("Assign MAWB button is disabled on Airport Trip page").isTrue();
+                break;
+        }
     }
 }

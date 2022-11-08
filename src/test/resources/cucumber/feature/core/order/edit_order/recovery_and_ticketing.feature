@@ -52,6 +52,14 @@ Feature: Recovery & Ticketing
     And Operator verify transaction on Edit order page using data below:
       | type   | DELIVERY |
       | status | PENDING  |
+    And API Operator get order details
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Recovery Ticket For Pending Reschedule Order (uid:3812f660-c9d7-45a8-96ef-2ae379eace0d)
