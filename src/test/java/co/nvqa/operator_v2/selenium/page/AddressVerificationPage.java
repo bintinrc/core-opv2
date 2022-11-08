@@ -199,7 +199,7 @@ public class AddressVerificationPage extends SimpleReactPage<AddressingPage> {
   public Button lastAssignZoneButton;
 
   private final static String ZONE_LIST_XPATH = "//div[@class='address-name' and text()='%s']";
-  private final static String ZONE_ADDRESS_SIZE_XPATH = "(%s/following-sibling::div[@class='address-size'])[last()]";
+  private final static String ZONE_ADDRESS_SIZE_XPATH = "(%s/following-sibling::div[@class='address-size'])[1]";
   private final static String ZONE_SELECTED_OPTION_XPATH = "(//div[contains(@class, 'ant-select-item-option-content') and text()='%s'])[last()]";
 
   //endregion
