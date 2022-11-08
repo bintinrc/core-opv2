@@ -1,17 +1,22 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.selenium.page.PickupAppointmentJobPage;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 
 @ScenarioScoped
 public class PickupAppointmentJobSteps extends AbstractSteps{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PickupAppointmentJobSteps.class);
 
     private PickupAppointmentJobPage pickupAppointmentJobPage;
     private List<WebElement> listOFPickupJobsBeforeEditNewJob;
@@ -28,8 +33,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
     @When("Operator loads Shipper Address Configuration page Pickup Appointment")
     public void operatorLoadsShipperAddressConfigurationPage() {
         loadShipperAddressConfigurationPage();
-        pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+        if(pickupAppointmentJobPage.isToastContainerDisplayed()) {
+            pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+        }
         getWebDriver().switchTo().frame(0);
+        pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(pickupAppointmentJobPage.loadSelection.getWebElement());
     }
 
     @And("Operator click on Create or edit job button on this top right corner of the page")
@@ -39,18 +47,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
 
     @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
     public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
-       pickupAppointmentJobPage.getCreateOrEditJobElement().setShipperIDInField(shipperId);
+       pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperIDInField(shipperId);
        put(KEY_LEGACY_SHIPPER_ID, shipperId);
     }
 
     @And("Operator select address = {string} in Shipper Address field")
     public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
-        pickupAppointmentJobPage.getCreateOrEditJobElement().setShipperAddressField(shipperAddress);
+        pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperAddressField(shipperAddress);
     }
 
     @And("Get Pickup Jobs from Calendar")
     public void getPickupJobsFromCalendar() {
-        listOFPickupJobsBeforeEditNewJob = pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar();
+        listOFPickupJobsBeforeEditNewJob = pickupAppointmentJobPage.getCreateOrEditJobPage().getAllPickupJobsFromCalendar();
     }
 
     @Then("Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar")
@@ -59,16 +67,19 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         final String shipperName = dataTable.get("shipperName");
         final String shipperAddress = dataTable.get("shipperAddress");
 
-        assertTrue("Shipper field is filled",
-                pickupAppointmentJobPage.getCreateOrEditJobElement().isElementDisplayedByTitle(shipperId.concat(" - ").concat(shipperName)));
-        assertTrue("Shipper field is filled",
-                pickupAppointmentJobPage.getCreateOrEditJobElement().isElementDisplayedByTitle(shipperAddress));
+        Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isElementDisplayedByTitle(shipperId.concat(" - ").concat(shipperName)))
+                .as("Shipper field is filled")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isElementDisplayedByTitle(shipperAddress))
+                .as("Shipper field is filled")
+                .isTrue();
     }
 
     @And("Operator verify Create button in displayed")
     public void isCreateButtonDisplayed() {
-        assertTrue("Create button is displayed",
-                pickupAppointmentJobPage.getCreateOrEditJobElement().isCreateButtonDisplayed());
+        Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isCreateButtonDisplayed())
+                .as("Create button is displayed")
+                .isTrue();
     }
 
     @When("Operator select the data range")
@@ -76,21 +87,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         final String startDay = dataTable.get("startDay");
         final String endDay = dataTable.get("endDay");
 
-        pickupAppointmentJobPage.getCreateOrEditJobElement().selectDataRangeByTitle(startDay, endDay);
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectDataRangeByTitle(startDay, endDay);
     }
 
     @And("Operator select time slot from Select time range field")
     public void selectTimeSlotFromSelectTimeRangeField(Map<String, String> dataTable) {
-        final String startTime = dataTable.get("startTime");
-        final String endTime = dataTable.get("endTime");
-        String timeRange = startTime.concat(" - ").concat(endTime);
-
-        pickupAppointmentJobPage.getCreateOrEditJobElement().selectTimeRangeByDataTime(timeRange);
+        final String timeRange = dataTable.get("timeRange");
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectTimeRangeByDataTime(timeRange);
     }
 
     @And("Operator click on Submit button")
     public void clickOnSubmitButton() {
-        pickupAppointmentJobPage.getCreateOrEditJobElement().clickOnCreateButton();
+        pickupAppointmentJobPage.getCreateOrEditJobPage().clickOnCreateButton();
     }
 
     @Then("QA verify Job created modal displayed with following format")
@@ -102,40 +110,41 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         final String startDay = dataTable.get("startDay");
         final String endDay = dataTable.get("endDay");
 
-        assertTrue("Shipper name is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperNameString()
-                        .equals(shipperName));
-        assertTrue("Shipper address is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperAddressString()
-                        .contains(shipperAddress));
-        assertTrue("Start time is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getStartTimeString()
-                        .equals(startTime));
-        assertTrue("End time is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getEndTimeString()
-                        .equals(endTime));
-        assertTrue("Start day is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString()
-                        .contains(startDay));
-        assertTrue("End day is correct",
-                pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString()
-                        .contains(endDay));
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperNameString())
+                        .as("Shipper name is correct")
+                                .isEqualTo(shipperName);
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperAddressString())
+                        .as("Shipper address is correct")
+                                .contains(shipperAddress);
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getStartTimeString())
+                        .as("Start time is correct")
+                                .isEqualTo(startTime);
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getEndTimeString())
+                        .as("End time is correct")
+                                .isEqualTo(endTime);
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString())
+                        .as("Start day is correct")
+                                .contains(startDay);
+        Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString())
+                        .as("End day is correct")
+                                .contains(endDay);
 
         pickupAppointmentJobPage.getJobCreatedModalWindowElement().clickOnOKButton();
     }
 
-    @And("QA verify the new created Pickup Jobs is shown in the Calendar")
-    public void verifyTheNewCreatedPickupJobsIsShownInTheCalendar() {
-        assertNotEquals("The new created Pickup Jobs is shown in the Calendar",
-                pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
-                listOFPickupJobsBeforeEditNewJob.size());
+    @And("QA verify the new created Pickup Jobs is shown in the Calendar by date {string}")
+    public void verifyTheNewCreatedPickupJobsIsShownInTheCalendar(String date) {
+        pickupAppointmentJobPage.getCreateOrEditJobPage().waitLoadJobInTheCalendarDisplayed(date);
+        Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().getAllPickupJobsFromCalendar().size())
+                        .as("The new created Pickup Jobs is shown in the Calendar")
+                                .isNotEqualTo(listOFPickupJobsBeforeEditNewJob.size());
     }
 
     @And("QA verify the new created Pickup Jobs is not shown in the Calendar")
     public void verifyTheNewCreatedPickupJobsIsNotShownInTheCalendar() {
-        assertEquals("The new created Pickup Jobs is shown in the Calendar",
-                pickupAppointmentJobPage.getCreateOrEditJobElement().getAllPickupJobsFromCalendar().size(),
-                listOFPickupJobsBeforeEditNewJob.size());
+        Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().getAllPickupJobsFromCalendar().size())
+                .as("The new created Pickup Jobs is shown in the Calendar")
+                .isSameAs(listOFPickupJobsBeforeEditNewJob.size());
     }
 
     @And("Complete Pickup Job With Route Id")
@@ -175,27 +184,28 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         int readyByNumber = Integer.parseInt(readyBy.substring(0, readyBy.indexOf(":")));
         int differentBetweenLatestByAndReadyBy = Integer.parseInt(latestBy.substring(0, latestBy.indexOf(":"))) - readyByNumber;
 
-        pickupAppointmentJobPage.getCreateOrEditJobElement().selectCustomTimeAndElement(readyByNumber, pickupAppointmentJobPage.getCreateOrEditJobElement().readyByField);
-        pickupAppointmentJobPage.getCreateOrEditJobElement().selectCustomTimeAndElement(differentBetweenLatestByAndReadyBy, pickupAppointmentJobPage.getCreateOrEditJobElement().latestByField);
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(readyByNumber, pickupAppointmentJobPage.getCreateOrEditJobPage().readyByField);
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(differentBetweenLatestByAndReadyBy, pickupAppointmentJobPage.getCreateOrEditJobPage().latestByField);
 
     }
 
     @Then("QA verify the {int} Job displayed on the Pickup Jobs page")
     public void verifyTheNewJobCreatedOnThePickupJobsPage(Integer numberJobs) {
-        assertEquals("The new Job created on the Pickup Jobs page",
-                pickupAppointmentJobPage.getNumberOfJobs(),numberJobs);
+        Assertions.assertThat(pickupAppointmentJobPage.getNumberOfJobs())
+                        .as("The new Job created on the Pickup Jobs page")
+                                .isEqualTo(numberJobs);
     }
 
     @And("Operator get Job Id from Pickup Jobs page")
     public void operatorGetJobIdFromPickupJobsPage() {
         List<String> jobId = pickupAppointmentJobPage.getJobIdsText();
-        putInList(KEY_LIST_OF_PICKUP_JOB_IDS, jobId);
+        put(KEY_LIST_OF_PICKUP_JOB_IDS, jobId);
     }
 
     @And("QA verify error message shown on the modal and close by message body {string}")
     public void verifyErrorMessageShownOnTheModalAndClose(String messagesBody) {
-        pickupAppointmentJobPage.waitUntilInvisibilityOfToast("Network Request Error");
-        pickupAppointmentJobPage.getCreateOrEditJobElement().verifyMessageInToastModalIsDisplayed(messagesBody);
+        getWebDriver().switchTo().defaultContent();
+        pickupAppointmentJobPage.verifyMessageInToastModalIsDisplayed(messagesBody);
         while (pickupAppointmentJobPage.isElementExistFast("//*[contains(@class,'toast-error')]")) {
             pickupAppointmentJobPage.closeToast();
         }
