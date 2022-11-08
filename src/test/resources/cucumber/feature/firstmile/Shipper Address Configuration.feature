@@ -1,4 +1,4 @@
-@FirstMile @ShipperAddressConfiguration
+@FirstMile @ShipperAddressConfiguration @UpdateLatLong
 Feature: Shipper Address Configuration
 
   @LaunchBrowser @ShouldAlwaysRun

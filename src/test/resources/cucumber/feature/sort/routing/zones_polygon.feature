@@ -63,7 +63,7 @@ Feature: Zones Polygon
     When Operator clicks Bulk Edit Polygons button
     Then Operator make sure Bulk Edit Polygons dialog shows up
     When Operator upload a KML file "invalid-structure.kml"
-    Then Operator make sure error popup on zones page shows up: "Given KML file has invalid structure."
+    Then Operator make sure error popup on zones page shows up: "The kml file has invalid format."
 
   Scenario: Bulk Edit Polygons - Unfinished Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
