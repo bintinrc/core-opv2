@@ -41,6 +41,12 @@ Feature: Reschedule
       | new_pickup_type   | PP      |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies that number of transactions is correct after new transactions created
+      | order_id               | {KEY_CREATED_ORDER_ID}              |
+      | number_of_transactions | 3                                   |
+      | number_of_pickup_txn   | 2                                   |
+      | pickup_address         | 116 Keng Lee Rd 15 308402 Singapore |
+      | number_of_delivery_txn | 1                                   |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
