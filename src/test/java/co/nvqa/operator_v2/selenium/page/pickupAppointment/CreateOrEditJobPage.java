@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -14,24 +13,27 @@ import java.util.List;
 public class CreateOrEditJobPage extends PageElement {
 
     @FindBy(css = "input[aria-owns=shipper_list]")
-    public PageElement shipperIDField;
+    private PageElement shipperIDField;
 
     @FindBy(css = "input[aria-owns=shipperAddress_list]")
-    public PageElement shipperAddress;
+    private PageElement shipperAddress;
 
     @FindBy(css = "#dateRange")
-    public Button selectDateRange;
+    private Button selectDateRange;
 
     @FindBy(css = "input[aria-owns=timeRange_list]")
-    public PageElement selectTimeRange;
+    private PageElement selectTimeRange;
 
     @FindBy(css = "div.ant-space-align-center button")
-    public Button createButton;
+    private Button createButton;
 
     @FindBy(css = "#readyBy")
-    public PageElement readyByField;
+    private PageElement readyByField;
     @FindBy(css = "#latestBy")
-    public PageElement latestByField;
+    private PageElement latestByField;
+    @FindBy(css = "#tags")
+    private PageElement tagsField;
+    private  Actions actions;
 
     public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shipper_list_0']";
     public final String VERIFY_ADDRESS_FIELD_LOCATOR = "//input[@aria-activedescendant='shipperAddress_list_0']";
@@ -43,6 +45,7 @@ public class CreateOrEditJobPage extends PageElement {
     public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
     public final String PICKUP_JOBS_CALENDAR_LOCATOR = "div[status='ready-for-routing']";
     public final String TIME_RANGE_FILTER_LABEL = "div[label='%s']";
+    public final String JOB_TAG_FILTER_LOCATOR = "div[aria-label='%s']";
     public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
         super(webDriver, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -80,33 +83,11 @@ public class CreateOrEditJobPage extends PageElement {
 
     public void selectTimeRangeByDataTime(String timeRange) {
         selectTimeRange.click();
-        Actions actions = new Actions(webDriver);
+        actions = new Actions(webDriver);
         WebElement customTimeRange = webDriver.findElement(By.cssSelector(f(TIME_RANGE_FILTER_LABEL, timeRange)));
         actions.moveToElement(customTimeRange);
         actions.perform();
         customTimeRange.click();
-        /*switch (timeRange) {
-            case ("09:00 - 22:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 0), selectTimeRange);
-                break;
-            case ("09:00 - 18:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 1), selectTimeRange);
-                break;
-            case ("09:00 - 12:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 2), selectTimeRange);
-                break;
-            case ("12:00 - 15:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 3), selectTimeRange);
-                break;
-            case ("15:00 - 18:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 4), selectTimeRange);
-                break;
-            case ("18:00 - 22:00"):
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 5), selectTimeRange);
-                break;
-            default:
-                chooseCorrectTimeFromAttributeUsingTimeAndWebElement(String.format(TIME_RANGE_NUMBER_OF_LIST, 6), selectTimeRange);
-        }*/
         waitUntilVisibilityOfElementLocated(createButton.getWebElement());
     }
 
@@ -146,5 +127,23 @@ public class CreateOrEditJobPage extends PageElement {
             day = day.substring(1);
         }
         waitUntilVisibilityOfElementLocated(f(".//*[@data-testid='paJobCalendar.day.%s']//*[@status='ready-for-routing']",day));
+    }
+
+    public void selectTagInJobTagsField(String tag) {
+        tagsField.sendKeys(tag);
+//        actions = new Actions(webDriver);
+        WebElement tagElement = webDriver.findElement(By.cssSelector(f(JOB_TAG_FILTER_LOCATOR, tag)));
+//        actions.moveToElement(tagElement);
+//        actions.perform();
+        tagElement.sendKeys(Keys.ENTER);
+        tagsField.click();
+    }
+
+    public PageElement getReadyByField() {
+        return readyByField;
+    }
+
+    public PageElement getLatestByField() {
+        return latestByField;
     }
 }

@@ -37,7 +37,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
             pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
         }
         getWebDriver().switchTo().frame(0);
-        pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(pickupAppointmentJobPage.loadSelection.getWebElement());
+        pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(pickupAppointmentJobPage.getLoadSelection().getWebElement());
     }
 
     @And("Operator click on Create or edit job button on this top right corner of the page")
@@ -184,8 +184,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         int readyByNumber = Integer.parseInt(readyBy.substring(0, readyBy.indexOf(":")));
         int differentBetweenLatestByAndReadyBy = Integer.parseInt(latestBy.substring(0, latestBy.indexOf(":"))) - readyByNumber;
 
-        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(readyByNumber, pickupAppointmentJobPage.getCreateOrEditJobPage().readyByField);
-        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(differentBetweenLatestByAndReadyBy, pickupAppointmentJobPage.getCreateOrEditJobPage().latestByField);
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(readyByNumber, pickupAppointmentJobPage.getCreateOrEditJobPage().getReadyByField());
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectCustomTimeAndElement(differentBetweenLatestByAndReadyBy, pickupAppointmentJobPage.getCreateOrEditJobPage().getLatestByField());
 
     }
 
@@ -209,6 +209,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps{
         while (pickupAppointmentJobPage.isElementExistFast("//*[contains(@class,'toast-error')]")) {
             pickupAppointmentJobPage.closeToast();
         }
+    }
+
+    @And("Operator select job tag = {string} in Job Tags Field")
+    public void selectJobTagsInJobTagsField(String tag) {
+        pickupAppointmentJobPage.getCreateOrEditJobPage().selectTagInJobTagsField(tag);
     }
 
     // This method can be removed once redirection to Shipper Address is added in operator V2 menu

@@ -188,7 +188,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @SuppressWarnings("unchecked")
+
   @And("Operator clicks on the {string} button")
   @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {

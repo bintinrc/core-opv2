@@ -13,37 +13,37 @@ import java.util.stream.Collectors;
 
 public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     @FindBy(css = "#shippers")
-    public PageElement shipperIDField;
+    private PageElement shipperIDField;
 
     @FindBy(css = "#dateRange")
-    public Button selectDateRange;
+    private Button selectDateRange;
 
     @FindBy(css = "div.ant-collapse-extra button")
-    public Button createEditJobButton;
+    private Button createEditJobButton;
 
     @FindBy(css="[type='submit']")
-    public PageElement loadSelection;
+    private PageElement loadSelection;
 
     @FindAll(@FindBy(css = ".BaseTable__table-frozen-left .BaseTable__row-cell-text"))
-    public  List<PageElement> jobIdElements;
+    private  List<PageElement> jobIdElements;
 
     @FindBy(css = ".ant-collapse-content-box")
-    public PageElement contentBox;
+    private PageElement contentBox;
 
     @FindBy(css = "[data-testid='resultTable.editButton']")
-    public PageElement editButton;
+    private PageElement editButton;
 
     @FindBy(css = "#route")
-    public PageElement routeIdInput;
+    private PageElement routeIdInput;
 
     @FindBy(xpath = "//*[text()='Update route']/..")
-    public PageElement updateRouteButton;
+    private PageElement updateRouteButton;
 
     @FindBy(css = "")
-    public PageElement successJobButton;
+    private PageElement successJobButton;
 
     @FindBy(css = ".BaseTable")
-    public PageElement jobTable;
+    private PageElement jobTable;
 
     @FindBy(css = "#__next")
     private CreateOrEditJobPage createOrEditJobPage;
@@ -146,6 +146,10 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
                 ? f("//div[@id='toast-container']//strong[contains(text(), '%s')]", messageBody)
                 : "//div[@id='toast-container']";
         return webDriver.findElement(By.xpath(xpathExpression)).isDisplayed();
+    }
+
+    public PageElement getLoadSelection() {
+        return loadSelection;
     }
 
 }

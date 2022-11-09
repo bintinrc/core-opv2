@@ -1,4 +1,3 @@
-@CWF @ShouldAlwaysRun
 Feature: Create Pickup Appointment Job
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -184,7 +183,7 @@ Feature: Create Pickup Appointment Job
       | timeRange | Customised time range |
 
     And Operator select customised time range from Select time range
-      | readyBy  | 10:00  |
+      | readyBy  | 10:00 |
       | latestBy | 16:00 |
     And Operator click on Submit button
 
@@ -193,8 +192,8 @@ Feature: Create Pickup Appointment Job
       | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
       | startTime      | 10:00                                         |
       | endTime        | 16:00                                         |
-      | startDay       | {gradle-current-date-yyyy-MM-dd}                |
-      | endDay         | {gradle-current-date-yyyy-MM-dd}                |
+      | startDay       | {gradle-current-date-yyyy-MM-dd}              |
+      | endDay         | {gradle-current-date-yyyy-MM-dd}              |
     And QA verify error message shown on the modal and close by message body "Please check your request payload for validation errors."
 
   @KillBrowser @ShouldAlwaysRun
