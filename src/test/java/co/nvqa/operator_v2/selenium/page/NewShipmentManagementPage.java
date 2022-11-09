@@ -665,6 +665,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     @FindBy(id = "master-awb")
     public TextBox mawb;
 
+    @FindBy(xpath = "//div/a/span[contains(text(),'Shipment Weight & Dimension page')]")
+    public Button mawbButtonLink;
+
     @FindBy(css = "[data-testid='confirm-edit-shipment-button']")
     public Button saveChanges;
 
@@ -914,5 +917,12 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     pause1s();
     click(ADD_FILTER_XPATH);
 
+  }
+
+  public void clickMAWBLinkButtonOnEditShipment() {
+      editShipmentDialog.mawbButtonLink.click();
+      switchToNewWindow();
+      this.switchTo();
+      waitUntilVisibilityOfElementLocated("//div/h4[contains(text(),'Add New Weight & Dimension')]",5);
   }
 }

@@ -983,4 +983,19 @@ public class NewShipmentManagementSteps extends AbstractSteps {
               .isEqualTo(message);
     });
   }
+
+  @And("Operator clicks Edit action button on Shipment Management page")
+  public void operatorClicksEditActionButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+    });
+  }
+
+  @And("Operator clicks mawb link button on Shipment Management page")
+  public void operatorClicksMawbLinkButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.clickMAWBLinkButtonOnEditShipment();
+    });
+  }
 }

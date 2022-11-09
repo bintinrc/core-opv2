@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @EditShipment
 Feature: Shipment Management - Edit Shipment
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -23,7 +23,7 @@ Feature: Shipment Management - Edit Shipment
     Then Operator verify the following parameters of all created shipments on Shipment Management page:
       | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
 
-  @DeleteShipments @runthis
+  @DeleteShipments
   Scenario: Bulk Update Shipment - Update Multiple Fields (uid:325947b5-3c94-441e-b5d1-28dd76627eb0)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -245,6 +245,6 @@ Feature: Shipment Management - Edit Shipment
       | status | Closed                    |
 
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
