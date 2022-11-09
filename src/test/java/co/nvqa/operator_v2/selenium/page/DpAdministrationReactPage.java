@@ -11,6 +11,7 @@ import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
@@ -36,6 +37,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//button[@data-testid='button_download_csv']")
   public Button buttonDownloadCsv;
+
+  @FindBy(xpath = "//button[@data-testid='button_download_csv']")
+  public Button DpButtonDownloadCsv;
 
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
   public Button buttonAddPartner;
@@ -394,7 +398,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public TextBox fieldMaximumParcelStay;
 
   @FindBy(xpath = "//input[@data-testid='file_add_photo_of_pudo_point']")
-  public TextBox fieldPhotoOfPudoPoint;
+  public FileInput fieldPhotoOfPudoPoint;
 
   @FindBy(xpath = "//input[@data-testid='field_password']")
   public TextBox fieldPassword;
