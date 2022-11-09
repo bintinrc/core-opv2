@@ -467,10 +467,6 @@ public class AirportTripManagementSteps extends AbstractSteps{
         airportTripManagementPage.verifySuccessUnassignAllDrivers(message);
     }
 
-    @Then("Operator verify Assign Driver button is disabled on Airport Trip page")
-    public void operatorVerifyAssignDriverButtonIsDisabledOnAirportTripPage() {
-    }
-
     @And("Operator search created flight trip {value} on Airport Trip table")
     public void operatorSearchCreatedFlightTripOnAirportTripTable(String tripID) {
         airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID,tripID);
@@ -498,5 +494,36 @@ public class AirportTripManagementSteps extends AbstractSteps{
     @And("Operator verify Assign Driver field not appear in Airport Flight Trip Details page")
     public void operatorVerifyAssignDriverFieldNotAppearInAirportFlightTripDetailsPage() {
         airportTripManagementPage.verifyAssignDriverFieldNotAppearInAirportFlightTripDetail();
+    }
+
+    @When("Operator clicks View Details action link on successful toast created to from airport trip")
+    public void operatorClicksViewDetailsActionLinkOnSuccessfulToastCreatedToFromAirportTrip() {
+        airportTripManagementPage.viewDetailsActionLink.click();
+        airportTripManagementPage.switchToOtherWindow();
+        airportTripManagementPage.waitUntilPageLoaded();
+        airportTripManagementPage.switchTo();
+    }
+
+    @Then("Operator verifies it direct to trip details page with data below:")
+    public void operatorVerifyItDirectToTripDetailsPageWithDataBelow(Map<String,String> data) {
+        Map<String,String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        String tripType = resolvedData.get("tripType");
+        airportTripManagementPage.verifyAirportTripDetailPageItem(tripType, tripID);
+    }
+
+    @And("Operator verifies the element of {string} tab on Airport Trip details page are correct")
+    public void operatorVerifiesTheElementOfTabOnAirportTripDetailsPageAreCorrect(String tabName) {
+        airportTripManagementPage.verifyTabElementOnAirportTripDetailsPage(tabName);
+    }
+
+    @Then("Operator verifies trip status is {string} on Airport Trip details page")
+    public void operatorVerifiesTripStatusIsOnAirportTripDetailsPage(String tripStatus) {
+        airportTripManagementPage.verifyTripStatusOnAirportTripDetailsPage(tripStatus);
+    }
+
+    @Then("Operator verify {string} button is disabled on Airport Trip page")
+    public void operatorVerifyButtonIsDisabledOnAirportTripPage(String actionButton) {
+        airportTripManagementPage.verifyActionsButtonIsDisabledOnAirportTripPage(actionButton);
     }
 }

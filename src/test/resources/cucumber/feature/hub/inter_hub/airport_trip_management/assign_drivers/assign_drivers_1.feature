@@ -305,7 +305,7 @@ Feature: Airport Trip Management - Assign Drivers 1
     And Operator clicks Save button on Assign Driver popup
     Then Operator successful message "0 driver(s) successfully assigned to the trip" for unassign driver display on Assigned Driver popup
 
-  @CancelTrip @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI
+  @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Cannot Assign Driver to Flight Trip - Airport Trip Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -341,7 +341,7 @@ Feature: Airport Trip Management - Assign Drivers 1
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                      |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                      |
       | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
-    Then Operator verify Assign Driver button is disabled on Airport Trip page
+    Then Operator verify "Assign Driver" button is disabled on Airport Trip page
 
   @KillBrowser
   Scenario: Kill Browser

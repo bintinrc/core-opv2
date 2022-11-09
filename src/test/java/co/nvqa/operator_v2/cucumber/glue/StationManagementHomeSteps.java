@@ -117,6 +117,18 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies that the tile:{string} is equal to {string}")
+  public void operator_verifies_that_the_tile_is_equal_to(String tileName,
+      String expectedTilevalue) {
+    stationManagementHomePage.closeIfModalDisplay();
+    String actualTileValue = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    takesScreenshot();
+    Assertions.assertThat(actualTileValue)
+        .as("expected Value is not matching for Total Completion Rate : %s", tileName)
+        .isEqualTo(expectedTilevalue);
+    takesScreenshot();
+  }
+
   @Then("Operator verifies that the count in the second tile: {string} has increased by {int}")
   public void operator_verifies_that_the_count_in__the_second_tile_has_increased_by(String tileName,
       Integer totOrder) {
@@ -355,6 +367,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_verifies_that_the_page_is_loaded_on_new_tab_on_clicking_the_link(
       String pageName, String linkName) {
     stationManagementHomePage.verifyPageOpenedOnClickingHyperlink(linkName, pageName);
+  }
+
+  @Then("Operator verifies that the URL {string} is loaded on new tab on clicking the link:{string}")
+  public void operator_verifies_that_the_URL_is_loaded_on_new_tab_on_clicking_the_link(
+      String ExpectedURL, String linkName) {
+    stationManagementHomePage.verifyURLOpenedOnClickingHyperlink(linkName, ExpectedURL);
   }
 
   @Then("Operator verifies that the text:{string} is displayed on the hub modal selection")
