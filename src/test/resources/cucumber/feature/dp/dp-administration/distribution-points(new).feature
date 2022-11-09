@@ -30,15 +30,15 @@ Feature: DP Administration - Distribution Point
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     And Operator will get the error from some field
-      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST  |
-      | poCode            | abc,Postcode                      |
-      | floorNo           | abc,Floor No                      |
-      | unitNo            | abc,Unit No                       |
-      | latitude          | abc,Latitude                      |
-      | longitude         | abc,Longitude                     |
-      | mcapacity         | abc,Maximum Parcel Capacity       |
-      | bCapacity         | abc,Buffer Capacity               |
-      | mpStay            | abc,Maximum Parcel Stay           |
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | poCode            | abc,Postcode                     |
+      | floorNo           | abc,Floor No                     |
+      | unitNo            | abc,Unit No                      |
+      | latitude          | abc,Latitude                     |
+      | longitude         | abc,Longitude                    |
+      | mcapacity         | abc,Maximum Parcel Capacity      |
+      | bCapacity         | abc,Buffer Capacity              |
+      | mpStay            | abc,Maximum Parcel Stay          |
 
   @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario: Update DP - Validation check (uid:15a71188-4ee0-4713-8733-451b83eadebb)
@@ -697,16 +697,20 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | HUSSAM-SHAFAF_NINJA_123 | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+      | name                     | shipperId                                    | contact      | shortName               | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | autoReservationEnabled | autoReservationCutOffTime |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | HUSSAM-SHAFAF_NINJA_123 | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | true                   | 15:30                     |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
-    And Operator waits for 10 seconds
+    And Operator waits for 5 seconds
     And Operator get the value of DP ID
-    When DB operator gets DP details from Hibernate
-      | dpId | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
-    Then Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "15:30:00"
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_RESERVATION_DATA        |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP with Auto-reservation Enabled and Default Cutoff Time (uid:82f0e08c-83a0-4ca3-88ed-a433756f41f9)
@@ -721,13 +725,20 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode  | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE     | true                   |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | true                   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST  |
+      | dpSettings | KEY_DP_SETTINGS                   |
+      | condition  | CHECK_DP_RESERVATION_DATA_DEFAULT |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create DP - Auto Reservation Disabled (uid:72a1c15d-3253-4009-bd50-3a9875516380)
@@ -742,14 +753,20 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | false                  |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
-    And Operator press save setting button
+    Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies auto reservation for dp "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "disabled"
-    And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST   |
+      | dpSettings | KEY_DP_SETTINGS                    |
+      | condition  | CHECK_DP_RESERVATION_DATA_DISABLED |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Short name is duplicate - Return Error (uid:c61d83b1-dd57-4bfc-8ffc-315980a55609)
@@ -764,11 +781,13 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName           | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP             | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
-    And Operator will get the error from some field
-      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
-      | shortName         | short_name TEST-DP                |
+      | name                     | shipperId                                    | contact      | shortName | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP   | hus.sharaf-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator will receiving error message pop-up "Dp with short_name TEST-DP already exists"
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - External Store ID is Duplicate - Return Error (uid:1c5bf620-8782-49cd-843d-4da1e50ab281)
@@ -783,11 +802,13 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | TESTING-NewDP          | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
-    And Operator will get the error from some field
-      | distributionPoint       | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
-      | externalStoreId         | external_store_id TESTING-NewDP   |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | TESTING-NewDP   | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator will receiving error message pop-up "Dp with external_store_id TESTING-NewDP already exists"
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Short Name and External Store ID is Duplicate - Return Error (uid:5e810b71-6531-4be7-bcaa-4527ab217fcb)
@@ -802,12 +823,13 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP                | TESTING-NewDP          | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m   | true                   |
-    And Operator will get the error from some field
-      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
-      | externalStoreId   | external_store_id TESTING-NewDP   |
-      | shortName         | short_name TEST-DP                |
+      | name                     | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | TEST-DP   | TESTING-NewDP   | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator will receiving error message pop-up "already exists"
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Upload DP Photos - Right Dimensions (uid:832a25fb-e77d-47a0-8b44-03d0ac98f1e3)
@@ -822,8 +844,8 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto  |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid    |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -843,8 +865,8 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | images     |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | invalid    |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | invalid |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -864,16 +886,24 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto  |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid    |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
     And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
-  ## edit DP steps will be in seperate PR
-#    When Operator deletes the dp image and "save settings"
-#    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not present"
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
+    And Operator waits for 5 seconds
+    When Operator fill Detail for create DP Management:
+      | contact      | dpPhoto |
+      | {dp-contact} | clear   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    And Operator press save setting button
+    And Operator waits for 5 seconds
+    When Operator deletes the dp image and "save settings"
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Download CSV DPs
@@ -898,7 +928,7 @@ Feature: DP Administration - Distribution Point
     Then The Dp page is displayed
     When Operator click on the distribution points Download CSV File button
     When Operator get all DP params on DP Administration page
-    Then Downloaded CSV file contains correct DP data
+    Then Downloaded CSV file contains correct DP data in new react page
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Update Distribution Point - Ninja Point
@@ -919,8 +949,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                  |  postalCode       | type        |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Box  |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type      |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Box |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -938,8 +968,8 @@ Feature: DP Administration - Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
-      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type       | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test user | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
@@ -952,8 +982,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                  |  postalCode       | type          |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point  |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -971,8 +1001,8 @@ Feature: DP Administration - Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
-      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type       | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
@@ -985,8 +1015,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                   |  postalCode       | type          | cutOffTime       |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point  | 19 h 00 m         |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        | autoReservationCutOffTime |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point | 19:00                     |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1004,8 +1034,8 @@ Feature: DP Administration - Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
-      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type       | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
@@ -1018,8 +1048,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                   |  postalCode       | type            | externalStoreId |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point     | GENERATED       |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        | externalStoreId |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point | GENERATED       |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1034,10 +1064,11 @@ Feature: DP Administration - Distribution Point
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Update Existing DP - External Store ID is Duplicate - Error Message Displayed
-  | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
-      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type       | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
@@ -1050,19 +1081,23 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                   |  postalCode       | type            | externalStoreId |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point     | TESTING-NewDP   |
-    Then Operator will get the error from some field
-      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_RESPONSE |
-      | externalStoreId   | external_store_id TESTING-NewDP   |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        | externalStoreId |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point | TESTING-NewDP   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
+    Then Operator will receiving error message pop-up "Dp with external_store_id TESTING-NewDP already exists"
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Update Existing DP - External Store ID is NULL - Success Update (uid:8067639b-8ceb-4b72-94ec-831afb3a1938)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    And API Operator add new DP for the created DP Partner with the following attributes:
-      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
-    When Operator go to menu Distribution Points -> DP Administration
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -1073,8 +1108,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                  |  postalCode       | type          |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point  |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1089,11 +1124,13 @@ Feature: DP Administration - Distribution Point
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Update Existing DP - External Store ID is Space only - Success Update
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    And API Operator add new DP for the created DP Partner with the following attributes:
-      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
-    When Operator go to menu Distribution Points -> DP Administration
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
@@ -1104,8 +1141,8 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                  |  postalCode       | type          |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point  |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        | externalStoreId |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point | space           |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1123,8 +1160,8 @@ Feature: DP Administration - Distribution Point
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
     When Operator fill Detail for create DP Management:
-      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type       | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Box  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
     Then API Operator request to create DP Management
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
@@ -1137,33 +1174,39 @@ Feature: DP Administration - Distribution Point
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact      |  unitNumber | floorNumber |  directions                                                |  address_1      | address_2                   |  postalCode       | type          | isAutoReservation |
-      | {dp-contact}  | 1          | 1           |  Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360       |  1 JELEBU ROAD  | BUKIT PANJANG PLAZA, #01-32 |  467360          |  Ninja Point  | false              |
+      | contact      | unitNumber | floorNumber | directions                                          | address_1     | address_2                   | postalCode | type        | autoReservationEnabled |
+      | {dp-contact} | 1          | 1           | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 | 1 JELEBU ROAD | BUKIT PANJANG PLAZA, #01-32 | 467360     | Ninja Point | true                   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies that the cut off time for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "23:59:59"
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Edit Existing DP - Upload DP Photos - Right Dimensions
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    And API Operator add new DP for the created DP Partner with the following attributes:
-      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
-    When Operator go to menu Distribution Points -> DP Administration
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
     And Operator press view DP Button
     Then The Dp page is displayed
-    And Operator fill the Dp list filter by "id"
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_12  | Mirza.Aziz-Ninjavan08_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
     Then Operator press edit DP button
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact       |  dpPhoto   |
-      | {dp-contact}  | valid      |
+      | contact      | dpPhoto |
+      | {dp-contact} | valid   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     And Operator press save setting button
@@ -1172,23 +1215,29 @@ Feature: DP Administration - Distribution Point
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: Edit Existing DPs - Update DP Photo - Wrong Dimensions
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    And API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-id}"
-    And API Operator add new DP for the created DP Partner with the following attributes:
-      | requestBody | {"hub_id":null,"type":"SHOP","can_shipper_lodge_in":true,"can_customer_collect":true,"dp_service_type":"RETAIL_POINT_NETWORK","driver_collection_mode":"CONFIRMATION_CODE","max_parcel_stay_duration":2,"name":"DP-{{unique_string}}","short_name":"{{unique_string}}","address_1":"1 JELEBU ROAD","address_2":"BUKIT PANJANG PLAZA, #01-32","city":"SG","postal_code":"677743","latitude": "1.372098","longitude": "103.909417","directions":"Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743","contact":"{{generated_phone_no}}","is_active":false,"is_ninja_warehouse":false,"is_public": false,"floor_number": "1","unit_number": "1","actual_max_capacity": 2,"computed_max_capacity": 1,"opening_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]},"operating_hours":{"monday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"tuesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"wednesday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"thursday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"friday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"saturday":[{"start_time":"08:00:00","end_time":"21:00:00"}],"sunday":[{"start_time":"08:00:00","end_time":"21:00:00"}]}} |
-    When Operator go to menu Distribution Points -> DP Administration
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "Create Dp Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    Given Operator go to menu Distribution Points -> DP Administration
     And Operator refresh page
     Then The Dp Administration page is displayed
     And Operator fill the partner filter by "id"
     And Operator press view DP Button
     Then The Dp page is displayed
-    And Operator fill the Dp list filter by "id"
+    Then Operator press Add DP
+    And The Create and Edit Dp page is displayed
+    When Operator fill Detail for create DP Management:
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_3   | Mirza.Aziz-Ninjavan19_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+    Then Operator press save setting button
+    And Operator waits for 5 seconds
     Then Operator press edit DP button
     And The Create and Edit Dp page is displayed
     And Operator waits for 5 seconds
     When Operator fill Detail for create DP Management:
-      | contact       |  dpPhoto     |
-      | {dp-contact}  | invalid      |
+      | contact      | dpPhoto |
+      | {dp-contact} | invalid |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     And Operator press save setting button
@@ -1208,15 +1257,15 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto  |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_123 | Mirza.Aziz-Ninjavan09_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid    |
+      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled | dpPhoto |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_ 23 | Mirza.Aziz-Ninjavan03_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   | valid   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
     And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
     When Operator fill Detail for create DP Management:
-      | contact       |  dpPhoto     |
-      | {dp-contact}  |  clear       |
+      | contact      | dpPhoto |
+      | {dp-contact} | clear   |
     When Operator press return to list button
     Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
