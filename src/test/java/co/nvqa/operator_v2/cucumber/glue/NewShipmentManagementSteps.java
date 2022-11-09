@@ -343,8 +343,23 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator edit Shipment on Shipment Management page:")
   public void operatorEditShipment(Map<String, String> data) {
     Map<String, String> resolvedData = resolveKeyValues(data);
+    String shipmentId = resolvedData.get("shipmentId");
     page.inFrame(() -> {
-      this.operatorInputFormEditShipmentOnShipmentManagementPage(resolvedData);
+      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+      if (resolvedData.containsKey("origHubName")) {
+        page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
+      }
+      if (resolvedData.containsKey("destHubName")) {
+        page.editShipmentDialog.endHub.selectValue(resolvedData.get("destHubName"));
+      }
+      if (resolvedData.containsKey("shipmentType")) {
+        page.editShipmentDialog.type.selectValue(resolvedData.get("shipmentType"));
+      }
+      if (resolvedData.containsKey("comments")) {
+        page.editShipmentDialog.comments.setValue(resolvedData.get("comments"));
+      }
       page.editShipmentDialog.saveChanges.click();
     });
   }
@@ -966,6 +981,21 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       Assertions.assertThat(page.shipmentToBeUpdatedTable.originDestinationHubError.getText())
               .as("Showing error message Origin Hub and Destination Hub cannot be the same")
               .isEqualTo(message);
+    });
+  }
+
+  @And("Operator clicks Edit action button on Shipment Management page")
+  public void operatorClicksEditActionButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+    });
+  }
+
+  @And("Operator clicks mawb link button on Shipment Management page")
+  public void operatorClicksMawbLinkButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.clickMAWBLinkButtonOnEditShipment();
     });
   }
 }
