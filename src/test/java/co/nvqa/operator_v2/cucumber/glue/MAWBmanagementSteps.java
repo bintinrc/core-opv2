@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.RecordOffloadModal;
@@ -218,5 +219,54 @@ public class MAWBmanagementSteps extends AbstractSteps {
         .as("Error message is display").isTrue();
   }
 
+  @Given("Operator performs manifest MAWB following data below:")
+  public void operatorPerformManifestMAWB(Map<String,String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    mawbManagementgPage.mawbtable.filterByColumn(COLUMN_MAWB, resolvedData.get("mawb"));
+    mawbManagementgPage.waitWhileTableIsLoading();
+    mawbManagementgPage.mawbtable.selectRow(1);
+    mawbManagementgPage.mawbtable.manifestButton.click();
+    mawbManagementgPage.verifyManifestMAWBPage();
+    try {
+      if (resolvedData.get("uploadFileSize")!=null){
+        Long sizeInBytes = Long.parseLong(resolvedData.get("uploadFileSize"));
+        mawbManagementgPage.uploadFileOnManifestPage(sizeInBytes);
+      }
+      if (resolvedData.get("comments")!=null)
+        mawbManagementgPage.manifestModal.comments.sendKeys(resolvedData.get("comments"));
+    } catch (Throwable ex) {
+      LOGGER.debug("Can not convert string to Long .. !");
+      throw new NvTestRuntimeException(ex);
+    }
+  }
+
+  @Given("Operator clicks on submit manifest button on Manifest MAWB Page")
+  public void operatorClicksOnSubmitManifestButton(){
+    mawbManagementgPage.manifestModal.manifestConfirmCheckbox.click();
+    mawbManagementgPage.manifestModal.submitManifest.click();
+  }
+
+  @Then("Operator verifies manifest MAWB successfully message")
+  public void operatorVerifiesManifestMAWBSuccessfully(){
+    mawbManagementgPage.manifestModal.submitManifest.waitUntilInvisible();
+    mawbManagementgPage.verifyOffloadMessageSuccessful("Successfully Manifested.");
+  }
+
+  @Then("Operator verifies toast messages below on Manifest MAWB page:")
+  public void operatorVerifiesErrorMessages(List<String> expectedError){
+    expectedError = resolveValues(expectedError);
+    mawbManagementgPage.verifyToastErrorMessage(expectedError);
+  }
+
+  @Given("Operator clicks on close button on Manifest MAWB Page")
+  public void operatorClicksOnCloseButtonOnManifestMAWBPage(){
+    mawbManagementgPage.manifestModal.close.click();
+    mawbManagementgPage.manifestModal.pageTile.waitUntilInvisible();
+  }
+
+  @Then("Operator verifies that manifest MAWB page close")
+  public void operatorVerifiesManifestPageClose(){
+    Assertions.assertThat(mawbManagementgPage.manifestModal.pageTile.isDisplayedFast()).as("Manifest MAWB page is closed").isFalse();
+  }
 
 }
