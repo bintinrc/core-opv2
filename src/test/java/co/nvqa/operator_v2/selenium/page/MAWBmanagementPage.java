@@ -1,12 +1,22 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.sort.hub.AirTrip;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -18,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.*;
+
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -39,12 +49,15 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     private static final String MAWB_MANAGEMENR_SEARCH_HEADER_XPATH = "//h4[text() = '%s']";
     private static final String MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
     private static final String MAWB_MANAGEMENR_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
+    private static final String MAWB_MANIFEST_UPLOAD_FILE_INFOR = "//div[@class='ant-upload-list-item-info']//a[contains(@title,'%s')]";
+    private static final String TOAST_ERROR_MESSAGES_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[normalize-space(.)]";
     private static final String searchByMAWBTextBoxId = "search-by-mawb-ref-form_searchMawbRefs";
     private static final String searchByVendor_mawbVendorId = "search-by-vendor-form_mawbVendor";
     private static final String searchByVendor_mawbOriginAirportId = "search-by-vendor-form_mawbOriginAirport";
     private static final String searchByVendor_mawbDestinationAirportId = "search-by-vendor-form_mawbDestinationAirport";
     private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
 
+    private static final String FILEPATH = TestConstants.TEMP_DIR;
 
     @FindBy(xpath = "//span[@class='ant-typography']")
     public PageElement searchMAWBtextInfor;
@@ -82,14 +95,11 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
     @FindBy(className = "ant-modal-wrap")
     public RecordOffloadModal recordOffload;
 
-    @FindBy(id = "manifest_form_is_aware")
-    public PageElement manifestConfirmCheckbox;
-
-    @FindBy(css ="[data-testid = 'submit-manifest-button']")
-    public Button submitManifest;
-
     @FindBy(xpath ="//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]")
     public PageElement noticeErrorMessage;
+
+    @FindBy(className = "ant-modal-wrap")
+    public ManifestMAWBModal manifestModal;
 
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
@@ -224,14 +234,6 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
             Assertions.assertThat(TotalSearchResult.getText()).as("Total result is the same").isEqualTo(expectedResult);
         }
     }
-
-    public void manifestMAWB(){
-        waitUntilVisibilityOfElementLocated("//div[text()='Manifest MAWB']");
-        manifestConfirmCheckbox.click();
-        submitManifest.click();
-        submitManifest.waitUntilInvisible();
-    }
-
 
     public void waitWhileTableIsLoading() {
         Wait<MAWBmanagementPage.amwbTableModal> fWait = new FluentWait<>(mawbtable)
@@ -418,6 +420,102 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(recordOffload.OffloadDepartureTime.getAttribute("value")).as("Estimated Flight Departure Date & Time is empty").isEqualTo("");
         Assertions.assertThat(recordOffload.OffloadArrivalTime.getAttribute("value")).as("Estimated Flight Arrival Date & Time is empty").isEqualTo("");
         Assertions.assertThat(recordOffload.OffloadComments.getText()).as("Comments is empty").isEqualTo("");
+    }
+
+    public static class ManifestMAWBModal extends AntModal{
+        public ManifestMAWBModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy (xpath ="//div[text()='Manifest MAWB']")
+        public PageElement pageTile;
+
+        @FindBy (xpath = "//button[@class='ant-modal-close']")
+        public Button close;
+
+        @FindBy (xpath = "//span[text()='Total Booked Pcs']")
+        public PageElement totalBookedPcs;
+
+        @FindBy (xpath = "//span[text()='Total Booked Weight']")
+        public PageElement totalBookedWeight;
+
+        @FindBy (xpath = "//span[text()='Total Booked Volume']")
+        public PageElement totalBookedVolumn;
+
+        @FindBy(css = "[data-testid = 'upload-manifest-attachment']")
+        public FileInput manifestUploadFile;
+
+        @FindBy(xpath = "//div[@class='ant-upload-list-item-progress']")
+        public PageElement fileUploadProgress;
+
+        @FindBy(id = "manifest_form_comments")
+        public TextBox comments;
+
+        @FindBy(id = "manifest_form_is_aware")
+        public PageElement manifestConfirmCheckbox;
+
+        @FindBy(css ="[data-testid = 'submit-manifest-button']")
+        public Button submitManifest;
+
+    }
+
+    public void verifyManifestMAWBPage(){
+        manifestModal.pageTile.waitUntilVisible();
+        Assertions.assertThat(manifestModal.pageTile.isDisplayed()).as("Manifest Page title is display").isTrue();
+        Assertions.assertThat(manifestModal.close.isDisplayed()).as("Manifest close button is display").isTrue();
+        Assertions.assertThat(manifestModal.totalBookedPcs.isDisplayed()).as("Manifest total Booked Pcs is display").isTrue();
+        Assertions.assertThat(manifestModal.totalBookedWeight.isDisplayed()).as("Manifest total Booked Weight is display").isTrue();
+        Assertions.assertThat(manifestModal.totalBookedVolumn.isDisplayed()).as("Manifest total Booked Volumn is display").isTrue();
+        Assertions.assertThat(manifestModal.comments.isDisplayed()).as("Manifest comments is display").isTrue();
+        Assertions.assertThat(manifestModal.submitManifest.isDisplayed()).as("Manifest submit button is display").isTrue();
+    }
+
+    public void manifestMAWB(){
+        manifestModal.pageTile.waitUntilVisible();
+        manifestModal.manifestConfirmCheckbox.click();
+        manifestModal.submitManifest.click();
+        manifestModal.submitManifest.waitUntilInvisible();
+    }
+    public void uploadFileOnManifestPage(Long sizeInBytes){
+        String filename = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
+        String fullPath = FILEPATH+filename;
+        createTemporaryFile(fullPath, sizeInBytes);
+        pause300ms();
+        manifestModal.manifestUploadFile.setValue(fullPath);
+        if (sizeInBytes>=10485760){
+            String actMessage = getAntTopText();
+            Assertions.assertThat(actMessage).as("File must be smaller than 10 MB").isEqualToIgnoringCase("File must be smaller than 10 MB");
+        }else {
+            waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,filename));
+            manifestModal.fileUploadProgress.waitUntilInvisible(30);
+        }
+    }
+
+    private void createTemporaryFile(final String filename, final long sizeInBytes) {
+        try{
+            File file = new File(filename);
+            file.createNewFile();
+
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            raf.setLength(sizeInBytes);
+            raf.close();
+        }catch (Throwable ex) {
+            LOGGER.debug("Can not create random file .. !");
+            throw new NvTestRuntimeException(ex);
+        }
+    }
+
+    public void verifyToastErrorMessage(List<String> expectedMessages){
+
+        List<WebElement> ErrorMessagesElement = findElementsByXpath(TOAST_ERROR_MESSAGES_XPATH);
+
+        List<String> actualMessages = new ArrayList<>();
+        ErrorMessagesElement.forEach(e -> actualMessages.add(e.getText()));
+        System.out.println(actualMessages.toString());
+        Boolean compareResult = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
+        Assertions.assertThat(compareResult).as("Error message is the same").isTrue();
+
     }
 
 
