@@ -30,7 +30,7 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@data-testid='button_load_selection']")
   public Button loadSelectionButton;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-dropdown-trigger')]")
+  @FindBy(xpath = "//button[@data-testid='button_apply_actions']")
   public Button applyActionButton;
 
   @FindBy(xpath = "//li[@data-testid='button_bulk_update']")
