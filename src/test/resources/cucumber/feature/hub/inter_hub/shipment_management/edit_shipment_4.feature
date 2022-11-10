@@ -6,9 +6,8 @@ Feature: Shipment Management - Edit Shipment 4
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment
-  Scenario: Edit Shipment - Start Hub
+  Scenario: Edit Shipment - Origin Hub
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -29,10 +28,9 @@ Feature: Shipment Management - Edit Shipment 4
       | destHubName  | {hub-name-2}              |
 
   @DeleteShipment
-  Scenario: Edit Shipment - End Hub
+  Scenario: Edit Shipment - Destination Hub
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
@@ -56,7 +54,6 @@ Feature: Shipment Management - Edit Shipment 4
   Scenario: Edit Shipment - Comments
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
