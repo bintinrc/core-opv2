@@ -63,6 +63,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
+    public static String FILENAME = "";
 
     @FindBy(xpath = "//span[@class='ant-typography']")
     public PageElement searchMAWBtextInfor;
@@ -491,8 +492,9 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         manifestModal.submitManifest.waitUntilInvisible();
     }
     public void uploadFileOnManifestPage(Long sizeInBytes){
-        String filename = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
-        String fullPath = FILEPATH+filename;
+        FILENAME = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
+        String fullPath = "D:\\tmp\\"+FILENAME; //Remove this line before commit code
+//        String fullPath = FILEPATH+FILENAME;
         createTemporaryFile(fullPath, sizeInBytes);
         pause300ms();
         manifestModal.manifestUploadFile.setValue(fullPath);
@@ -500,7 +502,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
             String actMessage = getAntTopText();
             Assertions.assertThat(actMessage).as("File must be smaller than 10 MB").isEqualToIgnoringCase("File must be smaller than 10 MB");
         }else {
-            waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,filename));
+            waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,FILENAME));
             manifestModal.fileUploadProgress.waitUntilInvisible(30);
         }
     }
@@ -537,7 +539,8 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         public static final String RESULT = "result";
         public static final String STATUS = "status";
         public static final String WHEN = "when";
-
+        public static final String MAWB_DETAILS_PAGE_ITEMS_XPATH= "//div[@class='ant-card-body']//span[text()='%s']";
+        public static final String MANIFEST_ATTACHMENT_XPATH = "//div[@class='ant-upload-list-item-info']//a[@title='%s']";
         public MawbEventsTable(WebDriver webDriver) {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
@@ -550,6 +553,34 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
             setEntityClass(MawbEvent.class);
             setTableLocator("//div[@data-testid='mawb-event-table-table']");
         }
+
+        @FindBy(xpath = "//span[text()='Comments']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement manifestComments;
+    }
+
+    public void verifyMAWBDetailsItems(){
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"MAWB")).isDisplayed()).as("MAWB is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"MAWB Status")).isDisplayed()).as("MAWB Status is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Vendor")).isDisplayed()).as("Vendor is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Origin Airport")).isDisplayed()).as("Origin Airport is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Destination Airport")).isDisplayed()).as("Destination Airport is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Pcs")).isDisplayed()).as("Booked Pcs is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Weight")).isDisplayed()).as("Booked Weight is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Volume")).isDisplayed()).as("Booked Volume is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Flight Number")).isDisplayed()).as("Flight Number is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Flight Date Time")).isDisplayed()).as("Flight Date Time is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Pcs of Offload")).isDisplayed()).as("Pcs of Offload is display").isTrue();
+
+    }
+
+    public void verifyManifestOnDetailsPage(Map<String,String> data){
+        if (data.get("uploadFile")!=null)
+            Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MANIFEST_ATTACHMENT_XPATH,FILENAME)).isDisplayed())
+                .as("Manifest attachment file is display").isTrue();
+        if(data.get("comments")!=null)
+            Assertions.assertThat(mawbEventsTable.manifestComments.getText()).as("Comment message is the same").contains(data.get("comments"));
+
+
     }
 
 }

@@ -280,7 +280,7 @@ public class MAWBmanagementSteps extends AbstractSteps {
     mawbManagementgPage.mawbtable.clickActionButton(1,ACTION_DETAILS);
     mawbManagementgPage.switchToOtherWindow();
     mawbManagementgPage.waitUntilPageLoaded();
-    Assertions.assertThat(mawbManagementgPage.findElementByXpath("//div[text()='MAWB Details']").isDisplayed()).as("OK").isTrue();
+    mawbManagementgPage.inFrame(() ->mawbManagementgPage.verifyMAWBDetailsItems());
   }
 
   @Then("Operator verifies mawb event on MAWB Details page:")
@@ -297,6 +297,18 @@ public class MAWBmanagementSteps extends AbstractSteps {
         mawbManagementgPage.refreshPage();
         throw ex;
       }
-    }), "retry shipment details", 1000, 2);
+    }), "retry MAWB details", 1000, 2);
+  }
+
+  @Then("Operator verifies manifest items on MAWB Details page:")
+  public void operatorVerifiesManifestItemsOnDetailsPage(Map<String,String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    if (!mawbManagementgPage.FILENAME.equals(""))
+        resolvedData.put("uploadFile",mawbManagementgPage.FILENAME);
+    pause1s();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+            mawbManagementgPage.inFrame(() ->mawbManagementgPage.verifyManifestOnDetailsPage(resolvedData))
+    ,"retry MAWB manifest detail",500, 2);
+
   }
 }
