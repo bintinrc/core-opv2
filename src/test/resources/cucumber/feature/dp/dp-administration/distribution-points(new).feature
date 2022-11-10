@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP @CWF
+@OperatorV2 @DistributionPointsReactPage @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1254,9 +1254,16 @@ Feature: DP Administration - Distribution Point
       | {dp-contact} | invalid |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
-    And Operator press save setting button
+    Then Operator press save setting button
     And Operator waits for 5 seconds
-    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not valid"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Edit Existing DPs - Delete DP Photo without Save
@@ -1277,9 +1284,30 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
+    And Operator waits for 5 seconds
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | contact      | dpPhoto |
-      | {dp-contact} | clear   |
+      | contact      | dpPhoto      |
+      | {dp-contact} | notSaveClear |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     When Operator press return to list button
-    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+    When Operator press leave the page button
+    And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |

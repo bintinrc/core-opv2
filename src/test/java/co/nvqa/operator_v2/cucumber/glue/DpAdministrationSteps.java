@@ -526,6 +526,14 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+
+  @Then("Operator press leave the page button")
+  public void pressLeaveThepage() {
+    dpAdminReactPage.inFrame(() -> {
+      dpAdminReactPage.buttonLeaveThePage.click();
+    });
+  }
+
   @Then("Operator press save setting button")
   public void pressSaveSetting() {
     dpAdminReactPage.inFrame(() -> {
@@ -969,8 +977,9 @@ public class DpAdministrationSteps extends AbstractSteps {
                 dpDetailsResponse.getMaxParcelStayDuration());
       }
       if (dpDetailsResponse.getDpPhoto() != null) {
-        if(dpDetailsResponse.getDpPhoto() == "clear"){
-          dpAdminReactPage.fieldPhotoOfPudoPoint.clear();
+        if(dpDetailsResponse.getDpPhoto().equalsIgnoreCase("clear")
+            || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")){
+          dpAdminReactPage.removeExistingPicture();
         }else{
         dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
                 dpDetailsResponse.getDpPhotoFile());
@@ -1136,17 +1145,17 @@ public class DpAdministrationSteps extends AbstractSteps {
         splitElement = unitNo.split(",");
         dpAdminReactPage.fieldUnitNo.forceClear();
         dpAdminReactPage.fieldUnitNo.setValue(splitElement[0]);
-        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
         dpAdminReactPage.fieldUnitNo.forceClear();
-        dpAdminReactPage.fieldUnitNo.setValue(dp.getUnitNumber());
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldUnitNo.setValue(splitElement[0]);
       }
       if (latitude != null) {
         splitElement = latitude.split(",");
         dpAdminReactPage.fieldLatitude.forceClear();
         dpAdminReactPage.fieldLatitude.setValue(splitElement[0]);
-        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
         dpAdminReactPage.fieldLatitude.forceClear();
-        dpAdminReactPage.fieldLatitude.setValue(dp.getLatitude());
+        dpAdminReactPage.fieldErrorMsg(splitElement[1]);
+        dpAdminReactPage.fieldLatitude.setValue(splitElement[0]);
       }
       if (longitude != null) {
         splitElement = longitude.split(",");
@@ -1399,7 +1408,8 @@ public class DpAdministrationSteps extends AbstractSteps {
       } else if (condition.equals(CHECK_DP_PHOTO)) {
         DpSetting dpSetting = get(KEY_DP_SETTINGS);
         if (dpDetailsResponse != null && dpSetting != null) {
-          if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("valid")){
+          if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("valid")
+              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")){
             Assertions.assertThat(dpSetting.getImages())
                 .as("Dp Images is Existed Is Valid")
                 .isNotNull();
