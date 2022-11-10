@@ -51,6 +51,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   private static final String CHECK_DP_RESERVATION_DATA_DEFAULT = "CHECK_DP_RESERVATION_DATA_DEFAULT";
   private static final String CHECK_DP_RESERVATION_DATA_DISABLED = "CHECK_DP_RESERVATION_DATA_DISABLED";
   private static final String CHECK_DP_OPENING_OPERATING_HOURS = "CHECK_DP_OPENING_OPERATING_HOURS";
+  private static final String CHECK_DP_PHOTO = "CHECK_DP_PHOTO";
   private static final String CHECK_ALTERNATE_DP_DATA = "CHECK_ALTERNATE_DP_DATA";
   private static final String CHECK_DP_SEARCH_ADDRESS = "CHECK_DP_SEARCH_ADDRESS";
   public static final String OPENING_HOURS = "OPENING_HOURS";
@@ -1394,6 +1395,20 @@ public class DpAdministrationSteps extends AbstractSteps {
           Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
                   .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
                   .isEqualTo(dpSetting.getAutoReservationEnabled());
+        }
+      } else if (condition.equals(CHECK_DP_PHOTO)) {
+        DpSetting dpSetting = get(KEY_DP_SETTINGS);
+        if (dpDetailsResponse != null && dpSetting != null) {
+          if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("valid")){
+            Assertions.assertThat(dpSetting.getImages())
+                .as("Dp Images is Existed Is Valid")
+                .isNotNull();
+          } else if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("clear")
+              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("invalid")){
+            Assertions.assertThat(dpSetting.getImages())
+                .as("Dp Images is Existed Is Invalid")
+                .isEqualTo("[]");
+          }
         }
       }
     }
