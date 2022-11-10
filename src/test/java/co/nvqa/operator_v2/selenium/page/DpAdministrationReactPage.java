@@ -77,6 +77,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//button[@data-testId='button_return_to_list']")
   public Button buttonReturnToList;
 
+  @FindBy(xpath = "//button[@data-testId='button_leave_the_page']")
+  public Button buttonLeaveThePage;
+
   @FindBy(xpath = "//button[@data-testId='button_save_settings']")
   public Button buttonSaveSettings;
 
@@ -400,6 +403,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='file_add_photo_of_pudo_point']")
   public FileInput fieldPhotoOfPudoPoint;
 
+
+  @FindBy(xpath = "//span[@class='ant-upload-list-item-actions']/button")
+  public Button buttonRemovePicture;
+
+  @FindBy(xpath = "//button[@data-testid='file_delete_submit_pudo_point']")
+  public Button buttonConfirmRemove;
+
   @FindBy(xpath = "//input[@data-testid='field_password']")
   public TextBox fieldPassword;
 
@@ -649,6 +659,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String CHOOSE_ALTERNATIVE_DP_XPATH = "//div[@class='rc-virtual-list']//div[@class='ant-select-item-option-content'][contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
   public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
+  public static final String DP_PHOTO_FILE_FIELD = "//div[@class='ant-upload-list-item-info']";
 
   public static final String SINGLE = "SINGLE";
   public static final String NEXT = "NEXT";
@@ -841,8 +852,8 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put(EXTERNAL_STORE_ID,
           "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
       .put(POSTCODE, "Please enter a valid number.")
-      .put(FLOOR_NO, "Please enter a valid number.")
-      .put(UNIT_NO, "Please enter a valid number.")
+      .put(FLOOR_NO, "Floor No. is required")
+      .put(UNIT_NO, "Unit No. is required")
       .put(LATITUDE, "please enter valid number.")
       .put(LONGITUDE, "please enter valid number.")
       .put(MAXIMUM_PARCEL_CAPACITY, "please enter valid number.")
@@ -1000,6 +1011,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void chooseShipperAssignedHub(String hubName) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
     click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+  }
+
+  public void removeExistingPicture() {
+    moveToElementWithXpath(DP_PHOTO_FILE_FIELD);
+    buttonRemovePicture.click();
+    buttonConfirmRemove.click();
   }
 
   public void chooseFromSearch(String searchName) {

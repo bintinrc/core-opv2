@@ -871,7 +871,14 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not present"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Create New DP - Upload DP Photos - Delete DP Photo (uid:e5cd0a1d-323a-42b8-93a2-013f8bd49921)
@@ -903,7 +910,14 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     And Operator press save setting button
     And Operator waits for 5 seconds
-    When Operator deletes the dp image and "save settings"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Download CSV DPs
@@ -1195,8 +1209,8 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_12  | Mirza.Aziz-Ninjavan08_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+      | name                     | shipperId                                    | contact      | shortName             | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_12 | Mirza.Aziz-Ninjavan08_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1226,8 +1240,8 @@ Feature: DP Administration - Distribution Point
     Then Operator press Add DP
     And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | name                     | shipperId                                    | contact      | shortName              | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
-      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_3   | Mirza.Aziz-Ninjavan19_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
+      | name                     | shipperId                                    | contact      | shortName            | externalStoreId        | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type        | hubName   | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | HUSSAM_NINJA_123 TESTING | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | AUDIA-ANJANI_NINJA_3 | Mirza.Aziz-Ninjavan19_ | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | Ninja Point | {sbm-hub} | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 15 h 30 m  | true                   |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
@@ -1240,9 +1254,16 @@ Feature: DP Administration - Distribution Point
       | {dp-contact} | invalid |
     Then Operator fill the DP details
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
-    And Operator press save setting button
+    Then Operator press save setting button
     And Operator waits for 5 seconds
-    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "not valid"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
 
   @DeleteNewlyCreatedDpManagementPartner
   Scenario: Edit Existing DPs - Delete DP Photo without Save
@@ -1263,9 +1284,30 @@ Feature: DP Administration - Distribution Point
       | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     Then Operator press save setting button
     And Operator waits for 5 seconds
-    And Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
+    And Operator waits for 5 seconds
+    Then Operator press edit DP button
+    And The Create and Edit Dp page is displayed
     When Operator fill Detail for create DP Management:
-      | contact      | dpPhoto |
-      | {dp-contact} | clear   |
+      | contact      | dpPhoto      |
+      | {dp-contact} | notSaveClear |
+    Then Operator fill the DP details
+      | distributionPoint | KEY_CREATE_DP_MANAGEMENT_REQUEST |
     When Operator press return to list button
-    Then Operator verifies the image for "KEY_CREATE_DP_MANAGEMENT_REQUEST" is "present"
+    When Operator press leave the page button
+    And Operator waits for 5 seconds
+    And Operator get the value of DP ID
+    When DB operator gets all details from DP Settings From Hibernate
+      | parameter | dpId                                        |
+      | value     | {KEY_CREATE_DP_USER_MANAGEMENT_RESPONSE_ID} |
+    And Operator Check the Data from created DP is Right
+      | dpDetails  | KEY_CREATE_DP_MANAGEMENT_REQUEST |
+      | dpSettings | KEY_DP_SETTINGS                  |
+      | condition  | CHECK_DP_PHOTO                   |
