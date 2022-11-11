@@ -493,8 +493,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     }
     public void uploadFileOnManifestPage(Long sizeInBytes){
         FILENAME = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
-        String fullPath = "D:\\tmp\\"+FILENAME; //Remove this line before commit code
-//        String fullPath = FILEPATH+FILENAME;
+        String fullPath = FILEPATH+FILENAME;
         createTemporaryFile(fullPath, sizeInBytes);
         pause300ms();
         manifestModal.manifestUploadFile.setValue(fullPath);

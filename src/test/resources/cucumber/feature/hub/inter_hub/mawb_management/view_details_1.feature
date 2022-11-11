@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @ViewDetails1 @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @ViewDetails1
 Feature: MAWB Management - View Details 1
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -329,104 +329,6 @@ Feature: MAWB Management - View Details 1
       | when      | ^{gradle-current-date-yyyy-MM-dd}.*           |
     And Operator verifies manifest items on MAWB Details page:
       | comments             | Automation comment            |
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: View Details Manifested MAWB updated by OPV2 without Comments
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB} |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies Search MAWB Management Page
-    When Operator performs manifest MAWB following data below:
-      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
-      | uploadFileSize       | 1000                                |
-    And Operator clicks on submit manifest button on Manifest MAWB Page
-    Then Operator verifies manifest MAWB successfully message
-    When Operator opens MAWB detail for the MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}" on MAWB Management page
-    Then Operator verifies mawb event on MAWB Details page:
-      | source    | MANIFESTED                                    |
-      | result    | Source: OPERATOR                              |
-      | status    | MANIFESTED                                    |
-      | user      | qa@ninjavan.co                                |
-      | when      | ^{gradle-current-date-yyyy-MM-dd}.*           |
-    And Operator verifies manifest items on MAWB Details page:
-      | comments             | N/A            |
-
-  @DeleteShipments @DeleteCreatedMAWBs
-  Scenario: View Details Manifested MAWB updated by OPV2 without Attachment and Comments
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> MAWB Management
-    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-      | {KEY_LIST_OF_CREATED_MAWB} |
-    And Operator clicks on "Search MAWB" button on MAWB Management Page
-    Then Operator verifies Search MAWB Management Page
-    When Operator performs manifest MAWB following data below:
-      | mawb                 | {KEY_LIST_OF_CREATED_MAWB[1]}       |
-    And Operator clicks on submit manifest button on Manifest MAWB Page
-    Then Operator verifies manifest MAWB successfully message
-    When Operator opens MAWB detail for the MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}" on MAWB Management page
-    Then Operator verifies mawb event on MAWB Details page:
-      | source    | MANIFESTED                                    |
-      | result    | Source: OPERATOR                              |
-      | status    | MANIFESTED                                    |
-      | user      | qa@ninjavan.co                                |
-      | when      | ^{gradle-current-date-yyyy-MM-dd}.*           |
-    And Operator verifies manifest items on MAWB Details page:
-      | comments             | N/A            |
-
-  @DeleteShipments @DeleteCreatedMAWBs @RT
-  Scenario: Record Offload Departed MAWB
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    And API Operator link mawb for following shipment ids
-      | mawb                 | RANDOM         |
-      | destinationAirportId | {airport-id-1} |
-      | originAirportId      | {airport-id-2} |
-      | vendorId             | {vendor-id}    |
-    And DB Operator get ID of MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}"
-
-    Given API Operator create new air trip with data below:
-      | airtripType         | FLIGHT_TRIP                   |
-      | originFacility      | {airport-hub-id-1}  |
-      | destinationFacility | {airport-hub-id-2}  |
-      | flight_no           | 12345                                 |
-
-    And Operator put MAWBs below to flight trip "{KEY_CURRENT_MOVEMENT_TRIP_ID}":
-      |444-12345678|
-      |444-11112222|
-#
-#    And API Operator depart flight trip "{KEY_LIST_OF_AIRHAUL_FLIGHT_TRIPS[1]}"
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Inter-Hub -> MAWB Management
-#    Then Operator verifies "Search by MAWB Number" UI on MAWB Management Page
-#    Given Operator add shipment IDs below to search by MAWB on MAWB Management page:
-#      | {KEY_LIST_OF_CREATED_MAWB} |
-#    And Operator clicks on "Search MAWB" button on MAWB Management Page
-#    Then Operator verifies Search MAWB Management Page
-#    When Operator opens MAWB detail for the MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}" on MAWB Management page
-#    Then Operator verifies mawb event on MAWB Details page:
-#      | source    | DEPARTED                 |
-#      | result    | Source: OPERATOR                    |
-#      | status    | DEPARTED              |
-#      | user      | qa@ninjavan.co                      |
-#      | when      | ^{gradle-current-date-yyyy-MM-dd}.* |
 
   @KillBrowser
   Scenario: Kill Browser
