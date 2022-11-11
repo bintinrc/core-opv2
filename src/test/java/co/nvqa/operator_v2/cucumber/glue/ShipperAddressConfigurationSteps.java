@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
@@ -152,12 +153,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator clicks on the submit button")
-  public void operatorClicksOnTheSubmitButton() {
-    shipperAddressConfigurationPage.clickSubmitFileButton();
-    takesScreenshot();
-  }
-
   @Then("Operator verifies upload error message is displayed for error count {string} and total count {string}")
   public void operatorVerifiesUploadErrorMessageIsDisplayed(String errorCount, String totalCount) {
     shipperAddressConfigurationPage.validateUploadErrorMessageIsShown(errorCount, totalCount);
@@ -173,6 +168,12 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator verifies upload error message is displayed for invalid file")
   public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFile() {
     shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies upload error message is displayed for invalid formatted file")
+  public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFormattedFile() {
+    shipperAddressConfigurationPage.validateInvalidFormattedFileErrorMessageIsShown();
     takesScreenshot();
   }
 
@@ -204,6 +205,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator verifies that the following texts are available on the downloaded file")
   public void operator_verifies_that_the_following_texts_are_available_on_the_downloaded_file(
       List<String> expected) {
+    expected = resolveValues(expected);
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
         CSV_DOWNLOADED_FILENAME_PATTERN);
     expected.forEach((expectedText) -> {
@@ -230,13 +232,16 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   }
 
-  @And("Operator uploads csv file: {string} by browsing files")
-  public void operatorUploadsCsvFile(String fileName) {
+  @And("Operator uploads csv file: {string} by browsing files in {string} upload window")
+  public void operatorUploadsCsvFile(String fileName, String windowName) {
     fileName = resolveValue(fileName);
     String Filepath =
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     shipperAddressConfigurationPage.fileUpload.sendKeys(Filepath);
     shipperAddressConfigurationPage.clickSubmitFileButton();
+    String titlexpath = f("//*[text()='%s']", windowName);
+    shipperAddressConfigurationPage.waitUntilInvisibilityOfElementLocated(
+        getWebDriver().findElement(By.xpath(titlexpath)));
     takesScreenshot();
   }
 
@@ -270,6 +275,14 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifiesPageUrlEndsWith(String expectedTest) {
     shipperAddressConfigurationPage.VerificationOfURL(expectedTest);
   }
+
+  @Then("Operator verifies the success message is displayed on uploading the file : {string}")
+  public void Operator_verifies_the_success_message_is_displayed_on_uploading_the_ile(
+      String hubName) {
+    shipperAddressConfigurationPage.validateConfigurePickupTypeUploadSuccessMessage(hubName);
+    takesScreenshot();
+  }
+
 }
 
 
