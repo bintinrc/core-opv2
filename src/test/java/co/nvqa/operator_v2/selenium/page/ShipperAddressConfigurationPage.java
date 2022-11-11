@@ -205,12 +205,14 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     downloadCSVTemplateButton.click();
   }
 
-  public void clickSubmitFileButton() {
+  public void clickSubmitFileButton(String windowName) {
     if (submitFileButton.size() > 0) {
       Assertions.assertThat(uploadedFileName.isDisplayed()).as("Validation for uploaded file name")
           .isTrue();
       waitUntilVisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
       submitFileButton.get(0).click();
+      String titlexpath = f("//*[text()='%s']", windowName);
+      waitUntilInvisibilityOfElementLocated(getWebDriver().findElement(By.xpath(titlexpath)));
     }
   }
 

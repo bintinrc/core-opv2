@@ -238,10 +238,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     String Filepath =
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     shipperAddressConfigurationPage.fileUpload.sendKeys(Filepath);
-    shipperAddressConfigurationPage.clickSubmitFileButton();
-    String titlexpath = f("//*[text()='%s']", windowName);
-    shipperAddressConfigurationPage.waitUntilInvisibilityOfElementLocated(
-        getWebDriver().findElement(By.xpath(titlexpath)));
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName);
     takesScreenshot();
   }
 
