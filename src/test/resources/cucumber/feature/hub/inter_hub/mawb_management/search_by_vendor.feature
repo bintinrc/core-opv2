@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor @CWF
 Feature: MAWB Management - Search by Vendor
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -29,12 +29,14 @@ Feature: MAWB Management - Search by Vendor
       | originAirportId      | {KEY_CREATED_AIRPORT_LIST[1].id} |
       | destinationAirportId | {KEY_CREATED_AIRPORT_LIST[2].id} |
       | vendorId             | {vendor-id}                      |
+    And DB Operator get ID of MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}"
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                         |
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id}|
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}|
       | flight_no           | 12345                               |
-      | mawb                | {KEY_LIST_OF_CREATED_MAWB[1]}       |
+    And Operator put MAWBs below to flight trip "{KEY_CURRENT_MOVEMENT_TRIP_ID}":
+      | {KEY_OF_CURRENT_MAWB_ID}|
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by Vendor" UI on MAWB Management Page
@@ -48,7 +50,7 @@ Feature: MAWB Management - Search by Vendor
     And Operator verifies total 1 results shown on MAWB Management Page
 
 
-  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs
+  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs @RT
   Scenario: Search by Vendor with Valid Filter - Reload Search
     Given API Operator create new airport using data below:
       | system_id     | SG          |
@@ -72,12 +74,14 @@ Feature: MAWB Management - Search by Vendor
       | originAirportId      | {KEY_CREATED_AIRPORT_LIST[1].id}  |
       | destinationAirportId | {KEY_CREATED_AIRPORT_LIST[2].id} |
       | vendorId             | {vendor-id}    |
+    And DB Operator get ID of MAWB "{KEY_LIST_OF_CREATED_MAWB[1]}"
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                   |
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id}            |
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}             |
       | flight_no           | 12345                         |
-      | mawb                | {KEY_LIST_OF_CREATED_MAWB[1]} |
+    And Operator put MAWBs below to flight trip "{KEY_CURRENT_MOVEMENT_TRIP_ID}":
+      | {KEY_OF_CURRENT_MAWB_ID}|
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> MAWB Management
     Then Operator verifies "Search by Vendor" UI on MAWB Management Page
@@ -96,12 +100,14 @@ Feature: MAWB Management - Search by Vendor
       | originAirportId      | {KEY_CREATED_AIRPORT_LIST[1].id}  |
       | destinationAirportId | {KEY_CREATED_AIRPORT_LIST[2].id} |
       | vendorId             | {vendor-id}    |
+    And DB Operator get ID of MAWB "{KEY_LIST_OF_CREATED_MAWB[2]}"
     Given API Operator create new air trip with data below:
       | airtripType         | FLIGHT_TRIP                   |
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id}            |
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id}             |
       | flight_no           | 12345                         |
-      | mawb                | {KEY_LIST_OF_CREATED_MAWB[2]} |
+    And Operator put MAWBs below to flight trip "{KEY_CURRENT_MOVEMENT_TRIP_ID}":
+      | {KEY_OF_CURRENT_MAWB_ID}|
     When Operator clicks on "Reload" button on MAWB Management Page
     Then Operator verifies total 2 results shown on MAWB Management Page
 
