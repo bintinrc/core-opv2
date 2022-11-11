@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor @CWF
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @SearchByVendor
 Feature: MAWB Management - Search by Vendor
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -50,7 +50,7 @@ Feature: MAWB Management - Search by Vendor
     And Operator verifies total 1 results shown on MAWB Management Page
 
 
-  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs @RT
+  @DeleteShipments @CancelTrip @DeleteCreatedAirports @DeleteAirportsViaAPI @DeleteCreatedMAWBs
   Scenario: Search by Vendor with Valid Filter - Reload Search
     Given API Operator create new airport using data below:
       | system_id     | SG          |
