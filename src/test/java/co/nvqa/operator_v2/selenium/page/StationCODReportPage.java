@@ -54,7 +54,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
   public PageElement filterDropdownValue;
 
-  @FindBy(xpath = "//button[@*='load-button']")
+  @FindBy(id = "station-cod-report_load-selection-button")
   public AntButton loadSelection;
 
   @FindBy(xpath = "//div[@role='table']//div[contains(@class,'base-row')]")
@@ -63,10 +63,10 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[@*='ant-picker ant-picker-range']]")
   public AntIntervalCalendarPicker transactionEndDateFilter;
 
-  @FindBy(xpath = "//button[@*='details-button']")
+  @FindBy(id = "station-cod-report_details-button")
   public PageElement detailsTab;
 
-  @FindBy(xpath = "//button[@*='summary-button']")
+  @FindBy(id = "station-cod-report_summary-button")
   public PageElement summaryTab;
 
   @FindAll(@FindBy(xpath = "//div[@role='gridcell']//div[contains(@class,'VirtualTableHeader')]"))
