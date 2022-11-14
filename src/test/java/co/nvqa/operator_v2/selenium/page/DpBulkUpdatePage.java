@@ -60,28 +60,27 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='S']/following-sibling::input")
   public PageElement maxPickCapacityS;
 
-  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_collect']")
   public PageElement canCustomerCollectEnable;
-
-  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_cust_collect']")
   public PageElement canCustomerCollectDisable;
 
-  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_return']")
   public PageElement canCustomerReturnEnable;
 
-  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_cust_return']")
   public PageElement canCustomerReturnDisable;
 
-  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_shipper_send']")
   public PageElement allowShipperSendEnable;
 
-  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_shipper_send']")
   public PageElement allowShipperSendDisable;
 
-  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_packs_sold']")
   public PageElement packsSoldEnable;
 
-  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_packs_sold']")
   public PageElement packsSoldDisable;
 
   @FindBy(xpath = "//button[@data-testid='button_save']")
