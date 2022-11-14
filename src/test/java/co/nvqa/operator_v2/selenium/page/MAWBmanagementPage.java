@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.sort.hub.AirTrip;
+import co.nvqa.commons.model.sort.hub.MawbEvent;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.*;
@@ -38,14 +41,16 @@ import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModa
  * @author Son Ha
  */
 
-public class MAWBmanagementPage extends OperatorV2SimplePage{
+public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     private static final Logger LOGGER = LoggerFactory.getLogger(MAWBmanagementPage.class);
 
     public MAWBmanagementPage(WebDriver webDriver) {
         super(webDriver);
         mawbtable = new MAWBmanagementPage.amwbTableModal(webDriver);
+        mawbEventsTable = new MawbEventsTable(webDriver);
     }
     public amwbTableModal mawbtable;
+    public MawbEventsTable mawbEventsTable;
     private static final String MAWB_MANAGEMENR_SEARCH_HEADER_XPATH = "//h4[text() = '%s']";
     private static final String MAWB_MANAGEMENR_CLEAR_BUTTON_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-select-selector']/following-sibling::span[@class ='ant-select-clear']";
     private static final String MAWB_MANAGEMENR_PAGE_ERRORS_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
@@ -100,6 +105,15 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
     @FindBy(className = "ant-modal-wrap")
     public ManifestMAWBModal manifestModal;
+
+    public void switchToOtherWindow() {
+        waitUntilNewWindowOrTabOpened();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for (String windowHandle : windowHandles) {
+            getWebDriver().switchTo().window(windowHandle);
+        }
+    }
 
     public void verifySearchByMawbUI(){
         waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by MAWB Number"));
@@ -272,7 +286,6 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
             flightTripDepartureDateTextBox.click();
             sendKeysAndEnterById(searchByVendor_flightTripDepartureDateId, resolvedMapOfData.get("flightTripDepartureDate"));
         }
-
     }
 
     public void clearTextonField(String fieldName){
@@ -457,7 +470,6 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
         @FindBy(css ="[data-testid = 'submit-manifest-button']")
         public Button submitManifest;
-
     }
 
     public void verifyManifestMAWBPage(){
@@ -478,8 +490,8 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
         manifestModal.submitManifest.waitUntilInvisible();
     }
     public void uploadFileOnManifestPage(Long sizeInBytes){
-        String filename = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
-        String fullPath = FILEPATH+filename;
+        String FILENAME = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
+        String fullPath = FILEPATH+FILENAME;
         createTemporaryFile(fullPath, sizeInBytes);
         pause300ms();
         manifestModal.manifestUploadFile.setValue(fullPath);
@@ -487,8 +499,9 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
             String actMessage = getAntTopText();
             Assertions.assertThat(actMessage).as("File must be smaller than 10 MB").isEqualToIgnoringCase("File must be smaller than 10 MB");
         }else {
-            waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,filename));
+            waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,FILENAME));
             manifestModal.fileUploadProgress.waitUntilInvisible(30);
+            mawbEventsTable.filename = FILENAME;
         }
     }
 
@@ -512,11 +525,61 @@ public class MAWBmanagementPage extends OperatorV2SimplePage{
 
         List<String> actualMessages = new ArrayList<>();
         ErrorMessagesElement.forEach(e -> actualMessages.add(e.getText()));
-        System.out.println(actualMessages.toString());
         Boolean compareResult = expectedMessages.containsAll(actualMessages) && actualMessages.containsAll(expectedMessages);
         Assertions.assertThat(compareResult).as("Error message is the same").isTrue();
 
     }
 
+    public static class MawbEventsTable extends AntTableV3<MawbEvent> {
+
+        public static final String SOURCE = "source";
+        public static final String USER = "user";
+        public static final String RESULT = "result";
+        public static final String STATUS = "status";
+        public static final String WHEN = "when";
+        public static final String MAWB_DETAILS_PAGE_ITEMS_XPATH= "//div[@class='ant-card-body']//span[text()='%s']";
+        public static final String MANIFEST_ATTACHMENT_XPATH = "//div[@class='ant-upload-list-item-info']//a[@title='%s']";
+        public static String filename = "filename";
+        public MawbEventsTable(WebDriver webDriver) {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                .put(SOURCE, "source")
+                .put(USER, "user-id")
+                .put(RESULT, "result")
+                .put(STATUS, "status")
+                .put(WHEN, "created-at")
+                .build());
+            setEntityClass(MawbEvent.class);
+            setTableLocator("//div[@data-testid='mawb-event-table-table']");
+        }
+
+        @FindBy(xpath = "//span[text()='Comments']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement manifestComments;
+    }
+
+    public void verifyMAWBDetailsItems(){
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"MAWB")).isDisplayed()).as("MAWB is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"MAWB Status")).isDisplayed()).as("MAWB Status is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Vendor")).isDisplayed()).as("Vendor is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Origin Airport")).isDisplayed()).as("Origin Airport is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Destination Airport")).isDisplayed()).as("Destination Airport is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Pcs")).isDisplayed()).as("Booked Pcs is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Weight")).isDisplayed()).as("Booked Weight is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Booked Volume")).isDisplayed()).as("Booked Volume is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Flight Number")).isDisplayed()).as("Flight Number is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Flight Date Time")).isDisplayed()).as("Flight Date Time is display").isTrue();
+        Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MAWB_DETAILS_PAGE_ITEMS_XPATH,"Pcs of Offload")).isDisplayed()).as("Pcs of Offload is display").isTrue();
+
+    }
+
+    public void verifyManifestOnDetailsPage(Map<String,String> data){
+        if (data.get("uploadFile")!=null)
+            Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MANIFEST_ATTACHMENT_XPATH,mawbEventsTable.filename)).isDisplayed())
+                .as("Manifest attachment file is display").isTrue();
+        if(data.get("comments")!=null)
+            Assertions.assertThat(mawbEventsTable.manifestComments.getText()).as("Comment message is the same").contains(data.get("comments"));
+
+
+    }
 
 }
