@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @SelfServePricingProfileID
+@OperatorV2 @LaunchBrowser @SalesOps @AllOrdersFeesID
 Feature: All Orders - ID
 
   Background: Login to Operator Portal V2
