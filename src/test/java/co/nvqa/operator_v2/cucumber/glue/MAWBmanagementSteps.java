@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.sort.hub.MawbEvent;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.RecordOffloadModal;
 import io.cucumber.java.en.And;
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Array;
 
 
+import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.COLUMN_MAWB;
 
 
@@ -269,4 +272,43 @@ public class MAWBmanagementSteps extends AbstractSteps {
     Assertions.assertThat(mawbManagementgPage.manifestModal.pageTile.isDisplayedFast()).as("Manifest MAWB page is closed").isFalse();
   }
 
+  @When("Operator opens MAWB detail for the MAWB {value} on MAWB Management page")
+  public void operatorOpensMAWBDetailOnManagementPage(String mawb){
+    mawbManagementgPage.mawbtable.filterByColumn(COLUMN_MAWB, mawb);
+    mawbManagementgPage.waitWhileTableIsLoading();
+    mawbManagementgPage.mawbtable.selectRow(1);
+    mawbManagementgPage.mawbtable.clickActionButton(1,ACTION_DETAILS);
+    mawbManagementgPage.switchToOtherWindow();
+    mawbManagementgPage.waitUntilPageLoaded();
+    mawbManagementgPage.inFrame(() ->mawbManagementgPage.verifyMAWBDetailsItems());
+  }
+
+  @Then("Operator verifies mawb event on MAWB Details page:")
+  public void operatorVerifiesMawbEvent(Map<String,String> data){
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> mawbManagementgPage.inFrame(() ->{
+      try {
+        MawbEvent expectedEvent = new MawbEvent(resolveKeyValues(data));
+        mawbManagementgPage.mawbEventsTable.readAllEntities().stream()
+            .filter(expectedEvent::matchedTo)
+            .findFirst().orElseThrow(
+                () -> new AssertionError("MAWB Event was not found:\n" + expectedEvent));
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getLocalizedMessage(), ex);
+        mawbManagementgPage.refreshPage();
+        throw ex;
+      }
+    }), "retry MAWB details", 1000, 2);
+  }
+
+  @Then("Operator verifies manifest items on MAWB Details page:")
+  public void operatorVerifiesManifestItemsOnDetailsPage(Map<String,String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    if (!mawbManagementgPage.mawbEventsTable.filename.equals("filename"))
+        resolvedData.put("uploadFile",mawbManagementgPage.mawbEventsTable.filename);
+    pause1s();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+            mawbManagementgPage.inFrame(() ->mawbManagementgPage.verifyManifestOnDetailsPage(resolvedData))
+    ,"retry MAWB manifest detail",500, 2);
+
+  }
 }
