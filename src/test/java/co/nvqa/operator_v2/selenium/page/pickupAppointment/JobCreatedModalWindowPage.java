@@ -25,6 +25,8 @@ public class JobCreatedModalWindowPage extends PageElement {
     @FindBy(xpath = "//span[span[text()='Jobs created for the following dates:']]//following-sibling::span")
     public TextBox dates;
 
+    @FindBy(xpath = "//div[span[text()='Job Tags:']]//following-sibling::span")
+    public TextBox tags;
     @FindBy(css = "div.ant-modal-footer button")
     public Button okButton;
 
@@ -55,5 +57,9 @@ public class JobCreatedModalWindowPage extends PageElement {
 
     public void clickOnOKButton() {
         okButton.click();
+    }
+
+    public String getTags() {
+        return tags.getText();
     }
 }
