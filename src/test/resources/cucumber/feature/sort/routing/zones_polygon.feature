@@ -25,7 +25,6 @@ Feature: Zones Polygon
     Then DB Operator verifies zones polygons are "updated"
     And DB Operator remove polygons from zones
 
-
   Scenario: Bulk Edit Polygons - Single Zone - Multi Polygon
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator refresh page v1
@@ -81,7 +80,7 @@ Feature: Zones Polygon
     When Operator clicks Bulk Edit Polygons button
     Then Operator make sure Bulk Edit Polygons dialog shows up
     When Operator upload a KML file "invalid-zone.kml"
-    Then Operator make sure dialog shows error: "Zone IDs not found"
+    Then Operator make sure dialog shows error: "Zone IDs with invalid latlong"
 
   Scenario: Bulk Edit Polygons - Duplicate Zone ID
     Given Operator go to menu Routing -> Last Mile and RTS Zones
