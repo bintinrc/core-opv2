@@ -411,6 +411,12 @@ public class RouteInboundPage extends OperatorV2SimplePage {
     waitUntilLoaded();
   }
 
+  public void openParcelProcessedDialog() {
+    parcelProcessed.click();
+    waitUntilVisibilityOfMdDialogByTitle("Parcels Processed");
+    waitUntilLoaded();
+  }
+
   public void openPendingC2CReturnPickupsDialog() {
     pendingC2cReturnPickups.click();
     waitUntilVisibilityOfMdDialogByTitle("Pending C2C / Return Pickups");
