@@ -303,8 +303,8 @@ public class MAWBmanagementSteps extends AbstractSteps {
   @Then("Operator verifies manifest items on MAWB Details page:")
   public void operatorVerifiesManifestItemsOnDetailsPage(Map<String,String> data){
     Map<String,String> resolvedData = resolveKeyValues(data);
-    if (!mawbManagementgPage.FILENAME.equals(""))
-        resolvedData.put("uploadFile",mawbManagementgPage.FILENAME);
+    if (!mawbManagementgPage.mawbEventsTable.filename.equals("filename"))
+        resolvedData.put("uploadFile",mawbManagementgPage.mawbEventsTable.filename);
     pause1s();
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
             mawbManagementgPage.inFrame(() ->mawbManagementgPage.verifyManifestOnDetailsPage(resolvedData))

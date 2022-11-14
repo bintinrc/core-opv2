@@ -63,7 +63,6 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
-    public static String FILENAME = "";
 
     @FindBy(xpath = "//span[@class='ant-typography']")
     public PageElement searchMAWBtextInfor;
@@ -471,7 +470,6 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
 
         @FindBy(css ="[data-testid = 'submit-manifest-button']")
         public Button submitManifest;
-
     }
 
     public void verifyManifestMAWBPage(){
@@ -492,7 +490,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         manifestModal.submitManifest.waitUntilInvisible();
     }
     public void uploadFileOnManifestPage(Long sizeInBytes){
-        FILENAME = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
+        String FILENAME = RandomStringUtils.randomAlphanumeric(3,8)+".txt";
         String fullPath = FILEPATH+FILENAME;
         createTemporaryFile(fullPath, sizeInBytes);
         pause300ms();
@@ -503,6 +501,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         }else {
             waitUntilVisibilityOfElementLocated(f(MAWB_MANIFEST_UPLOAD_FILE_INFOR,FILENAME));
             manifestModal.fileUploadProgress.waitUntilInvisible(30);
+            mawbEventsTable.filename = FILENAME;
         }
     }
 
@@ -540,6 +539,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         public static final String WHEN = "when";
         public static final String MAWB_DETAILS_PAGE_ITEMS_XPATH= "//div[@class='ant-card-body']//span[text()='%s']";
         public static final String MANIFEST_ATTACHMENT_XPATH = "//div[@class='ant-upload-list-item-info']//a[@title='%s']";
+        public static String filename = "filename";
         public MawbEventsTable(WebDriver webDriver) {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
@@ -574,7 +574,7 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
 
     public void verifyManifestOnDetailsPage(Map<String,String> data){
         if (data.get("uploadFile")!=null)
-            Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MANIFEST_ATTACHMENT_XPATH,FILENAME)).isDisplayed())
+            Assertions.assertThat(findElementByXpath(f(mawbEventsTable.MANIFEST_ATTACHMENT_XPATH,mawbEventsTable.filename)).isDisplayed())
                 .as("Manifest attachment file is display").isTrue();
         if(data.get("comments")!=null)
             Assertions.assertThat(mawbEventsTable.manifestComments.getText()).as("Comment message is the same").contains(data.get("comments"));
