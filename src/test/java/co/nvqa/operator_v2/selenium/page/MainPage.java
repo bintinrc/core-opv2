@@ -186,8 +186,7 @@ public class MainPage extends OperatorV2SimplePage {
 
       if ("linehaul".equals(urlPart)) {
         result = currentUrl.contains(urlPart);
-      }
-      else {
+      } else {
         result = currentUrl.endsWith(urlPart);
       }
 
