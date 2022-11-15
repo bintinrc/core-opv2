@@ -126,7 +126,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       Assertions.assertThatObject(get(KEY_OBJECT_OF_GET_CAMPAIGN)).usingRecursiveComparison()
           .ignoringCollectionOrder()
           .isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN))
-          .as("Campaign Details are matching");
+          .as("Campaign Details are matched");
 
     });
   }
