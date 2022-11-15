@@ -5,7 +5,7 @@ Feature: Create Campaign
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @mad
+
   Scenario: Success Create New Campaign - No Description (uid:6bd9c606-8caf-465c-9152-df7f6a188392)
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create ne campaign button in Discounts & Promotion Page
