@@ -49,9 +49,9 @@ public class AntSelect extends PageElement {
     clickMenuItem(value);
   }
 
-  public void selectValue(String value, String locator) {
+  public void selectValue(String value, String xpath) {
     enterSearchTerm(value);
-    clickMenuItem(value, locator);
+    clickMenuItem(value, xpath);
   }
 
   public void selectValues(Iterable<String> values) {
@@ -62,8 +62,8 @@ public class AntSelect extends PageElement {
     clickf(ITEM_CONTAINS_LOCATOR, StringUtils.normalizeSpace(value));
   }
 
-  public void clickMenuItem(String value, String Locator) {
-    clickf(Locator, StringUtils.normalizeSpace(value));
+  public void clickMenuItem(String value, String xpath) {
+    clickf(xpath, StringUtils.normalizeSpace(value));
   }
 
   public void clearValue() {

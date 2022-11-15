@@ -12,13 +12,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPage> {
 
-  public static final String ITEM_CONTAINS_LOCATOR = "(//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')])[2]";
-  public static final String SERVICE_TYPE_LOCATOR = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceType']]";
-  public static final String SERVICE_LEVEL_LOCATOR = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceLevel']]";
-  public static final String SERVICE_DISCOUNT_LOCATOR = "services_%s_discount_value";
-  public static final String SERVICE_TYPE_LOCATOR_LIST = "//input[contains(@id,'serviceType')]//parent::span//following-sibling::span";
-  public static final String SERVICE_LEVEL_LOCATOR_LIST = "//input[contains(@id,'serviceLevel')]//parent::span//following-sibling::span";
-  public static final String SERVICE_DISCOUNT_LOCATOR_LIST = "//input[contains(@id,'discount_value')]";
+  public static final String ITEM_CONTAINS_XPATH = "(//div[contains(@class, 'ant-select-dropdown') and not(contains(@class , 'ant-select-dropdown-hidden'))]//div[contains(normalize-space(text()), '%s')])[2]";
+  public static final String SERVICE_TYPE_XPATH = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceType']]";
+  public static final String SERVICE_LEVEL_XPATH = "//div[contains(@class, ' ant-select')][.//input[@id='services_%s_serviceLevel']]";
+  public static final String SERVICE_DISCOUNT_XPATH = "services_%s_discount_value";
+  public static final String SERVICE_TYPE_XPATH_LIST = "//input[contains(@id,'serviceType')]//parent::span//following-sibling::span";
+  public static final String SERVICE_LEVEL_XPATH_LIST = "//input[contains(@id,'serviceLevel')]//parent::span//following-sibling::span";
+  public static final String SERVICE_DISCOUNT_XPATH_LIST = "//input[contains(@id,'discount_value')]";
 
   @FindBy(id = "name")
   public PageElement campaignName;
@@ -74,8 +74,9 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public void selectServiceType(List<String> options) {
     int i = 0;
     for (String option : options) {
-      AntSelect serviceType = new AntSelect(getWebDriver(), findElementBy(By.xpath(f(SERVICE_TYPE_LOCATOR, Integer.toString(i)))));
-      serviceType.selectValue(option, ITEM_CONTAINS_LOCATOR);
+      AntSelect serviceType = new AntSelect(getWebDriver(),
+          findElementBy(By.xpath(f(SERVICE_TYPE_XPATH, Integer.toString(i)))));
+      serviceType.selectValue(option, ITEM_CONTAINS_XPATH);
       i++;
     }
   }
@@ -83,7 +84,8 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public void selectServiceLevel(List<String> options) {
     int i = 0;
     for (String option : options) {
-      AntSelect serviceLevel = new AntSelect(getWebDriver(), findElementBy(By.xpath(f(SERVICE_LEVEL_LOCATOR, Integer.toString(i)))));
+      AntSelect serviceLevel = new AntSelect(getWebDriver(),
+          findElementBy(By.xpath(f(SERVICE_LEVEL_XPATH, Integer.toString(i)))));
       serviceLevel.selectValue(option);
       i++;
     }
@@ -92,13 +94,13 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public void enterDiscountValue(List<String> values) {
     int i = 0;
     for (String value : values) {
-      findElementBy(By.id(f(SERVICE_DISCOUNT_LOCATOR, Integer.toString(i)))).sendKeys(value);
+      findElementBy(By.id(f(SERVICE_DISCOUNT_XPATH, Integer.toString(i)))).sendKeys(value);
       i++;
     }
   }
 
   public List<String> getServiceType() {
-    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_TYPE_LOCATOR_LIST));
+    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_TYPE_XPATH_LIST));
     List<String> serviceTypeList = new ArrayList<>();
     for (WebElement element: elements) {
       serviceTypeList.add(element.getText());
@@ -107,7 +109,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public List<String> getServiceLevel() {
-    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_LEVEL_LOCATOR_LIST));
+    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_LEVEL_XPATH_LIST));
     List<String> serviceLevelList = new ArrayList<>();
     for (WebElement element: elements) {
       serviceLevelList.add(element.getText());
@@ -116,7 +118,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public List<String> getDiscountValue() {
-    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_DISCOUNT_LOCATOR_LIST));
+    List<WebElement> elements = findElementsBy(By.xpath(SERVICE_DISCOUNT_XPATH_LIST));
     List<String> discountList = new ArrayList<>();
     for (WebElement element: elements) {
       discountList.add(element.getAttribute("value"));

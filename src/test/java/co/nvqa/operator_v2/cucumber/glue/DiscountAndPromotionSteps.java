@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Campaign;
 import co.nvqa.operator_v2.selenium.page.CampaignCreateEditPage;
 import co.nvqa.operator_v2.selenium.page.DiscountAndPromotionPage;
@@ -112,7 +113,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       try {
         getCampaignData();
       } catch (ParseException e) {
-        throw new RuntimeException(e);
+        throw new NvTestRuntimeException(e);
       }
       Assertions.assertThat(page.isCampaignIdDisplayed()).as("Campaign Id is displayed")
           .isTrue();
