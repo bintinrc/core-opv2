@@ -10,8 +10,8 @@ Feature: Create Campaign
     Given Operator go to menu Shipper -> Discount & Promotions
     When Operator click Create ne campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
-      | campaignName                                         | campaignDescription | startDate                      | endDate                         | serviceType     | serviceLevel     | discountValue |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Parcel;Document | Standard;Express | 10;10         |
+      | campaignName                                         | campaignDescription | startDate                      | endDate                         | serviceType | serviceLevel | discountValue |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} |                     | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Parcel;     | Standard;    | 10;           |
     When operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
@@ -44,7 +44,7 @@ Feature: Create Campaign
     When Operator click Create ne campaign button in Discounts & Promotion Page
     Then Operator enter campaign details using data below:
       | campaignName                                         | campaignDescription | startDate                      | endDate                         | serviceType                                                     | serviceLevel                                                            | discountValue             |
-      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document | Standard;Express;Same Day; Next Day;Standard;Express;Same Day; Next Day | 5;1.2;3.2;2;3.1;4;1.9;2.2 |
+      | Dummy Campaign {gradle-current-date-yyyyMMddHHmmsss} | dummy description   | {gradle-next-1-day-yyyy-MM-dd} | {gradle-next-10-day-yyyy-MM-dd} | Parcel;Parcel;Parcel;Parcel;Document;Document;Document;Document | Standard;Express;Same Day;Next Day;Standard;Express;Same Day;Next Day | 5;1.2;3.2;2;3.1;4;1.9;2.2 |
     When operator clicks on publish button
     Then Operator verifies toast message "Campaign has been created. Please add shippers into the campaign." in Campaign Page
     Then Operator verifies the published campaign page
