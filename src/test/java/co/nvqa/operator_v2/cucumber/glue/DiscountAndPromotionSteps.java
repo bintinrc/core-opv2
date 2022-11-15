@@ -114,16 +114,17 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       } catch (ParseException e) {
         throw new RuntimeException(e);
       }
-      Assertions.assertThat(page.isCampaignIdDisplayed()).as("Campaign Id is not displayed")
+      Assertions.assertThat(page.isCampaignIdDisplayed()).as("Campaign Id is displayed")
           .isTrue();
-      Assertions.assertThat(page.isDownloadButtonDisplayed()).as("Download button is not displayed")
+      Assertions.assertThat(page.isDownloadButtonDisplayed()).as("Download button is displayed")
           .isTrue();
-      Assertions.assertThat(page.isShippersAddButtonDisplayed()).as("Add button is not displayed")
+      Assertions.assertThat(page.isShippersAddButtonDisplayed()).as("Add button is displayed")
           .isTrue();
       Assertions.assertThat(page.isShippersRemoveButtonDisplayed())
-          .as("Remover button is not displayed")
+          .as("Remover button is displayed")
           .isTrue();
-      Assertions.assertThatObject(get(KEY_OBJECT_OF_GET_CAMPAIGN)).usingRecursiveComparison().isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN)).as("Campaign Details are not matching");
+      Assertions.assertThatObject(get(KEY_OBJECT_OF_GET_CAMPAIGN)).usingRecursiveComparison()
+          .isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN)).as("Campaign Details are matching");
     });
   }
 }
