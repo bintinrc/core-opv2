@@ -185,7 +185,11 @@ public class MainPage extends OperatorV2SimplePage {
 
       if ("linehaul".equals(urlPart)) {
         result = currentUrl.contains(urlPart);
-      } else {
+      }
+      else if ("discount-&-promotions".equals(urlPart)){
+        result = currentUrl.contains("discount-and-promotions");
+      }
+      else {
         result = currentUrl.endsWith(urlPart);
       }
 
