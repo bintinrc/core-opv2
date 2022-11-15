@@ -124,7 +124,10 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
           .as("Remover button is displayed")
           .isTrue();
       Assertions.assertThatObject(get(KEY_OBJECT_OF_GET_CAMPAIGN)).usingRecursiveComparison()
-          .isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN)).as("Campaign Details are matching");
+          .ignoringCollectionOrder()
+          .isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN))
+          .as("Campaign Details are matching");
+
     });
   }
 }
