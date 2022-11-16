@@ -1107,67 +1107,6 @@ Feature: Number of Parcels with Exception Cases
       | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
-  Scenario Outline: View Driver Inbound Scanned Parcels with Exception Cases (uid:8583e86a-58f3-4244-80bf-78cc5d3c7f47)
-    Given Operator loads Operator portal home page
-    And Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator gets the event time by event name:"DRIVER INBOUND SCAN"
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | RESUME DELIVERY    |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
-    Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator verifies that a table is displayed with following columns:
-      | Tracking ID       |
-      | Last Scan         |
-      | Last Scanned Time |
-      | Ticket Subtype    |
-      | Ticket Status     |
-      | Order Tags        |
-    And Operator selects following filter criteria for the table column: "Last Scan"
-      | <LastScannedEvent> |
-    And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator verifies that the following details are displayed on the modal under the table:"<ModalName>"
-      | Last Scanned Time | {KEY_EVENT_TIME} |
-      | Ticket Subtype    | <TicketSubType>  |
-      | Ticket Status     | CREATED          |
-
-    Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
-      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | DRIVER_INBOUND_SCAN |
-
-  @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Route Inbound Scanned Parcels with Exception Cases (uid:40bdc110-b89a-4e87-a185-a648e51765af)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
