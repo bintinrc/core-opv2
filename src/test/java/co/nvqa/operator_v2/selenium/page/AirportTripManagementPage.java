@@ -11,7 +11,6 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -46,6 +45,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public AirportTripManagementPage(WebDriver webDriver) {
         super(webDriver);
         airportTable = new AirportTripManagementPage.AirportTable(webDriver);
+        assignMawbModal = new AssignMawbModal(webDriver);
     }
 
     private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -330,6 +330,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     public static String notificationMessage = "";
 
     public AirportTable airportTable;
+    public AssignMawbModal assignMawbModal;
 
     @FindBy(className = "ant-modal-wrap")
     public TripDepartureArrivalModal tripDepartureArrivalModal;
@@ -343,6 +344,9 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
     @FindBy(xpath = "//a[@class='ant-typography']")
     public static Button viewDetailsActionLink;
 
+    @FindBy(css = ".ant-spin-dot")
+    public PageElement spinner;
+    
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
         Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
@@ -1782,4 +1786,69 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
                 break;
         }
     }
+
+    public static class AssignMawbModal {
+        public AssignMawbModal(WebDriver webDriver) {
+            super();
+            PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+        }
+
+        public static final String MAWB_CHECKBOX_XPATH = "//td[text()='%s']//preceding-sibling::td[contains(@class,'ant-table-selection-column')]//input[@class='ant-checkbox-input']";
+        public static final String mawbSelectedMessage = "//div[text()='Selected %s MAWB, %s Booked Pcs, %s Booked Weight, %s Book Volume']";
+
+        @FindBy(xpath = "//span[text()='Flight Trip Origin - Destination Airport']/ancestor::div[@class='ant-col']")
+        public PageElement flightTripAirports;
+
+        @FindBy(xpath = "//label[text()='MAWB Origin - Destination Airport']//ancestor::div[@class = 'ant-row ant-form-item']//input")
+        public PageElement mawbAirports;
+
+        @FindBy(xpath = "//strong[text()= 'Search Unassigned MAWB to Assign to Flight Trip']")
+        public PageElement searchUnassignedMawb;
+
+        @FindBy(id = "vendor")
+        public PageElement mawbVendor;
+
+        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
+        public PageElement expectedDuration;
+
+        @FindBy(css = "[data-testid = 'assign-to-trip-button']")
+        public Button assignToTrip;
+
+        @FindBy(xpath = "//div[@class='ant-typography ant-typography-danger']")
+        public Button warningMessage;
+
+        @FindBy(css = "[data-testid = 'find-mawb-button']")
+        public Button findMAWB;
+
+    }
+
+    public void verifyAssignedMawbPage(){
+        backButton.waitUntilVisible();
+        Assertions.assertThat(assignMawbModal.flightTripAirports.isDisplayed()).as("Flight Trip Origin - Destination Airport is display").isTrue();
+        Assertions.assertThat(assignMawbModal.mawbAirports.isDisplayed()).as("MAWB Origin - Destination Airport is display").isTrue();
+        Assertions.assertThat(assignMawbModal.searchUnassignedMawb.isDisplayed()).as("Search Unassigned MAWB to Assign to Flight Trip is display").isTrue();
+        Assertions.assertThat(assignMawbModal.mawbVendor.isDisplayed()).as("MAWB Vendor is display").isTrue();
+        Assertions.assertThat(assignMawbModal.assignToTrip.isDisplayed()).as("Assign to Trip is display").isTrue();
+        Assertions.assertThat(assignMawbModal.assignToTrip.getAttribute("disabled")).as("Assign to Trip is disable").isEqualTo("true");
+    }
+
+    public void assignMawb(String vendor, String mawb){
+        backButton.waitUntilVisible();
+        assignMawbModal.mawbVendor.sendKeys(vendor);
+        assignMawbModal.mawbVendor.sendKeys(Keys.ENTER);
+        assignMawbModal.findMAWB.waitUntilClickable();
+        assignMawbModal.findMAWB.click();
+        spinner.waitUntilInvisible();
+        findElementByXpath(f(assignMawbModal.MAWB_CHECKBOX_XPATH,mawb)).click();
+        assignMawbModal.assignToTrip.waitUntilClickable();
+        Assertions.assertThat(assignMawbModal.warningMessage.isDisplayed()).as("Warning message is display").isTrue();
+        assignMawbModal.assignToTrip.click();
+        pause500ms();
+    }
+
+    public void verifyAssignMawbSuccessMessage(){
+        String message = getAntTopText();
+        Assertions.assertThat(message).as("Message is the same").isEqualTo("Successfully assigned MAWB.");
+    }
+
 }
