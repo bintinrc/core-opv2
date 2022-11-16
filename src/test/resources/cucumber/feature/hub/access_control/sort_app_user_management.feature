@@ -5,7 +5,7 @@ Feature: Sort App User Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteSortAppUser
+  @DeleteSortAppUser @opv2
   Scenario: Success Create Sort User with One Primary Hub (uid:d2bdb5ea-9a31-46e1-821f-1091b390fa22)
     Given Operator go to menu Access Control -> Sort App User Management
     When Operator create new Sort App User with details:
