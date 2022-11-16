@@ -346,6 +346,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
 
     @FindBy(css = ".ant-spin-dot")
     public PageElement spinner;
+    
     public void verifyAirportTripMovementPageItems() {
         waitUntilVisibilityOfElementLocated("//button[.='Load Trips']");
         Assertions.assertThat(isElementVisible(LOAD_BUTTON_XPATH, 5))
@@ -1843,7 +1844,6 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(assignMawbModal.warningMessage.isDisplayed()).as("Warning message is display").isTrue();
         assignMawbModal.assignToTrip.click();
         pause500ms();
-
     }
 
     public void verifyAssignMawbSuccessMessage(){
