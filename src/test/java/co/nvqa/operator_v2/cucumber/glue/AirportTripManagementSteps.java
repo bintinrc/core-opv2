@@ -526,4 +526,19 @@ public class AirportTripManagementSteps extends AbstractSteps{
     public void operatorVerifyButtonIsDisabledOnAirportTripPage(String actionButton) {
         airportTripManagementPage.verifyActionsButtonIsDisabledOnAirportTripPage(actionButton);
     }
+
+    @When("Operator assigns MAWB to flight trip with data below:")
+    public void operatorAssignsMAWBToFlightTrip(Map<String, String> data) {
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        String tripID = resolvedData.get("tripID");
+        airportTripManagementPage.airportTable.filterByColumn(COLUMN_AIRTRIP_ID, tripID);
+        airportTripManagementPage.airportTable.clickActionButton(1, ACTION_ASSIGN_MAWB);
+        airportTripManagementPage.verifyAssignedMawbPage();
+        airportTripManagementPage.assignMawb(resolvedData.get("vendor"),resolvedData.get("mawb"));
+    }
+
+    @Then("Operator verifies assigned MAWB success message")
+    public void operatorVerifiesAssignedMawbSuccessMessaage(){
+        airportTripManagementPage.verifyAssignMawbSuccessMessage();
+    }
 }
