@@ -50,6 +50,58 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
     @FindBy(css = "#toast-container")
     private PageElement toastContainer;
+
+    @FindBy(css = "input[placeholder='Start date']")
+    private PageElement selectedStartDay;
+
+    @FindBy(css = "input[placeholder='End date']")
+    private PageElement selectedEndDay;
+
+    @FindBy(xpath = "//input[@id='priority']/parent::span/following-sibling::span")
+    private PageElement selectedPriority;
+
+    @FindAll(@FindBy(xpath = "//label[@for='serviceType']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> jobServiceTypeElements;
+
+    @FindAll(@FindBy(xpath = "//label[@for='serviceLevel']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> jobServiceLevelElements;
+
+    @FindAll(@FindBy(xpath = "//label[@for='jobStatus']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> jobStatusElements;
+
+    @FindAll(@FindBy(xpath = "//label[@for='zones']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> zonesElements;
+
+    @FindAll(@FindBy(xpath = "//label[@for='masterShippers']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> masterShippersElements;
+
+    @FindAll(@FindBy(xpath = "//label[@for='shippers']//parent::div/following-sibling::div//span[@class='ant-select-selection-item-content']"))
+    private List<PageElement> shippersElements;
+
+    @FindBy(css = "div.ant-collapse-header")
+    private Button showOrHideFilters;
+
+    @FindBy(css = "div.ant-collapse-content-inactive")
+    private PageElement invisibleFiltersBlock;
+
+    @FindBy(xpath = "//span[text()='Clear Selection']/parent::button")
+    private Button clearSelectionButton;
+
+    @FindBy(css = "#presetFilters")
+    private PageElement presetFilters;
+
+    @FindBy(xpath = "#priority")
+    private PageElement priorityButton;
+
+    @FindBy(css = "#serviceType")
+    private PageElement jobServiceTypeInput;
+
+    @FindBy(css = "#serviceLevel")
+    private PageElement jobServiceLevelInput;
+
+    @FindBy(css = "#jobStatus")
+    private PageElement jobStatusInput;
+
     public final String ID_NEXT = "__next";
     public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
     public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shippers_list_0']";
@@ -57,6 +109,17 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     public final String VERIFY_ROUTE_FIELD_LOCATOR = "//input[@aria-activedescendant='route_list_0']";
 
     public final String CALENDAR_DAY_BY_TITLE_LOCATOR = "td[title='%s']";
+    public final String VALUE = "value";
+    public final String TITLE = "title";
+    public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown.nv-select-dropdown.ant-select-dropdown-placement-bottomLeft:not(.ant-select-dropdown-hidden)";
+    public final String PRIORITY_SELECTION_LOCATOR = "div[aria-label='Priority']";
+    public final String NON_PRIORITY_SELECTION_LOCATOR = "div[aria-label='Non-Priority']";
+    public final String PREMIUM_SELECTION_LOCATOR = "div[aria-label='Premium']";
+    public final String STANDARD_SELECTION_LOCATOR = "div[aria-label='Standard']";
+    public final String IN_PROGRESS_SELECTION_LOCATOR = "div[label='In Progress']";
+    public final String CANCELLED_SELECTION_LOCATOR = "div[label='Cancelled']";
+    public final String COMPLETED_SELECTION_LOCATOR = "div[label='Completed']";
+    public final String FAILED_SELECTION_LOCATOR = "div[label='Failed']";
 
     public PickupAppointmentJobPage(WebDriver webDriver) {
         super(webDriver);
@@ -152,4 +215,132 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
         return loadSelection;
     }
 
+    public String getSelectedStartDay() {
+        return selectedStartDay.getAttribute(VALUE);
+    }
+
+    public String getSelectedEndDay() {
+        return selectedEndDay.getAttribute(VALUE);
+    }
+
+    public String getSelectedPriority() {
+        return selectedPriority.getAttribute(TITLE);
+    }
+
+    public List<String> getAllJobServiceLevel() {
+        return jobServiceLevelElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public List<String> getAllJobServiceType() {
+        return jobServiceTypeElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public List<String> getAllJobStatus() {
+        return jobStatusElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public List<String> getAllZones() {
+        return zonesElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public List<String> getAllMasterShippers() {
+        return masterShippersElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public List<String> getAllShippers() {
+        return shippersElements.stream().map(PageElement::getText).collect(Collectors.toList());
+    }
+
+    public void clickOnShowOrHideFilters() {
+        showOrHideFilters.click();
+    }
+
+    public boolean verifyIsFiltersBlockInvisible() {
+        waitUntilVisibilityOfElementLocated(invisibleFiltersBlock.getWebElement().getLocation().toString());
+        return invisibleFiltersBlock.isDisplayed();
+    }
+
+    public void clickOnClearSelectionButton() {
+        clearSelectionButton.click();
+    }
+
+    public void clickOnPresetFilters() {
+        presetFilters.click();
+    }
+
+    public void waitUntilDropdownManuVisible() {
+        waitUntilInvisibilityOfElementLocated(DROPDOWN_MENU_LOCATOR);
+    }
+
+    public boolean isFilterDropdownManuDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR)).isDisplayed();
+    }
+
+    public void clickOnSelectStartDay() {
+        selectedStartDay.click();
+    }
+
+    public void clickOnPriorityButton() {
+        priorityButton.click();
+    }
+
+    public boolean isPriorityFromPriorityFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(PRIORITY_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public boolean isNonPriorityFromPriorityFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(NON_PRIORITY_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public void clickOnJobServiceType() {
+        jobServiceTypeInput.click();
+    }
+
+    public void clickOnJobServiceLevel() {
+        jobServiceLevelInput.click();
+    }
+
+    public boolean isPremiumFromJobServiceLevelFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(PREMIUM_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public boolean isStandardFromJobServiceLevelFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(STANDARD_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public void clickOnJobStatus() {
+        jobStatusInput.click();
+    }
+
+    public boolean isInProgressFromJobStatusFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(IN_PROGRESS_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public boolean isCancelledFromJobStatusFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(CANCELLED_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public boolean isCompletedFromJobStatusFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(COMPLETED_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
+
+    public boolean isFailedFromJobStatusFilterDisplayed() {
+        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                .findElement(By.cssSelector(FAILED_SELECTION_LOCATOR))
+                .isDisplayed();
+    }
 }

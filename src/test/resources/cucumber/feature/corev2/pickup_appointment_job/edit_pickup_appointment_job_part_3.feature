@@ -1,4 +1,3 @@
-@CWF @ShouldAlwaysRun
 Feature: Edit Pickup Appointment Job Part 3
 
   @LaunchBrowser @ShouldAlwaysRun

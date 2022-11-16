@@ -10,8 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ScenarioScoped
 public class PickupAppointmentJobSteps extends AbstractSteps {
@@ -382,8 +381,209 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.getCreateOrEditJobPage().removeAllTags();
     }
 
+    /*For list of data using ', ' symbols
+    * Example
+    * | jobStatus      | Ready for Routing, Routed        |*/
+    @Then("qa verify filters on Pickup Jobs page are shown")
+    public void verifyFiltersOnPickupJobsPageAreShown(Map<String, String> dataTable) {
+        final String dateStart = dataTable.get("dateStart");
+        String dateEnd = dataTable.get("dateEnd");
+        final String priority = dataTable.get("priority");
+        final String jobServiceType = dataTable.get("jobServiceType");
+        final String jobServiceLevel = dataTable.get("jobServiceLevel");
+        final String jobStatus = dataTable.get("jobStatus");
+        final String zones = dataTable.get("zones");
+        final String masterShippers = dataTable.get("masterShippers");
+        final String shippers = dataTable.get("shippers");
+        if (dateEnd == null) {
+            dateEnd = dateStart;
+        }
+
+        verifyDataRange(dateStart, dateEnd);
+        verifyPriority(priority);
+
+        if (jobServiceLevel == null) {
+            verifyJobServiceLevels(new ArrayList<>());
+        } else verifyJobServiceLevels(Arrays.asList(jobServiceLevel.split(", ")));
+
+        if (jobServiceType == null) {
+            verifyJobServiceTypes(new ArrayList<>());
+        } else verifyJobServiceTypes(Arrays.asList(jobServiceType.split(", ")));
+
+        if (jobStatus == null) {
+            verifyJobStatuses(new ArrayList<>());
+        } else verifyJobStatuses(Arrays.asList(jobStatus.split(", ")));
+
+        if (zones == null) {
+            verifyZones(new ArrayList<>());
+        } else verifyZones(Arrays.asList(zones.split(", ")));
+
+        if (masterShippers == null) {
+            verifyMasterShippers(new ArrayList<>());
+        } else verifyMasterShippers(Arrays.asList(masterShippers.split(", ")));
+
+        if (shippers == null) {
+            verifyShippers(new ArrayList<>());
+        } else verifyShippers(Arrays.asList(shippers.split(", ")));
+    }
+
+    @When("Operator click on Show or hide dropdown button")
+    public void clickOnShowOrHideDropdownButton() {
+        pickupAppointmentJobPage.clickOnShowOrHideFilters();
+    }
+
+    @Then("qa verify filters are hidden")
+    public void verifyFiltersAreHidden() {
+        Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
+                .as("Filters are hidden")
+                .isTrue();
+    }
+
+    @When("Operator fills in the Shippers field with valid shipper = {string}")
+    public void fillInTheShippersFieldValidShipper(String shipperId) {
+        pickupAppointmentJobPage.setShipperIDInField(shipperId);
+    }
+
+    @When("Operator click on Clear Selection button")
+    public void clickOnClearSelectionButton() {
+        pickupAppointmentJobPage.clickOnClearSelectionButton();
+    }
+
+    @When("operator click Preset Filters field")
+    public void openPresetFiltersField() {
+        pickupAppointmentJobPage.clickOnPresetFilters();
+    }
+
+    @Then("qa verify dropdown menu shown with a list of saved preset")
+    public void verifyDropdownMenuShownWIthAListOfSavedPreset() {
+        pickupAppointmentJobPage.waitUntilDropdownManuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownManuDisplayed())
+                .as("Preset Filter Dropdown Manu is displayed")
+                .isTrue();
+        pickupAppointmentJobPage.clickOnPresetFilters();
+    }
+
+    @When("operator click Data Range field")
+    public void clickDataRangeField() {
+        pickupAppointmentJobPage.clickOnSelectStartDay();
+    }
+
+    @When("operator click Priority field")
+    public void clickPriorityField() {
+        pickupAppointmentJobPage.clickOnPriorityButton();
+    }
+
+    @Then("qa verify a dropdown menu shown with priority option")
+    public void verifyADropdownMenuShownWIthPriorityOption() {
+        pickupAppointmentJobPage.waitUntilDropdownManuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isPriorityFromPriorityFilterDisplayed())
+                .as("Priority in Priority Filter is displayed")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.isNonPriorityFromPriorityFilterDisplayed())
+                .as("Non-Priority in Priority Filter is displayed")
+                .isTrue();
+        pickupAppointmentJobPage.clickOnPriorityButton();
+    }
+
+    @When("operator click Job Service Type field")
+    public void clickJobServiceTypeField() {
+        pickupAppointmentJobPage.clickOnJobServiceType();
+    }
+
+    @Then("qa verify a dropdown menu shown with no data")
+    public void verifyServiceTypeDropdownMenuShown() {
+        pickupAppointmentJobPage.waitUntilDropdownManuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownManuDisplayed())
+                .as("Service Type Filter Dropdown Manu is displayed")
+                .isTrue();
+        pickupAppointmentJobPage.clickOnJobServiceType();
+    }
+
+    @When("operator click Job Service Level field")
+    public void clickJobServiceLevelField() {
+        pickupAppointmentJobPage.clickOnJobServiceLevel();
+    }
+
+    @Then("qa verify a dropdown menu shown with job service level option")
+    public void verifyADropdownMenuShownWIthJobServiceLevelOption() {
+        pickupAppointmentJobPage.waitUntilDropdownManuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isPremiumFromJobServiceLevelFilterDisplayed())
+                .as("Premium in Job Service Level Filter is displayed")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.isStandardFromJobServiceLevelFilterDisplayed())
+                .as("Standard in Job Service Level Filter is displayed")
+                .isTrue();
+    }
+
+    @When("operator click Job Status field")
+    public void clickJobStatusField() {
+        pickupAppointmentJobPage.clickOnJobStatus();
+    }
+
+    @Then("qa verify a dropdown menu shown with job status option")
+    public void verifyADropdownMenuShownWithJobStatusOption() {
+        pickupAppointmentJobPage.waitUntilDropdownManuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isInProgressFromJobStatusFilterDisplayed())
+                .as("In Progress in Job Status Filter is displayed")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.isCancelledFromJobStatusFilterDisplayed())
+                .as("Cancelled in Job Status Filter is displayed")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.isCompletedFromJobStatusFilterDisplayed())
+                .as("Completed in Job Status Filter is displayed")
+                .isTrue();
+        Assertions.assertThat(pickupAppointmentJobPage.isFailedFromJobStatusFilterDisplayed())
+                .as("Failed in Job Status Filter is displayed")
+                .isTrue();
+    }
+
     // This method can be removed once redirection to Shipper Address is added in operator V2 menu
     public void loadShipperAddressConfigurationPage() {
         getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
+    }
+
+    public void verifyDataRange(String dataRangeStart, String dataRangeEnd) {
+        Assertions.assertThat(pickupAppointmentJobPage.getSelectedStartDay())
+                .as("Start day in Date range is correct")
+                .isEqualTo(dataRangeStart);
+        Assertions.assertThat(pickupAppointmentJobPage.getSelectedEndDay())
+                .as("End day in Date range is correct")
+                .isEqualTo(dataRangeEnd);
+    }
+
+    public void verifyPriority(String priority) {
+        Assertions.assertThat(pickupAppointmentJobPage.getSelectedPriority())
+                .as("Priority is correct")
+                .isEqualTo(priority);
+    }
+
+    public void verifyJobServiceTypes(List<String> jobServiceTypeList) {
+        verifyFilters(pickupAppointmentJobPage.getAllJobServiceType(), jobServiceTypeList, "Job Service Type is correct");
+    }
+
+    public void verifyJobServiceLevels(List<String> jobServiceLevelList) {
+        verifyFilters(pickupAppointmentJobPage.getAllJobServiceLevel(), jobServiceLevelList, "Job Service Level is correct");
+    }
+
+    public void verifyJobStatuses(List<String> jobStatusList) {
+        verifyFilters(pickupAppointmentJobPage.getAllJobStatus(), jobStatusList, "Job Status is correct");
+    }
+
+    public void verifyZones(List<String> zonesList) {
+        verifyFilters(pickupAppointmentJobPage.getAllZones(), zonesList, "Zones is correct");
+    }
+
+    public void verifyMasterShippers(List<String> masterShippersList) {
+        verifyFilters(pickupAppointmentJobPage.getAllMasterShippers(), masterShippersList, "Master Shippers is correct");
+    }
+
+    public void verifyShippers(List<String> shippersList) {
+        verifyFilters(pickupAppointmentJobPage.getAllMasterShippers(), shippersList, "Shippers is correct");
+    }
+
+    private void verifyFilters(List<String> actualList, List<String> expectedList, String message) {
+        Assertions.assertThat(actualList)
+                .as(message)
+                .isEqualTo(expectedList);
     }
 }
