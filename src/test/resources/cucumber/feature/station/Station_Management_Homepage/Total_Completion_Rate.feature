@@ -32,7 +32,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 100
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-    Given API Operator cancel created order
+    When API Operator force cancels the created order
 
 
     Examples:
@@ -70,7 +70,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 100
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-    Given API Operator cancel created order
+    When API Operator force cancels the created order
 
     Examples:
       | HubName       | HubId       | TileName              |
@@ -98,7 +98,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-    Given API Operator cancel created order
+    When API Operator force cancels the created order
 
     Examples:
       | HubName       | HubId       | TileName              |
@@ -124,7 +124,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-    Given API Operator cancel created order
+    When API Operator force cancels the created order
 
     Examples:
       | HubName       | HubId       | TileName              |
