@@ -36,6 +36,8 @@ Feature: Movement Trip - Update Trip 2
     Then Operator verifies that the new tab with trip details is opened
     When Operator depart trip
     When Operator clicks Force Completion button on Movement Trips page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
+    Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
@@ -73,6 +75,8 @@ Feature: Movement Trip - Update Trip 2
     Then Operator verifies that the new tab with trip details is opened
     And Operator depart trip
     When Operator clicks Force Completion button on Movement Trips page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
+    Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
@@ -105,6 +109,8 @@ Feature: Movement Trip - Update Trip 2
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And Operator depart trip
     When Operator clicks Force Completion button on Movement Trips page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
+    Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
@@ -140,6 +146,8 @@ Feature: Movement Trip - Update Trip 2
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And Operator depart trip
     When Operator clicks Force Completion button on Movement Trips page
+    Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
+    Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"
     And Operator depart trip
     And Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]} departed" display on Movement Trip details page
 
