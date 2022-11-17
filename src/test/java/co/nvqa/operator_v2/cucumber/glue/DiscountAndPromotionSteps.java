@@ -116,6 +116,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       } catch (ParseException e) {
         throw new NvTestRuntimeException(e);
       }
+      put(KEY_CAMPAIGN_ID_OF_CREATED_CAMPAIGN, page.getCampaignId());
       Assertions.assertThat(page.isCampaignIdDisplayed()).as("Campaign Id is displayed")
           .isTrue();
       Assertions.assertThat(page.isDownloadButtonDisplayed()).as("Download button is displayed")
