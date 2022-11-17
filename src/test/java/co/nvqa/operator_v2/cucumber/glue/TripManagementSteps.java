@@ -570,4 +570,15 @@ public class TripManagementSteps extends AbstractSteps {
         Assertions.assertThat(result).as("Trip Management toast message is the same").isTrue();
     }
 
+    @When("Operator clicks Force Completion button on Movement Trips page")
+    public void operatorClicksForceCompletionButtonOnMovementTripsPage() {
+        tripManagementPage.forceTripCompletion.click();
+        pause2s();
+    }
+
+    @And("Operator verifies trip message {string} display on Movement Trip details page")
+    public void operatorVerifiesDepartTripMessageDisplayOnMovementTripDetailsPage(String tripMessage) {
+        tripMessage = resolveValue(tripMessage);
+        tripManagementPage.verifyTripMessageSuccessful(tripMessage);
+    }
 }
