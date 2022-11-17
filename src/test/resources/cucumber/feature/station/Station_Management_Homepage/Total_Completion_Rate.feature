@@ -8,7 +8,6 @@ Feature: Total Completion Rate
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rate - Success Delivery
     Given Operator loads Operator portal home page
-    And DB Operator update the route details to past date for the hub "<HubId>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
@@ -33,6 +32,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 100
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
+    Given API Operator cancel created order
 
 
     Examples:
@@ -42,7 +42,6 @@ Feature: Total Completion Rate
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates -  Failed Delivery
     Given Operator loads Operator portal home page
-    And DB Operator update the route details to past date for the hub "<HubId>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
@@ -71,7 +70,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 100
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-
+    Given API Operator cancel created order
 
     Examples:
       | HubName       | HubId       | TileName              |
@@ -80,7 +79,6 @@ Feature: Total Completion Rate
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates - Routed Order
     Given Operator loads Operator portal home page
-    And DB Operator update the route details to past date for the hub "<HubId>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
@@ -100,7 +98,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-
+    Given API Operator cancel created order
 
     Examples:
       | HubName       | HubId       | TileName              |
@@ -109,7 +107,6 @@ Feature: Total Completion Rate
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates - Unrouted Order
     Given Operator loads Operator portal home page
-    And DB Operator update the route details to past date for the hub "<HubId>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
@@ -127,7 +124,7 @@ Feature: Total Completion Rate
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the Total Completion Rate:"<TileName>" is equal to 0
     And Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: "<TileName>"
-
+    Given API Operator cancel created order
 
     Examples:
       | HubName       | HubId       | TileName              |
