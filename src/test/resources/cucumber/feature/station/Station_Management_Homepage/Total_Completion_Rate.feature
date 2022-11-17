@@ -5,7 +5,7 @@ Feature: Total Completion Rate
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rate - Success Delivery
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -39,7 +39,7 @@ Feature: Total Completion Rate
       | HubName       | HubId       | TileName              |
       | {hub-name-16} | {hub-id-16} | Total completion rate |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates -  Failed Delivery
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -76,7 +76,7 @@ Feature: Total Completion Rate
       | HubName       | HubId       | TileName              |
       | {hub-name-16} | {hub-id-16} | Total completion rate |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates - Routed Order
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -104,7 +104,7 @@ Feature: Total Completion Rate
       | HubName       | HubId       | TileName              |
       | {hub-name-16} | {hub-id-16} | Total completion rate |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario Outline: View Total Completion Rates - Unrouted Order
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
