@@ -114,15 +114,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
   public final String DROPDOWN_MENU_WITH_DATA_LOCATOR = "#shipper_list_0";
-  public final String PRIORITY_SELECTION_LOCATOR = "div[aria-label='Priority']";
-  public final String NON_PRIORITY_SELECTION_LOCATOR = "div[aria-label='Non-Priority']";
-  public final String PREMIUM_SELECTION_LOCATOR = "div[aria-label='Premium']";
-  public final String STANDARD_SELECTION_LOCATOR = "div[aria-label='Standard']";
-  public final String IN_PROGRESS_SELECTION_LOCATOR = "div[label='In Progress']";
-  public final String CANCELLED_SELECTION_LOCATOR = "div[label='Cancelled']";
-  public final String COMPLETED_SELECTION_LOCATOR = "div[label='Completed']";
-  public final String FAILED_SELECTION_LOCATOR = "div[label='Failed']";
-  public final String SELECTION_LOCATOR = "div[label='%s']";
+  public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
+  public final String SELECTION_ARIA_LABEL_LOCATOR = "div[aria-label='%s']";
   public final String SELECTION_ITEMS = "//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
   public PickupAppointmentJobPage(WebDriver webDriver) {
@@ -308,18 +301,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobPriorityFilterByNameDisplayed(String priorityName) {
-    switch (priorityName) {
-      case "priority":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(PRIORITY_SELECTION_LOCATOR))
-            .isDisplayed();
-      case "non priority":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(NON_PRIORITY_SELECTION_LOCATOR))
-            .isDisplayed();
-      default:
-        return false;
-    }
+    return isJobSelectionFilterByNameWithAriaLabelDisplayed(priorityName);
   }
 
   public void clickOnJobServiceType() {
@@ -331,18 +313,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobServiceLevelFilterByNameDisplayed(String serviceLevelName) {
-    switch (serviceLevelName) {
-      case "premium":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(PREMIUM_SELECTION_LOCATOR))
-            .isDisplayed();
-      case "standard":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(STANDARD_SELECTION_LOCATOR))
-            .isDisplayed();
-      default:
-        return false;
-    }
+    return isJobSelectionFilterByNameWithAriaLabelDisplayed(serviceLevelName);
   }
 
   public void clickOnJobStatus() {
@@ -350,26 +321,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobStatusLevelFilterByNameDisplayed(String statusName) {
-    switch (statusName) {
-      case "in progress":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(IN_PROGRESS_SELECTION_LOCATOR))
-            .isDisplayed();
-      case "cancelled":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(CANCELLED_SELECTION_LOCATOR))
-            .isDisplayed();
-      case "completed":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(COMPLETED_SELECTION_LOCATOR))
-            .isDisplayed();
-      case "failed":
-        return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(FAILED_SELECTION_LOCATOR))
-            .isDisplayed();
-      default:
-        return false;
-    }
+    return isJobSelectionFilterByNameWithLabelDisplayed(statusName);
   }
 
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
@@ -389,49 +341,11 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public void selectServiceLevel(String serviceLevel) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(PREMIUM_SELECTION_LOCATOR)));
-    switch (serviceLevel.toLowerCase()) {
-      case "premium":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(PREMIUM_SELECTION_LOCATOR)).click();
-        break;
-      case "standard":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(STANDARD_SELECTION_LOCATOR)).click();
-        break;
-      default:
-        LOGGER.warn("Incorrect entry service level");
-    }
+    clickOnJobSelectionFilterByNameWithAriaLabel(serviceLevel);
   }
 
   public void selectJobStatus(String status) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(IN_PROGRESS_SELECTION_LOCATOR)));
-    switch (status.toLowerCase()) {
-      case "in progress":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(IN_PROGRESS_SELECTION_LOCATOR))
-            .click();
-        break;
-      case "cancelled":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(CANCELLED_SELECTION_LOCATOR))
-            .click();
-        break;
-      case "completed":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(COMPLETED_SELECTION_LOCATOR))
-            .click();
-        break;
-      case "failed":
-        webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(FAILED_SELECTION_LOCATOR))
-            .click();
-        break;
-      default:
-        LOGGER.warn("Incorrect entry status");
-    }
+    clickOnJobSelectionFilterByNameWithLabel(status);
   }
 
   public void clickOnJobZone() {
@@ -458,14 +372,40 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public void selectJobSelection(String selection) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LOCATOR, selection))));
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LOCATOR, selection))).click();
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
   }
 
-  public boolean isJobSelectionFilterByNameDisplayed(String selection) {
+  public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
+    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LOCATOR, selection)))
+        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
         .isDisplayed();
+  }
+
+  public boolean isJobSelectionFilterByNameWithAriaLabelDisplayed(String selection) {
+    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
+    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
+            .isDisplayed();
+  }
+
+  public void clickOnJobSelectionFilterByNameWithLabel(String selection) {
+    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
+            .click();
+  }
+
+  public void clickOnJobSelectionFilterByNameWithAriaLabel(String selection) {
+    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
+    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
+            .click();
   }
 }
