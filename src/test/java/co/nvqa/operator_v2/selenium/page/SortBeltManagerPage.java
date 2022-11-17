@@ -43,7 +43,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String DROPDOWN_SELECTIONS_XPATH = "//div[@class='ant-select-item-option-content' and text()='%s']";
   public static final String DROPDOWN_SELECTIONS_LIST_XPATH = "//div[@class='ant-select-item-option-content']";
   public static final String LOGIC_MAPPING_COLUMN_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[text()='%s']";
-  public static final String COLUMN_MAPPING_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][%d]";
+  public static final String COLUMN_MAPPING_XPATH = "((//div[contains(@class, 'logic-mapping-table')]//div[@class='logic-mapping-rule'])[%d])//div[contains(@class, 'editable-cell')][%d]";
   public static final String ARM_FILTERS_DISABLED_XPATH = "//div[contains(@class,'ant-select-item-option-disabled')]";
   public static final String ADD_RULE_XPATH = "//button[@data-testid='add-rule-button']";
   public static final String DELETE_RULE_XPATH = "//span[contains(@data-testid,'delete-icon')]";
@@ -53,12 +53,12 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String FORM_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@data-testid='arm-filters-selection']//span[@class='ant-select-selection-item-content']";
   public static final String FORM_LOGIC_UNASSIGNED_ARM_VALUE_XPATH = "//input[@id='unassignedParcelArm']/parent::span/following-sibling::span";
   public static final String FORM_RULE_ALL_XPATH = "//div[contains(@class, 'logic-mapping-table')]//span[@class='rule-number']";
-  public static final String FORM_RULE_NUMBER_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//span[@class='rule-number']";
-  public static final String FORM_RULE_ARM_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][1+1]/div";
-  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+1]/div";
-  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+1]/div";
-  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+1+1]/div";
-  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "//div[contains(@class, 'logic-mapping-table')]//tr[@data-row-key='%d']//td[contains(@class,'ant-table-cell')][2+%d+2+1]/div";
+  public static final String FORM_RULE_NUMBER_VALUE_XPATH = "(//div[contains(@class, 'logic-mapping-table')]//span[@class='rule-number'])[%d]";
+  public static final String FORM_RULE_ARM_VALUE_XPATH = "(//div[@class='editable-cell-holder arm_ids']//div)[%d]";
+  public static final String FORM_RULE_DESCRIPTION_VALUE_XPATH = "(//div[@class='editable-cell-holder description']//div)[%d]";
+  public static final String FORM_RULE_FILTERS_VALUE_XPATH = "((//div[contains(@class, 'logic-mapping-table')]//div[@class='logic-mapping-rule'])[%d])//div[contains(@class, 'editable-cell')][%d]";
+  public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "(//div[@class='editable-cell-holder shipment_destination_hub_id']//div)[%d]";
+  public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "(//div[@class='editable-cell-holder shipment_type']//div)[%d]";
 
   public static final String CHECK_LOGIC_NAME_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block category-title']";
   public static final String CHECK_LOGIC_DESCRIPTION_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][1]";
