@@ -167,6 +167,10 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return !campaignId.getValue().isEmpty();
   }
 
+  public String getCampaignId() {
+    return campaignId.getValue();
+  }
+
   public Boolean isShippersRemoveButtonDisplayed() {
     return shippersRemoveButton.isDisplayed();
   }
