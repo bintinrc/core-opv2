@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @RTS @EditOrder3
+@OperatorV2 @Core @EditOrder @RTS @EditOrder3 @runRTS
 Feature: RTS
 
   @LaunchBrowser @ShouldAlwaysRun
