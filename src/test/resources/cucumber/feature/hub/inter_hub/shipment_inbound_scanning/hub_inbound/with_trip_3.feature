@@ -28,7 +28,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     And API Operator depart trip with data below:
@@ -71,7 +71,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
@@ -86,6 +86,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -173,7 +176,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}"
@@ -189,6 +192,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -267,7 +273,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator verify new Hubs are created
     And API Operator reloads hubs cache
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     And API Operator depart trip with data below:
@@ -322,7 +328,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
@@ -332,6 +338,9 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | shipmentType | Land Haul                          |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+    And DB Operator verify sla in movement_events table is succeed for the following data:
+      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:

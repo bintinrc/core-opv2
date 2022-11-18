@@ -63,7 +63,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     dtmPage.searchDriverType.setValue(searchString);
     dtmPage.driverTypesTable.clickActionButton(1, DriverTypesTable.ACTION_EDIT);
     dtmPage.editDriverTypeDialog.fillForm(driverTypeParams);
-    dtmPage.editDriverTypeDialog.submitForm();
+    dtmPage.clickSubmitButton();
   }
 
   @Then("Operator verify new Driver Type params")

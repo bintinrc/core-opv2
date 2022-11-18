@@ -6,7 +6,7 @@ Feature: Parcel Sweeper Live
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound Parcel With Changes in size - e2e (uid:b84edf3c-a535-4e0c-9bc8-c092b9c9c64b)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound update size - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -58,7 +58,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound Parcel With Changes In Weight - e2e (uid:e1cc9a06-a6e4-4e0e-8b8c-aafb675fbac1)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound update weight - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -111,7 +111,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound With Changes In Dimension - e2e (uid:dcd01994-7c0a-4850-bc2a-7153476b91e1)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound update dimension - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -164,7 +164,65 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound Override The Weight And Recalculate The Price - e2e (uid:463c843d-0e0d-4e9d-9c58-82b6541425e8)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound update size, weight, dimension - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
+    When API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id-2} } |
+    And API Operator add reservation pick-up to the route
+    And API Operator start the route
+    And API Driver set credentials "{ninja-driver-username-2}" and "{ninja-driver-password-2}"
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver success reservation by scanning created parcel using submit pod v5
+    When API Operator refresh created order data
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {hub-name-3}                               |
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | overrideWeight    | 7                                          |
+      | overrideDimHeight | 2                                          |
+      | overrideDimWidth  | 3                                          |
+      | overrideDimLength | 5                                          |
+      | overrideSize      | M                                          |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    Then API Operator verify order info after Global Inbound
+    When Operator switch to edit order page using direct URL
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    Then Operator verifies dimensions information on Edit Order page:
+      | weight | 7 |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And API Operator get order details
+    And Operator make sure size changed to "M"
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name-3}     |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    And API Operator get order details
+    And Operator refresh page
+    Then API Operator verify order info after delivery "DELIVERY_SUCCESS"
+    And Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound update weight - [API] Recalculate price - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from": {"name": "QA-SO-Test-UIO-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "22 Chuan Hoe Ave, Singapore 549854","address2": "","country": "SG","postcode": "549854","latitude":1.284711,"longitude":103.809378}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
@@ -209,7 +267,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Order Tagging with Global Inbound - Total tags is less/equal 4 - e2e (uid:fd80fe31-4be0-4b43-91ee-035faa84c72b)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [OPV2] Global inbound and order tagging - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -258,7 +316,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Order Tagging with Global Inbound - Total tags is more than 4 - e2e (uid:93503331-909a-466f-9dae-50a9b43a1dd2)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Assign order tag - [OPV2] Global inbound and order tagging - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -308,7 +366,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound On Hold Order - Resolve PENDING MISSING Ticket Type - e2e (uid:5cf67989-15c7-492f-8abe-6d6fd3efc336)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Create missing recovery ticket - [OPV2] Global inbound -  [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -394,7 +452,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Completed" on Edit Order page
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Global Inbound On Hold Order - DO NOT Resolve NON-MISSING ticket type - e2e (uid:77eaba9f-29f8-4882-a6a6-2c95ceaaaba5)
+  Scenario: [API] Order create - [API] Create route - [API] Success reservation - [API] Create non missing recovery ticket - [OPV2] Global inbound - [API] Resolve recovery ticket - [API] Add delivery to route - [API] Van inbound - [API] Success delivery
     When API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |

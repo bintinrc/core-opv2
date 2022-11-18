@@ -35,11 +35,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.data.Offset;
 import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -149,53 +152,148 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("^Operator verifies pricing information on Edit Order page:$")
   public void operatorVerifyPricingInformation(Map<String, String> data) {
     data = resolveKeyValues(data);
-    String expectedTotal = data.get("total");
-    if (StringUtils.isNotBlank(expectedTotal)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for Total ", expectedTotal,
-          editOrderPage.getTotal().toString());
-    }
-    String expectedDeliveryFee = data.get("deliveryFee");
-    if (StringUtils.isNotBlank(expectedDeliveryFee)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for Delivery Fee ",
-          expectedDeliveryFee,
-          editOrderPage.deliveryFee.getText());
-    }
-    String expectedCodFee = data.get("codFee");
-    if (StringUtils.isNotBlank(expectedCodFee)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for COD Fee ", expectedCodFee,
-          editOrderPage.codFee.getText());
-    }
-    String expectedInsuranceFee = data.get("insuranceFee");
-    if (StringUtils.isNotBlank(expectedInsuranceFee)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for Insurance Fee ",
-          expectedInsuranceFee, editOrderPage.insuranceFee.getText());
-    }
-    String expectedHandlingFee = data.get("handlingFee");
-    if (StringUtils.isNotBlank(expectedHandlingFee)) {
-      softAssert
-          .assertEquals("Expected and actual mismatch of value for Handling Fee ",
-              expectedHandlingFee,
-              editOrderPage.handlingFee.getText());
-    }
-    String expectedRtsFee = data.get("rtsFee");
-    if (StringUtils.isNotBlank(expectedRtsFee)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for Rts Fee ", expectedRtsFee,
-          editOrderPage.rtsFee.getText());
-    }
-    String expectedGst = data.get("gst");
-    if (StringUtils.isNotBlank(expectedGst)) {
-      softAssert.assertEquals("Expected and actual mismatch of value for Gst ", expectedGst,
-          editOrderPage.gst.getText());
-    }
-    String expectedInsuredValue = data.get("insuredValue");
-    if (StringUtils.isNotBlank(expectedInsuredValue)) {
-      softAssert
-          .assertEquals("Expected and actual mismatch of value for Insured Fee ",
-              expectedInsuredValue,
-              editOrderPage.insuredValue.getText());
-    }
-  }
+    SoftAssertions softAssertions = new SoftAssertions();
+    String expectedValue;
 
+    if (data.containsKey("total")) {
+      expectedValue = data.get("total");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.totalPrice.getText()).as("Total Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(editOrderPage.getTotal())
+            .as("Total is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(data.get("total")), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("deliveryFee")) {
+      expectedValue = data.get("deliveryFee");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.deliveryFee.getText()).as("Delivery Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(
+                StandardTestUtils.getDoubleValue(editOrderPage.deliveryFee.getText()))
+            .as("Delivery Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(data.get("deliveryFee")),
+                Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("codFee")) {
+      expectedValue = data.get("codFee");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.codFee.getText()).as("COD Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(StandardTestUtils.getDoubleValue(editOrderPage.codFee.getText()))
+            .as("COD Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("insuranceFee")) {
+      expectedValue = data.get("insuranceFee");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.insuranceFee.getText())
+            .as("Insurance Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(
+                StandardTestUtils.getDoubleValue(editOrderPage.insuranceFee.getText()))
+            .as("Insurance Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("handlingFee")) {
+      expectedValue = data.get("handlingFee");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.handlingFee.getText()).as("Handling Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(
+                StandardTestUtils.getDoubleValue(editOrderPage.handlingFee.getText()))
+            .as("Handling Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("rtsFee")) {
+      expectedValue = data.get("rtsFee");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.rtsFee.getText()).as("Rts Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(
+                StandardTestUtils.getDoubleValue(editOrderPage.rtsFee.getText()))
+            .as("Rts Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("gst")) {
+      expectedValue = data.get("gst");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.gst.getText()).as("GST Fee is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(StandardTestUtils.getDoubleValue(editOrderPage.gst.getText()))
+            .as("Gst is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("insuredValue")) {
+      expectedValue = data.get("insuredValue");
+      if (expectedValue.equals("-")) {
+        softAssertions.assertThat(editOrderPage.insuredValue.getText())
+            .as("Insurance Value is correct")
+            .isEqualTo("-");
+      } else {
+        softAssertions.assertThat(
+                StandardTestUtils.getDoubleValue(editOrderPage.insuredValue.getText()))
+            .as("Insured Fee is correct")
+            .isCloseTo(StandardTestUtils.getDoubleValue(expectedValue), Offset.offset(0.09));
+      }
+    }
+
+    if (data.containsKey("billingWeight")) {
+      expectedValue = data.get("billingWeight");
+      if (expectedValue.equals("notAvailable")) {
+        softAssertions.assertThat(editOrderPage.billingWeight.isDisplayed())
+            .as("Billing Weight Value is correct").isFalse();
+      } else {
+        softAssertions.assertThat(editOrderPage.billingWeight.getText())
+            .as("Billing Weight is correct").isEqualTo(expectedValue);
+      }
+    }
+
+    if (data.containsKey("billingSize")) {
+      expectedValue = data.get("billingSize");
+      if (expectedValue.equals("notAvailable")) {
+        softAssertions.assertThat(editOrderPage.billingSize.isDisplayed())
+            .as("Billing Size Value is correct").isFalse();
+      } else {
+        softAssertions.assertThat(editOrderPage.billingSize.getText())
+            .as("Billing Size is correct").isEqualTo(expectedValue);
+      }
+    }
+
+    if (data.containsKey("source")) {
+      expectedValue = data.get("source");
+      if (expectedValue.equals("notAvailable")) {
+        softAssertions.assertThat(editOrderPage.source.isDisplayed())
+            .as("Source is correct").isFalse();
+      } else {
+        softAssertions.assertThat(editOrderPage.source.getText())
+            .as("Source is correct").isEqualTo(expectedValue);
+      }
+    }
+
+    softAssertions.assertAll();
+  }
 
   @When("Operator enter Order Instructions on Edit Order page:")
   public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data) {
@@ -239,6 +337,15 @@ public class EditOrderSteps extends AbstractSteps {
     put(KEY_ORDER_CHANGE_REASON, changeReason);
   }
 
+  @When("^Operator confirm manually complete order on Edit Order page:$")
+  public void operatorManuallyCompleteOrderOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String changeReason = data.get("changeReason");
+    String reasonForChange = data.get("reasonForChange");
+    editOrderPage.confirmCompleteOrder(changeReason, reasonForChange);
+    put(KEY_ORDER_CHANGE_REASON, changeReason);
+  }
+
   @When("Operator verify 'COD Collected' checkbox is disabled on Edit Order page")
   public void verifyCodCollectedIsDisabled() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
@@ -250,7 +357,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order with COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -265,7 +374,8 @@ public class EditOrderSteps extends AbstractSteps {
     }
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
     editOrderPage.manuallyCompleteOrderDialog.markAll.click();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     editOrderPage.waitUntilInvisibilityOfToast("The order has been completed", true);
@@ -274,7 +384,9 @@ public class EditOrderSteps extends AbstractSteps {
   @When("Operator confirm manually complete order without collecting COD on Edit Order page")
   public void operatorManuallyCompleteOrderWithoutCodOnEditOrderPage() {
     editOrderPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Completed by automated test");
+    editOrderPage.manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    editOrderPage.manuallyCompleteOrderDialog.reasonForChange.setValue(
+        "Completed by automated test");
     editOrderPage.manuallyCompleteOrderDialog.unmarkAll.click();
     takesScreenshot();
     editOrderPage.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
@@ -468,8 +580,15 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Given("New Stamp ID was generated")
   public void newStampIdWasGenerated() {
-    String stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(9).toUpperCase();
+    newStampIdWasGenerated("STAMP");
+  }
+
+  @Given("New Stamp ID with {value} prefix was generated")
+  public void newStampIdWasGenerated(String prefix) {
+    String trackingNumber = TestUtils.generateAlphaNumericString(9).toUpperCase();
+    String stampId = "NVSG" + prefix.toUpperCase() + trackingNumber;
     put(KEY_STAMP_ID, stampId);
+    put(KEY_TRACKING_NUMBER, trackingNumber);
   }
 
   @When("^Operator unable to change Stamp ID of the created order to \"(.+)\" on Edit order page$")
@@ -1605,6 +1724,20 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
+  @Then("Operator verifies ticket status is {value} on Edit Order page")
+  public void updateRecoveryTicket(String data) {
+    String status = editOrderPage.recoveryTicket.getText();
+    Pattern p = Pattern.compile(".*Status:\\s*(.+?)\\s.*");
+    Matcher m = p.matcher(status);
+    if (m.matches()) {
+      Assertions.assertThat(m.group(1))
+          .as("Ticket status")
+          .isEqualToIgnoringCase(data);
+    } else {
+      fail("Could not get ticket status from string: " + status);
+    }
+  }
+
   @Then("Operator updates recovery ticket on Edit Order page:")
   public void updateRecoveryTicket(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -1636,7 +1769,7 @@ public class EditOrderSteps extends AbstractSteps {
       }
       editOrderPage.editTicketDialog.newInstructions.setValue(instruction);
     }
-    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+    editOrderPage.editTicketDialog.updateTicket.clickAndWaitUntilDone(60);
   }
 
   @When("^Operator create new recovery ticket on Edit Order page:$")

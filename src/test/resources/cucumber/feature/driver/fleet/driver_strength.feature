@@ -9,7 +9,7 @@ Feature: Driver Strength
   Scenario: Create New Driver Account (uid:7b2078bd-589f-4c9a-a06e-156098e34cf2)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator create new Driver on Driver Strength page using data below:
       | firstName            | GENERATED                                                        |
@@ -214,7 +214,7 @@ Feature: Driver Strength
   Scenario: Can Not Create New Driver Account Without Active Contact (uid:30bcd5fd-376f-45be-bbf5-2e420a760f2c)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -241,7 +241,7 @@ Feature: Driver Strength
   Scenario: Can Not Create New Driver Account Without Active Vehicle (uid:faf2e60a-730e-4d7a-b67e-7a17fba22f6e)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -267,7 +267,7 @@ Feature: Driver Strength
   Scenario: Can Not Create New Driver Account Without Preferred Zone and Capacity (uid:a7f36604-0398-4d3d-ab5f-b4fb554bb8a7)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -403,7 +403,7 @@ Feature: Driver Strength
   Scenario Outline: Can Not Create New Driver Account with Invalid Phone Number (uid:5012477c-39d3-419b-8aee-f6201203ef99)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
@@ -437,7 +437,7 @@ Feature: Driver Strength
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}" } } |
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     And Operator filter driver strength using data below:
@@ -469,7 +469,7 @@ Feature: Driver Strength
   Scenario Outline: Download All Shown CSV (uid:58a58dac-b1f6-49ab-8b69-f8db23934f4c)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}" } } |
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
@@ -523,7 +523,7 @@ Feature: Driver Strength
   Scenario Outline: Download Selected to Update Prefilled Template (uid:13e78371-2b98-4f2c-8155-29f1dfd8d311)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
@@ -597,8 +597,8 @@ Feature: Driver Strength
     And Operator verifies that the notice message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                                       | Message                                         |
-      | No       | {update_driver_details_prefilled_xlsx_invalid} | Invalid format! Please upload a valid CSV file. |
+      | Resigned | FileName                                       | Message                                              |
+      | No       | {update_driver_details_prefilled_xlsx_invalid} | Invalid file upload! Please upload a valid CSV file. |
 
   Scenario Outline: Cannot Bulk Update More than 200 Drivers (uid:0838cfce-c768-4d84-822e-d0a13781bdb9)
     Given Operator loads Operator portal home page
@@ -696,7 +696,7 @@ Feature: Driver Strength
   Scenario Outline: Filter by Type and Download Selected to Update Prefilled Template (uid:ea4229de-2a3a-49e0-94d8-94b2cb87ebad)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
-      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}", "conditions": { "0": "001", "1": "11", "2": "001000", "3": "1010", "4": "001000" } } } |
+      | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength

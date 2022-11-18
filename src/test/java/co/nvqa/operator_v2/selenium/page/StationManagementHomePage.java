@@ -40,6 +40,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String STATION_RECOVERY_TICKETS_URL_PATH = "/recovery-tickets/result?tracking_ids=%s";
   private static final String STATION_EDIT_ORDER_URL_PATH = "/order/%s";
   private static final String TILE_VALUE_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//div[@class='value']";
+  private static final String PENDING_PICKUP_TILE_VALUE_XPATH = "//*[.='%s']/following-sibling::*";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
@@ -239,12 +240,36 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
-      tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      if (tileValue.contains(" ")) {
+        tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      }
       LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
       return Integer.parseInt(tileValue);
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
       return 0;
+    }
+  }
+
+  public String getNumberFromPendingPickupTile(String tileName) {
+    try {
+      String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
+      waitWhilePageIsLoading();
+      if (pageFrame.size() > 0) {
+        switchToStationHomeFrame();
+      }
+      waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+      pause5s();
+      WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+      String tileValue = tile.getText().replace(",", "").trim();
+      if (tileValue.contains(" ")) {
+        tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      }
+      LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
+      return tileValue;
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      return null;
     }
   }
 
@@ -618,10 +643,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     routeIdLink.click();
     switchToNewWindow();
     waitWhilePageIsLoading();
+    pause5s();
     String actualRouteId = routeManifestRouteId.getText().trim();
-    closeAllWindows(windowHandle);
     Assert.assertTrue("Assert that the search has results as expected after applying filters",
         actualRouteId.equalsIgnoreCase(expectedRouteId));
+    closeAllWindows(windowHandle);
   }
 
   public void loadOperatorPortal() {
@@ -649,6 +675,19 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         actualPageName.contains(expectedPageName));
     closeAllWindowsExceptCurrentWindow();
     pause3s();
+  }
+
+  public void verifyURLOpenedOnClickingHyperlink(String linkName, String expectedURL) {
+    WebElement navLink = getWebDriver().findElement(By.linkText(linkName));
+    scrollIntoView(navLink);
+    navLink.click();
+    switchToNewWindow();
+    waitWhilePageIsLoading();
+    pause10s();
+    Assertions.assertThat(getWebDriver().getCurrentUrl()).
+        as("Assert that the expected page has opened in new tab from navigation links").
+        isEqualTo(expectedURL);
+    closeAllWindowsExceptCurrentWindow();
   }
 
   @FindBy(css = "button[class*='btn-icon']")

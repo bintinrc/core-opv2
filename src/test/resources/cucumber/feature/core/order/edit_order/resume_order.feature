@@ -34,6 +34,9 @@ Feature: Resume Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
   Scenario: Resume Pickup For On Hold Order (uid:75e59db9-3f68-4979-8cde-493cb766d524)
     When Operator go to menu Utilities -> QRCode Printing
@@ -108,7 +111,10 @@ Feature: Resume Order
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
-    And API Driver failed the C2C/Return order pickup
+    And API Driver failed the C2C/Return order pickup using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 9           |
+      | failureReasonIndexMode | FIRST       |
     And API Operator cancel created order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page
@@ -125,8 +131,13 @@ Feature: Resume Order
       | status | Pending |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
+    When Operator get "Pickup" transaction with status "Fail"
+    Then DB Operator verifies waypoint status is "FAIL"
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Delivery is Not Cancelled (uid:9f299d69-54b1-4049-93ee-bc9bdaf50476)
@@ -157,6 +168,9 @@ Feature: Resume Order
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
     Then DB Operator verify the last Pickup transaction record of the created order:
       | status | Pending |
       | dnrId  | 0       |
@@ -175,6 +189,7 @@ Feature: Resume Order
     When Operator resume order on Edit Order page
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    When Operator get "Pickup" transaction with status "Fail"
     Then DB Operator verify the last Pickup transaction record of the created order:
       | status | Pending |
       | dnrId  | 0       |
@@ -184,6 +199,9 @@ Feature: Resume Order
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -38,6 +38,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Driver Report", "driver-reports");
     MAP_OF_END_URL.put("Facilities Management", "hub");
     MAP_OF_END_URL.put("Linehaul Management", "linehaul");
+    MAP_OF_END_URL.put("Discount & Promotions", "discount-and-promotions");
     MAP_OF_END_URL.put("Messaging Module", "sms");
     MAP_OF_END_URL.put("Non Inbounded Orders", "non-inbounded-list");
     MAP_OF_END_URL.put("Order Creation V2", "create-combine");
@@ -66,6 +67,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("โฮมเพจการจัดการสถานี", "station-homepage");
     MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
     MAP_OF_END_URL.put("Station User Management", "admin/hubs");
+    MAP_OF_END_URL.put("Last Mile and RTS Zones", "zones");
   }
 
   public MainPage(WebDriver webDriver) {
@@ -125,10 +127,6 @@ public class MainPage extends OperatorV2SimplePage {
     closeDialogIfVisible();
     openNavigationPanel();
     String mainDashboard = grabEndURL(navTitle);
-    if (mainDashboard.contains("(new)")){
-      mainDashboard = mainDashboard.replace("(","");
-      mainDashboard = mainDashboard.replace(")","");
-    }
     clickNavigation(parentTitle, navTitle, mainDashboard);
   }
 

@@ -225,9 +225,9 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | status_logs    | Open,Ready,Completed |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
-      | source          | <source>      |
-      | overall_balance | 2.27          |
-      | logs            | <amount>,2.27 |
+      | source          | <source>       |
+      | overall_balance | -2.77          |
+      | logs            | <amount>,-2.77 |
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is not in billing_qa_gl.invoiced_orders table
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is not in billing_qa_gl.invoiced_orders table
     Examples:
@@ -493,4 +493,4 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount_2> |
     Examples:
       | source   | account_id                                       | account_id_2                                       | amount | amount_2 | type  | type_2 | payment_method | transaction_no                                             | transaction_no_2                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 4.15   | 12.45    | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 4.14   | 12.45    | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |

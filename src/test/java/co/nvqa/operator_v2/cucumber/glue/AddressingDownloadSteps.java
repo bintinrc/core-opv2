@@ -73,21 +73,22 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorCreatesAPresetUsingFilter(String filter) {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
     String presetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-            .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
 
     retryIfAssertionErrorOccurred(() -> {
-          addressingDownloadPage.filterButton.click();
-          pause1s();
-          addressingDownloadPage.selectPresetFilter(filterType);
-          Assertions.assertThat(
-                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
-              .isTrue();
-        },
-        "Clicking Filter for Preset");
+      addressingDownloadPage.filterButton.click();
+      pause1s();
+      addressingDownloadPage.selectPresetFilter(filterType);
+      Assertions.assertThat(
+              addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+          .isTrue();
+    }, "Clicking Filter for Preset");
 
+    addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
+        addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
     addressingDownloadPage.setPresetFilter(filterType);
     addressingDownloadPage.mainPresetButtonInModal.click();
     put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);
@@ -137,8 +138,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.selectPresetEditModal.sendKeys(Keys.ENTER);
 
     String newPresetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-            .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
     pause2s();
     addressingDownloadPage.inputPresetName.sendKeys(newPresetName);
     addressingDownloadPage.mainPresetButtonInModal.click();
@@ -290,8 +291,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
           addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
       addressingDownloadPage.loadAddresses.click();
       Assertions.assertThat(addressingDownloadPage.addressDownloadTableResult.isDisplayed())
-          .as("Result table is displayed.")
-          .isTrue();
+          .as("Result table is displayed.").isTrue();
     }, "Clicking Load Addresses button until table is showing...");
   }
 
@@ -342,26 +342,27 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")
   public void operatorVerifiesThatTheAddressDownloadTableResultContainsAllBasicData() {
-      WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
-      addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
+    WebElement addressDownloadTableResult = addressingDownloadPage.addressDownloadTableResult.getWebElement();
+    addressingDownloadPage.waitUntilVisibilityOfElementLocated(addressDownloadTableResult);
 
-      Order createdOrder = get(KEY_ORDER_DETAILS);
-      Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
+    Order createdOrder = get(KEY_ORDER_DETAILS);
+    Waypoint waypoint = get(KEY_WAYPOINT_DETAILS);
 
-      boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(createdOrder, waypoint);
+    boolean latencyExists = addressingDownloadPage.basicOrderDataUICheckingAndCheckForTimeLatency(
+        createdOrder, waypoint);
 
-      if (latencyExists) {
-        LocalDateTime adjustedOCCreatedAt = addressingDownloadPage.resolveLocalDateTime(
-            createdOrder.getCreatedAt(), "UTC").plus(Duration.of(1, ChronoUnit.MINUTES));
-        Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
+    if (latencyExists) {
+      LocalDateTime adjustedOCCreatedAt = addressingDownloadPage.resolveLocalDateTime(
+          createdOrder.getCreatedAt(), "UTC").plus(Duration.of(1, ChronoUnit.MINUTES));
+      Date newCreatedAt = Timestamp.valueOf(adjustedOCCreatedAt);
 
-        LOGGER.debug("!! There had been creation time latency !!");
-        LOGGER.debug("Creation time is sets from {} to {}", createdOrder.getCreatedAt().toString(),
-            newCreatedAt);
+      LOGGER.debug("!! There had been creation time latency !!");
+      LOGGER.debug("Creation time is sets from {} to {}", createdOrder.getCreatedAt().toString(),
+          newCreatedAt);
 
-        createdOrder.setCreatedAt(newCreatedAt);
-        put(KEY_ORDER_DETAILS, createdOrder);
-      }
+      createdOrder.setCreatedAt(newCreatedAt);
+      put(KEY_ORDER_DETAILS, createdOrder);
+    }
   }
 
   @Then("Operator verifies that the downloaded csv file contains all correct data")
@@ -399,14 +400,13 @@ public class AddressingDownloadSteps extends AbstractSteps {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
 
     retryIfAssertionErrorOccurred(() -> {
-              addressingDownloadPage.filterButton.click();
-              pause1s();
-          addressingDownloadPage.selectPresetFilter(filterType);
-          Assertions.assertThat(
-                  addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
-              .isTrue();
-            },
-            "Clicking Filter for Preset");
+      addressingDownloadPage.filterButton.click();
+      pause1s();
+      addressingDownloadPage.selectPresetFilter(filterType);
+      Assertions.assertThat(
+              addressingDownloadPage.isElementExistFast(addressingDownloadPage.FILTER_SHOWN_XPATH))
+          .isTrue();
+    }, "Clicking Filter for Preset");
 
     addressingDownloadPage.setPresetFilter(filterType);
   }
@@ -419,8 +419,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator input the new preset name")
   public void operatorInputTheNewPresetName() {
     String presetName =
-            "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil
-                    .randomString(7);
+        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+            7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
     put(KEY_CREATED_ADDRESS_PRESET_NAME, presetName);

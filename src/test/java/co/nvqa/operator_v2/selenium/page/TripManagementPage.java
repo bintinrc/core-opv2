@@ -242,6 +242,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
+
   public static String actualToastMessageContent = "";
 
   public TripManagementPage(WebDriver webDriver) {
@@ -808,6 +811,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
         break;
       case "No":
         cancelTripModal.no.click();
+        break;
+      case "Cancel Flight Trip":
+        cancelTripModal.cancelFlightTrip.click();
         break;
       default:
         NvLogger.warn("Button value is not found!");
@@ -1680,6 +1686,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Cancel Trip']")
     public Button cancelTrip;
 
+    @FindBy(xpath = "//button[.='Cancel Flight Trip']")
+    public Button cancelFlightTrip;
+
     @FindBy(xpath = "//button[.='No']")
     public Button no;
   }
@@ -1813,4 +1822,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
   }
 
+  public void verifyTripMessageSuccessful(String expectedMessage){
+    antNotificationMessage.waitUntilVisible();
+    String actualMessage = getAntTopTextV2();
+    Assertions.assertThat(actualMessage).as("Trip Message is shown successfuly").isEqualTo(expectedMessage);
+  }
 }

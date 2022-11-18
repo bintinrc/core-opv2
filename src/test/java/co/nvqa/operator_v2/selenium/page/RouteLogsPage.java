@@ -42,7 +42,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[@class='ant-modal-content'][.//div[contains(.,'Create Route')]]")
   public CreateRouteDialog createRouteDialog;
 
-  @FindBy(css = ".load-selection button")
+  @FindBy(xpath = "//button[.='Load Selection']")
   public AntButton loadSelection;
 
   @FindBy(xpath = "//button[.='Search']")
@@ -341,7 +341,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(css = "div.route-date")
     public AntPicker routeDate;
 
-    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Route Tags']]//div[contains(@class,'ant-select')]")
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Route tags']]//div[contains(@class,'ant-select')]")
     public AntSelect3 routeTags;
 
     @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Zone']]//div[contains(@class,'ant-select')]")
@@ -350,7 +350,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Hub']]//div[contains(@class,'ant-select')]")
     public AntSelect3 hub;
 
-    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Assigned Driver']]//div[contains(@class,'ant-select')]")
+    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Assigned driver']]//div[contains(@class,'ant-select')]")
     public AntSelect3 assignedDriver;
 
     @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Vehicle']]//div[contains(@class,'ant-select')]")

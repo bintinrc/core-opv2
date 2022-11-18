@@ -141,6 +141,7 @@ Feature: Update Template
       | selectHeaders       | Legacy Shipper ID                                                   |
     # create template in SG
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And Operator changes the country to "Singapore"
     Then Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded
     And Operator clicks Create Template button

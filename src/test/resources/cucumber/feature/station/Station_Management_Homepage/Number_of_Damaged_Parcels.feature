@@ -389,67 +389,6 @@ Feature: Number of Damaged Parcels
       | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | PARCEL_ROUTING_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
-  Scenario Outline: View Driver Inbound Scanned Damaged Parcels (uid:0908d756-3b31-4cae-afd6-4b7846fdb1e9)
-    Given Operator loads Operator portal home page
-    And Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator gets the event time by event name:"DRIVER INBOUND SCAN"
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | IMPROPER PACKAGING |
-      | parcelLocation          | DAMAGED RACK       |
-      | liability               | Recovery           |
-      | damageDescription       | GENERATED          |
-      | orderOutcomeDamaged     | NV LIABLE - FULL   |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
-    Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator verifies that a table is displayed with following columns:
-      | Tracking ID       |
-      | Last Scan         |
-      | Last Scanned Time |
-      | Ticket Status     |
-      | Order Tags        |
-    And Operator selects following filter criteria for the table column: "Last Scan"
-      | <LastScannedEvent> |
-    And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator verifies that the following details are displayed on the modal under the table:"<ModalName>"
-      | Last Scanned Time | {KEY_EVENT_TIME} |
-      | Ticket Status     | CREATED          |
-
-    Examples:
-      | HubName      | HubId      | TicketType | TileName        | ModalName       | LastScannedEvent    |
-      | {hub-name-6} | {hub-id-6} | DAMAGED    | Damaged parcels | Damaged Parcels | DRIVER_INBOUND_SCAN |
-
-  @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Route Inbound Scanned Damaged Parcels (uid:10f5c894-bb82-487b-ba88-326cf2bb66ba)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -718,7 +657,7 @@ Feature: Number of Damaged Parcels
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |

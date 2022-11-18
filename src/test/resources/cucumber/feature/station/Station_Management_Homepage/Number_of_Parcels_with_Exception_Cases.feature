@@ -5,6 +5,7 @@ Feature: Number of Parcels with Exception Cases
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+
   Scenario Outline: View Pending Shipper Issue Ticket Type (uid:e4bc5e11-0ce4-4b9a-837c-557ab529319a)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -25,7 +26,7 @@ Feature: Number of Parcels with Exception Cases
       | investigatingHub            | <HubName>          |
       | ticketType                  | <TicketType>       |
       | ticketSubType               | <TicketSubType>    |
-      | orderOutcomeDuplicateParcel | XMAS CAGE          |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED    |
       | issueDescription            | GENERATED          |
       | custZendeskId               | 1                  |
       | shipperZendeskId            | 1                  |
@@ -157,6 +158,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TicketType       | TicketSubType      | TileName                               | ModalName                    |
       | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | Number of parcels with exception cases | Parcels with Exception Cases |
 
+
   Scenario Outline: View In-progress Shipper Issue Ticket Type (uid:06bcacaa-588f-464f-95f8-2ee71c5a40a0)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -208,8 +210,9 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Subtype | <TicketSubType> |
       | Ticket Status  | <Status>        |
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status      | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | Status      | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | IN PROGRESS | Number of parcels with exception cases | Parcels with Exception Cases |
+
 
   Scenario Outline: View on Hold Shipper Issue Ticket Type (uid:a5af556b-3c65-469a-abe3-ed478990b0e7)
     Given Operator loads Operator portal home page
@@ -263,10 +266,11 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status  | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | Status  | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | ON HOLD | Number of parcels with exception cases | Parcels with Exception Cases |
 
-  Scenario Outline: View Pending Shipper of  Shipper Issue Ticket Type (uid:ae7d775e-4a1b-4df1-85b6-2a3c1d75780b)
+
+  Scenario Outline: View Pending Shipper of Shipper Issue Ticket Type (uid:ae7d775e-4a1b-4df1-85b6-2a3c1d75780b)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -318,8 +322,8 @@ Feature: Number of Parcels with Exception Cases
       | Ticket Status  | <Status>        |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | Status          | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | Status          | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: View In-progress Parcel on Hold Ticket Type (uid:4e3e1b3f-679e-453e-9ff8-8cadb4fd21f3)
     Given Operator loads Operator portal home page
@@ -655,6 +659,7 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TicketType       | TicketSubType      | OrderOutcome | Status          | TileName                               | ModalName                    |
       | {hub-name-3} | {hub-id-3} | PARCEL EXCEPTION | INACCURATE ADDRESS | RTS          | PENDING SHIPPER | Number of parcels with exception cases | Parcels with Exception Cases |
 
+
   Scenario Outline: Resolved Ticket of Shipper Issue Type Disappear (uid:ab9b8b45-4b3a-4f61-9fb2-d78abde35d5f)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
@@ -703,8 +708,8 @@ Feature: Number of Parcels with Exception Cases
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @Happypath
   Scenario Outline: Resolved Ticket of Parcel Exception Type Disappear (uid:fc916a62-b9fe-4fb8-be97-915e29cc5b88)
@@ -810,7 +815,8 @@ Feature: Number of Parcels with Exception Cases
       | HubName      | HubId      | TicketType     | TicketSubType   | OrderOutcome    | KeepCurrentOrderOutcome | Status   | TileName                               | ModalName                    |
       | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | No                      | RESOLVED | Number of parcels with exception cases | Parcels with Exception Cases |
 
-  Scenario Outline: View Recovery Ticket  of Exception Cases Parcels (uid:ff67196f-4020-4a36-abf8-5e33420ca106)
+
+  Scenario Outline: View Recovery Ticket of Exception Cases Parcels (uid:ff67196f-4020-4a36-abf8-5e33420ca106)
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -853,8 +859,9 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the url for recovery tickets page is loaded with tracking id
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
+
 
   Scenario Outline: View Order Details of Exception Cases Parcels (uid:36f6ec17-4e1d-4bcb-b99a-fd754118bf06)
     Given Operator loads Operator portal home page
@@ -899,8 +906,8 @@ Feature: Number of Parcels with Exception Cases
     And Operator verifies that the url for edit order page is loaded with order id
 
     Examples:
-      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | XMAS CAGE    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | TileName                               | ModalName                    |
+      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Missing Ticket Not Appears in Exception Cases (uid:0af9d116-d7ec-449d-87ca-65e8697e294e)
     Given Operator loads Operator portal home page
@@ -1098,67 +1105,6 @@ Feature: Number of Parcels with Exception Cases
     Examples:
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
       | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
-
-  @ForceSuccessOrder @DeleteOrArchiveRoute
-  Scenario Outline: View Driver Inbound Scanned Parcels with Exception Cases (uid:8583e86a-58f3-4244-80bf-78cc5d3c7f47)
-    Given Operator loads Operator portal home page
-    And Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator get the count from the tile: "<TileName>"
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":"{hub-id-Global}" } |
-    And API Operator sweep parcel in the hub
-      | hubId | <HubId>                         |
-      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator gets the event time by event name:"DRIVER INBOUND SCAN"
-    When Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | ROUTE CLEANING     |
-      | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | <HubName>          |
-      | ticketType              | <TicketType>       |
-      | ticketSubType           | <TicketSubType>    |
-      | orderOutcome            | RESUME DELIVERY    |
-      | exceptionReason         | GENERATED          |
-      | custZendeskId           | 1                  |
-      | shipperZendeskId        | 1                  |
-      | ticketNotes             | GENERATED          |
-    And Operator verify ticket is created successfully on page Recovery Tickets
-    Then Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "<HubName>" and proceed
-    And Operator verifies that the count in tile: "<TileName>" has increased by 1
-    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
-    And Operator verifies that a table is displayed with following columns:
-      | Tracking ID       |
-      | Last Scan         |
-      | Last Scanned Time |
-      | Ticket Subtype    |
-      | Ticket Status     |
-      | Order Tags        |
-    And Operator selects following filter criteria for the table column: "Last Scan"
-      | <LastScannedEvent> |
-    And Operator searches for the orders in modal pop-up by applying the following filters:
-      | Tracking ID                     |
-      | {KEY_CREATED_ORDER_TRACKING_ID} |
-    And Operator verifies that the following details are displayed on the modal under the table:"<ModalName>"
-      | Last Scanned Time | {KEY_EVENT_TIME} |
-      | Ticket Subtype    | <TicketSubType>  |
-      | Ticket Status     | CREATED          |
-
-    Examples:
-      | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
-      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | DRIVER_INBOUND_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Route Inbound Scanned Parcels with Exception Cases (uid:40bdc110-b89a-4e87-a185-a648e51765af)

@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -218,6 +218,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//label[text()='Insured Value']/following-sibling::p")
   public PageElement insuredValue;
+
+  @FindBy(xpath = "//label[text()='Billing Weight']/following-sibling::p")
+  public PageElement billingWeight;
+
+  @FindBy(xpath = "//label[text()='Billing Size']/following-sibling::p")
+  public PageElement billingSize;
+
+  @FindBy(xpath = "//label[text()='Source']/following-sibling::p")
+  public PageElement source;
 
   @FindBy(css = "md-dialog")
   public DpDropOffSettingDialog dpDropOffSettingDialog;
@@ -482,10 +491,21 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String changeReason = f("This reason is created by automation at %s.",
         CREATED_DATE_SDF.format(new Date()));
     manuallyCompleteOrderDialog.waitUntilVisible();
-    manuallyCompleteOrderDialog.changeReason.setValue(changeReason);
+    manuallyCompleteOrderDialog.changeReason.setValue("Others (fill in below)");
+    manuallyCompleteOrderDialog.reasonForChange.setValue(changeReason);
     manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("The order has been completed", true);
     return changeReason;
+  }
+
+  public void confirmCompleteOrder(String reason, String reasonDescr) {
+    manuallyCompleteOrderDialog.waitUntilVisible();
+    manuallyCompleteOrderDialog.changeReason.setValue(reason);
+    if (StringUtils.isNotBlank(reasonDescr)) {
+      manuallyCompleteOrderDialog.reasonForChange.setValue(reasonDescr);
+    }
+    manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+    waitUntilInvisibilityOfToast("The order has been completed", true);
   }
 
   public void verifyEditOrderDetailsIsSuccess(Order editedOrder) {
@@ -865,8 +885,16 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editPickupDetailsDialog.senderContact.setValue(senderContact);
     editPickupDetailsDialog.senderEmail.setValue(senderEmail);
     editPickupDetailsDialog.internalNotes.setValue(internalNotes);
-    editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
-    editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+    if (StringUtils.isNotBlank(pickupDate)) {
+      editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
+    }
+    if (StringUtils.isNotBlank(pickupTimeslot)) {
+      editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+    }
+    editPickupDetailsDialog.shipperRequestedToChange.setValue(
+        Boolean.parseBoolean(mapOfData.getOrDefault("shipperRequestedToChange", "false")));
+    editPickupDetailsDialog.assignPickupLocation.setValue(
+        Boolean.parseBoolean(mapOfData.getOrDefault("assignPickupLocation", "false")));
     editPickupDetailsDialog.changeAddress.click();
     editPickupDetailsDialog.country.setValue(country);
     editPickupDetailsDialog.city.setValue(city);
@@ -874,7 +902,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editPickupDetailsDialog.address2.setValue(address2);
     editPickupDetailsDialog.postcode.setValue(postalCode);
     editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Pickup Details Updated", false);
   }
 
   public void updateDeliveryDetails(Map<String, String> mapOfData) {
@@ -1385,6 +1412,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(css = "[id^='commons.sender-contact']")
     public TextBox senderContact;
+
+    @FindBy(css = "[aria-label='Shipper requested to change']")
+    public MdCheckbox shipperRequestedToChange;
+
+    @FindBy(css = "[aria-label='Assign Pickup Location']")
+    public MdCheckbox assignPickupLocation;
 
     @FindBy(css = "[id^='commons.sender-email']")
     public TextBox senderEmail;
@@ -2148,11 +2181,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void createTicket(RecoveryTicket recoveryTicket) {
-    waitUntilPageLoaded();
     String trackingId = recoveryTicket.getTrackingId();
     String ticketType = recoveryTicket.getTicketType();
 
     createTicketDialog.waitUntilVisible();
+    waitWhilePageIsLoading(120);
     createTicketDialog.trackingId.setValue(trackingId
         + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
     createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
@@ -2172,6 +2205,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
         }
         if (StringUtils.isNotBlank(recoveryTicket.getDamageDescription())) {
           createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
+        }
+        if (StringUtils.isNotBlank(recoveryTicket.getRtsReason())) {
+          createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
         }
         break;
       }
@@ -2462,6 +2498,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void verifyTheSortCodeIsCorrect(String sortCode, File orderAirwayBillPdfAsByteArray) {
     String actualSortCode = PdfUtils.getSortCode(orderAirwayBillPdfAsByteArray);
+    actualSortCode = actualSortCode.replaceAll("\\n|F O R  N I N J A  V A N  U S E", "");
     assertTrue("Sort Code", sortCode.equalsIgnoreCase(actualSortCode));
   }
 

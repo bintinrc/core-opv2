@@ -63,7 +63,15 @@ public class PageElement extends SimplePage {
       scrollIntoView();
       getWebElement().click();
     } catch (ElementClickInterceptedException ex) {
-      jsClick();
+      try {
+        jsClick();
+      } catch (Exception e) {
+        String xpath = "//*[contains(@class,'ant-notification-close-x')]";
+        while (isElementVisible(xpath, 1)) {
+          click(xpath);
+        }
+        getWebElement().click();
+      }
     }
   }
 
@@ -301,6 +309,25 @@ public class PageElement extends SimplePage {
       System.out.println("No valid locator found. Couldn't refresh element");
     }
     return retWebEl;
+  }
+
+  public void ClickSendKeysAndEnter(CharSequence... keysToSend) {
+    WebElement we = this.webElement;
+    we.click();
+    we.sendKeys(keysToSend);
+    we.sendKeys(Keys.RETURN);
+    pause300ms();
+  }
+
+  /*
+  Clear and send key version 2, using incase element has atribute "value"
+  and we can not use method clear() to delete text in textbox
+   */
+  public void clearAndSendkeysV2(CharSequence... keysToSend) {
+    WebElement we = this.webElement;
+    we.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+    we.sendKeys(keysToSend);
+    pause300ms();
   }
 
 }

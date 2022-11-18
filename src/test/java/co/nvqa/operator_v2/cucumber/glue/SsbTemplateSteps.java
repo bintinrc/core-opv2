@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
 
+import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
+
 public class SsbTemplateSteps extends AbstractSteps {
 
   private SsbTemplatePage ssbTemplatePage;
@@ -75,6 +77,7 @@ public class SsbTemplateSteps extends AbstractSteps {
       template.setConfiguration(configuration);
     }
     template.setReportType("SSB");
+    template.setSystemId(COUNTRY_CODE);
 
     put(KEY_TEMPLATE, template);
   }

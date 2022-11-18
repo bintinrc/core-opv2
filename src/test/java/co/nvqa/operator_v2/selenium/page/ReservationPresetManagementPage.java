@@ -8,6 +8,8 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -44,6 +46,9 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public CreateRouteDialog createRouteDialog;
 
+  @FindBy(css = "md-dialog")
+  public UploadCsvDialog uploadCsvDialog;
+
   @FindBy(css = "div.title md-menu")
   public MdMenu actionsMenu;
 
@@ -59,8 +64,8 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "div[ng-repeat='pendingTask in ctrl.pendingTasks']")
   public List<PendingTaskBlock> pendingTasks;
 
-  @FindBy(name = "container.reservation-preset-management.add-new-group")
-  public NvIconTextButton addNewGroup;
+  @FindBy(xpath = "(//div[contains(@class,'title')]//md-menu)[1]")
+  public MdMenu moreActions;
 
   public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
 
@@ -79,7 +84,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void addNewGroup(ReservationGroup reservationPreset) {
     waitUntilPageLoaded();
-    addNewGroup.click();
+    moreActions.selectOption("Add New Group");
     addNewGroupDialog.waitUntilVisible();
     addNewGroupDialog.fillForm(reservationPreset);
   }
@@ -259,6 +264,19 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
     public NvApiTextButton confirm;
 
     public CreateRouteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class UploadCsvDialog extends MdDialog {
+
+    @FindBy(css = "[label='Choose']")
+    public NvButtonFilePicker selectFile;
+
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
+
+    public UploadCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

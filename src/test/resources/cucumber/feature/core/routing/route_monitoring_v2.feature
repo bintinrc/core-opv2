@@ -758,7 +758,7 @@ Feature: Route Monitoring V2
   Scenario: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -1051,6 +1051,86 @@ Feature: Route Monitoring V2
       | totalParcels  | 4                      |
       | totalWaypoint | 2                      |
       | pendingCount  | 2                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Delivery From Route
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Routing -> Route Monitoring V2
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId              | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels         | 1                      |
+      | completionPercentage | 0                      |
+      | totalWaypoint        | 1                      |
+      | pendingCount         | 1                      |
+      | successCount         | 0                      |
+      | numInvalidFailed     | 0                      |
+      | numValidFailed       | 0                      |
+    When API Operator pulled out parcel "DELIVERY" from route
+    And API Operator get order details
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalWaypoint | 0                      |
+      | pendingCount  | 0                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Pickup From Route
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When Operator go to menu Routing -> Route Monitoring V2
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId              | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels         | 1                      |
+      | completionPercentage | 0                      |
+      | totalWaypoint        | 1                      |
+      | pendingCount         | 1                      |
+      | successCount         | 0                      |
+      | numInvalidFailed     | 0                      |
+      | numValidFailed       | 0                      |
+    When API Operator pulled out parcel "PICKUP" from route
+    And API Operator get order details
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    When Operator go to menu Routing -> Route Monitoring V2
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}                     |
+      | zones   | {zone-short-name}({zone-name}) |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId       | {KEY_CREATED_ROUTE_ID} |
+      | totalWaypoint | 0                      |
+      | pendingCount  | 0                      |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

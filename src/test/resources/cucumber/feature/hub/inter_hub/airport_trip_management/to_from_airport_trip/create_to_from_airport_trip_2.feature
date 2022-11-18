@@ -1,5 +1,5 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AirportLoadTrip2
-Feature: Airport Trip Management - Load Trip 2
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @CreateToFromAirportTrip2
+Feature: Airport Trip Management - Create To From Airport Trip 1
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -26,7 +26,7 @@ Feature: Airport Trip Management - Load Trip 2
     And API Operator reloads hubs cache
     And API Operator refresh Airports cache
     And API Operator create 1 new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
@@ -73,7 +73,7 @@ Feature: Airport Trip Management - Load Trip 2
     And API Operator reloads hubs cache
     And API Operator refresh Airports cache
     And API Operator create 1 new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
@@ -135,7 +135,7 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator fill new airport trip using data below:
       | originFacility      | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destinationFacility | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
-    Then Operator verifies same hub error messages on Create Airport Trip page
+    Then Operator verifies same hub error messages on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -165,7 +165,7 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator fill new airport trip using data below:
       | durationminutes  | 00                                        |
       | durationhour     | 00                                        |
-    Then Operator verifies duration time error messages on Create Airport Trip page
+    Then Operator verifies duration time error messages on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -192,7 +192,7 @@ Feature: Airport Trip Management - Load Trip 2
       | endDate                | {gradle-next-1-day-yyyy-MM-dd}                      |
       | originOrDestination    | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport)|
     And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
-    Then Operator verifies past date picker "{gradle-previous-1-day-yyyy-MM-dd}" is disable on Create Airport Trip page
+    Then Operator verifies past date picker "{gradle-previous-1-day-yyyy-MM-dd}" is disable on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
@@ -221,8 +221,8 @@ Feature: Airport Trip Management - Load Trip 2
     And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
     And Operator fill new airport trip using data below:
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].airport_code}|
-    And Operator removes text of "Origin Facility" field on Create Airport Trip page
-    Then Operator verifies Mandatory require error message on "Origin Facility" field
+    And Operator removes text of "Origin Facility" field on "Create Airport Trip" page
+    Then Operator verifies Mandatory require error message of "Origin Facility" field on "Create Airport Trip" page
     And Operator verifies Submit button is disable on Create Airport Trip  page
 
   @KillBrowser

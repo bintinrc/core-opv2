@@ -1,9 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Date;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -20,6 +26,14 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//input";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
+  public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
+  public static final String COLUMN_NAME = "Suggested Address URL";
+  public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
+  public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
+  public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
+  public static final String BUTTON = "//span[text()='%s']/parent::button";
+  public static final String CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s addresses pick up has been updated!']";
+  public static final String FILENAME_IN_UPLOAD_WINDOW = "//span[text()='%s']";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -50,6 +64,48 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindAll(@FindBy(xpath = "//div[@class='BaseTable__row-cell' and @data-datakey='lat_long']//*[local-name()='svg' and contains (@class,'GaComponent__StyledAxleIconComponent')]"))
   private List<PageElement> greencheckMarks;
+
+  @FindBy(xpath = "//button[@data-pa-action='Download Addresses']")
+  public PageElement downloadAddressButton;
+
+  @FindBy(xpath = "//span[text()='Update Addresses Lat Long']/parent::button")
+  public PageElement updateAddressesLatLongButton;
+
+  @FindBy(xpath = "//span[text()='Configure Pickup Type']/parent::button")
+  public PageElement configurePickupTypeButton;
+
+  @FindBy(xpath = "//span[text()='Download CSV Template']/parent::button")
+  public PageElement downloadCSVTemplateButton;
+
+  @FindBy(xpath = "//div[text()='Drag and drop CSV file here']")
+  public PageElement dragAndDropPath;
+
+  @FindBy(xpath = "//input[@type='file']")
+  public PageElement fileUpload;
+
+  @FindAll(@FindBy(xpath = "//span[text()='Submit File']//parent::button"))
+  private List<PageElement> submitFileButton;
+
+  @FindBy(xpath = "//span[text()='Please review the errors and upload a valid file.']")
+  public PageElement errormessage2;
+
+  @FindBy(xpath = "//span[text()='Download Errors']/parent::button")
+  public PageElement downloadErrorsButton;
+
+  @FindBy(xpath = "//div[text()='Please upload a file with valid input!']")
+  public PageElement invalidFileErrorMessage;
+
+  @FindBy(xpath = "//div[text()='Please upload a valid formatted file!']")
+  public PageElement invalidFormatFileErrorMessage;
+
+  @FindBy(xpath = "//button[@aria-label='Close']")
+  public PageElement closePopModal;
+
+  @FindBy(xpath = "//*[@id='address-pickup-type-drop-down']//div[@class='ant-select-selector']")
+  public AntSelect pickupType;
+
+  @FindBy(xpath = "//*[@class='ant-select-clear']")
+  public PageElement clearDropdown;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -89,6 +145,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   }
 
+  public void selectPickupType(List<String> pickuptype) {
+    switchToShipperAddressConfigurationFrame();
+    clearDropdown.click();
+    pickupType.selectValues(pickuptype);
+  }
+
   public void filterBy(String filterCriteria, String filterValue) {
     switchToShipperAddressConfigurationFrame();
     filterValue(filterCriteria, filterValue);
@@ -117,7 +179,116 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void validateGreenCheckMarkNotDisplayed() {
-    Assertions.assertThat(greencheckMarks.size()).isZero();
+    Assertions.assertThat(greencheckMarks).isEmpty();
+  }
+
+  public void clickDownloadAddress() {
+    pause2s();
+    waitUntilVisibilityOfElementLocated(downloadAddressButton.getWebElement());
+    downloadAddressButton.click();
+  }
+
+  public void clickUpdateAddressesLatLongButton() {
+    waitUntilVisibilityOfElementLocated(updateAddressesLatLongButton.getWebElement());
+    updateAddressesLatLongButton.click();
+  }
+
+  public void clickConfigurePickupTypeButton() {
+    waitUntilVisibilityOfElementLocated(configurePickupTypeButton.getWebElement());
+    configurePickupTypeButton.click();
+  }
+
+  public void clickDownloadCSVTemplateButton() {
+    waitUntilVisibilityOfElementLocated(downloadCSVTemplateButton.getWebElement());
+    downloadCSVTemplateButton.click();
+  }
+
+  public void clickSubmitFileButton(String windowName, String fileName) {
+    if (submitFileButton.size() > 0) {
+      String uploadedFileNamexpath = f(FILENAME_IN_UPLOAD_WINDOW, fileName);
+      Assertions.assertThat(
+              getWebDriver().findElement(By.xpath(uploadedFileNamexpath)).isDisplayed())
+          .as("Validation for uploaded file name in the upload Window")
+          .isTrue();
+      waitUntilVisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
+      submitFileButton.get(0).click();
+      //waitUntilInvisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
+    }
+  }
+
+  public void validateUploadErrorMessageIsShown(String errorCount, String totalCount) {
+    pause5s();
+    String errorXpath = f(UPLOAD_ERROR_MESSAGE, errorCount, totalCount);
+    WebElement errorMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    waitUntilVisibilityOfElementLocated(errorMessage);
+    Assertions.assertThat(errorMessage.isDisplayed()).as("Validation for Upload error message")
+        .isTrue();
+    Assertions.assertThat(errormessage2.isDisplayed()).as("Validation for Upload error message")
+        .isTrue();
+  }
+
+  public void validateUploadSuccessMessageIsShown(String errorCount) {
+    pause1s();
+    String errorXpath = f(UPLOAD_SUCCESS_MESSAGE, errorCount);
+    WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
+        .isTrue();
+  }
+
+  public void validateConfigurePickupTypeUploadSuccessMessage(String hubName) {
+    String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, hubName);
+    WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
+    Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
+        .isTrue();
+  }
+
+  public void clickButton(String buttonText) {
+    pause1s();
+    switchToShipperAddressConfigurationFrame();
+    String errorXpath = f(BUTTON, buttonText);
+    WebElement buttonXpath = getWebDriver().findElement(By.xpath(errorXpath));
+    buttonXpath.click();
+  }
+
+  public void VerificationOfURL(String buttonText) {
+    waitWhilePageIsLoading();
+    Assertions.assertThat(getWebDriver().getCurrentUrl()).endsWith(buttonText);
+    LOGGER.info(getWebDriver().getCurrentUrl());
+  }
+
+  public void validateInvalidFileErrorMessageIsShown() {
+    pause5s();
+    Assertions.assertThat(invalidFileErrorMessage.isDisplayed())
+        .as("Validation for error message for Invalid input file").isTrue();
+  }
+
+  public void validateInvalidFormattedFileErrorMessageIsShown() {
+    pause5s();
+    Assertions.assertThat(invalidFormatFileErrorMessage.isDisplayed())
+        .as("Validation for error message for Invalid Formatted input file").isTrue();
+  }
+
+  public void clickDownloadErrorsButton() {
+    waitUntilVisibilityOfElementLocated(downloadErrorsButton.getWebElement());
+    downloadErrorsButton.click();
+  }
+
+  public void closeModal() {
+    waitUntilVisibilityOfElementLocated(closePopModal.getWebElement());
+    closePopModal.click();
+  }
+
+  public void updateCSVFile(String filepath, int columnNumber, int rowNumber, String value) {
+    try {
+      CSVReader csvReader = new CSVReader(new FileReader(filepath));
+      List<String[]> allData = csvReader.readAll();
+      allData.get(rowNumber)[columnNumber] = value;
+      CSVWriter csvWriter = new CSVWriter(new FileWriter(filepath));
+      csvWriter.writeAll(allData);
+      csvWriter.flush();
+    } catch (Exception e) {
+      throw new NvTestRuntimeException("Could not update the CSV file " + filepath, e);
+    }
   }
 
 }

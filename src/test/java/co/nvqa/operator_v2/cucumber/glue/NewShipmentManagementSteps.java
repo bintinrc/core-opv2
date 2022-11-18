@@ -17,12 +17,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -32,6 +29,8 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
@@ -178,11 +177,14 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
     String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
-    page.inFrame(() -> {
-      page.shipmentIds.waitUntilVisible();
-      page.shipmentIds.setValue(shipmentIds);
-    }
-    );
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      reloadPage();
+      page.inFrame(() -> {
+            page.shipmentIds.waitUntilVisible();
+            page.shipmentIds.setValue(shipmentIds);
+          }
+      );
+    }, "Retry until page is loaded...");
   }
 
   @When("Operator enters next shipment ids on Shipment Management page:")
@@ -315,6 +317,29 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator input form edit Shipment on Shipment Management page:")
+  public void operatorInputFormEditShipmentOnShipmentManagementPage(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    String shipmentId = resolvedData.get("shipmentId");
+    page.inFrame(() -> {
+      page.shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+      if (resolvedData.containsKey("origHubName")) {
+        page.editShipmentDialog.startHub.selectValue(resolvedData.get("origHubName"));
+      }
+      if (resolvedData.containsKey("destHubName")) {
+        page.editShipmentDialog.endHub.selectValue(resolvedData.get("destHubName"));
+      }
+      if (resolvedData.containsKey("shipmentType")) {
+        page.editShipmentDialog.type.selectValue(resolvedData.get("shipmentType"));
+      }
+      if (resolvedData.containsKey("comments")) {
+        page.editShipmentDialog.comments.setValue(resolvedData.get("comments"));
+      }
+    });
+  }
+
   @When("Operator edit Shipment on Shipment Management page:")
   public void operatorEditShipment(Map<String, String> data) {
     Map<String, String> resolvedData = resolveKeyValues(data);
@@ -432,7 +457,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator opens Shipment Details page for shipment {value}")
   public void openShipmentDetailsPage(String shipmentId) {
     navigateTo(
-        f("%s/%s/new-shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
+        f("%s/%s/shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
     page.inFrame(() -> page.waitUntilLoaded());
     pause3s();
   }
@@ -707,6 +732,15 @@ public class NewShipmentManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator input form bulk update shipment with data below:")
+  public void operatorInputFormBulkUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
+    Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+
+    page.inFrame(() -> {
+      page.inputFormBulkUpdateShipment(resolvedMapOfData);
+    });
+  }
+
   @When("Operator bulk update shipment with data below:")
   public void operatorBulkUpdateShipmentWithDataBelow(Map<String, String> mapOfData) {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
@@ -782,5 +816,186 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       }
     });
     assertions.assertAll();
+  }
+
+  @When("Operator click Hide \\(n) button in Shipment Status filter")
+  public void operatorClickHideNButtonInShipmentStatusFilter() {
+    page.inFrame(()-> {
+      page.showShipmentStatus.click();
+    });
+  }
+
+  @When("Operator click Hide \\(n) button in Shipment Type filter")
+  public void operatorClickHideNButtonInShipmentTypeFilter() {
+    page.inFrame(()-> {
+      page.showShipmentType.click();
+    });
+  }
+
+  @When("Operator click X icon button in the right corner of Shipment Type filter field")
+  public void operatorClickXIconButtonInTheRightCornerOfShipmentTypeFilterField() {
+    page.inFrame(()-> {
+      page.hoverShipmentTypeForm();
+      page.clearShipmentType.click();
+    });
+  }
+
+  @Then("Operator verify it shows Please enter shipment type error message")
+  public void operatorVerifyItShowsPleaseEnterShipmentTypeErrorMessage() {
+      page.inFrame(()-> {
+          Assertions.assertThat(page.showErrorAlertShipmentType.getText()).as("Showed error message of Shipment Type")
+                  .isEqualTo("Please enter Shipment Type");
+      });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Type")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentType() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
+  }
+
+  @When("Operator click X icon button in the right corner of Shipment Status filter field")
+  public void operatorClickXIconButtonInTheRightCornerOfShipmentStatusFilterField() {
+    page.inFrame(()-> {
+      page.hoverShipmentStatusForm();
+      page.clearShipmentStatus.click();
+    });
+  }
+
+  @Then("Operator verify it shows Please enter shipment status error message")
+  public void operatorVerifyItShowsPleaseEnterShipmentStatusErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showErrorAlertShipmentStatus.getText()).as("Showed error message of Shipment Status")
+              .isEqualTo("Please enter Shipment Status");
+    });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Status")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentStatus() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
+  }
+
+  @When("Operator select Shipment Date on Shipment Management page")
+  public void operatorSelectShipmentDateOnShipmentManagementPage() {
+    page.inFrame(() -> {
+      page.waitUntilLoaded(1);
+          LocalDateTime previous2Weeks = LocalDateTime.now().plusDays(-14);
+          String fromDates =  DateTimeFormatter.ofPattern("yyyy-MM-dd").format(previous2Weeks);
+        page.shipmentDateFilter.setFromDate(fromDates);
+    });
+  }
+
+  @Then("Operator verify it shows The Shipment Date maximum range of selection error message")
+  public void operatorVerifyItShowsTheShipmentDateMaximumRangeOfSelectionErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showErrorAlertShipmentDate.getText()).as("Entered the Shipment Date maximum range of selection is more than 7 days")
+              .isEqualTo("The Shipment Date maximum range of selection is 7 days");
+    });
+  }
+
+  @When("^Operator click \"Load Selection\" button on Shipment Management page$")
+  public void operatorClickButtonOnShipmentManagementPage() {
+      page.inFrame(() -> {
+        page.loadSelection.click();
+      });
+  }
+
+  @Then("Operator verify unable to load Shipment data without input Shipment Type and Shipment Status")
+  public void operatorVerifyUnableToLoadShipmentDataWithoutInputShipmentTypeAndShipmentStatus() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editFilters.isDisplayed())
+              .isFalse();
+    });
+  }
+
+  @When("Operator search not found shipment id on Shipment Management table")
+  public void operatorSearchNotFoundShipmentIdOnShipmentManagementTable() {
+    page.inFrame(()-> {
+      page.shipmentIdInputFieldOnShipmentManagementTable.setValue(get(KEY_CREATED_SHIPMENT_ID).toString());
+    });
+  }
+
+  @Then("Operator verify it shows \"No Results Found\" error message")
+  public void operatorVerifyItShowsNoResultsFoundErrorMessage() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.showNoResultsFound.getText()).as("Please set filter to no results found error message")
+              .isEqualTo("No Results Found");
+    });
+  }
+
+  @Then("^Operator verify error message \"Origin Hub and Destination Hub cannot be the same\" is shown")
+  public void operatorVerifyErrorMessageOriginHubAndDestinationHubCannotBeTheSameIsShown() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.editShipmentDialog.startHubError.getText()).as("Showed error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+    });
+  }
+
+  @And("Operator verify {string} on edit popup is disable")
+  public void operatorVerifyOnEditPopupIsDisable(String disabledButton) {
+    Button button;
+    switch (disabledButton.toLowerCase()) {
+      case "save changes button":
+        button = page.editShipmentDialog.saveChanges;
+        break;
+      default:
+        throw new IllegalStateException("Unknown button name " + disabledButton);
+    }
+    page.inFrame(() -> Assertions.assertThat(button.isEnabled())
+            .withFailMessage(disabledButton + " is enabled").isFalse());
+  }
+
+  @Then("^Operator verify error message \"Origin Hub and Destination Hub cannot be the same\" is showing on Bulk Update dialog")
+  public void operatorVerifyErrorMessageIsShowingOnBulkUpdateDialog() {
+    page.inFrame(()-> {
+      Assertions.assertThat(page.bulkUpdateShipmentDialog.originHubError.getText()).as("Showing error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+      Assertions.assertThat(page.bulkUpdateShipmentDialog.destinationHubError.getText()).as("Showing error message of Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo("Origin Hub and Destination Hub cannot be the same");
+    });
+  }
+
+  @And("Operator verify {string} on bulk update is disable")
+  public void operatorVerifyOnBulkUpdateIsDisable(String disabledButton) {
+    Button button;
+    switch (disabledButton.toLowerCase()) {
+      case "apply to selected button":
+        button = page.bulkUpdateShipmentDialog.applyToSelected;
+        break;
+      default:
+        throw new IllegalStateException("Unknown button name " + disabledButton);
+    }
+    page.inFrame(() -> Assertions.assertThat(button.isEnabled())
+            .withFailMessage(disabledButton + " is enabled").isFalse());
+  }
+
+  @Then("Operator verify error message {string} is shown on bulk update page")
+  public void operatorVerifyErrorMessageIsShownOnBulkUpdatePage(String message) {
+    page.inFrame(()-> {
+      page.shipmentToBeUpdatedTable.waitUntilVisible();
+      Assertions.assertThat(page.shipmentToBeUpdatedTable.originDestinationHubError.getText())
+              .as("Showing error message Origin Hub and Destination Hub cannot be the same")
+              .isEqualTo(message);
+    });
+  }
+
+  @And("Operator clicks Edit action button on Shipment Management page")
+  public void operatorClicksEditActionButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.shipmentsTable.clickActionButton(1, ACTION_EDIT);
+      page.editShipmentDialog.waitUntilVisible();
+    });
+  }
+
+  @And("Operator clicks mawb link button on Shipment Management page")
+  public void operatorClicksMawbLinkButtonOnShipmentManagementPage() {
+    page.inFrame(()-> {
+      page.clickMAWBLinkButtonOnEditShipment();
+    });
   }
 }

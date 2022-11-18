@@ -24,7 +24,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-rts-zone-latitude}  |
@@ -59,7 +59,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-zone-latitude}  |
@@ -94,7 +94,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-ooz-zone-latitude}  |
@@ -127,7 +127,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-rts-zone-latitude-2}  |
@@ -141,7 +141,7 @@ Feature: Address Verification
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
-    And Operator verifies Zone is "{av-zone-short-name}" on Edit Order page
+    And Operator verifies Zone is "{av-standard-zone-name}" on Edit Order page
 
   Scenario: AV Non RTS orders - RTS zone does not exist
     When Operator go to menu Utilities -> Address Verification
@@ -160,7 +160,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-zone-latitude}  |
@@ -193,7 +193,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     And Operator clicks on 'Edit' button for -1 address on Address Verification page
     And Operator fills address parameters in Edit Address modal on Address Verification page:
       | latitude  | {av-ooz-zone-latitude}  |
@@ -226,7 +226,7 @@ Feature: Address Verification
     When Operator initialize address pool with all options checked in Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Address pool initialized |
-    When Operator fetch addresses from initialized pool from zone "{KEY_ZONE_INFO.name}"
+    When Operator fetch addresses from initialized pool from zone "{ooz-zone-name}"
     When Operator assign "{av-zone-name}" zone to the last address on Address Verification page
     Then Operator verifies that success react notification displayed:
       | top | Success assign to zone |
@@ -235,9 +235,12 @@ Feature: Address Verification
     And DB operator gets details for delivery waypoint
     And API Operator get Addressing Zone from a lat long with type "STANDARD"
     Then Operator verifies waypoint details:
-      | latitude      | {KEY_ZONE_INFO.latitude}     |
-      | longitude     | {KEY_ZONE_INFO.longitude}    |
       | routingZoneId | {KEY_ZONE_INFO.legacyZoneId} |
+    And API Operator Get Addressing Zone by Legacy Id
+    Then Operator verifies zone details:
+      | legacyZoneId | {KEY_LIST_OF_ZONE_INFO.legacyZoneId} |
+      | latitude     | {KEY_LIST_OF_ZONE_INFO.latitude}     |
+      | longitude    | {KEY_LIST_OF_ZONE_INFO.longitude}    |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
@@ -247,15 +250,15 @@ Feature: Address Verification
   Scenario: Fetch Addresses - By Route Group For Delivery Waypoint (uid:a9ca5a86-92e9-4641-9a7b-3122edd9140b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"SameDay","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00","timezone":"Asia/Singapore"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"size":"S","weight":5,"length":"40","width":"41","height":"12"}},"from":{"name":"Hub Automation Shipper","email":"hub.automation.shipper@ninjavan.co","phone_number":"+6598984204","address":{"address1":"26 Address Verification Automation Ave","address2":"26 Address Verification Automation Ave","postcode":"960304","country":"SG"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"441 Address Verification Automation Ave","address2":"441 Address Verification Automation Ave","postcode":"960304","country":"SG"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -269,15 +272,15 @@ Feature: Address Verification
   Scenario: Fetch Addresses - By Route Group For Return Pickup Waypoint (uid:24866b2e-7855-4132-b7b4-d734f526ed00)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | {"service_type":"return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00","timezone":"Asia/Jakarta"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Jakarta"},"dimensions":{"size":"S","weight":5,"length":"40","width":"41","height":"12"}},"from":{"name":"Hub Automation Shipper","email":"hub.automation.shipper@ninjavan.co","phone_number":"+6598984204","address":{"address1":"26 Address Verification Automation Ave","address2":"26 Address Verification Automation Ave","postcode":"12780","country":"ID"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"441 Address Verification Automation Ave","address2":"441 Address Verification Automation Ave","postcode":"12780","country":"ID"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
-      | trackingId                                 | type     |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
+      | trackingId                                 | type   |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Pickup Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -291,15 +294,15 @@ Feature: Address Verification
   Scenario: Archive Shipper Addresses By Route Groups (uid:ed60ff97-999f-48c3-b02c-495df9200840)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00","timezone":"Asia/Jakarta"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Jakarta"},"dimensions":{"size":"S","weight":5,"length":"40","width":"41","height":"12"}},"from":{"name":"Hub Automation Shipper","email":"hub.automation.shipper@ninjavan.co","phone_number":"+6598984204","address":{"address1":"26 Address Verification Automation Ave","address2":"26 Address Verification Automation Ave","postcode":"12780","country":"ID"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"441 Address Verification Automation Ave","address2":"441 Address Verification Automation Ave","postcode":"12780","country":"ID"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -316,15 +319,15 @@ Feature: Address Verification
   Scenario: Edit Address Coordinates - By Route Group (uid:63668ac1-a4f0-4e58-91db-a26beb702f3d)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00","timezone":"Asia/Jakarta"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Jakarta"},"dimensions":{"size":"S","weight":5,"length":"40","width":"41","height":"12"}},"from":{"name":"Hub Automation Shipper","email":"hub.automation.shipper@ninjavan.co","phone_number":"+6598984204","address":{"address1":"26 Address Verification Automation Ave","address2":"26 Address Verification Automation Ave","postcode":"12780","country":"ID"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"441 Address Verification Automation Ave","address2":"441 Address Verification Automation Ave","postcode":"12780","country":"ID"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
@@ -348,15 +351,15 @@ Feature: Address Verification
   Scenario: Save AV Addresses (uid:171516e5-6802-486d-8584-8dcf3aab6bd5)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00","timezone":"Asia/Jakarta"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Jakarta"},"dimensions":{"size":"S","weight":5,"length":"40","width":"41","height":"12"}},"from":{"name":"Hub Automation Shipper","email":"hub.automation.shipper@ninjavan.co","phone_number":"+6598984204","address":{"address1":"26 Address Verification Automation Ave","address2":"26 Address Verification Automation Ave","postcode":"12780","country":"ID"}},"to":{"name":"Hub Automation Customer","email":"hub.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"441 Address Verification Automation Ave","address2":"441 Address Verification Automation Ave","postcode":"12780","country":"ID"}}} |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
       | trackingId                                 | type     |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     And API Operator get order details
     And DB Operator unarchive Jaro Scores of Delivery Transaction waypoint of created order
     When Operator go to menu Utilities -> Address Verification
