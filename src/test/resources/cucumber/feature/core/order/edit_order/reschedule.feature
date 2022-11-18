@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2
+@OperatorV2 @Core @EditOrder @Reschedule @EditOrder2 @runReschedule
 Feature: Reschedule
 
   @LaunchBrowser @ShouldAlwaysRun
