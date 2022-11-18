@@ -203,12 +203,13 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies that the following texts are available on the downloaded file")
+  @Then("Operator verifies that the following texts are available on the downloaded file {string}")
   public void operator_verifies_that_the_following_texts_are_available_on_the_downloaded_file(
+      String filePattern,
       List<String> expected) {
     expected = resolveValues(expected);
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
-        CSV_DOWNLOADED_FILENAME_PATTERN);
+        filePattern);
     expected.forEach((expectedText) -> {
       shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
           expectedText, true);
@@ -239,7 +240,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     String Filepath =
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     shipperAddressConfigurationPage.fileUpload.sendKeys(Filepath);
-    shipperAddressConfigurationPage.clickSubmitFileButton(windowName);
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
   }
 
