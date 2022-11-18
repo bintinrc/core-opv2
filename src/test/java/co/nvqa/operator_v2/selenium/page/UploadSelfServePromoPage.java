@@ -25,6 +25,9 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement antNotificationMessage;
 
+  @FindBy(xpath = "//button[.='Download Error Upload Pricing Profile CSV']")
+  public PageElement downloadErrorUploadPricingProfileCsvButton;
+
   public UploadSelfServePromoPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -61,6 +64,10 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
         expectedBody);
   }
 
+  public void clickDownloadErrorUploadPricingProfileCsvButton() {
+    downloadErrorUploadPricingProfileCsvButton.click();
+  }
+
   public static class UploadBulkPricingProfileDialog extends AntModal {
 
     @FindBy(xpath = "//button[.='Submit']")
@@ -75,7 +82,6 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
     @FindBy(xpath = "//button[.='Download Errors CSV']")
     public Button downloadErrorsCsvButton;
 
-
     public UploadBulkPricingProfileDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -87,5 +93,6 @@ public class UploadSelfServePromoPage extends SimpleReactPage<UploadSelfServePro
     public void clickDownloadErrorsCsvButton() {
       downloadErrorsCsvButton.click();
     }
+
   }
 }

@@ -57,6 +57,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   private  static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
   private static final String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
+  public static final String ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH = "//div/h4[contains(text(),'Add New Weight & Dimension')]";
 
   @FindBy(id = "search-by-sid_searchIds")
   public PageElement sidsTextArea;
@@ -407,7 +408,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     }
   }
 
-  public void bulkUpdateShipment(Map<String, String> resolvedMapOfData) {
+  public void inputFormBulkUpdateShipment(Map<String, String> resolvedMapOfData) {
     if (resolvedMapOfData.get("shipmentType") != null) {
       String shipmentType = resolvedMapOfData.get("shipmentType");
       bulkUpdateShipmentDialog.shipmentTypeEnable.check();
@@ -428,6 +429,10 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
       bulkUpdateShipmentDialog.commentsEnable.check();
       bulkUpdateShipmentDialog.commentsInput.sendKeys(comments);
     }
+  }
+
+  public void bulkUpdateShipment(Map<String, String> resolvedMapOfData) {
+    this.inputFormBulkUpdateShipment(resolvedMapOfData);
     bulkUpdateShipmentDialog.applyToSelected.click();
   }
 
@@ -661,6 +666,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     @FindBy(id = "master-awb")
     public TextBox mawb;
 
+    @FindBy(xpath = "//div/a/span[contains(text(),'Shipment Weight & Dimension page')]")
+    public Button mawbButtonLink;
+
     @FindBy(css = "[data-testid='confirm-edit-shipment-button']")
     public Button saveChanges;
 
@@ -679,6 +687,11 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     @FindBy(css = "button[aria-label='Force Success']")
     public Button forceSuccessButton;
 
+    @FindBy(xpath = "(.//*[contains(@class,'ant-form-item-explain-error')])[1]")
+    public PageElement startHubError;
+
+    @FindBy(xpath = "(.//*[contains(@class,'ant-form-item-explain-error')])[2]")
+    public PageElement endHubError;
   }
 
   public static class ShipmentEventsTable extends AntTableV3<ShipmentEvent> {
@@ -774,8 +787,15 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//input[@id='dest_hub_id']]")
     public AntSelect3 endHub;
+
     @FindBy(id = "comments")
     public TextBox commentsInput;
+
+    @FindBy(xpath = "(.//*[contains(@class,'ant-form-item-explain-error')])[1]")
+    public PageElement originHubError;
+
+    @FindBy(xpath = "(.//*[contains(@class,'ant-form-item-explain-error')])[2]")
+    public PageElement destinationHubError;
 
     public BulkUpdateShipmentDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -807,6 +827,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
     @FindBy(xpath = ".//button[.='Modify Selection']")
     public Button modifySelectionButton;
+
+    @FindBy(xpath = "(.//*[contains(@class,'ant-table-cell result')])[2]/span/b")
+    public PageElement originDestinationHubError;
 
     public ShipmentToBeUpdatedTable(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -895,5 +918,12 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     pause1s();
     click(ADD_FILTER_XPATH);
 
+  }
+
+  public void clickMAWBLinkButtonOnEditShipment() {
+      editShipmentDialog.mawbButtonLink.click();
+      switchToNewWindow();
+      this.switchTo();
+      waitUntilVisibilityOfElementLocated(ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH,5);
   }
 }

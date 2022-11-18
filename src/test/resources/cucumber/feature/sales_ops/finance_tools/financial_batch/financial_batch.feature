@@ -160,7 +160,7 @@ Feature: Financial Batch
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "5","source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "CREDIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
+      | createPaymentRequest | { "amount": "5", "event": "Payment", "source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "CREDIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
     Then Operator waits for 5 seconds
     Given Operator go to menu Finance Tools -> Financial Batch
     When Operator generates financial batch data as below
@@ -200,7 +200,7 @@ Feature: Financial Batch
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "4.15","source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
+      | createPaymentRequest | { "amount": "4.14", "event": "Payment", "source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
     Then Operator waits for 5 seconds
     Given Operator go to menu Finance Tools -> Financial Batch
     When Operator generates financial batch data as below
@@ -376,7 +376,7 @@ Feature: Financial Batch
       | {KEY_FINANCIAL_BATCH_LEDGERS[1].id} | Debit  | Reversion  | {KEY_COUNTRY} | 17.16  |
       | {KEY_FINANCIAL_BATCH_LEDGERS[1].id} | Credit | Reversion  | {KEY_COUNTRY} | 5.30   |
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "4.15","source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
+      | createPaymentRequest | { "amount": "4.14", "event": "Payment", "source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
     Then Operator waits for 5 seconds
     Given Operator go to menu Finance Tools -> Financial Batch
     When Operator generates financial batch data as below

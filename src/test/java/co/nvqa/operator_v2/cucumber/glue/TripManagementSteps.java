@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
@@ -15,6 +16,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -553,5 +556,29 @@ public class TripManagementSteps extends AbstractSteps {
                 tripManagementPage.selectValueFromFilterDropDownDirectly(key, inputMap.get(key));
             }
         }, "Retrying until field value is shown...");
+    }
+
+    @Then("Operator verifies one of toast with message is shown on movement page without closing")
+    public void operatorVerifiesOneOfToastWithMessageIsShow(List<String> toastMessages){
+        List<String> resolvedToastMessages = resolveValues(toastMessages);
+        tripManagementPage.waitUntilVisibilityOfElementLocated(
+                "//div[contains(@class,'notification-notice-message')]");
+        WebElement toast = tripManagementPage.findElementByXpath(
+                "//div[contains(@class,'notification-notice-message')]");
+        String actualToastMessage = toast.getText();
+        Boolean result  = (actualToastMessage.contains(resolvedToastMessages.get(0))) || (actualToastMessage.contains(resolvedToastMessages.get(1)));
+        Assertions.assertThat(result).as("Trip Management toast message is the same").isTrue();
+    }
+
+    @When("Operator clicks Force Completion button on Movement Trips page")
+    public void operatorClicksForceCompletionButtonOnMovementTripsPage() {
+        tripManagementPage.forceTripCompletion.click();
+        pause2s();
+    }
+
+    @And("Operator verifies trip message {string} display on Movement Trip details page")
+    public void operatorVerifiesDepartTripMessageDisplayOnMovementTripDetailsPage(String tripMessage) {
+        tripMessage = resolveValue(tripMessage);
+        tripManagementPage.verifyTripMessageSuccessful(tripMessage);
     }
 }

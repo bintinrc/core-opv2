@@ -5,6 +5,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.CheckSquare;
+import co.nvqa.operator_v2.selenium.page.ZonesPage.AddZoneDialog;
+import co.nvqa.operator_v2.selenium.page.ZonesPage.EditZoneDialog;
 import com.epam.ta.reportportal.ws.model.Page;
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,8 +31,14 @@ public class ZonesSelectedPolygonsPage extends SimpleReactPage {
   @FindBy(xpath = "//iframe")
   public PageElement pageFrame;
 
+  @FindBy(className = "ant-modal-wrap")
+  public EditZoneDialog setZoneCoordinateDialog;
+
   @FindBy(css = "div.ant-list:nth-of-type(1)")
   public ZonesPanel zonesPanel;
+
+  @FindBy(css = "div.ant-list:nth-of-type(4)")
+  public ZonesPanel zonesRTSPanel;
 
   @FindBy(css = "input[placeholder='Find zones by name']")
   public TextBox findZonesInput;
@@ -52,6 +60,15 @@ public class ZonesSelectedPolygonsPage extends SimpleReactPage {
 
   @FindBy(xpath = "//div[@class='ant-modal-footer']//span[@aria-label='check']/parent::button")
   public PageElement saveConfirmationDialogSaveButton;
+
+  @FindBy(xpath = ".//button[.//*[@data-icon='map-marker-alt']]")
+  public PageElement setCoordinate;
+
+  @FindBy(xpath = ".//button[.//*[@data-icon='plus']]")
+  public Button createZonePolygon;
+
+  @FindBy(xpath = "//span[@class='vertex-count']")
+  public PageElement vertexcount;
 
   public ZonesSelectedPolygonsPage(WebDriver webDriver) {
     super(webDriver);

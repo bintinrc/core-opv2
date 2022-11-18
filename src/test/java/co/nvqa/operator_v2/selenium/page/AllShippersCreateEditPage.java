@@ -23,6 +23,7 @@ import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -36,6 +37,7 @@ import co.nvqa.operator_v2.selenium.elements.md.TabWrapper;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -199,6 +201,18 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
   public void waitUntilShipperCreateEditPageIsLoaded(int timeoutInSeconds) {
     shipperInformation.waitUntilClickable(timeoutInSeconds);
+  }
+
+  public void openPage(String legacyId) {
+    openPage(Long.parseLong(legacyId));
+  }
+
+  public void openPage(long legacyId) {
+    getWebDriver().get(f("%s/%s/shippers/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
+        StandardTestConstants.COUNTRY_CODE.toLowerCase(), legacyId));
+    pause1s();
+    closeDialogIfVisible();
+    waitWhilePageIsLoading(120);
   }
 
   public void createNewShipper(Shipper shipper) {
@@ -1663,7 +1677,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
     public TextBox comments;
 
-    @FindBy(css = "md-select[aria-label$='Select billing weight logic']")
+    @FindBy(css = "md-select[placeholder$='Select billing weight logic']")
     public MdSelect billingWeight;
 
     @FindBy(name = "Save Changes")

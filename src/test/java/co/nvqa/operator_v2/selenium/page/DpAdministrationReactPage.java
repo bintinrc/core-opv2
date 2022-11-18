@@ -10,6 +10,8 @@ import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import com.google.common.collect.ImmutableMap;
@@ -22,19 +24,22 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Diaz Ilyasa
  */
 public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationReactPage> {
 
-  @FindBy(xpath = "//button[@data-testid='virtual-table.button_download_csv']")
+  @FindBy(xpath = "//button[@data-testid='button_download_csv']")
   public Button buttonDownloadCsv;
+
+  @FindBy(xpath = "//button[@data-testid='button_download_csv']")
+  public Button DpButtonDownloadCsv;
 
   @FindBy(xpath = "//button[@data-testid='button_add_partner']")
   public Button buttonAddPartner;
@@ -71,6 +76,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   @FindBy(xpath = "//button[@data-testId='button_return_to_list']")
   public Button buttonReturnToList;
+
+  @FindBy(xpath = "//button[@data-testId='button_leave_the_page']")
+  public Button buttonLeaveThePage;
 
   @FindBy(xpath = "//button[@data-testId='button_save_settings']")
   public Button buttonSaveSettings;
@@ -311,6 +319,45 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[@data-testid='field_shipper_account_no']/div/span/input")
   public TextBox fieldShipperAccountNo;
 
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input")
+  public TextBox fieldAlternateDp1;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//input[@disabled]")
+  public TextBox fieldAlternateDp1Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp1;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[1]")
+  public PageElement elementRemoveMsg1;
+  @FindBy(xpath = "//div[@class='ant-modal-body']/div/div/div[2]")
+  public PageElement elementRemoveMsg2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input")
+  public TextBox fieldAlternateDp2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//input[@disabled]")
+  public TextBox fieldAlternateDp2Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp2;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input")
+  public TextBox fieldAlternateDp3;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//input[@disabled]")
+  public TextBox fieldAlternateDp3Disabled;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-clear']")
+  public PageElement buttonClearAlternateDp3;
+
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_one']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId1;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_two']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId2;
+  @FindBy(xpath = "//div[@data-testid='field_alternative_dps_three']//span[@class='ant-select-selection-item']")
+  public PageElement elementAlternateDPId3;
+
   @FindBy(xpath = "//div[@data-testid='field_search_via_lat_lang']//input")
   public TextBox fieldLatLongSearch;
 
@@ -353,14 +400,36 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='field_maximum_parcel_stay']")
   public TextBox fieldMaximumParcelStay;
 
+  @FindBy(xpath = "//input[@data-testid='file_add_photo_of_pudo_point']")
+  public FileInput fieldPhotoOfPudoPoint;
+
+
+  @FindBy(xpath = "//span[@class='ant-upload-list-item-actions']/button")
+  public Button buttonRemovePicture;
+
+  @FindBy(xpath = "//button[@data-testid='file_delete_submit_pudo_point']")
+  public Button buttonConfirmRemove;
+
   @FindBy(xpath = "//input[@data-testid='field_password']")
   public TextBox fieldPassword;
 
   @FindBy(xpath = "//input[@data-testid='field_confirm_password']")
   public TextBox fieldConfirmPassword;
 
+  @FindBy(xpath = "//div[@class='ant-modal-confirm-content']/div/div")
+  public PageElement elementErrorCreatingDP;
+
   @FindBy(xpath = "//div[@data-testid='field_pudo_point_type']")
   public PageElement fieldPudoPointType;
+
+  @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Update')]")
+  public PageElement elementUpdateDPAlternate;
+
+  @FindBy(xpath = "//div[@class='ant-modal-footer']//button/span[contains(text(),'Select another')]")
+  public PageElement elementSelectAnotherDPAlternate;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']/button[@class='ant-modal-close']")
+  public PageElement elementCancelDPAlternate;
 
   @FindBy(xpath = "//div[@data-testid='option_pudo_point_type']/div[text()='Ninja Box']")
   public PageElement ninjaBoxPudoPointType;
@@ -482,6 +551,9 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//input[@data-testid='checkbox_auto_reservation_enabled']")
   public PageElement checkBoxAutoReservationEnabled;
 
+  @FindBy(xpath = "//input[@data-testid='reserved_cutoff_time']")
+  public TextBox formAutoReservationCutOff;
+
   @FindBy(xpath = "//input[@data-testid='checkbox_active_point']")
   public PageElement checkBoxActivePoint;
 
@@ -527,10 +599,53 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]/div[@class='ant-card-body']/div[8]/button[@data-testid='button_add_time_slot']")
   public Button buttonAddTimeSlotOperatingHoursSunday;
 
+
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursMonday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursTuesday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursWednesday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursThursday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursFriday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursSaturday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][2]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOpeningHoursSunday;
+
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[2]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursMonday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[3]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursTuesday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[4]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursWednesday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[5]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursThursday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[6]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursFriday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[7]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursSaturday;
+  @FindBy(xpath = "//div[@class='ant-card-body'][1]/div[contains(@class,'ant-card')][3]/div/div[8]//a[@data-testid='hyperlink_remove_opening_hours'][1]")
+  public PageElement buttonCutOffOperatingHoursSunday;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][1]/div/div[2]//span[@class='ant-picker-clear']")
+  public PageElement buttonRemoveFirstOpeningHour;
+
+  @FindBy(xpath = "//div[@class='ant-card ant-card-bordered sadqt2-1 foYRUM'][2]/div/div[2]//span[@class='ant-picker-clear']")
+  public PageElement buttonRemoveFirstOperatingHour;
+
+
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOpeningHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][1]//button[@data-testid='button_apply_to_all_days']")
+  public PageElement buttonApplyFirstDaySlotsOpeningHours;
+
   @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//input[@data-testid='checkbox_edit_days_individually']")
   public PageElement buttonEditDaysIndividuallyOperatingHours;
+  @FindBy(xpath = "//div[contains(@class,'sadqt2-1')][2]//button[@data-testid='button_apply_to_all_days']")
+  public PageElement buttonApplyFirstDaySlotsOperatingHours;
 
 
   public static final String ERROR_MSG_NOT_PHONE_NUM = "That doesn't look like a phone number.";
@@ -541,8 +656,10 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public static final String ERROR_MSG_ALERT_XPATH = "//div[@role='alert'][text()='%s']";
   public static final String CHOOSE_SHIPPER_ACCOUNT_XPATH = "//div[@data-testid='option_shipper_account_no']/div[contains(text(),'%s')]";
+  public static final String CHOOSE_ALTERNATIVE_DP_XPATH = "//div[@class='rc-virtual-list']//div[@class='ant-select-item-option-content'][contains(text(),'%s')]";
   public static final String CHOOSE_ASSIGNED_HUB_XPATH = "//div[@data-testid='option_assigned_hub']/div[text()='%s']";
   public static final String CHOOSE_SEARCH_FIRST_OPTIONS = "//div[@class='rc-virtual-list-holder-inner']/div[contains(@class,'ant-select-item')][1]/div[text()='%s']";
+  public static final String DP_PHOTO_FILE_FIELD = "//div[@class='ant-upload-list-item-info']";
 
   public static final String SINGLE = "SINGLE";
   public static final String NEXT = "NEXT";
@@ -574,10 +691,18 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public static final String BUFFER_CAPACITY = "Buffer Capacity";
   public static final String EXTERNAL_STORE_ID = "External Store Id";
   public static final String MAXIMUM_PARCEL_STAY = "Maximum Parcel Stay";
+  public static final String POPUP_CHANGE_ALTERNATE_DP_MSG = "Select another distribution point or update field to Alternate Distribution Point ID %s?";
 
   public static final String RETAIL_POINT_NETWORK = "RETAIL_POINT_NETWORK";
   public static final String CREATE = "CREATE";
   public static final String DPS = "dps";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DpAdministrationReactPage.class);
+
+  public ImmutableMap<String, PageElement> getAlternateDpText = ImmutableMap.<String, PageElement>builder()
+      .put("ADP1", elementAlternateDPId1)
+      .put("ADP2", elementAlternateDPId2)
+      .put("ADP3", elementAlternateDPId3)
+      .build();
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTime = ImmutableMap.<String, TextBox>builder()
       .put("monday", fieldOpeningStartHourMonday)
@@ -587,6 +712,27 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put("friday", fieldOpeningStartHourFriday)
       .put("saturday", fieldOpeningStartHourSaturday)
       .put("sunday", fieldOpeningStartHourSunday)
+      .build();
+
+  public ImmutableMap<String, PageElement> cutOffOpeningHour = ImmutableMap.<String, PageElement>builder()
+      .put("monday", buttonCutOffOpeningHoursMonday)
+      .put("tuesday", buttonCutOffOpeningHoursTuesday)
+      .put("wednesday", buttonCutOffOpeningHoursWednesday)
+      .put("thursday", buttonCutOffOpeningHoursThursday)
+      .put("friday", buttonCutOffOpeningHoursFriday)
+      .put("saturday", buttonCutOffOpeningHoursSaturday)
+      .put("sunday", buttonCutOffOpeningHoursSunday)
+      .build();
+
+
+  public ImmutableMap<String, PageElement> cutOffOperatingHour = ImmutableMap.<String, PageElement>builder()
+      .put("monday", buttonCutOffOperatingHoursMonday)
+      .put("tuesday", buttonCutOffOperatingHoursTuesday)
+      .put("wednesday", buttonCutOffOperatingHoursWednesday)
+      .put("thursday", buttonCutOffOperatingHoursThursday)
+      .put("friday", buttonCutOffOperatingHoursFriday)
+      .put("saturday", buttonCutOffOperatingHoursSaturday)
+      .put("sunday", buttonCutOffOperatingHoursSunday)
       .build();
 
   public ImmutableMap<String, TextBox> textBoxOpeningStartTimeNext = ImmutableMap.<String, TextBox>builder()
@@ -706,13 +852,13 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
       .put(EXTERNAL_STORE_ID,
           "Invalid field. Please use only alphabets, characters, numbers (0-9), periods (.), hyphens (-), underscores (_) and spaces ( )")
       .put(POSTCODE, "Please enter a valid number.")
-      .put(FLOOR_NO, "Please enter a valid number.")
-      .put(UNIT_NO, "Please enter a valid number.")
+      .put(FLOOR_NO, "Floor No. is required")
+      .put(UNIT_NO, "Unit No. is required")
       .put(LATITUDE, "please enter valid number.")
       .put(LONGITUDE, "please enter valid number.")
-      .put(MAXIMUM_PARCEL_CAPACITY, "Please enter a valid number.")
-      .put(BUFFER_CAPACITY, "Please enter a valid number.")
-      .put(MAXIMUM_PARCEL_STAY, "Please enter a valid number.")
+      .put(MAXIMUM_PARCEL_CAPACITY, "please enter valid number.")
+      .put(BUFFER_CAPACITY, "please enter valid number.")
+      .put(MAXIMUM_PARCEL_STAY, "please enter valid number.")
       .build();
 
 
@@ -827,6 +973,36 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   }
 
+  public void chooseAlternateDp(Long alternateDPId) {
+    waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+  }
+
+  public void fillAutoReservationCutoffTime(String cutoffTime) {
+    formAutoReservationCutOff.forceClear();
+    String []cutoffTimeElement = cutoffTime.split(":");
+    String cutOffTimeFill = f("%s h %s m",cutoffTimeElement[0],cutoffTimeElement[1]);
+    formAutoReservationCutOff.sendKeysAndEnterNoXpath(cutOffTimeFill);
+  }
+
+
+  public void popupMsgAlternateDP(String alternateDpId) {
+    String popupMsg = f(POPUP_CHANGE_ALTERNATE_DP_MSG, alternateDpId);
+    Assertions.assertThat(elementRemoveMsg1.getText() + " " + elementRemoveMsg2.getText())
+        .as(f("Popup message is: %s", popupMsg))
+        .isEqualTo(popupMsg);
+  }
+
+  public void chooseInvalidAlternateDp(Long alternateDPId) {
+    try {
+      waitUntilVisibilityOfElementLocated(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+      click(f(CHOOSE_ALTERNATIVE_DP_XPATH, alternateDPId));
+    } catch (TimeoutException te) {
+      LOGGER.info("Alternate DP Not Found");
+    }
+  }
+
+
   public void chooseShipperAccountDp(Long shipperId) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
     click(f(CHOOSE_SHIPPER_ACCOUNT_XPATH, shipperId));
@@ -835,6 +1011,12 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
   public void chooseShipperAssignedHub(String hubName) {
     waitUntilVisibilityOfElementLocated(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
     click(f(CHOOSE_ASSIGNED_HUB_XPATH, hubName));
+  }
+
+  public void removeExistingPicture() {
+    moveToElementWithXpath(DP_PHOTO_FILE_FIELD);
+    buttonRemovePicture.click();
+    buttonConfirmRemove.click();
   }
 
   public void chooseFromSearch(String searchName) {
@@ -1066,21 +1248,43 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
 
   public void errorCheckDpUser(String value, String errorKey) {
     switch (errorKey) {
-      case "!USFIRNME":
+      case "USFIRNME":
         formDpUserFirstName.forceClear();
         formDpUserFirstName.setValue(value);
+        formDpUserFirstName.forceClear();
         break;
-      case "!USLANME":
+      case "USLANME":
         formDpUserLastName.forceClear();
         formDpUserLastName.setValue(value);
+        formDpUserLastName.forceClear();
         break;
-      case "!USNME":
+      case "CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        formDpUserContact.forceClear();
+        break;
+      case "!CONTACT":
+        formDpUserContact.forceClear();
+        formDpUserContact.setValue(value);
+        break;
+      case "USNME":
         formDpUserUsername.forceClear();
         formDpUserUsername.setValue(value);
+        formDpUserUsername.forceClear();
+        break;
+      case "PWORD":
+        formDpUserPassword.forceClear();
+        formDpUserPassword.setValue(value);
+        formDpUserPassword.forceClear();
         break;
       case "!USEMAIL":
         formDpUserEmail.forceClear();
         formDpUserEmail.setValue(value);
+        break;
+      case "USEMAIL":
+        formDpUserEmail.forceClear();
+        formDpUserEmail.setValue(value);
+        formDpUserEmail.forceClear();
         break;
 
     }
@@ -1280,7 +1484,7 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         .put("id", Long.toString(dp.getId()))
         .put("name", dp.getName())
         .put("shortName", dp.getShortName())
-        .put("hub", f("%s - %s",dp.getHubId(),dp.getHubName()))
+        .put("hub", f("%s - %s", dp.getHubId(), dp.getHubName()))
         .put("address", dp.getAddress1())
         .put("direction", dp.getDirections())
         .put("activity", dp.getIsActive() ? "Active" : "Inactive")
@@ -1289,4 +1493,15 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
     return dpElement.get(map);
   }
 
+  public void removeOpeningHoursDay() {
+    moveToElementWithXpath("//input[@id='reservationSlots.monday[0].startTime']");
+    buttonRemoveFirstOpeningHour.click();
+    buttonRemoveFirstOpeningHour.click();
+  }
+
+  public void removeOperatingHoursDay() {
+    moveToElementWithXpath("//input[@id='operatingHours.monday[0].startTime']");
+    buttonRemoveFirstOperatingHour.click();
+    buttonRemoveFirstOperatingHour.click();
+  }
 }

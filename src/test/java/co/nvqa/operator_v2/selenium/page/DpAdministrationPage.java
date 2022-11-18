@@ -35,6 +35,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   private static final String CSV_FILENAME_PATTERN = "data-dp-users";
   private static final String CSV_DPS_FILENAME_PATTERN = "data-dps";
   private static final String CSV_DP_USERS_FILENAME_PATTERN = "data-dp-users";
+  private static final String CSV_DPS_FILENAME_PATTERN_NEWEST = "data-dp-partners";
   private static final String LOCATOR_BUTTON_ADD_PARTNER = "container.dp-administration.dp-partners.add-title";
   private static final String LOCATOR_BUTTON_ADD_DP = "container.dp-administration.dps.add-title";
   private static final String LOCATOR_BUTTON_ADD_DP_USER = "container.dp-administration.dp-users.add-title";
@@ -542,7 +543,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualUser.getLastName()).as("User Last Name is correct")
           .isEqualTo(user.getLastName());
       Assertions.assertThat(actualUser.getContactNo()).as("Contact Number is correct")
-          .isEqualTo("'"+user.getContactNo());
+          .isEqualTo(user.getContactNo());
       Assertions.assertThat(actualUser.getEmail()).as("Email is correct")
           .isEqualTo(user.getEmail());
     }
@@ -571,7 +572,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
       Assertions.assertThat(actualDpPartner.getPocName()).as("POC Name")
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
-          .isEqualTo("'" + expectedDpPartner.getPocTel());
+          .isEqualTo(expectedDpPartner.getPocTel());
 
       if (expectedDpPartner.getPocEmail() == null || expectedDpPartner.getPocEmail().equals("")) {
         Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC No. is correct")
@@ -626,7 +627,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void verifyDownloadedDpFileContent(List<Dp> expectedDpParams) {
-    String fileName = getLatestDownloadedFilename(CSV_DPS_FILENAME_PATTERN);
+    String fileName = getLatestDownloadedFilename(CSV_DPS_FILENAME_PATTERN_NEWEST);
     verifyFileDownloadedSuccessfully(fileName);
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<Dp> actualDpParams = Dp.fromCsvFile(Dp.class, pathName, true);

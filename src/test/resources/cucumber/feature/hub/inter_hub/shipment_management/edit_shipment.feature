@@ -8,7 +8,6 @@ Feature: Shipment Management - Edit Shipment
   @DeleteShipments
   Scenario: Bulk Update Shipment - Update Comments (uid:1410c729-d7db-438b-a6b6-a86ceb72fcc2)
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -28,7 +27,6 @@ Feature: Shipment Management - Edit Shipment
   Scenario: Bulk Update Shipment - Update Multiple Fields (uid:325947b5-3c94-441e-b5d1-28dd76627eb0)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -43,16 +41,21 @@ Feature: Shipment Management - Edit Shipment
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]} |
       | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]} |
-    Then Operator verify the following parameters of all created shipments on Shipment Management page:
-      | startHub | {hub-name-2}                                                         |
-      | endHub   | {hub-name}                                                           |
-      | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[1]}                                 |
+      | origHubName | {hub-name-2}                                                         |
+      | destHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Then Operator verify parameters of shipment on Shipment Management page:
+      | id          | {KEY_LIST_OF_CREATED_SHIPMENT_ID[2]}                                 |
+      | origHubName | {hub-name-2}                                                         |
+      | destHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
 
   @DeleteShipments
   Scenario: Bulk Update Shipment - Remove Selected Shipment (uid:05a2ed45-d659-45f3-b5d5-9878335e7a18)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator search shipments by given Ids on Shipment Management page:
@@ -164,15 +167,15 @@ Feature: Shipment Management - Edit Shipment
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Then DB Operator update shipment created date:
-      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
-      | dateOffset  | -3                                |
+      | shipmentId | {KEY_CREATED_SHIPMENT_ID} |
+      | dateOffset | -3                        |
     Then API Operator cancel old shipment from "3_days_before"
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID} |
-      | status      | Cancelled                 |
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Cancelled                 |
 
 
   @DeleteShipment
@@ -188,8 +191,8 @@ Feature: Shipment Management - Edit Shipment
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID} |
-      | status      | Pending                   |
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Pending                   |
 
 
   @DeleteShipment @ForceSuccessOrder
@@ -205,21 +208,21 @@ Feature: Shipment Management - Edit Shipment
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {hub-name-2}                       |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | originHub      | {hub-name}                      |
+      | destinationHub | {hub-name-2}                    |
+      | shipmentType   | Air Haul                        |
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
     Then DB Operator update shipment created date:
-      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
-      | dateOffset  | -3                                |
+      | shipmentId | {KEY_CREATED_SHIPMENT_ID} |
+      | dateOffset | -3                        |
     Then API Operator cancel old shipment from "3_days_before"
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID} |
-      | status      | Pending                   |
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Pending                   |
 
   @DeleteShipment
   Scenario: Auto Cancel Close Shipment with 0 parcel
@@ -231,15 +234,15 @@ Feature: Shipment Management - Edit Shipment
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Then API Operator closes the created shipment
     Then DB Operator update shipment created date:
-      | shipmentId  | {KEY_CREATED_SHIPMENT_ID}         |
-      | dateOffset  | -3                                |
+      | shipmentId | {KEY_CREATED_SHIPMENT_ID} |
+      | dateOffset | -3                        |
     Then API Operator cancel old shipment from "3_days_before"
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID} |
-      | status      | Closed                    |
+      | id     | {KEY_CREATED_SHIPMENT_ID} |
+      | status | Closed                    |
 
 
   @KillBrowser @ShouldAlwaysRun

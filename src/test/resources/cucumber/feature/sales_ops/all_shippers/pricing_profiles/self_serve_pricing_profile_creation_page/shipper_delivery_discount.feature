@@ -31,14 +31,14 @@ Feature: Shipper Delivery Discount
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | INVALID       | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10000000.00          | FLAT          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | -5                   | FLAT          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-    Then Operator verifies error message "File is invalid" in Upload Self Serve Promo Page
+    Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
       | row | shipper_id              | column               | description                                                                                      |
-      | 1   | {KEY_LEGACY_SHIPPER_ID} | discount_type        | discount_type not found or value is not as FLAT/PERCENTAGE when salesperson_discount is provided |
       | 2   | {KEY_LEGACY_SHIPPER_ID} | discount_type        | discount_type not found or value is not as FLAT/PERCENTAGE when salesperson_discount is provided |
-      | 3   | {KEY_LEGACY_SHIPPER_ID} | salesperson_discount | salesperson_discount has value greater than 6 figures. Discounts cannot exceed 6 figures.        |
-      | 4   | {KEY_LEGACY_SHIPPER_ID} | salesperson_discount | salesperson_discount has invalid salesperson_discount value                                      |
+      | 3   | {KEY_LEGACY_SHIPPER_ID} | discount_type        | discount_type not found or value is not as FLAT/PERCENTAGE when salesperson_discount is provided |
+      | 4   | {KEY_LEGACY_SHIPPER_ID} | salesperson_discount | salesperson_discount has value greater than 6 figures. Discounts cannot exceed 6 figures.        |
+      | 5   | {KEY_LEGACY_SHIPPER_ID} | salesperson_discount | salesperson_discount has invalid salesperson_discount value                                      |
     Then DB Operator verifies there is no pricing profile added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
 
 
@@ -68,6 +68,5 @@ Feature: Shipper Delivery Discount
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 0                    | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     And Operator waits for 1 seconds
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
-    Then Operator verifies shipper discount details is null
     Then DB Operator fetches pricing lever details
     And Operator verifies the pricing lever details in the database

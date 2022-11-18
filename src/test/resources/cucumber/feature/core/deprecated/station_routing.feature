@@ -1,4 +1,3 @@
-@OperatorV2 @Core @NewFeatures @StationRouting @NewFeatures2
 Feature: Station Routing
 
   @LaunchBrowser @ShouldAlwaysRun

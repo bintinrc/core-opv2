@@ -95,7 +95,7 @@ Feature: Get Report in Ledger
       | status | Ready          |
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "<amount>","source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
+      | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
     Then Operator waits for 5 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -166,7 +166,7 @@ Feature: Get Report in Ledger
       | status | Ready          |
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "<amount>","source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
+      | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
     Then Operator waits for 5 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -299,7 +299,7 @@ Feature: Get Report in Ledger
       | status | Ready          |
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
-      | createPaymentRequest | { "amount": "<amount>","source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
+      | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
     Then Operator waits for 5 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
