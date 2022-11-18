@@ -29,4 +29,3 @@ bin/
 .classpath/
 
 
-src/test/resources/local-config.properties
