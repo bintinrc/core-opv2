@@ -594,7 +594,7 @@ Feature: Reservation Preset Management
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
   @DeleteDriver @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
-  Scenario: Assign a Shipper Milkrun Address to a Milkrun Group
+  Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
