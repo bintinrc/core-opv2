@@ -593,6 +593,105 @@ Feature: Reservation Preset Management
     And Operator downloads sample CSV on Reservation Preset Management page
     Then sample CSV file on Reservation Preset Management page is downloaded successfully
 
+  @DeleteDriver @DeleteShipper @DeleteReservationGroup @DeleteOrArchiveRoute
+  Scenario: Route Pending Reservations From the Reservation Preset Management Page - Reservation Added to Different Driver Route
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":true,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"+6589011608"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":"{hub-name}"}} |
+    And Operator go to menu Shipper -> All Shippers
+    And Operator create new Shipper with basic settings using data below:
+      | isShipperActive               | true                  |
+      | shipperType                   | Normal                |
+      | ocVersion                     | v4                    |
+      | services                      | STANDARD              |
+      | trackingType                  | Fixed                 |
+      | isAllowCod                    | false                 |
+      | isAllowCashPickup             | true                  |
+      | isPrepaid                     | true                  |
+      | isAllowStagedOrders           | false                 |
+      | isMultiParcelShipper          | false                 |
+      | isDisableDriverAppReschedule  | false                 |
+      | pricingScriptName             | {pricing-script-name} |
+      | industryName                  | {industry-name}       |
+      | salesPerson                   | {sales-person}        |
+      | pickupAddressCount            | 1                     |
+      | address.1.milkrun.1.startTime | 9AM                   |
+      | address.1.milkrun.1.endTime   | 12PM                  |
+      | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
+    And API Operator fetch id of the created shipper
+    When Operator go to menu Pick Ups -> Reservation Preset Management
+    And Operator create new Reservation Group on Reservation Preset Management page using data below:
+      | name   | GENERATED                                                                            |
+      | driver | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} |
+      | hub    | {hub-name}                                                                           |
+    And Operator assign pending task on Reservation Preset Management page:
+      | shipper | {KEY_CREATED_SHIPPER.name}           |
+      | group   | {KEY_CREATED_RESERVATION_GROUP.name} |
+    Then Operator verifies that success toast displayed:
+      | top | ^{KEY_CREATED_SHIPPER.name} \(.*\) has been assigned to {KEY_CREATED_RESERVATION_GROUP.name} |
+    And API Operator get address of shipper with ID = "{KEY_CREATED_SHIPPER.id}"
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{KEY_LEGACY_SHIPPER_ID}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{KEY_LEGACY_SHIPPER_ID}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{KEY_LEGACY_SHIPPER_ID}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-next-2-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-2-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}"} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_LIST_OF_CREATED_DRIVERS[2].id}, "date":"{gradle-next-1-day-yyyy-MM-dd} 16:00:00", "dateTime": "{gradle-next-1-day-yyyy-MM-dd}T16:00:00+00:00"} |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} |
+    When Operator finish reservation with success
+    When Operator go to menu Pick Ups -> Reservation Preset Management
+    When Operator create route on Reservation Preset Management page:
+      | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
+      | routeDate | {gradle-current-date-yyyy-MM-dd}     |
+    Then Operator verifies that success toast displayed:
+      | top                | Routes have been created for all groups! |
+      | waitUntilInvisible | true                                     |
+    When Operator create route on Reservation Preset Management page:
+      | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
+      | routeDate | {gradle-next-1-day-yyyy-MM-dd}       |
+    Then Operator verifies that success toast displayed:
+      | top                | Routes have been created for all groups! |
+      | waitUntilInvisible | true                                     |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | shipperId               | shipperName                   | pickupAddress                                    | routeId                | driverName                                                                           | readyBy                              | latestBy                             |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-current-date-yyyy-MM-dd} .* | ^{gradle-current-date-yyyy-MM-dd} .* |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-next-1-day-yyyy-MM-dd} .*   | ^{gradle-next-1-day-yyyy-MM-dd} .*   |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | {KEY_CREATED_ROUTE_ID} | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} {KEY_LIST_OF_CREATED_DRIVERS[2].lastName} | ^{gradle-next-2-day-yyyy-MM-dd} .*   | ^{gradle-next-2-day-yyyy-MM-dd} .*   |
+    When Operator refresh page
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} |
+    And Operator removes reservation from route from Edit Route Details dialog
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | shipperId               | shipperName                   | pickupAddress                                    | routeId | driverName | readyBy                            | latestBy                           |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | null    | null       | ^{gradle-next-1-day-yyyy-MM-dd} .* | ^{gradle-next-1-day-yyyy-MM-dd} .* |
+    When Operator go to menu Pick Ups -> Reservation Preset Management
+    When Operator route pending reservations on Reservation Preset Management page:
+      | group     | {KEY_CREATED_RESERVATION_GROUP.name} |
+      | routeDate | {gradle-next-1-day-yyyy-MM-dd}       |
+    Then Operator verifies that info toast displayed:
+      | top | 1 reservations added to route |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} |
+    Then Operator verify reservations details on Shipper Pickups page:
+      | id                                       | shipperId               | shipperName                   | pickupAddress                                    | routeId                | driverName                                                                           | readyBy                              | latestBy                             |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-current-date-yyyy-MM-dd} .* | ^{gradle-current-date-yyyy-MM-dd} .* |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[2]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | not null               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} {KEY_LIST_OF_CREATED_DRIVERS[1].lastName} | ^{gradle-next-1-day-yyyy-MM-dd} .*   | ^{gradle-next-1-day-yyyy-MM-dd} .*   |
+      | {KEY_LIST_OF_CREATED_RESERVATION_IDS[3]} | {KEY_LEGACY_SHIPPER_ID} | ^{KEY_CREATED_SHIPPER.name}.* | {KEY_CREATED_ADDRESS.to1LineAddressWithPostcode} | {KEY_CREATED_ROUTE_ID} | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} {KEY_LIST_OF_CREATED_DRIVERS[2].lastName} | ^{gradle-next-2-day-yyyy-MM-dd} .*   | ^{gradle-next-2-day-yyyy-MM-dd} .*   |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
