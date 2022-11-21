@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.openqa.selenium.By;
@@ -19,6 +20,8 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   public static final String SERVICE_TYPE_XPATH_LIST = "//input[contains(@id,'serviceType')]//parent::span//following-sibling::span";
   public static final String SERVICE_LEVEL_XPATH_LIST = "//input[contains(@id,'serviceLevel')]//parent::span//following-sibling::span";
   public static final String SERVICE_DISCOUNT_XPATH_LIST = "//input[contains(@id,'discount_value')]";
+  private static final String CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH = "//div[contains(@class,'ant-notification')]//span[@class='ant-notification-notice-close-x']";
+
 
   @FindBy(id = "name")
   public PageElement campaignName;
@@ -49,6 +52,18 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
 
   @FindBy(xpath = "//span[text()='Shippers']//parent::div//following::span[text()='Add']//parent::button")
   public PageElement shippersAddButton;
+
+  @FindBy(xpath = "//span[text()='Search by shipper']//parent::li")
+  public PageElement searchByShipperTab;
+
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_7']]")
+  public AntSelect searchByShipper;
+
+  @FindBy(xpath = "//span[text()='Upload']//parent::button")
+  public PageElement uploadButton;
+
+  @FindBy(xpath = "//span[text()='Browse']//input")
+  public PageElement browseInput;
 
   @FindBy(xpath = "//span[text()='Remove']//parent::button")
   public PageElement shippersRemoveButton;
@@ -155,8 +170,39 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     return antNotificationMessage.getText();
   }
 
+  public void closeNotificationMessage() {
+    List<WebElement> notificationElements = findElementsByXpath(
+        CAMPAIGN_PAGE_NOTIFICATION_CLOSE_ICON_XPATH);
+    if (notificationElements != null) {
+      notificationElements.forEach((element) -> {
+        element.click();
+        pause1s();
+      });
+    }
+  }
+
   public Boolean isShippersAddButtonDisplayed() {
     return shippersAddButton.isDisplayed();
+  }
+
+  public void clickShippersAddButton() {
+    shippersAddButton.click();
+  }
+
+  public void clickSearchByShippersTab() {
+    searchByShipperTab.click();
+  }
+
+  public void searchForTheShipper(String shipperName) {
+    searchByShipper.selectValue(shipperName);
+  }
+
+  public void clickUploadButton() {
+    uploadButton.click();
+  }
+
+  public void uploadFile(File file) {
+    browseInput.sendKeys(file.getAbsolutePath());
   }
 
   public Boolean isDownloadButtonDisplayed() {
