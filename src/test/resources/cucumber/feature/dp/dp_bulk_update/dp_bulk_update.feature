@@ -73,6 +73,15 @@ Feature: DP Administration - DP Bulk Update
     And Operator inputs DP with "more_than_30" condition into the textbox
     Then Operator verifies the data shown in DP Bulk Update Page is correct
 
+  Scenario: Select DP IDs - Input duplicate Valid DP IDs
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given DB Operator gets 30 existed DP IDs
+    Given Operator go to menu Distribution Points -> DP Bulk Update
+    Then Operator verifies that the DP Bulk Update is loaded completely
+    When Operator clicks on Select DP ID Button
+    And Operator inputs DP with "duplicate_valid" condition into the textbox
+    Then Operator verifies the data shown in DP Bulk Update Page is correct
+
   @DeleteNewlyCreatedDp
   Scenario: Select DP IDs - Input Valid and Invalid DP IDs (uid:f311f1a9-812d-4828-bdb1-d067d9e33882)
     Given API DP gets DP Partner Details for Partner ID "{opv2-dp-partner-bulk-update-id}"
@@ -102,7 +111,8 @@ Feature: DP Administration - DP Bulk Update
     Then Operator verifies that the DP Bulk Update is loaded completely
     When Operator clicks on Select DP ID Button
     And Operator inputs DP with "blank" condition into the textbox
-    Then Operator verifies error toast with invalid error message is shown
+    Then Operator verifies error toast with "Invalid DP ID" message is shown
+
 
   Scenario: Select DP IDs - Bulk Update DP Information - Enable Customer Collect and Rest Settings are Blank (uid:7cb79661-d7be-4e51-94e8-83615bcb4893)
     Given Operator go to menu Shipper Support -> Blocked Dates

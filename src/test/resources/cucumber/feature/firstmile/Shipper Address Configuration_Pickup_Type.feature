@@ -233,7 +233,7 @@ Feature: Shipper Address Configuration
       | Pickup Type    |
       | Zones          |
       | Hubs           |
-    And Operator verifies that the following texts are available on the downloaded file
+    And Operator verifies that the following texts are available on the downloaded file "Downloaded Pickup Addresses"
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
 
     Examples:
@@ -340,7 +340,6 @@ Feature: Shipper Address Configuration
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
-      | noOfAddress                 | 2                                                                                                                                                                                                |
       | noOfAddress                 | 2                                                                                                                                                                                                |
       | withLatLong                 | NO                                                                                                                                                                                               |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |

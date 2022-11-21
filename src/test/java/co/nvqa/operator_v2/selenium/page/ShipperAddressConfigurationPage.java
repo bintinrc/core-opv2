@@ -33,6 +33,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
   public static final String BUTTON = "//span[text()='%s']/parent::button";
   public static final String CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s addresses pick up has been updated!']";
+  public static final String FILENAME_IN_UPLOAD_WINDOW = "//span[text()='%s']";
 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(
@@ -96,9 +97,6 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//div[text()='Please upload a valid formatted file!']")
   public PageElement invalidFormatFileErrorMessage;
-
-  @FindBy(xpath = "//span[text()='Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv']")
-  public PageElement uploadedFileName;
 
   @FindBy(xpath = "//button[@aria-label='Close']")
   public PageElement closePopModal;
@@ -205,14 +203,16 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     downloadCSVTemplateButton.click();
   }
 
-  public void clickSubmitFileButton(String windowName) {
+  public void clickSubmitFileButton(String windowName, String fileName) {
     if (submitFileButton.size() > 0) {
-      Assertions.assertThat(uploadedFileName.isDisplayed()).as("Validation for uploaded file name")
+      String uploadedFileNamexpath = f(FILENAME_IN_UPLOAD_WINDOW, fileName);
+      Assertions.assertThat(
+              getWebDriver().findElement(By.xpath(uploadedFileNamexpath)).isDisplayed())
+          .as("Validation for uploaded file name in the upload Window")
           .isTrue();
       waitUntilVisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
       submitFileButton.get(0).click();
-      String titlexpath = f("//*[text()='%s']", windowName);
-      waitUntilInvisibilityOfElementLocated(getWebDriver().findElement(By.xpath(titlexpath)));
+      //waitUntilInvisibilityOfElementLocated(submitFileButton.get(0).getWebElement());
     }
   }
 
