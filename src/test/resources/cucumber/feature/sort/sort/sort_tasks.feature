@@ -56,7 +56,6 @@ Feature: Sort Task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     Then Operator verify added outputs appears on tree list
 
   @DeleteNodes
@@ -83,7 +82,6 @@ Feature: Sort Task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     Then Operator verify removed outputs removed on tree list
 
   @CloseNewWindows
@@ -169,7 +167,6 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name-4} |
       | hubId   | {hub-id-4}   |
-    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIER{gradle-current-date-yyyyMMddHHmmsss} |
@@ -197,7 +194,6 @@ Feature: Sort Task
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name-5} |
       | hubId   | {hub-id-5}   |
-    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
     And Operator creates new middle tier on Sort Tasks page
       | name | MIDTIER{gradle-current-date-yyyyMMddHHmmsss} |
@@ -287,13 +283,11 @@ Feature: Sort Task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     Then Operator verify removed outputs removed on tree list
     When Operator go to menu Sort -> Sort Tasks
     And Sort Belt Tasks page is loaded
     And Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     And Operator open the sidebar menu on Sort Tasks page
     And Operator select region on Sort Task page
       | regionName | {region-name} |
@@ -301,7 +295,6 @@ Feature: Sort Task
     Then Operator verifies that "{hub-name} modified" success notification is displayed
     When Operator select hub on Sort Tasks page:
       | hubName | {hub-name} |
-    And Operator refresh table on Sort Tasks page
     Then Operator verify added outputs appears on tree list
 
   @CloseNewWindows
