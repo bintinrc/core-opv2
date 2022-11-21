@@ -1,14 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
-import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentJobServiceLevelEnum;
-import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentPriorityEnum;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
-import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentStatusEnum;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentPriorityEnum;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +37,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator loads Shipper Address Configuration page Pickup Appointment")
   public void operatorLoadsShipperAddressConfigurationPage() {
+    getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
       pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
@@ -186,7 +187,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void loadSelectionJobByDateRangeAndShipper(Map<String, String> dataTable) {
     final String startDay = dataTable.get("startDay");
     final String endDay = dataTable.get("endDay");
-    String shipperId = get(KEY_LEGACY_SHIPPER_ID);
+    String shipperId = dataTable.get("shipperId");
+    if (shipperId == null) {
+      shipperId = get(KEY_LEGACY_SHIPPER_ID);
+    }
     operatorLoadsShipperAddressConfigurationPage();
     pickupAppointmentJobPage
         .selectDataRangeByTitle(startDay, endDay)
@@ -440,45 +444,54 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     verifyPriority(priority);
 
     if (jobServiceLevel == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.SERVICE_LEVEL.name(),
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(),
           "Job Service Level is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(jobServiceLevel.split(", ")),
-              PickupAppointmentFilterNameEnum.SERVICE_LEVEL.name(),
+          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(),
           "Job Service Level is correct");
     }
     if (jobServiceType == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.SERVICE_TYPE.name(),
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(),
           "Job Service Type is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(jobServiceType.split(", ")),
-              PickupAppointmentFilterNameEnum.SERVICE_TYPE.name(),
+          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(),
           "Job Service Type is correct");
     }
     if (jobStatus == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.STATUS.name(), "Job Status is correct");
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.STATUS.getName(), "Job Status is correct");
     } else {
-      verifySelectedInJobAppointmentPage(Arrays.asList(jobStatus.split(", ")), PickupAppointmentFilterNameEnum.STATUS.name(),
+      verifySelectedInJobAppointmentPage(Arrays.asList(jobStatus.split(", ")),
+          PickupAppointmentFilterNameEnum.STATUS.getName(),
           "Job Status is correct");
     }
     if (zones == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.ZONES.name(), "Zones is correct");
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.ZONES.getName(), "Zones is correct");
     } else {
-      verifySelectedInJobAppointmentPage(Arrays.asList(zones.split(", ")), PickupAppointmentFilterNameEnum.ZONES.name(),
+      verifySelectedInJobAppointmentPage(Arrays.asList(zones.split(", ")),
+          PickupAppointmentFilterNameEnum.ZONES.getName(),
           "Zones is correct");
     }
     if (masterShippers == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.MASTER_SHIPPER.name(),
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(),
           "Master Shippers is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(masterShippers.split(", ")),
-              PickupAppointmentFilterNameEnum.MASTER_SHIPPER.name(),
+          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(),
           "Master Shippers is correct");
     }
     if (shippers == null) {
-      verifySelectedInJobAppointmentPage(new ArrayList<>(), PickupAppointmentFilterNameEnum.SHIPPER.name(), "Shippers is correct");
+      verifySelectedInJobAppointmentPage(new ArrayList<>(),
+          PickupAppointmentFilterNameEnum.SHIPPER.getName(), "Shippers is correct");
     } else {
-      verifySelectedInJobAppointmentPage(Arrays.asList(shippers.split(", ")), PickupAppointmentFilterNameEnum.SHIPPER.name(),
+      verifySelectedInJobAppointmentPage(Arrays.asList(shippers.split(", ")),
+          PickupAppointmentFilterNameEnum.SHIPPER.getName(),
           "Shippers is correct");
     }
   }
@@ -532,11 +545,13 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("QA verify a dropdown menu shown with priority option")
   public void verifyADropdownMenuShownWIthPriorityOption() {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(PickupAppointmentPriorityEnum.PRIORITY.name()))
+    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+            PickupAppointmentPriorityEnum.PRIORITY.getName()))
         .as("Priority in Priority Filter is displayed")
         .isTrue();
     Assertions.assertThat(
-            pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(PickupAppointmentPriorityEnum.NON_PRIORITY.name()))
+            pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+                PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
         .as("Non-Priority in Priority Filter is displayed")
         .isTrue();
     pickupAppointmentJobPage.clickOnPriorityButton();
@@ -561,70 +576,36 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.clickOnJobServiceLevel();
   }
 
-  @Then("QA verify a dropdown menu shown with job service level option")
-  public void verifyADropdownMenuShownWIthJobServiceLevelOption() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobServiceLevelFilterByNameDisplayed(PickupAppointmentJobServiceLevelEnum.PREMIUM.name()))
-        .as("Premium in Job Service Level Filter is displayed")
-        .isTrue();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobServiceLevelFilterByNameDisplayed(PickupAppointmentJobServiceLevelEnum.STANDARD.name()))
-        .as("Standard in Job Service Level Filter is displayed")
-        .isTrue();
-  }
-
   @When("Operator click Job Status field")
   public void clickJobStatusField() {
     pickupAppointmentJobPage.clickOnJobStatus();
   }
 
-  @Then("QA verify a dropdown menu shown with job status option")
-  public void verifyADropdownMenuShownWithJobStatusOption() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobStatusLevelFilterByNameDisplayed(PickupAppointmentStatusEnum.IN_PROGRESS.name()))
-        .as("In Progress in Job Status Filter is displayed")
-        .isTrue();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobStatusLevelFilterByNameDisplayed(PickupAppointmentStatusEnum.CANCELLED.name()))
-        .as("Cancelled in Job Status Filter is displayed")
-        .isTrue();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobStatusLevelFilterByNameDisplayed(PickupAppointmentStatusEnum.COMPLETED.name()))
-        .as("Completed in Job Status Filter is displayed")
-        .isTrue();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobStatusLevelFilterByNameDisplayed(PickupAppointmentStatusEnum.FAILED.name()))
-        .as("Failed in Job Status Filter is displayed")
-        .isTrue();
-  }
-
   @And("QA verify data start to end limited to 7 days")
-  public void verifyDataStartToEndLimitedToSevenDays(Map<String, String> dataTable) {
-    final String startDay = dataTable.get("startDay");
-    final String endDay = dataTable.get("endDay");
-    operatorLoadsShipperAddressConfigurationPage();
+  public void verifyDataStartToEndLimitedToSevenDays() {
+    String startDay = getDateByDaysAgo(7);
+    String endDay = getDateByDaysLater(7);
     pickupAppointmentJobPage
         .verifyDataStartToEndLimited(startDay, endDay);
   }
 
   @And("Select multiple service level")
   public void selectMultipleServiceLevel() {
-    pickupAppointmentJobPage.selectServiceLevel(PickupAppointmentJobServiceLevelEnum.PREMIUM.name());
-    pickupAppointmentJobPage.selectServiceLevel(PickupAppointmentJobServiceLevelEnum.STANDARD.name());
+    pickupAppointmentJobPage.selectServiceLevel();
+    pickupAppointmentJobPage.selectServiceLevel();
     pickupAppointmentJobPage.clickOnJobServiceLevel();
   }
 
   @And("Select multiple job Status")
   public void selectMultipleJobStatus() {
-    pickupAppointmentJobPage.selectJobStatus(PickupAppointmentStatusEnum.CANCELLED.name());
-    pickupAppointmentJobPage.selectJobStatus(PickupAppointmentStatusEnum.COMPLETED.name());
+    pickupAppointmentJobPage.selectJobStatus();
+    pickupAppointmentJobPage.selectJobStatus();
     pickupAppointmentJobPage.clickOnJobStatus();
   }
 
   /*For list of data using ', ' symbols
    * Example
-   * | zone      | Zone1, Zone2        |*/
+   * | zones      | Zone1, Zone2        |*/
   @And("Select multiple job Zone")
   public void selectMultipleJobZone(Map<String, String> dataTable) {
     final String zones = dataTable.get("zones");
@@ -644,10 +625,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String zones = dataTable.get("masterShipper");
     List<String> zone = Arrays.asList(zones.split(", "));
     zone.forEach(s -> {
-      pickupAppointmentJobPage.inputOnJobZone(s);
+      pickupAppointmentJobPage.inputOnJobMasterShipper(s);
       pickupAppointmentJobPage.selectJobSelection(s);
     });
-    pickupAppointmentJobPage.clickOnJobZone();
+    pickupAppointmentJobPage.clickOnJobMasterShipper();
   }
 
   @When("Operator click Job Zone field")
@@ -663,11 +644,6 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @When("Operator click Job Shipper field")
   public void clickJobShipperField() {
     pickupAppointmentJobPage.clickOnJobShipper();
-  }
-
-  @When("Operator select in Job Shipper Filter By Id {string}")
-  public void selectInJobShipperFilterById(String shipperId) {
-    pickupAppointmentJobPage.setShipperIDInField(shipperId);
   }
 
   @Then("QA verify a dropdown menu shown")
@@ -688,6 +664,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
         .as("Dropdown Menu No Data is displayed")
         .isTrue();
+    pickupAppointmentJobPage.clearOnJobShipper();
   }
 
   // This method can be removed once redirection to Shipper Address is added in operator V2 menu
@@ -721,4 +698,24 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .as(message)
         .isEqualTo(expectedList);
   }
+
+  private String getDateByDaysAgo(int amount) {
+    DateTimeFormatter format =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime then = now.minusDays(amount);
+    return then.format(format);
+  }
+
+  private String getDateByDaysLater(int amount) {
+    DateTimeFormatter format =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime then = now.plusDays(amount);
+
+    return then.format(format);
+  }
+
 }

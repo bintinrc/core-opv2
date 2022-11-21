@@ -1,3 +1,4 @@
+@PickupAppointment @JobPage @Edit @Part3
 Feature: Edit Pickup Appointment Job Part 3
 
   @LaunchBrowser @ShouldAlwaysRun

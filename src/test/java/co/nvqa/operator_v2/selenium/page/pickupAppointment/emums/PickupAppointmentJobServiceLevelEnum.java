@@ -7,6 +7,10 @@ public enum PickupAppointmentJobServiceLevelEnum {
 
     private final String name;
 
+    public String getName() {
+        return name;
+    }
+
     PickupAppointmentJobServiceLevelEnum(String name) {
         this.name = name;
     }

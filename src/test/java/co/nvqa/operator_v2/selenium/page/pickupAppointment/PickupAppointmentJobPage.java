@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -74,7 +73,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-collapse-header")
   private Button showOrHideFilters;
 
-  @FindBy(css = "div.ant-collapse-content-inactive")
+  @FindBy(xpath = "//div[@class='ant-collapse-header' and @aria-expanded='false']")
   private PageElement invisibleFiltersBlock;
 
   @FindBy(xpath = "//span[text()='Clear Selection']/parent::button")
@@ -83,7 +82,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "#presetFilters")
   private PageElement presetFilters;
 
-  @FindBy(xpath = "#priority")
+  @FindBy(xpath = "//input[@id='priority']//parent::span//parent::div")
   private PageElement priorityButton;
 
   @FindBy(css = "#serviceType")
@@ -104,19 +103,15 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public final String ID_NEXT = "__next";
   public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
   public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shippers_list_0']";
-
   public final String VERIFY_ROUTE_FIELD_LOCATOR = "//input[@aria-activedescendant='route_list_0']";
-
   public final String CALENDAR_DAY_BY_TITLE_LOCATOR = "td[title='%s']";
   public final String DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR = "td.ant-picker-cell.ant-picker-cell-disabled[title='%s']";
   public final String VALUE = "value";
   public final String TITLE = "title";
   public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
-  public final String DROPDOWN_MENU_WITH_DATA_LOCATOR = "#shipper_list_0";
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
-  public final String SELECTION_ARIA_LABEL_LOCATOR = "div[aria-label='%s']";
-  public final String SELECTION_ITEMS = "//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
+  public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
@@ -163,10 +158,10 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   private void sendTextInFieldAndChooseData(PageElement field, String data, String verifyLocator) {
-    field.clear();
     field.sendKeys(data);
     waitUntilVisibilityOfElementLocated(verifyLocator);
     field.sendKeys(Keys.ENTER);
+    contentBox.click();
   }
 
   public PickupAppointmentJobPage selectDataRangeByTitle(String dayStart, String dayEnd) {
@@ -231,28 +226,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public List<String> getAllSelectedByJobName(String selectedItem) {
-    switch (selectedItem) {
-      case "serviceType":
-        return jobServiceTypeInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "serviceLevel":
-        return jobServiceLevelInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "status":
-        return jobStatusInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "zones":
-        return jobZonesInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "masterShipper":
-        return jobMasterShipperInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "shipper":
-        return shipperIDField.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      default:
-        return new ArrayList<>();
-    }
+   return webDriver.findElements(By.xpath(f(SELECTION_ITEMS, selectedItem)))
+        .stream().map(WebElement::getText).collect(Collectors.toList());
   }
 
   public void clickOnShowOrHideFilters() {
@@ -260,8 +235,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean verifyIsFiltersBlockInvisible() {
-    waitUntilVisibilityOfElementLocated(
-        invisibleFiltersBlock.getWebElement().getLocation().toString());
+    waitUntilVisibilityOfElementLocated(invisibleFiltersBlock.getWebElement());
     return invisibleFiltersBlock.isDisplayed();
   }
 
@@ -287,9 +261,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isFilterDropdownMenuShipperWithDataDisplayed() {
-    waitUntilInvisibilityOfElementLocated(DROPDOWN_MENU_WITH_DATA_LOCATOR);
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(DROPDOWN_MENU_WITH_DATA_LOCATOR)).isDisplayed();
+    waitUntilInvisibilityOfElementLocated(VERIFY_SHIPPER_FIELD_LOCATOR);
+    return webDriver.findElement(By.xpath(VERIFY_SHIPPER_FIELD_LOCATOR)).isDisplayed();
   }
 
   public void clickOnSelectStartDay() {
@@ -301,7 +274,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobPriorityFilterByNameDisplayed(String priorityName) {
-    return isJobSelectionFilterByNameWithAriaLabelDisplayed(priorityName);
+    return isJobSelectionFilterByNameWithLabelDisplayed(priorityName);
   }
 
   public void clickOnJobServiceType() {
@@ -312,16 +285,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     jobServiceLevelInput.click();
   }
 
-  public boolean isJobServiceLevelFilterByNameDisplayed(String serviceLevelName) {
-    return isJobSelectionFilterByNameWithAriaLabelDisplayed(serviceLevelName);
-  }
-
   public void clickOnJobStatus() {
     jobStatusInput.click();
-  }
-
-  public boolean isJobStatusLevelFilterByNameDisplayed(String statusName) {
-    return isJobSelectionFilterByNameWithLabelDisplayed(statusName);
   }
 
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
@@ -340,12 +305,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     contentBox.click();
   }
 
-  public void selectServiceLevel(String serviceLevel) {
-    clickOnJobSelectionFilterByNameWithAriaLabel(serviceLevel);
-  }
-
-  public void selectJobStatus(String status) {
-    clickOnJobSelectionFilterByNameWithLabel(status);
+  public void selectServiceLevel() {
+    jobServiceLevelInput.sendKeys(Keys.RETURN);
   }
 
   public void clickOnJobZone() {
@@ -361,13 +322,22 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public void inputOnJobShipper(String text) {
-    shipperIDField.clear();
+    clearOnJobShipper();
     shipperIDField.sendKeys(text);
+  }
+
+  public void clearOnJobShipper() {
+    shipperIDField.clear();
   }
 
   public void inputOnJobZone(String text) {
     jobZonesInput.clear();
     jobZonesInput.sendKeys(text);
+  }
+
+  public void inputOnJobMasterShipper(String text) {
+    jobMasterShipperInput.clear();
+    jobMasterShipperInput.sendKeys(text);
   }
 
   public void selectJobSelection(String selection) {
@@ -378,34 +348,15 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
-        .isDisplayed();
+      waitUntilVisibilityOfElementLocated(
+          webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+              .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+      return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+          .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
+          .isDisplayed();
   }
 
-  public boolean isJobSelectionFilterByNameWithAriaLabelDisplayed(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
-            .isDisplayed();
-  }
-
-  public void clickOnJobSelectionFilterByNameWithLabel(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
-    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
-            .click();
-  }
-
-  public void clickOnJobSelectionFilterByNameWithAriaLabel(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
-    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
-            .click();
+  public void selectJobStatus() {
+    jobStatusInput.sendKeys(Keys.RETURN);
   }
 }

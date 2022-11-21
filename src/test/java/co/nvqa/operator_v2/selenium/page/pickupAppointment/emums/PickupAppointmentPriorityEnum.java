@@ -7,6 +7,11 @@ public enum PickupAppointmentPriorityEnum {
     ALL("All");
 
     private final String name;
+
+    public String getName() {
+        return name;
+    }
+
     PickupAppointmentPriorityEnum(String name) {
         this.name = name;
     }
