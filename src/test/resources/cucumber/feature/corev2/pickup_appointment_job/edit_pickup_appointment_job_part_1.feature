@@ -6,40 +6,10 @@ Feature: Edit Pickup Appointment Job Part 1
 
   @AddJobsTag @DeletePickupJob
   Scenario: Edit pickup appointment job - add jobs tag
+    Given API Operator create new appointment pickup job using data below:
+      | createRouteRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
+
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create or edit job button on this top right corner of the page
-    And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
-
-    And Get Pickup Jobs from Calendar
-
-    Then Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar
-      | shipperId      | {normal-shipper-pickup-appointment-1-id}      |
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
-    And Operator verify Create button in displayed
-
-    When Operator select the data range
-      | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
-    And Operator select time slot from Select time range field
-      | timeRange | 09:00 - 12:00 |
-
-    And Operator click on Submit button
-
-    Then QA verify Job created modal displayed with following format
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
-      | startTime      | 09:00                                         |
-      | endTime        | 12:00                                         |
-      | startDay       | {gradle-next-1-day-yyyy-MM-dd}                |
-      | endDay         | {gradle-next-1-day-yyyy-MM-dd}                |
-    And QA verify the new created Pickup Jobs is shown in the Calendar by date "{gradle-next-1-day-yyyy-MM-dd}"
-
-    Then Operator load selection job by date range and shipper
-      | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
-    And Operator get Job Id from Pickup Jobs page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -75,42 +45,10 @@ Feature: Edit Pickup Appointment Job Part 1
 
   @RemoveJobsTag @DeletePickupJob
   Scenario: Edit pickup appointment job - remove jobs tag
+    Given API Operator create new appointment pickup job using data below:
+      | createRouteRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "tagIds":[287]} |
+
     When Operator loads Shipper Address Configuration page Pickup Appointment
-    And Operator click on Create or edit job button on this top right corner of the page
-    And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
-
-    And Get Pickup Jobs from Calendar
-
-    Then Operator verify all jobs for selected shipper and address on the selected month are displayed in the Calendar
-      | shipperId      | {normal-shipper-pickup-appointment-1-id}      |
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
-    And Operator verify Create button in displayed
-
-    When Operator select the data range
-      | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
-    And Operator select time slot from Select time range field
-      | timeRange | 09:00 - 12:00 |
-    When Operator select job tag = "PRIOR" in Job Tags Field
-
-    And Operator click on Submit button
-
-    Then QA verify Job created modal displayed with following format
-      | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
-      | startTime      | 09:00                                         |
-      | endTime        | 12:00                                         |
-      | startDay       | {gradle-next-1-day-yyyy-MM-dd}                |
-      | endDay         | {gradle-next-1-day-yyyy-MM-dd}                |
-      | tag            | PRIOR                                         |
-    And QA verify the new created Pickup Jobs is shown in the Calendar by date "{gradle-next-1-day-yyyy-MM-dd}"
-
-    Then Operator load selection job by date range and shipper
-      | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
-    And Operator get Job Id from Pickup Jobs page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
