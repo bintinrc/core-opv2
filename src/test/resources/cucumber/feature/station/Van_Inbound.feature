@@ -509,10 +509,9 @@ Feature: Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
     And Operator verifies unable to Van Inbound message is displayed
-    And Operator clicks the Parcel Sweep button
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | <OrigHubName>                   |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    And API Operator sweep parcel in the hub
+      | hubId | <OrigHubId>                     |
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click Parcels Yet to scan area on Van Inbound Page
