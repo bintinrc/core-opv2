@@ -17,10 +17,10 @@ import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.RouteInboundPage;
 import co.nvqa.operator_v2.selenium.page.RouteInboundPage.PhotoAuditDialog.WaypointsSection;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -737,6 +737,11 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.openC2CReturnPickupsDialog();
   }
 
+  @When("^Operator open Parcel Processed dialog on Route Inbound page$")
+  public void operatorOpenParcelProcessedDialogOnRouteInboundPage() {
+    routeInboundPage.openParcelProcessedDialog();
+  }
+
   @When("^Operator open Pending C2C / Return Pickups dialog on Route Inbound page$")
   public void operatorOpenPendingC2CReturnPickupsDialogOnRouteInboundPage() {
     routeInboundPage.openPendingC2CReturnPickupsDialog();
@@ -809,6 +814,17 @@ public class RouteInboundSteps extends AbstractSteps {
     routeInboundPage.reservationPickupsDialog.nonInboundedOrdersTab.click();
     pause1s();
     WaypointOrderInfo actualRecord = routeInboundPage.reservationPickupsDialog.nonInboundedOrdersTable
+        .readEntity(1);
+    expectedRecord.compareWithActual(actualRecord);
+  }
+
+  @Then("^Operator verify Inbounded Orders record using data below:$")
+  public void operatorVerifyInboundedOrdersRecord(Map<String, String> mapOfData) {
+    mapOfData = resolveKeyValues(mapOfData);
+    WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
+    routeInboundPage.reservationPickupsDialog.inpoundedOrdersTab.click();
+    pause1s();
+    WaypointOrderInfo actualRecord = routeInboundPage.reservationPickupsDialog.inboundedOrdersTable
         .readEntity(1);
     expectedRecord.compareWithActual(actualRecord);
   }

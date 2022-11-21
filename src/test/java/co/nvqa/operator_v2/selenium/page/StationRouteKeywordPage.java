@@ -30,11 +30,20 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
   @FindBy(css = "label[title='Add keywords']")
   public Button addKeywords;
 
+  @FindBy(css = "label[title='Transfer keywords']")
+  public Button transferKeywords;
+
   @FindBy(css = "label[title='Remove coverage']")
   public Button removeCoverage;
 
   @FindBy(css = "label[title='Remove keywords']")
   public Button removeKeywords;
+
+  @FindBy(css = "label[title='Change drivers']")
+  public Button changeDrivers;
+
+  @FindBy(css = "label[title='Edit area']")
+  public Button editArea;
 
   @FindBy(css = "button[data-pa-label='Yes, remove']")
   public Button yesRemove;
@@ -44,6 +53,15 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
   @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
   public RemoveKeywordsTab removeKeywordsTab;
+
+  @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
+  public TransferKeywordsTab transferKeywordsTab;
+
+  @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
+  public ChangeDriversTab changeDriversTab;
+
+  @FindBy(xpath = "(.//div[@data-testid='page-wrapper'])[2]")
+  public EditAreaTab editAreaTab;
 
   @FindBy(css = ".ant-modal")
   public CreateNewCoverageDialog createNewCoverageDialog;
@@ -56,6 +74,9 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
   @FindBy(css = ".ant-modal")
   public RemoveKeywordsDialog removeKeywordsDialog;
+
+  @FindBy(css = ".ant-modal")
+  public TransferKeywordsDialog transferKeywordsDialog;
 
   public AreasTable areasTable;
 
@@ -263,6 +284,31 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
   }
 
+  public static class TransferKeywordsTab extends PageElement {
+
+    public TransferKeywordsTab(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public TransferKeywordsTab(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+    }
+
+    @FindBy(css = "div[data-datakey='value']")
+    public List<PageElement> keywords;
+
+    @FindBy(css = "div[data-datakey='__checkbox__'] input")
+    public List<CheckBox> checkboxes;
+
+    @FindBy(xpath = ".//div[.='No Results Found']")
+    public PageElement noResultsFound;
+
+    @FindBy(css = "button[data-pa-action='Transfer keywords to coverage']")
+    public Button transfer;
+
+  }
+
   public static class RemoveKeywordsDialog extends AntModal {
 
     public RemoveKeywordsDialog(WebDriver webDriver, WebElement webElement) {
@@ -274,6 +320,103 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
 
     @FindBy(css = "button[data-pa-label='Yes, remove']")
     public Button yes;
+
+  }
+
+  public static class TransferKeywordsDialog extends AntModal {
+
+    public TransferKeywordsDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    @FindBy(css = "div[data-datakey='0']")
+    public List<PageElement> keywords;
+
+    @FindBy(css = "button[data-pa-label='Yes, transfer']")
+    public Button yes;
+
+    @FindBy(xpath = ".//div[.='No coverages found']")
+    public PageElement noCoveragesFound;
+
+    @FindBy(css = "div.ant-radio-group label")
+    public List<AreaBox> coverages;
+
+    public static class AreaBox extends PageElement {
+
+      public AreaBox(WebDriver webDriver, SearchContext searchContext,
+          WebElement webElement) {
+        super(webDriver, searchContext, webElement);
+      }
+
+      @FindBy(css = "input[type='radio']")
+      public Button radio;
+
+      @FindBy(xpath = ".//div[./b[.='Area']]")
+      public PageElement area;
+
+      @FindBy(xpath = ".//div[./b[.='Keywords']]")
+      public PageElement keywords;
+
+      @FindBy(xpath = ".//div[./b[.='Primary driver']]")
+      public PageElement primaryDriver;
+
+      @FindBy(xpath = ".//div[./b[.='Fallback driver']]")
+      public PageElement fallbackDriver;
+
+      public Coverage readEntry() {
+        Coverage coverage = new Coverage();
+        coverage.setArea(area.getText().replace("Area:", "").trim());
+        coverage.setKeywords(keywords.getText().replace("Keywords:", "").trim());
+        coverage.setPrimaryDriver(primaryDriver.getText().replace("Primary driver:", "").trim());
+        coverage.setFallbackDriver(fallbackDriver.getText().replace("Fallback driver:", "").trim());
+        return coverage;
+      }
+
+    }
+
+  }
+
+  public static class ChangeDriversTab extends PageElement {
+
+    public ChangeDriversTab(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public ChangeDriversTab(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+    }
+
+    @FindBy(xpath = ".//div[./label[.='Primary driver']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 primaryDriver;
+
+    @FindBy(xpath = ".//div[./label[.='Fallback driver']]//div[contains(@class,'ant-select')]")
+    public AntSelect3 fallbackDriver;
+
+    @FindBy(css = "button[data-pa-label='Save']")
+    public Button save;
+
+  }
+
+  public static class EditAreaTab extends PageElement {
+
+    public EditAreaTab(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public EditAreaTab(WebDriver webDriver, SearchContext searchContext,
+        WebElement webElement) {
+      super(webDriver, searchContext, webElement);
+    }
+
+    @FindBy(xpath = ".//div[./div/label[.='Area']]//input")
+    public ForceClearTextBox area;
+
+    @FindBy(css = "textarea")
+    public ForceClearTextBox areaVariation;
+
+    @FindBy(css = "button[data-pa-label='Save']")
+    public Button save;
 
   }
 }
