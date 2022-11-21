@@ -291,7 +291,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   public void dragAndDrop(String fileName) {
     String Filepath =
-        System.getProperty("user.dir") + "\\src\\test\\resources\\csv\\firstMile\\" + fileName;
+        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     File file = new File(Filepath);
     WebElement upload = getWebDriver().findElement(
         By.xpath("//div[text()='Drag and drop CSV file here']"));

@@ -305,10 +305,10 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator drag and drop csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv"
     Then Operator verifies the success message is displayed on uploading the file : "1"
 
-  @Debug
+
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
     Given Operator loads Operator portal home page
     When Operator loads Shipper Address Configuration page
