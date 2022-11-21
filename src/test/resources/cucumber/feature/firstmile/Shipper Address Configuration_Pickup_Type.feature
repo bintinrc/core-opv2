@@ -177,7 +177,7 @@ Feature: Shipper Address Configuration
       | dataset_name             | search_field   | search_value                                     | column_datakey        |
       | Search by Address ID     | Address ID     | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id    |
       | Search by Pickup Address | Pickup Address | 15SenokoRd,Singapore, SG, 994289                 | pickup_address        |
-      | Search by Shipper ID     | Shipper ID     | {shipper-v4-id}                                  | shipper_id            |
+      | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id     |
       | Search by Pickup Type    | Pickup Type    | -                                                | formatted_pickup_type |
       | Search by Zone           | Zones          | -                                                | zones                 |
       | Search by Hub            | Hubs           | -                                                | hubs                  |
@@ -308,6 +308,7 @@ Feature: Shipper Address Configuration
     And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the file : "1"
 
+  @Debug
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
     Given Operator loads Operator portal home page
     When Operator loads Shipper Address Configuration page
@@ -319,7 +320,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator drag and drop csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx"
     Then Operator verifies upload error message is displayed for invalid formatted file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Address ID
