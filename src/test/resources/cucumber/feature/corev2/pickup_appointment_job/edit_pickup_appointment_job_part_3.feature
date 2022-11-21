@@ -7,7 +7,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @AddJobComment @DeletePickupJob
   Scenario: Edit pickup appointment job - add jobs comments (pickup instructions)
     Given API Operator create new appointment pickup job using data below:
-      | createRouteRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
 
     When Operator loads Shipper Address Configuration page Pickup Appointment
     And Operator click on Create or edit job button on this top right corner of the page
@@ -80,7 +80,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @RemoveJobComment @DeletePickupJob
   Scenario: Edit pickup appointment job - remove jobs comments (pickup instructions)
     Given API Operator create new appointment pickup job using data below:
-      | createRouteRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "tagIds":[287], "pickupInstructions":"pickup instructions"} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "tagIds":[287], "pickupInstructions":"pickup instructions"} |
 
     When Operator loads Shipper Address Configuration page Pickup Appointment
     And Operator click on Create or edit job button on this top right corner of the page
@@ -123,7 +123,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @CancelEditing @DeletePickupJob
   Scenario: Edit pickup appointment job - cancel editing
     Given API Operator create new appointment pickup job using data below:
-      | createRouteRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "pickupInstructions":"pickup instructions"} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "pickupInstructions":"pickup instructions"} |
 
     When Operator loads Shipper Address Configuration page Pickup Appointment
     And Operator click on Create or edit job button on this top right corner of the page
