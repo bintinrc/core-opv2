@@ -204,7 +204,7 @@ Feature: Shipper Address Configuration
       | Address id #881118 Not Found |
 
 
-  Scenario: Unable to Update Shipper Addresses with Invalid Input
+  Scenario: Unable to Update Addresses Lat Long with Invalid Input
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
