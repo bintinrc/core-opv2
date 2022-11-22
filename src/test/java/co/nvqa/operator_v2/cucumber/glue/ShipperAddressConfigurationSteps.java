@@ -262,10 +262,11 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator drag and drop csv file: {string}")
-  public void operatorDragAndDropCsvFile(String fileName) {
+  @And("Operator drag and drop csv file: {string} in {string} upload window")
+  public void operatorDragAndDropCsvFile(String fileName, String windowName) {
     fileName = resolveValue(fileName);
     shipperAddressConfigurationPage.dragAndDrop(fileName);
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
 
   }
