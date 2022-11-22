@@ -61,6 +61,7 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
+    When API Operator closes the shipment using created shipper id
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | <Country>                 |
@@ -180,6 +181,7 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
+    When API Operator closes the shipment using created shipper id
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | <Country>                 |
@@ -246,6 +248,7 @@ Feature: Van Inbound
       | country    | <Country>                       |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
       | actionType | ADD                             |
+    When API Operator closes the shipment using created shipper id
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | <Country>                 |
