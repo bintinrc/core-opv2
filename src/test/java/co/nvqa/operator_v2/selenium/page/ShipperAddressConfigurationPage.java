@@ -253,6 +253,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   public void validateConfigurePickupTypeUploadSuccessMessage(String hubName) {
     String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, hubName);
+    waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
     WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
     Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
         .isTrue();
