@@ -53,6 +53,9 @@ public class MAWBmanagementSteps extends AbstractSteps {
       case "Search by Vendor":
         mawbManagementgPage.verifySearchByVendorUI();
         break;
+      case "Search by Flight":
+        mawbManagementgPage.verifySearchByFlightUI();
+        break;
     }
   }
 
@@ -83,7 +86,9 @@ public class MAWBmanagementSteps extends AbstractSteps {
       case "Search by Vendor":
         mawbManagementgPage.searchByVendorButton.click();
         break;
-
+      case "Search by Flight":
+        mawbManagementgPage.searchByFlightbutton.click();
+        break;
       case "Reload":
         mawbManagementgPage.mawbtable.reloadButton.click();
         pause1s();
@@ -128,7 +133,13 @@ public class MAWBmanagementSteps extends AbstractSteps {
     Map<String, String> resolvedData = resolveKeyValues(data);
     pause3s();
     mawbManagementgPage.SearchByVendorInputData(resolvedData);
+  }
 
+  @Given("Operator searchs by flight following data below on MAWB Management page:")
+  public void operatorSearchsByFlight(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    pause3s();
+    mawbManagementgPage.SearchByFlightInputData(resolvedData);
   }
 
   @When("Operator removes text of {string} field on MAWB Management page")
