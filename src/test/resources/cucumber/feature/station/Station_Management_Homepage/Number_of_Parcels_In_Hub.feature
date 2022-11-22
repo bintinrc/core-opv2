@@ -372,9 +372,7 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And gets the count of the parcel by parcel size from the table: "<TableName>"
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator click Order Settings -> Edit Order Details on Edit Order page
-    And updates parcel size from "<LowerSize>" to "<UpperSize>" for the order
+    When API Operator update parcel size to "XXLARGE"
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed
@@ -403,9 +401,7 @@ Feature: Number of Parcels In Hub
     And Operator get the count from the tile: "<TileName>"
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And gets the count of the parcel by parcel size from the table: "<TableName>"
-    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    And Operator click Order Settings -> Edit Order Details on Edit Order page
-    And updates parcel size from "<UpperSize>" to "<LowerSize>" for the order
+    When API Operator update parcel size to "SMALL"
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the count in tile: "<TileName>" has remained un-changed

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @StationRouteKeyword @NewFeatures2
+@OperatorV2 @Route @NewFeatures @StationRouteKeyword @StationRoute
 Feature: Remove Keywords
 
   @LaunchBrowser @ShouldAlwaysRun

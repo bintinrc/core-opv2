@@ -41,9 +41,6 @@ public class SortTasksPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//button[contains(@class,'ant-btn')])[1]")
   public AntButton load;
 
-  @FindBy(xpath = "//button[.='Refresh table']")
-  public AntButton refreshTable;
-
   @FindBy(xpath = "(//a[contains(text(), 'Add/Remove Outputs')])[1]")
   public PageElement sideBar;
 

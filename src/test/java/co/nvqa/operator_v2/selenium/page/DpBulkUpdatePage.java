@@ -15,10 +15,10 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//iframe[contains(@src,'dp-bulk-update')]")
   private PageElement pageFrame;
 
-  @FindBy(xpath = "//div[contains(@class,'nv-table')]")
+  @FindBy(xpath = "//div[contains(@class,'BaseTable__table')]")
   private PageElement tableXpath;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-btn-text')]")
+  @FindBy(xpath = "//button[@data-testid='button_select_dp_ids']")
   public Button selectDpIdsButton;
 
   @FindBy(xpath = "//div[@class='ant-modal-content']")
@@ -27,13 +27,13 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//textarea[@class='ant-input']")
   public PageElement inputDpIdsTextArea;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-btn-primary')]")
+  @FindBy(xpath = "//button[@data-testid='button_load_selection']")
   public Button loadSelectionButton;
 
-  @FindBy(xpath = "//button[contains(@class,'ant-dropdown-trigger')]")
+  @FindBy(xpath = "//button[@data-testid='button_apply_actions']")
   public Button applyActionButton;
 
-  @FindBy(xpath = "//li[text()='Bulk Update']")
+  @FindBy(xpath = "//li[@data-testid='button_bulk_update']")
   public Button bulkUpdateButton;
 
   @FindBy(xpath = "(//input[@type='checkbox'])[1]/..")
@@ -60,31 +60,30 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='S']/following-sibling::input")
   public PageElement maxPickCapacityS;
 
-  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_collect']")
   public PageElement canCustomerCollectEnable;
-
-  @FindBy(xpath = "//span[text()='Customer Collect']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_cust_collect']")
   public PageElement canCustomerCollectDisable;
 
-  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_return']")
   public PageElement canCustomerReturnEnable;
 
-  @FindBy(xpath = "//span[text()='Customer Return']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_cust_return']")
   public PageElement canCustomerReturnDisable;
 
-  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_shipper_send']")
   public PageElement allowShipperSendEnable;
 
-  @FindBy(xpath = "//span[text()='Shipper Send']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_shipper_send']")
   public PageElement allowShipperSendDisable;
 
-  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Enable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_enable_packs_sold']")
   public PageElement packsSoldEnable;
 
-  @FindBy(xpath = "//span[text()='Packs Sold']/ancestor::div[contains(@class,'row')]//span[text()='Disable']/ancestor::label//input")
+  @FindBy(xpath = "//input[@data-testid='toggle_disable_packs_sold']")
   public PageElement packsSoldDisable;
 
-  @FindBy(xpath = "//div[contains(@class,'flex')]/button[contains(@class,'ant-btn-primary')]")
+  @FindBy(xpath = "//button[@data-testid='button_save']")
   public Button saveButton;
 
   @FindBy(xpath = "//span[text()='Download CSV']/parent::button")

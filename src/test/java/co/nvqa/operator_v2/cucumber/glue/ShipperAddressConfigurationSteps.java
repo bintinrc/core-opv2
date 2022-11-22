@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
@@ -94,6 +95,13 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+
+  @And("Operator selects  following picktypes in the dropdown:")
+  public void operatorSelectsFollowingPicktypesInTheDropdown(List<String> pickType) {
+    shipperAddressConfigurationPage.selectPickupType(pickType);
+
+  }
+
   @And("Operator clicks on the load selection button")
   public void operatorClicksOnTheLoadSelectionButton() {
     shipperAddressConfigurationPage.clickLoadSelection();
@@ -133,6 +141,18 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   }
 
+  @And("Operator clicks on the edit pickup button")
+  public void operatorClicksOnTheEditPickupButton() {
+    shipperAddressConfigurationPage.clickEditPickupTypeButton();
+    takesScreenshot();
+  }
+
+  @And("Operator selects the picktype {string} in the dropdown")
+  public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
+    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValue(pickType);
+
+  }
+
   @And("Operator clicks on the Update Addresses Lat Long button")
   public void operatorClicksOnTheUpdateAddressesLatLongButton() {
     shipperAddressConfigurationPage.clickUpdateAddressesLatLongButton();
@@ -142,12 +162,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @And("Operator clicks on the Download CSV Template button")
   public void operatorClicksOnTheDownloadCSVTemplateButton() {
     shipperAddressConfigurationPage.clickDownloadCSVTemplateButton();
-    takesScreenshot();
-  }
-
-  @And("Operator clicks on the submit button")
-  public void operatorClicksOnTheSubmitButton() {
-    shipperAddressConfigurationPage.clickSubmitFileButton();
     takesScreenshot();
   }
 
@@ -169,6 +183,19 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies success message after updating the pickupType for Address {string}")
+  public void operatorVerifiessuccessMessageAfterUpdatingThePickupType(String addressId) {
+    addressId = resolveValue(addressId);
+    shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies upload error message is displayed for invalid formatted file")
+  public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFormattedFile() {
+    shipperAddressConfigurationPage.validateInvalidFormattedFileErrorMessageIsShown();
+    takesScreenshot();
+  }
+
   @And("Operator clicks on the Download Errors button")
   public void operatorClicksOnTheDownloadErrorsButton() {
     shipperAddressConfigurationPage.clickDownloadErrorsButton();
@@ -181,7 +208,9 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+
   @And("Operator clicks on the {string} button")
+  @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
     retryIfExpectedExceptionOccurred(
         () -> shipperAddressConfigurationPage.clickButton(buttonText),
@@ -193,11 +222,13 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @Then("Operator verifies that the following texts are available on the downloaded file")
+  @Then("Operator verifies that the following texts are available on the downloaded file {string}")
   public void operator_verifies_that_the_following_texts_are_available_on_the_downloaded_file(
+      String filePattern,
       List<String> expected) {
+    expected = resolveValues(expected);
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
-        CSV_DOWNLOADED_FILENAME_PATTERN);
+        filePattern);
     expected.forEach((expectedText) -> {
       shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
           expectedText, true);
@@ -222,24 +253,21 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   }
 
-  @And("Operator uploads csv file: {string} by browsing files")
-  public void operatorUploadsCsvFile(String fileName) {
+  @And("Operator uploads csv file: {string} by browsing files in {string} upload window")
+  public void operatorUploadsCsvFile(String fileName, String windowName) {
     fileName = resolveValue(fileName);
     String Filepath =
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     shipperAddressConfigurationPage.fileUpload.sendKeys(Filepath);
-    shipperAddressConfigurationPage.clickSubmitFileButton();
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
   }
 
-  @And("Operator drag and drop csv file: {string}")
-  public void operatorDragAndDropCsvFile(String fileName) {
+  @And("Operator drag and drop csv file: {string} in {string} upload window")
+  public void operatorDragAndDropCsvFile(String fileName, String windowName) {
     fileName = resolveValue(fileName);
-    String Filepath =
-        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
-    File file = new File(Filepath);
-    shipperAddressConfigurationPage.dragAndDrop(file,
-        shipperAddressConfigurationPage.fileUpload.getWebElement());
+    shipperAddressConfigurationPage.dragAndDrop(fileName);
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
 
   }
@@ -262,6 +290,14 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operatorVerifiesPageUrlEndsWith(String expectedTest) {
     shipperAddressConfigurationPage.VerificationOfURL(expectedTest);
   }
+
+  @Then("Operator verifies the success message is displayed on uploading the file : {string}")
+  public void Operator_verifies_the_success_message_is_displayed_on_uploading_the_ile(
+      String hubName) {
+    shipperAddressConfigurationPage.validateConfigurePickupTypeUploadSuccessMessage(hubName);
+    takesScreenshot();
+  }
+
 }
 
 

@@ -219,6 +219,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//label[text()='Insured Value']/following-sibling::p")
   public PageElement insuredValue;
 
+  @FindBy(xpath = "//label[text()='Billing Weight']/following-sibling::p")
+  public PageElement billingWeight;
+
+  @FindBy(xpath = "//label[text()='Billing Size']/following-sibling::p")
+  public PageElement billingSize;
+
+  @FindBy(xpath = "//label[text()='Source']/following-sibling::p")
+  public PageElement source;
+
   @FindBy(css = "md-dialog")
   public DpDropOffSettingDialog dpDropOffSettingDialog;
 

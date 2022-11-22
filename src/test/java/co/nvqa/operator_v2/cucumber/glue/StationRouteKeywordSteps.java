@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.Coverage;
+import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.TransferKeywordsDialog.AreaBox;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
 import java.util.List;
@@ -225,6 +226,65 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator transfer keywords on Station Route Keyword page:")
+  public void transferKeywords(List<String> keywords) {
+    List<String> finalKeywords = resolveValues(keywords);
+    page.inFrame(() -> {
+      page.transferKeywords.click();
+      int count = page.transferKeywordsTab.keywords.size();
+      for (int i = 0; i < count; i++) {
+        if (finalKeywords.contains(page.transferKeywordsTab.keywords.get(i).getText())) {
+          page.transferKeywordsTab.checkboxes.get(i).check();
+        }
+      }
+      page.transferKeywordsTab.transfer.click();
+    });
+  }
+
+  @When("Operator change drivers on Station Route Keyword page:")
+  public void changeDrivers(Map<String, String> data) {
+    Coverage coverage = new Coverage(resolveKeyValues(data));
+    page.inFrame(() -> {
+      page.changeDrivers.click();
+      if (StringUtils.isNotBlank(coverage.getPrimaryDriver())) {
+        page.changeDriversTab.primaryDriver.selectValue(coverage.getPrimaryDriver());
+      }
+      if (StringUtils.isNotBlank(coverage.getFallbackDriver())) {
+        page.changeDriversTab.fallbackDriver.selectValue(coverage.getFallbackDriver());
+      }
+      page.changeDriversTab.save.click();
+    });
+  }
+
+  @When("Operator edit area on Station Route Keyword page:")
+  public void editArea(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.editArea.click();
+      if (StringUtils.isNotBlank(finalData.get("area"))) {
+        page.editAreaTab.area.setValue(finalData.get("area"));
+        putInList(KEY_LIST_OF_CREATED_AREAS, finalData.get("area"));
+      }
+      if (StringUtils.isNotBlank(finalData.get("areaVariations"))) {
+        page.editAreaTab.areaVariation.setValue(finalData.get("areaVariations").replace(",", "\n"));
+      }
+      page.editAreaTab.save.click();
+    });
+  }
+
+  @When("Operator verify there are no keywords to transfer on Station Route Keyword page")
+  public void verifyNoKeywordsToTransfer() {
+    page.inFrame(() -> {
+      page.transferKeywords.click();
+      Assertions.assertThat(page.transferKeywordsTab.noResultsFound.isDisplayed())
+          .withFailMessage("'No Results Found' message is not displayed")
+          .isTrue();
+      Assertions.assertThat(page.transferKeywordsTab.keywords)
+          .withFailMessage("Unexpected keywords are displayed")
+          .isEmpty();
+    });
+  }
+
   @When("Operator remove keywords on Station Route Keyword page:")
   public void deleteKeywords(List<String> keywords) {
     List<String> finalKeywords = resolveValues(keywords);
@@ -261,6 +321,77 @@ public class StationRouteKeywordSteps extends AbstractSteps {
               page.removeKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
                   Collectors.toList()))
           .as("List of keywords to remove")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
+    });
+  }
+
+  @When("Operator verify coverages on Transfer keywords dialog:")
+  public void verifyCoveragesOnRemoveKeywordsDialog(List<Map<String, String>> data) {
+    List<Map<String, String>> finalData = resolveListOfMaps(data);
+    page.inFrame(() -> {
+      page.transferKeywordsDialog.waitUntilVisible();
+      List<Coverage> actual = page.transferKeywordsDialog.coverages.stream()
+          .map(AreaBox::readEntry)
+          .collect(Collectors.toList());
+      finalData.forEach(row -> {
+        Coverage expected = new Coverage(row);
+        Assertions.assertThat(actual)
+            .withFailMessage(
+                "Expected coverage is not displayed: " + expected + "\n" + "Actual: " + actual)
+            .anyMatch(expected::matchedTo);
+      });
+    });
+  }
+
+  @When("Operator verify no coverages displayed on Transfer keywords dialog")
+  public void verifyNoCoveragesOnRemoveKeywordsDialog() {
+    page.inFrame(() -> {
+      page.transferKeywordsDialog.waitUntilVisible();
+      Assertions.assertThat(page.transferKeywordsDialog.noCoveragesFound.isDisplayed())
+          .withFailMessage("'No coverages found' message is not displayed")
+          .isTrue();
+      Assertions.assertThat(page.transferKeywordsDialog.coverages)
+          .withFailMessage("Unexpected coverages are displayed")
+          .isEmpty();
+    });
+  }
+
+  @When("Operator select coverage on Transfer keywords dialog:")
+  public void selectCoverageOnRemoveKeywordsDialog(Map<String, String> data) {
+    Coverage coverage = new Coverage(resolveKeyValues(data));
+    page.inFrame(() -> {
+      page.transferKeywordsDialog.waitUntilVisible();
+      page.transferKeywordsDialog.coverages.stream()
+          .filter(c -> coverage.matchedTo(c.readEntry()))
+          .findFirst()
+          .orElseThrow(
+              () -> new AssertionFailure("Expected coverage is not displayed: " + coverage))
+          .radio.jsClick();
+    });
+  }
+
+  @When("Operator click 'Yes, transfer' button on Transfer keywords dialog")
+  public void clickYesOnRemoveKeywordsDialog() {
+    page.inFrame(() -> page.transferKeywordsDialog.yes.click());
+  }
+
+  @When("Operator verify 'Yes, transfer' button is disabled on Transfer keywords dialog")
+  public void verifyYesIsDisabledOnRemoveKeywordsDialog() {
+    page.inFrame(() ->
+        Assertions.assertThat(page.transferKeywordsDialog.yes.isEnabled())
+            .withFailMessage("''Yes, transfer' button' is not disabled")
+            .isFalse()
+    );
+  }
+
+  @When("Operator verify keywords on Transfer keywords dialog:")
+  public void verifyTransferKeywordsDialog(List<String> keywords) {
+    page.inFrame(() -> {
+      page.transferKeywordsDialog.waitUntilVisible();
+      Assertions.assertThat(
+              page.transferKeywordsDialog.keywords.stream().map(PageElement::getText).collect(
+                  Collectors.toList()))
+          .as("List of keywords to transfer")
           .containsExactlyInAnyOrderElementsOf(resolveValues(keywords));
     });
   }

@@ -57,6 +57,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   private  static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
   private static final String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
+  public static final String ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH = "//div/h4[contains(text(),'Add New Weight & Dimension')]";
 
   @FindBy(id = "search-by-sid_searchIds")
   public PageElement sidsTextArea;
@@ -665,6 +666,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     @FindBy(id = "master-awb")
     public TextBox mawb;
 
+    @FindBy(xpath = "//div/a/span[contains(text(),'Shipment Weight & Dimension page')]")
+    public Button mawbButtonLink;
+
     @FindBy(css = "[data-testid='confirm-edit-shipment-button']")
     public Button saveChanges;
 
@@ -914,5 +918,12 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     pause1s();
     click(ADD_FILTER_XPATH);
 
+  }
+
+  public void clickMAWBLinkButtonOnEditShipment() {
+      editShipmentDialog.mawbButtonLink.click();
+      switchToNewWindow();
+      this.switchTo();
+      waitUntilVisibilityOfElementLocated(ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH,5);
   }
 }

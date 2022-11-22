@@ -49,7 +49,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public UploadCsvDialog uploadCsvDialog;
 
-  @FindBy(css = "div.title md-menu")
+  @FindBy(xpath = "(//div[contains(@class,'title')]//md-menu)[2]")
   public MdMenu actionsMenu;
 
   @FindBy(css = "div.route-date")

@@ -242,6 +242,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//td[contains(@class,'action')]//i)[1]")
   public Button tripDetailButton;
 
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
+
   public static String actualToastMessageContent = "";
 
   public TripManagementPage(WebDriver webDriver) {
@@ -1819,4 +1822,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
   }
 
+  public void verifyTripMessageSuccessful(String expectedMessage){
+    antNotificationMessage.waitUntilVisible();
+    String actualMessage = getAntTopTextV2();
+    Assertions.assertThat(actualMessage).as("Trip Message is shown successfuly").isEqualTo(expectedMessage);
+  }
 }
