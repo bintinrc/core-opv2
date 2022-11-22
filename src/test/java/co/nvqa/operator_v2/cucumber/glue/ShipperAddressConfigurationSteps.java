@@ -141,6 +141,18 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   }
 
+  @And("Operator clicks on the edit pickup button")
+  public void operatorClicksOnTheEditPickupButton() {
+    shipperAddressConfigurationPage.clickEditPickupTypeButton();
+    takesScreenshot();
+  }
+
+  @And("Operator selects the picktype {string} in the dropdown")
+  public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
+    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValue(pickType);
+
+  }
+
   @And("Operator clicks on the Update Addresses Lat Long button")
   public void operatorClicksOnTheUpdateAddressesLatLongButton() {
     shipperAddressConfigurationPage.clickUpdateAddressesLatLongButton();
@@ -167,6 +179,13 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @Then("Operator verifies upload error message is displayed for invalid file")
   public void operatorVerifiesUploadErrorMessageIsDisplayedForInvalidFile() {
+    shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies success message after updating the pickupType for Address {string}")
+  public void operatorVerifiessuccessMessageAfterUpdatingThePickupType(String addressId) {
+    addressId = resolveValue(addressId);
     shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
     takesScreenshot();
   }
@@ -244,14 +263,11 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @And("Operator drag and drop csv file: {string}")
-  public void operatorDragAndDropCsvFile(String fileName) {
+  @And("Operator drag and drop csv file: {string} in {string} upload window")
+  public void operatorDragAndDropCsvFile(String fileName, String windowName) {
     fileName = resolveValue(fileName);
-    String Filepath =
-        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
-    File file = new File(Filepath);
-    shipperAddressConfigurationPage.dragAndDrop(file,
-        shipperAddressConfigurationPage.fileUpload.getWebElement());
+    shipperAddressConfigurationPage.dragAndDrop(fileName);
+    shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
 
   }

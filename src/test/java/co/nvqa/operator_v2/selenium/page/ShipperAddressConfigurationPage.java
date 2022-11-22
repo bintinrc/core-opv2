@@ -8,9 +8,9 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Date;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -31,6 +31,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
+  public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
   public static final String BUTTON = "//span[text()='%s']/parent::button";
   public static final String CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s addresses pick up has been updated!']";
   public static final String FILENAME_IN_UPLOAD_WINDOW = "//span[text()='%s']";
@@ -106,6 +107,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//*[@class='ant-select-clear']")
   public PageElement clearDropdown;
+
+  @FindBy(xpath = "//button[@data-pa-label='Edit Pickup Type']")
+  public PageElement editPickUpTypeButton;
+
+  @FindBy(xpath = "//div[contains(text(),'Pickup Type')]/ancestor::div[contains(@class,'ant')]//div[@class='ant-select-selector']")
+  public AntSelect2 pickupTypeInEditWindow;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -235,8 +242,18 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
+  public void validateUploadSuccessMessageAfterPickUpUpdate(String addressId) {
+    pause1s();
+    String errorXpath = f(PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE, addressId);
+    WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    Assertions.assertThat(successMessage.isDisplayed())
+        .as("Validation for Pick Type update Success message")
+        .isTrue();
+  }
+
   public void validateConfigurePickupTypeUploadSuccessMessage(String hubName) {
     String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, hubName);
+    waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
     WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
     Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
         .isTrue();
@@ -273,6 +290,15 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     downloadErrorsButton.click();
   }
 
+  public void dragAndDrop(String fileName) {
+    String Filepath =
+        System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
+    File file = new File(Filepath);
+    WebElement upload = getWebDriver().findElement(
+        By.xpath("//div[text()='Drag and drop CSV file here']"));
+    dragAndDrop(file, upload);
+  }
+
   public void closeModal() {
     waitUntilVisibilityOfElementLocated(closePopModal.getWebElement());
     closePopModal.click();
@@ -289,6 +315,11 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     } catch (Exception e) {
       throw new NvTestRuntimeException("Could not update the CSV file " + filepath, e);
     }
+  }
+
+  public void clickEditPickupTypeButton() {
+    waitUntilVisibilityOfElementLocated(editPickUpTypeButton.getWebElement());
+    editPickUpTypeButton.click();
   }
 
 }
