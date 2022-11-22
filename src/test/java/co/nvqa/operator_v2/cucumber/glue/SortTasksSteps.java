@@ -96,13 +96,6 @@ public class SortTasksSteps extends AbstractSteps {
     }
     getWebDriver().switchTo().window(windowHandle);
   }
-
-  @When("Operator refresh table on Sort Tasks page")
-  public void operatorRefreshTable() {
-    sortTasksPage.refreshTable.clickAndWaitUntilDone();
-    sortTasksPage.waitUntilInvisibilityOfNotification("Refresh table successfully", true);
-  }
-
   @When("Operator refresh diagram on View Sort Structure page")
   public void operatorRefreshDiagram() {
     viewSortStructurePage.refreshDiagram.clickAndWaitUntilDone();
@@ -318,7 +311,6 @@ public class SortTasksSteps extends AbstractSteps {
 
     retryIfAssertionErrorOccurred(() -> {
       pause3s();
-      operatorRefreshTable();
       sortTasksPage.verifyOutput(sortName);
     }, "Cannot find the sort task node");
   }
@@ -330,7 +322,6 @@ public class SortTasksSteps extends AbstractSteps {
 
     retryIfAssertionErrorOccurred(() -> {
       pause3s();
-      operatorRefreshTable();
       sortTasksPage.verifyOutput(rtsZone);
       sortTasksPage.verifyNumberOutput("RTS");
     }, "Cannot find the sort task node");
@@ -342,7 +333,6 @@ public class SortTasksSteps extends AbstractSteps {
 
     retryIfAssertionErrorOccurred(() -> {
       pause3s();
-      operatorRefreshTable();
       sortTasksPage.verifyOutputDeleted(sortName);
     }, "Can find the sort task node");
   }

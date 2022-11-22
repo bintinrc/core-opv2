@@ -132,6 +132,16 @@ public class DpBulkUpdateSteps extends AbstractSteps {
         }
         break;
 
+      case DUPLICATE_VALID:
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_1_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID);
+        dpIds.add(TestConstants.SAME_PARTNER_BULK_UPDATE_OPV2_DP_3_ID);
+        for (Long dpId : dpIds) {
+          dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + "\n");
+        }
+        break;
+
       case DP_DELETE_LATER:
         dp = get(KEY_DISTRIBUTION_POINT);
         dpIds.add(dp.getId());
@@ -186,6 +196,12 @@ public class DpBulkUpdateSteps extends AbstractSteps {
     pause1s();
     getWebDriver().switchTo().parentFrame();
     dpBulkUpdatePage.waitUntilVisibilityOfToast("Network Request Error");
+  }
+
+  @Then("Operator verifies error toast with {string} message is shown")
+  public void operatorVerifiesErrorToastWithInvalidErrorMessageIsShown(String message) {
+    pause1s();
+    dpBulkUpdatePage.waitUntilNoticeMessage(message);
   }
 
   @When("Operator clicks on Bulk Update on Apply Action Drop Down")

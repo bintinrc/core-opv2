@@ -14,6 +14,7 @@ public enum DpBulkUpdateType {
   SPECIAL_CHAR("special_char"),
   BLANK("blank"),
   SAME_PARTNER_3_DPS("same_partner_3_dps"),
+  DUPLICATE_VALID("duplicate_valid"),
   DP_DELETE_LATER("dp_delete_later"),
   DP_DELETE_LATER_1("dp_delete_later_1"),
   PICK_DP("pick_dp");

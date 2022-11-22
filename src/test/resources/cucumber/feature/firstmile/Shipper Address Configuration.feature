@@ -204,7 +204,7 @@ Feature: Shipper Address Configuration
       | Address id #881118 Not Found |
 
 
-  Scenario: Unable to Update Shipper Addresses with Invalid Input
+  Scenario: Unable to Update Addresses Lat Long with Invalid Input
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
@@ -280,7 +280,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the "Update Addresses Lat Long" button
-    And Operator uploads csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" by browsing files in "Update Addresses Lat Long" upload window
+    And Operator drag and drop csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
 
