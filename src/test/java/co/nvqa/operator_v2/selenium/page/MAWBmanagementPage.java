@@ -61,6 +61,8 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     private static final String searchByVendor_mawbOriginAirportId = "search-by-vendor-form_mawbOriginAirport";
     private static final String searchByVendor_mawbDestinationAirportId = "search-by-vendor-form_mawbDestinationAirport";
     private static final String searchByVendor_flightTripDepartureDateId = "search-by-vendor-form_flightTripDepartureDate";
+    private static final String searchByFlight_flightNumberId = "search-by-flight-form_flightNumber";
+    private static final String searchByFlight_flightTripDepartureDateId = "search-by-flight-form_flightTripDepartureDate";
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 
@@ -82,11 +84,19 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
     @FindBy(id = searchByVendor_flightTripDepartureDateId)
     public TextBox flightTripDepartureDateTextBox;
 
+    @FindBy(id = searchByFlight_flightNumberId)
+    public TextBox flightNumberTextBox;
+
+    @FindBy(id = searchByFlight_flightTripDepartureDateId)
+    public TextBox searchByFlight_flightTripDepartureDateTextBox;
     @FindBy(css = "[data-testid = 'mawb-counter']")
     public PageElement mawbCounter;
 
     @FindBy(css = "[data-testid = 'search-by-mawb-button']")
     public Button searchByMAWBbutton;
+
+    @FindBy(css = "[data-testid = 'search-by-flight-button']")
+    public Button searchByFlightbutton;
 
     @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-confirm-content']")
     public PageElement ErrorMessage;
@@ -137,6 +147,15 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         Assertions.assertThat(mawbDestinationAirportTextBox.isDisplayed()).as("MAWB Destination Airport dropdown is display").isTrue();
         Assertions.assertThat(flightTripDepartureDateTextBox.isDisplayed()).as("Flight Trip Departure Date dropdown is display").isTrue();
         Assertions.assertThat(searchByVendorButton.getAttribute("disabled")).as("Search by Vendor button is disable").isEqualTo("true");
+    }
+
+    public void verifySearchByFlightUI(){
+        waitUntilVisibilityOfElementLocated(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by Flight"));
+        Assertions.assertThat(findElementByXpath(f(MAWB_MANAGEMENR_SEARCH_HEADER_XPATH,"Search by Flight")).isDisplayed())
+            .as("Search by Flight Header is display").isTrue();
+        Assertions.assertThat(flightNumberTextBox.isDisplayed()).as("Flight number is display").isTrue();
+        Assertions.assertThat(searchByFlight_flightTripDepartureDateTextBox.isDisplayed()).as("Flight Trip Departure Date dropdown is display").isTrue();
+        Assertions.assertThat(searchByFlightbutton.getAttribute("disabled")).as("Search by Flight button is disable").isEqualTo("true");
     }
 
     public void addShipmentToSearchBox(List<String> listMAWBs){
@@ -288,8 +307,21 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
         }
     }
 
+    public void SearchByFlightInputData(Map<String,String> resolvedMapOfData){
+
+        if(resolvedMapOfData.get("flight_no") !=null){
+            flightNumberTextBox.click();
+            sendKeysAndEnterById(searchByFlight_flightNumberId, resolvedMapOfData.get("flight_no"));
+        }
+        if(resolvedMapOfData.get("flightTripDepartureDate") !=null){
+            searchByFlight_flightTripDepartureDateTextBox.click();
+            sendKeysAndEnterById(searchByFlight_flightTripDepartureDateId, resolvedMapOfData.get("flightTripDepartureDate"));
+        }
+    }
+
     public void clearTextonField(String fieldName){
         String MAWB_MANAGEMENT_DEPARTURE_DATE_CLEAR_XPATH= "//input[@id='search-by-vendor-form_flightTripDepartureDate']/following-sibling::span[contains(@class ,'clear')]";
+        String SEARCH_BY_FLIGHT_DEPARTURE_DATE_CLEAR_XPATH= "//input[@id='search-by-flight-form_flightTripDepartureDate']/following-sibling::span[contains(@class ,'clear')]";
 
         switch (fieldName){
             case "MAWB Vendor":
@@ -304,6 +336,12 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
             case "Flight Trip Departure Date":
                 findElementByXpath(MAWB_MANAGEMENT_DEPARTURE_DATE_CLEAR_XPATH).click();
                 break;
+            case "Flight Number":
+                flightNumberTextBox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));;
+                break;
+            case "Search by Flight_Flight Trip Departure Date":
+                findElementByXpath(SEARCH_BY_FLIGHT_DEPARTURE_DATE_CLEAR_XPATH).click();
+
         }
     }
 
@@ -322,6 +360,13 @@ public class MAWBmanagementPage extends SimpleReactPage<MAWBmanagementPage>{
                 break;
             case "Flight Trip Departure Date":
                 actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByVendor_flightTripDepartureDateId)).getText();
+                break;
+            case "Flight Number":
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByFlight_flightNumberId)).getText();
+                break;
+            case "Search by Flight_Flight Trip Departure Date":
+                expectedMessage = "Please enter Flight Trip Departure Date";
+                actualMessage = findElementByXpath(f(MAWB_MANAGEMENR_PAGE_ERRORS_XPATH,searchByFlight_flightTripDepartureDateId)).getText();
                 break;
         }
         Assertions.assertThat(actualMessage).as("Mandatory require error message is the same").isEqualTo(expectedMessage);
