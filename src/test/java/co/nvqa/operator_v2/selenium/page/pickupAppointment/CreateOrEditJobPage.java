@@ -192,6 +192,10 @@ public class CreateOrEditJobPage extends PageElement {
         webDriver.findElement(By.cssSelector(f(EDIT_BUTTON_IN_CALENDAR_LOCATOR, jobId))).click();
     }
 
+    public void clickOnDeleteButtonByJobId(String jobId) {
+        webDriver.findElement(By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId))).click();
+    }
+
     public PageElement getReadyByField() {
         return readyByField;
     }

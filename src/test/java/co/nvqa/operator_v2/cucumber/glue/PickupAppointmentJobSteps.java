@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.ItemsDeleteJobModalWindow;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentPriorityEnum;
 import io.cucumber.guice.ScenarioScoped;
@@ -283,6 +284,12 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.getCreateOrEditJobPage().clickOnEditButtonByJobId(listJobIds.get(0));
   }
 
+  @When("Operator click on Delete button")
+  public void clickOnDeleteButton() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    pickupAppointmentJobPage.getCreateOrEditJobPage().clickOnDeleteButtonByJobId(listJobIds.get(0));
+  }
+
   // For correct assertions the start and end day have to be in format dd/MM/yyyy
   @Then("Operator verify the dialog displayed the editable data fields")
   public void verifyTheDialogDisplayedTheEditableDataFields(Map<String, String> dataTable) {
@@ -359,11 +366,14 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifySuccessfulMessageIsDisplayedWithDataAndTime(Map<String, String> dataTable) {
     final String startDay = dataTable.get("startDay");
     final String timeRange = dataTable.get("timeRange");
-
+    String notificationMessage = dataTable.get("notificationMessage");
+    if (notificationMessage == null) {
+      notificationMessage = "Job updated";
+    }
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationMessage())
         .as("Notification message is displayed")
-        .isEqualTo("Job updated");
+        .isEqualTo(notificationMessage);
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationDescription())
         .as("Notification message is contains " + startDay)
@@ -665,6 +675,49 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .as("Dropdown Menu No Data is displayed")
         .isTrue();
     pickupAppointmentJobPage.clearOnJobShipper();
+  }
+
+  @Then("QA verify Delete dialog displays the jobs information")
+  public void verifyDeleteJobModalWindow(Map<String, String> dataTable) {
+    final String shipperName = dataTable.get("shipperName");
+    final String shipperAddress = dataTable.get("shipperAddress");
+    final String readyBy = dataTable.get("readyBy");
+    final String latestBy = dataTable.get("latestBy");
+    final String priority = dataTable.get("priority");
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(
+                    ItemsDeleteJobModalWindow.SHIPPER_NAME.getName()))
+        .as("Shipper name is correct")
+        .isEqualTo(shipperName);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(
+                    ItemsDeleteJobModalWindow.SHIPPER_ADDRESS.getName()))
+        .as("Shipper address is correct")
+        .contains(shipperAddress);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.READY_BY.getName()))
+        .as("Ready by is correct")
+        .isEqualTo(readyBy);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.LATEST_BY.getName()))
+        .as("Latest by is correct")
+        .isEqualTo(latestBy);
+    if (priority != null) {
+      Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+              .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.PRIORITY.getName()))
+          .as("Priority tags is correct")
+          .contains(priority);
+    }
+  }
+
+  @When("Operator click on Submit button on Delete Job modal window")
+  public void clickOnSubmitButtonOnDeleteJobModal() {
+    pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+        .clickOnSubmitButtonOnDeleteJobModal();
   }
 
   // This method can be removed once redirection to Shipper Address is added in operator V2 menu
