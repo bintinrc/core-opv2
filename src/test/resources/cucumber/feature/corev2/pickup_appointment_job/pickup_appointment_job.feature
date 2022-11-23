@@ -1,3 +1,4 @@
+@PickupAppointment @JobPage @Create
 Feature: Create Pickup Appointment Job
 
   @LaunchBrowser @ShouldAlwaysRun
