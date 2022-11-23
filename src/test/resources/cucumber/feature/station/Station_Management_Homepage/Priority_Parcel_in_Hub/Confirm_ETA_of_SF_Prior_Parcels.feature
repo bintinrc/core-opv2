@@ -30,8 +30,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -76,8 +75,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -124,7 +122,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -167,7 +165,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -209,7 +207,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -254,7 +252,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -294,7 +292,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -339,7 +337,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -378,8 +376,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get the count from the tile: "<TileName>"
     And Operator get sfld ticket count for the priority parcels
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -395,7 +392,6 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operators chooses the date:"{gradle-next-2-day-yyyy-MM-dd}" as station confirmed eta and proceed
     And Operators verifies that the toast message: "<ToastMessage>" has displayed
     And Operator verifies that the sfld ticket count has decreased by 1
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
     And DB Operator verifies that the following details are displaying in sfld_tickets table in station db:
       | status             | MANUAL_CONFIRMED                 |
       | confirmed_eta      | {gradle-next-2-day-yyyy-MM-dd}   |
@@ -428,8 +424,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get the count from the tile: "<TileName>"
     And Operator get sfld ticket count for the priority parcels
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -445,7 +440,6 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator confirms the common eta as:"{gradle-next-1-day-yyyy-MM-dd}" and proceed
     And Operators verifies that the toast message: "Successfully confirmed <NoOfRecords> ETA(s)!" has displayed
     And Operator verifies that the sfld ticket count has decreased by <NoOfRecords>
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
     And DB Operator verifies that the following details are displaying in sfld_tickets table in station db:
       | status             | MANUAL_CONFIRMED                 |
       | confirmed_eta      | {gradle-next-1-day-yyyy-MM-dd}   |
@@ -479,7 +473,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get the count from the tile: "<TileName>"
     And Operator get sfld ticket count for the priority parcels
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -533,7 +527,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 2
     And Operator verifies that the sfld ticket count has increased by 2
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator verifies that the modal: "<ModalName>" is displayed
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
@@ -574,8 +568,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get sfld ticket count for the priority parcels
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -628,8 +621,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get sfld ticket count for the priority parcels
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -684,8 +676,7 @@ Feature: Confirm ETA of SF Prior Parcels
     And Operator selects the hub as "<HubName>" and proceed
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator get sfld ticket count for the priority parcels
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
