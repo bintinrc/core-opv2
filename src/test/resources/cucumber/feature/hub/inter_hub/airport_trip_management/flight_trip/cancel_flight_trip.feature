@@ -112,7 +112,7 @@ Feature: Airport Trip Management - Cancel Flight Trip
       |Cancel         |
 
   @DeleteCreatedAirports @DeleteAirportsViaAPI
-  Scenario: Cancel Pending Flight Trip without MAWB
+  Scenario: Cancel Flight Trip with Other Status
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
       | system_id    | SG        |
