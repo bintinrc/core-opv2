@@ -21,8 +21,9 @@ Feature: Edit Pickup Appointment Job Part 1
     When Operator click on Edit button
 
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
-      | date  | {gradle-next-1-day-yyyy-MM-dd} |
-      | color | rgb(255, 255, 255)             |
+      | date   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status | ready-for-routing              |
+      | color  | rgb(255, 255, 255)             |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |
@@ -60,8 +61,9 @@ Feature: Edit Pickup Appointment Job Part 1
     When Operator click on Edit button
 
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
-      | date  | {gradle-next-1-day-yyyy-MM-dd} |
-      | color | rgb(255, 255, 255)             |
+      | date   | {gradle-next-1-day-yyyy-MM-dd} |
+      | status | ready-for-routing              |
+      | color  | rgb(255, 255, 255)             |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |

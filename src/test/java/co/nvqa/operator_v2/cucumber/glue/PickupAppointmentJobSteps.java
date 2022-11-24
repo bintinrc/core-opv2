@@ -269,6 +269,32 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .isTrue();
   }
 
+  @Then("QA verify there is no Delete button in that particular job tag")
+  public void verifyDeleteButtonIsNotDisplayed() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isDeleteButtonByJobIdDisplayed(listJobIds.get(0)))
+        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed")
+        .isFalse();
+  }
+
+  @Then("QA verify that particular job is removed from calendar on date {string} with status {string}")
+  public void verifyParticularJobIsRemoved(String date, String status) {
+    pickupAppointmentJobPage.getCreateOrEditJobPage().waitNotificationMessageInvisibility();
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isParticularJobDisplayedByDateAndStatus(date,status))
+        .as("Particular job is removed from calendar on date " + date  + " with status " + status)
+        .isFalse();
+  }
+
+  @Then("QA verify the jobs with status {string} displayed in the Calendar on the date {string} as well")
+  public void verifyJobWithStatusIsDisplayed(String status,String date) {
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isParticularJobDisplayedByDateAndStatus(date,status))
+        .as("Job in the calendar on date " + date  + " with status " + status + " displayed")
+        .isTrue();
+  }
+
   @Then("QA verify there is Edit button in that particular job tag")
   public void verifyEditButtonIsDisplayed() {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
@@ -276,6 +302,15 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
             .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
         .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
         .isTrue();
+  }
+
+  @Then("QA verify there is no Edit button in that particular job tag")
+  public void verifyEditButtonIsNotDisplayed() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
+        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
+        .isFalse();
   }
 
   @When("Operator click on Edit button")
@@ -409,10 +444,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("Operator verify the particular job tag in the Calendar changes from grey to black with white text")
   public void verifyThePickupJobInTheCalendarChangesFromGreyToBlack(Map<String, String> dataTable) {
     final String date = dataTable.get("date");
+    final String status = dataTable.get("status");
     final String color = dataTable.get("color");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .getColorAttributeInPickupJobFromCalendar(date))
+            .getColorAttributeInPickupJobFromCalendar(date,status))
         .as("Pickup job has correct color")
         .contains("color: " + color);
   }
