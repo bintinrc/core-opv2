@@ -1,4 +1,4 @@
-@PickupAppointment @JobPage @Delete @Part2  @CWF @ShouldAlwaysRun
+@PickupAppointment @JobPage @Delete @Part2
 Feature: Delete Pickup Appointment Job Part 2
 
   @LaunchBrowser @ShouldAlwaysRun
