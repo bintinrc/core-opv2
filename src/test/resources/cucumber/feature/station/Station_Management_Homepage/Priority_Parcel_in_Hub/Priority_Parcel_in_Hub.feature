@@ -405,7 +405,7 @@ Feature: Priority Parcel in Hub
     And Operator closes the modal: "<FSRModalName>" if it is displayed on the page
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator get sfld ticket count for the priority parcels
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     Then Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
       | Address               |
@@ -719,7 +719,7 @@ Feature: Priority Parcel in Hub
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<ModalName1>" if it is displayed on the page
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
@@ -1496,7 +1496,7 @@ Feature: Priority Parcel in Hub
     Then Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator closes the modal: "<ModalName1>" if it is displayed on the page
-    And Operator clicks the alarm button to view parcels with sfld tickets
+    And Operator clicks the arrow button to view parcels with sfld tickets
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID                     |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
