@@ -244,9 +244,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void validateUploadSuccessMessageAfterPickUpUpdate(String addressId) {
-    pause1s();
-    String errorXpath = f(PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE, addressId);
-    WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    String SuccessMessageXpath = f(PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE, addressId);
+    waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
+    WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
     Assertions.assertThat(successMessage.isDisplayed())
         .as("Validation for Pick Type update Success message")
         .isTrue();
