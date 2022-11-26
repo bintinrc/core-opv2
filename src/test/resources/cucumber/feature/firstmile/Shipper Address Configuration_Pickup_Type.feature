@@ -454,7 +454,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
 
-  @Debug
+
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
@@ -479,7 +479,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
-  @Debug
+
   Scenario: Unable to Bulk Configure Some Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -515,7 +515,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
-  @Debug
+
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
     When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
