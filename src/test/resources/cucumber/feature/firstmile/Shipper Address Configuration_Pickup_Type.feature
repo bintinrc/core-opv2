@@ -385,6 +385,7 @@ Feature: Shipper Address Configuration
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_PickupType.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
+  @Debug
   Scenario: Success Bulk Configure Addresses Pickup Type
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
@@ -420,7 +421,8 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM-Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
 
-  Scenario: Success Bulk Configure Addresses Pickup Type
+  @Debug
+  Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
@@ -446,12 +448,13 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Success Bulk Configure Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload success message is displayed for success count "1"
     And Operator filter the column "Address ID " with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
 
+  @Debug
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
     Given Operator loads Operator portal home page
     When Operator loads Shipper Address Configuration page
@@ -477,6 +480,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
+  @Debug
   Scenario: Unable to Bulk Configure Some Addresses Pickup Type
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
@@ -512,6 +516,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
+  @Debug
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
     Given Operator loads Operator portal home page
     When Operator loads Shipper Address Configuration page
@@ -523,7 +528,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Unable to Bulk Configure Some Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
     And Operator clicks on the Download Errors button
     Then Operator verifies header names are available in the downloaded CSV file "Update Pickup Type Failure Reasons"
@@ -537,12 +542,11 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
-
+  @Debug
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     Given Operator loads Operator portal home page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
-      | noOfAddress                 | 2                                                                                                                                                                                                |
       | withLatLong                 | NO                                                                                                                                                                                               |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
@@ -557,16 +561,16 @@ Feature: Shipper Address Configuration
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
     And Operator clicks on the "Save Changes" button
-    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "<pickUpType>" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
-
+    Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
 
     Examples:
-      | dataset_name             | pickUpType   | search_field | search_value                                     | column_datakey | expectedZoneValue |
-      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | last mile zone    |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]  | zones          | first mile zone   |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]  | zones          | first mile zone   |
+      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
+      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | SORT-1            | SORT-SG-1-HUB    |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | -                 |                  |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | -                 |                  |
 
 
   @KillBrowser @ShouldAlwaysRun
