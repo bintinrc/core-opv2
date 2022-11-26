@@ -252,11 +252,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
-  public void validateConfigurePickupTypeUploadSuccessMessage(String hubName) {
-    String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, hubName);
+  public void validateConfigurePickupTypeUploadSuccessMessage(String count) {
+    String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, count);
     waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
     WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
-    Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
+    Assertions.assertThat(successMessage.isDisplayed())
+        .as("Validation for Pickup type Upload Success message")
         .isTrue();
   }
 

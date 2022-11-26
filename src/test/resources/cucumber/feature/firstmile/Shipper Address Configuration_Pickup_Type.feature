@@ -413,7 +413,7 @@ Feature: Shipper Address Configuration
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Success Bulk Configure Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
-    Then Operator verifies upload success message is displayed for success count "2"
+    Then Operator verifies the success message is displayed on uploading the pickup type file "2"
     And Operator filter the column "Address ID " with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM-dedicated" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
@@ -449,12 +449,12 @@ Feature: Shipper Address Configuration
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
-    Then Operator verifies upload success message is displayed for success count "1"
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
     And Operator filter the column "Address ID " with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
 
-
+  @Debug
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
