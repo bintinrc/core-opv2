@@ -448,7 +448,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload success message is displayed for success count "1"
     And Operator filter the column "Address ID " with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page

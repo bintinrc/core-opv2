@@ -149,7 +149,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator selects the picktype {string} in the dropdown")
   public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
-    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValue(pickType);
+    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValueWithoutSearch(pickType);
 
   }
 
@@ -186,7 +186,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator verifies success message after updating the pickupType for Address {string}")
   public void operatorVerifiessuccessMessageAfterUpdatingThePickupType(String addressId) {
     addressId = resolveValue(addressId);
-    shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    shipperAddressConfigurationPage.validateUploadSuccessMessageAfterPickUpUpdate(addressId);
     takesScreenshot();
   }
 

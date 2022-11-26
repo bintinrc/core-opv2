@@ -5,6 +5,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -112,7 +113,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public PageElement editPickUpTypeButton;
 
   @FindBy(xpath = "//div[contains(text(),'Pickup Type')]/ancestor::div[contains(@class,'ant')]//div[@class='ant-select-selector']")
-  public AntSelect2 pickupTypeInEditWindow;
+  public AntSelect3 pickupTypeInEditWindow;
 
 
   public void switchToShipperAddressConfigurationFrame() {
