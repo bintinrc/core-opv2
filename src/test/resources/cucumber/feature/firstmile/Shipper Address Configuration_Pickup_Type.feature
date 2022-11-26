@@ -387,7 +387,7 @@ Feature: Shipper Address Configuration
 
   @Debug
   Scenario: Success Bulk Configure Addresses Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -423,7 +423,7 @@ Feature: Shipper Address Configuration
 
   @Debug
   Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -454,9 +454,8 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
 
-  @Debug
+
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
-    Given Operator loads Operator portal home page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -482,7 +481,7 @@ Feature: Shipper Address Configuration
 
   @Debug
   Scenario: Unable to Bulk Configure Some Addresses Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -518,7 +517,7 @@ Feature: Shipper Address Configuration
 
   @Debug
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -544,9 +543,10 @@ Feature: Shipper Address Configuration
 
   @Debug
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 1                                                                                                                                                                                                |
       | withLatLong                 | NO                                                                                                                                                                                               |
       | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
@@ -567,10 +567,10 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
 
     Examples:
-      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
-      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | SORT-1            | SORT-SG-1-HUB    |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | -                 |                  |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG} | zones          | -                 |                  |
+      | dataset_name             | pickUpType   | search_field | search_value                                     | column_datakey | expectedZoneValue | expectedHubValue |
+      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | SORT-1            | SORT-SG-1-HUB    |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 |                  |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 |                  |
 
 
   @KillBrowser @ShouldAlwaysRun
