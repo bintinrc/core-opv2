@@ -27,8 +27,8 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
     Examples:
-      | search_field | search_value                                     | column_datakey        | pickupTypeSelect | pickupTypeAPI | pickupType |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | formatted_pickup_type | None assigned    |               | -          |
+      | search_field | search_value                                     | column_datakey        | pickupTypeSelect | pickupType |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | formatted_pickup_type | None assigned    | -          |
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Hybrid
@@ -282,7 +282,7 @@ Feature: Shipper Address Configuration
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
-    Then Operator verifies the success message is displayed on uploading the file : "1"
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 
   Scenario: Upload Addresses Pickup Type CSV by Drag and Drop
     Given Operator loads Operator portal home page
@@ -306,7 +306,7 @@ Feature: Shipper Address Configuration
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator drag and drop csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" in "Configure Address Pickup Type" upload window
-    Then Operator verifies the success message is displayed on uploading the file : "1"
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 
 
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
@@ -414,12 +414,12 @@ Feature: Shipper Address Configuration
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Success Bulk Configure Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies the success message is displayed on uploading the pickup type file "2"
-    And Operator filter the column "Address ID " with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
-    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM-dedicated" in shipper address page
-    Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM dedicated" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
-    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM-Truck" in shipper address page
-    Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
 
   @Debug
   Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
@@ -452,7 +452,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies the success message is displayed on uploading the pickup type file "1"
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
-    Then Operator verifies table is filtered "zones" based on input in "expectedZoneValue" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
 
 
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
@@ -561,7 +561,7 @@ Feature: Shipper Address Configuration
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
     And Operator clicks on the "Save Changes" button
-    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG}"
+    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "<pickUpType>" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
     Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
