@@ -569,8 +569,8 @@ Feature: Shipper Address Configuration
     Examples:
       | dataset_name             | pickUpType   | search_field | search_value                                     | column_datakey | expectedZoneValue | expectedHubValue |
       | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | SORT-1            | SORT-SG-1-HUB    |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 |                  |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 |                  |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 | -                |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 | -                |
 
 
   @KillBrowser @ShouldAlwaysRun
