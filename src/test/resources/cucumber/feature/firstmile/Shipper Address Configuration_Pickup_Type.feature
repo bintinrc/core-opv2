@@ -385,7 +385,7 @@ Feature: Shipper Address Configuration
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_PickupType.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
-  @Debug
+
   Scenario: Success Bulk Configure Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -421,7 +421,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
 
-  @Debug
+
   Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -545,10 +545,10 @@ Feature: Shipper Address Configuration
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
-      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
-      | noOfAddress                 | 1                                                                                                                                                                                                |
-      | withLatLong                 | NO                                                                                                                                                                                               |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                           |
+      | withLatLong                 | YES                                                                                                                                                                                                                                         |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"9.99999","longitude":"9.99999","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -561,16 +561,16 @@ Feature: Shipper Address Configuration
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
     And Operator clicks on the "Save Changes" button
-    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "<pickUpType>" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
     Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
 
     Examples:
-      | dataset_name             | pickUpType   | search_field | search_value                                     | column_datakey | expectedZoneValue | expectedHubValue |
-      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | SORT-1            | SORT-SG-1-HUB    |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 | -                |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | zones          | -                 | -                |
+      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
+      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyo123            | DYOEDIT          |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | DYO123            | RECOVERY1        |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | DYO123            | RECOVERY1        |
 
 
   @KillBrowser @ShouldAlwaysRun
