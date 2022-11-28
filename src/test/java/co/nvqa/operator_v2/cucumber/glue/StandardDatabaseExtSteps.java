@@ -2107,7 +2107,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Given("DB Operator gets waypoint record")
   public void dbOperatorGetsWaypointRecord() {
     final Long waypointId = get(KEY_WAYPOINT_ID);
-    Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
+    dbOperatorGetsWaypointRecord(waypointId.toString());
+  }
+
+  @Given("DB Operator gets {value} waypoint record")
+  public void dbOperatorGetsWaypointRecord(String value) {
+    Waypoint waypoint = getCoreJdbc().getWaypoint(Long.valueOf(value));
     put(KEY_WAYPOINT_DETAILS, waypoint);
   }
 

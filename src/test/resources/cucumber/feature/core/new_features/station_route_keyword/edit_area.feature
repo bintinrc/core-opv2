@@ -62,24 +62,9 @@ Feature: Edit Area
       | area | Area 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator edit area on Station Route Keyword page:
       | areaVariations | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
-    And Operator verifies that success react notification displayed:
-      | top    | Coverage updated                                                                                                      |
-      | bottom | Area AREA 2 {gradle-current-date-yyyyMMddHHmmsss} with variations AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
-      | id             | {KEY_LIST_OF_COVERAGE_ID[1]}               |
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
-      | hubId          | {hub-id}                                   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
-      | id             | {KEY_LIST_OF_COVERAGE_ID[2]}               |
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
-      | hubId          | {hub-id}                                   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
-      | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
-      | variationName | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
+    And Operator verifies that error react notification displayed:
+      | top    | Status 500: Unknown                                                                                                                                                                                |
+      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA... |
 
   @DeleteDriver @DeleteCoverage
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area and Duplicate Area Variation

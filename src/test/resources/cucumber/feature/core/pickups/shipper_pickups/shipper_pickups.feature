@@ -64,6 +64,45 @@ Feature: Shipper Pickups
       | driverName   | {ninja-driver-name}                      |
       | comments     | {KEY_CREATED_RESERVATION.comments}       |
 
+  @DeleteOrArchiveRoute
+  Scenario: Show Updated Driver Name on Routed Reservation in Shipper Pickup Page
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id         | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId    | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName | {ninja-driver-name}                      |
+    And Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator edits details of created route using data below:
+      | driverName | {ninja-driver-2-name} |
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Updated |
+      | waitUntilInvisible | true               |
+    And Operator waits for 5 seconds
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    Then Operator verify reservation details on Shipper Pickups page:
+      | id         | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId    | {KEY_CREATED_ROUTE_ID}                   |
+      | driverName | {ninja-driver-2-name}                    |
+    And DB Operator verifies shipper_pickups_search data updated correctly
+      | driver_id | {ninja-driver-2-id} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

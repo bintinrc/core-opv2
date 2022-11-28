@@ -196,6 +196,63 @@ Feature: Edit Order Details
       | email    | test@mail.com    |
       | contact  | +9727894434      |
 
+  Scenario: Operator Edit Order Details - Edit Parcel Weight
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update order details on Edit Order page:
+      | weight | 5 |
+    And Operator waits for 10 seconds
+    Then Operator verifies dimensions information on Edit Order page:
+      | weight | 5 |
+    And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE DIMENSION                                               |
+      | description | Weight changed from 1 to 5\nPricing Weight changed from 1 to 5 |
+
+  Scenario Outline: Operator Edit Order Details - Edit Parcel Size - <oldSize> to <newSize>
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "<oldSize>", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update order details on Edit Order page:
+      | size | <newSize> |
+    And Operator waits for 10 seconds
+    Then Operator verifies dimensions information on Edit Order page:
+      | size | <newSizeFull> |
+    And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE DIMENSION                                       |
+      | description | Parcel Size Id changed from <oldSizeId> to <newSizeId> |
+    Examples:
+      | oldSize | oldSizeId | newSize | newSizeFull | newSizeId |
+      | S       | 0         | M       | MEDIUM      | 1         |
+      | M       | 1         | L       | LARGE       | 2         |
+      | L       | 2         | XL      | EXTRALARGE  | 3         |
+      | XL      | 3         | XXL     | XXLARGE     | 4         |
+      | XXL     | 4         | XL      | EXTRALARGE  | 3         |
+
+  Scenario: Operator Edit Order Details - Edit Parcel Dimensions
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update order details on Edit Order page:
+      | length  | 5 |
+      | width   | 6 |
+      | breadth | 7 |
+    And Operator waits for 10 seconds
+    Then Operator verifies dimensions information on Edit Order page:
+      | length | 5 |
+      | width  | 6 |
+      | height | 7 |
+    And Operator verifies Latest Event is "UPDATE DIMENSION" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE DIMENSION                                                                                                |
+      | description | Length updated: assigned new value 5\nWidth updated: assigned new value 6\nHeight updated: assigned new value 7 |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
