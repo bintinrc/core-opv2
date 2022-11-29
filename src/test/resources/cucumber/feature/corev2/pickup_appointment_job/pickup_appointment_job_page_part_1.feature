@@ -75,14 +75,14 @@ Feature: Pickup Appointment Job Page Part 1
     Then Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
 
     Then QA verify filters on Pickup Jobs page are shown
-      | dateStart       | {gradle-current-date-dd/MM/yyyy}                  |
-      | priority        | All                                               |
-      | jobServiceType  | Scheduled                                         |
-      | jobServiceLevel | Premium, Standard                                 |
-      | jobStatus       | Ready for Routing, Routed, In Progress, Cancelled |
-      | zones           | {zone-name-1}, {zone-name-2}                      |
-      | masterShippers  | {master-shipper-1}, {master-shipper-2}            |
-      | shippers        | 830859 - Pickup Appointment Job Normal            |
+      | dateStart       | {gradle-current-date-dd/MM/yyyy}                                                      |
+      | priority        | All                                                                                   |
+      | jobServiceType  | Scheduled                                                                             |
+      | jobServiceLevel | Premium, Standard                                                                     |
+      | jobStatus       | Ready for Routing, Routed, In Progress, Cancelled                                     |
+      | zones           | {zone-name-1}, {zone-name-2}                                                          |
+      | masterShippers  | {master-shipper-1}, {master-shipper-2}                                                |
+      | shippers        | {normal-shipper-pickup-appointment-1-id} - {normal-shipper-pickup-appointment-1-name} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

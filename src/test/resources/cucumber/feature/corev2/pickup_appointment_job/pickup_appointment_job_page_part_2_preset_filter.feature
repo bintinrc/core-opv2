@@ -64,7 +64,7 @@ Feature: Pickup Appointment Job Page Part 2 - Preset Filter
       | jobServiceLevel | Premium                                  |
       | jobStatus       | Failed                                   |
       | zones           | newZone                                  |
-      | masterShippers   | Ninjavan                                 |
+      | masterShippers  | Ninjavan                                 |
       | shippers        | {normal-shipper-pickup-appointment-1-id} |
 
     When Operator click on Create or Modify Preset button
