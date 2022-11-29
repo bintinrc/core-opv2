@@ -3383,12 +3383,12 @@ Feature: Priority Parcel in Hub
       | Order Tags            |
       | Size                  |
       | Timeslot              |
+    And Operators sorts and verifies that the column:"Time in Hub" is in descending order
     And Operator searches for the orders in modal pop-up by applying the following filters:
       | Tracking ID/ Route ID           |
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And Operator verifies that the following details are displayed on the modal
       | Tracking ID/ Route ID | {KEY_CREATED_ORDER_TRACKING_ID}\n- |
-    And Operators sorts and verifies that the column:"Time in Hub" is in descending order
 
     Examples:
       | HubId      | HubName      | TileName                | ModalName               |
