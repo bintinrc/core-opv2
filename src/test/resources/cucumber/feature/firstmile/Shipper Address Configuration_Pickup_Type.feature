@@ -7,7 +7,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Null
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -32,7 +32,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Hybrid
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -60,7 +60,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type FM Dedicated
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -88,7 +88,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Truck
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -116,7 +116,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Filter Shipper Address by Multiple Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 4                                                                                                                                                                                                |
@@ -155,7 +155,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Search Shipper Addresses on Pickup Type Configure Page - <dataset_name>
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                           |
       | noOfAddress                 | 1                                                                                                                                                                                                                                         |
@@ -183,7 +183,7 @@ Feature: Shipper Address Configuration
       | Search by Hub            | Hubs           | -                                                | hubs                  |
 
   Scenario Outline: Filter Shipper Address by Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -207,7 +207,7 @@ Feature: Shipper Address Configuration
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario Outline: Download CSV of Address Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -241,7 +241,7 @@ Feature: Shipper Address Configuration
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario: Download CSV of Address Pickup Type Template
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -261,7 +261,7 @@ Feature: Shipper Address Configuration
       | Hubs           |
 
   Scenario: Upload Addresses Pickup Type CSV by Browsing File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -285,7 +285,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 
   Scenario: Upload Addresses Pickup Type CSV by Drag and Drop
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -310,7 +310,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -324,7 +324,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid formatted file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -338,7 +338,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Shipper ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -362,7 +362,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -518,7 +518,6 @@ Feature: Shipper Address Configuration
 
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
     When Operator loads Shipper Address Configuration page
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
     And Operator chooses start and end date on Address Creation date using the following data:
@@ -569,8 +568,8 @@ Feature: Shipper Address Configuration
     Examples:
       | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
       | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyo123            | DYOEDIT          |
-      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | DYO123            | RECOVERY1        |
-      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | DYO123            | RECOVERY1        |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
 
 
   @KillBrowser @ShouldAlwaysRun

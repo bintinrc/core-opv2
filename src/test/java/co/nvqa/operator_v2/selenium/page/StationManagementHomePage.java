@@ -899,7 +899,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" hrs ", ".").replaceAll("mins", "");
+        value = value.replaceAll(" days ", ".").replaceAll(" hours ", "")
+            .replaceAll(" minutes", "");
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(

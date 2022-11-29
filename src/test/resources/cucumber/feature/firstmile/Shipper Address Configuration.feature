@@ -6,7 +6,7 @@ Feature: Shipper Address Configuration
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Filter Unverified Shipper Address
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -26,7 +26,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Filter Verified Shipper Address
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
@@ -46,7 +46,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Filter All Shipper Addresses
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -74,7 +74,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Search Shipper Addresses - <dataset_name>
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -99,7 +99,7 @@ Feature: Shipper Address Configuration
       | Search by Shipper ID     | Shipper ID     | 5356053                                          | shipper_id     |
 
   Scenario: Download CSV of Shipper Address
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -122,7 +122,7 @@ Feature: Shipper Address Configuration
       | Longitude      |
 
   Scenario: Download CSV of Shipper Address Template
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Update Lat Long" button
     Then Operator verifies page url ends with "lat-long"
@@ -142,7 +142,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Update Shipper Addresses with Invalid Shipper ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -174,7 +174,7 @@ Feature: Shipper Address Configuration
       | Shipper ID #23423 not found |
 
   Scenario: Unable to Update Shipper Addresses with Invalid Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -205,7 +205,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Update Addresses Lat Long with Invalid Input
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -225,7 +225,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Upload Invalid Formatted Shipper Address File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -245,7 +245,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Upload Addresses Lat Long CSV by Browsing File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -265,7 +265,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Upload Addresses Lat Long CSV by Drag and Drop
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -285,7 +285,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Success Bulk Update Shipper Addresses Lat Long
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -321,7 +321,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Success Bulk Update Duplicate Shipper Addresses Lat Long
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -354,7 +354,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Bulk Update Some Shipper Addresses Lat Long
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -401,7 +401,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Unable to Bulk Update All Shipper Addresses
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
