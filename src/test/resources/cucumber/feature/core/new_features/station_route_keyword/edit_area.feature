@@ -32,8 +32,8 @@ Feature: Edit Area
     And Operator edit area on Station Route Keyword page:
       | area | Area {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                                                                                                |
-      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA... |
+      | top    | Status 500: Unknown                                                                                                                                                                                     |
+      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA\.\.\..* |
 
   @DeleteDriver @DeleteCoverage
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area Variation
@@ -63,8 +63,8 @@ Feature: Edit Area
     And Operator edit area on Station Route Keyword page:
       | areaVariations | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                                                                                                |
-      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA... |
+      | top    | Status 500: Unknown                                                                                                                                                                                     |
+      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIATI\.\.\..* |
 
   @DeleteDriver @DeleteCoverage
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - Duplicate Area and Duplicate Area Variation
@@ -150,8 +150,8 @@ Feature: Edit Area
       | area           | Area 2 {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariations | AreaVariation 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                                                                                                |
-      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA... |
+      | top    | Status 500: Unknown                                                                                                                                                                                     |
+      | bottom | ^.*Error Message: More than one existing SrAreaVariation found by variation names \[areaNames: \[AREAVARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}\], duplicatedVariationNames: \[AREAVARIA\.\.\..* |
 
   @DeleteDriver @DeleteCoverage
   Scenario: Operator Edit Area for Coverage on Station Route Keyword - New Area
