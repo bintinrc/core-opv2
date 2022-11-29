@@ -541,7 +541,6 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Unable to update pickup type, error: sql: no rows in result set |
 
-  @Debug
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
