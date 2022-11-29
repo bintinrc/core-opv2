@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -74,7 +73,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-collapse-header")
   private Button showOrHideFilters;
 
-  @FindBy(css = "div.ant-collapse-content-inactive")
+  @FindBy(xpath = "//div[@class='ant-collapse-header' and @aria-expanded='false']")
   private PageElement invisibleFiltersBlock;
 
   @FindBy(xpath = "//span[text()='Clear Selection']/parent::button")
@@ -83,7 +82,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "#presetFilters")
   private PageElement presetFilters;
 
-  @FindBy(xpath = "#priority")
+  @FindBy(xpath = "//input[@id='priority']//parent::span//parent::div")
   private PageElement priorityButton;
 
   @FindBy(css = "#serviceType")
@@ -101,23 +100,60 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   @FindBy(css = "#masterShippers")
   private PageElement jobMasterShipperInput;
 
+  @FindBy(css = "#priority")
+  private PageElement priorityInput;
+
+  @FindBy(css = "button.ant-dropdown-trigger")
+  private Button createOrModifyPresetButton;
+
+  @FindBy(xpath = "//li[text()='Save as Preset']")
+  private Button saveAsPresetButton;
+
+  @FindBy(css = "div.ant-modal-content")
+  private PageElement presetModal;
+
+  @FindBy(css = "input[data-testid='presetAction.presetNameInput']")
+  private PageElement presetNameInput;
+
+  @FindBy(css = "div.ant-modal-footer button")
+  private Button confirmPresetButton;
+
+  @FindBy(css = "div.ant-notification-notice")
+  private PageElement newPresetCreatedPopup;
+
+  @FindBy(css = "div.ant-select-item-option-active div")
+  private PageElement selectedPresetInDropdownMenu;
+
+  @FindBy(xpath = "//span[text()='Update Current Preset']")
+  private Button updateCurrentPresetButton;
+
+  @FindBy(xpath = "//div[text()='Current Preset Updated']")
+  private PageElement currentPresetUpdatedPopup;
+
+  @FindBy(xpath = "//span[text()='Delete']")
+  private Button deletePresetButton;
+
+  @FindBy(xpath = "//div[text()='Preset Deleted']")
+  private PageElement presetDeletedPopup;
+
+  @FindBy(css = "div.ant-notification-notice-description")
+  private PageElement newPresetCreatedPopupName;
+
   public final String ID_NEXT = "__next";
   public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
   public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shippers_list_0']";
-
   public final String VERIFY_ROUTE_FIELD_LOCATOR = "//input[@aria-activedescendant='route_list_0']";
-
   public final String CALENDAR_DAY_BY_TITLE_LOCATOR = "td[title='%s']";
   public final String DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR = "td.ant-picker-cell.ant-picker-cell-disabled[title='%s']";
   public final String VALUE = "value";
   public final String TITLE = "title";
   public final String DROPDOWN_MENU_LOCATOR = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
-  public final String DROPDOWN_MENU_WITH_DATA_LOCATOR = "#shipper_list_0";
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
-  public final String SELECTION_ARIA_LABEL_LOCATOR = "div[aria-label='%s']";
-  public final String SELECTION_ITEMS = "//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
-
+  public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
+  public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
+  public final String ARIA_LABEL = "aria-label";
+  public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -163,20 +199,20 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   private void sendTextInFieldAndChooseData(PageElement field, String data, String verifyLocator) {
-    field.clear();
     field.sendKeys(data);
     waitUntilVisibilityOfElementLocated(verifyLocator);
     field.sendKeys(Keys.ENTER);
+    contentBox.click();
   }
 
   public PickupAppointmentJobPage selectDataRangeByTitle(String dayStart, String dayEnd) {
     selectDateRange.click();
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-        By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
+            By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
     webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-        .click();
+            .click();
     webDriver.findElement(By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
-        .click();
+            .click();
     return this;
   }
 
@@ -204,13 +240,13 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public JobCreatedModalWindowPage getJobCreatedModalWindowElement() {
     return new JobCreatedModalWindowPage(webDriver,
-        getWebDriver().findElement(By.cssSelector(MODAL_CONTENT_LOCAL)));
+            getWebDriver().findElement(By.cssSelector(MODAL_CONTENT_LOCAL)));
   }
 
   public boolean verifyMessageInToastModalIsDisplayed(String messageBody) {
     String xpathExpression = StringUtils.isNotBlank(messageBody)
-        ? f("//div[@id='toast-container']//strong[contains(text(), '%s')]", messageBody)
-        : "//div[@id='toast-container']";
+            ? f("//div[@id='toast-container']//strong[contains(text(), '%s')]", messageBody)
+            : "//div[@id='toast-container']";
     return webDriver.findElement(By.xpath(xpathExpression)).isDisplayed();
   }
 
@@ -231,28 +267,8 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public List<String> getAllSelectedByJobName(String selectedItem) {
-    switch (selectedItem) {
-      case "serviceType":
-        return jobServiceTypeInput.findElementsBy(By.xpath(SELECTION_ITEMS))
+    return webDriver.findElements(By.xpath(f(SELECTION_ITEMS, selectedItem)))
             .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "serviceLevel":
-        return jobServiceLevelInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "status":
-        return jobStatusInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "zones":
-        return jobZonesInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "masterShipper":
-        return jobMasterShipperInput.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      case "shipper":
-        return shipperIDField.findElementsBy(By.xpath(SELECTION_ITEMS))
-            .stream().map(WebElement::getText).collect(Collectors.toList());
-      default:
-        return new ArrayList<>();
-    }
   }
 
   public void clickOnShowOrHideFilters() {
@@ -260,8 +276,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean verifyIsFiltersBlockInvisible() {
-    waitUntilVisibilityOfElementLocated(
-        invisibleFiltersBlock.getWebElement().getLocation().toString());
+    waitUntilVisibilityOfElementLocated(invisibleFiltersBlock.getWebElement());
     return invisibleFiltersBlock.isDisplayed();
   }
 
@@ -283,13 +298,12 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public boolean isFilterDropdownMenuWithoutDataDisplayed() {
     return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(DROPDOWN_MENU_NO_DATA_LOCATOR)).isDisplayed();
+            .findElement(By.cssSelector(DROPDOWN_MENU_NO_DATA_LOCATOR)).isDisplayed();
   }
 
   public boolean isFilterDropdownMenuShipperWithDataDisplayed() {
-    waitUntilInvisibilityOfElementLocated(DROPDOWN_MENU_WITH_DATA_LOCATOR);
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(DROPDOWN_MENU_WITH_DATA_LOCATOR)).isDisplayed();
+    waitUntilInvisibilityOfElementLocated(VERIFY_SHIPPER_FIELD_LOCATOR);
+    return webDriver.findElement(By.xpath(VERIFY_SHIPPER_FIELD_LOCATOR)).isDisplayed();
   }
 
   public void clickOnSelectStartDay() {
@@ -301,7 +315,7 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public boolean isJobPriorityFilterByNameDisplayed(String priorityName) {
-    return isJobSelectionFilterByNameWithAriaLabelDisplayed(priorityName);
+    return isJobSelectionFilterByNameWithLabelDisplayed(priorityName);
   }
 
   public void clickOnJobServiceType() {
@@ -312,40 +326,28 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
     jobServiceLevelInput.click();
   }
 
-  public boolean isJobServiceLevelFilterByNameDisplayed(String serviceLevelName) {
-    return isJobSelectionFilterByNameWithAriaLabelDisplayed(serviceLevelName);
-  }
-
   public void clickOnJobStatus() {
     jobStatusInput.click();
   }
 
-  public boolean isJobStatusLevelFilterByNameDisplayed(String statusName) {
-    return isJobSelectionFilterByNameWithLabelDisplayed(statusName);
-  }
-
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-        By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
+            By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
     Assertions.assertThat(
-            webDriver.findElement(
-                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-                .isDisplayed())
-        .as("The previous 7th day is not active for selection").isTrue();
+                    webDriver.findElement(
+                                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
+                            .isDisplayed())
+            .as("The previous 7th day is not active for selection").isTrue();
     Assertions.assertThat(
-            webDriver.findElement(
-                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
-                .isDisplayed())
-        .as("The next 7th day is not active for selection").isTrue();
+                    webDriver.findElement(
+                                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
+                            .isDisplayed())
+            .as("The next 7th day is not active for selection").isTrue();
     contentBox.click();
   }
 
-  public void selectServiceLevel(String serviceLevel) {
-    clickOnJobSelectionFilterByNameWithAriaLabel(serviceLevel);
-  }
-
-  public void selectJobStatus(String status) {
-    clickOnJobSelectionFilterByNameWithLabel(status);
+  public void selectServiceLevel() {
+    jobServiceLevelInput.sendKeys(Keys.RETURN);
   }
 
   public void clickOnJobZone() {
@@ -361,51 +363,147 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   }
 
   public void inputOnJobShipper(String text) {
-    shipperIDField.clear();
+    clearOnJobShipper();
     shipperIDField.sendKeys(text);
   }
 
+  public void clearOnJobShipper() {
+    shipperIDField.clear();
+  }
+
   public void inputOnJobZone(String text) {
-    jobZonesInput.clear();
     jobZonesInput.sendKeys(text);
+  }
+
+  public void inputOnJobMasterShipper(String text) {
+    jobMasterShipperInput.sendKeys(text);
   }
 
   public void selectJobSelection(String selection) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))).click();
   }
 
   public boolean isJobSelectionFilterByNameWithLabelDisplayed(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
+    waitUntilVisibilityOfElementLocated(
+            webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
+                    .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
     return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-        .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
-        .isDisplayed();
-  }
-
-  public boolean isJobSelectionFilterByNameWithAriaLabelDisplayed(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
-    return webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
+            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
             .isDisplayed();
   }
 
-  public void clickOnJobSelectionFilterByNameWithLabel(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection))));
-    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_LABEL_LOCATOR, selection)))
-            .click();
+  public void selectJobStatus() {
+    jobStatusInput.sendKeys(Keys.RETURN);
   }
 
-  public void clickOnJobSelectionFilterByNameWithAriaLabel(String selection) {
-    waitUntilVisibilityOfElementLocated(webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection))));
-    webDriver.findElement(By.cssSelector(DROPDOWN_MENU_LOCATOR))
-            .findElement(By.cssSelector(f(SELECTION_ARIA_LABEL_LOCATOR, selection)))
-            .click();
+  public void selectJobStatusByString(String jobStatus) {
+    jobStatusInput.click();
+    int retry = 10;
+    while (retry > 0 && !webDriver.findElement(By.id(jobStatusInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+            .getAttribute(ARIA_LABEL).equals(jobStatus)) {
+      jobStatusInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    jobStatusInput.sendKeys(Keys.ENTER);
+    clickOnJobStatus();
+  }
+
+  public void selectJobServiceLevelByString(String jobServiceLevel) {
+    jobServiceLevelInput.click();
+    int retry = 2;
+    while (retry > 0 && !webDriver.findElement(By.id(jobServiceLevelInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+            .getAttribute(ARIA_LABEL).equals(jobServiceLevel)) {
+      jobServiceLevelInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    jobServiceLevelInput.sendKeys(Keys.ENTER);
+    clickOnJobServiceLevel();
+  }
+
+  public void selectPriorityByString(String priority) {
+    clickOnPriorityButton();
+    int retry = 2;
+    priorityInput.sendKeys(Keys.ARROW_DOWN);
+    while (retry > 0 && !webDriver.findElement(By.id(priorityInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+            .getAttribute(ARIA_LABEL).equals(priority)) {
+      priorityInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    priorityInput.sendKeys(Keys.ENTER);
+    clickOnPriorityButton();
+  }
+
+  public void clickOnCreateOrModifyPresetButton() {
+    moveToElement(createOrModifyPresetButton.getWebElement());
+    createOrModifyPresetButton.click();
+  }
+
+  public void clickOnSaveAsPresetButton() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    saveAsPresetButton.click();
+  }
+
+  public boolean isPresetModalDisplayed() {
+    return presetModal.isDisplayed();
+  }
+
+  public void fillInPresetNamefield(String presetName) {
+    presetNameInput.sendKeys(presetName);
+  }
+
+  public void clickConfirmPresetModalButton() {
+    confirmPresetButton.click();
+  }
+
+  public boolean isNewPresetCreatedPopupDisplayed() {
+    return newPresetCreatedPopup.isDisplayed();
+  }
+
+  public String getSelectedPresetFromDropdownMenu() {
+    return newPresetCreatedPopupName.getText();
+  }
+
+  public void choosePresetByName(String presetName) {
+    int retry = 100;
+    while (retry > 0 && !webDriver.findElement(By.cssSelector("div.ant-select-item-option-active div")).getText().equalsIgnoreCase(presetName)) {
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    presetFilters.sendKeys(Keys.ENTER);
+  }
+
+  public void clickOnUpdateCurrentPreset() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    updateCurrentPresetButton.click();
+  }
+
+  public boolean isCurrentPresetUpdatedPopupDisplayed() {
+    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+    return currentPresetUpdatedPopup.isDisplayed();
+  }
+
+  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
+    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+  }
+
+  public void clickOnDeletePresetButton() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    deletePresetButton.click();
+  }
+
+  public boolean isPresetDeletedPopupDisplayed() {
+    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+    return presetDeletedPopup.isDisplayed();
+  }
+
+  public void waitUntilPresetDeletedPopupInvisible() {
+    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+  }
+
+  public void waitUntilCreateOrModifyPresetDropdownManyIsVisible() {
+    waitUntilVisibilityOfElementLocated(DROPDOWN_BOTTOM_LEFT_LOCATOR);
   }
 }

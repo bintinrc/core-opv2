@@ -4,13 +4,17 @@ public enum PickupAppointmentFilterNameEnum {
 
     SERVICE_LEVEL("serviceLevel"),
     SERVICE_TYPE("serviceType"),
-    STATUS("status"),
+    STATUS("jobStatus"),
     ZONES("zones"),
-    MASTER_SHIPPER("masterShipper"),
-    SHIPPER("shipper");
+    MASTER_SHIPPER("masterShippers"),
+    SHIPPER("shippers");
 
     private final String name;
     PickupAppointmentFilterNameEnum(String name) {
         this.name =name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
