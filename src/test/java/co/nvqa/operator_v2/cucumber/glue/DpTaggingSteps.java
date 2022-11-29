@@ -49,7 +49,7 @@ public class DpTaggingSteps extends AbstractSteps {
     dpTaggingPage.selectDateToNextDay();
     dpTaggingPage.checkAndAssignAll(false);
     takesScreenshot();
-
+    pause5s();
     put("listOfDpTagging", listOfDpTagging);
     put(KEY_DISTRIBUTION_POINT_ID, dpId);
   }
@@ -72,9 +72,9 @@ public class DpTaggingSteps extends AbstractSteps {
     dpTaggingPage.untagAll();
     takesScreenshot();
     if (listOfDpTagging.size() == 1) {
-      dpTaggingPage.waitUntilInvisibilityOfToast("1 Order(s) untagged successfully");
+      dpTaggingPage.verifyTaggingToast("1 order(s) untagged successfully");
     } else {
-      dpTaggingPage.waitUntilInvisibilityOfToast("DP untagging performed successfully");
+      dpTaggingPage.verifyTaggingToast("DP untagging performed successfully");
     }
   }
 
@@ -104,6 +104,12 @@ public class DpTaggingSteps extends AbstractSteps {
   @When("Operator uploads invalid DP Tagging CSV")
   public void operatorUploadsInvalidDpTaggingCsv() {
     dpTaggingPage.uploadInvalidDpTaggingCsv();
+  }
+
+  @When("Operator wait for DP tagging page to load")
+  public void operatorWaitsForDpTaggingToLoad() {
+    dpTaggingPage.switchToIframe();
+    dpTaggingPage.waitUntilLoaded();
   }
 
   @When("Operator verify invalid DP Tagging CSV is not uploaded successfully")

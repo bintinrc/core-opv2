@@ -149,7 +149,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator selects the picktype {string} in the dropdown")
   public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
-    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValue(pickType);
+    shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValueWithoutSearch(pickType);
 
   }
 
@@ -186,7 +186,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator verifies success message after updating the pickupType for Address {string}")
   public void operatorVerifiessuccessMessageAfterUpdatingThePickupType(String addressId) {
     addressId = resolveValue(addressId);
-    shipperAddressConfigurationPage.validateInvalidFileErrorMessageIsShown();
+    shipperAddressConfigurationPage.validateUploadSuccessMessageAfterPickUpUpdate(addressId);
     takesScreenshot();
   }
 
@@ -291,10 +291,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.VerificationOfURL(expectedTest);
   }
 
-  @Then("Operator verifies the success message is displayed on uploading the file : {string}")
-  public void Operator_verifies_the_success_message_is_displayed_on_uploading_the_ile(
-      String hubName) {
-    shipperAddressConfigurationPage.validateConfigurePickupTypeUploadSuccessMessage(hubName);
+  @Then("Operator verifies the success message is displayed on uploading the pickup type file {string}")
+  public void Operator_verifies_the_success_message_is_displayed_on_uploading_the_pickup_type_file(
+      String count) {
+    shipperAddressConfigurationPage.validateConfigurePickupTypeUploadSuccessMessage(count);
     takesScreenshot();
   }
 

@@ -5,6 +5,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -112,7 +113,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   public PageElement editPickUpTypeButton;
 
   @FindBy(xpath = "//div[contains(text(),'Pickup Type')]/ancestor::div[contains(@class,'ant')]//div[@class='ant-select-selector']")
-  public AntSelect2 pickupTypeInEditWindow;
+  public AntSelect3 pickupTypeInEditWindow;
 
 
   public void switchToShipperAddressConfigurationFrame() {
@@ -243,19 +244,20 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void validateUploadSuccessMessageAfterPickUpUpdate(String addressId) {
-    pause1s();
-    String errorXpath = f(PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE, addressId);
-    WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
+    String SuccessMessageXpath = f(PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE, addressId);
+    waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
+    WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
     Assertions.assertThat(successMessage.isDisplayed())
         .as("Validation for Pick Type update Success message")
         .isTrue();
   }
 
-  public void validateConfigurePickupTypeUploadSuccessMessage(String hubName) {
-    String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, hubName);
+  public void validateConfigurePickupTypeUploadSuccessMessage(String count) {
+    String SuccessMessageXpath = f(CONFIGURE_PICKUP_TYPE_FILE_UPLOAD_SUCCESS_MESSAGE, count);
     waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(SuccessMessageXpath)));
     WebElement successMessage = getWebDriver().findElement(By.xpath(SuccessMessageXpath));
-    Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")
+    Assertions.assertThat(successMessage.isDisplayed())
+        .as("Validation for Pickup type Upload Success message")
         .isTrue();
   }
 

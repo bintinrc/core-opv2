@@ -7,6 +7,7 @@ Feature: DP Tagging
 
   Scenario: DP Tagging - Invalid CSV (uid:975339a9-7c0b-4ec8-b815-3c2aa9c87bc5)
     Given Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator uploads invalid DP Tagging CSV
     Then Operator verify invalid DP Tagging CSV is not uploaded successfully
 
@@ -18,6 +19,7 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{opv2-dp-dpms-id}"
     Then API Operator verify order info after Operator assign delivery waypoint of an order to DP
 
@@ -29,6 +31,7 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{opv2-dp-dpms-id}"
     Then API Operator verify order info after Operator assign delivery waypoint of an order to DP
 
@@ -41,8 +44,9 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
-    When Operator tags multiple orders to DP with DPMS ID = "{opv2-dp-dpms-id}"
-    Then API Operator verify multiple orders info after Operator assign delivery waypoint of the orders to the same DP
+      Then Operator wait for DP tagging page to load
+      When Operator tags multiple orders to DP with DPMS ID = "{opv2-dp-dpms-id}"
+      Then API Operator verify multiple orders info after Operator assign delivery waypoint of the orders to the same DP
 
   Scenario: DP Tagging - Unassign Single Normal Order from DP (uid:9df35d69-140a-42c2-82b2-a0881ce4d8b3)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -52,6 +56,7 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{opv2-dp-dpms-id}"
     And Operator untags created orders from DP with DPMS ID = "{opv2-dp-dpms-id}" on DP Tagging page
     Then Operator go to menu Order -> All Orders
@@ -67,6 +72,7 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{opv2-dp-dpms-id}"
     And Operator untags created orders from DP with DPMS ID = "{opv2-dp-dpms-id}" on DP Tagging page
     Then Operator go to menu Order -> All Orders
@@ -83,6 +89,7 @@ Feature: DP Tagging
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
+    Then Operator wait for DP tagging page to load
     When Operator tags multiple orders to DP with DPMS ID = "{opv2-dp-dpms-id}"
     And Operator untags created orders from DP with DPMS ID = "{opv2-dp-dpms-id}" on DP Tagging page
     Then Operator go to menu Order -> All Orders
