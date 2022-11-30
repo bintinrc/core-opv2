@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
+import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.ItemsDeleteJobModalWindow;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentPriorityEnum;
 import io.cucumber.guice.ScenarioScoped;
@@ -268,6 +269,32 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
             .isTrue();
   }
 
+  @Then("QA verify there is no Delete button in that particular job tag")
+  public void verifyDeleteButtonIsNotDisplayed() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isDeleteButtonByJobIdDisplayed(listJobIds.get(0)))
+        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed")
+        .isFalse();
+  }
+
+  @Then("QA verify that particular job is removed from calendar on date {string} with status {string}")
+  public void verifyParticularJobIsRemoved(String date, String status) {
+    pickupAppointmentJobPage.getCreateOrEditJobPage().waitNotificationMessageInvisibility();
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isParticularJobDisplayedByDateAndStatus(date,status))
+        .as("Particular job is removed from calendar on date " + date  + " with status " + status)
+        .isFalse();
+  }
+
+  @Then("QA verify the jobs with status {string} displayed in the Calendar on the date {string} as well")
+  public void verifyJobWithStatusIsDisplayed(String status,String date) {
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isParticularJobDisplayedByDateAndStatus(date,status))
+        .as("Job in the calendar on date " + date  + " with status " + status + " displayed")
+        .isTrue();
+  }
+
   @Then("QA verify there is Edit button in that particular job tag")
   public void verifyEditButtonIsDisplayed() {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
@@ -277,10 +304,25 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
             .isTrue();
   }
 
+  @Then("QA verify there is no Edit button in that particular job tag")
+  public void verifyEditButtonIsNotDisplayed() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
+            .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
+        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
+        .isFalse();
+  }
+
   @When("Operator click on Edit button")
   public void clickOnEditButton() {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     pickupAppointmentJobPage.getCreateOrEditJobPage().clickOnEditButtonByJobId(listJobIds.get(0));
+  }
+
+  @When("Operator click on Delete button")
+  public void clickOnDeleteButton() {
+    List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    pickupAppointmentJobPage.getCreateOrEditJobPage().clickOnDeleteButtonByJobId(listJobIds.get(0));
   }
 
   // For correct assertions the start and end day have to be in format dd/MM/yyyy
@@ -359,11 +401,14 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifySuccessfulMessageIsDisplayedWithDataAndTime(Map<String, String> dataTable) {
     final String startDay = dataTable.get("startDay");
     final String timeRange = dataTable.get("timeRange");
-
+    String notificationMessage = dataTable.get("notificationMessage");
+    if (notificationMessage == null) {
+      notificationMessage = "Job updated";
+    }
     Assertions.assertThat(
-                    pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationMessage())
-            .as("Notification message is displayed")
-            .isEqualTo("Job updated");
+            pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationMessage())
+        .as("Notification message is displayed")
+        .isEqualTo(notificationMessage);
     Assertions.assertThat(
                     pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationDescription())
             .as("Notification message is contains " + startDay)
@@ -399,12 +444,13 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("Operator verify the particular job tag in the Calendar changes from grey to black with white text")
   public void verifyThePickupJobInTheCalendarChangesFromGreyToBlack(Map<String, String> dataTable) {
     final String date = dataTable.get("date");
+    final String status = dataTable.get("status");
     final String color = dataTable.get("color");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-                    .getColorAttributeInPickupJobFromCalendar(date))
-            .as("Pickup job has correct color")
-            .contains("color: " + color);
+            .getColorAttributeInPickupJobFromCalendar(date,status))
+        .as("Pickup job has correct color")
+        .contains("color: " + color);
   }
 
   @Then("Operator verify the dialog not shows the job tag")
@@ -665,6 +711,49 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
             .as("Dropdown Menu No Data is displayed")
             .isTrue();
     pickupAppointmentJobPage.clearOnJobShipper();
+  }
+
+  @Then("QA verify Delete dialog displays the jobs information")
+  public void verifyDeleteJobModalWindow(Map<String, String> dataTable) {
+    final String shipperName = dataTable.get("shipperName");
+    final String shipperAddress = dataTable.get("shipperAddress");
+    final String readyBy = dataTable.get("readyBy");
+    final String latestBy = dataTable.get("latestBy");
+    final String priority = dataTable.get("priority");
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(
+                    ItemsDeleteJobModalWindow.SHIPPER_NAME.getName()))
+        .as("Shipper name is correct")
+        .isEqualTo(shipperName);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(
+                    ItemsDeleteJobModalWindow.SHIPPER_ADDRESS.getName()))
+        .as("Shipper address is correct")
+        .contains(shipperAddress);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.READY_BY.getName()))
+        .as("Ready by is correct")
+        .isEqualTo(readyBy);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.LATEST_BY.getName()))
+        .as("Latest by is correct")
+        .isEqualTo(latestBy);
+    if (priority != null) {
+      Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+              .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.PRIORITY.getName()))
+          .as("Priority tags is correct")
+          .contains(priority);
+    }
+  }
+
+  @When("Operator click on Submit button on Delete Job modal window")
+  public void clickOnSubmitButtonOnDeleteJobModal() {
+    pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+        .clickOnSubmitButtonOnDeleteJobModal();
   }
 
   @When("Operator filled in the filters")

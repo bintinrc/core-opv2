@@ -111,6 +111,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "span[aria-label$='bell']")
   private PageElement alarmBell;
 
+  @FindBy(xpath = "//*[@title='SFLD Unconfirmed Tickets']")
+  private PageElement fsrUnconfirmedETAArrow;
+
   @FindBy(xpath = "//button[@disabled]//*[text()='Save & Proceed']")
   private List<PageElement> disabledSaveAndProceed;
 
@@ -132,8 +135,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "li:last-child .text")
   public PageElement fsrText;
 
-  @FindBy(css = "li:last-child .count")
-  public PageElement fsrCount;
+  @FindBy(xpath = "//*[contains(text(),'ETA that need to be confirmed')]/preceding-sibling::b")
+  public List<PageElement> fsrCount;
 
   @FindBy(css = "div[class*='footer-row']")
   private PageElement footerRow;
@@ -262,6 +265,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
+      tileValue = tileValue.replace("%", "").trim();
       if (tileValue.contains(" ")) {
         tileValue = tileValue.substring(0, tileValue.indexOf(' '));
       }
@@ -278,8 +282,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     waitWhilePageIsLoading();
     pause5s();
     try {
-      if (sfldTicketCount.size() > 0) {
-        actualCount = Integer.parseInt(sfldTicketCount.get(0).getText().trim());
+      if (fsrCount.size() > 0) {
+        return Integer.parseInt(fsrCount.get(0).getText().trim());
       } else {
         actualCount = 0;
       }
@@ -791,7 +795,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void openOrdersWithUnconfirmedTickets() {
     waitWhilePageIsLoading();
-    alarmBell.click();
+    fsrUnconfirmedETAArrow.click();
   }
 
   public void stationConfirmedEtaEmpty() {
@@ -814,7 +818,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   public void verifyFsrInUrgentTasks(String expectedText) {
     waitWhilePageIsLoading();
     String actualText = fsrText.getText().trim();
-    String actualCount = fsrCount.getText().trim();
+    String actualCount = fsrCount.get(0).getText().trim();
     Assert.assertTrue(f("Assert that the text : %s is displayed", expectedText)
         , expectedText.contentEquals(actualText));
     int alarmCount = getSfldParcelCount();
@@ -895,7 +899,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" hrs ", ".").replaceAll("mins", "");
+        value = value.replaceAll(" days ", ".").replaceAll(" hours ", "")
+            .replaceAll(" minutes", "");
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(

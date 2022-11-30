@@ -1,12 +1,11 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
-import co.nvqa.common_selenium.page.SimplePage;
-import co.nvqa.commons.util.NvRetry;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
@@ -18,6 +17,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 
 public class AntSelect3 extends PageElement {
 
@@ -38,6 +39,9 @@ public class AntSelect3 extends PageElement {
   public AntSelect3(WebDriver webDriver, SearchContext searchContext, String xpath) {
     super(webDriver, searchContext, xpath);
   }
+
+  @FindBy(css = ".ant-spin-dot")
+  public PageElement spinner;
 
   @FindBy(css = ".ant-select-selection-item")
   public List<PageElement> selectedValues;
@@ -100,8 +104,13 @@ public class AntSelect3 extends PageElement {
     if (isElementVisible(xpath, 1)) {
       click(xpath);
     } else {
+      xpath = getItemIgnoreCaseLocator(value);
+      if (isElementVisible(xpath, 1)) {
+        click(xpath);
+      } else {
       xpath = getItemContainsLocator(value);
       click(xpath);
+      }
     }
   }
 
@@ -141,15 +150,21 @@ public class AntSelect3 extends PageElement {
 
   private String getItemContainsLocator(String value) {
     return getListBoxLocator()
-        + "//div[@class='rc-virtual-list-holder-inner']/div[contains(normalize-space(@title),'"
-        + StringUtils.normalizeSpace(value) + "')]";
+        + "//div[@class='rc-virtual-list-holder-inner']//*[contains(normalize-space(@title),'"
+        + normalizeSpace(value) + "')]";
   }
 
   private String getItemEqualsLocator(String value) {
     return getListBoxLocator()
-        + "//div[@class='rc-virtual-list-holder-inner']/div[normalize-space(@title)='"
-        + StringUtils.normalizeSpace(
+        + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(@title)='"
+        + normalizeSpace(
         value) + "']";
+  }
+
+  private String getItemIgnoreCaseLocator(String value) {
+    return getListBoxLocator()
+        + "//div[@class='rc-virtual-list-holder-inner']//*[normalize-space(translate(@title, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))='"
+        + normalizeSpace(value.toLowerCase(Locale.ROOT)) + "']";
   }
 
   private String getListBoxLocator() {
@@ -165,6 +180,7 @@ public class AntSelect3 extends PageElement {
     if (!isElementVisible(listBoxLocator, 0)) {
       searchInput.click();
     }
+
   }
 
   public void closeMenu() {
@@ -188,7 +204,7 @@ public class AntSelect3 extends PageElement {
 
   public void enterSearchTerm(String value) {
     searchInput.setValue(value);
-    pause500ms();
+    waitUntilLoaded();
   }
 
   public void fillSearchTermAndEnter(String value) {
@@ -242,5 +258,11 @@ public class AntSelect3 extends PageElement {
 
   public void waitUntilEnabled() {
     searchInput.waitUntilClickable();
+  }
+
+  private void waitUntilLoaded(){
+    if (spinner.waitUntilVisible(1)){
+      spinner.waitUntilInvisible();
+    }
   }
 }

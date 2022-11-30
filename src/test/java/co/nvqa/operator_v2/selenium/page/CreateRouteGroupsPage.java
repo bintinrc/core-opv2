@@ -13,7 +13,6 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSwitch;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntFilterNumberBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenu;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
@@ -246,8 +245,8 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
 
   public static class GeneralFiltersForm extends PageElement {
 
-    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
-    public AntSelect addFilter;
+    @FindBy(xpath = ".//div[text()='Add Filter']//div[contains(@class,'ant-select')]")
+    public AntSelect3 addFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Start Datetime')]]")
     public AntDateRangePicker startDateTimeFilter;
@@ -301,8 +300,8 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
 
   public static class TransactionsFiltersForm extends PageElement {
 
-    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
-    public AntSelect addFilter;
+    @FindBy(xpath = ".//div[text()='Add Filter']//div[contains(@class,'ant-select')]")
+    public AntSelect3 addFilter;
 
     @FindBy(css = "button[role='switch']")
     public AntSwitch includeTransactions;
@@ -359,8 +358,8 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
 
   public static class ReservationFiltersForm extends PageElement {
 
-    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
-    public AntSelect addFilter;
+    @FindBy(xpath = ".//div[text()='Add Filter']//div[contains(@class,'ant-select')]")
+    public AntSelect3 addFilter;
 
     @FindBy(css = "button[role='switch']")
     public AntSwitch includeReservations;
@@ -381,8 +380,8 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
 
   public static class ShipmentFiltersForm extends PageElement {
 
-    @FindBy(xpath = ".//div[contains(@class,'ant-select')][.//span[.='Select Filter']]")
-    public AntSelect addFilter;
+    @FindBy(xpath = ".//div[text()='Add Filter']//div[contains(@class,'ant-select')]")
+    public AntSelect3 addFilter;
 
     @FindBy(css = "button[role='switch']")
     public AntSwitch includeShipments;

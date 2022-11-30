@@ -716,7 +716,9 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
     createRouteGroupsPage.inFrame(page -> {
       String value;
-      page.waitUntilLoaded(2);
+      page.waitUntilLoaded(5);
+      page.generalFiltersForm.waitUntilVisible();
+
       if (finalData.containsKey("startDateTimeFrom") || finalData.containsKey("startDateTimeTo")) {
         if (!page.generalFiltersForm.startDateTimeFilter.isDisplayedFast()) {
           page.generalFiltersForm.addFilter("Start Datetime");
@@ -1295,6 +1297,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(value)) {
         createRouteGroupsPage.shipmentFiltersForm.shipmentTypeFilter.selectFilter(value);
       }
+
       if (finalData.containsKey("transitDateTimeFrom") || finalData.containsKey(
           "transitDateTimeTo")) {
         if (!createRouteGroupsPage.shipmentFiltersForm.transitDateTimeFilter.isDisplayedFast()) {

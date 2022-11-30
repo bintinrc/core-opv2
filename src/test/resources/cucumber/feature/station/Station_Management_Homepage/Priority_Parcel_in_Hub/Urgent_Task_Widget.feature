@@ -29,7 +29,6 @@ Feature: Urgent Task Widget
     And Operator verifies that the modal: "<ModalName>" is displayed and can be closed
     And Operator verifies that the count in tile: "<TileName>" has increased by 1
     And Operator verifies that the sfld ticket count has increased by 1
-    And Operator verifies that the text: "<FSRParcelText>" and count are matching for fsr parcels in urgent tasks banner
     And Operator opens the modal: "<ModalName>" by clicking arrow beside the text: "<FSRParcelText>"
     And Operator verifies that a table is displayed with following columns:
       | Tracking ID           |
