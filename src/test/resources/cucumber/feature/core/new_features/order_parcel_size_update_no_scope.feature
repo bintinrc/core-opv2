@@ -1,13 +1,12 @@
 @OperatorV2 @Core @NewFeatures @OrderParcelSizeUpdate @NewFeatures2
 Feature: Order Parcel Size Update
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator is in Operator Portal V2 login page
     When Operator click login button
     Given Operator login as "{operator-portal-uid-2}" with password "{operator-portal-pwd-2}"
 
-  @Debug
   Scenario: Operator update order parcel size by upload CSV file with Multiple Orders - User has no scope
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                         |
