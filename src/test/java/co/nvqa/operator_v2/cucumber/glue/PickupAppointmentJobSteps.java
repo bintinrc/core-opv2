@@ -36,8 +36,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage = new PickupAppointmentJobPage(getWebDriver());
   }
 
-  @When("Operator loads Shipper Address Configuration page Pickup Appointment")
-  public void operatorLoadsShipperAddressConfigurationPage() {
+  @When("Operator goes to Pickup Jobs Page")
+  public void operatorGoesToPickupJobsPage() {
     getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
@@ -176,7 +176,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @And("Complete Pickup Job With Route Id")
   public void completePickupJobWithRouteId() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
-    operatorLoadsShipperAddressConfigurationPage();
+    operatorGoesToPickupJobsPage();
     pickupAppointmentJobPage
             .clickEditButton()
             .setRouteId(String.valueOf(routeId))
@@ -192,7 +192,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     if (shipperId == null) {
       shipperId = get(KEY_LEGACY_SHIPPER_ID);
     }
-    operatorLoadsShipperAddressConfigurationPage();
+    operatorGoesToPickupJobsPage();
     pickupAppointmentJobPage
             .selectDataRangeByTitle(startDay, endDay)
             .setShipperIDInField(shipperId)
@@ -839,8 +839,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.clickOnPresetFilters();
   }
 
-  @When("Operator click on Delete button")
-  public void clickOnDeleteButton() {
+  @When("Operator click on Delete Preset button")
+  public void clickOnDeletePresetButton() {
     pickupAppointmentJobPage.clickOnDeletePresetButton();
   }
 

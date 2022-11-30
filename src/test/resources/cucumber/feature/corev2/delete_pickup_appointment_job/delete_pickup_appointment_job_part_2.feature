@@ -15,7 +15,7 @@ Feature: Delete Pickup Appointment Job Part 2
       | overwrite | false |
     And API Operator complete appointment pickup job
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -40,7 +40,7 @@ Feature: Delete Pickup Appointment Job Part 2
       | failureReasonCodeId | 9    |
       | failureReasonId     | 1476 |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field

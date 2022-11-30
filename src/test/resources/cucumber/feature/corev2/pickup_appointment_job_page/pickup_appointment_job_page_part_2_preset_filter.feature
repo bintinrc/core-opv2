@@ -7,7 +7,7 @@ Feature: Pickup Appointment Job Page Part 2 - Preset Filter
 
   @CreatePresetFilters @DeletePresetFilter
   Scenario: Create preset filters on Pickup Jobs page
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
 
     Then QA verify filters on Pickup Jobs page are shown
       | dateStart      | {gradle-current-date-dd/MM/yyyy} |
@@ -50,7 +50,7 @@ Feature: Pickup Appointment Job Page Part 2 - Preset Filter
     Given API Operator create new Preset filters using data below:
       | createPresetFiltersRequest | {"name":"test preset name","value":{"priority":{"value":"All"},"shippers":[],"masterShippers":[],"zones":[],"jobStatus":[{"value":"ready-for-routing","label":"Ready for Routing"},{"value":"routed","label":"Routed"}],"serviceLevel":[],"serviceType":[{"value":"Scheduled"}]}} |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator fills in the Preset Filters preset with name = "test preset name"
 
     Then QA verify filters on Pickup Jobs page are shown
@@ -91,7 +91,7 @@ Feature: Pickup Appointment Job Page Part 2 - Preset Filter
     Given API Operator create new Preset filters using data below:
       | createPresetFiltersRequest | {"name":"test preset name","value":{"priority":{"value":"All"},"shippers":[{"value":{normal-shipper-pickup-appointment-1-global-id},"label":"{normal-shipper-pickup-appointment-1-id} - {normal-shipper-pickup-appointment-1-name}"}],"masterShippers":[{"value":36,"label":"Ninjavan"}],"zones":[{"value":33219,"label":"newZone"}],"jobStatus":[{"value":"ready-for-routing","label":"Ready for Routing"},{"value":"routed","label":"Routed"}],"serviceLevel":[{"value":"Premium"}],"serviceType":[{"value":"Scheduled"}]}} |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator fills in the Preset Filters preset with name = "test preset name"
 
     Then QA verify filters on Pickup Jobs page are shown
@@ -105,7 +105,7 @@ Feature: Pickup Appointment Job Page Part 2 - Preset Filter
       | shippers        | {normal-shipper-pickup-appointment-1-id} - {normal-shipper-pickup-appointment-1-name} |
 
     When Operator click on Create or Modify Preset button
-    And Operator click on Delete button
+    And Operator click on Delete Preset button
 
     Then QA verify Delete Preset modal shown
 

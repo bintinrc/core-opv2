@@ -10,7 +10,7 @@ Feature: Delete Pickup Appointment Job Part 1
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -42,7 +42,7 @@ Feature: Delete Pickup Appointment Job Part 1
     And API Operator add route to appointment pickup job using data below:
       | overwrite | false |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -75,7 +75,7 @@ Feature: Delete Pickup Appointment Job Part 1
     And API Operator add route to appointment pickup job using data below:
       | overwrite | false |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field

@@ -7,7 +7,7 @@ Feature: Pickup Appointment Job Page Part 1
 
   @ShowHideFilters
   Scenario: Show/hide filters on Pickup Jobs page
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
 
     Then QA verify filters on Pickup Jobs page are shown
       | dateStart      | {gradle-current-date-dd/MM/yyyy} |
@@ -20,7 +20,7 @@ Feature: Pickup Appointment Job Page Part 1
 
   @ClearSelectionFilters
   Scenario: Clear Selection filters on Pickup Jobs page
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     Then Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     And Operator click on Clear Selection button
 
@@ -32,7 +32,7 @@ Feature: Pickup Appointment Job Page Part 1
 
   @FillInFilters
   Scenario: Fill in filters on Pickup Jobs page
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     Then QA verify filters on Pickup Jobs page are shown
       | dateStart      | {gradle-current-date-dd/MM/yyyy} |
       | priority       | All                              |
