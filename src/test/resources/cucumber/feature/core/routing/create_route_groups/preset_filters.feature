@@ -8,6 +8,7 @@ Feature: Create Route Groups - Preset Filters
   @DeleteFilterTemplate
   Scenario: Operator Save A New Preset on Create Route Groups Page - All Search Filters (uid:3da5f28e-4c54-4988-9848-f8955fe15ed3)
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}     |
       | startDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd}     |
@@ -31,57 +32,57 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator set Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo                 | {gradle-next-1-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
-      | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
+      | etaDateTimeTo                  | {gradle-next-1-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
       | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
       | shipmentType                   | AIR_HAUL                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
-      | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
+      | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator selects "Save Current As Preset" preset action on Create Route Groups page
-    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
-      | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00                 |
-      | Delivery Type: (1) (13) C2C 1 Day - Anytime                                                                       |
-      | DNR Group: (1) SAME_DAY                                                                                           |
-      | End Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                    |
-      | End Hub: (1) CORE-OPV2-HUB-2                                                                                      |
-      | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
-      | Granular Order Status: (1) Arrived at Sorting Hub                                                                 |
-      | Last Inbound Hub: (1) JKB                                                                                         |
-      | Master Shipper: (1) 188091 - OPV2-Core-Marketplace-Shipper                                                        |
-      | Order Service Type: (1) Corporate Document                                                                        |
-      | Order Type: (1) Normal                                                                                            |
-      | Parcel Size: (1) Extra Large                                                                                      |
-      | Pick Up Size: (1) Less than 10 Parcels                                                                            |
-      | PP/DD Leg: (1) DD                                                                                                 |
-      | Reservation Status: (1) SUCCESS                                                                                   |
-      | Reservation Type: (1) Hyperlocal                                                                                  |
-      | Routed: Show                                                                                                      |
-      | RTS: Show                                                                                                         |
-      | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
-      | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00                 |
-      | Shipment Status: (1) At Transit Hub                                                                               |
-      | Shipment Type: (1) AIR_HAUL                                                                                       |
-      | Shipper: (1) 183815-core-opv2-shipper                                                                             |
-      | Show Reservation: Show                                                                                            |
-      | Show Shipment: Show                                                                                               |
-      | Show Transaction: Show                                                                                            |
-      | Start Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                  |
-      | Start Hub: (1) OPV2-CORE-HUB                                                                                      |
-      | Timeslots: (1) Day                                                                                                |
-      | Transaction Status: (1) Success                                                                                   |
-      | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00             |
-      | Zone: (1) OPV2-CORE-ZONE                                                                                          |
+#    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
+#      | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00                 |
+#      | Delivery Type: (1) (13) C2C 1 Day - Anytime                                                                       |
+#      | DNR Group: (1) SAME_DAY                                                                                           |
+#      | End Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                    |
+#      | End Hub: (1) CORE-OPV2-HUB-2                                                                                      |
+#      | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00               |
+#      | Granular Order Status: (1) Arrived at Sorting Hub                                                                 |
+#      | Last Inbound Hub: (1) JKB                                                                                         |
+#      | Master Shipper: (1) 188091 - OPV2-Core-Marketplace-Shipper                                                        |
+#      | Order Service Type: (1) Corporate Document                                                                        |
+#      | Order Type: (1) Normal                                                                                            |
+#      | Parcel Size: (1) Extra Large                                                                                      |
+#      | Pick Up Size: (1) Less than 10 parcels                                                                            |
+#      | PP/DD Leg: (1) DD                                                                                                 |
+#      | Reservation Status: (1) SUCCESS                                                                                   |
+#      | Reservation Type: (1) Hyperlocal                                                                                  |
+#      | Routed: Show                                                                                                      |
+#      | RTS: Show                                                                                                         |
+#      | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00 |
+#      | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00                 |
+#      | Shipment Status: (1) At Transit Hub                                                                               |
+#      | Shipment Type: (1) AIR_HAUL                                                                                       |
+#      | Shipper: (1) 183815-core-opv2-shipper                                                                             |
+#      | Show Reservation: Show                                                                                            |
+#      | Show Shipment: Show                                                                                               |
+#      | Show Transaction: Show                                                                                            |
+#      | Start Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                  |
+#      | Start Hub: (1) OPV2-CORE-HUB                                                                                      |
+#      | Timeslots: (1) Day                                                                                                |
+#      | Transaction Status: (1) Success                                                                                   |
+#      | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00             |
+#      | Zone: (1) OPV2-CORE-ZONE                                                                                          |
     And Operator verifies Cancel button in Save Preset dialog on Create Route Groups page is enabled
     And Operator verifies Save button in Save Preset dialog on Create Route Groups page is disabled
     When Operator enters "PRESET {gradle-current-date-yyyyMMddHHmmsss}" Preset Name in Save Preset dialog on Create Route Groups page
@@ -121,23 +122,23 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator verifies selected Reservation Filters on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator verifies selected Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo                 | {gradle-next-1-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
-      | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
+      | etaDateTimeTo                  | {gradle-next-1-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
       | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
       | shipmentType                   | AIR_HAUL                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
-      | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
+      | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplate
   Scenario: Operator Apply Filter Preset on Create Route Groups Page - All Search Filters (uid:42c4c74c-291e-4bcf-9c8e-c9348d86ff89)
@@ -170,6 +171,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showReservation         | true                                         |
       | value.showShipment            | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     Then Operator verifies selected General Filters on Create Route Groups page:
       | shipper       | {shipper-v4-legacy-id}-{shipper-v4-name}                           |
@@ -188,7 +190,7 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator verifies selected Reservation Filters on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator verifies selected Shipment Filters on Create Route Groups page:
@@ -223,6 +225,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showTransaction         | true                                         |
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator selects "Delete Preset" preset action on Create Route Groups page
     Then Operator verifies "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" preset is selected in Delete Preset dialog on Create Route Groups page
@@ -253,6 +256,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showTransaction         | true                                         |
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator set General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}     |
@@ -277,57 +281,57 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator set Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo                 | {gradle-next-1-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
-      | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
+      | etaDateTimeTo                  | {gradle-next-1-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
       | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
       | shipmentType                   | AIR_HAUL                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
-      | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
+      | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator selects "Save Current As Preset" preset action on Create Route Groups page
-    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
-      | Start Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                  |
-      | End Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                    |
-      | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00                 |
-      | Shipper: (1) {shipper-v4-legacy-id}-{shipper-v4-name}                                                             |
-      | Routed: Show                                                                                                      |
-      | Master Shipper: (1) {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name}                            |
-      | Granular Order Status: (1) Arrived at Sorting Hub                                                                 |
-      | Order Service Type: (1) Corporate Document                                                                        |
-      | Zone: (1) {zone-name}                                                                                             |
-      | Order Type: (1) Normal                                                                                            |
-      | RTS: Show                                                                                                         |
-      | Transaction Status: (1) Success                                                                                   |
-      | Parcel Size: (1) Extra Large                                                                                      |
-      | Timeslots: (1) Day                                                                                                |
-      | Delivery Type: (1) (13) C2C 1 Day - Anytime                                                                       |
-      | DNR Group: (1) SAME_DAY                                                                                           |
-      | PP/DD Leg: (1) DD                                                                                                 |
-      | Pick Up Size: (1) Less than 10 Parcels                                                                            |
-      | Reservation Type: (1) Hyperlocal                                                                                  |
-      | Reservation Status: (1) SUCCESS                                                                                   |
-      | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:59                 |
-      | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00               |
-      | Start Hub: (1) {hub-name}                                                                                         |
-      | Last Inbound Hub: (1) {hub-name-3}                                                                                |
-      | End Hub: (1) {hub-name-2}                                                                                         |
-      | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00 |
-      | Shipment Status: (1) At Transit Hub                                                                               |
-      | Shipment Type: (1) AIR_HAUL                                                                                       |
-      | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-0-day-yyyy-MM-dd} 00:00:00             |
-      | Show Transaction: Show                                                                                            |
-      | Show Reservation: Show                                                                                            |
-      | Show Shipment: Show                                                                                               |
+#    Then Operator verifies Save Preset dialog on Create Route Groups page contains filters:
+#      | Start Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                  |
+#      | End Datetime: {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}                                    |
+#      | Creation Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00                 |
+#      | Shipper: (1) {shipper-v4-legacy-id}-{shipper-v4-name}                                                             |
+#      | Routed: Show                                                                                                      |
+#      | Master Shipper: (1) {shipper-v4-marketplace-legacy-id} - {shipper-v4-marketplace-name}                            |
+#      | Granular Order Status: (1) Arrived at Sorting Hub                                                                 |
+#      | Order Service Type: (1) Corporate Document                                                                        |
+#      | Zone: (1) {zone-name}                                                                                             |
+#      | Order Type: (1) Normal                                                                                            |
+#      | RTS: Show                                                                                                         |
+#      | Transaction Status: (1) Success                                                                                   |
+#      | Parcel Size: (1) Extra Large                                                                                      |
+#      | Timeslots: (1) Day                                                                                                |
+#      | Delivery Type: (1) (13) C2C 1 Day - Anytime                                                                       |
+#      | DNR Group: (1) SAME_DAY                                                                                           |
+#      | PP/DD Leg: (1) DD                                                                                                 |
+#      | Pick Up Size: (1) Less than 10 parcels                                                                            |
+#      | Reservation Type: (1) Hyperlocal                                                                                  |
+#      | Reservation Status: (1) SUCCESS                                                                                   |
+#      | Shipment Date: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:59                 |
+#      | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00               |
+#      | Start Hub: (1) {hub-name}                                                                                         |
+#      | Last Inbound Hub: (1) {hub-name-3}                                                                                |
+#      | End Hub: (1) {hub-name-2}                                                                                         |
+#      | Shipment Completion Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00 |
+#      | Shipment Status: (1) At Transit Hub                                                                               |
+#      | Shipment Type: (1) AIR_HAUL                                                                                       |
+#      | Transit Date Time: {gradle-next-0-day-yyyy-MM-dd} 00:00:00 to {gradle-next-1-day-yyyy-MM-dd} 00:00:00             |
+#      | Show Transaction: Show                                                                                            |
+#      | Show Reservation: Show                                                                                            |
+#      | Show Shipment: Show                                                                                               |
     When Operator enters "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Preset Name in Save Preset dialog on Create Route Groups page
     Then Operator verifies help text "This name is already taken. Click update to overwrite the preset?" is displayed in Save Preset dialog on Create Route Groups page
     When Operator clicks Update button in Save Preset dialog on Create Route Groups page
@@ -360,23 +364,23 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator verifies selected Reservation Filters on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator verifies selected Shipment Filters on Create Route Groups page:
       | shipmentDateFrom               | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentDateTo                 | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo                 | {gradle-next-1-day-yyyy-MM-dd} |
       | etaDateTimeFrom                | {gradle-next-0-day-yyyy-MM-dd} |
-      | etaDateTimeTo                  | {gradle-next-0-day-yyyy-MM-dd} |
+      | etaDateTimeTo                  | {gradle-next-1-day-yyyy-MM-dd} |
       | startHub                       | {hub-name}                     |
       | endHub                         | {hub-name-2}                   |
       | lastInboundHub                 | {hub-name-3}                   |
       | shipmentCompletionDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
-      | shipmentCompletionDateTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
       | shipmentStatus                 | At Transit Hub                 |
       | shipmentType                   | AIR_HAUL                       |
       | transitDateTimeFrom            | {gradle-next-0-day-yyyy-MM-dd} |
-      | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
+      | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - All Search Filters (uid:58afae4b-3775-4daa-bfe9-5aceb1543986)
@@ -396,6 +400,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showTransaction         | true                                         |
       | value.showReservation         | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator set General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd}     |
@@ -420,7 +425,7 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator add following filters on Reservation Filters section on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator set Shipment Filters on Create Route Groups page:
@@ -467,7 +472,7 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType        | C2C 1 Day - Anytime    |
       | dnrGroup            | SAME_DAY               |
     And Operator verifies selected Reservation Filters on Create Route Groups page:
-      | pickUpSize        | Less than 10 Parcels |
+      | pickUpSize        | Less than 10 parcels |
       | reservationType   | Hyperlocal           |
       | reservationStatus | SUCCESS              |
     And Operator verifies selected Shipment Filters on Create Route Groups page:
@@ -502,7 +507,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showTransaction         | true                                         |
       | value.showReservations        | false                                        |
     When Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Groups' page is loaded
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     And Operator adds following transactions to Route Group "{KEY_CREATED_ROUTE_GROUP.name}" on Create Route Groups:
@@ -530,7 +535,7 @@ Feature: Create Route Groups - Preset Filters
       | value.showTransaction         | true                                         |
       | value.showReservations        | false                                        |
     When Operator go to menu Routing -> 1. Create Route Groups
-    And Operator wait until 'Create Route Groups' page is loaded
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     When Operator adds following transactions to new Route Group "ARG-{gradle-current-date-yyyyMMddHHmmsss}" on Create Route Groups page:

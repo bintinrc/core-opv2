@@ -2015,6 +2015,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
     @FindBy(id = "weight")
     public TextBox weight;
 
+    @FindBy(id = "length")
+    public TextBox length;
+
+    @FindBy(id = "width")
+    public TextBox width;
+
+    @FindBy(id = "breadth")
+    public TextBox breadth;
+
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
   }
@@ -2126,6 +2135,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
+    @FindBy(css = "[text='container.order.edit.rts-hint'] p")
+    public PageElement hint;
 
     @FindBy(css = "md-select[id^='commons.reason']")
     public MdSelect reason;
