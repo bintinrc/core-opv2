@@ -67,7 +67,7 @@ Feature: Pickup Appointment Job Page Part 1
     When Operator click Job Master Shipper field
     Then QA verify a dropdown menu shown
     And Select multiple job Master Shipper
-      | masterShipper | {master-shipper-1}, {master-shipper-2} |
+      | masterShippers | {master-shipper-1}, {master-shipper-2} |
 
     When Operator click Job Shipper field
     Then QA verify a dropdown menu shown
