@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements;
 
-import co.nvqa.common_selenium.page.SimplePage;
+import co.nvqa.common.ui.page.SimpleWebPage;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
-public class PageElement extends SimplePage {
+public class PageElement extends SimpleWebPage {
 
   protected WebElement webElement;
 

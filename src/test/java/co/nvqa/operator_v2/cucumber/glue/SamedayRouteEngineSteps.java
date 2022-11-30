@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.client.auth.AuthClient;
+import co.nvqa.commonauth.utils.TokenUtils;
 import co.nvqa.commons.client.core.BulkyTrackingClient;
-import co.nvqa.commons.model.auth.AuthResponse;
-import co.nvqa.commons.model.auth.ClientCredentialsAuth;
 import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.commons.model.core.bukly.BulkyOrder;
 import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,25 +43,10 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     samedayRouteEnginePage = new SamedayRouteEnginePage(getWebDriver());
   }
 
-  public String getOperatorAccessToken() {
-    String operatorAccessToken = get(KEY_OPERATOR_ACCESS_TOKEN);
-
-    if (operatorAccessToken == null) {
-      ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(
-          TestConstants.OPERATOR_CLIENT_ID, TestConstants.OPERATOR_CLIENT_SECRET);
-
-      AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
-      AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
-      operatorAccessToken = authResponse.getAccessToken();
-    }
-
-    return operatorAccessToken;
-  }
-
   public BulkyTrackingClient getBulkyTrackingClient() {
     if (bulkyTrackingClient == null) {
       bulkyTrackingClient = new BulkyTrackingClient(TestConstants.API_BASE_URL,
-          getOperatorAccessToken());
+          TokenUtils.getOperatorAuthToken());
     }
     return bulkyTrackingClient;
   }
@@ -110,8 +94,6 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     String routingAlgorithm = mapOfData.get("routingAlgorithm");
     String fleetType1OperatingHoursStart = mapOfData.get("fleetType1OperatingHoursStart");
     String fleetType1OperatingHoursEnd = mapOfData.get("fleetType1OperatingHoursEnd");
-    //String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
-    //String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
     String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity"))
         .orElse("10");
 
@@ -182,7 +164,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps {
     trackingIds.forEach(trId ->
     {
       BulkyOrder order = getBulkyTrackingClient().getBulkyOrderDetail(trId, asyncIdString);
-      assertEquals(suggestedDate, order.getSuggestedTimeslot().getDate());
+      Assertions.assertThat(order.getSuggestedTimeslot().getDate()).isEqualTo(suggestedDate);
     });
   }
 }

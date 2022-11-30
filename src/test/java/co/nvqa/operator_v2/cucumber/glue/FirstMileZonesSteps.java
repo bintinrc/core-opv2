@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.FirstMileZonesPage;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,19 +65,15 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @Then("^Operator verifies Submit Button in First Mile Zone add dialog is Disabled$")
   public void verifiesAddSubmitButtonDisabled() {
-    firstMileZonesPage.inFrame(page -> {
-      Assertions.assertThat(page.addFmZoneDialog.submit.isEnabled()).as("Submit button is disabled")
-          .isFalse();
-    });
+    firstMileZonesPage.inFrame(page -> Assertions.assertThat(page.addFmZoneDialog.submit.isEnabled()).as("Submit button is disabled")
+        .isFalse());
   }
 
   @Then("^Operator verifies Submit Button in First Mile Zone edit dialog is Disabled$")
   public void verifiesEditSubmitButtonDisabled() {
-    firstMileZonesPage.inFrame(page -> {
-      Assertions.assertThat(page.editFmZoneDialog.update.isEnabled())
-          .as("Submit button is disabled")
-          .isFalse();
-    });
+    firstMileZonesPage.inFrame(page -> Assertions.assertThat(page.editFmZoneDialog.update.isEnabled())
+        .as("Submit button is disabled")
+        .isFalse());
   }
 
   @Then("Operator verifies first mile zone details on First Mile Zones page:")
@@ -172,44 +168,44 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
       List<String> values = firstMileZonesPage.zonesTable.readColumn(COLUMN_ID);
-      assertThat("ID filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      Assertions.assertThat(values).as("ID filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
       values = firstMileZonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
-      assertThat("Short Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+      Assertions.assertThat(values).as("Short Name filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = firstMileZonesPage.zonesTable.readColumn(COLUMN_NAME);
-      assertThat("Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getName())));
+      Assertions.assertThat(values).as("Name filter results")
+          .allMatch(value -> value.contains(zone.getName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = firstMileZonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
-      assertThat("Hub Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      Assertions.assertThat(values).as("Hub Name filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
       values = firstMileZonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
-      assertThat("Latitude/Longitude filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      Assertions.assertThat(values).as("Latitude/Longitude filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
       values = firstMileZonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
-      assertThat("Description filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+      Assertions.assertThat(values).as("Description filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
 
   private void operatorCreateFirstMileZone(String hubName) {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
 
     Zone zone = new Zone();
@@ -291,8 +287,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
   @And("Operator upload a KML file {string} in First Mile Zones")
   public void operatorUploadAKMLFileInFirstMileZones(String fileName) {
     final String kmlFileName = "kml/" + fileName;
-    File file = null;
-    file = getKmlFile(kmlFileName);
+    File file = getKmlFile(kmlFileName);
     firstMileZonesPage.uploadKmlFileInput.sendKeys(file);
     firstMileZonesPage.selectKmlFile.click();
   }

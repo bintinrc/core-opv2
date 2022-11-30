@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import java.util.ArrayList;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -88,10 +89,10 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyRoleDetails(RoleManagement roleManagement) {
-    assertEquals("Different Role Name Returned", roleManagement.getRoleName(),
-        getText(COLUMN_DATA_TITLE_NAME));
-    assertEquals("Different Description Returned", roleManagement.getDesc(),
-        getText(COLUMN_DATA_TITLE_DESC));
+    Assertions.assertThat(getText(COLUMN_DATA_TITLE_NAME)).as("Different Role Name Returned")
+        .isEqualTo(roleManagement.getRoleName());
+    Assertions.assertThat(getText(COLUMN_DATA_TITLE_DESC)).as("Different Description Returned")
+        .isEqualTo(roleManagement.getDesc());
   }
 
   public void deleteRole() {
@@ -194,11 +195,11 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
   public void verifyEditedRoleDetails(RoleManagement roleManagement) {
     String actualName = getText(UPDATED_NAME_XPATH).replace("NAME\n", "");
     String actualDescription = getText(UPDATED_DESCRIPTION_XPATH).replace("DESCRIPTION\n", "");
-    assertEquals("Different Role Name Returned", roleManagement.getRoleName(),
-        actualName.replace("\nEdit", ""));
-    assertEquals("Different Description Returned", roleManagement.getDesc(),
-        actualDescription.replace("\nEdit", ""));
-    assertEquals("New Scope Not Found", roleManagement.getScope(),
-        getText(f("//tbody[1]//span/span[.='%s']", roleManagement.getScope())));
+    Assertions.assertThat(roleManagement.getRoleName()).as("Different Role Name Returned")
+        .isEqualTo(actualName.replace("\nEdit", ""));
+    Assertions.assertThat(roleManagement.getDesc()).as("Different Description Returned")
+        .isEqualTo(actualDescription.replace("\nEdit", ""));
+    Assertions.assertThat(roleManagement.getScope()).as("New Scope Not Found")
+        .isEqualTo(getText(f("//tbody[1]//span/span[.='%s']", roleManagement.getScope())));
   }
 }

@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.selenium.page.GlobalSettingsPage;
 import io.cucumber.java.en.And;
 import io.cucumber.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -36,14 +37,14 @@ public class GlobalSettingsSteps extends AbstractSteps {
 
   @And("Operator verifies Weight Tolerance value is {string} on Global Settings page")
   public void operatorVerifiesWeightToleranceValue(String expected) {
-    assertEquals("Weight Tolerance", Double.valueOf(resolveValue(expected)),
-        Double.valueOf(globalSettingsPage.inputWeightTolerance.getValue()));
+    Assertions.assertThat(Double.valueOf(globalSettingsPage.inputWeightTolerance.getValue()))
+        .as("Weight Tolerance").isEqualTo(Double.valueOf(resolveValue(expected)));
   }
 
   @And("Operator verifies Weight Limit value is {string} on Global Settings page")
   public void operatorVerifiesWeightLimitValue(String expected) {
-    assertEquals("Weight Limit", Double.valueOf(resolveValue(expected)),
-        Double.valueOf(globalSettingsPage.inputMaxWeightLimit.getValue()));
+    Assertions.assertThat(Double.valueOf(globalSettingsPage.inputMaxWeightLimit.getValue()))
+        .as("Weight Limit").isEqualTo(Double.valueOf(resolveValue(expected)));
   }
 
   @And("^Operator save Inbound settings on Global Settings page$")

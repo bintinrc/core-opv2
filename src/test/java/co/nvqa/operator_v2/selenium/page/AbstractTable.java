@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.util.JsonUtils;
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;

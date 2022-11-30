@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.MawbEvent;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;

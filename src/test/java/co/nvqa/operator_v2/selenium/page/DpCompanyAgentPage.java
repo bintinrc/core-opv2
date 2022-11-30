@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -62,23 +63,27 @@ public class DpCompanyAgentPage extends OperatorV2SimplePage {
 
   private void verifyDpCompanyInfoIsCorrect(DpCompanyAgent dpCompanyAgent) {
     String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-    assertEquals("DP Company Agent Name", dpCompanyAgent.getName(), actualName);
+    Assertions.assertThat(actualName).as("DP Company Agent Name")
+        .isEqualTo(dpCompanyAgent.getName());
 
     String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
-    assertEquals("DP Company Agent Email", dpCompanyAgent.getEmail(), actualEmail);
+    Assertions.assertThat(actualEmail).as("DP Company Agent Email")
+        .isEqualTo(dpCompanyAgent.getEmail());
 
     String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT_NO);
-    assertEquals("DP Company Agent Contact", dpCompanyAgent.getContact(), actualContact);
+    Assertions.assertThat(actualContact).as("DP Company Agent Contact")
+        .isEqualTo(dpCompanyAgent.getContact());
 
     String actualUnlockCode = getTextOnTable(1, COLUMN_CLASS_DATA_UNLOCK_CODE);
-    assertEquals("DP Company Agent Unlock Code", dpCompanyAgent.getUnlockCode(), actualUnlockCode);
+    Assertions.assertThat(actualUnlockCode).as("DP Company Agent Unlock Code")
+        .isEqualTo(dpCompanyAgent.getUnlockCode());
   }
 
   public void verifyDpCompanyAgentIsDeletedSuccessfully(DpCompanyAgent dpCompanyAgent) {
     searchTableByName(dpCompanyAgent.getName());
     boolean isTableEmpty = isTableEmpty();
-    assertTrue("DP Company Agent still exist in table. Fail to delete DP Company Agent.",
-        isTableEmpty);
+    Assertions.assertThat(isTableEmpty)
+        .as("DP Company Agent still exist in table. Fail to delete DP Company Agent.").isTrue();
   }
 
   public void backToDpCompanyManagementPage(DpCompany dpCompany) {

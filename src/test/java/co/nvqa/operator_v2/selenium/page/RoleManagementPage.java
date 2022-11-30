@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,9 +60,9 @@ public class RoleManagementPage extends OperatorV2SimplePage {
     searchTable(roleManagement.getRoleName());
 
     String actualName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);
-    assertEquals("Different Role Name Returned", roleManagement.getRoleName(), actualName);
+   Assertions.assertThat(actualName).as("Different Role Name Returned").isEqualTo(roleManagement.getRoleName());
     String actualDesc = getTextOnTable(1, COLUMN_DATA_TITLE_DESC);
-    assertEquals("Different Description Returned", roleManagement.getDesc(), actualDesc);
+   Assertions.assertThat(actualDesc).as("Different Description Returned").isEqualTo(roleManagement.getDesc());
   }
 
   public void deleteRole() {
@@ -73,8 +74,7 @@ public class RoleManagementPage extends OperatorV2SimplePage {
   public void verifyRoleIsDeleted(RoleManagement roleManagement) {
     waitUntilVisibilityOfElementLocated("//table[@ng-table='ctrl.allRoleParams']/tbody/tr");
     searchTable(roleManagement.getRoleName());
-    assertFalse("Row is exist.",
-        isElementExistWait1Second("//table[@ng-table='ctrl.allRoleParams']/tbody/tr"));
+   Assertions.assertThat(        isElementExistWait1Second("//table[@ng-table='ctrl.allRoleParams']/tbody/tr")).as("Row is exist.").isFalse();
   }
 
   public void editRole(RoleManagement roleManagement, RoleManagement roleManagementEdited) {

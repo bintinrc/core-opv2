@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
@@ -104,7 +105,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
         .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     csvContents = "tracking_id,delivery_date" + System.lineSeparator() + csvContents;
     File csvFile = failedDeliveryManagementPage.createFile(
-        String.format("csv_reschedule_%s.csv", generateDateUniqueString()), csvContents);
+        String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()), csvContents);
 
     failedDeliveryManagementPage.waitWhilePageIsLoading();
     failedDeliveryManagementPage.csvReschedule.click();
@@ -214,8 +215,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   }
 
   private RtsDetails buildRtsDetails(Map<String, String> data) {
-    Map<String, String> mapOfTokens = createDefaultTokens();
-    data = replaceDataTableTokens(data, mapOfTokens);
+    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
+    data = StandardTestUtils.replaceDataTableTokens(data, mapOfTokens);
 
     RtsDetails rtsDetails = new RtsDetails(resolveKeyValues(data));
 
@@ -249,8 +250,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   @When("^Operator verifies error messages in dialog on Failed Delivery Management page:$")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);
-    assertTrue("Errors dialog is displayed",
-        failedDeliveryManagementPage.errorsDialog.waitUntilVisible(5));
+   Assertions.assertThat(        failedDeliveryManagementPage.errorsDialog.waitUntilVisible(5)).as("Errors dialog is displayed").isTrue();
     List<String> actual = failedDeliveryManagementPage.errorsDialog.errorMessage.stream()
         .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
             .replaceAll("^\\d{1,2}\\.", ""))

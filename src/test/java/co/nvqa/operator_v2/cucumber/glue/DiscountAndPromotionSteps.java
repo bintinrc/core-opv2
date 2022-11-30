@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT_SNS_1;
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class DiscountAndPromotionSteps extends AbstractSteps {
 
@@ -182,7 +182,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
 
   @NotNull
   private File getCsvFile(String shipperLegacyId) {
-    File csvFile = createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
+    File csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
     LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());
     return csvFile;
   }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.interactions.Actions;
 
 /**
@@ -51,13 +51,14 @@ public class AddressVerificationSteps extends AbstractSteps {
     List<String> actual = addressVerificationPage.fetchedAddresses.stream()
         .map(PageElement::getNormalizedText)
         .collect(Collectors.toList());
-    assertThat("List of fetched addresses", actual,
-        Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+    Assertions.assertThat(actual).as("List of fetched addresses").containsAll(expected);
   }
 
   @When("Operator clicks on 'Edit' button for {int} address on Address Verification page")
   public void operatorOpenEditAddressModal(Integer index) {
-    if (index == -1) index = addressVerificationPage.editLinks.size();
+    if (index == -1) {
+      index = addressVerificationPage.editLinks.size();
+    }
     addressVerificationPage.editLinks.get(index - 1).click();
   }
 

@@ -8,6 +8,7 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.ManageOrderTagsPage.TagsTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.TagManagementPage.TagsTable.COLUMN_NAME;
@@ -62,7 +63,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
         break;
       }
     }
-    assertNotNull("Tag " + tag.getName() + " was not found", actual);
+    Assertions.assertThat(actual).as("Tag " + tag.getName() + " was not found").isNotNull();
     tag.compareWithActual(actual, "id");
   }
 

@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.cucumber.ScenarioStorage;
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.cucumber.ScenarioStorage;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.util.TestConstants;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -46,7 +46,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
     click(f("//md-tab-item/span[contains(text(), '%s')]", label));
   }
 
-  public void selectFiltersAndClickLoadSelection(Date fromDate, Date toDate, String zoneName,
+  public void selectFiltersAndClickLoadSelection(ZonedDateTime fromDate, ZonedDateTime toDate, String zoneName,
       String hubName) {
     setMdDatepicker("fromModel", fromDate);
     setMdDatepicker("toModel", toDate);
@@ -62,7 +62,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
   public void verifyRouteIdExists(String routeId) {
     searchTableByRouteId(routeId);
     String actualRouteId = getText("//td[@class='id']//span[@class='highlight']");
-    assertEquals("Route ID is not found.", routeId, actualRouteId);
+   Assertions.assertThat(actualRouteId).as("Route ID is not found.").isEqualTo(routeId);
   }
 
   public void searchTableByRouteId(String routeId) {
@@ -72,17 +72,17 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
 
   public void verifyRouteIdDoesNotExists(String routeId) {
     searchTableByRouteId(routeId);
-    assertTrue("Route id not found", isTableEmpty());
+   Assertions.assertThat(isTableEmpty()).as("Route id not found").isTrue();
   }
 
   public void verifyStatusInProgress() {
     String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-    assertEquals("Route ID is not found.", "In Progress", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not found.").isEqualTo("In Progress");
   }
 
   public void verifyStatusComplete() {
     String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-    assertEquals("Route ID is not found.", "Complete", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not found.").isEqualTo("Complete");
   }
 
   public void clickFlagButton() {
@@ -91,7 +91,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
 
   public void verifyStatusMarked() {
     String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-    assertEquals("Route ID is not marked.", "Marked", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not marked.").isEqualTo("Marked");
   }
 
   public void clickCommentButtonAndSubmit() {
@@ -103,7 +103,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
 
   public void verifyCommentIsRight() {
     String actualComment = getTextOnTable(1, COLUMN_CLASS_DATA_COMMENT);
-    assertEquals("Comment is different.", "This comment is for test purpose.", actualComment);
+   Assertions.assertThat(actualComment).as("Comment is different.").isEqualTo("This comment is for test purpose.");
   }
 
   public void searchTableByRouteId(long routeId) {
@@ -125,7 +125,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
   public void verifyRouteIdAndInfo(String routeId, Integer assigned, Integer loaded,
       Integer passedBack, Integer missing) {
     String actualRouteId = getTextOnTable("id");
-    assertEquals("RouteId must match", routeId, actualRouteId);
+   Assertions.assertThat(actualRouteId).as("RouteId must match").isEqualTo(routeId);
     ////# Note, please verify this:
     ////# - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
     ////# - Parcels Assigned = 2
@@ -134,19 +134,19 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
     ////# - Parcels Missing Parcels = 0
     String driverName = TestConstants.NINJA_DRIVER_NAME;
     String actualName = getTextOnTable("driver_name");
-    assertEquals("Driver name must match", driverName, actualName);
+   Assertions.assertThat(actualName).as("Driver name must match").isEqualTo(driverName);
 
     String actualParcelsAssigned = getTextOnTable("total_parcels_count");
-    assertEquals("Parcels Assigned must match", actualParcelsAssigned, assigned.toString());
+   Assertions.assertThat(assigned.toString()).as("Parcels Assigned must match").isEqualTo(actualParcelsAssigned);
 
     String actualParcelsLoaded = getTextOnTable("van_parcels_count");
-    assertEquals("Parcels Loaded must match", actualParcelsLoaded, loaded.toString());
+   Assertions.assertThat(loaded.toString()).as("Parcels Loaded must match").isEqualTo(actualParcelsLoaded);
 
     String actualParcelsPassedBack = getTextOnTable("truck_parcels_count");
-    assertEquals("Parcels Passed Back  must match", actualParcelsPassedBack, passedBack.toString());
+   Assertions.assertThat(passedBack.toString()).as("Parcels Passed Back  must match").isEqualTo(actualParcelsPassedBack);
 
     String actualParcelsMissingParcels = getTextOnTable("missing_parcels_count");
-    assertEquals("Parcels Missing must match", actualParcelsMissingParcels, missing.toString());
+   Assertions.assertThat(missing.toString()).as("Parcels Missing must match").isEqualTo(actualParcelsMissingParcels);
   }
 
 
@@ -165,7 +165,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
         found++;
       }
     }
-    assertEquals("Tracking IDs must match", found, ids.size());
+   Assertions.assertThat(ids.size()).as("Tracking IDs must match").isEqualTo(found);
     closeModal();
   }
 }

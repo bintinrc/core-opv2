@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,7 +60,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   public void openPage(long routeId) {
     getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-        StandardTestConstants.COUNTRY_CODE.toLowerCase(), routeId));
+        StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), routeId));
     waitUntilPageLoaded();
   }
 
@@ -94,17 +95,16 @@ public class RouteManifestPage extends OperatorV2SimplePage {
         "//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
     String actualWaypointSuccessCount = getText(
         "//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Success.value')]");
-    assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
-    assertEquals("Waypoint Success Count", "1", actualWaypointSuccessCount);
+   Assertions.assertThat(actualRouteId).as("Route ID").isEqualTo(String.valueOf(route.getId()));
+   Assertions.assertThat(actualWaypointSuccessCount).as("Waypoint Success Count").isEqualTo("1");
 
     searchTableByTrackingId(order.getTrackingId());
-    assertFalse(f("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()),
-        isTableEmpty());
+   Assertions.assertThat(        isTableEmpty()).as(f("Order with Tracking ID = '%s' not found on table.", order.getTrackingId())).isFalse();
 
     String actualStatus = getTextOnTable(1, COLUMN_STATUS);
     String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
-    assertEquals("Status", "Success", actualStatus);
-    assertEquals("Count Delivery", "1", actualCountDelivery);
+   Assertions.assertThat(actualStatus).as("Status").isEqualTo("Success");
+   Assertions.assertThat(actualCountDelivery).as("Count Delivery").isEqualTo("1");
   }
 
   public void verify1DeliveryIsFailed(Route route, Order order,
@@ -115,8 +115,8 @@ public class RouteManifestPage extends OperatorV2SimplePage {
         "//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
     String actualWaypointSuccessCount = getText(
         "//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Fail.value')]");
-    assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
-    assertEquals("Waypoint Failed Count", "1", actualWaypointSuccessCount);
+   Assertions.assertThat(actualRouteId).as("Route ID").isEqualTo(String.valueOf(route.getId()));
+   Assertions.assertThat(actualWaypointSuccessCount).as("Waypoint Failed Count").isEqualTo("1");
 
     searchTableByTrackingId(order.getTrackingId());
     assertFalse(
@@ -126,9 +126,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     String actualStatus = getTextOnTable(1, COLUMN_STATUS);
     String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
     String actualComments = getTextOnTable(1, COLUMN_COMMENTS);
-    assertEquals("Status", "Fail", actualStatus);
-    assertEquals("Count Delivery", "1", actualCountDelivery);
-    assertEquals("Comments", expectedFailureReason.getDescription(), actualComments);
+   Assertions.assertThat(actualStatus).as("Status").isEqualTo("Fail");
+   Assertions.assertThat(actualCountDelivery).as("Count Delivery").isEqualTo("1");
+   Assertions.assertThat(actualComments).as("Comments").isEqualTo(expectedFailureReason.getDescription());
   }
 
   public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails) {

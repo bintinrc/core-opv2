@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.util.Arrays;
 import java.util.List;

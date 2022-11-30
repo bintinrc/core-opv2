@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -57,24 +58,24 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
   }
 
   public void verifyRouteIdExists(String routeId) {
-    assertFalse("Routes table is empty", routesTable.isTableEmpty());
+   Assertions.assertThat(routesTable.isTableEmpty()).as("Routes table is empty").isFalse();
     String actualRouteId = routesTable.getColumnText(1, COLUMN_ROUTE_ID);
-    assertEquals("Route ID is not found.", routeId, actualRouteId);
+   Assertions.assertThat(actualRouteId).as("Route ID is not found.").isEqualTo(routeId);
   }
 
   public void verifyStatusInProgress() {
     String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
-    assertEquals("Route ID is not found.", "In Progress", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not found.").isEqualTo("In Progress");
   }
 
   public void verifyStatusComplete() {
     String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
-    assertEquals("Route ID is not found.", "Complete", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not found.").isEqualTo("Complete");
   }
 
   public void verifyStatusMarked() {
     String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
-    assertEquals("Route ID is not marked.", "Marked", actualStatus);
+   Assertions.assertThat(actualStatus).as("Route ID is not marked.").isEqualTo("Marked");
   }
 
   public void clickCommentButtonAndSubmit() {
@@ -87,7 +88,7 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
 
   public void verifyCommentIsRight() {
     String actualComment = routesTable.getColumnText(1, COLUMN_COMMENTS);
-    assertEquals("Comment is different.", "This comment is for test purpose.", actualComment);
+   Assertions.assertThat(actualComment).as("Comment is different.").isEqualTo("This comment is for test purpose.");
   }
 
   public void searchTableByRouteId(long routeId) {

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.commons.support.OrderHelper;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -148,7 +148,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
   @When("^Operator saves created orders Tracking IDs without prefix$")
   public void removeTrackingIdsPrefix() {
     List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-    String prefix = OrderHelper.getCountryPrefix(TestConstants.COUNTRY_CODE);
+    String prefix = OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID);
     List<String> prefixlessTrackingIds = trackingIds.stream()
         .map(s -> s.replaceFirst(prefix, ""))
         .collect(Collectors.toList());
@@ -170,7 +170,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     implantedManifestPage.addPrefix.click();
     implantedManifestPage.setPrefixDialog.waitUntilVisible();
     implantedManifestPage.setPrefixDialog.prefix
-        .setValue(OrderHelper.getCountryPrefix(TestConstants.COUNTRY_CODE));
+        .setValue(OrderHelper.getCountryPrefix(TestConstants.NV_SYSTEM_ID));
     implantedManifestPage.setPrefixDialog.save.click();
     implantedManifestPage.setPrefixDialog.waitUntilInvisible();
   }

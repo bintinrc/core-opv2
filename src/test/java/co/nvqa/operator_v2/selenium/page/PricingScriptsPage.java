@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
@@ -236,30 +237,30 @@ public class PricingScriptsPage extends OperatorV2SimplePage {
 
     String actualTotal = getText(
         "//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
-    assertEquals("Total", expectedTotal, actualTotal);
+   Assertions.assertThat(actualTotal).as("Total").isEqualTo(expectedTotal);
 
         /*String actualGst = getText("//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         Assert.assertEquals("GST", expectedGst, actualGst);*/
 
     String actualCodFee = getText(
         "//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
-    assertEquals("COD Fee", expectedCodFee, actualCodFee);
+   Assertions.assertThat(actualCodFee).as("COD Fee").isEqualTo(expectedCodFee);
 
     String actualInsuranceFee = getText(
         "//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
-    assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
+   Assertions.assertThat(actualInsuranceFee).as("Insurance Fee").isEqualTo(expectedInsuranceFee);
 
     String actualDeliveryFee = getText(
         "//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
-    assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
+   Assertions.assertThat(actualDeliveryFee).as("Delivery Fee").isEqualTo(expectedDeliveryFee);
 
     String actualHandlingFee = getText(
         "//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
-    assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
+   Assertions.assertThat(actualHandlingFee).as("Handling Fee").isEqualTo(expectedHandlingFee);
 
     String actualComments = getText(
         "//md-input-container/label[text()='Comments']/following-sibling::div[1]");
-    assertEquals("Comments", expectedComments, actualComments);
+   Assertions.assertThat(actualComments).as("Comments").isEqualTo(expectedComments);
   }
 
   public void clickButtonCancel() {

@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable;
 import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -91,16 +92,17 @@ public class SortBeltShipmentPage extends OperatorV2SimplePage {
 
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
-    assertEquals("Shipment ID", expectedShipmentId, String.valueOf(shipmentId));
+    Assertions.assertThat(String.valueOf(shipmentId)).as("Shipment ID")
+        .isEqualTo(expectedShipmentId);
 
     String expectedShipmentEntrySource = getText(
         "//td[@nv-table-highlight='filter.shipment_entry_source']");
-    assertEquals("Shipment Entry Source", expectedShipmentEntrySource, BELT);
+    Assertions.assertThat(BELT).as("Shipment Entry Source").isEqualTo(expectedShipmentEntrySource);
   }
 
   public void verifiesHighlightedFilterIsShown(String value) {
     retryIfAssertionErrorOccurred(() ->
-        assertTrue(isElementExist(f(HIGHLIGHTED_FILTER_INPUT_XPATH, value))),
-        f("Finding Sort Belt Shipment with comment %s", value));
+        Assertions.assertThat(isElementExist(f(HIGHLIGHTED_FILTER_INPUT_XPATH, value)))
+            .isTrue(), f("Finding Sort Belt Shipment with comment %s", value));
   }
 }

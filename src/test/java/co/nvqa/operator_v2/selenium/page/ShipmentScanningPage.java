@@ -29,8 +29,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.hamcrest.Matchers.allOf;
-
 /**
  * @author Lanang Jati
  * <p>
@@ -255,18 +253,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void selectShipmentType(String shipmentType) {
     TestUtils.findElementAndClick("shipment_type", "id", getWebDriver());
-    if(shipmentType.equals("AIR_HAUL")){
+    if (shipmentType.equals("AIR_HAUL")) {
       shipmentType = "Air Haul";
-    }else if(shipmentType.equals("SEA_HAUL")){
+    } else if (shipmentType.equals("SEA_HAUL")) {
       shipmentType = "Sea Haul";
-    }else if(shipmentType.equals("LAND_HAUL")){
+    } else if (shipmentType.equals("LAND_HAUL")) {
       shipmentType = "Land Haul";
-    }else if(shipmentType.equals("OTHERS")){
+    } else if (shipmentType.equals("OTHERS")) {
       shipmentType = "Others";
-    }else if(shipmentType.equals("ALL")){
+    } else if (shipmentType.equals("ALL")) {
       shipmentType = "All";
     }
-    TestUtils.findElementAndClick("//div[.='"+shipmentType+"']", "xpath", getWebDriver());
+    TestUtils.findElementAndClick("//div[.='" + shipmentType + "']", "xpath", getWebDriver());
   }
 
   public void scanBarcode(String trackingId) {
@@ -278,14 +276,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     WebElement orderWe = getWebDriver().findElement(By.xpath(String
         .format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", trackingId)));
     boolean orderExist = orderWe != null;
-    assertTrue("order " + trackingId + " doesn't exist in shipment", orderExist);
+    Assertions.assertThat(orderExist).as("order " + trackingId + " doesn't exist in shipment")
+        .isTrue();
   }
 
   public void checkOrderNotInShipment(String trackingId) {
     retryIfAssertionErrorOccurred(() -> {
       try {
         List<String> shipmentsList = getTextOfElements("//td[contains(@class, 'tracking-id')]");
-        Assertions.assertThat(!shipmentsList.contains(trackingId)).as("Order "+ trackingId +" exists in shipment").isTrue();
+        Assertions.assertThat(!shipmentsList.contains(trackingId))
+            .as("Order " + trackingId + " exists in shipment").isTrue();
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         throw ex;
@@ -297,14 +297,17 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void closeShipment() {
     pause300ms();
     click("//button//span[.='Close Shipment']");
-    waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
+    waitUntilVisibilityOfElementLocated(
+        "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
     TestUtils.callJavaScriptExecutor("arguments[0].click();",
-            getWebDriver().findElement(By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
-            getWebDriver());
+        getWebDriver().findElement(
+            By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
+        getWebDriver());
     String toastMessage = getAntTopText();
     LOGGER.info(toastMessage);
-    assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
-        allOf(containsString("Shipment"), containsString("closed")));
+    Assertions.assertThat(toastMessage)
+        .as("Toast message not contains Shipment <SHIPMENT_ID> created")
+        .contains("Shipment", "closed");
     waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
@@ -323,10 +326,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void scanAndCloseShipmentWithData(String originHubName, String destinationHubName,
-                                    String shipmentType, String shipmentId, String trackingId) {
+      String shipmentType, String shipmentId, String trackingId) {
     pause10s();
     switchTo();
-    waitUntilVisibilityOfElementLocated("//div[span[input[@id='orig_hub']]]//span[.='Search or Select']");
+    waitUntilVisibilityOfElementLocated(
+        "//div[span[input[@id='orig_hub']]]//span[.='Search or Select']");
     selectHub(originHubName);
     selectDestinationHub(destinationHubName);
     selectShipmentType(shipmentType);
@@ -340,8 +344,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void scanAndCloseShipmentsWithData(String originHubName, String destinationHubName,
-                                           String shipmentType, String shipmentId, String trackingId) {
-    waitUntilVisibilityOfElementLocated("//div[span[input[@id='shipment_id']]]//span[.='Search or Select']");
+      String shipmentType, String shipmentId, String trackingId) {
+    waitUntilVisibilityOfElementLocated(
+        "//div[span[input[@id='shipment_id']]]//span[.='Search or Select']");
     waitUntilElementIsClickable("//input[@id='shipment_id']");
     selectShipmentId(Long.parseLong(shipmentId));
     clickSelectShipment();
@@ -353,22 +358,22 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void removeOrderFromShipment(String firstTrackingId) {
     pause1s();
-    sendKeysAndEnter("//input[@aria-label='input-tracking_id']",firstTrackingId);
+    sendKeysAndEnter("//input[@aria-label='input-tracking_id']", firstTrackingId);
 
     pause1s();
-    waitUntilVisibilityOfElementLocated("//tr[@data-row-key='"+firstTrackingId+"']//button");
-    waitUntilElementIsClickable("//tr[@data-row-key='"+firstTrackingId+"']//button");
-    click("//tr[@data-row-key='"+firstTrackingId+"']//button");
+    waitUntilVisibilityOfElementLocated("//tr[@data-row-key='" + firstTrackingId + "']//button");
+    waitUntilElementIsClickable("//tr[@data-row-key='" + firstTrackingId + "']//button");
+    click("//tr[@data-row-key='" + firstTrackingId + "']//button");
 
     pause1s();
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
     TestUtils.callJavaScriptExecutor("arguments[0].click();",
-            getWebDriver().findElement(By.xpath("//button[.='Confirm Remove']")), getWebDriver());
+        getWebDriver().findElement(By.xpath("//button[.='Confirm Remove']")), getWebDriver());
     String toastMessage = getAntTopText();
     LOGGER.info(toastMessage);
     Assertions.assertThat(toastMessage)
-            .as("Success Delete Order tracking ID "+firstTrackingId)
-            .isEqualTo("Success Delete Order tracking ID "+firstTrackingId);
+        .as("Success Delete Order tracking ID " + firstTrackingId)
+        .isEqualTo("Success Delete Order tracking ID " + firstTrackingId);
     waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
   }
 
@@ -377,9 +382,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
     pause1s();
     String statusCardText = findElementByXpath(XPATH_STATUS_CARD_BOX).getText();
-    assertThat("Invalid contained", statusCardText.toLowerCase(), containsString("invalid"));
-    assertThat("Not in Shipment  contained", statusCardText.toLowerCase(),
-        containsString("not in shipment"));
+    Assertions.assertThat(statusCardText.toLowerCase()).as("Invalid contained").contains("invalid");
+    Assertions.assertThat(statusCardText.toLowerCase()).as("Not in Shipment  contained")
+        .contains("not in shipment");
   }
 
   public void verifyTheSumOfOrderIsDecreased(int expectedSumOfOrder) {
@@ -387,7 +392,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         "//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5")
         .substring(0, 1);
     int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
-    assertEquals("Sum Of Order is not the same : ", expectedSumOfOrder, actualSumOfOrderAsInt);
+    Assertions.assertThat(actualSumOfOrderAsInt).as("Sum Of Order is not the same : ")
+        .isEqualTo(expectedSumOfOrder);
   }
 
   public void removeAllOrdersFromShipment() {
@@ -395,15 +401,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     click("//button//span[.='Remove All']");
     waitUntilVisibilityOfElementLocated("//div[contains(@class,'ant-modal-content')]");
     TestUtils.callJavaScriptExecutor("arguments[0].click();",
-            getWebDriver().findElement(By.xpath("//button[.='Remove']")), getWebDriver());
-    waitUntilInvisibilityOfElementLocated("//div[contains(@class,'ant-modal-title')][.='Removing all']");
+        getWebDriver().findElement(By.xpath("//button[.='Remove']")), getWebDriver());
+    waitUntilInvisibilityOfElementLocated(
+        "//div[contains(@class,'ant-modal-title')][.='Removing all']");
   }
 
   public void verifyTheSumOfOrderIsZero() {
     String actualSumOfOrder = getText(
         "//div[@class='ant-space-item']//h4").substring(0, 1);
     int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
-    assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
+    Assertions.assertThat(actualSumOfOrderAsInt).as("Sum Of Order is not the same : ").isEqualTo(0);
   }
 
   public void verifyOrderIsRedHighlighted() {
@@ -415,24 +422,28 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     Color statusCardColor = getBackgroundColor(XPATH_STATUS_CARD_BOX);
     Color zoneCardColor = getBackgroundColor(XPATH_ZONE_CARD_BOX);
     String expectedColor = "#55a1e8";
-    assertThat("Status Card color is blue", statusCardColor.asHex(), equalTo(expectedColor));
-    assertThat("Zone Card color is blue", zoneCardColor.asHex(), equalTo(expectedColor));
+    Assertions.assertThat(statusCardColor.asHex()).as("Status Card color is blue")
+        .isEqualTo(expectedColor);
+    Assertions.assertThat(zoneCardColor.asHex()).as("Zone Card color is blue")
+        .isEqualTo(expectedColor);
   }
 
   public void verifyToastWithMessageIsShown(String expectedToastMessage) {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String actualToastMessage = "";
-        if(null == antNotificationMessage || antNotificationMessage.equals("")){
+        if (null == antNotificationMessage || antNotificationMessage.equals("")) {
           if (isElementExistFast("//div[@class='ant-message-notice']//span[2]")) {
             actualToastMessage = getAntTopText();
-          } else
-            actualToastMessage = getAntTopTextV2() ;
-        }else{
+          } else {
+            actualToastMessage = getAntTopTextV2();
+          }
+        } else {
           actualToastMessage = antNotificationMessage;
         }
         antNotificationMessage = "";
-        Assertions.assertThat(actualToastMessage).as("Shipment inbound toast message is the same").isEqualTo(expectedToastMessage);
+        Assertions.assertThat(actualToastMessage).as("Shipment inbound toast message is the same")
+            .isEqualTo(expectedToastMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
@@ -449,39 +460,43 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void verifyBottomToastContainingMessageIsShown(String expectedToastMessageContain) {
     String actualToastMessage = getAntNotificationMessage();
-    assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
-        containsString(expectedToastMessageContain));
+    Assertions.assertThat(actualToastMessage)
+        .as("Toast message contains %s", expectedToastMessageContain)
+        .contains(expectedToastMessageContain);
   }
 
   public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {
     String actualToastMessage = "";
-    if(null == antNotificationMessage || antNotificationMessage.equals("")){
+    if (null == antNotificationMessage || antNotificationMessage.equals("")) {
       actualToastMessage = getAntTopText();
-    }else{
+    } else {
       actualToastMessage = antNotificationMessage;
     }
-    assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage,
-        containsString(expectedToastMessageContain));
+    Assertions.assertThat(actualToastMessage)
+        .as("Toast message contains %s", expectedToastMessageContain)
+        .contains(expectedToastMessageContain);
   }
 
   public void verifyBottomToastDriverInTripContainingEitherMessage(
       List<String> expectedToastMessages) {
     String actualToastMessage = getAntNotificationMessage().split(" with expected ")[0];
-    assertThat(f("Toast message contains either %s or %s", expectedToastMessages.get(0),
-        expectedToastMessages.get(1)), actualToastMessage,
-        isOneOf(expectedToastMessages.get(0), expectedToastMessages.get(1)));
+    Assertions.assertThat(actualToastMessage)
+        .as("Toast message contains either %s or %s", expectedToastMessages.get(0),
+            expectedToastMessages.get(1))
+        .containsAnyOf(expectedToastMessages.get(0), expectedToastMessages.get(1));
   }
 
 
   public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
     String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
-    assertThat("Scan container color is the same", actualContainerColorAsHex,
-        equalTo(expectedContainerColorAsHex));
+    Assertions.assertThat(actualContainerColorAsHex).as("Scan container color is the same")
+        .isEqualTo(expectedContainerColorAsHex);
   }
 
   public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
     String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
-    Assertions.assertThat(actualColorAsHex).as("Scanned shipment color:").isEqualTo(expectedShipmentColorAsHex);
+    Assertions.assertThat(actualColorAsHex).as("Scanned shipment color:")
+        .isEqualTo(expectedShipmentColorAsHex);
   }
 
   public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex,
@@ -499,17 +514,21 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void clickEndShipmentInbound() {
     pause3s();
     endInboundButton.click();
-    waitUntilVisibilityOfElementLocated("//div[ contains(@role,'dialog') and not(contains(@style, 'none'))]//div[contains(@class, 'ant-modal-content')]");
+    waitUntilVisibilityOfElementLocated(
+        "//div[ contains(@role,'dialog') and not(contains(@style, 'none'))]//div[contains(@class, 'ant-modal-content')]");
   }
 
   public void clickProceedInEndInboundDialog() {
     waitUntilVisibilityOfElementLocated(ANT_MODAL_CONTENT_XPATH);
-    String dialogTitleText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_TITLE_XPATH)).getText();
-    assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
+    String dialogTitleText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_TITLE_XPATH))
+        .getText();
+    Assertions.assertThat(dialogTitleText).as("Dialog title is the same")
+        .isEqualTo("Confirm End Inbound");
 
-    String dialogMessageText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_CONTENT_XPATH)).getText();
-    assertThat("Dialog message text is the same", dialogMessageText,
-        equalTo("Are you sure you want to end inbound?"));
+    String dialogMessageText = getWebDriver().findElement(By.xpath(ANT_MODAL_CONFIRM_CONTENT_XPATH))
+        .getText();
+    Assertions.assertThat(dialogMessageText).as("Dialog message text is the same")
+        .isEqualTo("Are you sure you want to end inbound?");
 
     ok.waitUntilClickable();
     ok.click();
@@ -517,12 +536,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void clickProceedInTripDepartureDialog() {
-    if(null != antModalConfirmTitleElements){
+    if (null != antModalConfirmTitleElements) {
       String dialogTitleText = dialogTitle.getText();
-      Assertions.assertThat(dialogTitleText).as("Dialog title is the same").isEqualTo("Trip Departure");
+      Assertions.assertThat(dialogTitleText).as("Dialog title is the same")
+          .isEqualTo("Trip Departure");
 
       String dialogMessageText = dialogMessage.getText();
-      Assertions.assertThat(dialogMessageText).as("Dialog message text is the same").isEqualTo("Are you sure you want to start departure?");
+      Assertions.assertThat(dialogMessageText).as("Dialog message text is the same")
+          .isEqualTo("Are you sure you want to start departure?");
     }
     okorProceed.waitUntilClickable();
     okorProceed.click();
@@ -533,7 +554,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   public void clickGoBackInCancelledTripDepartureDialog(String shipmentId) {
     waitUntilVisibilityOfElementLocated(errorShipment);
     /*String dialogTitleText = findElementByXpath("//span[@class='ant-modal-confirm-title']").getText();
-    assertThat("Dialog title is the same", dialogTitleText, equalTo("Proceed to inbound Cancelled Shipment?"));
+   Assertions.assertThat(dialogTitleText).as("Dialog title is the same").isEqualTo("Proceed to inbound Cancelled Shipment?");
 
     String dialogMessageText = findElementByXpath("//div[@class='ant-modal-confirm-content']").getText();
     assertThat("Dialog message text is the same", dialogMessageText,
@@ -549,7 +570,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     yesContinue.click();
   }
 
-  public String getAntNotificationMessage(){
+  public String getAntNotificationMessage() {
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
@@ -599,8 +620,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       actualResultMessage = missingresultTextBox.getText();
     }
 
-    assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
-    assertThat("Result message is equal", actualResultMessage, equalTo(resultMessage));
+    Assertions.assertThat(actualShipmentId).as("Shipment id is equal").isEqualTo(shipmentId);
+    Assertions.assertThat(actualResultMessage).as("Result message is equal")
+        .isEqualTo(resultMessage);
   }
 
   public void clickCancelInMdDialog() {
@@ -614,7 +636,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     antNotificationMessage = getAntNotificationMessage();
   }
 
-  public void verifyShipmentWithTripData(Map<String, String> finalData, String expectedDialogTitle) {
+  public void verifyShipmentWithTripData(Map<String, String> finalData,
+      String expectedDialogTitle) {
     String shipmentCount = finalData.get("shipmentCount");
     String dialogTitle = f("%s (%s)", expectedDialogTitle, shipmentCount);
     if (finalData.get("inboundType") != null && "Into Hub".equals(finalData.get("inboundType"))) {
@@ -642,12 +665,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualDestinationHub = destinationHubNameList.get(index).getText();
     String actualComments = commentsList.get(index).getText();
 
-    assertThat("Dialog title is equal", actualDialogTitle, equalTo(dialogTitle));
-    assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
-    assertThat("Origin hub is equal", actualOriginHub, equalTo(originHub));
-    assertThat("Drop off hub is equal", actualDropOffHub, equalTo(dropOffHub));
-    assertThat("Destination hub is equal", actualDestinationHub, equalTo(destinationHub));
-    assertThat("Comments is equal", actualComments, equalTo(comments));
+    Assertions.assertThat(actualDialogTitle).as("Dialog title is equal").isEqualTo(dialogTitle);
+    Assertions.assertThat(actualShipmentId).as("Shipment id is equal").isEqualTo(shipmentId);
+    Assertions.assertThat(actualOriginHub).as("Origin hub is equal").isEqualTo(originHub);
+    Assertions.assertThat(actualDropOffHub).as("Drop off hub is equal").isEqualTo(dropOffHub);
+    Assertions.assertThat(actualDestinationHub).as("Destination hub is equal").isEqualTo(destinationHub);
+    Assertions.assertThat(actualComments).as("Comments is equal").isEqualTo(comments);
     cancelButton.click();
   }
 
@@ -681,8 +704,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       if (shipmentIdAsString.equals(currentShipmentId)) {
         assertEquals(shipmentIdAsString, currentShipmentId);
         TestUtils.callJavaScriptExecutor("arguments[0].click();",
-                getWebDriver().findElement(By.xpath("//td[contains(@class,'shipment-id')]//a[.='"+shipmentIdAsString+"']")),
-                getWebDriver());
+            getWebDriver().findElement(By.xpath(
+                "//td[contains(@class,'shipment-id')]//a[.='" + shipmentIdAsString + "']")),
+            getWebDriver());
         switchToOtherWindow();
         return;
       }
@@ -696,7 +720,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     switchTo();
     shipmentDetailPageShipmentId.waitUntilVisible();
     String expectedShipmentIdString = f("Shipment ID : %s", shipmentIdAsString);
-    Assertions.assertThat(expectedShipmentIdString).isEqualTo(shipmentDetailPageShipmentId.getText());
+    Assertions.assertThat(expectedShipmentIdString)
+        .isEqualTo(shipmentDetailPageShipmentId.getText());
   }
 
   public void verifyTripData(String expectedInboundHub, String expectedInboundType,
@@ -714,11 +739,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     String actualDepartureTime = f("%s %s",
         actualMovementTrip.split(",")[1].trim().split(" ")[1],
         actualMovementTrip.split(",")[1].trim().split(" ")[2]);
-    Assertions.assertThat(actualInboundHub).as("Inbound Hub is the same").isEqualTo(expectedInboundHub);
-    Assertions.assertThat(actualInboundType).as("Inbound Type is the same").isEqualTo(expectedInboundType);
+    Assertions.assertThat(actualInboundHub).as("Inbound Hub is the same")
+        .isEqualTo(expectedInboundHub);
+    Assertions.assertThat(actualInboundType).as("Inbound Type is the same")
+        .isEqualTo(expectedInboundType);
     Assertions.assertThat(actualDriver).as("Driver is the same").isEqualTo(expectedDriver);
-    Assertions.assertThat(actualDestinationHub).as("Destination or Origin hub is the same").contains(expectedDestinationHub);
-    Assertions.assertThat(actualDepartureTime).as("Departure time is the same").isEqualTo(expectedDepartureTime);
+    Assertions.assertThat(actualDestinationHub).as("Destination or Origin hub is the same")
+        .contains(expectedDestinationHub);
+    Assertions.assertThat(actualDepartureTime).as("Departure time is the same")
+        .isEqualTo(expectedDepartureTime);
   }
 
   public void verifyShipmentInTrip(String expectedShipmentId) {
@@ -731,8 +760,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-        Assertions.assertThat(textNumberOfScannedParcel).as("Number of shipment scanned to Hub message is the same").
-                isEqualTo(f("%s Shipments Scanned to Hub", numberOfShipment));
+        Assertions.assertThat(textNumberOfScannedParcel)
+            .as("Number of shipment scanned to Hub message is the same").
+            isEqualTo(f("%s Shipments Scanned to Hub", numberOfShipment));
       } catch (Throwable ex) {
         LOGGER.info(ex.getMessage());
         pause2s();
@@ -753,12 +783,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
       try {
         waitUntilVisibilityOfElementLocated(XPATH_SMALL_SUCCESS_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedSuccessMessage);
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal")
+            .isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(),500,2);
+    }, getCurrentMethodName(), 500, 2);
   }
 
   public void verifyScanTextAppearsInScanShipmentBox(String expectedSuccessMessage) {
@@ -767,24 +798,26 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String[] expected = expectedSuccessMessage.split("\n");
         waitUntilVisibilityOfElementLocated(XPATH_SCANTEXT_MESSAGE);
         String actualSuccessMessage = findElementByXpath(XPATH_SCANTEXT_MESSAGE).getText();
-        Assertions.assertThat(actualSuccessMessage).as("ScanText message is equal").isEqualTo(expectedSuccessMessage);
+        Assertions.assertThat(actualSuccessMessage).as("ScanText message is equal")
+            .isEqualTo(expectedSuccessMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(),500,2);
+    }, getCurrentMethodName(), 500, 2);
   }
 
   public void verifySmallMessageAppearsInRemoveShipmentBox(String expectedRemoveMessage) {
     retryIfAssertionErrorOccurred(() -> {
       try {
         String actualSuccessMessage = smallRemoveMessage.getText();
-        Assertions.assertThat(actualSuccessMessage).as("Small message is equal").isEqualTo(expectedRemoveMessage);
+        Assertions.assertThat(actualSuccessMessage).as("Small message is equal")
+            .isEqualTo(expectedRemoveMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(),500,2);
+    }, getCurrentMethodName(), 500, 2);
 
   }
 
@@ -963,7 +996,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void switchTo() {
-    if(isElementExist("//iframe"))
+    if (isElementExist("//iframe")) {
       getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    }
   }
 }

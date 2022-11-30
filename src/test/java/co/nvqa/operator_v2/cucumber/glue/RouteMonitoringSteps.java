@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
@@ -7,8 +8,7 @@ import co.nvqa.operator_v2.selenium.page.RouteMonitoringPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -32,8 +32,6 @@ public class RouteMonitoringSteps extends AbstractSteps {
   public void operatorFilterRouteMonitoringUsingDataBelowAndThenLoadSelection(
       Map<String, String> mapOfData) {
     try {
-      Date routeDate = YYYY_MM_DD_SDF.parse(mapOfData.get("routeDate"));
-
       String routeTags = mapOfData.get("routeTags").replaceAll("\\[", "").replaceAll("]", "");
       String[] tags = Stream.of(routeTags.split(",")).map(String::trim).toArray(String[]::new);
 
@@ -44,14 +42,15 @@ public class RouteMonitoringSteps extends AbstractSteps {
       String[] zones = Stream.of(zonesRaw.split(",")).map(String::trim).toArray(String[]::new);
 
       RouteMonitoringFilters routeMonitoringFilters = new RouteMonitoringFilters();
-      routeMonitoringFilters.setRouteDate(routeDate);
+      routeMonitoringFilters.setRouteDate(
+          StandardTestUtils.convertToDate(mapOfData.get("routeDate"), DTF_NORMAL_DATE));
       routeMonitoringFilters.setRouteTags(tags);
       routeMonitoringFilters.setHubs(hubs);
       routeMonitoringFilters.setZones(zones);
 
       routeMonitoringPage.filterAndLoadSelection(routeMonitoringFilters);
       put("routeMonitoringFilters", routeMonitoringFilters);
-    } catch (ParseException ex) {
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse date.", ex);
     }
   }

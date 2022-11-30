@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -108,10 +110,11 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage {
     assertEquals(String.valueOf(2), waypointTotal);
 
     // Check waypoint is pickup and delivery.
-    assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type",
-        "route in ctrl.routeResponse.solution.routes"));
-    assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type",
-        "route in ctrl.routeResponse.solution.routes"));
+    Assertions.assertThat(getTextOnTableWithMdVirtualRepeat(1, "type",
+        "route in ctrl.routeResponse.solution.routes")).as("Check route type").isEqualTo("PICKUP");
+    Assertions.assertThat(getTextOnTableWithMdVirtualRepeat(2, "type",
+            "route in ctrl.routeResponse.solution.routes")).as("Check route type")
+        .isEqualTo("DELIVERY");
   }
 
   public void downloadCsvOnWaypointDetails(String trackingId) throws IOException {
@@ -127,7 +130,8 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage {
 
     click("//button[@aria-label='Download CSV']");
 
-    new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS)
+    new WebDriverWait(getWebDriver(),
+        Duration.ofSeconds(TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS))
         .until((WebDriver driver) ->
         {
           File csvFileDownloaded = new File(TestConstants.TEMP_DIR + "/" + routeName + ".csv");
@@ -142,7 +146,8 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage {
     lines.forEach((String str) ->
     {
       String[] columnData = str.split(",");
-      assertFalse("Shouldn't have break in the exported csv", columnData[1].startsWith("break"));
+      Assertions.assertThat(columnData[1].startsWith("break"))
+          .as("Shouldn't have break in the exported csv").isFalse();
     });
   }
 

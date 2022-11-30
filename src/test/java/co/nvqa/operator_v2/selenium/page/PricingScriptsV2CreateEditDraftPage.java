@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -119,7 +120,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
 
   public void checkSyntaxHeader(String message) {
     String actualErrorInfo = getText("//div[contains(@class,'hint')]");
-    assertTrue(actualErrorInfo.contains(message));
+    Assertions.assertThat(actualErrorInfo.contains(message)).isTrue();
   }
 
   public void editScript(Script script) {
@@ -254,11 +255,12 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
 
     if (StringUtils.isNotBlank(status)) {
-      assertThat("Error toast status", toastData.get("status"), equalToIgnoringCase(status));
+      Assertions.assertThat(toastData.get("status")).as("Error toast status")
+          .isEqualToIgnoringCase(status);
     }
     if (StringUtils.isNotBlank(errorMessage)) {
-      assertThat("Error toast status", toastData.get("errorMessage"),
-          equalToIgnoringCase(errorMessage));
+      Assertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
+          .isEqualToIgnoringCase(errorMessage);
     }
   }
 

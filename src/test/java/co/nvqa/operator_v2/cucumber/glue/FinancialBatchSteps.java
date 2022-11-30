@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;

@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * Modified by Sergey Mishanin
@@ -88,8 +89,9 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     List<DriverType> driverTypes = get(KEY_LIST_OF_DRIVER_TYPES);
     String count = dtmPage.rowsCount.getText();
     int actualCount = Integer.parseInt(count.split(" ")[0]);
-    assertEquals("Driver Types count", driverTypes.size(), actualCount);
-    assertTrue("Driver Types rows count", dtmPage.driverTypesTable.getRowsCount() > 1);
+    Assertions.assertThat(actualCount).as("Driver Types count").isEqualTo(driverTypes.size());
+    Assertions.assertThat(dtmPage.driverTypesTable.getRowsCount() > 1).as("Driver Types rows count")
+        .isTrue();
     takesScreenshot();
   }
 
@@ -118,7 +120,8 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     dtmPage.refreshPage();
     DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
     dtmPage.searchDriverType.setValue(driverTypeParams.getDriverTypeName());
-    assertFalse("Created Driver Type was not deleted", dtmPage.driverTypesTable.isTableEmpty());
+    Assertions.assertThat(dtmPage.driverTypesTable.isTableEmpty())
+        .as("Created Driver Type was not deleted").isFalse();
     remove(KEY_DRIVER_TYPE_ID);
     takesScreenshot();
   }

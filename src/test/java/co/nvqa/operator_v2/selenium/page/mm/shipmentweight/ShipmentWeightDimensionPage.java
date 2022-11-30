@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.selenium.elements.mm.AntConfirmModal;
 import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;

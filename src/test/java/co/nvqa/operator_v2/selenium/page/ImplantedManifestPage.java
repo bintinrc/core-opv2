@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -136,8 +137,9 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
   }
 
   public void verifyRowsCountEqualsOrdersCountInManifestTable(int ordersCount) {
-    assertEquals("Rows count in Implanted Manifest table is not equal to order count", ordersCount,
-        implantedManifestOrderTable.getRowsCount());
+    Assertions.assertThat(implantedManifestOrderTable.getRowsCount())
+        .as("Rows count in Implanted Manifest table is not equal to order count")
+        .isEqualTo(ordersCount);
   }
 
   public void verifyManifestTableIsEmpty() {
@@ -170,23 +172,23 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
           LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
           LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt()
               .toLocalDateTime();
-          assertThat("'Scanned At' value in Implant Manifest table is not in expected range",
-              scannedAtLocalExpected,
-              isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L),
+          Assertions.assertThat(scannedAtLocalExpected)
+              .as("'Scanned At' value in Implant Manifest table is not in expected range")
+              .isIn(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L),
                   scannedAtLocalActual.plusSeconds(2L), scannedAtLocalActual.minusSeconds(1L),
-                  scannedAtLocalActual.minusSeconds(2L)));
+                  scannedAtLocalActual.minusSeconds(2L));
         }
-        assertEquals("'Destination' value in Implant Manifest table", destination,
-            implantedManifestOrder.getDestination());
-        assertEquals("'Rack Sector' value in Implant Manifest table", rackSector,
-            implantedManifestOrder.getRackSector());
-        assertEquals("'Addressee' value in Implant Manifest table", addressee,
-            implantedManifestOrder.getAddressee());
+        Assertions.assertThat(implantedManifestOrder.getDestination())
+            .as("'Destination' value in Implant Manifest table").isEqualTo(destination);
+        Assertions.assertThat(implantedManifestOrder.getRackSector())
+            .as("'Rack Sector' value in Implant Manifest table").isEqualTo(rackSector);
+        Assertions.assertThat(implantedManifestOrder.getAddressee())
+            .as("'Addressee' value in Implant Manifest table").isEqualTo(addressee);
       }
     }
 
-    assertTrue(f("No record with tracking Id %s in Manifest table", order.getTrackingId()),
-        recordFound);
+    Assertions.assertThat(recordFound)
+        .as(f("No record with tracking Id %s in Manifest table", order.getTrackingId())).isTrue();
   }
 
   public void scrollToBottom() {

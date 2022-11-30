@@ -10,11 +10,13 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntIntervalCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -89,7 +91,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     if (pageFrame.size() > 0) {
       switchToStationCODReportFrame();
     }
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 30);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(30));
     String fieldLabelXpath = f(STATION_COD_REPORT_LABELS_XPATH, expectedField);
     wdWait.until((driver) -> {
       List<WebElement> labels = driver.findElements(By.xpath(fieldLabelXpath));
@@ -143,8 +145,8 @@ public class StationCODReportPage extends OperatorV2SimplePage {
 
   public void verifyDetailsAndSummaryTabsDisplayed() {
     waitUntilVisibilityOfElementLocated(detailsTab.getWebElement());
-    assertTrue("Assert that Details tab is displayed!", detailsTab.isDisplayed());
-    assertTrue("Assert that Summary tab is displayed!", summaryTab.isDisplayed());
+   Assertions.assertThat(detailsTab.isDisplayed()).as("Assert that Details tab is displayed!").isTrue();
+   Assertions.assertThat(summaryTab.isDisplayed()).as("Assert that Summary tab is displayed!").isTrue();
   }
 
   public void verifyColumnsInTableDisplayed(String tabName, List<String> expectedColumns) {
@@ -164,7 +166,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
     summaryTab.click();
     pause3s();
     boolean isActive = summaryTab.getAttribute("class").contains("active");
-    assertTrue("Assert that Summary tab is highlighted!", isActive);
+   Assertions.assertThat(isActive).as("Assert that Summary tab is highlighted!").isTrue();
   }
 
   public void setTransactionEndDateFilter(String fromDate, String toDate) {

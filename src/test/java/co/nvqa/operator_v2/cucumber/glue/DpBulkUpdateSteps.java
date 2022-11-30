@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.dp.utils.DpTestConstants;
 import co.nvqa.commons.client.dp.DpClient;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.support.AuthHelper;
@@ -112,7 +113,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
       case SPECIAL_CHAR:
         dp = get(KEY_DISTRIBUTION_POINT);
         dpIds.add(dp.getId());
-        dpIds.add(TestConstants.DP_ID);
+        dpIds.add(DpTestConstants.DP_ID);
 
         for (Long dpId : dpIds) {
           dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + ",");

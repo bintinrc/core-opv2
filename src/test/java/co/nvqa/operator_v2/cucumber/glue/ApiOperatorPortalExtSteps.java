@@ -18,8 +18,8 @@ import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.driver.DriverFilter;
 import co.nvqa.commons.model.sort.nodes.Node;
 import co.nvqa.commons.model.sort.nodes.Node.NodeType;
-import co.nvqa.commons.util.JsonUtils;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.JsonUtils;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.model.ContactType;
@@ -44,6 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +95,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     if (addressing != null) {
       try {
         List<co.nvqa.commons.model.addressing.Address> addresses = getAddressingClient()
-            .searchAddresses(StandardTestConstants.COUNTRY_CODE, addressing.getBuildingNo());
+            .searchAddresses(StandardTestConstants.NV_SYSTEM_ID, addressing.getBuildingNo());
         if (CollectionUtils.isNotEmpty(addresses)) {
           getAddressingClient().deleteAddress(addresses.get(0).getId());
         }
@@ -252,8 +253,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   }
 
   @When("API Operator create {int} new Driver using data below:")
-  public void apiOperatorCreateMultiNewDriverUsingDataBelow(Integer numberOdDrivers,Map<String, String> mapOfData){
-    for(int i =0;i<numberOdDrivers;i++){
+  public void apiOperatorCreateMultiNewDriverUsingDataBelow(Integer numberOdDrivers,
+      Map<String, String> mapOfData) {
+    for (int i = 0; i < numberOdDrivers; i++) {
       apiOperatorCreateNewDriverUsingDataBelow(mapOfData);
     }
   }
@@ -262,8 +264,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
   public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String rawDateUniqueString = TestUtils.generateDateUniqueString();
-    String dateUniqueString = StringUtils.substring(rawDateUniqueString, 2, rawDateUniqueString.length() - 2);
-    String country = StandardTestConstants.COUNTRY_CODE.toUpperCase();
+    String dateUniqueString = StringUtils.substring(rawDateUniqueString, 2,
+        rawDateUniqueString.length() - 2);
+    String country = StandardTestConstants.NV_SYSTEM_ID.toUpperCase();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
     mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-" + dateUniqueString);
@@ -447,9 +450,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     Long routeId = get(KEY_CREATED_ROUTE_ID);
 
     Cod cod = order.getCod();
-    assertNotNull("COD should not be null.", cod);
+    Assertions.assertThat(cod).as("COD should not be null.").isNotNull();
     Double codGoodsAmount = cod.getGoodsAmount();
-    assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
+    Assertions.assertThat(codGoodsAmount).as("COD Goods Amount should not be null.").isNotNull();
 
     Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
     String receiptNumber = "#" + routeId + "-" + generateDateUniqueString();

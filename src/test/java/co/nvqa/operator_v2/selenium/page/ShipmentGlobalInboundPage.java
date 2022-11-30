@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -71,7 +72,7 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage {
   public void checkAlert(String toastText) {
     waitUntilVisibilityOfElementLocated(TOAST_TEXT_XPATH, toastText);
     if (StringUtils.isNotBlank(toastText)) {
-      assertEquals("Toast text", toastText, getToastTopText());
+      Assertions.assertThat(getToastTopText()).as("Toast text").isEqualTo(toastText);
       waitUntilInvisibilityOfToast(toastText, false);
     }
   }
@@ -81,7 +82,8 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage {
     String actualPriorityLevel = getText(
         "//div[contains(text(), 'Priority Level')]/following-sibling::div[1]/span");
 
-    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+    Assertions.assertThat(actualPriorityLevel).as("Priority Level")
+        .isEqualTo(String.valueOf(expectedPriorityLevel));
     if (expectedPriorityLevelColor == "" || expectedPriorityLevelColor.isEmpty()
         || expectedPriorityLevelColor == null) {
       isElementExist(DEFAULT_PRIORITY_COLOR_XPATH);

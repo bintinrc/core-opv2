@@ -54,7 +54,7 @@ import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.Shipme
 @SuppressWarnings("WeakerAccess")
 public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManagementPage> {
 
-  private  static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
+  private static final String ADD_FILTER_XPATH = "//div[@data-testid='add-filter-select']";
   private static final String FILTER_DROPDOWN_LIST_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@title='%s'] ";
   private static final String XPATH_SEARCHBYSIDSUBMIT = "//button[@data-testid='search-by-sid-submit']";
   public static final String ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH = "//div/h4[contains(text(),'Add New Weight & Dimension')]";
@@ -227,11 +227,11 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     }
   }
 
-  public void hoverShipmentTypeForm(){
+  public void hoverShipmentTypeForm() {
     moveToElementWithXpath(FORM_SHIPMENT_TYPE_XPATH);
   }
 
-  public void hoverShipmentStatusForm(){
+  public void hoverShipmentStatusForm() {
     moveToElementWithXpath(FORM_SHIPMENT_STATUS_XPATH);
   }
 
@@ -391,20 +391,23 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     pause1s();
     if (isValid) {
       if (isDuplicated) {
-        assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder + 1);
-        assertEquals("Failed Order(s) : ", failedOrder, 1);
+        Assertions.assertThat(numberOfOrder + 1).as("Number of Order is not the same")
+            .isEqualTo(actualNumberOfOrder);
+        Assertions.assertThat(1).as("Failed Order(s) : ").isEqualTo(failedOrder);
         String actualFailedReason = uploadResultsDialog.failedReasons.get(0).getText();
-        assertEquals("Failure reason is different : ", actualFailedReason, "DUPLICATE");
+        Assertions.assertThat("DUPLICATE").as("Failure reason is different : ")
+            .isEqualTo(actualFailedReason);
       } else {
-        assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder);
-        assertEquals("Failed Order(s) : ", failedOrder, 0);
+        Assertions.assertThat(numberOfOrder).as("Number of Order is not the same")
+            .isEqualTo(actualNumberOfOrder);
+        Assertions.assertThat(0).as("Failed Order(s) : ").isEqualTo(failedOrder);
       }
-      assertEquals("Successful Order(s) : ", successfulOrder, numberOfOrder);
+      Assertions.assertThat(numberOfOrder).as("Successful Order(s) : ").isEqualTo(successfulOrder);
 
     } else {
-      assertEquals("Number of Order is not the same", actualNumberOfOrder, 1);
-      assertEquals("Successful Order(s) : ", successfulOrder, 0);
-      assertEquals("Failed Order(s) : ", failedOrder, 1);
+      Assertions.assertThat(1).as("Number of Order is not the same").isEqualTo(actualNumberOfOrder);
+      Assertions.assertThat(0).as("Successful Order(s) : ").isEqualTo(successfulOrder);
+      Assertions.assertThat(1).as("Failed Order(s) : ").isEqualTo(failedOrder);
     }
   }
 
@@ -442,25 +445,25 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     String fieldToBeUpdated = shipmentToBeUpdatedTable.fieldToBeUpdated.getText()
         .split(":")[1].trim();
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Shipment Type"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Shipment Type");
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Origin Hub"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Origin Hub");
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Destination Hub"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Destination Hub");
     }
     if (resolvedMapOfData.get("eda") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("eta") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("MAWB"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("MAWB");
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Comments"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Comments");
     }
     List<String> actualShipmentIds = shipmentToBeUpdatedTable.shipmentIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
@@ -514,30 +517,30 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
     String shipmentField = confirmUpdateContent[0].split(":")[1].trim();
     Long numberOfRecords = Long.valueOf(confirmUpdateContent[1].split(":")[1].trim());
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("field is equal", shipmentField, containsString("Shipment Type"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Shipment Type");
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("field is equal", shipmentField, containsString("Origin Hub"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Origin Hub");
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("field is equal", shipmentField, containsString("Destination Hub"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Destination Hub");
     }
     if (resolvedMapOfData.get("EDA") != null) {
-      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("ETA") != null) {
-      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("field is equal", shipmentField, containsString("MAWB"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("MAWB");
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("field is equal", shipmentField, containsString("Comments"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Comments");
     }
     if (resolvedMapOfData.get("removeShipment") != null) {
-      assertThat("number of records is equal", numberOfRecords, equalTo(1L));
+      Assertions.assertThat(numberOfRecords).as("number of records is equal").isEqualTo(1L);
     } else {
-      assertThat("number of records is equal", numberOfRecords, equalTo(2L));
+      Assertions.assertThat(numberOfRecords).as("number of records is equal").isEqualTo(2L);
     }
     confirmBulkUpdateDialog.proceed.click();
     confirmBulkUpdateDialog.waitUntilInvisible();
@@ -907,13 +910,13 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
   }
 
-  public void AddFilterWithValue(String value){
-    if (isElementEnabled(f(FILTER_DROPDOWN_LIST_XPATH,value))){
-      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+  public void AddFilterWithValue(String value) {
+    if (isElementEnabled(f(FILTER_DROPDOWN_LIST_XPATH, value))) {
+      click(f(FILTER_DROPDOWN_LIST_XPATH, value));
     } else {
       click(ADD_FILTER_XPATH);
-      waitUntilVisibilityOfElementLocated(f(FILTER_DROPDOWN_LIST_XPATH,value));
-      click(f(FILTER_DROPDOWN_LIST_XPATH,value));
+      waitUntilVisibilityOfElementLocated(f(FILTER_DROPDOWN_LIST_XPATH, value));
+      click(f(FILTER_DROPDOWN_LIST_XPATH, value));
     }
     pause1s();
     click(ADD_FILTER_XPATH);
@@ -921,9 +924,9 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
   }
 
   public void clickMAWBLinkButtonOnEditShipment() {
-      editShipmentDialog.mawbButtonLink.click();
-      switchToNewWindow();
-      this.switchTo();
-      waitUntilVisibilityOfElementLocated(ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH,5);
+    editShipmentDialog.mawbButtonLink.click();
+    switchToNewWindow();
+    this.switchTo();
+    waitUntilVisibilityOfElementLocated(ADD_NEW_WEIGHT_DIMENSION_PAGE_XPATH, 5);
   }
 }

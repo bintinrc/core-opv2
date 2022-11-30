@@ -17,7 +17,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -29,13 +28,12 @@ import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static co.nvqa.operator_v2.util.TestConstants.COUNTRY_CODE;
 import static co.nvqa.operator_v2.util.TestConstants.OPERATOR_PORTAL_BASE_URL;
 
 /**
@@ -457,7 +455,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   @Then("Operator opens Shipment Details page for shipment {value}")
   public void openShipmentDetailsPage(String shipmentId) {
     navigateTo(
-        f("%s/%s/shipment-details/%s", OPERATOR_PORTAL_BASE_URL, COUNTRY_CODE, shipmentId));
+        f("%s/%s/shipment-details/%s", OPERATOR_PORTAL_BASE_URL, NV_SYSTEM_ID.toLowerCase(), shipmentId));
     page.inFrame(() -> page.waitUntilLoaded());
     pause3s();
   }
@@ -495,7 +493,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
       Matcher m = p.matcher(presetId);
       if (m.matches()) {
         presetId = m.group(1);
-        assertThat("created preset is selected", m.group(3), equalTo(presetName));
+        Assertions.assertThat(m.group(3)).as("created preset is selected").isEqualTo(presetName);
       }
       put(KEY_SHIPMENTS_FILTERS_PRESET_ID, presetId);
       put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID, presetId);

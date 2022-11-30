@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.page.NinjaPackTrackingIdGeneratorPage;
 import io.cucumber.java.en.And;
 import io.cucumber.guice.ScenarioScoped;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 @ScenarioScoped
 public class NinjaPackTrackingIdGeneratorSteps extends AbstractSteps {
@@ -37,9 +37,9 @@ public class NinjaPackTrackingIdGeneratorSteps extends AbstractSteps {
   @And("Operator verifies quantity is {int} in Review Ninja Pack ID generator selection dialog")
   public void operatorVerifiesQuantity(int expected) {
     ninjaPackTrackingIdGeneratorPage.reviewNinjaPackIdGeneratorSelectionDialog.waitUntilVisible();
-    assertEquals("Quantity", String.valueOf(expected),
+    Assertions.assertThat(
         ninjaPackTrackingIdGeneratorPage.reviewNinjaPackIdGeneratorSelectionDialog.quantity
-            .getText());
+            .getText()).as("Quantity").isEqualTo(String.valueOf(expected));
   }
 
   @And("Operator clicks Confirm button in Review Ninja Pack ID generator selection dialog")
@@ -55,13 +55,13 @@ public class NinjaPackTrackingIdGeneratorSteps extends AbstractSteps {
         .getLatestDownloadedFilename("ninja_pack_tracking_id_");
     List<List<String>> data = ninjaPackTrackingIdGeneratorPage.readXls(Paths.get(
         StandardTestConstants.TEMP_DIR, fileName).toString());
-    assertEquals("Number of rows", count + 1, data.size());
-    assertThat("File headers", data.get(0), Matchers.contains("Tracking ID", "Expiry Date."));
+    Assertions.assertThat(data.size()).as("Number of rows").isEqualTo(count + 1);
+    Assertions.assertThat(data.get(0)).as("File headers").contains("Tracking ID", "Expiry Date.");
     for (int i = 1; i < data.size(); i++) {
-      assertThat("Row " + i + " Tracking ID", data.get(i).get(0),
-          Matchers.matchesPattern("[A-Z0-9]{16}"));
-      assertThat("Row " + i + " Expiry Date", data.get(i).get(1), Matchers.matchesPattern(
-          "\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d{3}\\+[0-2]\\d:\\d\\d"));
+      Assertions.assertThat(data.get(i).get(0)).as("Row " + i + " Tracking ID")
+          .containsPattern("[A-Z0-9]{16}");
+      Assertions.assertThat(data.get(i).get(1)).as("Row " + i + " Expiry Date")
+          .containsPattern("\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d{3}\\+[0-2]\\d:\\d\\d");
     }
   }
 

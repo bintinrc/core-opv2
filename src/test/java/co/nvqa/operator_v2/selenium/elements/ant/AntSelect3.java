@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.elements.ant;
 
-import co.nvqa.common_selenium.page.SimplePage;
-import co.nvqa.commons.util.NvRetry;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -171,7 +169,7 @@ public class AntSelect3 extends PageElement {
     String listBoxLocator = getListBoxLocator();
     try {
       waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
-    } catch (Exception ex) {
+    } catch (Exception ignored) {
     }
     if (isElementVisible(listBoxLocator, 0)) {
       jsClick();

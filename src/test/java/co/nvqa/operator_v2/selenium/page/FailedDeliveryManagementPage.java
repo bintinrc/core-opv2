@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.FailedDelivery;
@@ -15,11 +16,11 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -84,7 +85,7 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
 
     actionsMenu.selectOption("Reschedule Selected");
     rescheduleSelectedOrdersDialog.waitUntilVisible();
-    rescheduleSelectedOrdersDialog.date.setDate(TestUtils.getNextDate(2));
+    rescheduleSelectedOrdersDialog.date.setDate(ZonedDateTime.now().plusDays(2));
     rescheduleSelectedOrdersDialog.reschedule.click();
   }
 
@@ -107,10 +108,12 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     editRtsDetailsDialog.waitUntilVisible();
     editRtsDetailsDialog.reason.selectValue("Other Reason");
     editRtsDetailsDialog.description.setValue(
-        f("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        f("Reason created by OpV2 automation on %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
     editRtsDetailsDialog.internalNotes.setValue(
-        f("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
-    editRtsDetailsDialog.deliveryDate.setDate(TestUtils.getNextDate(1));
+        f("Internal notes created by OpV2 automation on %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
+    editRtsDetailsDialog.deliveryDate.setDate(ZonedDateTime.now().plusDays(1));
     editRtsDetailsDialog.timeslot.selectValue("3PM - 6PM");
     editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
     editRtsDetailsDialog.waitUntilInvisible();
@@ -124,7 +127,7 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     failedDeliveriesTable.selectRow(1);
     actionsMenu.selectOption("Set RTS to Selected");
     setSelectedToReturnToSenderDialog.waitUntilVisible();
-    setSelectedToReturnToSenderDialog.deliveryDate.setDate(TestUtils.getNextDate(1));
+    setSelectedToReturnToSenderDialog.deliveryDate.setDate(ZonedDateTime.now().plusDays(1));
     setSelectedToReturnToSenderDialog.timeslot.selectValue("3PM - 6PM");
     setSelectedToReturnToSenderDialog.setOrderToRts.clickAndWaitUntilDone();
     setSelectedToReturnToSenderDialog.waitUntilInvisible();
@@ -223,10 +226,12 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
         saveLocation.clickAndWaitUntilDone();
 
         if (isNotBlank(address.getAddress1())) {
-          assertEquals("Found Address 1", address.getAddress1(), address1.getValue());
+          Assertions.assertThat(address1.getValue()).as("Found Address 1")
+              .isEqualTo(address.getAddress1());
         }
         if (isNotBlank(address.getAddress2())) {
-          assertEquals("Found Address 2", address.getAddress2(), address2.getValue());
+          Assertions.assertThat(address2.getValue()).as("Found Address 2")
+              .isEqualTo(address.getAddress2());
         }
         if (isNotBlank(address.getCountry())) {
           country.setValue(address.getCountry());
@@ -245,19 +250,23 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
         saveLocation.clickAndWaitUntilDone();
 
         if (isNotBlank(address.getCountry())) {
-          assertEquals("Found Country", address.getCountry(), country.getValue());
+          Assertions.assertThat(country.getValue()).as("Found Country")
+              .isEqualTo(address.getCountry());
         }
         if (isNotBlank(address.getCity())) {
-          assertEquals("Found City", address.getCity(), city.getValue());
+          Assertions.assertThat(city.getValue()).as("Found City").isEqualTo(address.getCity());
         }
         if (isNotBlank(address.getAddress1())) {
-          assertEquals("Found Address 1", address.getAddress1(), address1.getValue());
+          Assertions.assertThat(address1.getValue()).as("Found Address 1")
+              .isEqualTo(address.getAddress1());
         }
         if (isNotBlank(address.getAddress2())) {
-          assertEquals("Found Address 2", address.getAddress2(), address2.getValue());
+          Assertions.assertThat(address2.getValue()).as("Found Address 2")
+              .isEqualTo(address.getAddress2());
         }
         if (isNotBlank(address.getPostcode())) {
-          assertEquals("Found Postcode", address.getPostcode(), postcode.getValue());
+          Assertions.assertThat(postcode.getValue()).as("Found Postcode")
+              .isEqualTo(address.getPostcode());
         }
       } else {
         if (isNotBlank(address.getCountry())) {
@@ -286,7 +295,8 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
         internalNotes.setValue(rtsDetails.getInternalNotes());
       }
       if (rtsDetails.getDeliveryDate() != null) {
-        deliveryDate.setDate(rtsDetails.getDeliveryDate());
+        deliveryDate.setDate(
+            StandardTestUtils.convertToZonedDateTime(rtsDetails.getDeliveryDate()));
       }
       if (isNotBlank(rtsDetails.getTimeSlot())) {
         timeslot.selectValue(rtsDetails.getTimeSlot());
@@ -375,12 +385,12 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
     FailedDelivery actual = failedDeliveriesTable.readEntity(1);
 
-    assertEquals("Tracking ID", trackingId, actual.getTrackingId());
-    assertEquals("Order Type", orderType, actual.getType());
-    assertEquals("Failure Comments", expectedFailureReason.getDescription(),
-        actual.getFailureReasonComments());
-    assertEquals("Failure Reason", expectedFailureReason.getFailureReasonCodeDescription(),
-        actual.getFailureReasonCodeDescription());
+    Assertions.assertThat(actual.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
+    Assertions.assertThat(actual.getType()).as("Order Type").isEqualTo(orderType);
+    Assertions.assertThat(actual.getFailureReasonComments()).as("Failure Comments")
+        .isEqualTo(expectedFailureReason.getDescription());
+    Assertions.assertThat(actual.getFailureReasonCodeDescription()).as("Failure Reason")
+        .isEqualTo(expectedFailureReason.getFailureReasonCodeDescription());
   }
 
   public void verifyFailedDeliveryOrderIsTagged(Order order, List<String> orderTags) {
@@ -390,8 +400,8 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
     FailedDelivery actual = failedDeliveriesTable.readEntity(1);
 
-    assertEquals("Tracking ID", trackingId, actual.getTrackingId());
-    assertEquals("Tags", orderTags, actual.getOrderTags());
+    Assertions.assertThat(actual.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
+    Assertions.assertThat(actual.getOrderTags()).as("Tags").isEqualTo(orderTags);
   }
 
   public void verifyCsvFileDownloadedSuccessfully(String trackingId) {
@@ -407,8 +417,8 @@ public class FailedDeliveryManagementPage extends OperatorV2SimplePage {
     refreshPage();
     waitWhilePageIsLoading(120);
     failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
-    assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId),
-        failedDeliveriesTable.isEmpty());
+    Assertions.assertThat(failedDeliveriesTable.isEmpty())
+        .as(f("Tracking ID '%s' is still listed on failed order list.", trackingId)).isTrue();
   }
 
   public static class UploadCsvRescheduleDialog extends MdDialog {

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -65,7 +66,7 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
           }
         }
 
-        assertTrue("Blocked Date should be added.", isAdded);
+        Assertions.assertThat(isAdded).as("Blocked Date should be added.").isTrue();
       }, getCurrentMethodName());
     }
   }
@@ -87,7 +88,7 @@ public class BlockedDatesPage extends OperatorV2SimplePage {
         }
       }
 
-      assertTrue("Blocked Date should be removed.", isRemoved);
+      Assertions.assertThat(isRemoved).as("Blocked Date should be removed.").isTrue();
     }
   }
 

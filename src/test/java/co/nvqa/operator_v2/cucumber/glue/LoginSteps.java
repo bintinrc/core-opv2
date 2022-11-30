@@ -102,24 +102,24 @@ public class LoginSteps extends AbstractSteps {
   */
     switch (countryName) {
       case "Singapore":
-        TestConstants.COUNTRY_CODE = "sg";
+        TestConstants.NV_SYSTEM_ID = "sg";
         break;
       case "Indonesia":
-        TestConstants.COUNTRY_CODE = "id";
+        TestConstants.NV_SYSTEM_ID = "id";
         break;
       case "Thailand":
-        TestConstants.COUNTRY_CODE = "th";
+        TestConstants.NV_SYSTEM_ID = "th";
         break;
       case "Vietnam":
-        TestConstants.COUNTRY_CODE = "vn";
+        TestConstants.NV_SYSTEM_ID = "vn";
         break;
       case "Malaysia":
-        TestConstants.COUNTRY_CODE = "my";
+        TestConstants.NV_SYSTEM_ID = "my";
         break;
       case "Philippines":
-        TestConstants.COUNTRY_CODE = "ph";
+        TestConstants.NV_SYSTEM_ID = "ph";
         break;
     }
-    TestConstants.API_BASE_URL=TestConstants.API_BASE_URL.substring(0,TestConstants.API_BASE_URL.length()-2)+TestConstants.COUNTRY_CODE ;
+    TestConstants.API_BASE_URL=TestConstants.API_BASE_URL.substring(0,TestConstants.API_BASE_URL.length()-2)+TestConstants.NV_SYSTEM_ID ;
   }
 }

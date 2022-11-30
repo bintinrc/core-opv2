@@ -1,20 +1,21 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import com.google.common.collect.ImmutableMap;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Condition;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import static co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage.ApplyActionsMenu.AllOrdersAction.CANCEL_ORDER;
 import static co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage.ApplyActionsMenu.AllOrdersAction.DOWNLOAD_CSV_FILE;
 import static co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage.OrdersTable.COLUMN_TRACKING_ID;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Sergey Mishanin
@@ -38,7 +39,7 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage {
     return ordersTable;
   }
 
-  public void filterAndLoadSelection(Date fromDate, String shipper) {
+  public void filterAndLoadSelection(ZonedDateTime fromDate, String shipper) {
     waitUntilPageLoaded();
 
     if (fromDate != null) {
@@ -71,12 +72,12 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage {
         "//tr[@ng-repeat='order in ctrl.orders']/td[1]");
     List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText)
         .collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(trackingIds.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(trackingIds), ""));
 
     sendKeysById("container.order.edit.cancellation-reason", String.format(
         "This order is canceled by automation to test 'Cancel Order' feature on Non Inbounded Orders page. Canceled at %s.",
-        CREATED_DATE_SDF.format(new Date())));
+        DTF_CREATED_DATE.format(ZonedDateTime.now())));
 
     if (listOfActualTrackingIds.size() == 1) {
       clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
@@ -105,8 +106,8 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage {
     List<NonInboundedOrder> actualOrdersDetails = NonInboundedOrder
         .fromCsvFile(NonInboundedOrder.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualOrdersDetails.size(),
-        greaterThanOrEqualTo(trackingIds.size()));
+    Assertions.assertThat(actualOrdersDetails.size()).as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(trackingIds.size());
 
     Map<String, NonInboundedOrder> actualMap = actualOrdersDetails.stream()
         .collect(Collectors.toMap(

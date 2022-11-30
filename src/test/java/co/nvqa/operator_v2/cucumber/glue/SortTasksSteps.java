@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 
 /**
@@ -96,6 +96,7 @@ public class SortTasksSteps extends AbstractSteps {
     }
     getWebDriver().switchTo().window(windowHandle);
   }
+
   @When("Operator refresh diagram on View Sort Structure page")
   public void operatorRefreshDiagram() {
     viewSortStructurePage.refreshDiagram.clickAndWaitUntilDone();
@@ -112,8 +113,8 @@ public class SortTasksSteps extends AbstractSteps {
     expectedNodes = resolveValues(expectedNodes);
     viewSortStructurePage.adjustCanvasScale();
     List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.HUB);
-    assertThat("List of Hub nodes", actualNodes,
-        Matchers.hasItems(expectedNodes.toArray(new String[0])));
+    Assertions.assertThat(actualNodes).as("List of Hub nodes")
+        .contains(expectedNodes.toArray(new String[0]));
   }
 
   @When("Operator verifies graph contains following Middle Tier nodes:")
@@ -121,8 +122,8 @@ public class SortTasksSteps extends AbstractSteps {
     expectedNodes = resolveValues(expectedNodes);
     viewSortStructurePage.adjustCanvasScale();
     List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.MIDDLE_TIER);
-    assertThat("List of Middle Tier nodes", actualNodes,
-        Matchers.hasItems(expectedNodes.toArray(new String[0])));
+    Assertions.assertThat(actualNodes).as("List of Middle Tier nodes")
+        .contains(expectedNodes.toArray(new String[0]));
   }
 
   @When("Operator verifies graph contains exactly following Middle Tier nodes:")
@@ -132,8 +133,8 @@ public class SortTasksSteps extends AbstractSteps {
       viewSortStructurePage.refreshDiagram.clickAndWaitUntilDone();
       viewSortStructurePage.adjustCanvasScale();
       List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.MIDDLE_TIER);
-      assertThat("List of Middle Tier nodes", actualNodes,
-          Matchers.containsInAnyOrder(resolvedExpectedNodes.toArray(new String[0])));
+      Assertions.assertThat(actualNodes).as("List of Middle Tier nodes")
+          .contains(resolvedExpectedNodes.toArray(new String[0]));
     }, "Failed to find the expectedNodes", 5000, 10);
   }
 
@@ -142,8 +143,8 @@ public class SortTasksSteps extends AbstractSteps {
     expectedNodes = resolveValues(expectedNodes);
     viewSortStructurePage.adjustCanvasScale();
     List<String> actualNodes = viewSortStructurePage.getNodeLabelsByType(NodeType.ZONE);
-    assertThat("List of Zone nodes", actualNodes,
-        Matchers.hasItems(expectedNodes.toArray(new String[0])));
+    Assertions.assertThat(actualNodes).as("List of Zone nodes")
+        .contains(expectedNodes.toArray(new String[0]));
   }
 
   @When("Operator verifies graph contains following duplicated nodes:")
@@ -157,7 +158,8 @@ public class SortTasksSteps extends AbstractSteps {
       long actualCount = actualNodes.stream()
           .filter(val -> StringUtils.equalsIgnoreCase(val, label))
           .count();
-      assertEquals("Count of " + label + " node duplicates", count, actualCount);
+      Assertions.assertThat(actualCount).as("Count of " + label + " node duplicates")
+          .isEqualTo(count);
     });
   }
 
@@ -166,8 +168,8 @@ public class SortTasksSteps extends AbstractSteps {
     expectedNodes = resolveValues(expectedNodes);
     viewSortStructurePage.adjustCanvasScale();
     List<String> actualNodes = viewSortStructurePage.getNodeLabels();
-    assertThat("List of displayed nodes", actualNodes,
-        Matchers.containsInAnyOrder(expectedNodes.toArray(new String[0])));
+    Assertions.assertThat(actualNodes).as("List of displayed nodes")
+        .contains(expectedNodes.toArray(new String[0]));
   }
 
   @When("Operator clicks on {string} node")
@@ -223,9 +225,12 @@ public class SortTasksSteps extends AbstractSteps {
     String sortType = mapOfData.get("sortType");
 
     sortTasksPage.find.sendKeys(sortName);
-    assertThat("Sort Name", sortTasksPage.actualSortName.getText(), equalToIgnoringCase(sortName));
-    assertThat("Hub Name", sortTasksPage.actualHubName.getText(), equalToIgnoringCase(hubName));
-    assertThat("Sort Name", sortTasksPage.actualSortType.getText(), equalToIgnoringCase(sortType));
+    Assertions.assertThat(sortTasksPage.actualSortName.getText()).as("Sort Name")
+        .isEqualToIgnoringCase(sortName);
+    Assertions.assertThat(sortTasksPage.actualHubName.getText()).as("Hub Name")
+        .isEqualToIgnoringCase(hubName);
+    Assertions.assertThat(sortTasksPage.actualSortType.getText()).as("Sort Name")
+        .isEqualToIgnoringCase(sortType);
   }
 
   @Then("Operator search for {string} node on Sort Tasks page")
@@ -239,8 +244,8 @@ public class SortTasksSteps extends AbstractSteps {
     expected = resolveValues(expected);
     List<String> actual = sortTasksPage.nodeNames.stream().map(PageElement::getNormalizedText)
         .collect(Collectors.toList());
-    assertThat("List of displayed nodes", actual,
-        Matchers.contains(expected.toArray(new String[0])));
+    Assertions.assertThat(actual).as("List of displayed nodes")
+        .contains(expected.toArray(new String[0]));
   }
 
   @Then("Operator verify following nodes are highlighted on Sort Tasks page:")
@@ -249,8 +254,9 @@ public class SortTasksSteps extends AbstractSteps {
     sortTasksPage.nodeNames.stream()
         .filter(pageElement -> expected.contains(pageElement.getNormalizedText()))
         .forEach(
-            pageElement -> assertTrue("Node " + pageElement.getNormalizedText() + " is highlighted",
-                pageElement.findElement(By.cssSelector("mark.highlight")).isDisplayed()));
+            pageElement -> Assertions.assertThat(
+                    pageElement.findElement(By.cssSelector("mark.highlight")).isDisplayed())
+                .as("Node " + pageElement.getNormalizedText() + " is highlighted").isTrue());
   }
 
   @Then("^Operator delete the middle tier$")
@@ -263,7 +269,8 @@ public class SortTasksSteps extends AbstractSteps {
 
   @Then("^Operator verify middle tier is deleted$")
   public void operatorVerifyMiddleTierIsDeleted() {
-    assertThat("Result", sortTasksPage.noResult.getText(), equalToIgnoringCase("No Results Found"));
+    Assertions.assertThat(sortTasksPage.noResult.getText()).as("Result")
+        .isEqualToIgnoringCase("No Results Found");
   }
 
   @Then("^Operator select a sort task$")
@@ -345,13 +352,13 @@ public class SortTasksSteps extends AbstractSteps {
     } else {
       List<String> actual = sortTasksPage.nodeNames.stream().map(PageElement::getNormalizedText)
           .collect(Collectors.toList());
-      assertThat("List of displayed nodes", actual,
-          Matchers.contains(expectedNodes.toArray(new String[0])));
+      Assertions.assertThat(actual).as("List of displayed nodes")
+          .contains(expectedNodes.toArray(new String[0]));
     }
   }
 
   @And("Operator select region on Sort Task page")
-  public void operatorSelectRegionOnSortTaskPage(Map<String,String>data) {
+  public void operatorSelectRegionOnSortTaskPage(Map<String, String> data) {
     data = resolveKeyValues(data);
     String regionName = data.get("regionName");
     sortTasksPage.selectRegion.selectValue(regionName);

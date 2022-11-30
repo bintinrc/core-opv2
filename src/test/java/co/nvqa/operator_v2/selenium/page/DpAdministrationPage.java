@@ -20,8 +20,6 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-
 /**
  * @author Sergey Mishanin
  */
@@ -451,23 +449,19 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   public void verifyDpPartnerParams(DpPartner expectedDpPartnerParams) {
     dpPartnersTable.filterByColumn("name", expectedDpPartnerParams.getName());
     DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
-    assertThatIfExpectedValueNotNull("DP Partner ID is correct", expectedDpPartnerParams.getId(),
-        actualDpPartner.getId(), equalTo(expectedDpPartnerParams.getId()));
-    assertThatIfExpectedValueNotNull("DP Partner name is correct",
-        expectedDpPartnerParams.getName(),
-        actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC name is correct",
-        expectedDpPartnerParams.getPocName(),
-        actualDpPartner.getPocName(), equalTo(expectedDpPartnerParams.getPocName()));
-    assertThatIfExpectedValueNotNull("DP Partner POC No. is correct",
-        expectedDpPartnerParams.getPocTel(),
-        actualDpPartner.getPocTel(), equalTo(expectedDpPartnerParams.getPocTel()));
-    assertThatIfExpectedValueNotNull("DP Partner POC email is correct",
-        expectedDpPartnerParams.getPocEmail(),
-        actualDpPartner.getPocEmail(), equalTo(expectedDpPartnerParams.getPocEmail()));
-    assertThatIfExpectedValueNotNull("DP Partner POC restrictions is correct",
-        expectedDpPartnerParams.getRestrictions(), actualDpPartner.getRestrictions(),
-        equalTo(expectedDpPartnerParams.getRestrictions()));
+    Assertions.assertThat(actualDpPartner.getId()).as("DP Partner ID is correct")
+        .isEqualTo(expectedDpPartnerParams.getId());
+    Assertions.assertThat(actualDpPartner.getName()).as("DP Partner name is correct")
+        .isEqualTo(expectedDpPartnerParams.getName());
+    Assertions.assertThat(actualDpPartner.getPocName()).as("DP Partner POC name is correct")
+        .isEqualTo(expectedDpPartnerParams.getPocName());
+    Assertions.assertThat(actualDpPartner.getPocTel()).as("DP Partner POC No. is correct")
+        .isEqualTo(expectedDpPartnerParams.getPocTel());
+    Assertions.assertThat(actualDpPartner.getPocEmail()).as("DP Partner POC email is correct")
+        .isEqualTo(expectedDpPartnerParams.getPocEmail());
+    Assertions.assertThat(actualDpPartner.getRestrictions())
+        .as("DP Partner POC restrictions is correct")
+        .isEqualTo(expectedDpPartnerParams.getRestrictions());
     expectedDpPartnerParams.setId(actualDpPartner.getId());
   }
 
@@ -521,7 +515,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
 
   public void verifyDownloadedFileContentNewReactPageDpUsers(List<User> expectedUsers,
       DpDetailsResponse dp) {
-    final String fileName = getLatestDownloadedFilename(CSV_DP_USERS_FILENAME_PATTERN+ "-" + dp.getName());
+    final String fileName = getLatestDownloadedFilename(
+        CSV_DP_USERS_FILENAME_PATTERN + "-" + dp.getName());
     verifyFileDownloadedSuccessfully(fileName);
     final String pathName = StandardTestConstants.TEMP_DIR + fileName;
     final List<User> actualDpUser = User.fromCsvFile(User.class, pathName, true);
@@ -617,12 +612,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
           .isEqualTo(expectedDpPartner.getPocName());
       Assertions.assertThat(actualDpPartner.getPocTel()).as("POC No. is correct")
           .isEqualTo(expectedDpPartner.getPocTel());
-      assertEquals("POC Email is correct",
-          Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"),
-          actualDpPartner.getPocEmail());
-      assertEquals("Restrictions is correct",
-          Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"),
-          actualDpPartner.getRestrictions());
+      Assertions.assertThat(actualDpPartner.getPocEmail()).as("POC Email is correct")
+          .isEqualTo(Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"));
+      Assertions.assertThat(actualDpPartner.getRestrictions()).as("Restrictions is correct")
+          .isEqualTo(Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"));
     }
   }
 
@@ -682,8 +675,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
     final String pathName = StandardTestConstants.TEMP_DIR + fileName;
     final List<DpUser> actualDpUsersParams = DpUser.fromCsvFile(DpUser.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualDpUsersParams.size(),
-        greaterThanOrEqualTo(expectedDpUsersParams.size()));
+    Assertions.assertThat(actualDpUsersParams.size()).as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(expectedDpUsersParams.size());
 
     Map<String, DpUser> actualMap = actualDpUsersParams.stream().collect(Collectors.toMap(
         DpUser::getClientId,
@@ -726,7 +719,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   }
 
   public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime) {
-    assertEquals("Cut off time is not correct", expectedCutOffTime, actualCutOffTime);
+    Assertions.assertThat(actualCutOffTime).as("Cut off time is not correct")
+        .isEqualTo(expectedCutOffTime);
   }
 
   public void verifyErrorMessageForDpCreation(String field) {
@@ -763,12 +757,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
         .isEqualTo(dpUserDb.getEmail());
   }
 
-  public void verifyNewlyCreatedDpUserDeleted(co.nvqa.commons.model.dp.DpUser dpUserDb,String status) {
-    if (status.equalsIgnoreCase(SUCCESS)){
+  public void verifyNewlyCreatedDpUserDeleted(co.nvqa.commons.model.dp.DpUser dpUserDb,
+      String status) {
+    if (status.equalsIgnoreCase(SUCCESS)) {
       Assertions.assertThat(dpUserDb.getDeletedAt())
           .as("Deleted At from Dp User is Populated")
           .isNotNull();
-    } else if (status.equalsIgnoreCase(FAILED)){
+    } else if (status.equalsIgnoreCase(FAILED)) {
       Assertions.assertThat(dpUserDb.getDeletedAt())
           .as("Deleted At from Dp User is NULL")
           .isNull();
@@ -870,7 +865,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage {
   public void verifyMisMatchPasswordErrorMessage() {
     String expectedMessage = "Password does not match!";
     String actualMessage = getText(XPATH_ERROR_MISMATCH_PASSWORD_MESSAGE);
-    assertTrue("Error message is not correct: ", expectedMessage.equalsIgnoreCase(actualMessage));
+    Assertions.assertThat(expectedMessage.equalsIgnoreCase(actualMessage))
+        .as("Error message is not correct: ").isTrue();
   }
 
   public void clickResetPassword() {

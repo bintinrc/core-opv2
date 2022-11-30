@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyShippersPage;
 import io.cucumber.java.en.Then;
@@ -30,7 +31,7 @@ public class ThirdPartyShippersSteps extends AbstractSteps {
 
   @When("^Operator create new Third Party Shippers$")
   public void operatorCreateNewThirdPartyShippers() {
-    String uniqueString = generateDateUniqueString();
+    String uniqueString = StandardTestUtils.generateDateUniqueString();
     String name = f("TPS-%s", uniqueString);
     String code = generateThirdPartyShipperCode();
     String url = f("https://www.tps%s.co", uniqueString);

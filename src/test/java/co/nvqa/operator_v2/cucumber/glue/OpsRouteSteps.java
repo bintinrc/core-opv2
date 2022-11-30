@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.util.Random;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -38,6 +39,6 @@ public class OpsRouteSteps extends AbstractSteps {
   @Then("^Operator verifies the Route ID is changed$")
   public void verifyEditOpsRouteSuccess() {
     String actualRouteId = opsRoutePage.getRouteIdAtRow(EDITED_ROW_NUMBER);
-    assertEquals(newRouteId, actualRouteId);
+    Assertions.assertThat(actualRouteId).isEqualTo(newRouteId);
   }
 }

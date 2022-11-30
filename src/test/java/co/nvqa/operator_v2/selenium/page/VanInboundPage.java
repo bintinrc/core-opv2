@@ -1,17 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.page.VanInboundPage.ShipmentInboundDialog;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -93,7 +91,7 @@ public class VanInboundPage extends OperatorV2SimplePage {
 
   public void verifyVanInboundSucceed() {
     String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
-    assertEquals("Tracking ID is invalid", "SUCCESS", actualMessage);
+    Assertions.assertThat(actualMessage).as("Tracking ID is invalid").isEqualTo("SUCCESS");
   }
 
   public void startRoute(String trackingId) {
@@ -111,12 +109,12 @@ public class VanInboundPage extends OperatorV2SimplePage {
     String expectedTrackingId = findElementByXpath(
         "//tr[@ng-repeat='trackingId in ctrl.invalidTrackingIds track by $index'][1]/td").getText()
         .trim();
-    assertEquals("Tracking ID is valid", trackingId, expectedTrackingId);
+    Assertions.assertThat(expectedTrackingId).as("Tracking ID is valid").isEqualTo(trackingId);
   }
 
   public void verifyTrackingIdEmpty() {
     String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
-    assertEquals("Tracking ID is invalid", "EMPTY", actualMessage);
+    Assertions.assertThat(actualMessage).as("Tracking ID is invalid").isEqualTo("EMPTY");
   }
 
   public void clickCloseIcon() {
@@ -261,7 +259,7 @@ public class VanInboundPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog-content")
   public ShipmentInboundDialog shipmentInboundDialog;
 
-  public static class ShipmentInboundDialog extends MdDialog{
+  public static class ShipmentInboundDialog extends MdDialog {
 
     public ShipmentInboundDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

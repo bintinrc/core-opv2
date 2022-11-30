@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.AddOrderToRoutePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 
 /**
@@ -54,7 +55,7 @@ public class AddOrderToRouteSteps extends AbstractSteps {
 
   @Then("^Operator verifies the last scanned tracking id is \"(.+)\"$")
   public void operatorVerifiesTheLastScannedTrackingId(String expectedTrackingId) {
-    assertEquals("Last scanned tracking id", resolveValue(expectedTrackingId),
-        addOrderToRoutePage.lastScannedTrackingId.getText());
+    Assertions.assertThat(addOrderToRoutePage.lastScannedTrackingId.getText())
+        .as("Last scanned tracking id").isEqualTo(resolveValue(expectedTrackingId));
   }
 }

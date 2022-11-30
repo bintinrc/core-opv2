@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.page.InvoicedOrdersSearchPage;
 import io.cucumber.java.en.And;
@@ -7,10 +8,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class SearchInvoicedOrdersSteps extends AbstractSteps {
 
@@ -32,7 +32,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   public void operatorUploadACSVFileWithBelowOrderIdsOnInvoicedOrdersSearchPage(
       List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    File csvFile = createFile(filename, String.join("\n", trackingIds));
+    File csvFile = StandardTestUtils.createFile(filename, String.join("\n", trackingIds));
     String absolutePath = csvFile.getAbsolutePath();
     LOGGER.info("Path of the created file : " + absolutePath);
     invoicedOrdersSearchPage.uploadFile(absolutePath);
@@ -65,15 +65,15 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   @And("Operator verifies No Results Found is displayed")
   public void operatorVerifiesNoResultsFoundIsDisplayed() {
     invoicedOrdersSearchPage.noResultsFound.waitUntilVisible(3);
-    assertTrue("No Results Found Message is not displayed",
-        invoicedOrdersSearchPage.noResultsFound.isDisplayed());
+    Assertions.assertThat(invoicedOrdersSearchPage.noResultsFound.isDisplayed())
+        .as("No Results Found Message is not displayed").isTrue();
   }
 
   @Then("Operator uploads a PDF on Invoiced Orders Search Page and verifies error message {string}")
   public void operatorUploadsAPDFOnInvoicedOrdersSearchPageAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed(
       String expectedErrorMsg) {
     String pdfFileName = "invalid-upload.pdf";
-    File pdfFile = createFile(pdfFileName, "TEST");
+    File pdfFile = StandardTestUtils.createFile(pdfFileName, "TEST");
     invoicedOrdersSearchPage.uploadFile(pdfFile.getAbsolutePath());
     String actualNotifDescription = invoicedOrdersSearchPage.getNotificationMessageText();
     verifyErrorMessage(expectedErrorMsg);
@@ -83,7 +83,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   public void operatorUploadsAnInvalidOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
       String expectedErrorMsg) {
     String csvFileName = "upload.csv";
-    File csvFile = createFile(csvFileName, "TEST1 , TEST2");
+    File csvFile = StandardTestUtils.createFile(csvFileName, "TEST1 , TEST2");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
     verifyErrorMessage(expectedErrorMsg);
@@ -93,7 +93,7 @@ public class SearchInvoicedOrdersSteps extends AbstractSteps {
   public void operatorUploadsAnEmptyCSVOnInvoicedOrdersSearchPageCSVAndVerifiesErrorMessage(
       String expectedErrorMsg) {
     String csvFileName = "upload.csv";
-    File csvFile = createFile(csvFileName, "");
+    File csvFile = StandardTestUtils.createFile(csvFileName, "");
     invoicedOrdersSearchPage.uploadFile(csvFile.getAbsolutePath());
     invoicedOrdersSearchPage.searchInvoicedOrdersButton.click();
     verifyErrorMessage(expectedErrorMsg);

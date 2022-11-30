@@ -45,8 +45,6 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
 
 /**
  * @author Lanang Jati
@@ -199,7 +197,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void addFilter(String filterLabel, String value, boolean isMawb) {
-    if(!isElementExist(f(XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT,filterLabel))){
+    if (!isElementExist(f(XPATH_SHIPMENT_SEARCH_FILTER_LABEL_TEXT, filterLabel))) {
       selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
     }
     if (!isMawb) {
@@ -219,7 +217,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void changeDate(String field, String date, boolean isFromDate) {
-    String datepickerXpath = "//div//p[contains(.,'"+field+"')]//parent::div//parent::div//md-datepicker[@ng-model='%s']//input";
+    String datepickerXpath = "//div//p[contains(.,'" + field
+        + "')]//parent::div//parent::div//md-datepicker[@ng-model='%s']//input";
     if (isFromDate) {
       clear(f(datepickerXpath, "container.fromDate"));
       pause1s();
@@ -243,7 +242,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     Matcher m = p.matcher(presetId);
     if (m.matches()) {
       presetId = m.group(1);
-      assertThat("created preset is selected", m.group(3), equalTo(presetName));
+      Assertions.assertThat(m.group(3)).as("created preset is selected").isEqualTo(presetName);
     }
     return Long.parseLong(presetId);
   }
@@ -260,8 +259,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyFiltersPresetWasDeleted(String presetName) {
-    assertThat("Preset [" + presetName + "] exists in presets list",
-        getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET), not(contains(presetName)));
+    Assertions.assertThat(getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET))
+        .as("Preset [" + presetName + "] exists in presets list").doesNotContain(presetName);
   }
 
   public void selectFiltersPreset(String presetName) {
@@ -273,30 +272,34 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     {
       String actualValue = getAttribute("aria-label",
           "//nv-filter-box[@item-types='%s']//nv-icon-text-button[@ng-repeat]", filter);
-      assertThat(filter + " filter selected value", actualValue, equalTo(expectedValue));
+      Assertions.assertThat(actualValue).as(filter + " filter selected value")
+          .isEqualTo(expectedValue);
     });
   }
 
-  public void checkErrorMessageShipmentCreation(){
-    boolean errMsgOriginHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub"));
-    boolean errMsgDestHub = isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+  public void checkErrorMessageShipmentCreation() {
+    boolean errMsgOriginHub = isElementExistWait1Second(
+        f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE, "origHub"));
+    boolean errMsgDestHub = isElementExistWait1Second(
+        f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE, "destHub"));
 
     Assertions.assertThat(errMsgOriginHub)
-            .as("Error Message in Origin Hub Form is exist").isTrue();
+        .as("Error Message in Origin Hub Form is exist").isTrue();
     Assertions.assertThat(errMsgDestHub)
-            .as("Error Message in Destination Hub Form is exist").isTrue();
+        .as("Error Message in Destination Hub Form is exist").isTrue();
   }
 
-  public boolean checkErrMsgExist(){
-      return isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"origHub")) ||
-              isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE,"destHub"));
+  public boolean checkErrMsgExist() {
+    return isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE, "origHub")) ||
+        isElementExistWait1Second(f(XPATH_CREATE_SHIPMENT_ERROR_MESSAGE, "destHub"));
   }
 
   public void shipmentScanExist(String source, String hub) {
     String xpath =
         XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
     WebElement scan = findElementByXpath(xpath);
-    assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
+    Assertions.assertThat(scan.getTagName()).as("shipment(" + source + ") not exist")
+        .isEqualTo("tr");
   }
 
   public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder) {
@@ -314,42 +317,45 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     }
 
     String toastMessage = getToastTopText();
-    assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
-        allOf(containsString("Shipment"), containsString("created")));
+    Assertions.assertThat(toastMessage)
+        .as("Toast message not contains Shipment <SHIPMENT_ID> created")
+        .contains("Shipment", "created");
     long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
     confirmToast(toastMessage, false);
     shipmentInfo.setId(shipmentId);
   }
 
   public void createNewShipment(ShipmentInfo shipmentInfo) {
-      createShipment.click();
-      createShipmentDialog.waitUntilVisible();
-      createShipmentDialog.type.selectValue(shipmentInfo.getShipmentDialogType());
-      createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
-      createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
-      createShipmentDialog.comments.setValue(shipmentInfo.getComments());
+    createShipment.click();
+    createShipmentDialog.waitUntilVisible();
+    createShipmentDialog.type.selectValue(shipmentInfo.getShipmentDialogType());
+    createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+    createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+    createShipmentDialog.comments.setValue(shipmentInfo.getComments());
   }
 
-  public void checkToastMsg(){
-      String toastMessage = getToastTopText();
-      boolean shipmentCreated = toastMessage.contains("Shipment") && toastMessage.contains("created");
-      Assertions.assertThat(shipmentCreated).as("Toast message not contains Shipment <SHIPMENT_ID> created").isTrue();
-      confirmToast(toastMessage, false);
+  public void checkToastMsg() {
+    String toastMessage = getToastTopText();
+    boolean shipmentCreated = toastMessage.contains("Shipment") && toastMessage.contains("created");
+    Assertions.assertThat(shipmentCreated)
+        .as("Toast message not contains Shipment <SHIPMENT_ID> created").isTrue();
+    confirmToast(toastMessage, false);
   }
 
-  public void submitNewShipment (boolean isNextOrder){
-      if (isNextOrder) {
-          createShipmentDialog.createAnother.click();
-      } else {
-          createShipmentDialog.create.click();
-      }
+  public void submitNewShipment(boolean isNextOrder) {
+    if (isNextOrder) {
+      createShipmentDialog.createAnother.click();
+    } else {
+      createShipmentDialog.create.click();
+    }
   }
 
   public Long createAnotherShipment() {
     clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
     String toastMessage = getToastTopText();
-    assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage,
-        allOf(containsString("Shipment"), containsString("created")));
+    Assertions.assertThat(toastMessage)
+        .as("Toast message not contains Shipment <SHIPMENT_ID> created")
+        .contains("Shipment", "created");
     long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
     confirmToast(toastMessage, false);
 
@@ -358,11 +364,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void checkDisabledCreateShipmentButton(String disabledButton) {
     ImmutableMap<String, String> buttonMap = ImmutableMap.<String, String>builder()
-            .put(CREATE_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createButton"))
-            .put(CREATE_ANOTHER_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createAnotherButton"))
-            .build();
+        .put(CREATE_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createButton"))
+        .put(CREATE_ANOTHER_BUTTON, f(XPATH_DISABLED_CREATE_SHIPMENT_BUTTON, "createAnotherButton"))
+        .build();
 
-    Assertions.assertThat(isElementExistWait1Second(buttonMap.get(disabledButton))).as(f("'%s' is disabled", disabledButton)).isTrue();
+    Assertions.assertThat(isElementExistWait1Second(buttonMap.get(disabledButton)))
+        .as(f("'%s' is disabled", disabledButton)).isTrue();
   }
 
   public void editShipment(ShipmentInfo shipmentInfo) {
@@ -438,29 +445,33 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void validateShipmentStatusPending(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
-    assertThat("shipment Id is the same", actualShipmentInfo.getId(), equalTo(shipmentId));
-    assertThat("shipment status is the same", actualShipmentInfo.getStatus(), equalTo("Pending"));
+    Assertions.assertThat(actualShipmentInfo.getId()).as("shipment Id is the same")
+        .isEqualTo(shipmentId);
+    Assertions.assertThat(actualShipmentInfo.getStatus()).as("shipment status is the same")
+        .isEqualTo("Pending");
   }
 
   public void validateShipmentId(Long shipmentId) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     waitUntilVisibilityOfElementLocated("//td[@nv-table-highlight='filter.id']");
     String actualShipmentId = getText("//td[@nv-table-highlight='filter.id']");
-    assertEquals("Shipment ID is not the same : ", String.valueOf(shipmentId), actualShipmentId);
+    Assertions.assertThat(actualShipmentId).as("Shipment ID is not the same : ")
+        .isEqualTo(String.valueOf(shipmentId));
   }
 
   public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId) {
     String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
     String actualTextShipmentDetails = getText(
         "//md-content[contains(@class,'nv-shipment-details')]//h3");
-    Assertions.assertThat(actualTextShipmentDetails).as("Shipment ID is same: ", expectedTextShipmentDetails);
+    Assertions.assertThat(actualTextShipmentDetails)
+        .as("Shipment ID is same: ", expectedTextShipmentDetails);
     isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     getWebDriver().close();
   }
 
   public void verifyMasterAwbIsOpened() {
     String currentUrl = getCurrentUrl();
-    assertTrue("Tab is not opened", currentUrl.startsWith("blob"));
+    Assertions.assertThat(currentUrl.startsWith("blob")).as("Tab is not opened").isTrue();
     getWebDriver().close();
   }
 
@@ -475,7 +486,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     {
       try {
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-        Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:").isEqualTo(shipmentId);
+        Assertions.assertThat(shipmentsTable.readEntity(1).getId()).as("Shipment Id:")
+            .isEqualTo(shipmentId);
       } catch (AssertionError ex) {
         clickEditSearchFilterButton();
         clickButtonLoadSelection();
@@ -509,15 +521,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void downloadPdfAndVerifyTheDataIsCorrect(ShipmentInfo shipmentInfo,
       byte[] shipmentAirwayBill) {
     ShipmentAirwayBill sab = PdfUtils.getShipmentFromShipmentAirwayBill(shipmentAirwayBill);
-    assertEquals("Shipment ID is not the same: ", shipmentInfo.getId(), sab.getShipmentId());
-    assertEquals("Start Hub is not the same: ",
-        StandardTestConstants.COUNTRY_CODE + "-" + shipmentInfo.getOrigHubName(),
-        sab.getStartHub());
-    assertEquals("Destination Hub is not the same: ",
-        StandardTestConstants.COUNTRY_CODE + "-" + shipmentInfo.getDestHubName(),
-        sab.getDestinationHub());
-    assertEquals("Contains has a different number: ", shipmentInfo.getOrdersCount(),
-        sab.getContains());
+    Assertions.assertThat(sab.getShipmentId()).as("Shipment ID is not the same: ")
+        .isEqualTo(shipmentInfo.getId());
+    Assertions.assertThat(sab.getStartHub()).as("Start Hub is not the same: ")
+        .isEqualTo(StandardTestConstants.NV_SYSTEM_ID + "-" + shipmentInfo.getOrigHubName());
+    Assertions.assertThat(sab.getDestinationHub()).as("Destination Hub is not the same: ")
+        .isEqualTo(StandardTestConstants.NV_SYSTEM_ID + "-" + shipmentInfo.getDestHubName());
+    Assertions.assertThat(sab.getContains()).as("Contains has a different number: ")
+        .isEqualTo(shipmentInfo.getOrdersCount());
   }
 
   public void forceSuccessShipment() {
@@ -526,8 +537,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     click("//button[contains(@aria-label,'Confirm')]");
 
     String toastMessage = getToastTopText();
-    assertThat("Toast message not contains Shipment Completion", toastMessage,
-        allOf(containsString("Force"), containsString("Success")));
+    Assertions.assertThat(toastMessage).as("Toast message not contains Shipment Completion")
+        .contains("Force", "Success");
   }
 
   public void clickReopenShipmentButton(boolean isValid) {
@@ -596,8 +607,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
 
   public void verifyCannotParseParameterIdAsLongToastExist() {
     waitUntilVisibilityOfToast("Network Request Error");
-    assertThat("toast message is the same", getToastBottomText(),
-        containsString("Cannot parse parameter id as Long: For input string:"));
+    Assertions.assertThat(getToastBottomText()).as("toast message is the same")
+        .contains("Cannot parse parameter id as Long: For input string:");
   }
 
   public void bulkSearchShipmentIds(List<Long> shipmentIds) {
@@ -639,7 +650,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     click(XPATH_SEARCH_SHIPMENT_BUTTON);
   }
 
-  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData) {
+  public void editShipmentBy(String editType, ShipmentInfo shipmentInfo,
+      Map<String, String> resolvedMapOfData) {
     clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
     editShipmentDialog.waitUntilVisible();
     if ("Start Hub".equals(editType)) {
@@ -664,7 +676,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       editShipmentDialog.comments.setValue(shipmentInfo.getComments());
     }
     if ("mawb".equals(editType)) {
-      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, "");
+      editMawbInShipmentManagement(shipmentInfo, resolvedMapOfData, "");
     }
     if ("cancelled".equals(editType)) {
       editShipmentDialog.saveChanges.click();
@@ -697,7 +709,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause1s();
     waitUntilVisibilityOfElementLocated(XPATH_SHIPMENT_ID_RESULT_TABLE);
     String actualShipmentId = getText(XPATH_SHIPMENT_ID_RESULT_TABLE);
-    assertEquals("Shipment ID", shipmentIdAsString, actualShipmentId);
+    Assertions.assertThat(actualShipmentId).as("Shipment ID").isEqualTo(shipmentIdAsString);
   }
 
   public void moreThan30WarningToastShown() {
@@ -708,15 +720,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void verifyEmptyLineParsingErrorToastExist() {
     waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'shipment-search-error')]");
     Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[1]")).
-            as("toast message is the same").matches("We cannot find following .* shipment ids:");
+        as("toast message is the same").matches("We cannot find following .* shipment ids:");
     Assertions.assertThat(getToastText(XPATH_SHIPMENT_SEARCH_ERROR_MODAL + "//p[2]")).
-            as("toast message is the same").contains("");
+        as("toast message is the same").contains("");
   }
 
   public void verifyUnableToEditCompletedShipmentToastExist() {
     waitUntilVisibilityOfToast("Network Request Error");
-    assertThat("toast message is the same", getToastBottomText(),
-        containsString("unable to edit completed/cancelled shipments"));
+    Assertions.assertThat(getToastBottomText()).as("toast message is the same")
+        .contains("unable to edit completed/cancelled shipments");
     click("//button[.='close']");
   }
 
@@ -788,21 +800,24 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause1s();
     if (isValid) {
       if (isDuplicated) {
-        assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder + 1);
-        assertEquals("Failed Order(s) : ", failedOrder, 1);
+        Assertions.assertThat(numberOfOrder + 1).as("Number of Order is not the same")
+            .isEqualTo(actualNumberOfOrder);
+        Assertions.assertThat(1).as("Failed Order(s) : ").isEqualTo(failedOrder);
         String actualFailedReason = getTextOnTableWithNgRepeat(1, "reason",
             "row in ctrl.uploadResult.failedUpload");
-        assertEquals("Failure reason is different : ", actualFailedReason, "DUPLICATE");
+        Assertions.assertThat("DUPLICATE").as("Failure reason is different : ")
+            .isEqualTo(actualFailedReason);
       } else {
-        assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder);
-        assertEquals("Failed Order(s) : ", failedOrder, 0);
+        Assertions.assertThat(numberOfOrder).as("Number of Order is not the same")
+            .isEqualTo(actualNumberOfOrder);
+        Assertions.assertThat(0).as("Failed Order(s) : ").isEqualTo(failedOrder);
       }
-      assertEquals("Successful Order(s) : ", successfulOrder, numberOfOrder);
+      Assertions.assertThat(numberOfOrder).as("Successful Order(s) : ").isEqualTo(successfulOrder);
 
     } else {
-      assertEquals("Number of Order is not the same", actualNumberOfOrder, 1);
-      assertEquals("Successful Order(s) : ", successfulOrder, 0);
-      assertEquals("Failed Order(s) : ", failedOrder, 1);
+      Assertions.assertThat(1).as("Number of Order is not the same").isEqualTo(actualNumberOfOrder);
+      Assertions.assertThat(0).as("Successful Order(s) : ").isEqualTo(successfulOrder);
+      Assertions.assertThat(1).as("Failed Order(s) : ").isEqualTo(failedOrder);
     }
   }
 
@@ -838,11 +853,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     if (resolvedMapOfData.get("mawb") != null) {
       ShipmentInfo shipmentInfo = new ShipmentInfo();
       String ids = "";
-      for(Long shipmentId : shipmentIds){
+      for (Long shipmentId : shipmentIds) {
         ids = ids + shipmentId + "\n";
       }
-      shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1));
-      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, ids.trim());
+      shipmentInfo.setMawb(
+          "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get("mawb")
+              .substring(1));
+      editMawbInShipmentManagement(shipmentInfo, resolvedMapOfData, ids.trim());
     }
     if (resolvedMapOfData.get("comments") != null) {
       String comments = resolvedMapOfData.get("comments");
@@ -852,15 +869,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     bulkUpdateShipmentDialog.applyToSelected.click();
   }
 
-  public void bulkMawbUpdateShipment(Map<String, String> resolvedMapOfData, List<Long> shipmentIds) {
+  public void bulkMawbUpdateShipment(Map<String, String> resolvedMapOfData,
+      List<Long> shipmentIds) {
     if (resolvedMapOfData.get("mawb") != null) {
       ShipmentInfo shipmentInfo = new ShipmentInfo();
       String ids = "";
-      for(Long shipmentId : shipmentIds){
+      for (Long shipmentId : shipmentIds) {
         ids = ids + shipmentId + "\n";
       }
-      shipmentInfo.setMawb("12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1));
-      editMawbInShipmentManagement(shipmentInfo,resolvedMapOfData, ids.trim());
+      shipmentInfo.setMawb(
+          "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get("mawb")
+              .substring(1));
+      editMawbInShipmentManagement(shipmentInfo, resolvedMapOfData, ids.trim());
     }
   }
 
@@ -871,25 +891,25 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String fieldToBeUpdated = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(":")[1]
         .trim();
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Shipment Type"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Shipment Type");
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Start Hub"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Start Hub");
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("End Hub"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("End Hub");
     }
     if (resolvedMapOfData.get("eda") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("eta") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("ETA (Date Time)"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("MAWB"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("MAWB");
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("Field is the same", fieldToBeUpdated, containsString("Comments"));
+      Assertions.assertThat(fieldToBeUpdated).as("Field is the same").contains("Comments");
     }
     List<String> actualShipmentIds = shipmentToBeUpdatedTable.shipmentIds.stream()
         .map(TextBox::getText).collect(
@@ -900,15 +920,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
       if ("second".equals(whichShipment)) {
         shipmentToBeUpdatedTable.removeButtons.get(1).click();
         pause1s();
-        assertThat(f("shipment id %d is contained", shipmentIds.get(0)),
-            actualShipmentIds.contains(String.valueOf(shipmentIds.get(0))), equalTo(true));
+        Assertions.assertThat(actualShipmentIds.contains(String.valueOf(shipmentIds.get(0))))
+            .as("shipment id %d is contained", shipmentIds.get(0)).isTrue();
         return;
       }
     }
 
     for (Long shipmentId : shipmentIds) {
-      assertThat(f("shipment id %d is contained", shipmentId),
-          actualShipmentIds.contains(String.valueOf(shipmentId)), equalTo(true));
+      Assertions.assertThat(actualShipmentIds.contains(String.valueOf(shipmentId)))
+          .as("shipment id %d is contained", shipmentId).isTrue();
     }
   }
 
@@ -931,39 +951,41 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     String shipmentField = confirmUpdateContent[0].split(":")[1].trim();
     Long numberOfRecords = Long.valueOf(confirmUpdateContent[1].split(":")[1].trim());
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("field is equal", shipmentField, containsString("Shipment Type"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Shipment Type");
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("field is equal", shipmentField, containsString("Start Hub"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Start Hub");
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("field is equal", shipmentField, containsString("End Hub"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("End Hub");
     }
     if (resolvedMapOfData.get("EDA") != null) {
-      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("ETA") != null) {
-      assertThat("field is equal", shipmentField, containsString("ETA (Date Time)"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("ETA (Date Time)");
     }
     if (resolvedMapOfData.get("mawb") != null) {
-      assertThat("field is equal", shipmentField, containsString("MAWB"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("MAWB");
     }
     if (resolvedMapOfData.get("comments") != null) {
-      assertThat("field is equal", shipmentField, containsString("Comments"));
+      Assertions.assertThat(shipmentField).as("field is equal").contains("Comments");
     }
     if (resolvedMapOfData.get("removeShipment") != null) {
-      assertThat("number of records is equal", numberOfRecords, equalTo(1L));
+      Assertions.assertThat(numberOfRecords).as("number of records is equal").isEqualTo(1L);
     } else {
-      assertThat("number of records is equal", numberOfRecords, equalTo(2L));
+      Assertions.assertThat(numberOfRecords).as("number of records is equal").isEqualTo(2L);
     }
     confirmBulkUpdateDialog.proceed.click();
     confirmBulkUpdateDialog.waitUntilInvisible();
 
     pause3s();
     String fieldInfo = shipmentToBeUpdatedTable.fieldToBeUpdated.getText().split(": ")[0];
-    assertThat("Field info is correct", fieldInfo, equalTo("Field successfully updated"));
+    Assertions.assertThat(fieldInfo).as("Field info is correct")
+        .isEqualTo("Field successfully updated");
     for (PageElement checkListExistence : shipmentToBeUpdatedTable.checkLists) {
-      assertThat("checklists is shown", checkListExistence.getText(), equalTo("check"));
+      Assertions.assertThat(checkListExistence.getText()).as("checklists is shown")
+          .isEqualTo("check");
     }
     shipmentToBeUpdatedTable.backButton.click();
   }
@@ -971,39 +993,42 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
   public void validateShipmentUpdated(Long shipmentId, Map<String, String> resolvedMapOfData) {
     shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
     ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
-    assertThat("Shipment id is the same", actualShipmentInfo.getId(),
-        equalTo(shipmentId));
+    Assertions.assertThat(actualShipmentInfo.getId()).as("Shipment id is the same")
+        .isEqualTo(shipmentId);
     if (resolvedMapOfData.get("shipmentType") != null) {
-      assertThat("Shipment Type is the same", actualShipmentInfo.getShipmentType().toLowerCase(),
-          equalTo(resolvedMapOfData.get("shipmentType").toLowerCase()));
+      Assertions.assertThat(actualShipmentInfo.getShipmentType().toLowerCase())
+          .as("Shipment Type is the same")
+          .isEqualTo(resolvedMapOfData.get("shipmentType").toLowerCase());
     }
     if (resolvedMapOfData.get("startHub") != null) {
-      assertThat("Start Hub is the same", actualShipmentInfo.getOrigHubName().toLowerCase(),
-          equalTo(resolvedMapOfData.get("startHub").toLowerCase()));
+      Assertions.assertThat(actualShipmentInfo.getOrigHubName().toLowerCase())
+          .as("Start Hub is the same").isEqualTo(resolvedMapOfData.get("startHub").toLowerCase());
     }
     if (resolvedMapOfData.get("endHub") != null) {
-      assertThat("End Hub is the same", actualShipmentInfo.getDestHubName().toLowerCase(),
-          equalTo(resolvedMapOfData.get("endHub").toLowerCase()));
+      Assertions.assertThat(actualShipmentInfo.getDestHubName().toLowerCase())
+          .as("End Hub is the same").isEqualTo(resolvedMapOfData.get("endHub").toLowerCase());
     }
     if (resolvedMapOfData.get("EDA") != null) {
       String eda = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[0];
-      assertThat("EDA is the same", eda,
-          equalTo(resolvedMapOfData.get("EDA").toLowerCase()));
+      Assertions.assertThat(eda).as("EDA is the same")
+          .isEqualTo(resolvedMapOfData.get("EDA").toLowerCase());
     }
     if (resolvedMapOfData.get("ETA") != null) {
       String eta = actualShipmentInfo.getArrivalDatetime().toLowerCase().split(" ")[1];
-      assertThat("ETA is the same", eta,
-          equalTo(resolvedMapOfData.get("ETA").toLowerCase()));
+      Assertions.assertThat(eta).as("ETA is the same")
+          .isEqualTo(resolvedMapOfData.get("ETA").toLowerCase());
     }
     if (resolvedMapOfData.get("mawb") != null) {
       String mawb = actualShipmentInfo.getMawb().toLowerCase();
-      String expected = "12" + resolvedMapOfData.get("mawb").substring(0,1) + "-" + resolvedMapOfData.get("mawb").substring(1);
-      assertThat("MAWB is the same", mawb, equalTo(expected));
+      String expected =
+          "12" + resolvedMapOfData.get("mawb").substring(0, 1) + "-" + resolvedMapOfData.get("mawb")
+              .substring(1);
+      Assertions.assertThat(mawb).as("MAWB is the same").isEqualTo(expected);
     }
     if (resolvedMapOfData.get("comments") != null) {
       String comments = actualShipmentInfo.getComments().toLowerCase();
-      assertThat("Comments is the same", comments,
-          equalTo(resolvedMapOfData.get("comments").toLowerCase()));
+      Assertions.assertThat(comments).as("Comments is the same")
+          .isEqualTo(resolvedMapOfData.get("comments").toLowerCase());
     }
   }
 
@@ -1014,18 +1039,19 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause3s();
 
     List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
-    assertThat("Selected shipments count is true", shipmentList.size(), equalTo(3));
+    Assertions.assertThat(shipmentList.size()).as("Selected shipments count is true").isEqualTo(3);
   }
 
-  public void editMawbInShipmentManagement(ShipmentInfo shipmentInfo, Map<String, String> resolvedMapOfData, String bulkIds) {
+  public void editMawbInShipmentManagement(ShipmentInfo shipmentInfo,
+      Map<String, String> resolvedMapOfData, String bulkIds) {
     waitUntilVisibilityOfElementLocated(XPATH_SHIPMENTWEIGHTANDDIMENSION);
     click(XPATH_SHIPMENTWEIGHTANDDIMENSION);
     waitUntilNewWindowOrTabOpened();
     switchToOtherWindow();
     switchTo();
-    if(bulkIds.equals("")){
+    if (bulkIds.equals("")) {
       searchMawbByShipmentId(String.valueOf(shipmentInfo.getId()));
-    }else {
+    } else {
       searchMawbByShipmentId(bulkIds);
     }
     updateMawbDetails(shipmentInfo, resolvedMapOfData);
@@ -1046,8 +1072,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     pause2s();
     click("//button[contains(.,'Update MAWB')]");
     inputUpdateMawb.sendKeys(shipmentInfo.getMawb());
-    TestUtils.findElementAndClick("//input[@id='updateMAWBForm_vendor_id']", "xpath", getWebDriver());
-    sendKeysAndEnter("//input[@id='updateMAWBForm_vendor_id']", resolvedMapOfData.get("mawbVendor"));
+    TestUtils.findElementAndClick("//input[@id='updateMAWBForm_vendor_id']", "xpath",
+        getWebDriver());
+    sendKeysAndEnter("//input[@id='updateMAWBForm_vendor_id']",
+        resolvedMapOfData.get("mawbVendor"));
     TestUtils.findElementAndClick(inputUpdateMawbOriginAirport, "xpath", getWebDriver());
     sendKeysAndEnter(inputUpdateMawbOriginAirport, resolvedMapOfData.get("MawbOrigin"));
     TestUtils.findElementAndClick(inputUpdateMawbDestinationAirport, "xpath", getWebDriver());
@@ -1240,7 +1268,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public Map<String, String> readShipmentEventsTable(String source) {
       waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
       List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
-      Assertions.assertThat(list.size()).as(f("There is no [%s] shipment event on Shipment Details page",source)).isNotEqualTo(0);
+      Assertions.assertThat(list.size())
+          .as(f("There is no [%s] shipment event on Shipment Details page", source))
+          .isNotEqualTo(0);
       Map<String, String> eventsTable = new HashMap<>();
       eventsTable.put(SOURCE, list.get(0));
       eventsTable.put(USER_ID, list.get(1));
@@ -1276,7 +1306,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage {
     public Map<String, String> readMovementEventsTable(String source) {
       waitUntilVisibilityOfElementLocated(f(XPATH_TABLE_DATA, source));
       List<String> list = getTextOfElements(f(XPATH_TABLE_DATA, source));
-      Assertions.assertThat(list.size()).as(f("There is no [%s] movement event on Shipment Details page",source)).isNotEqualTo(0);
+      Assertions.assertThat(list.size())
+          .as(f("There is no [%s] movement event on Shipment Details page", source))
+          .isNotEqualTo(0);
       Map<String, String> eventsTable = new HashMap<>();
       eventsTable.put(SOURCE, list.get(0));
       eventsTable.put(STATUS, list.get(1));

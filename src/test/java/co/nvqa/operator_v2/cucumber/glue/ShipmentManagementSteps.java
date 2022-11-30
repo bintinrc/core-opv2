@@ -522,7 +522,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 //    try {
 //      ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
 //      navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-//          TestConstants.COUNTRY_CODE, shipmentId));
+//          TestConstants.NV_SYSTEM_ID, shipmentId));
 //      shipmentManagementPage.waitUntilPageLoaded();
 //      List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
 //      ShipmentEvent actualEvent = events.stream().filter(
@@ -551,7 +551,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 //      try {
 //        ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
 //        navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-//            TestConstants.COUNTRY_CODE, shipmentId));
+//            TestConstants.NV_SYSTEM_ID, shipmentId));
 //        shipmentManagementPage.waitUntilPageLoaded();
 //        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(
 //            1);
@@ -789,8 +789,7 @@ public class ShipmentManagementSteps extends AbstractSteps {
 //
 //    if ("Cancel Shipment".equals(actionButton)) {
 //      shipmentManagementPage.cancelShipmentButton.waitUntilVisible();
-//      assertThat("Cancel Shipment Button is disabled",
-//          shipmentManagementPage.cancelShipmentButton.isEnabled(), equalTo(false));
+//     Assertions.assertThat(//          shipmentManagementPage.cancelShipmentButton.isEnabled()).as("Cancel Shipment Button is disabled").isEqualTo(false);
 //    }
 //  }
 //

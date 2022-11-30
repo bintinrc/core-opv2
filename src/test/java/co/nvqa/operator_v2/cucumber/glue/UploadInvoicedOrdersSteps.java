@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import java.io.File;
 import java.util.List;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
+import org.assertj.core.api.Assertions;
 
 public class UploadInvoicedOrdersSteps extends AbstractSteps {
 
@@ -30,7 +30,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
   @And("Operator upload a CSV file with below order ids and verify success message")
   public void operatorUploadACSVFileWithBelowOrderIdsVerify(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
+    File csvFile = StandardTestUtils.createFile("upload.csv", String.join("\n", trackingIds));
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
@@ -41,7 +41,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
   @And("Operator upload a CSV file with below order ids")
   public void operatorUploadACSVFileWithBelowOrderIds(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    File csvFile = createFile("upload.csv", String.join("\n", trackingIds));
+    File csvFile = StandardTestUtils.createFile("upload.csv", String.join("\n", trackingIds));
     NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
     takesScreenshot();
@@ -57,21 +57,21 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
   @Then("Operator uploads a PDF and verifies that any other file except csv is not allowed")
   public void operatorUploadsAPDFAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed() {
     String pdfFileName = "invalid-upload.pdf";
-    File pdfFile = createFile(pdfFileName, "TEST");
+    File pdfFile = StandardTestUtils.createFile(pdfFileName, "TEST");
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.chooseButton.setValue(pdfFile);
     String actualErrorMsg = uploadInvoicedOrdersPage.getToastTopText();
     String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
-    assertEquals(expectedToastText, actualErrorMsg);
+    Assertions.assertThat(actualErrorMsg).as("Check error message").isEqualTo(expectedToastText);
   }
 
   @Then("Operator uploads an invalid CSV and verifies error message")
   public void operatorUploadsAnInvalidCSVAndVerifiesErrorMessage() {
     String csvFileName = "upload.csv";
-    File csvFile = createFile(csvFileName, "TEST1 , TEST2");
+    File csvFile = StandardTestUtils.createFile(csvFileName, "TEST1 , TEST2");
     uploadInvoicedOrdersPage.uploadInvoicedOrdersDialog.uploadFile(csvFile);
     String actualErrorMsg = uploadInvoicedOrdersPage.getToastTopText();
     String expectedToastText = "Error parsing csv";
-    assertEquals(expectedToastText, actualErrorMsg);
+    Assertions.assertThat(actualErrorMsg).as("Check error message").isEqualTo(expectedToastText);
   }
 
   @And("Operator clicks Download sample CSV template button on the Upload Invoiced Orders Page")

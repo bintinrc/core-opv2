@@ -91,7 +91,7 @@ public class MovementManagementSteps extends AbstractSteps {
     try {
       movementManagementPage.addMovementScheduleModal.getScheduleForm(1).destinationHub.selectValue(
           hubName);
-      fail(
+      Assertions.fail(
           f("Operator can select [%s] value in Destination Crossdock Hub field on the New Crossdock Movement Schedule dialog, but must not",
               hubName));
     } catch (NoSuchElementException ex) {
@@ -392,18 +392,18 @@ public class MovementManagementSteps extends AbstractSteps {
     Map<String, String> finalData = data;
     movementManagementPage.inFrame(page -> {
       Optional.ofNullable(finalData.get("station")).ifPresent(
-          value -> assertEquals("Station", value,
-              page.relationsTable.rows.get(0).station.getText()));
+          value -> Assertions.assertThat(page.relationsTable.rows.get(0).station.getText())
+              .as("Station").isEqualTo(value));
       Optional.ofNullable(finalData.get("crossdockHub")).ifPresent(
-          value -> assertEquals("Crossdock Hub", value,
-              page.relationsTable.rows.get(0).crossdock.getText()));
+          value -> Assertions.assertThat(page.relationsTable.rows.get(0).crossdock.getText())
+              .as("Crossdock Hub").isEqualTo(value));
     });
   }
 
   @Then("Operator verify relations table on Movement Management page is empty")
   public void operatorVerifyRelationTableOnMovementManagementPageIsEmpty() {
-    assertEquals("Numbers of row in Relations table", 0,
-        movementManagementPage.relationsTable.rows.size());
+    Assertions.assertThat(movementManagementPage.relationsTable.rows.size())
+        .as("Numbers of row in Relations table").isEqualTo(0);
   }
 
   @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
@@ -579,8 +579,8 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
 
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(),
-            movementManagementPage.schedulesTable.getRowsCount());
+        Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
+            .as("Number of displayed schedules").isEqualTo(movementSchedule.getSchedules().size());
         for (int i = 0; i < movementSchedule.getSchedules().size(); i++) {
           MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(
               i + 1);
@@ -610,8 +610,8 @@ public class MovementManagementSteps extends AbstractSteps {
   @And("Operator verifies Crossdock Movement Schedule parameters on Movement Management page")
   public void operatorVerifiesANewScheduleIsCreatedOnMovementManagementPage() {
     MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-    assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(),
-        movementManagementPage.schedulesTable.getRowsCount());
+    Assertions.assertThat(movementManagementPage.schedulesTable.getRowsCount())
+        .as("Number of displayed schedules").isEqualTo(movementSchedule.getSchedules().size());
     for (int i = 0; i < movementSchedule.getSchedules().size(); i++) {
       MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(i + 1);
       movementSchedule.getSchedule(i).compareWithActual(actual);
@@ -690,26 +690,29 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @Then("Operator verify Add Movement Schedule form is empty")
   public void operatorVerifyAddMovementScheduleFormIsEmpty() {
-    assertNull("Origin Crossdock Hub value",
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.getValue());
-    assertNull("Destination Crossdock Hub value",
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(
-            1).destinationHub.getValue());
-    assertNull("Movement Type value",
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).movementType.getValue());
-    assertEquals("Comment value", null,
-        movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue());
+    Assertions.assertThat(
+            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.getValue())
+        .as("Origin Crossdock Hub value").isNull();
+    Assertions.assertThat(movementManagementPage.addMovementScheduleModal.getScheduleForm(
+        1).destinationHub.getValue()).as("Destination Crossdock Hub value").isNull();
+    Assertions.assertThat(
+            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).movementType.getValue())
+        .as("Movement Type value").isNull();
+    Assertions.assertThat(
+            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue())
+        .as("Comment value").isEqualTo(null);
   }
 
   @Then("Operator verifies Add Movement Schedule dialog is closed on Movement Management page")
   public void operatorVerifiesAddMovementScheduleDialogIsClosedOnMovementManagementPage() {
-    assertFalse("Add Movement Schedule dialog is opened",
-        movementManagementPage.addMovementScheduleModal.isDisplayed());
+    Assertions.assertThat(movementManagementPage.addMovementScheduleModal.isDisplayed())
+        .as("Add Movement Schedule dialog is opened").isFalse();
   }
 
   @Then("Operator verify schedules list is empty on Movement Management page")
   public void operatorVerifySchedulesListIsEmptyOnMovementManagementPage() {
-    assertTrue("Schedules list is not empty", movementManagementPage.schedulesTable.isEmpty());
+    Assertions.assertThat(movementManagementPage.schedulesTable.isEmpty())
+        .as("Schedules list is not empty").isTrue();
   }
 
   @And("Operator filters schedules list on Movement Management page using data below:")
@@ -738,15 +741,15 @@ public class MovementManagementSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(originHub)) {
         String actualOriginHub = movementManagementPage.schedulesTable.getColumnText(i + 1,
             COLUMN_ORIGIN_HUB);
-        assertTrue(f("Row [%d] - Origin Hub name - doesn't contains [%s]", i + 1, originHub),
-            StringUtils.containsIgnoreCase(originHub, actualOriginHub));
+        Assertions.assertThat(StringUtils.containsIgnoreCase(originHub, actualOriginHub))
+            .as(f("Row [%d] - Origin Hub name - doesn't contains [%s]", i + 1, originHub)).isTrue();
       }
       if (StringUtils.isNotBlank(destinationHub)) {
         String actualDestinationHub = movementManagementPage.schedulesTable.getColumnText(i + 1,
             MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB);
-        assertTrue(
-            f("Row [%d] - Destination Hub name - doesn't contains [%s]", i + 1, destinationHub),
-            StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub));
+        Assertions.assertThat(StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub))
+            .as(f("Row [%d] - Destination Hub name - doesn't contains [%s]", i + 1, destinationHub))
+            .isTrue();
       }
     }
   }
@@ -798,15 +801,15 @@ public class MovementManagementSteps extends AbstractSteps {
   public void operatorVerifiesCreatedMovementScheduleDataOnMovementScheduleModalOnMovementManagementPage() {
     MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
     String actualOriginHub = movementManagementPage.movementScheduleModal.originCrossdockHub.getText();
-    assertEquals("Origin Crossdock Hub", movementSchedule.getSchedule(0).getOriginHub(),
-        actualOriginHub);
+    Assertions.assertThat(actualOriginHub).as("Origin Crossdock Hub")
+        .isEqualTo(movementSchedule.getSchedule(0).getOriginHub());
 
     String actualDestinationHub = movementManagementPage.movementScheduleModal.destinationCrossdockHub.getText();
-    assertEquals("Destination Crossdock Hub", movementSchedule.getSchedule(0).getDestinationHub(),
-        actualDestinationHub);
+    Assertions.assertThat(actualDestinationHub).as("Destination Crossdock Hub")
+        .isEqualTo(movementSchedule.getSchedule(0).getDestinationHub());
 
-    assertTrue("Edit Schedule button is disabled",
-        movementManagementPage.movementScheduleModal.editSchedule.isEnabled());
+    Assertions.assertThat(movementManagementPage.movementScheduleModal.editSchedule.isEnabled())
+        .as("Edit Schedule button is disabled").isTrue();
   }
 
   @When("Operator select {value} tab on Movement Management page")
@@ -835,16 +838,19 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.allTab.click();
         break;
       default:
-        fail("Unknown tab name [%s]", tabName);
+        Assertions.fail("Unknown tab name [%s]", tabName);
     }
     movementManagementPage.waitUntilLoaded(2, 60);
   }
 
   @When("Operator verify 'All' 'Pending' and 'Complete' tabs are displayed on 'Relations' tab")
   public void operatorVerifyTabsAreDisplayedOnRelationsTab() {
-    assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
-    assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
-    assertTrue("Complete tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
+    Assertions.assertThat(movementManagementPage.allTab.isDisplayedFast())
+        .as("All tab is displayed").isTrue();
+    Assertions.assertThat(movementManagementPage.pendingTab.isDisplayedFast())
+        .as("Pending tab is displayed").isTrue();
+    Assertions.assertThat(movementManagementPage.completedTab.isDisplayedFast())
+        .as("Complete tab is displayed").isTrue();
   }
 
   @When("Operator verify {value} tab is selected on 'Relations' tab")
@@ -916,32 +922,36 @@ public class MovementManagementSteps extends AbstractSteps {
 
   @When("^Operator verify all Crossdock Hub in Pending tab have \"(.+)\" value$")
   public void operatorVerifyCrossdockHubInPendingTabOnRelationsTab(String expectedValue) {
-    assertTrue(f("All Crossdock Hub in Pending tab have '%s' value", expectedValue),
-        movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText())
-            .allMatch(expectedValue::equals));
+    Assertions.assertThat(
+            movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText())
+                .allMatch(expectedValue::equals))
+        .as("All Crossdock Hub in Pending tab have '%s' value", expectedValue).isTrue();
   }
 
   @When("Operator verify all Crossdock Hub of all listed Stations already defined")
   public void operatorVerifyCrossdockHubAlreadyDefinedOnRelationsTab() {
-    assertTrue("all Crossdock Hub of all listed Stations already defined",
-        movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText())
-            .noneMatch("Unfilled"::equals));
+    Assertions.assertThat(
+            movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText())
+                .noneMatch("Unfilled"::equals))
+        .as("all Crossdock Hub of all listed Stations already defined").isTrue();
   }
 
   @When("Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab")
   public void operatorVerifyEditRelationLinkOnRelationsTab() {
-    assertTrue("there is hyperlink for 'Edit Relations' on the right side",
-        movementManagementPage.relationsTable.rows.stream().map(row -> row.editRelations.getText())
-            .allMatch("Edit Relations"::equals));
+    Assertions.assertThat(
+            movementManagementPage.relationsTable.rows.stream().map(row -> row.editRelations.getText())
+                .allMatch("Edit Relations"::equals))
+        .as("there is hyperlink for 'Edit Relations' on the right side").isTrue();
   }
 
   @When("Operator verify {string} error Message is displayed in Add Crossdock Movement Schedule dialog")
   public void operatorVerifyErrorMessageInAddCrossdockMovementScheduleDialog(
       String expectedMessage) {
-    assertTrue("Error message is not displayed",
-        movementManagementPage.addMovementScheduleModal.errorMessage.isDisplayedFast());
-    assertEquals("Error message text", expectedMessage,
-        movementManagementPage.addMovementScheduleModal.errorMessage.getText());
+    Assertions.assertThat(
+            movementManagementPage.addMovementScheduleModal.errorMessage.isDisplayedFast())
+        .as("Error message is not displayed").isTrue();
+    Assertions.assertThat(movementManagementPage.addMovementScheduleModal.errorMessage.getText())
+        .as("Error message text").isEqualTo(expectedMessage);
   }
 
   @When("Operator deletes schedule for {string} movement")
@@ -990,11 +1000,11 @@ public class MovementManagementSteps extends AbstractSteps {
         movementManagementPage.delete.click();
         movementManagementPage.modalDeleteButton.click();
         movementManagementPage.verifyNotificationWithMessage("2 schedule(s) have been deleted.");
-        assertThat("effecting path text is equal",
-            movementManagementPage.effectingPathText.getText(), equalTo("Effecting Paths"));
+        Assertions.assertThat(movementManagementPage.effectingPathText.getText())
+            .as("effecting path text is equal").isEqualTo("Effecting Paths");
         movementManagementPage.effectingPathClose.click();
-        assertThat("No results found is true", movementManagementPage.noResultsFoundText.getText(),
-            equalTo("No Results Found"));
+        Assertions.assertThat(movementManagementPage.noResultsFoundText.getText())
+            .as("No results found is true").isEqualTo("No Results Found");
       } catch (Throwable ex) {
         LOGGER.error(ex.getMessage());
         LOGGER.info(
@@ -1084,18 +1094,18 @@ public class MovementManagementSteps extends AbstractSteps {
         break;
     }
 
-    assertThat("departure time 1 is true", movementManagementPage.departureTimes.get(0).getText(),
-        equalTo(displayTime));
-    assertThat("departure time 2 is true", movementManagementPage.departureTimes.get(1).getText(),
-        equalTo(displayTime));
-    assertThat("duration 1 is true", movementManagementPage.durations.get(0).getText(),
-        equalTo("00d 00h 45m"));
-    assertThat("duration 2 is true", movementManagementPage.durations.get(0).getText(),
-        equalTo("00d 00h 45m"));
-    assertThat("comments 1 is true", movementManagementPage.comments.get(0).getText(),
-        equalTo("This schedule has been updated by Automation Test"));
-    assertThat("comments 2 is true", movementManagementPage.comments.get(0).getText(),
-        equalTo("This schedule has been updated by Automation Test"));
+    Assertions.assertThat(movementManagementPage.departureTimes.get(0).getText())
+        .as("departure time 1 is true").isEqualTo(displayTime);
+    Assertions.assertThat(movementManagementPage.departureTimes.get(1).getText())
+        .as("departure time 2 is true").isEqualTo(displayTime);
+    Assertions.assertThat(movementManagementPage.durations.get(0).getText())
+        .as("duration 1 is true").isEqualTo("00d 00h 45m");
+    Assertions.assertThat(movementManagementPage.durations.get(0).getText())
+        .as("duration 2 is true").isEqualTo("00d 00h 45m");
+    Assertions.assertThat(movementManagementPage.comments.get(0).getText()).as("comments 1 is true")
+        .isEqualTo("This schedule has been updated by Automation Test");
+    Assertions.assertThat(movementManagementPage.comments.get(0).getText()).as("comments 2 is true")
+        .isEqualTo("This schedule has been updated by Automation Test");
   }
 
   @Then("Operator verify all station schedules are correct from UI")

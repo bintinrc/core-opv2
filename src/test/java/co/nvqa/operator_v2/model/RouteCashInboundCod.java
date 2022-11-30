@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -67,7 +67,7 @@ public class RouteCashInboundCod extends DataEntity<RouteCashInboundCod> {
   public void setAmountCollected(Double amountCollected) {
     String strAmountCollected = DECIMAL_FORMAT.format(amountCollected);
 
-    switch (TestConstants.COUNTRY_CODE.toUpperCase()) {
+    switch (TestConstants.NV_SYSTEM_ID.toUpperCase()) {
       case "SG":
         strAmountCollected = "S$" + strAmountCollected;
         break;

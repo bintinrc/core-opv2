@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.UserManagement;
 import co.nvqa.operator_v2.selenium.page.UserManagementPage;
 import io.cucumber.java.en.Then;
@@ -26,7 +27,7 @@ public class UserManagementSteps extends AbstractSteps {
 
   @When("^Operator create new user on User Management page$")
   public void createUserManagementPage() {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
 
     UserManagement userManagement = new UserManagement();
     userManagement.setEmail(f("automation.%s@gmail.com", uniqueCode));

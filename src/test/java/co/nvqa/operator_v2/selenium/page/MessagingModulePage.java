@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.model.SmsHistoryEntry;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -85,9 +85,10 @@ public class MessagingModulePage extends OperatorV2SimplePage {
     composeMessageCard.waitUntilVisible();
     String smsDate = sdf.format(new Date());
     cache.put("sms-date", smsDate);
-    assertEquals("Uploaded File", SMS_CAMPAIGN_FILE_NAME,
-        composeMessageCard.uploadedFileName.getText());
-    assertEquals("Number of Messages", "1", composeMessageCard.totalRecords.getText());
+    Assertions.assertThat(composeMessageCard.uploadedFileName.getText()).as("Uploaded File")
+        .isEqualTo(SMS_CAMPAIGN_FILE_NAME);
+    Assertions.assertThat(composeMessageCard.totalRecords.getText()).as("Number of Messages")
+        .isEqualTo("1");
     String template =
         "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered. sms-date: "
             + smsDate;
@@ -96,14 +97,16 @@ public class MessagingModulePage extends OperatorV2SimplePage {
     pause1s();
     String expectedMessage = "Hallo " + name + ", your parcel with tracking id " + trackingId
         + " is ready to be delivered. sms-date: " + smsDate;
-    assertEquals("Message preview", expectedMessage, composeMessageCard.preview.getValue());
+    Assertions.assertThat(composeMessageCard.preview.getValue()).as("Message preview")
+        .isEqualTo(expectedMessage);
   }
 
   public void composeSmsWithUrlShortener() {
     composeMessageCard.waitUntilVisible();
-    assertEquals("Uploaded File", SMS_CAMPAIGN_FILE_NAME,
-        composeMessageCard.uploadedFileName.getText());
-    assertEquals("Number of Messages", "1", composeMessageCard.totalRecords.getText());
+    Assertions.assertThat(composeMessageCard.uploadedFileName.getText()).as("Uploaded File")
+        .isEqualTo(SMS_CAMPAIGN_FILE_NAME);
+    Assertions.assertThat(composeMessageCard.totalRecords.getText()).as("Number of Messages")
+        .isEqualTo("1");
     String template = "email : {{email}}";
     composeMessageCard.message.sendKeys(template);
     composeMessageCard.shortenUrl.check();
@@ -115,8 +118,8 @@ public class MessagingModulePage extends OperatorV2SimplePage {
     pause10s();
     String actualValue = composeMessageCard.preview.getValue();
     String expectedValue = StandardTestConstants.NV_URL_SHORTENER_PREFIX;
-    assertThat("The produced sms using ninja url shortener is failed", actualValue,
-        Matchers.containsString(expectedValue));
+    Assertions.assertThat(actualValue).as("The produced sms using ninja url shortener is failed")
+        .contains(expectedValue);
   }
 
   public void searchSmsSentHistory(String trackingId) {
@@ -127,12 +130,13 @@ public class MessagingModulePage extends OperatorV2SimplePage {
   public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber) {
     smsHistoryCard.waitUntilVisible();
     String smsDate = (String) cache.get("sms-date");
-    assertEquals("Tracking id", trackingId, smsHistoryCard.trackingId.getText());
+    Assertions.assertThat(smsHistoryCard.trackingId.getText()).as("Tracking id")
+        .isEqualTo(trackingId);
 
     SmsHistoryEntry entry = smsHistoryCard.smsHistoryTable.readEntity(1);
-    assertEquals("Contact Number", contactNumber, entry.getContact());
-    assertThat("It contain sms-date with same date", entry.getContent(),
-        Matchers.containsString(smsDate));
+    Assertions.assertThat(entry.getContact()).as("Contact Number").isEqualTo(contactNumber);
+    Assertions.assertThat(entry.getContent()).as("It contain sms-date with same date")
+        .contains(smsDate);
   }
 
   public static class CsvValidationErrorsDialog extends MdDialog {

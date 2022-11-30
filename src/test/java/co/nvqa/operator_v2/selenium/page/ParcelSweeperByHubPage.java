@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 
@@ -56,18 +57,20 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage {
 
   public void verifyRouteInfo(String routeId, String driverName, String color) {
     if (routeId != null) {
-      assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
+      Assertions.assertThat(getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"))
+          .as("Unexpected Route ID").isEqualTo(routeId);
     }
 
     if (StringUtils.isNotBlank(driverName)) {
-      assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h5"),
-          equalToIgnoringCase(driverName));
+      Assertions.assertThat(getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h5"))
+          .as("Unexpected Driver Name").isEqualToIgnoringCase(driverName);
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ROUTE_INFO_CONTAINER, "background-color"));
-      assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex()).as("Unexpected Route Info Container color")
+          .isEqualTo(color);
     }
   }
 
@@ -77,51 +80,54 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage {
       if (matcher.matches()) {
         zoneName = matcher.group(1).trim();
       }
-      assertThat("Unexpected Zone Name",
-          getText(LOCATOR_ZONE_INFO_CONTAINER + "//*[self::h4 or self::h5]"),
-          equalToIgnoringCase(zoneName));
+      Assertions.assertThat(getText(LOCATOR_ZONE_INFO_CONTAINER + "//*[self::h4 or self::h5]")
+      ).as("Unexpected Zone Name").isEqualToIgnoringCase(zoneName);
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
-      assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex()).as("Unexpected Zone Info Container color")
+          .isEqualTo(color);
     }
   }
 
   public void verifyDestinationHub(String hubName, String color) {
     if (StringUtils.isNotBlank(hubName)) {
-      assertThat("Unexpected Destination Hub Name",
-          getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"), equalToIgnoringCase(hubName));
+      Assertions.assertThat(getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"))
+          .as("Unexpected Destination Hub Name").isEqualToIgnoringCase(hubName);
     }
 
     if (StringUtils.isNotBlank(color)) {
       Color actualColor = Color
           .fromString(getCssValue(LOCATOR_DESTINATION_HUB_CONTAINER, "background-color"));
-      assertEquals("Unexpected Destination Hub Container color", color, actualColor.asHex());
+      Assertions.assertThat(actualColor.asHex()).as("Unexpected Destination Hub Container color")
+          .isEqualTo(color);
     }
   }
 
   public void verifyRTSInfo(boolean isRTSed) {
     if (isRTSed) {
-      assertTrue("RTS Label is not displayed", isElementVisible(LOCATOR_RTS_INFO));
-      assertThat("Unexpected text of RTS Label", getText(LOCATOR_RTS_INFO),
-          equalToIgnoringCase("RTS ORDER"));
+      Assertions.assertThat(isElementVisible(LOCATOR_RTS_INFO)).as("RTS Label is not displayed")
+          .isTrue();
+      Assertions.assertThat(getText(LOCATOR_RTS_INFO)).as("Unexpected text of RTS Label")
+          .isEqualToIgnoringCase("RTS ORDER");
     } else {
-      assertFalse("RTS Label is displayed, but must not", isElementVisible(LOCATOR_RTS_INFO));
+      Assertions.assertThat(isElementVisible(LOCATOR_RTS_INFO))
+          .as("RTS Label is displayed, but must not").isFalse();
     }
   }
 
   public void verifyParcelRouteDifferentDateInfo(boolean hasDifferentDate) {
     if (hasDifferentDate) {
-      assertTrue("Parcel Route different date Label is not displayed",
-          isElementVisible(LOCATOR_DIFFERENT_DATE_INFO));
-      assertThat("Unexpected text of Parcel Route different date Label",
-          getText(LOCATOR_DIFFERENT_DATE_INFO),
-          equalToIgnoringCase("Parcel route has different date"));
+      Assertions.assertThat(isElementVisible(LOCATOR_DIFFERENT_DATE_INFO))
+          .as("Parcel Route different date Label is not displayed").isTrue();
+      Assertions.assertThat(getText(LOCATOR_DIFFERENT_DATE_INFO))
+          .as("Unexpected text of Parcel Route different date Label")
+          .isEqualToIgnoringCase("Parcel route has different date");
     } else {
-      assertFalse("Parcel Route different date Label is displayed, but must not",
-          isElementVisible(LOCATOR_DIFFERENT_DATE_INFO));
+      Assertions.assertThat(isElementVisible(LOCATOR_DIFFERENT_DATE_INFO))
+          .as("Parcel Route different date Label is displayed, but must not").isFalse();
     }
   }
 

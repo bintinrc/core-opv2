@@ -8,6 +8,7 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -51,8 +52,9 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
     ThirdPartyOrderMapping expected = new ThirdPartyOrderMapping(resolveKeyValues(data));
     thirdPartyOrderManagementPage.uploadSingleMappingDialog.waitUntilVisible();
     pause2s();
-    assertEquals("Number of Upload Results records", 1,
-        thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount());
+    Assertions.assertThat(
+            thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable.getRowsCount())
+        .as("Number of Upload Results records").isEqualTo(1);
     ThirdPartyOrderMapping actual = thirdPartyOrderManagementPage.uploadSingleMappingDialog.uploadResultsTable
         .readEntity(1);
     expected.compareWithActual(actual);

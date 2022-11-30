@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -154,9 +154,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
       Long actualRouteId = Long.valueOf(
           bulkRouteOptimisationDialog.optimizedRouteIds.get(i).getText());
       String actualStatus = bulkRouteOptimisationDialog.optimizedRouteStatuses.get(i).getText();
-      assertThat("Route ID not found in optimised list.", expectedRouteIds,
-          Matchers.hasItem(actualRouteId));
-      assertEquals(String.format("Route ID = %s", actualRouteId), "PENDING", actualStatus);
+      Assertions.assertThat(expectedRouteIds).as("Route ID not found in optimised list.")
+          .contains(actualRouteId);
+      Assertions.assertThat(actualStatus).as(String.format("Route ID = %s", actualRouteId))
+          .isEqualTo("PENDING");
     }
   }
 
@@ -181,8 +182,9 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
       assertNotNull(
           String.format("Route password for Route ID = %d not found on PDF.", expectedRouteId),
           selectedRoutePassword);
-      assertEquals(String.format("Route Password for Route ID = %d", expectedRouteId),
-          createRouteParams.getRoutePassword(), selectedRoutePassword.getRoutePassword());
+      Assertions.assertThat(selectedRoutePassword.getRoutePassword())
+          .as(String.format("Route Password for Route ID = %d", expectedRouteId))
+          .isEqualTo(createRouteParams.getRoutePassword());
     }
   }
 

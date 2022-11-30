@@ -6,8 +6,9 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.COLUMN_TRACKING_ID;
@@ -54,27 +55,27 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
     if ("GENERATED".equals(damageDescription)) {
       damageDescription = f("This damage description is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     if ("GENERATED".equals(ticketNotes)) {
       ticketNotes = f("This ticket notes is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     if ("GENERATED".equals(parcelDescription)) {
       parcelDescription = f("This parcel description is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     if ("GENERATED".equals(exceptionReason)) {
       exceptionReason = f("This exception reason is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     if ("GENERATED".equals(issueDescription)) {
       issueDescription = f("This issue description is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -109,7 +110,8 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     pause10s();
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
-    assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
+    Assertions.assertThat(isTicketCreated).as(f("Ticket '%s' does not created.", trackingId))
+        .isTrue();
   }
 
   @Then("Operator searches the created ticket and clicks on Edit button")
@@ -154,7 +156,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
     if ("GENERATED".equals(enterNewInstruction)) {
       enterNewInstruction = f("This instruction is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -167,14 +169,14 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     pause5s();
     recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
     pause2s();
-    assertEquals(recoveryTicket.getTicketStatus().toLowerCase(),
-        recoveryTicketsPage.getTextById("ticket-status").toLowerCase());
-    assertEquals(recoveryTicket.getOrderOutcome().toLowerCase(),
-        recoveryTicketsPage.getTextById("order-outcome").toLowerCase());
-    assertEquals(recoveryTicket.getAssignTo().toLowerCase(),
-        recoveryTicketsPage.getTextById("assign-to").toLowerCase());
-    assertEquals(recoveryTicket.getEnterNewInstruction().toLowerCase(),
-        recoveryTicketsPage.lastInstructionText.getText().toLowerCase());
+    Assertions.assertThat(recoveryTicketsPage.getTextById("ticket-status").toLowerCase())
+        .isEqualTo(recoveryTicket.getTicketStatus().toLowerCase());
+    Assertions.assertThat(recoveryTicketsPage.getTextById("order-outcome").toLowerCase())
+        .isEqualTo(recoveryTicket.getOrderOutcome().toLowerCase());
+    Assertions.assertThat(recoveryTicketsPage.getTextById("assign-to").toLowerCase())
+        .isEqualTo(recoveryTicket.getAssignTo().toLowerCase());
+    Assertions.assertThat(recoveryTicketsPage.lastInstructionText.getText().toLowerCase())
+        .isEqualTo(recoveryTicket.getEnterNewInstruction().toLowerCase());
     recoveryTicketsPage.editTicketDialog.forceClose();
     pause2s();
   }
@@ -188,7 +190,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
     if ("GENERATED".equals(enterNewInstruction)) {
       enterNewInstruction = f("This instruction is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -217,7 +219,7 @@ public class RecoveryTicketsSteps extends AbstractSteps {
 
     if ("GENERATED".equals(ticketComments)) {
       ticketComments = f("This ticket comment is created by automation at %s.",
-          CREATED_DATE_SDF.format(new Date()));
+          DTF_CREATED_DATE.format(ZonedDateTime.now()));
     }
 
     RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -229,10 +231,12 @@ public class RecoveryTicketsSteps extends AbstractSteps {
     pause3s();
     recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
     pause3s();
-    assertEquals(recoveryTicket.getCustZendeskId().trim(),
-        recoveryTicketsPage.getInnerTextByIdForInputFields("customer-zendesk-id").trim());
-    assertEquals(recoveryTicket.getShipperZendeskId().trim(),
-        recoveryTicketsPage.getInnerTextByIdForInputFields("shipper-zendesk-id").trim());
+    Assertions.assertThat(
+            recoveryTicketsPage.getInnerTextByIdForInputFields("customer-zendesk-id").trim())
+        .isEqualTo(recoveryTicket.getCustZendeskId().trim());
+    Assertions.assertThat(
+            recoveryTicketsPage.getInnerTextByIdForInputFields("shipper-zendesk-id").trim())
+        .isEqualTo(recoveryTicket.getShipperZendeskId().trim());
     //Commenting the below assertion because of JIRA TICKETING-173(https://jira.ninjavan.co/browse/TICKETING-173)
     //assertEquals(recoveryTicket.getTicketComments().toLowerCase(),recoveryTicketsPage.getTextByClassInTable("comments").toLowerCase());
     recoveryTicketsPage.editTicketDialog.forceClose();
@@ -280,7 +284,8 @@ public class RecoveryTicketsSteps extends AbstractSteps {
         .waitUntilInvisibilityOfElementLocated("//*[contains(text(),'Loading more results')]", 60);
     boolean doesTicketExist = recoveryTicketsPage
         .verifyTicketExistsInTheCorrectStatusFilter(trackingId);
-    assertTrue(f("Ticket '%s' exists in correct filer", trackingId), doesTicketExist);
+    Assertions.assertThat(doesTicketExist).as(f("Ticket '%s' exists in correct filer", trackingId))
+        .isTrue();
     pause2s();
   }
 
@@ -318,7 +323,8 @@ public class RecoveryTicketsSteps extends AbstractSteps {
   public void noResultsShouldDisplayed() {
     String expectedResult = "No Results Found";
     String actualResult = recoveryTicketsPage.displayNoResults();
-    assertEquals(expectedResult.toLowerCase().trim(), actualResult.trim().toLowerCase());
+    Assertions.assertThat(actualResult.trim().toLowerCase())
+        .isEqualTo(expectedResult.toLowerCase().trim());
   }
 
   @Then("Operator chooses Investigating Hub filter as {string}")

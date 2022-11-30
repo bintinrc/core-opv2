@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Soewandi Wirjawan
@@ -30,7 +32,7 @@ public class ContactTypeManagementSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     String name = mapOfData.get("name");
 
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
 
     if ("GENERATED".equals(name)) {
       name = "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode;
@@ -63,7 +65,7 @@ public class ContactTypeManagementSteps extends AbstractSteps {
       put(KEY_CONTACT_TYPE, contactType);
     }
 
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
 
     if ("GENERATED".equals(name)) {
       String temp = contactType.getName();
@@ -115,10 +117,8 @@ public class ContactTypeManagementSteps extends AbstractSteps {
     ContactType expectedContactType = get(KEY_CONTACT_TYPE);
     ContactType actualContactType = get(KEY_CONTACT_TYPE_SEARCH_RESULT);
 
-    assertNotNull(
-        f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword),
-        actualContactType);
-    assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
+   Assertions.assertThat(        actualContactType).as(f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword)).isNotNull();
+   Assertions.assertThat(actualContactType.getName()).as("Contact Type").isEqualTo(expectedContactType.getName());
   }
 
   @When("^Operator download Contact Type CSV file on page Contact Type Management$")

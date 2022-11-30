@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
+import co.nvqa.common.ui.support.CommonUiTestUtils;
 import co.nvqa.commons.util.JsonUtils;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public class TestUtils extends CommonSeleniumTestUtils {
+public class TestUtils extends CommonUiTestUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 

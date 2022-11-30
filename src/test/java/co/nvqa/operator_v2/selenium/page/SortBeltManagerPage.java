@@ -916,7 +916,8 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     pause1s();
 
     selectHub.searchInput.sendKeys(configName);
-    assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
+    Assertions.assertThat(noResult.getText()).as("Check result")
+        .isEqualToIgnoringCase("No Results Found");
   }
 
   public ArmCombinationContainer getArmCombinationContainer(String armName) {

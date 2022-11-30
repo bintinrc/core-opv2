@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableMap;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -115,22 +116,22 @@ public class ReservationRejectionPage extends OperatorV2SimplePage {
     ZonedDateTime timeRejectionExpected = DateUtil
         .getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
-    assertThat("Time Rejection is not as expected in Reservation Rejection",
-        reservationRejectionEntity.getTimeRejected(),
-        containsString(DateUtil.displayDate(timeRejectionExpected)));
-    assertThat("Pickup info is not as expected in Reservation Rejection",
-        reservationRejectionEntity.getPickupInfo(), containsString(pickupInfo));
-    assertEquals("Rejection Reason is not as expected in Reservation Rejection",
-        rejectReservationRequest.getRejectionReason(),
-        reservationRejectionEntity.getReasonForRejection());
-    assertEquals("Route Id is not as expected in Reservation Rejection",
-        String.valueOf(rejectReservationRequest.getRouteId()),
-        reservationRejectionEntity.getRoute());
+    Assertions.assertThat(reservationRejectionEntity.getTimeRejected())
+        .as("Time Rejection is not as expected in Reservation Rejection")
+        .contains(DTF_NORMAL_DATE.format(timeRejectionExpected));
+    Assertions.assertThat(reservationRejectionEntity.getPickupInfo())
+        .as("Pickup info is not as expected in Reservation Rejection").contains(pickupInfo);
+    Assertions.assertThat(reservationRejectionEntity.getReasonForRejection())
+        .as("Rejection Reason is not as expected in Reservation Rejection")
+        .isEqualTo(rejectReservationRequest.getRejectionReason());
+    Assertions.assertThat(reservationRejectionEntity.getRoute())
+        .as("Route Id is not as expected in Reservation Rejection")
+        .isEqualTo(String.valueOf(rejectReservationRequest.getRouteId()));
   }
 
   public void verifyRecordIsNotPresentInTableByPickup(String pickup) {
     reservationRejectionEntityTable.filterByColumn(COLUMN_PICKUP_INFO, pickup);
-    assertTrue(reservationRejectionEntityTable.isTableEmpty());
+    Assertions.assertThat(reservationRejectionEntityTable.isTableEmpty()).isTrue();
   }
 
   public void verifyToastAboutFailedPickupIsPresent() {

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
-import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -339,8 +338,7 @@ public class MovementManagementPage extends SimpleReactPage<MovementManagementPa
   public void verifyNotificationWithMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(MS_PAGE_NOTIFICATION_XPATH);
     WebElement notificationElement = findElementByXpath(MS_PAGE_NOTIFICATION_XPATH);
-    assertThat("Toast message is the same", notificationElement.getText(),
-        equalTo(containsMessage));
+   Assertions.assertThat(notificationElement.getText()).as("Toast message is the same").isEqualTo(containsMessage);
     waitUntilInvisibilityOfNotification(MS_PAGE_NOTIFICATION_XPATH, false);
   }
 

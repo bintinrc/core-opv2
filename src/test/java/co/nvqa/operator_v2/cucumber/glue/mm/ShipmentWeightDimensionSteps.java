@@ -4,7 +4,7 @@ import co.nvqa.commons.model.core.hub.Shipment;
 import co.nvqa.commons.model.core.hub.ShipmentDimensionResponse;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.ShipmentWeightDimensionAddInfo;
 import co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionAddPage;

@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
-import co.nvqa.commons.model.other.LatLong;
+import co.nvqa.common.model.others.LatLong;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -128,7 +129,7 @@ public class BulkAddressVerificationSteps extends AbstractSteps {
     }
 
     String latitude = data.getOrDefault("latitude", "");
-    LatLong randomLatLong = generateRandomLatLong();
+    LatLong randomLatLong = StandardTestUtils.generateRandomLatLong();
 
     switch (latitude.toUpperCase()) {
       case "GENERATED":

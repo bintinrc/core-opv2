@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage.PendingTaskBlock;

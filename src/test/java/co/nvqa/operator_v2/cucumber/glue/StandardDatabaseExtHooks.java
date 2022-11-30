@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.StandardScenarioManager;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -19,7 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 @ScenarioScoped
 public class StandardDatabaseExtHooks extends
-    AbstractDatabaseSteps<StandardScenarioManager> implements ScenarioStorageKeys {
+    AbstractDatabaseSteps<ScenarioManager> implements ScenarioStorageKeys {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(StandardDatabaseExtHooks.class);
 

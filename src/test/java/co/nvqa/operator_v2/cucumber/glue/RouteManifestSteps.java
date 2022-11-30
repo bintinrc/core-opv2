@@ -13,8 +13,8 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.hamcrest.Matchers;
 
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_CODE_ID_ALL;
 import static co.nvqa.commons.util.factory.FailureReasonFactory.FAILURE_REASON_DELIVERY;
@@ -45,7 +45,7 @@ public class RouteManifestSteps extends AbstractSteps {
     Route route = get(KEY_CREATED_ROUTE);
     getWebDriver().navigate()
         .to(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
-            TestConstants.COUNTRY_CODE, route.getId()).toLowerCase());
+            TestConstants.NV_SYSTEM_ID, route.getId()).toLowerCase());
   }
 
   @Then("^Operator verify 1 delivery success at Route Manifest$")
@@ -79,8 +79,8 @@ public class RouteManifestSteps extends AbstractSteps {
     data.forEach((tag, expected) -> {
       routeManifestPage.waypointsTable.filterByColumn(COLUMN_ORDER_TAGS, tag);
       List<String> actual = routeManifestPage.waypointsTable.readColumn(COLUMN_TRACKING_IDS);
-      assertThat("List of Tracking IDs for tag " + tag, actual,
-          Matchers.containsInAnyOrder(splitAndNormalize(expected).toArray(new String[0])));
+      Assertions.assertThat(actual).as("List of Tracking IDs for tag " + tag)
+          .contains(splitAndNormalize(expected).toArray(new String[0]));
     });
   }
 
@@ -134,7 +134,8 @@ public class RouteManifestSteps extends AbstractSteps {
           break;
         }
       }
-      assertTrue("Tracking id " + trackingId + " was not found in COD collection dialog", found);
+      Assertions.assertThat(found)
+          .as("Tracking id " + trackingId + " was not found in COD collection dialog").isTrue();
     });
     routeManifestPage.codCollectionDialog.ok.clickAndWaitUntilDone();
     routeManifestPage.confirmationDialog.waitUntilVisible();

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 
-import static co.nvqa.operator_v2.util.KeyConstants.KEY_SHIPPER_NAME;
-
 public class LoyaltyCreationSteps extends AbstractSteps{
 
   private LoyaltyCreationPage loyaltyCreationPage;

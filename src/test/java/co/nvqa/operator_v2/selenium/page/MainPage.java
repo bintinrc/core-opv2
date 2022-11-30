@@ -110,7 +110,7 @@ public class MainPage extends OperatorV2SimplePage {
 
     String currentUrl = getCurrentUrl();
     String countrySpecificDashboardUrl =
-        TestConstants.COUNTRY_CODE.toLowerCase() + '/' + mainDashboardUrl;
+        TestConstants.NV_SYSTEM_ID.toLowerCase() + '/' + mainDashboardUrl;
 
     if (!currentUrl.endsWith(countrySpecificDashboardUrl)) {
       getWebDriver().navigate()

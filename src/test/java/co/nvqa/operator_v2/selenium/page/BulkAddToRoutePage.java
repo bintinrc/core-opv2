@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
+import java.time.ZonedDateTime;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,13 +17,13 @@ public class BulkAddToRoutePage extends OperatorV2SimplePage {
   }
 
   public void selectCurrentDate() {
-    switch (TestConstants.COUNTRY_CODE.toUpperCase()) {
+    switch (TestConstants.NV_SYSTEM_ID.toUpperCase()) {
       case "MSI":
-        setMdDatepickerById("commons.model.route-date", TestUtils.getBeforeDate(0));
+        setMdDatepickerById("commons.model.route-date", ZonedDateTime.now());
         break;
       default:
         setMdDatepickerById("commons.model.route-date",
-            TestUtils.getBeforeDate(1)); //This is a hack for now. It should be select current date.
+            ZonedDateTime.now().minusDays(1)); //This is a hack for now. It should be select current date.
     }
   }
 

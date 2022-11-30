@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
@@ -57,7 +58,8 @@ public class LoginPage extends OperatorV2SimplePage {
     LOGGER.info("FORCE LOGIN BY INJECTING COOKIES TO BROWSER");
 
     try {
-      final String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
+      final String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE,
+          "UTF-8");
       LOGGER.info("ninja_access_token = " + operatorBearerToken);
       LOGGER.info("user = " + userCookie);
 
@@ -159,8 +161,8 @@ public class LoginPage extends OperatorV2SimplePage {
   public void backToLoginPage() {
     pause1s();
     String currentUrl = getCurrentUrl();
-    assertThat("Default Operator Portal URL not loaded.", currentUrl,
-        Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
+    Assertions.assertThat(currentUrl).as("Default Operator Portal URL not loaded.")
+        .contains(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
   }
 
   public void changeCountry(String countryName) {

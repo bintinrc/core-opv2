@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Address;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -30,8 +31,8 @@ public class NvDashboardPage extends OperatorV2SimplePage {
   public void validateUserInfo(String username, String email) {
     waitUntilPageLoaded();
     retryIfAssertionErrorOccurred(
-        () -> assertEquals("Username and email", username + "\n" + email, getText(USER_INFO_XPATH)),
-        "Validate User Info");
+        () -> Assertions.assertThat(getText(USER_INFO_XPATH))
+            .isEqualTo(f("Username and email", username + "\n" + email)), "Validate User Info");
   }
 
   public void selectMenuItem(String item1, String item2) {
@@ -49,6 +50,6 @@ public class NvDashboardPage extends OperatorV2SimplePage {
         .map(StringUtils::normalizeSpace)
         .collect(Collectors.toList());
     String expectedAddress = address.to1LineAddressWithPostcode().replaceAll(",", "").toUpperCase();
-    assertThat("List of available addresses", addresses, hasItem(expectedAddress));
+   Assertions.assertThat(addresses).as("List of available addresses").contains(expectedAddress);
   }
 }

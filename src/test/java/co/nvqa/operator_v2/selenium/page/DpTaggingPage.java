@@ -10,25 +10,20 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.time.LocalDate;
-
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -86,9 +81,10 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     antNotificationMessage.waitUntilVisible();
     String actualNotificationMessage = antNotificationMessage.getText();
     Assertions.assertThat(actualNotificationMessage)
-            .as("Notification message is the same")
-            .isEqualTo(message);
+        .as("Notification message is the same")
+        .isEqualTo(message);
   }
+
   public void switchToIframe() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
@@ -112,11 +108,12 @@ public class DpTaggingPage extends OperatorV2SimplePage {
               .isTrue();
     }
   }
+
   public void verifyInvalidDpTaggingCsvIsNotUploadedSuccessfully() {
     String expectedErrorMessageOnToast = "No order data to process, please check the file";
-    antNotificationMessage.waitUntilVisible();
-    String actualNotificationMessage = antNotificationMessage.getText();
-    assertEquals("Error Message", expectedErrorMessageOnToast, actualNotificationMessage);
+    String actualMessage = getText(
+        "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+    Assertions.assertThat(actualMessage).as("Error Message").isEqualTo(expectedErrorMessageOnToast);
     waitUntilInvisibilityOfToast(expectedErrorMessageOnToast, false);
   }
 
@@ -152,24 +149,23 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   public void checkAndAssignAll(boolean isMultipleOrders) {
     int row = 0;
-    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
-      clickf(LOCATOR_ROW_CHECKBOX,row);
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))) {
+      clickf(LOCATOR_ROW_CHECKBOX, row);
       row++;
     }
     assignAll.click();
     pause1s();
     if (isMultipleOrders) {
       verifyTaggingToast("DP tagging performed successfully");
-    }
-    else {
-      verifyTaggingToast(row +" order(s) tagged successfully");
+    } else {
+      verifyTaggingToast(row + " order(s) tagged successfully");
     }
   }
 
   public void untagAll() {
     int row = 0;
-    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
-      clickf(LOCATOR_ROW_CHECKBOX,row);
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))) {
+      clickf(LOCATOR_ROW_CHECKBOX, row);
       row++;
     }
     untagAll.click();
@@ -203,10 +199,10 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   public void selectMultiDateToNextDay(int size) {
     String nextDay = dropOffDate();
     int tableRowId = 1;
-    for (int i = 0; i <= size-1; i++) {
-      click("//div[@data-row-index='"+i+"']" + LOCATOR_DROP_OFF_DATE);
-      clickf("//div[@id='rc_select_"+tableRowId+"_list']/div[@aria-label='%s']", nextDay);
-      tableRowId=tableRowId+2;
+    for (int i = 0; i <= size - 1; i++) {
+      click("//div[@data-row-index='" + i + "']" + LOCATOR_DROP_OFF_DATE);
+      clickf("//div[@id='rc_select_" + tableRowId + "_list']/div[@aria-label='%s']", nextDay);
+      tableRowId = tableRowId + 2;
     }
   }
 
@@ -222,24 +218,27 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
-    assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
-    assertEquals("DP ID is not the same : ", result.getDpId(), dpDetails.getId());
-    assertEquals("Status is not the same : ", result.getStatus(), "CONFIRMED");
-    assertEquals("Source is not the same : ", result.getSource(), "OPERATOR");
-    assertEquals("Drop Off On is not the same : ", result.getDropOffOn().toString(),
-        formatter.format(today));
-    assertEquals("Start Date is not the same : ", result.getStartDate().toString(),
-        formatter.format(today));
-    assertEquals("Collect Start Date is not the same : ", result.getCollectStartDate().toString(),
-        formatter.format(today.plusDays(1)));
-    assertEquals("DP Reservation Event Name is not the same : ", result.getName(),
-        "OPERATOR_CONFIRMED");
-    assertTrue("Order Event - ASSIGNED_TO_DP - is published: ",
-        isOrderEventPublished(orderEvent, "ASSIGNED_TO_DP"));
-    assertEquals("DP Reservation SMS Notification is not the same : ",
-        result.getSmsNotificationStatus(), "NA");
-    assertEquals("DP Reservation Email Notification is not the same : ",
-        result.getEmailNotificationStatus(), "NA");
+    Assertions.assertThat(barcode).as("Barcode is not the same : ").isEqualTo(result.getBarcode());
+    Assertions.assertThat(dpDetails.getId()).as("DP ID is not the same : ")
+        .isEqualTo(result.getDpId());
+    Assertions.assertThat("CONFIRMED").as("Status is not the same : ")
+        .isEqualTo(result.getStatus());
+    Assertions.assertThat("OPERATOR").as("Source is not the same : ").isEqualTo(result.getSource());
+    Assertions.assertThat(formatter.format(today)).as("Drop Off On is not the same : ")
+        .isEqualTo(result.getDropOffOn().toString());
+    Assertions.assertThat(formatter.format(today)).as("Start Date is not the same : ")
+        .isEqualTo(result.getStartDate().toString());
+    Assertions.assertThat(formatter.format(today.plusDays(1)))
+        .as("Collect Start Date is not the same : ")
+        .isEqualTo(result.getCollectStartDate().toString());
+    Assertions.assertThat("OPERATOR_CONFIRMED").as("DP Reservation Event Name is not the same : ")
+        .isEqualTo(result.getName());
+    Assertions.assertThat(isOrderEventPublished(orderEvent, "ASSIGNED_TO_DP"))
+        .as("Order Event - ASSIGNED_TO_DP - is published: ").isTrue();
+    Assertions.assertThat("NA").as("DP Reservation SMS Notification is not the same : ")
+        .isEqualTo(result.getSmsNotificationStatus());
+    Assertions.assertThat("NA").as("DP Reservation Email Notification is not the same : ")
+        .isEqualTo(result.getEmailNotificationStatus());
   }
 
   public boolean isOrderEventPublished(Events orderEvent, String expectedOrderEvent) {
@@ -258,12 +257,14 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     LocalDateTime today = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
-    assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
-    assertEquals("Received From is not the same : ", result.getReceivedFrom(), "DRIVER");
-    assertEquals("DP Reservation Status is not the same : ", result.getDpReservationStatus(),
-        "CONFIRMED");
-    assertTrue("Received At is not the same : ",
-        result.getReceivedAt().toString().contains(formatter.format(today)));
-    assertEquals("DP Job Order Status is not the same : ", result.getDpJobOrderStatus(), "SUCCESS");
+    Assertions.assertThat(barcode).as("Barcode is not the same : ").isEqualTo(result.getBarcode());
+    Assertions.assertThat("DRIVER").as("Received From is not the same : ")
+        .isEqualTo(result.getReceivedFrom());
+    Assertions.assertThat("CONFIRMED").as("DP Reservation Status is not the same : ")
+        .isEqualTo(result.getDpReservationStatus());
+    Assertions.assertThat(result.getReceivedAt().toString().contains(formatter.format(today)))
+        .as("Received At is not the same : ").isTrue();
+    Assertions.assertThat("SUCCESS").as("DP Job Order Status is not the same : ")
+        .isEqualTo(result.getDpJobOrderStatus());
   }
 }

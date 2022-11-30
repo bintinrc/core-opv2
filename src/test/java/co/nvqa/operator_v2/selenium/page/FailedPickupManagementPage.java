@@ -9,13 +9,13 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Condition;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -51,9 +51,9 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage {
       FailureReason expectedFailureReason) {
     failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
     FailedDelivery actual = failedPickupsTable.readEntity(1);
-    assertEquals("Tracking ID", trackingId, actual.getTrackingId());
-    assertEquals("Failure Comments", expectedFailureReason.getFailureReasonCodeDescription(),
-        actual.getFailureReasonCodeDescription());
+    Assertions.assertThat(actual.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
+    Assertions.assertThat(actual.getFailureReasonCodeDescription()).as("Failure Comments")
+        .isEqualTo(expectedFailureReason.getFailureReasonCodeDescription());
   }
 
   public void downloadCsvFile(String trackingId) {
@@ -83,11 +83,11 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage {
     cancelSelectedDialog.waitUntilVisible();
     List<String> listOfActualTrackingIds = cancelSelectedDialog.trackingIds.stream()
         .map(PageElement::getText).collect(Collectors.toList());
-    assertThat("Expected Tracking ID not found.", listOfActualTrackingIds,
-        hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+    Assertions.assertThat(listOfActualTrackingIds).as("Expected Tracking ID not found.")
+        .has(new Condition<>(l -> l.containsAll(listOfExpectedTrackingId), "Contain tracking id"));
     cancelSelectedDialog.cancellationReason.setValue(
         f("This order is canceled by automation to test 'Cancel Selected' feature on Failed Pickup Management. Canceled at %s.",
-            CREATED_DATE_SDF.format(new Date())));
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
 
     if (listOfActualTrackingIds.size() == 1) {
       cancelSelectedDialog.cancelOrder.clickAndWaitUntilDone();
@@ -111,7 +111,7 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage {
 
     actionsMenu.selectOption("Reschedule Selected");
     rescheduleSelectedOrdersDialog.waitUntilVisible();
-    rescheduleSelectedOrdersDialog.date.setDate(TestUtils.getNextDate(2));
+    rescheduleSelectedOrdersDialog.date.setDate(ZonedDateTime.now().plusDays(2));
     rescheduleSelectedOrdersDialog.reschedule.click();
     rescheduleSelectedOrdersDialog.waitUntilInvisible();
   }

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -91,8 +92,8 @@ public class HubsGroupManagementPage extends OperatorV2SimplePage {
 
   public void verifyHubsGroupDeleted(Long hubsGroupId) {
     hubsGroupTable.filterByColumn(COLUMN_ID, String.valueOf(hubsGroupId));
-    assertTrue("Hubs Group with ID [" + hubsGroupId + "] was not deleted",
-        hubsGroupTable.isTableEmpty());
+    Assertions.assertThat(hubsGroupTable.isTableEmpty())
+        .as("Hubs Group with ID [" + hubsGroupId + "] was not deleted").isTrue();
   }
 
   /**

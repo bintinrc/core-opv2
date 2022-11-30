@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
+import co.nvqa.common.ui.support.CommonUiTestConstants;
 import co.nvqa.commons.util.NvSystemProperties;
 
 /**
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public final class TestConstants extends CommonSeleniumTestConstants {
+public final class TestConstants extends CommonUiTestConstants {
 
   public static final String OPERATOR_PORTAL_BASE_URL;
   public static final String DASH_PORTAL_BASE_URL;

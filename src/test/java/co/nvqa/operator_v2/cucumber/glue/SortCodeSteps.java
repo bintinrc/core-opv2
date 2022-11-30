@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.RandomUtil;
@@ -130,7 +131,7 @@ public class SortCodeSteps extends AbstractSteps {
 
     //Replacing new sort code
     if (content.contains("new-sort-code")) {
-      sortCodeValue = "SA" + randomInt(0, 999) + RandomUtil.randomString(5);
+      sortCodeValue = "SA" + StandardTestUtils.randomInt(0, 999) + RandomUtil.randomString(5);
       content = content.replaceAll("new-sort-code", sortCodeValue);
       LOGGER.info(sortCodeValue);
       sortCode.setSortCode(sortCodeValue);

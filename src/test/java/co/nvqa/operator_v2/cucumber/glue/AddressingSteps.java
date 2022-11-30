@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressingPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -31,14 +32,12 @@ public class AddressingSteps extends AbstractSteps {
 
   @When("^Operator clicks on Add Address Button on Addressing Page$")
   public void clickAddAddressButton() {
-    addressingPage.inFrame(pahe -> {
-      addressingPage.clickAddAddressButton();
-    });
+    addressingPage.inFrame(pahe -> addressingPage.clickAddAddressButton());
   }
 
   @And("^Operator creates new address on \"([^\"]*)\" Addressing Page$")
   public void addNewAddress(String country) {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
     Addressing addressing = new Addressing();
 
@@ -80,9 +79,7 @@ public class AddressingSteps extends AbstractSteps {
     addressing.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
     addressing.setAddressType("Standard");
 
-    addressingPage.inFrame(page -> {
-      page.addNewAddress(addressing);
-    });
+    addressingPage.inFrame(page -> page.addNewAddress(addressing));
     put(KEY_CREATED_ADDRESSING, addressing);
   }
 
@@ -98,11 +95,9 @@ public class AddressingSteps extends AbstractSteps {
 
   @Then("^Operator verifies the address does not exist on Addressing Page$")
   public void verifyDelete() {
-    addressingPage.inFrame(page -> {
-      Assertions.assertThat(page.emptyListText.isDisplayed())
-          .as("No address found is displayed")
-          .isTrue();
-    });
+    addressingPage.inFrame(page -> Assertions.assertThat(page.emptyListText.isDisplayed())
+        .as("No address found is displayed")
+        .isTrue());
   }
 
   @When("^Operator edits the address on Addressing Page$")

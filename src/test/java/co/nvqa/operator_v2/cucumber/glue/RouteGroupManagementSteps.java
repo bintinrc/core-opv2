@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.model.core.RouteGroup;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteGroupInfo;
 import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -293,7 +293,8 @@ public class RouteGroupManagementSteps extends AbstractSteps {
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<RouteGroupJobDetails> actual = DataEntity
         .fromCsvFile(RouteGroupJobDetails.class, pathName, true);
-    assertEquals("Number of records in " + CSV_FILE_NAME, expected.size(), actual.size());
+    Assertions.assertThat(actual.size()).as("Number of records in " + CSV_FILE_NAME)
+        .isEqualTo(expected.size());
 
     for (int i = 0; i < expected.size(); i++) {
       expected.get(i).compareWithActual(actual.get(i));

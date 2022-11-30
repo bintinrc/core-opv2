@@ -7,12 +7,12 @@ import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.DriverPerformancePage.DriverPerformanceTable.COLUMN_DRIVER_NAME;
 import static co.nvqa.operator_v2.selenium.page.DriverPerformancePage.DriverPerformanceTable.COLUMN_HUB;
@@ -49,35 +49,35 @@ public class DriverPerformanceSteps extends AbstractSteps {
 
   @Then("Operator verifies Filters form is hidden on Driver Performance page")
   public void checkFiltersHidden() {
-    assertTrue("Filters form is hidden",
-        driverPerformancePage.filtersForm.waitUntilInvisible(5));
+    Assertions.assertThat(driverPerformancePage.filtersForm.waitUntilInvisible(5))
+        .as("Filters form is hidden").isTrue();
   }
 
   @Then("Operator verifies Filters form is displayed on Driver Performance page")
   public void checkFiltersDisplayed() {
-    assertTrue("Filters form is displayed",
-        driverPerformancePage.filtersForm.waitUntilVisible(5));
+    Assertions.assertThat(driverPerformancePage.filtersForm.waitUntilVisible(5))
+        .as("Filters form is displayed").isTrue();
   }
 
   @Then("Operator verifies Route Date range is {int} days on Driver Performance page")
-  public void checkRouteRange(long range) throws ParseException {
+  public void checkRouteRange(long range) {
     String startDateVal = driverPerformancePage.filtersForm.routeDate.fromInput.getValue();
     String endDateVal = driverPerformancePage.filtersForm.routeDate.toInput.getValue();
-    assertEquals("Route Date range", range,
-        ChronoUnit.DAYS.between(LocalDate.parse(startDateVal), LocalDate.parse(endDateVal)));
-
+    Assertions.assertThat(
+            ChronoUnit.DAYS.between(LocalDate.parse(startDateVal), LocalDate.parse(endDateVal)))
+        .as("Route Date range").isEqualTo(range);
   }
 
   @Then("Operator verifies Load Selection button is disabled on Driver Performance page")
   public void checkLoadSelectionDisabled() {
-    assertFalse("Load Selection button is enabled",
-        driverPerformancePage.filtersForm.loadSelection.isEnabled());
+    Assertions.assertThat(driverPerformancePage.filtersForm.loadSelection.isEnabled())
+        .as("Load Selection button is enabled").isFalse();
   }
 
   @Then("Operator verifies Load Selection button is enabled on Driver Performance page")
   public void checkLoadSelectionEnabled() {
-    assertTrue("Load Selection button is enabled",
-        driverPerformancePage.filtersForm.loadSelection.isEnabled());
+    Assertions.assertThat(driverPerformancePage.filtersForm.loadSelection.isEnabled())
+        .as("Load Selection button is enabled").isTrue();
   }
 
   @Then("Operator clicks Load Selection button on Driver Performance page")
@@ -171,8 +171,8 @@ public class DriverPerformanceSteps extends AbstractSteps {
   @Then("Operator verifies {string} preset was deleted on Driver Performance page")
   public void verifyPresetDeleted(String presetName) {
     presetName = resolveValue(presetName);
-    assertFalse("List of presets contains value " + presetName,
-        driverPerformancePage.filtersForm.selectPreset.hasItem(presetName));
+    Assertions.assertThat(driverPerformancePage.filtersForm.selectPreset.hasItem(presetName))
+        .as("List of presets contains value " + presetName).isFalse();
   }
 
   @Then("Operator enters {string} name in Save As Preset modal")
@@ -183,15 +183,16 @@ public class DriverPerformanceSteps extends AbstractSteps {
 
   @Then("Operator verifies Save button is disabled in Save As Preset modal")
   public void verifySaveButtonIsDisabled() {
-    assertFalse("Save button is enabled", driverPerformancePage.saveAsPresetModal.save.isEnabled());
+    Assertions.assertThat(driverPerformancePage.saveAsPresetModal.save.isEnabled())
+        .as("Save button is enabled").isFalse();
   }
 
   @Then("Operator verifies {string} error message is displayed in Save As Preset modal")
   public void verifyErrorMessage(String message) {
-    assertTrue("Error message is displayed",
-        driverPerformancePage.saveAsPresetModal.errorMessage.isDisplayed());
-    assertEquals("Error message", resolveValue(message),
-        driverPerformancePage.saveAsPresetModal.errorMessage.getNormalizedText());
+    Assertions.assertThat(driverPerformancePage.saveAsPresetModal.errorMessage.isDisplayed())
+        .as("Error message is displayed").isTrue();
+    Assertions.assertThat(driverPerformancePage.saveAsPresetModal.errorMessage.getNormalizedText())
+        .as("Error message").isEqualTo(resolveValue(message));
   }
 
   @Then("Operator selects {string} preset on Driver Performance page")

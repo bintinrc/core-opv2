@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.StandardScenarioManager;
 import co.nvqa.commons.cucumber.glue.AbstractApiDashSteps;
 import co.nvqa.commons.model.dash.report.DashPaymentHistory;
 import co.nvqa.commons.model.dash.report.DashPaymentHistoryRequest;
@@ -9,12 +8,13 @@ import co.nvqa.operator_v2.model.ShipperBillingRecord;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
  */
 @ScenarioScoped
-public class ApiDashExtSteps extends AbstractApiDashSteps<StandardScenarioManager> {
+public class ApiDashExtSteps extends AbstractApiDashSteps<ScenarioManager> {
 
   public ApiDashExtSteps() {
   }
@@ -37,13 +37,14 @@ public class ApiDashExtSteps extends AbstractApiDashSteps<StandardScenarioManage
             f("Dash payment history doesn't containt record with comment [%s].",
                 billingRecord.getComment())));
 
-    assertEquals("Amount", dashPaymentRecord.getAmount(), billingRecord.getAmount());
-    assertEquals("Status", dashPaymentRecord.getStatus(), "SUCCESS");
-    assertNotNull("Metadata", dashPaymentRecord.getMetadata());
-    assertEquals("Metadata - Reason", dashPaymentRecord.getMetadata().getReason(),
-        billingRecord.getReason());
-    assertEquals("Metadata - Details", dashPaymentRecord.getMetadata().getDetails(),
-        billingRecord.getComment());
+    Assertions.assertThat(billingRecord.getAmount()).as("Amount")
+        .isEqualTo(dashPaymentRecord.getAmount());
+    Assertions.assertThat("SUCCESS").as("Status").isEqualTo(dashPaymentRecord.getStatus());
+    Assertions.assertThat(dashPaymentRecord.getMetadata()).as("Metadata").isNotNull();
+    Assertions.assertThat(billingRecord.getReason()).as("Metadata - Reason")
+        .isEqualTo(dashPaymentRecord.getMetadata().getReason());
+    Assertions.assertThat(billingRecord.getComment()).as("Metadata - Details")
+        .isEqualTo(dashPaymentRecord.getMetadata().getDetails());
 
     String expectedType;
 
@@ -59,7 +60,7 @@ public class ApiDashExtSteps extends AbstractApiDashSteps<StandardScenarioManage
             f("Unknown operation type [%s]. Can be 'add' or 'deduct'.", billingRecord.getType()));
     }
 
-    assertEquals("Type", dashPaymentRecord.getType(), expectedType);
-    assertEquals("Event", dashPaymentRecord.getEvent(), "ACCOUNT_CORRECTION");
+    Assertions.assertThat(expectedType).as("Type").isEqualTo(dashPaymentRecord.getType());
+    Assertions.assertThat("ACCOUNT_CORRECTION").as("Event").isEqualTo(dashPaymentRecord.getEvent());
   }
 }

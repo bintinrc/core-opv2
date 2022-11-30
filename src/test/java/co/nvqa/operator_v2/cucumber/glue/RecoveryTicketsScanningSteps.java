@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsScanningPage;
@@ -35,7 +36,7 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
     Map<String, String> mapOfTokens = new HashMap<>();
     mapOfTokens.put("tracking_id", trackingId);
 
-    String recoveryTicketsScanningRequestJson = replaceTokens(
+    String recoveryTicketsScanningRequestJson = StandardTestUtils.replaceTokens(
         dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
     RecoveryTicketsScanning recoveryTicketsScanning = fromJsonCamelCase(
         recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
@@ -70,13 +71,13 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
 
   @When("^Operator fills all the field on Recovery Tickets Scanning Page with invalid tracking ID and clicks on enter with data bellow:$")
   public void fillInvalidData(Map<String, String> dataTableAsMap) {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     String trackingId = "DUMMY" + uniqueCode;
 
     Map<String, String> mapOfTokens = new HashMap<>();
     mapOfTokens.put("tracking_id", trackingId);
 
-    String recoveryTicketsScanningRequestJson = replaceTokens(
+    String recoveryTicketsScanningRequestJson = StandardTestUtils.replaceTokens(
         dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
     RecoveryTicketsScanning recoveryTicketsScanning = fromJsonCamelCase(
         recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);

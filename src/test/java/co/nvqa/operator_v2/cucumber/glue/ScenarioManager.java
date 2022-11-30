@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
+import co.nvqa.common.ui.cucumber.glue.CommonUiScenarioManager;
 import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author Daniel Joi Partogi Hutapea
  */
 @Singleton
-public class ScenarioManager extends CommonSeleniumScenarioManager {
+public class ScenarioManager extends CommonUiScenarioManager {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioManager.class);
 
@@ -93,11 +93,12 @@ public class ScenarioManager extends CommonSeleniumScenarioManager {
   public void cleanDownloadFolder() {
     File parentDir = new File(StandardTestConstants.TEMP_DIR);
     Optional<File> optionalFile = Optional.of(parentDir);
-    optionalFile.flatMap(dir -> Optional.ofNullable(dir.listFiles())).ifPresent(files -> Stream.of(files).forEach(File::delete));
+    optionalFile.flatMap(dir -> Optional.ofNullable(dir.listFiles()))
+        .ifPresent(files -> Stream.of(files).forEach(File::delete));
   }
 
   @After
   public void afterScenario(Scenario scenario) {
-    testCaseService.pushExecutionResultViaApi(scenario);
+    getTestCaseService().pushExecutionResultViaApi(scenario);
   }
 }

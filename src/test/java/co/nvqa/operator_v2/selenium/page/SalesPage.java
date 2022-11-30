@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -63,8 +64,8 @@ public class SalesPage extends OperatorV2SimplePage {
 
     findOrdersWithCsvDialog.selectFile.setValue(csvFile);
     findOrdersWithCsvDialog.fileName.waitUntilVisible();
-    assertEquals("Uploaded file name", csvFile.getName(),
-        findOrdersWithCsvDialog.fileName.getText());
+    Assertions.assertThat(findOrdersWithCsvDialog.fileName.getText()).as("Uploaded file name")
+        .isEqualTo(csvFile.getName());
     findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
   }
 

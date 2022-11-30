@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -54,7 +55,7 @@ public class ProfilePage extends OperatorV2SimplePage {
     clickProfileButton();
     String currentCountry = getCurrentCountry();
     closeProfile();
-    assertTrue(f("Current country is %s not %s", currentCountry, country),
-        currentCountry.equalsIgnoreCase(country));
+    Assertions.assertThat(currentCountry.equalsIgnoreCase(country))
+        .as(f("Current country is %s not %s", currentCountry, country)).isTrue();
   }
 }

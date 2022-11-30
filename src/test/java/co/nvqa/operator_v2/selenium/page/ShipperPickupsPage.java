@@ -20,15 +20,16 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterDateBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -197,7 +198,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     if (address != null) {
       pickupAddress = reservationsTable.searchByPickupAddress(address);
     }
-    assertFalse("Reservation address was not found", reservationsTable.isTableEmpty());
+    Assertions.assertThat(reservationsTable.isTableEmpty()).as("Reservation address was not found")
+        .isFalse();
     ReservationInfo actual = reservationsTable.readEntity(1);
 
     if (comments != null && comments.length() > 255) {
@@ -208,11 +210,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       // Remove multiple [SPACE] chars from String value.
       String actualPickupAddress = StringUtils.normalizeSpace(actual.getPickupAddress());
       pickupAddress = StringUtils.normalizeSpace(pickupAddress);
-      assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
+      Assertions.assertThat(actualPickupAddress).as("Check pickup address")
+          .startsWith(pickupAddress);
     }
 
-    assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, actual.getShipperName(),
-        startsWith(shipperName));
+    if (StringUtils.isNotBlank(shipperName)) {
+      Assertions.assertThat(actual.getShipperName()).as("Shipper Name").startsWith(shipperName);
+    }
     assertEqualsIfExpectedValueNotBlank("Route ID", routeId, actual.getRouteId());
     assertEqualsIfExpectedValueNotBlank("Driver Name", driverName, actual.getDriverName());
     assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, actual.getPriorityLevel());
@@ -221,8 +225,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifyReservationInfo(ReservationInfo expectedReservationInfo, Address address) {
-    Date readyDate = expectedReservationInfo.getReadyByDate();
-    Date latestDate = expectedReservationInfo.getLatestByDate();
+    ZonedDateTime readyDate = expectedReservationInfo.getReadyByDateTime();
+    ZonedDateTime latestDate = expectedReservationInfo.getReadyByDateTime();
 
     if (readyDate != null && latestDate != null) {
       editFilters.click();
@@ -249,7 +253,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
       actual = actual.split(" ")[0];
       expected = expected.split(" ")[0];
-      assertEquals(message, expected, actual);
+      Assertions.assertThat(actual).as(message).isEqualTo(expected);
     }
   }
 
@@ -266,17 +270,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
     reservationDetailsDialog.waitUntilVisible();
 
-    assertEquals("Shipper Name", shipperName,
-        reservationDetailsDialog.shipperName.getNormalizedText());
-    assertEquals("Shipper ID", shipperId, reservationDetailsDialog.shipperId.getNormalizedText());
-    assertEquals("Reservation ID", reservationId,
-        reservationDetailsDialog.reservationId.getNormalizedText());
-    assertThat("Pickup Address", reservationDetailsDialog.pickupAddress.getNormalizedText(),
-        startsWith(pickupAddress));
+    Assertions.assertThat(reservationDetailsDialog.shipperName.getNormalizedText())
+        .as("Shipper Name").isEqualTo(shipperName);
+    Assertions.assertThat(reservationDetailsDialog.shipperId.getNormalizedText())
+        .as("Shipper ID").isEqualTo(shipperId);
+    Assertions.assertThat(reservationDetailsDialog.reservationId.getNormalizedText())
+        .as("Reservation ID").isEqualTo(reservationId);
+    Assertions.assertThat(reservationDetailsDialog.pickupAddress.getNormalizedText())
+        .as("Check Pickup Address").startsWith(pickupAddress);
   }
 
   @SuppressWarnings("unused")
-  public ReservationInfo duplicateReservation(Address address, Date date) {
+  public ReservationInfo duplicateReservation(Address address, ZonedDateTime date) {
     return duplicateReservations(Collections.singletonList(address), date).get(0);
   }
 
@@ -294,7 +299,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     verifyFileDownloadedSuccessfully(CSV_FILENAME, reservationInfo.toCsvLine(), false, true, true);
   }
 
-  public List<ReservationInfo> duplicateReservations(List<Address> addresses, Date date) {
+  public List<ReservationInfo> duplicateReservations(List<Address> addresses, ZonedDateTime date) {
     List<ReservationInfo> originalReservationsInfo = selectReservationsAndStoreInfo(addresses);
     actionsMenu.selectOption(ITEM_CREATE_RESERVATION);
     createSelectedReservationsDialog.fillTheForm(date);
@@ -364,12 +369,14 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifySelectedCount(int count) {
-    assertEquals(getText(SELECTED_COUNT_LABEL_LOCATOR), String.format("Selected: %d", count));
+    Assertions.assertThat(getText(SELECTED_COUNT_LABEL_LOCATOR)).as("Check selected count")
+        .isEqualTo("Selected: %d", count);
   }
 
   public ReservationInfo readReservationInfo(Address address) {
     reservationsTable.searchByPickupAddress(address);
-    assertFalse("Reservation was not found", reservationsTable.isTableEmpty());
+    Assertions.assertThat(reservationsTable.isTableEmpty()).as("Reservation was not found")
+        .isFalse();
     return reservationsTable.readEntity(1);
   }
 
@@ -417,15 +424,15 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifyFinishedReservationHighlighted(String color) {
-    assertEquals("Expected another background color for finished reservation with failure",
-        color,
-        reservationsTable.getNotDefaultBackgroundColorOfRow(1));
+    Assertions.assertThat(reservationsTable.getNotDefaultBackgroundColorOfRow(1))
+        .as("Expected another background color for finished reservation with failure")
+        .isEqualTo(color);
   }
 
   public void verifyFinishedReservationHasStatus(String status) {
-    assertEquals("Reservation status",
-        status,
-        reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS_CLASS));
+    Assertions.assertThat(
+            reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS_CLASS))
+        .as("Reservation status").isEqualTo(status);
   }
 
   /**
@@ -487,7 +494,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       super(webDriver);
     }
 
-    public void fillTheForm(Date date) {
+    public void fillTheForm(ZonedDateTime date) {
       waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
       setMdDatepickerById(FIELD_DATE_ID, date);
     }
@@ -539,7 +546,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     public void fillTheForm(Long routeId, Integer priorityLevel) {
       waitUntilVisible();
       pause2s();
-      assertNotNull("Route ID should not be null.", routeId);
+      Assertions.assertThat(routeId).as("Route ID should not be null.").isNotNull();
 
       newRoute.selectValue(routeId);
 
@@ -634,7 +641,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
     public Route validateSuggestedRoute(int index, List<Route> validRoutes) {
       String suggestedRoute = readSuggestedRoute(index);
-      assertThat("Suggested Route", suggestedRoute, not(isEmptyOrNullString()));
+      Assertions.assertThat(suggestedRoute).as("Suggested Route not empty or null")
+          .isNotNull().isNotEmpty();
       Pattern p = Pattern.compile("(\\d*)(\\s-\\s)(.*)");
       Matcher m = p.matcher(suggestedRoute);
       AtomicLong routeId = new AtomicLong(0);
@@ -644,7 +652,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       }
 
       String reason = String.format("[%d] Suggested Route ID", index);
-      assertThat(reason, routeId.get(), greaterThan(0L));
+      Assertions.assertThat(routeId.get()).as(reason).isGreaterThan(0L);
       return validRoutes.stream()
           .filter(validRoute -> validRoute.getId() == routeId.get())
           .findFirst()
@@ -754,7 +762,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
       super(webDriver);
     }
 
-    public void filterReservationDate(Date fromDate, Date toDate) {
+    public void filterReservationDate(ZonedDateTime fromDate, ZonedDateTime toDate) {
       toDateField.setDate(toDate); // To Date should be select first.
       fromDateField.setDate(fromDate);
     }

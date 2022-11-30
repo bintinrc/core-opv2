@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -69,12 +69,12 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
           sb.append(COMMA);
         }
 
-        csvData.append(sb.toString()).append(System.lineSeparator());
+        csvData.append(sb).append(System.lineSeparator());
       });
 
       PrintWriter pw = new PrintWriter(new FileOutputStream(csvResultFile));
       pw.println(CSV_CAMPAIGN_HEADER);
-      pw.print(csvData.toString());
+      pw.print(csvData);
       pw.close();
     } catch (IOException ex) {
       throw new NvTestRuntimeException(ex);
@@ -85,8 +85,8 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage {
 
   public void invalidTrackingIdVerification() {
     errorMessage.waitUntilClickable();
-    assertThat("Tracking ID is valid.", errorMessage.getText(),
-        Matchers.containsStringIgnoringCase("Invalid tracking Id"));
+    Assertions.assertThat(errorMessage.getText()).as("Tracking ID is valid.")
+        .containsIgnoringCase("Invalid tracking Id");
   }
 
   public static class UploadChangeDeliveryTimingCsvDialog extends MdDialog {

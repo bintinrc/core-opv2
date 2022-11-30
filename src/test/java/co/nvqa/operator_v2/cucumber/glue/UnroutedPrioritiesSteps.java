@@ -1,13 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.UnroutedPrioritiesPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 /**
@@ -31,18 +33,20 @@ public class UnroutedPrioritiesSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     try {
       String routeDateAsString = mapOfData.get("routeDate");
-      Date routeDate;
+      ZonedDateTime routeDate;
 
       if ("GET_FROM_ORDER_DELIVERY_END_TIME_TRANSACTION".equalsIgnoreCase(routeDateAsString)) {
         Order order = get(KEY_CREATED_ORDER);
-        routeDate = ISO_8601_WITHOUT_MILLISECONDS
-            .parse(order.getTransactions().get(1).getEndTime());
+        routeDate = StandardTestUtils.convertToZonedDateTime(
+            order.getTransactions().get(1).getEndTime(),
+            ZoneId.of("UTC"), DTF_ISO_8601_LITE);
       } else {
-        routeDate = YYYY_MM_DD_SDF.parse(routeDateAsString);
+        routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
+            DTF_NORMAL_DATE);
       }
 
       unroutedPrioritiesPage.filterAndClickLoadSelection(routeDate);
-    } catch (ParseException ex) {
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse date.", ex);
     }
   }

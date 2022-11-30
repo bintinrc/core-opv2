@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.selenium.page.VehicleTypeManagementPage;
 import io.cucumber.java.en.Then;
@@ -24,7 +25,7 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
 
   @When("^Operator create new Vehicle Type$")
   public void operatorCreateNewVehicleType() {
-    String vehicleTypeName = "VT-" + generateDateUniqueString();
+    String vehicleTypeName = "VT-" + StandardTestUtils.generateDateUniqueString();
     VehicleType vehicleType = new VehicleType();
     vehicleType.setName(vehicleTypeName);
     vehicleTypeManagementPage.addNewVehicleType(vehicleType);
