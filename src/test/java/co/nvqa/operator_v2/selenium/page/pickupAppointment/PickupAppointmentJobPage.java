@@ -154,6 +154,9 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
   public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
   public final String ARIA_LABEL = "aria-label";
   public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
+  public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "td.ant-picker-cell-selected";
+  public final String SHOW_PREVIOUS_MONTH_BUTTON_LOCATION = "button.ant-picker-header-prev-btn";
+
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -332,17 +335,18 @@ public class PickupAppointmentJobPage extends OperatorV2SimplePage {
 
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-            By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
+        By.cssSelector(SELECTED_DAY_IN_CALENDAR_LOCATOR)));
     Assertions.assertThat(
-                    webDriver.findElement(
-                                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-                            .isDisplayed())
-            .as("The previous 7th day is not active for selection").isTrue();
+            webDriver.findElement(
+                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
+                .isDisplayed())
+        .as("The next 7th day is not active for selection").isTrue();
+    webDriver.findElement(By.cssSelector(SHOW_PREVIOUS_MONTH_BUTTON_LOCATION)).click();
     Assertions.assertThat(
-                    webDriver.findElement(
-                                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
-                            .isDisplayed())
-            .as("The next 7th day is not active for selection").isTrue();
+            webDriver.findElement(
+                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
+                .isDisplayed())
+        .as("The previous 7th day is not active for selection").isTrue();
     contentBox.click();
   }
 

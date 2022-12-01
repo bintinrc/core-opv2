@@ -39,7 +39,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().manage().window().maximize();
-    loadShipperAddressConfigurationPage();
+    openPickupJobsPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
       pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
     }
@@ -450,7 +450,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .getColorAttributeInPickupJobFromCalendar(date,status))
         .as("Pickup job has correct color")
-        .contains("color: " + color);
+        .contains(color);
   }
 
   @Then("Operator verify the dialog not shows the job tag")
@@ -890,9 +890,21 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.waitUntilPresetDeletedPopupInvisible();
   }
 
+  @Then("Operator verify the dialog displayed the Customised time range")
+  public void verifyTheDialogDisplayedTHeCustomisedTimeRange(Map<String, String> dataTable) {
+    final String readyBy = dataTable.get("readyBy");
+    final String latestBy = dataTable.get("latestBy");
+
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().getCustomisedTimeRangeByTitleAndStringName("readyBy"))
+        .as("ReadyBy range is correct")
+        .isEqualTo(readyBy);
+    Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().getCustomisedTimeRangeByTitleAndStringName("latestBy"))
+        .as("LatestBy range is correct")
+        .isEqualTo(latestBy);
+  }
 
   // This method can be removed once redirection to Shipper Address is added in operator V2 menu
-  public void loadShipperAddressConfigurationPage() {
+  public void openPickupJobsPage() {
     getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
   }
 

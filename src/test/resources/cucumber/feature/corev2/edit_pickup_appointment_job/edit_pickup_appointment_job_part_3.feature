@@ -8,7 +8,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @AddJobComment @DeletePickupJob
   Scenario: Edit pickup appointment job - add jobs comments (pickup instructions)
     Given API Operator create new appointment pickup job using data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
 
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -23,7 +23,7 @@ Feature: Edit Pickup Appointment Job Part 3
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | ready-for-routing              |
-      | color  | rgb(255, 255, 255)             |
+      | color  | rgba(64, 64, 64, 1)            |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |
@@ -53,7 +53,7 @@ Feature: Edit Pickup Appointment Job Part 3
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | ready-for-routing              |
-      | color  | rgb(255, 255, 255)             |
+      | color  | rgba(64, 64, 64, 1)            |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |
@@ -83,7 +83,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @RemoveJobComment @DeletePickupJob
   Scenario: Edit pickup appointment job - remove jobs comments (pickup instructions)
     Given API Operator create new appointment pickup job using data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "tagIds":[287], "pickupInstructions":"pickup instructions"} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "tagIds":[287], "pickupInstructions":"pickup instructions"} |
 
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -98,7 +98,7 @@ Feature: Edit Pickup Appointment Job Part 3
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | ready-for-routing              |
-      | color  | rgb(255, 255, 255)             |
+      | color  | rgba(64, 64, 64, 1)            |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |
@@ -127,7 +127,7 @@ Feature: Edit Pickup Appointment Job Part 3
   @CancelEditing @DeletePickupJob
   Scenario: Edit pickup appointment job - cancel editing
     Given API Operator create new appointment pickup job using data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "pickupInstructions":"pickup instructions"} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}, "pickupInstructions":"pickup instructions"} |
 
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -142,7 +142,7 @@ Feature: Edit Pickup Appointment Job Part 3
     Then Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | ready-for-routing              |
-      | color  | rgb(255, 255, 255)             |
+      | color  | rgba(64, 64, 64, 1)            |
     And Operator verify the dialog displayed the editable data fields
       | startDay  | {gradle-next-1-day-dd/MM/yyyy} |
       | endDay    | {gradle-next-1-day-dd/MM/yyyy} |
