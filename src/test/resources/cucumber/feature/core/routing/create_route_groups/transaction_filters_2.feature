@@ -11,6 +11,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"<startTime>","end_time":"<endTime>"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -40,6 +41,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"dimensions":{"size":"<size>","volume":1.0,"weight":4.0},"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -76,6 +78,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
@@ -103,6 +106,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
@@ -130,6 +134,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"<serviceType>","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
@@ -160,6 +165,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest    | {"service_type":"Corporate AWB","requested_tracking_number":"{KEY_CORPORATE_AWB_TRACKING_LIST[2].trackingId}","corporate":{"branch_id":"{shipper-v4-corporate-subshipper-branch-id}"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
@@ -185,6 +191,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}         |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}         |
@@ -211,6 +218,7 @@ Feature: Create Route Groups - Transaction Filters
       | addressType    | global           |
       | generateTo     | RANDOM           |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -236,6 +244,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -258,6 +267,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -282,6 +292,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -307,6 +318,7 @@ Feature: Create Route Groups - Transaction Filters
       | addressType    | global           |
       | generateTo     | RANDOM           |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
@@ -329,6 +341,7 @@ Feature: Create Route Groups - Transaction Filters
       | generateFromAndTo | RANDOM           |
       | v4OrderRequest    | <v4OrderRequest> |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |

@@ -154,7 +154,7 @@ Feature: Route Logs
     Then Operator verify routes are deleted successfully:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    
+
   @DeleteOrArchiveRoute
   Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
     Given Operator go to menu Utilities -> QRCode Printing

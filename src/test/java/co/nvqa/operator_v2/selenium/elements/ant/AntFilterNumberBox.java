@@ -33,7 +33,7 @@ public abstract class AntFilterNumberBox extends AntAbstractFilterBox {
   public Button value;
 
   @FindBy(css = "div.ant-select")
-  public AntSelect op;
+  public AntSelect3 op;
 
   @FindBy(xpath = "(.//input[@aria-valuemax])[1]")
   public ForceClearTextBox from;
