@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.sort.sort_belt_manager.LogicForm;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.ArmCombinationContainer;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
@@ -51,8 +50,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @When("Operator selects hub and device of Sort Belt Manager")
   public void operatorSelectsHubAndDeviceOfSortBeltManager() {
-    String hub = StandardTestConstants.SORT_BELT_MANAGER_HUB;
-    String device = StandardTestConstants.SORT_BELT_MANAGER_DEVICE;
+    String hub = TestConstants.SORT_BELT_MANAGER_HUB;
+    String device = TestConstants.SORT_BELT_MANAGER_DEVICE;
     operatorSelectsHubAndDeviceOfSortBeltManager(hub, device);
   }
 
@@ -135,7 +134,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void operatorSearchLogicInSortBeltManagerPage(String selection) {
     String createdLogicName;
     if (selection.equals("default")) {
-      createdLogicName = StandardTestConstants.SORT_BELT_MANAGER_DEFAULT_LOGIC;
+      createdLogicName = TestConstants.SORT_BELT_MANAGER_DEFAULT_LOGIC;
     } else {
       createdLogicName = ((LogicForm) get(KEY_SBM_CREATED_LOGIC_FORM)).getName();
     }

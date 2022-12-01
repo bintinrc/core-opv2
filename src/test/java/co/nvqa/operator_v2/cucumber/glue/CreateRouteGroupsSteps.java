@@ -4,7 +4,7 @@ import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.commons.model.core.Transaction;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
@@ -27,7 +27,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
-import static co.nvqa.commons.model.DataEntity.toDateTime;
+import static co.nvqa.common.model.DataEntity.toDateTime;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TYPE;

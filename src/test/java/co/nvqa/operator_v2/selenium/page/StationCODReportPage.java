@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvCountry;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.StationDetailsTabInfo;
 import co.nvqa.operator_v2.model.StationSummaryTabInfo;
 import co.nvqa.operator_v2.selenium.elements.PageElement;

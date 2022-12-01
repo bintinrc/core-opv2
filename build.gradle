@@ -47,20 +47,17 @@ apply plugin: "io.qameta.allure-adapter"
 apply plugin: "io.qameta.allure-report"
 
 dependencies {
-    testImplementation "ch.qos.logback:logback-classic:1.2.3"
+    testImplementation "ch.qos.logback:logback-classic:1.2.11"
     testImplementation "org.apache.poi:poi-ooxml:4.1.0"
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation "co.nvqa:common-base:1.1.0"
-    implementation "co.nvqa:common-ui:1.0.5"
+    implementation "co.nvqa:common-ui:1.1.0"
     implementation "co.nvqa:common-core:1.0.1"
-    implementation "co.nvqa:common-ordercreate:1.0.4"
     implementation "co.nvqa:common-auth:1.0.0"
-    implementation "co.nvqa:common-driver:1.0.4"
     implementation "co.nvqa:common-dp:1.2.0"
+    implementation "co.nvqa:common-sort:1.0.7"
     implementation "co.nvqa:commons:2.3.0"
-    implementation "com.github.appium:java-client:26a6cdb62335e4842d03fa223c689c83596c3e25"
-
 }
 
 

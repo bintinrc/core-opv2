@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.api.StandardApiOperatorPortalSteps;
+import co.nvqa.commonauth.utils.TokenUtils;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
@@ -10,8 +10,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import javax.inject.Inject;
-import javax.inject.Provider;
 
 /**
  * @author Soewandi Wirjawan
@@ -19,8 +17,6 @@ import javax.inject.Provider;
 @ScenarioScoped
 public class LoginSteps extends AbstractSteps {
 
-  @Inject
-  private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
   private LoginPage loginPage;
   private MainPage mainPage;
   private ProfilePage profilePage;
@@ -41,9 +37,7 @@ public class LoginSteps extends AbstractSteps {
     loginPage.loadPage();
 
     if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
-      String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get()
-          .getOperatorAccessToken();
-      loginPage.forceLogin(operatorAccessToken);
+      loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
     } else {
       loginPage.clickLoginButton();
       loginPage.enterCredential(username, password);
@@ -59,9 +53,7 @@ public class LoginSteps extends AbstractSteps {
     pause2s();
 
     if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES) {
-      String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get()
-          .getOperatorAccessToken();
-      loginPage.forceLogin(operatorAccessToken);
+      loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
       pause5s();
     } else {
       loginPage.clickLoginButton();

@@ -26,7 +26,7 @@ import co.nvqa.operator_v2.model.shipper.ShipperBasicSettings;
 import co.nvqa.operator_v2.model.shipper.Shopify;
 import co.nvqa.operator_v2.model.shipper.SubShipperDefaultSettings;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;

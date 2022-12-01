@@ -39,6 +39,11 @@ public final class TestConstants extends CommonUiTestConstants {
   public static final long HUB_ID;
   public static final String HUB_NAME;
 
+  public static String SORT_BELT_MANAGER_DEVICE;
+  public static String SORT_BELT_MANAGER_HUB;
+  public static Integer SORT_BELT_MANAGER_DEVICE_ARMS_COUNT;
+  public static String SORT_BELT_MANAGER_DEFAULT_LOGIC;
+
   public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
   public static final String ADDRESSING_PRESET_NAME;
@@ -87,6 +92,11 @@ public final class TestConstants extends CommonUiTestConstants {
 
     HUB_ID = getLong("hub-id");
     HUB_NAME = getString("hub-name");
+
+    SORT_BELT_MANAGER_HUB = getString("sbm-hub");
+    SORT_BELT_MANAGER_DEVICE = getString("sbm-device");
+    SORT_BELT_MANAGER_DEVICE_ARMS_COUNT = getInt("sbm-device-arm-count");
+    SORT_BELT_MANAGER_DEFAULT_LOGIC = getString("sbm-default-logic");
 
     ADDRESSING_PRESET_NAME = getString("addressing-preset-name");
     ADDRESSING_SHIPPER_NAME = getString("addressing-shipper-v4-name");
