@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.util;
 
 import co.nvqa.common.ui.support.CommonUiTestConstants;
-import co.nvqa.commons.util.NvSystemProperties;
 
 /**
  * @author Soewandi Wirjawan
@@ -59,9 +58,7 @@ public final class TestConstants extends CommonUiTestConstants {
   public static final long IMDA_PICK_BULK_UPDATE_OPV2_DP_2_ID;
 
   static {
-    String apiBase = NvSystemProperties
-        .getString(NV_API_BASE, getString("operator-portal-base-url"));
-    OPERATOR_PORTAL_BASE_URL = apiBase.replace("api", "operatorv2") + "/#";
+    OPERATOR_PORTAL_BASE_URL = NV_API_BASE.replace("api", "operatorv2") + "/#";
     DASH_PORTAL_BASE_URL = getString("dash-portal-base-url");
     OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
     OPERATOR_PORTAL_UID = getString("operator-portal-uid");
