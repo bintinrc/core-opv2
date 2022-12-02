@@ -67,7 +67,7 @@ Feature: Total Completion Rate
       | HubName      | HubId      | Country | TileName         |
       | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates |
 
-  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn  @Debug
+  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: View N+0 Pickup Rates - Success Due Today No Job Parcel
     Given Operator loads Operator portal home page
     And DB Operator update the parcel details to past date "{gradle-previous-2-day-yyyy-MM-dd} 00:00:00" for the hub "<HubId>"
