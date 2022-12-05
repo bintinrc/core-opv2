@@ -305,15 +305,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_DRIVER                |
       | fetchByValue | {KEY_CREATED_DRIVER.firstName} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID}                                      |
-      | driverName  | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} |
-      | hubName     | {hub-name}                                                  |
-      | routeDate   | GET_FROM_CREATED_ROUTE                                      |
-      | wpPending   | 1                                                           |
-      | wpPartial   | 0                                                           |
-      | wpFailed    | 0                                                           |
-      | wpCompleted | 0                                                           |
-      | wpTotal     | 1                                                           |
+      | routeId     | {KEY_CREATED_ROUTE_ID}         |
+      | driverName  | {KEY_CREATED_DRIVER.firstName} |
+      | hubName     | {hub-name}                     |
+      | routeDate   | GET_FROM_CREATED_ROUTE         |
+      | wpPending   | 1                              |
+      | wpPartial   | 0                              |
+      | wpFailed    | 0                              |
+      | wpCompleted | 0                              |
+      | wpTotal     | 1                              |
 
   @DeleteOrArchiveRoute @DeleteDriver
   Scenario: Get Route Details by Driver Name - Number of Route_Id > 1 (uid:62ce5fbf-6f11-4dff-85ce-7c4d45e418f2)
@@ -341,15 +341,15 @@ Feature: Route Inbound Screen 1
       | fetchByValue | {KEY_CREATED_DRIVER.firstName}    |
       | routeId      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]}                           |
-      | driverName  | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} |
-      | hubName     | {hub-name}                                                  |
-      | routeDate   | GET_FROM_CREATED_ROUTE                                      |
-      | wpPending   | 1                                                           |
-      | wpPartial   | 0                                                           |
-      | wpFailed    | 0                                                           |
-      | wpCompleted | 0                                                           |
-      | wpTotal     | 1                                                           |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | driverName  | {KEY_CREATED_DRIVER.firstName}    |
+      | hubName     | {hub-name}                        |
+      | routeDate   | GET_FROM_CREATED_ROUTE            |
+      | wpPending   | 1                                 |
+      | wpPartial   | 0                                 |
+      | wpFailed    | 0                                 |
+      | wpCompleted | 0                                 |
+      | wpTotal     | 1                                 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
