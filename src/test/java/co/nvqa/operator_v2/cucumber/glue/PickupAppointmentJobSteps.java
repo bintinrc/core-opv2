@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.corev2.cucumber.glue.ControlSteps;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.ItemsDeleteJobModalWindow;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentPriorityEnum;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,10 +16,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @ScenarioScoped
 public class PickupAppointmentJobSteps extends AbstractSteps {
@@ -250,6 +254,59 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.getCreateOrEditJobPage().selectTagInJobTagsField(tag);
   }
 
+  @When("Operator click edit icon for Pickup job row")
+  public void clickEditIconRouteRow(){
+    pickupAppointmentJobPage.clickEditButton();
+  }
+
+  @When("Operator click success button in pickup job drawer")
+  public void clickFourceSuccess()
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      page.clickFourceSuccessButton();
+    });
+  }
+
+  @When("^Operator check Success button (enabled|disabled) in pickup job drawer")
+  public void checkSuccessButtonState(String state)
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      if (state.equals("enabled")){
+        page.forceSuccess.waitUntilClickable();
+      }
+      Assertions.assertThat(page.forceSuccess.isEnabled())
+          .as("Force Success button enable state")
+          .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
+    });
+
+  }
+
+
+
+
+
+  @When("^Operator check Fail button (enabled|disabled) in pickup job drawer")
+  public void checkFailButtonState(String state)
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      if (state.equals("enabled")){
+        page.forceFail.waitUntilClickable();
+      }
+      Assertions.assertThat(page.forceFail.isEnabled())
+          .as("Force Fail button enable state")
+          .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
+    });
+
+  }
+
+  @When("Operator click submit button on pickup success job")
+  public void clickSubmitSuccess(){
+    pickupAppointmentJobPage.inFrame(page->{
+      page.clickSubmitButton();
+
+    });
+  }
+
   @When("Operator add pickup instructions = {string} in Comment Field")
   public void addPickupInstructionsInJobCommentField(String comment) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().addCommentInCommentField(comment);
@@ -419,6 +476,27 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .contains(timeRange);
   }
 
+  @Then("QA verify successful message is displayed with the jobID:")
+  public void verifySuccessfulMessageIsDisplayedWithJobID(Map<String, String> dataTable) {
+
+
+    String jobID = resolveValue(dataTable.get("jobID"));
+    final String notificationMessage = dataTable.get("notificationMessage");
+
+    pickupAppointmentJobPage.inFrame(page->{
+      Assertions.assertThat(
+              page.getCreateOrEditJobPage().getTextFromNotificationMessage())
+          .as("Notification message is displayed")
+          .isEqualTo(notificationMessage);
+      Assertions.assertThat(
+              page.getCreateOrEditJobPage().getTextFromNotificationDescription())
+          .as("Notification message is contains " + jobID)
+          .contains(jobID);
+    });
+
+
+  }
+
   @Then("Operator verify the dialog shows the job tag")
   public void verifyTheDialogShowsTheJogTag(Map<String, String> dataTable) {
     final String date = dataTable.get("date");
@@ -558,10 +636,35 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void fillInTheShippersFieldValidShipper(String shipperId) {
     pickupAppointmentJobPage.setShipperIDInField(shipperId);
   }
+  @When("Operator click load selection on pickup jobs filter")
+  public void clickLoadSelection() {
+    pickupAppointmentJobPage.clickLoadSelectionButton();
+  }
+  @After("@CreatPickupJob")
+  public void deletePickUpJob()
+  {
+    List<String> jobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
+    new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(jobIds.get(0));
+  }
+  @When("Operator select only In progress job status, on pickup jobs filter")
+  public void selectInProgressJobStatus() {
+    pickupAppointmentJobPage.clearJobStatusFilter();
+    pickupAppointmentJobPage.selectInprogressJobStatus();
+  }
+
+
 
   @When("Operator click on Clear Selection button")
   public void clickOnClearSelectionButton() {
     pickupAppointmentJobPage.clickOnClearSelectionButton();
+  }
+
+  @When("Operator upload proof photo on pickup appointment job")
+  public void uploadProofPhoto()
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      pickupAppointmentJobPage.addProofPhoto();
+    });
   }
 
   @When("Operator click Preset Filters field")
