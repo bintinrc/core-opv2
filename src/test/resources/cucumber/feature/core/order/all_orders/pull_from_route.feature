@@ -24,7 +24,6 @@ Feature: All Orders - Pull From Route
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
-  @DeleteOrArchiveRoute
   Scenario: Operator Pull Out Multiple Orders from Route on All Orders Page - Route is Soft Deleted (uid:6af580d8-534b-432d-9e00-7993023a9eee)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
