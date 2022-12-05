@@ -281,7 +281,36 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   }
 
+  @When("Operator hover on Success button in pickup job drawer")
+  public void hoverOnSuccessButton()
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      page.forceSuccess.moveToElement();
 
+    });
+  }
+
+  @When("Operator hover on Fail button in pickup job drawer")
+  public void hoverOnFailButton()
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      page.forceFail.moveToElement();
+
+    });
+  }
+
+  @When("^Operator check Tool tip is (shown|hidden)")
+  public void successFailTooltipStatus(String state)
+  {
+    pickupAppointmentJobPage.inFrame(page->{
+      page.waitUntilLoaded();
+      Assertions.assertThat(page.successFailToolTip.isDisplayed())
+          .as("Check Success Fail tool tip")
+          .isEqualTo(StringUtils.equalsIgnoreCase(state, "shown"));
+    });
+
+
+  }
 
 
 
