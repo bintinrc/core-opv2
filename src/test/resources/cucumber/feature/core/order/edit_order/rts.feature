@@ -672,8 +672,8 @@ Feature: RTS
     When Operator RTS order on Edit Order page using data below:
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                           |
-      | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING |
+      | top    | Network Request Error                                                                                             |
+      | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
     Examples:

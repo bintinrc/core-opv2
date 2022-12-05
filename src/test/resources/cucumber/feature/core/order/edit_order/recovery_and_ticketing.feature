@@ -132,8 +132,6 @@ Feature: Recovery & Ticketing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
-      | {order-tag-id} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -149,39 +147,29 @@ Feature: Recovery & Ticketing
     And Operator verify order granular status is "On Vehicle For Delivery" on Edit Order page
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | PENDING |
-    When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_BEFORE"
     When Operator create new recovery ticket on Edit Order page:
-      | entrySource                   | CUSTOMER COMPLAINT |
-      | investigatingDepartment       | Recovery           |
-      | investigatingHub              | {hub-name}         |
-      | ticketType                    | PARCEL EXCEPTION   |
-      | ticketSubType                 | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
-      | custZendeskId                 | 1                  |
-      | shipperZendeskId              | 1                  |
-      | ticketNotes                   | GENERATED          |
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     And API Operator get order details
     And Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator verify order events on Edit order page using data below:
-      | name           |
-      | TICKET CREATED |
-      | UPDATE STATUS  |
-      | RESCHEDULE     |
-    And Operator verify transaction on Edit order page using data below:
-      | type   | DELIVERY |
-      | status | FAIL     |
+      | name              |
+      | TICKET CREATED    |
+      | UPDATE STATUS     |
+      | PULL OUT OF ROUTE |
     And Operator verify transaction on Edit order page using data below:
       | type   | DELIVERY |
       | status | PENDING  |
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
-    Then DB Operator verifies transactions record:
-      | orderId    | {KEY_CREATED_ORDER_ID}              |
-      | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
-      | type       | DD                                  |
-      | status     | Fail                                |
-      | routeId    | {KEY_CREATED_ROUTE_ID}              |
     Then DB Operator verifies transactions record:
       | orderId    | {KEY_CREATED_ORDER_ID}             |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
@@ -272,21 +260,23 @@ Feature: Recovery & Ticketing
       | status  | RESOLVED                         |
       | outcome | NV NOT LIABLE - PARCEL DELIVERED |
     Then Operator verifies that success toast displayed:
-      | top | ^Ticket ID : .* updated |
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
     When Operator refresh page
     Then Operator verifies ticket status is "RESOLVED" on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify transaction on Edit order page using data below:
       | type   | PICKUP  |
-      | status | PENDING |
+      | status | SUCCESS |
     And Operator verify transaction on Edit order page using data below:
       | type   | DELIVERY |
       | status | SUCCESS  |
+    And API Operator get order details
     And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
     And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
+      | status | Success                      |
     And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
     And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |

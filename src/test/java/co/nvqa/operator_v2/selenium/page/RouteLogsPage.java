@@ -148,7 +148,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     String expectedStatus = f("%1$d of %1$d route(s) completed", sizeOfListOfCreateRouteParams);
     waitUntil(() -> StringUtils.equalsIgnoreCase(
         bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
-        expectedStatus), 10000, "Did not get message: " + expectedStatus);
+        expectedStatus), 20000, "Did not get message: " + expectedStatus);
     pause2s();
 
     for (int i = 0; i < sizeOfListOfCreateRouteParams; i++) {
