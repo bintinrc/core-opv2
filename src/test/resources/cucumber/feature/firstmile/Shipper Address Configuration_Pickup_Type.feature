@@ -7,7 +7,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Null
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -27,12 +27,12 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<pickupType>" in shipper address page
 
     Examples:
-      | search_field | search_value                                     | column_datakey        | pickupTypeSelect | pickupTypeAPI | pickupType |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | formatted_pickup_type | None assigned    |               | -          |
+      | search_field | search_value                                     | column_datakey        | pickupTypeSelect | pickupType |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | formatted_pickup_type | None assigned    | -          |
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Hybrid
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -60,7 +60,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type FM Dedicated
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -88,7 +88,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Truck
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -116,7 +116,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario: Filter Shipper Address by Multiple Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 4                                                                                                                                                                                                |
@@ -155,7 +155,7 @@ Feature: Shipper Address Configuration
 
 
   Scenario Outline: Search Shipper Addresses on Pickup Type Configure Page - <dataset_name>
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                           |
       | noOfAddress                 | 1                                                                                                                                                                                                                                         |
@@ -177,13 +177,13 @@ Feature: Shipper Address Configuration
       | dataset_name             | search_field   | search_value                                     | column_datakey        |
       | Search by Address ID     | Address ID     | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id    |
       | Search by Pickup Address | Pickup Address | 15SenokoRd,Singapore, SG, 994289                 | pickup_address        |
-      | Search by Shipper ID     | Shipper ID     | {shipper-v4-id}                                  | shipper_id            |
+      | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id     |
       | Search by Pickup Type    | Pickup Type    | -                                                | formatted_pickup_type |
       | Search by Zone           | Zones          | -                                                | zones                 |
       | Search by Hub            | Hubs           | -                                                | hubs                  |
 
   Scenario Outline: Filter Shipper Address by Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -207,7 +207,7 @@ Feature: Shipper Address Configuration
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario Outline: Download CSV of Address Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 1                                                                                                                                                                                                |
@@ -241,7 +241,7 @@ Feature: Shipper Address Configuration
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario: Download CSV of Address Pickup Type Template
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -261,7 +261,7 @@ Feature: Shipper Address Configuration
       | Hubs           |
 
   Scenario: Upload Addresses Pickup Type CSV by Browsing File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -282,10 +282,10 @@ Feature: Shipper Address Configuration
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
-    Then Operator verifies the success message is displayed on uploading the file : "1"
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
 
   Scenario: Upload Addresses Pickup Type CSV by Drag and Drop
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -305,11 +305,12 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" by browsing files in "Configure Address Pickup Type" upload window
-    Then Operator verifies the success message is displayed on uploading the file : "1"
+    And Operator drag and drop csv file: "Upload_Addresses_Pickup_Type_CSV_Valid_Input.csv" in "Configure Address Pickup Type" upload window
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
+
 
   Scenario: Unable to Upload Invalid Formatted Address Pickup Type File
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -319,11 +320,11 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
-    And Operator uploads csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx" by browsing files in "Configure Address Pickup Type" upload window
+    And Operator drag and drop csv file: "Unable_to_Upload_Invalid_Formatted_Address_Pickup_Type_File.xlsx" in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid formatted file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Address ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -337,7 +338,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Shipper ID
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -361,7 +362,7 @@ Feature: Shipper Address Configuration
     Then Operator verifies upload error message is displayed for invalid file
 
   Scenario: Unable to Configure Addresses Pickup Type with Invalid Input - Invalid Pickup Type
-    Given Operator loads Operator portal home page
+    When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
       | noOfAddress                 | 2                                                                                                                                                                                                |
@@ -383,6 +384,192 @@ Feature: Shipper Address Configuration
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_PickupType.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
+
+
+  Scenario: Success Bulk Configure Addresses Pickup Type
+    When Operator loads Shipper Address Configuration page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 2                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success Bulk Configure Addresses Pickup Type.csv |
+      | rowIndex    | 1                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success Bulk Configure Addresses Pickup Type.csv |
+      | rowIndex    | 2                                                |
+      | columnIndex | 0                                                |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator clicks on the "Configure Pickup Type" button
+    And Operator uploads csv file: "Success Bulk Configure Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    Then Operator verifies the success message is displayed on uploading the pickup type file "2"
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "FM dedicated" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
+
+
+  Scenario: Success Bulk Configure Duplicate Addresses Pickup Type
+    When Operator loads Shipper Address Configuration page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 1                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success Bulk Configure Duplicate Addresses Pickup Type.csv |
+      | rowIndex    | 1                                                          |
+      | columnIndex | 0                                                          |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}           |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Success Bulk Configure Duplicate Addresses Pickup Type.csv |
+      | rowIndex    | 2                                                          |
+      | columnIndex | 0                                                          |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}           |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator clicks on the "Configure Pickup Type" button
+    And Operator uploads csv file: "Success Bulk Configure Duplicate Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    Then Operator verifies the success message is displayed on uploading the pickup type file "1"
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
+
+
+  Scenario: Unable to Bulk Configure All Addresses Pickup Type
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator clicks on the "Configure Pickup Type" button
+    And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    Then Operator verifies upload error message is displayed for error count "2" and total count "2"
+    And Operator clicks on the Download Errors button
+    Then Operator verifies header names are available in the downloaded CSV file "Update Pickup Type Failure Reasons"
+      | Address ID      |
+      | Pickup Address  |
+      | Shipper ID      |
+      | Pickup Type     |
+      | Zones           |
+      | Hubs            |
+      | Failure Reasons |
+    And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
+      | Unable to update pickup type, error: sql: no rows in result set |
+
+
+  Scenario: Unable to Bulk Configure Some Addresses Pickup Type
+    When Operator loads Shipper Address Configuration page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
+      | noOfAddress                 | 1                                                                                                                                                                                                |
+      | withLatLong                 | NO                                                                                                                                                                                               |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","milkrun_settings":[],"is_milk_run":false} |
+    Then Operator updates the CSV file with below data:
+      | fileName    | Unable to Bulk Configure Some Addresses Pickup Type.csv |
+      | rowIndex    | 1                                                       |
+      | columnIndex | 0                                                       |
+      | value       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}        |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator clicks on the "Configure Pickup Type" button
+    And Operator uploads csv file: "Unable to Bulk Configure Some Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    Then Operator verifies upload error message is displayed for error count "1" and total count "2"
+    And Operator clicks on the Download Errors button
+    Then Operator verifies header names are available in the downloaded CSV file "Update Pickup Type Failure Reasons"
+      | Address ID      |
+      | Pickup Address  |
+      | Shipper ID      |
+      | Pickup Type     |
+      | Zones           |
+      | Hubs            |
+      | Failure Reasons |
+    And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
+      | Unable to update pickup type, error: sql: no rows in result set |
+
+
+  Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator clicks on the "Configure Pickup Type" button
+    And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
+    Then Operator verifies upload error message is displayed for error count "2" and total count "2"
+    And Operator clicks on the Download Errors button
+    Then Operator verifies header names are available in the downloaded CSV file "Update Pickup Type Failure Reasons"
+      | Address ID      |
+      | Pickup Address  |
+      | Shipper ID      |
+      | Pickup Type     |
+      | Zones           |
+      | Hubs            |
+      | Failure Reasons |
+    And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
+      | Unable to update pickup type, error: sql: no rows in result set |
+
+  Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
+    When Operator loads Shipper Address Configuration page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                           |
+      | withLatLong                 | YES                                                                                                                                                                                                                                         |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"15SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"9.99999","longitude":"9.99999","milkrun_settings":[],"is_milk_run":false} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 120 seconds
+    And Operator filter the column "<search_field>" with "<search_value>"
+    And Operator clicks on the edit pickup button
+    And Operator selects the picktype "<pickUpType>" in the dropdown
+    And Operator clicks on the "Save Changes" button
+    Then Operator verifies success message after updating the pickupType for Address "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    Then Operator verifies table is filtered "formatted_pickup_type" based on input in "<pickUpType>" in shipper address page
+    Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
+    Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
+
+    Examples:
+      | dataset_name             | pickUpType   | search_field | search_value                                  | column_datakey | expectedZoneValue | expectedHubValue |
+      | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyo123            | DYOEDIT          |
+      | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
+      | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

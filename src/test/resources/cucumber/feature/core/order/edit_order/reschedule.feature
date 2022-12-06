@@ -574,7 +574,7 @@ Feature: Reschedule
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     Then DB Operator verify Jaro Scores:
       | waypointId        | archived |
-      | {KEY_WAYPOINT_ID} | 0        |
+      | {KEY_WAYPOINT_ID} | 1        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

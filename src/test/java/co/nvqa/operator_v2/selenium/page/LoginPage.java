@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
@@ -23,6 +24,7 @@ public class LoginPage extends OperatorV2SimplePage {
 
   private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
   private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
+  private static final String GOOGLE_EXPECTED_URL_3 = "https://accounts.google.com/o/oauth2/auth/identifier";
 
   public LoginPage(WebDriver webDriver) {
     super(webDriver);
@@ -57,7 +59,8 @@ public class LoginPage extends OperatorV2SimplePage {
     LOGGER.info("FORCE LOGIN BY INJECTING COOKIES TO BROWSER");
 
     try {
-      final String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
+      final String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE,
+          "UTF-8");
       LOGGER.info("ninja_access_token = " + operatorBearerToken);
       LOGGER.info("user = " + userCookie);
 
@@ -99,13 +102,14 @@ public class LoginPage extends OperatorV2SimplePage {
       String currentUrl = getCurrentUrl();
       googlePageUrlSb.setLength(0);
       googlePageUrlSb.append(currentUrl);
-      boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl
-          .startsWith(GOOGLE_EXPECTED_URL_2);
+      boolean isExpectedUrlFound = StringUtils.startsWithAny(currentUrl, GOOGLE_EXPECTED_URL_1,
+          GOOGLE_EXPECTED_URL_2, GOOGLE_EXPECTED_URL_3);
 
       LOGGER.info("========== GOOGLE LOGIN PAGE ==========");
       LOGGER.info("Current URL          : " + currentUrl);
       LOGGER.info("Expected URL 1       : " + GOOGLE_EXPECTED_URL_1);
       LOGGER.info("Expected URL 2       : " + GOOGLE_EXPECTED_URL_2);
+      LOGGER.info("Expected URL 3       : " + GOOGLE_EXPECTED_URL_3);
       LOGGER.info("Is Expected URL Found: " + isExpectedUrlFound);
       LOGGER.info("=======================================");
 
@@ -116,7 +120,8 @@ public class LoginPage extends OperatorV2SimplePage {
 
     if (googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_1)) {
       enterCredentialWithMethod1(username, password);
-    } else if (googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_2)) {
+    } else if (StringUtils.startsWithAny(googlePageUrl, GOOGLE_EXPECTED_URL_2,
+        GOOGLE_EXPECTED_URL_3)) {
       enterCredentialWithMethod2(username, password);
     }
   }

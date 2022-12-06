@@ -6,6 +6,9 @@ import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollec
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectDriverDropOffConfirmedStatus;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.DpTagging;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
@@ -20,6 +23,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,17 +39,33 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   public DpTaggingTable dpTaggingTable;
 
-  private static final String LOCATOR_DROP_OFF_DATE = "//td[contains(@class,'drop-off-date column-locked-right')]/md-input-container";
+  private static final String LOCATOR_TRACKING_ID = "//div[@class='BaseTable__body']//div[@data-datakey='trackingId']//*[text()='%s']";
+  private static final String LOCATOR_DROP_OFF_DATE = "//div[@data-datakey='postcode']//input";
+
+  private static final String DROP_OFF_DATE = "//div[@data-testid='dropdown_date']//span[@class='ant-select-selection-item']";
+
+  private static final String LOCATOR_DATA_ROWS = "//div[@data-row-index='%s']";
+
+  private static final String LOCATOR_ROW_CHECKBOX = "//div[@data-row-index='%s']//input[@data-testid='virtual-table.checkbox_assign_order']";
+
   private static final String LOCATOR_DROP_OFF_MENU = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'') or contains(./div/text(),'')]";
 
-  @FindBy(name = "container.dp-tagging.assign-all")
-  public NvApiTextButton assignAll;
+  @FindBy(xpath = "//iframe[contains(@src,'dp-tagging')]")
+  private PageElement pageFrame;
 
-  @FindBy(name = "container.dp-tagging.untag-all")
-  public NvApiTextButton untagAll;
+  @FindBy(css = ".ant-spin-dot")
+  public PageElement spinner;
+  @FindBy(xpath = "//button[@data-testid='assign_all']")
+  public Button assignAll;
 
-  @FindBy(css = "nv-button-file-picker[label='Select File']")
-  public NvButtonFilePicker selectFile;
+  @FindBy(xpath = "//button[@data-testid='button_untag_all']")
+  public Button untagAll;
+
+  @FindBy(xpath = "//div[contains(@class,'ant-upload-select')]//input")
+  public FileInput selectFile;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
 
   @FindBy(xpath = LOCATOR_DROP_OFF_DATE)
   public MdSelect selectDate;
@@ -57,7 +79,18 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     pause2s();
     File dpTaggingCsv = buildCsv(listOfDpTagging);
     selectFile.setValue(dpTaggingCsv);
-    waitUntilInvisibilityOfToast("File successfully uploaded");
+    verifyTaggingToast("File successfully uploaded");
+  }
+
+  public void verifyTaggingToast(String message) {
+    antNotificationMessage.waitUntilVisible();
+    String actualNotificationMessage = antNotificationMessage.getText();
+    Assertions.assertThat(actualNotificationMessage)
+            .as("Notification message is the same")
+            .isEqualTo(message);
+  }
+  public void switchToIframe() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
 
   public void uploadInvalidDpTaggingCsv() {
@@ -65,22 +98,25 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     selectFile.setValue(dpTaggingCsv);
   }
 
-  public void verifyDpTaggingCsvIsUploadedSuccessfully(List<DpTagging> listOfDpTagging) {
-    List<String> actualTracingIds = dpTaggingTable.readAllEntities().stream()
-        .map(DpTagging::getTrackingId)
-        .collect(Collectors.toList());
-
-    for (DpTagging dpTagging : listOfDpTagging) {
-      assertThat("Tracking ID is not listed on table.", dpTagging.getTrackingId(),
-          isIn(actualTracingIds));
+  public void waitUntilLoaded() {
+    if (spinner.waitUntilVisible(10)) {
+      spinner.waitUntilInvisible();
     }
   }
 
+  public void verifyDpTaggingCsvIsUploadedSuccessfully(List<DpTagging> listOfDpTagging) {
+    for (DpTagging dpTagging : listOfDpTagging) {
+      String xpath = f(LOCATOR_TRACKING_ID, dpTagging.getTrackingId());
+      Assertions.assertThat(isElementExist(xpath))
+              .as("Tracking ID is not listed on table")
+              .isTrue();
+    }
+  }
   public void verifyInvalidDpTaggingCsvIsNotUploadedSuccessfully() {
     String expectedErrorMessageOnToast = "No order data to process, please check the file";
-    String actualMessage = getText(
-        "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-    assertEquals("Error Message", expectedErrorMessageOnToast, actualMessage);
+    antNotificationMessage.waitUntilVisible();
+    String actualNotificationMessage = antNotificationMessage.getText();
+    assertEquals("Error Message", expectedErrorMessageOnToast, actualNotificationMessage);
     waitUntilInvisibilityOfToast(expectedErrorMessageOnToast, false);
   }
 
@@ -115,18 +151,27 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   }
 
   public void checkAndAssignAll(boolean isMultipleOrders) {
-    dpTaggingTable.selectAllShown();
-    assignAll.clickAndWaitUntilDone();
-
+    int row = 0;
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
+      clickf(LOCATOR_ROW_CHECKBOX,row);
+      row++;
+    }
+    assignAll.click();
+    pause1s();
     if (isMultipleOrders) {
-      waitUntilInvisibilityOfToast("DP tagging performed successfully");
-    } else {
-      waitUntilInvisibilityOfToast("tagged successfully");
+      verifyTaggingToast("DP tagging performed successfully");
+    }
+    else {
+      verifyTaggingToast(row +" order(s) tagged successfully");
     }
   }
 
   public void untagAll() {
-    dpTaggingTable.selectAllShown();
+    int row = 0;
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
+      clickf(LOCATOR_ROW_CHECKBOX,row);
+      row++;
+    }
     untagAll.click();
   }
 
@@ -151,30 +196,25 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   public void selectDateToNextDay() {
     String nextDay = dropOffDate();
     clickf(
-        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]",
-        nextDay, nextDay);
+        "//div[@class='ant-select-item-option-content' and text()='%s']",
+        nextDay);
   }
 
   public void selectMultiDateToNextDay(int size) {
     String nextDay = dropOffDate();
-    click(LOCATOR_DROP_OFF_DATE);
-
-    for (int i = 1; i <= size; i++) {
-      click("//tr[" + i + "]" + LOCATOR_DROP_OFF_DATE);
-      clickf(
-          "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]",
-          nextDay, nextDay);
+    int tableRowId = 1;
+    for (int i = 0; i <= size-1; i++) {
+      click("//div[@data-row-index='"+i+"']" + LOCATOR_DROP_OFF_DATE);
+      clickf("//div[@id='rc_select_"+tableRowId+"_list']/div[@aria-label='%s']", nextDay);
+      tableRowId=tableRowId+2;
     }
   }
 
   private String dropOffDate() {
-    clickAndWaitUntilDone("//tr[1]" + LOCATOR_DROP_OFF_DATE);
-    waitUntilVisibilityOfElementLocated(LOCATOR_DROP_OFF_MENU);
-    List<String> listOfDropOffDates = findElementsBy(By.xpath(LOCATOR_DROP_OFF_MENU)).stream()
-        .map(WebElement::getText).collect(Collectors.toList());
-
-    String nextDay = listOfDropOffDates.get(listOfDropOffDates.size() - 1);
-    return nextDay;
+    clickAndWaitUntilDone("//div[@data-row-index='0']" + LOCATOR_DROP_OFF_DATE);
+    String date =getWebDriver().findElement(By.xpath(DROP_OFF_DATE)).getText();
+    LocalDate localDate = LocalDate.parse(date);
+    return localDate.plusDays(1).toString();
   }
 
   public void verifiesDetailsRightConfirmedOptTag(DatabaseCheckingNinjaCollectConfirmed result,

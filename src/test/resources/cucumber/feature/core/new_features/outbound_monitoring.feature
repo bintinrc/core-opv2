@@ -155,7 +155,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V1 Page - Route is Soft Deleted (uid:f474c12f-e041-46ce-8e39-9008f501a8b7)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -371,22 +371,13 @@ Feature: Outbound Monitoring
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies "{gradle-current-date-yyyy-MM-dd}" date shown on Outbound Breakroute V2 page
     When Operator filter orders table on Outbound Breakroute V2 page:
-      | tracking_id | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | granular_status | Arrived at Sorting Hub |
-    And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
-    When Operator clear filters of orders table on Outbound Breakroute V2 page
-    And Operator filter orders table on Outbound Breakroute V2 page:
-      | last_scanned_hub | {hub-name} |
+      | granularStatus | Arrived at Sorting Hub |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -395,14 +386,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | route_id | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
-    And Operator verifies filter results on Outbound Breakroute V2 page:
-      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
-    When Operator clear filters of orders table on Outbound Breakroute V2 page
-    And Operator filter orders table on Outbound Breakroute V2 page:
-      | route_date | {gradle-current-date-yyyy-MM-dd} |
+      | lastScannedHub | {hub-name} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -411,7 +395,14 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | driver_id | {ninja-driver-id} |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And Operator verifies filter results on Outbound Breakroute V2 page:
+      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+    When Operator clear filters of orders table on Outbound Breakroute V2 page
+    And Operator filter orders table on Outbound Breakroute V2 page:
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -420,7 +411,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | driver_name | {ninja-driver-name} |
+      | driverId | {ninja-driver-id} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -429,7 +420,16 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | driver_type | {default-driver-type-name} |
+      | driverName | {ninja-driver-name} |
+    And Operator verifies filter results on Outbound Breakroute V2 page:
+      | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | inbound_scan | STANDARD          |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
+    When Operator clear filters of orders table on Outbound Breakroute V2 page
+    And Operator filter orders table on Outbound Breakroute V2 page:
+      | driverType | {default-driver-type-name} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -444,7 +444,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | last_scanned_type | inbound_scan |
+      | lastScanType | inbound_scan |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -453,7 +453,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[4].buildToAddressString} | inbound_scan | STANDARD          |
     When Operator clear filters of orders table on Outbound Breakroute V2 page
     And Operator filter orders table on Outbound Breakroute V2 page:
-      | order_delivery_type | STANDARD |
+      | orderDeliveryType | STANDARD |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                                 | granularStatus         | lastScannedHub | routeId                           | routeDate                                 | driverId          | driverName          | driverType                 | address                                             | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Arrived at Sorting Hub | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -574,7 +574,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V2 Page - Route is Soft Deleted (uid:48deac7d-dde2-4e28-a637-3a08b1ae1a47)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:

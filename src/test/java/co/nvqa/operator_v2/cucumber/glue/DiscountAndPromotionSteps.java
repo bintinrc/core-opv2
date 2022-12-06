@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Campaign;
@@ -9,18 +10,25 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT;
 import static co.nvqa.commons.support.DateUtil.DATE_FORMAT_SNS_1;
+import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class DiscountAndPromotionSteps extends AbstractSteps {
 
   private DiscountAndPromotionPage discountAndPromotionsPage;
   private CampaignCreateEditPage campaignCreateEditPage;
+  public static final String CSV_FILENAME_PATTERN = "automation_upload_shippers.csv";
+  private static final Logger LOGGER = LoggerFactory.getLogger(DiscountAndPromotionSteps.class);
 
   @Override
   public void init() {
@@ -28,7 +36,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
     campaignCreateEditPage = new CampaignCreateEditPage(getWebDriver());
   }
 
-  @Given("Operator click Create ne campaign button in Discounts & Promotion Page")
+  @Given("Operator click Create new campaign button in Discounts & Promotion Page")
   public void operatorClickCreateNewCampaignButton() {
     discountAndPromotionsPage.inFrame(page -> {
       discountAndPromotionsPage.clickCreateNewCampaignButton();
@@ -92,7 +100,7 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       put(KEY_OBJECT_OF_GET_CAMPAIGN, campaignDetail);
   }
 
-  @When("operator clicks on publish button")
+  @When("Operator clicks on publish button")
   public void operatorClicksOnPublishButton() {
     discountAndPromotionsPage.inFrame(page -> {
       discountAndPromotionsPage.clickPublishButton();
@@ -132,5 +140,50 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
           .as("Campaign Details are matched");
 
     });
+  }
+
+  @When("Operator clicks on Shippers Add button")
+  public void operatorClickOnShipperAddButton() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickShippersAddButton();
+    });
+  }
+
+  @When("Operator clicks on Search by Shipper tab")
+  public void operatorClickOnSearchByShipperTab() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickSearchByShippersTab();
+    });
+  }
+
+  @When("Operator uploads csv file with {value}")
+  public void operatorUploadsCsvFileWithBelowData(String shipperLegacyId) {
+    campaignCreateEditPage.inFrame(page -> {
+      File csvFile = getCsvFile(resolveValue(shipperLegacyId));
+      campaignCreateEditPage.uploadFile(csvFile);
+    });
+  }
+
+  @Then("Operator search and select the created shipper")
+  public void operatorSearchAndSelectShipper() {
+    campaignCreateEditPage.inFrame(page -> {
+      Shipper createdShipper = resolveValue(KEY_CREATED_SHIPPER);
+      page.searchForTheShipper(createdShipper.getName());
+    });
+  }
+
+  @When("Operator clicks on upload button")
+  public void operatorClicksOnUploadButton() {
+    campaignCreateEditPage.closeNotificationMessage();
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickUploadButton();
+    });
+  }
+
+  @NotNull
+  private File getCsvFile(String shipperLegacyId) {
+    File csvFile = createFile(CSV_FILENAME_PATTERN, shipperLegacyId);
+    LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());
+    return csvFile;
   }
 }

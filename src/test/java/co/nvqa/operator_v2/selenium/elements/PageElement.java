@@ -66,9 +66,10 @@ public class PageElement extends SimplePage {
       try {
         jsClick();
       } catch (Exception e) {
-        String xpath = "//*[contains(@class,'ant-notification-close-x')]";
+        String xpath = "//*[contains(@class,'ant-notification-close-x')] | //button[contains(@class,'md-nvYellow-theme')]";
         while (isElementVisible(xpath, 1)) {
           click(xpath);
+          pause500ms();
         }
         getWebElement().click();
       }

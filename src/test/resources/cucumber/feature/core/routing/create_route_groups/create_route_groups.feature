@@ -37,8 +37,9 @@ Feature: Create Route Groups
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -72,6 +73,7 @@ Feature: Create Route Groups
     And API Shipper create V4 order using data below:
       | v4OrderRequest | {"service_type": "Marketplace","service_level": "Standard","from": {"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"to": {"name": "George Ezra","phone_number": "+65189178","email": "ezra@g.ent","address": {"address1": "999 Toa Payoh North","address2": "","country": "SG","postcode": "318993"}},"parcel_job": {"experimental_from_international": false,"experimental_to_international": false,"is_pickup_required": true,"pickup_date": "{{next-1-day-yyyy-MM-dd}}","pickup_service_type": "Scheduled","pickup_service_level": "Standard","pickup_timeslot": {"start_time": "09:00","end_time": "12:00","timezone": "Asia/Singapore"},"pickup_address_id": "add08","pickup_instruction": "Please be careful with the v-day flowers.","delivery_start_date": "{{next-1-day-yyyy-MM-dd}}","delivery_timeslot": {"start_time": "09:00","end_time": "22:00","timezone": "Asia/Singapore"},"delivery_instruction": "Please be careful with the v-day flowers.","dimensions": {"weight": 100}},"marketplace": {"seller_id": "seller-ABCnew01","seller_company_name": "ABC Shop"}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                              |
       | masterShipper | {shipper-v4-marketplace-legacy-id} |
@@ -101,6 +103,7 @@ Feature: Create Route Groups
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today |
       | routed       | Show  |
@@ -128,6 +131,7 @@ Feature: Create Route Groups
     And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And API Operator refresh created order data
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -150,6 +154,7 @@ Feature: Create Route Groups
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
@@ -185,8 +190,9 @@ Feature: Create Route Groups
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | current hour          |
       | shipper      | {filter-shipper-name} |
@@ -218,6 +224,7 @@ Feature: Create Route Groups
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                          |
       | routeGrouping | {KEY_CREATED_ROUTE_GROUP.name} |
@@ -245,6 +252,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                          |
       | routeGrouping | {KEY_CREATED_ROUTE_GROUP.name} |
@@ -276,7 +284,7 @@ Feature: Create Route Groups
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
       | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
@@ -286,6 +294,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                          |
       | routeGrouping | {KEY_CREATED_ROUTE_GROUP.name} |
@@ -316,6 +325,7 @@ Feature: Create Route Groups
       | value.showTransaction  | true                                         |
       | value.showReservation  | true                                         |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
@@ -345,6 +355,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | PICKUP   |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                          |
       | routeGrouping | {KEY_CREATED_ROUTE_GROUP.name} |

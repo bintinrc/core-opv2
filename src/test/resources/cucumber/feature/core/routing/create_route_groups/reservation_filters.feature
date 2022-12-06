@@ -13,6 +13,7 @@ Feature: Create Route Groups - Reservation Filters
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume": "<pickupSize>", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -41,6 +42,7 @@ Feature: Create Route Groups - Reservation Filters
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And Update status reservation to Cancelled
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -70,6 +72,7 @@ Feature: Create Route Groups - Reservation Filters
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -109,6 +112,7 @@ Feature: Create Route Groups - Reservation Filters
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -128,6 +132,7 @@ Feature: Create Route Groups - Reservation Filters
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "pickup_service_level":"Standard", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -147,6 +152,7 @@ Feature: Create Route Groups - Reservation Filters
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "pickup_service_level":"<pickup_service_level>", "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |

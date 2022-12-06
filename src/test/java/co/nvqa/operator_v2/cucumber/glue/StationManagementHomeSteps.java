@@ -124,7 +124,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     String actualTileValue = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
     takesScreenshot();
     Assertions.assertThat(actualTileValue)
-        .as("expected Value is not matching for Total Completion Rate : %s", tileName)
+        .as("expected Value is not matching for %s", tileName)
         .isEqualTo(expectedTilevalue);
     takesScreenshot();
   }
@@ -555,8 +555,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
   }
 
-  @When("Operator clicks the alarm button to view parcels with sfld tickets")
-  public void operator_clicks_the_alarm_button_to_view_parcels_with_sfld_tickets() {
+  @When("Operator clicks the arrow button to view parcels with sfld tickets")
+  public void operator_clicks_the_arrow_button_to_view_parcels_with_sfld_tickets() {
     stationManagementHomePage.openOrdersWithUnconfirmedTickets();
   }
 
