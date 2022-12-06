@@ -165,22 +165,22 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = ".//div[./div/label[.='Area']]//input")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.area.field']")
     public ForceClearTextBox area;
 
-    @FindBy(xpath = ".//div[./div/label[.='Area Variation']]//textarea")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.area-variation.field']")
     public ForceClearTextBox areaVariation;
 
-    @FindBy(xpath = ".//div[./div/label[.='Keyword']]//textarea")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.keyword.field']")
     public ForceClearTextBox keyword;
 
-    @FindBy(xpath = ".//div[./label[.='Primary driver']]//div[contains(@class,'ant-select')]")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.primary-driver.field']")
     public AntSelect3 primaryDriver;
 
-    @FindBy(xpath = ".//div[./label[.='Fallback driver']]//div[contains(@class,'ant-select')]")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.fallback-driver.field']")
     public AntSelect3 fallbackDriver;
 
-    @FindBy(css = "button[data-pa-label='Add']")
+    @FindBy(css = "[data-testid='station-route-keyword-testid.create-new-coverage.add.button']")
     public Button add;
 
   }

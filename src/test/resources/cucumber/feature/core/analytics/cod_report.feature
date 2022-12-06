@@ -11,7 +11,7 @@ Feature: COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> COD Report
     When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
-    Then Operator verify COR record on COD Report page:
+    Then Operator verify COD record on COD Report page:
       | trackingId     | {KEY_CREATED_ORDER_TRACKING_ID} |
       | granularStatus | Pending Pickup                  |
       | shipperName    | {shipper-v4-name}               |
@@ -29,13 +29,13 @@ Feature: COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-0-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-0-day-yyyy-MM-dd}}T16:00:00+00:00"} |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
-    Then Operator verify COR record on COD Report page:
+    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-next-1-day-yyyy-MM-dd}"
+    Then Operator verify COD record on COD Report page:
       | trackingId     | {KEY_CREATED_ORDER_TRACKING_ID} |
       | granularStatus | Arrived at Sorting Hub          |
       | shipperName    | {shipper-v4-name}               |
@@ -64,12 +64,12 @@ Feature: COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-0-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-0-day-yyyy-MM-dd}}T16:00:00+00:00"} |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
+    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-next-1-day-yyyy-MM-dd}"
     When Operator download COD Report
     When API Operator get order details
     Then Operator verify the downloaded COD Report data is correct
