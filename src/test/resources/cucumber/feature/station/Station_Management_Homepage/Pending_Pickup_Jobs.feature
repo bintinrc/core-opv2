@@ -78,18 +78,31 @@ Feature: Total Completion Rate
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given DB Operator get Grab reservation id
+    And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound parcel
     And API Operator start the route
+    And API Driver fail the waypoint "{KEY_WAYPOINT_ID}" in the reservation "{KEY_CREATED_RESERVATION_ID}"
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 11          |
+      | failureReasonIndexMode | FIRST       |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                      |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                    |
+      | withLatLong                 | Yes                                                                                                                                                                                                                                  |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555","milkrun_settings":[],"is_milk_run":false} |
     And API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]},"pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver collect all his routes
     And API Operator Van Inbound parcel
     And API Operator start the route
+    And API Driver get Reservation Job
     And API Driver success Reservation by scanning created parcel
     And Operator changes the country to "<Country>"
     And Operator verify operating country is "<Country>"
