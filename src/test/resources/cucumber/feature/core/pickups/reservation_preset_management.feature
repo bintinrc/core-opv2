@@ -617,6 +617,7 @@ Feature: Reservation Preset Management
       | address.1.milkrun.1.endTime   | 12PM                  |
       | address.1.milkrun.1.days      | 1,2,3,4,5,6,7         |
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                  |
