@@ -919,12 +919,21 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String address2 = mapOfData.get("address2");
     String postalCode = mapOfData.get("postalCode");
 
-    editDeliveryDetailsDialog.updateRecipientName(recipientName)
-        .updateRecipientContact(recipientContact).updateRecipientEmail(recipientEmail)
-        .updateInternalNotes(internalNotes).clickChangeSchedule().updateDeliveryDate(deliveryDate)
-        .updateDeliveryTimeslot(deliveryTimeslot).clickChangeAddress().updateCountry(country)
-        .updateCity(city).updateAddress1(address1).updateAddress2(address2)
-        .updatePostalCode(postalCode).clickSaveChanges();
+    editDeliveryDetailsDialog
+        .updateRecipientName(recipientName)
+        .updateRecipientContact(recipientContact)
+        .updateRecipientEmail(recipientEmail)
+        .updateInternalNotes(internalNotes)
+        .clickChangeSchedule()
+        .updateDeliveryDate(deliveryDate)
+        .updateDeliveryTimeslot(deliveryTimeslot)
+        .clickChangeAddress()
+        .updateCountry(country)
+        .updateCity(city)
+        .updateAddress1(address1)
+        .updateAddress2(address2)
+        .updatePostalCode(postalCode)
+        .clickSaveChanges();
     editDeliveryDetailsDialog.confirmPickupDetailsUpdated();
   }
 
@@ -940,11 +949,20 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String address2 = mapOfData.get("address2");
     String postalCode = mapOfData.get("postalCode");
 
-    pickupRescheduleDialog.waitUntilVisibility().updateSenderName(senderName)
-        .updateSenderContact(senderContact).updateSenderEmail(senderEmail)
-        .updatePickupDate(pickupDate).updatePickupTimeslot(pickupTimeslot).clickChangeAddress()
-        .updateCountry(country).updateCity(city).updateAddress1(address1).updateAddress2(address2)
-        .updatePostalCode(postalCode).clickSaveChanges();
+    pickupRescheduleDialog
+        .waitUntilVisibility()
+        .updateSenderName(senderName)
+        .updateSenderContact(senderContact)
+        .updateSenderEmail(senderEmail)
+        .updatePickupDate(pickupDate)
+        .updatePickupTimeslot(pickupTimeslot)
+        .clickChangeAddress()
+        .updateCountry(country)
+        .updateCity(city)
+        .updateAddress1(address1)
+        .updateAddress2(address2)
+        .updatePostalCode(postalCode)
+        .clickSaveChanges();
     pickupRescheduleDialog.confirmPickupRescheduledUpdated();
   }
 
@@ -960,11 +978,20 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String address2 = mapOfData.get("address2");
     String postalCode = mapOfData.get("postalCode");
 
-    deliveryRescheduleDialog.waitUntilVisibility().updateRecipientName(recipientName)
-        .updateRecipientContact(recipientContact).updateRecipientEmail(recipientEmail)
-        .updateDeliveryDate(deliveryDate).updateDeliveryTimeslot(deliveryTimeslot)
-        .clickChangeAddress().updateCountry(country).updateCity(city).updateAddress1(address1)
-        .updateAddress2(address2).updatePostalCode(postalCode).clickSaveChanges();
+    deliveryRescheduleDialog
+        .waitUntilVisibility()
+        .updateRecipientName(recipientName)
+        .updateRecipientContact(recipientContact)
+        .updateRecipientEmail(recipientEmail)
+        .updateDeliveryDate(deliveryDate)
+        .updateDeliveryTimeslot(deliveryTimeslot)
+        .clickChangeAddress()
+        .updateCountry(country)
+        .updateCity(city)
+        .updateAddress1(address1)
+        .updateAddress2(address2)
+        .updatePostalCode(postalCode)
+        .clickSaveChanges();
     deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
   }
 
@@ -974,14 +1001,22 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     public TransactionsTable(WebDriver webDriver) {
       super(webDriver);
-      setColumnLocators(
-          ImmutableMap.<String, String>builder().put("serviceEndTime", "_service-end-time")
-              .put(COLUMN_TYPE, "type").put("status", "status").put("driver", "_driver")
-              .put("routeId", "route-id").put("routeDate", "_route-date")
-              .put("dpId", "distribution-point-id").put("failureReason", "failure_reason_code")
-              .put("priorityLevel", "priority-level").put("dnr", "dnr").put("name", "name")
-              .put("contact", "contact").put("email", "email").put("destinationAddress", "_address")
-              .build());
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("serviceEndTime", "_service-end-time")
+          .put(COLUMN_TYPE, "type")
+          .put("status", "status")
+          .put("driver", "_driver")
+          .put("routeId", "route-id")
+          .put("routeDate", "_route-date")
+          .put("dpId", "distribution-point-id")
+          .put("failureReason", "failure_reason_code")
+          .put("priorityLevel", "priority-level")
+          .put("dnr", "dnr")
+          .put("name", "name")
+          .put("contact", "contact")
+          .put("email", "email")
+          .put("destinationAddress", "_address")
+          .build());
       setNgRepeat("transaction in getTableData()");
       setEntityClass(TransactionInfo.class);
     }
@@ -1006,10 +1041,17 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public EventsTable(WebDriver webDriver) {
       super(webDriver);
       setNgRepeat(NG_REPEAT);
-      setColumnLocators(ImmutableMap.<String, String>builder().put(DATE_TIME, "_event_time")
-          .put(EVENT_TAGS, "_tags").put(EVENT_NAME, "name").put(USER_TYPE, "user_type")
-          .put(USER_ID, "_user").put(SCAN_ID, "_scan_id").put(ROUTE_ID, "_route_id")
-          .put(HUB_NAME, "_hub_name").put(DESCRIPTION, "_description").build());
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(DATE_TIME, "_event_time")
+          .put(EVENT_TAGS, "_tags")
+          .put(EVENT_NAME, "name")
+          .put(USER_TYPE, "user_type")
+          .put(USER_ID, "_user")
+          .put(SCAN_ID, "_scan_id")
+          .put(ROUTE_ID, "_route_id")
+          .put(HUB_NAME, "_hub_name")
+          .put(DESCRIPTION, "_description")
+          .build());
       setEntityClass(OrderEvent.class);
     }
 
@@ -2328,11 +2370,18 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     public PodDetailTable(WebDriver webDriver) {
       super(webDriver);
-      setColumnLocators(ImmutableMap.<String, String>builder().put("podId", "id")
-          .put("waypointType", "_rsvn-or-txn").put("type", "_type").put("status", "_status")
-          .put("distance", "_distance").put("podTime", "_pod-time").put("driver", "route-driver")
-          .put("recipient", "_recipient").put("address", "_address")
-          .put("verificationMethod", "_verification-method").build());
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put("podId", "id")
+          .put("waypointType", "_rsvn-or-txn")
+          .put("type", "_type")
+          .put("status", "_status")
+          .put("distance", "_distance")
+          .put("podTime", "_pod-time")
+          .put("driver", "route-driver")
+          .put("recipient", "_recipient")
+          .put("address", "_address")
+          .put("verificationMethod", "_verification-method")
+          .build());
       setNgRepeat("pod in getTableData()");
       setActionButtonsLocators(ImmutableMap.of(ACTION_VIEW, "commons.view"));
       setEntityClass(PodDetail.class);

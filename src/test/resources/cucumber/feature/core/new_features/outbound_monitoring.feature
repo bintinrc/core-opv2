@@ -155,7 +155,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V1 Page - Route is Soft Deleted (uid:f474c12f-e041-46ce-8e39-9008f501a8b7)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -574,7 +574,7 @@ Feature: Outbound Monitoring
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows
   Scenario: Operator Pull Out Delivery Order from a Route on Outbound Breakroute V2 Page - Route is Soft Deleted (uid:48deac7d-dde2-4e28-a637-3a08b1ae1a47)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
