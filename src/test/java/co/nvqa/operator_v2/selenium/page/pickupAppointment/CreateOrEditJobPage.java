@@ -293,7 +293,7 @@ public class CreateOrEditJobPage extends PageElement {
     return day;
   }
 
-  public String getColorAttributeInPickupJobFromCalendar(String date,String status) {
+  public String getColorAttributeInPickupJobFromCalendar(String date, String status) {
     return webDriver.findElement(
             By.cssSelector(f(CALENDAR_DAY_WEB_ELEMENT_LOCATOR, getDayFromFullDate(date))))
         .findElement(By.cssSelector(f(CALENDAR_STATUS_WEB_ELEMENT_LOCATOR, status)))
