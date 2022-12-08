@@ -50,7 +50,7 @@ public class AntSelect2 extends PageElement {
   }
 
   public void selectValueV2(String column,String value) {
-    SearchTermV2(column,value);
+    SearchTermV2(column);
     clickMenuItem(value);
   }
 
@@ -91,7 +91,7 @@ public class AntSelect2 extends PageElement {
     pause1s();
   }
 
-  public void SearchTermV2(String column,String value) {
+  public void SearchTermV2(String column) {
     openMenu();
     findElementByXpath(f(ITEM_FILTER_LOCATOR,column)).click();
     pause1s();
