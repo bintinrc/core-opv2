@@ -635,7 +635,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.clickLoadSelectionButton();
   }
 
-  @After("@CreatPickupJob")
+  @After("@deletePickupJob")
   public void deletePickUpJob() {
     List<String> jobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(jobIds.get(0));
