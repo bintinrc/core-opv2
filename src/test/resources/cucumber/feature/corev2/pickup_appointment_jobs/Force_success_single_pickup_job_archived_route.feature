@@ -15,7 +15,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | overwrite | false |
     When API Operator archives routes:
       | {KEY_CREATED_ROUTE_ID} |
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -38,7 +38,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | overwrite | false |
     When API Operator archives routes:
       | {KEY_CREATED_ROUTE_ID} |
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -61,7 +61,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | overwrite | false |
     When API Operator archives routes:
       | {KEY_CREATED_ROUTE_ID} |
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -85,7 +85,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | overwrite | false |
     When API Operator archives routes:
       | {KEY_CREATED_ROUTE_ID} |
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -97,6 +97,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When Operator hover on Success button in pickup job drawer
     Then Operator check Success button disabled in pickup job drawer
     Then Operator check Tool tip is shown
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -148,35 +148,37 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     loadSelection.click();
     return this;
   }
-  public PickupAppointmentJobPage clearJobStatusFilter()
-  {
+
+  public PickupAppointmentJobPage clearJobStatusFilter() {
 
     jobStatusInput.click();
     clearJobStatusButton.click();
     return this;
   }
 
-  public PickupAppointmentJobPage addProofPhoto()
-  {
+  public PickupAppointmentJobPage addProofPhoto() {
     final ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
     uploadPhotoInput.sendKeys(file.getPath());
     return this;
   }
-  public PickupAppointmentJobPage selectInprogressJobStatus()
-  {
+
+  public PickupAppointmentJobPage selectInprogressJobStatus() {
 
     jobStatusInput.click();
 
     inProgressFilterOption.click();
     return this;
   }
+
   public PickupAppointmentJobPage clickEditButton() {
     waitUntilVisibilityOfElementLocated(editButton.getWebElement());
     editButton.click();
 
     return this;
   }
+
   public PickupAppointmentJobPage clickSubmitButton() {
     waitUntilVisibilityOfElementLocated(submitButton.getWebElement());
     submitButton.click();

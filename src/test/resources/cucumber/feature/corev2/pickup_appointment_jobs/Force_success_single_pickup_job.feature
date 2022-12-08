@@ -1,9 +1,9 @@
-
 Feature: Force Success Single Pickup Job
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
+
   @CreatPickupJob
   Scenario:Force Success Single Pickup Job Routed With Photo
     Given API Operator create new appointment pickup job using data below:
@@ -13,7 +13,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "ROUTED" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -26,7 +26,7 @@ Feature: Force Success Single Pickup Job
     When Operator upload proof photo on pickup appointment job
     When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Success job successful |
+      | notificationMessage | Success job successful          |
       | jobID               | {KEY_LIST_OF_PICKUP_JOB_IDS[1]} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
@@ -43,7 +43,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "IN_PROGRESS" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -57,7 +57,7 @@ Feature: Force Success Single Pickup Job
     When Operator upload proof photo on pickup appointment job
     When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Success job successful |
+      | notificationMessage | Success job successful          |
       | jobID               | {KEY_LIST_OF_PICKUP_JOB_IDS[1]} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
@@ -72,7 +72,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "ROUTED" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -84,7 +84,7 @@ Feature: Force Success Single Pickup Job
     When Operator click success button in pickup job drawer
     When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Success job successful |
+      | notificationMessage | Success job successful          |
       | jobID               | {KEY_LIST_OF_PICKUP_JOB_IDS[1]} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
@@ -101,7 +101,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "IN_PROGRESS" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -114,7 +114,7 @@ Feature: Force Success Single Pickup Job
     When Operator click success button in pickup job drawer
     When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Success job successful |
+      | notificationMessage | Success job successful          |
       | jobID               | {KEY_LIST_OF_PICKUP_JOB_IDS[1]} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
