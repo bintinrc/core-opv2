@@ -13,7 +13,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "ROUTED" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -43,7 +43,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "IN_PROGRESS" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -72,7 +72,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "ROUTED" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
@@ -101,7 +101,7 @@ Feature: Force Success Single Pickup Job
     When API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "IN_PROGRESS" ,in pickup_appointment_jobs table
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
