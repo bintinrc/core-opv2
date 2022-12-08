@@ -1,11 +1,11 @@
-@CWF
+@CoreV2 @PickupAppointment
 Feature: Force Success Single Pickup Job
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @RT @CreatPickupJob
+  @ForceSuccessSingle
   Scenario:Force Success Single Pickup Job Routed With Photo
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -33,8 +33,7 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has "1" proof in proof_photos table
 
-
-  @RT @CreatPickupJob
+  @ForceSuccessSingle
   Scenario:Force Success Single Pickup Job In Progress With Photo
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -64,7 +63,7 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has "1" proof in proof_photos table
 
-  @RT @CreatPickupJob
+  @ForceSuccessSingle
   Scenario:Force Success Single Pickup Job Routed With No Photo
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -91,8 +90,7 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" has no proof in proof_photos table
 
-
-  @RT @CreatPickupJob
+  @ForceSuccessSingle
   Scenario:Force Success Single Pickup Job In Progress With no Photo
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |

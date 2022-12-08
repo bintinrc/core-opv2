@@ -342,7 +342,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyJobWithStatusIsDisplayed(String status, String date) {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isParticularJobDisplayedByDateAndStatus(date, status))
-        .as("Job in the calendar on date " + date + " with status " + status + " displayed")
+        .as(f("Job in the calendar on date %s  with status  %s  displayed", date, status))
         .isTrue();
   }
 
@@ -351,7 +351,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
-        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
+        .as(f("Edit Button in Job with id = %s displayed", listJobIds.get(0)))
         .isTrue();
   }
 
@@ -483,7 +483,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
           .isEqualTo(notificationMessage);
       Assertions.assertThat(
               page.getCreateOrEditJobPage().getTextFromNotificationDescription())
-          .as("Notification message is contains " + jobID)
+          .as(f("Notification message is contains %s:", jobID))
           .contains(jobID);
     });
 
