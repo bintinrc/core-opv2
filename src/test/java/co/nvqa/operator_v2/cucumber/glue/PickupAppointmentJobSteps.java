@@ -362,7 +362,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.getCreateOrEditJobPage().waitNotificationMessageInvisibility();
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isParticularJobDisplayedByDateAndStatus(date, status))
-        .as("Particular job is removed from calendar on date " + date + " with status " + status)
+
+        .as(f("Particular job is removed from calendar on date %s with status %s", date, status))
         .isFalse();
   }
 
@@ -370,7 +371,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyJobWithStatusIsDisplayed(String status, String date) {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isParticularJobDisplayedByDateAndStatus(date, status))
-        .as("Job in the calendar on date " + date + " with status " + status + " displayed")
+
+        .as(f("Job in the calendar on date $s with status %s displayed", date, status))
         .isTrue();
   }
 
