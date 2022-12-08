@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointme
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.LocalDateTime;
@@ -21,6 +22,8 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage.BulkSelectTable.ACTION_SELECTED;
 
 
 @ScenarioScoped
@@ -42,7 +45,6 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator goes to Pickup Jobs Page")
   public void operatorLoadsShipperAddressConfigurationPage() {
-    getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
       pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
@@ -853,4 +855,70 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     return then.format(format);
   }
 
+  @Given("Operator clicks {string} button on Pickup Jobs page")
+  public void operatorClicksButtonOnPickupJobsPage(String buttonName) {
+    pickupAppointmentJobPage.inFrame(() -> {
+      switch (buttonName) {
+        case "Load Selection":
+          pickupAppointmentJobPage.loadSelection.click();
+          pickupAppointmentJobPage.loadingIcon.waitUntilInvisible();
+          break;
+        case "Bulk select dropdown":
+          pickupAppointmentJobPage.bulkSelect.bulkSelectDropdown.click();
+          break;
+        case "Select All Shown":
+          pickupAppointmentJobPage.bulkSelect.selectAll.click();
+          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
+          break;
+        case "Unselect All Shown":
+          pickupAppointmentJobPage.bulkSelect.unSelectAll.click();
+
+          break;
+        case "Clear Selection":
+          pickupAppointmentJobPage.bulkSelect.clearSelection.click();
+
+          break;
+        case "Display only selected":
+          pickupAppointmentJobPage.bulkSelect.displayOnlySelected.click();
+          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
+          break;
+      }
+    });
+  }
+
+  @Then("Operator verifies number of selected rows on Pickup Jobs page")
+  public void operatorVerifiesNumberOfSelectedRows(){
+    pickupAppointmentJobPage.inFrame(() ->
+      pickupAppointmentJobPage.verifyBulkSelectResult()
+    );
+  }
+
+  @When("Operator filters on the table with values below:")
+  public void operatorFiltersValueOnTheTable(Map<String, String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    pickupAppointmentJobPage.inFrame(() -> {
+      if (resolvedData.get("status") != null) {
+        pickupAppointmentJobPage.bulkSelect.filterByColumnV2(
+            pickupAppointmentJobPage.bulkSelect.COLUMN_STATUS, resolvedData.get("status"));
+      }
+    });
+  }
+
+  @Then("Operator verify number of selected row is not updated")
+  public void operatorVerifyNumberOfSelectedRowIsNotUpdated(){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountHasNotChanged());
+  }
+
+  @Then("Operator verify the number of selected rows is {value}")
+  public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountisEqualTo(expectedRowCount));
+  }
+
+  @Given("Operator selects {int} rows on Pickup Jobs page")
+  public void operatorSelectRowsOnPickupJobsPage(int numberOfRows){
+    pickupAppointmentJobPage.inFrame(() -> {
+      for (int i = 1; i<=numberOfRows; i++)
+        pickupAppointmentJobPage.bulkSelect.clickActionButton(i,ACTION_SELECTED);
+    });
+  }
 }

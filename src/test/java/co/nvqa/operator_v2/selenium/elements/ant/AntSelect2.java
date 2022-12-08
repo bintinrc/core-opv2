@@ -15,6 +15,7 @@ public class AntSelect2 extends PageElement {
   public static final String ITEM_CONTAINS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[contains(normalize-space(text()), '%s')]";
   public static final String ITEM_EQUALS_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//*[normalize-space(text())='%s']";
   public static final String ITEM_INDEX_LOCATOR = "//div[contains(@class, 'ant-select-dropdown')][not(contains(@class,'dropdown-hidden'))]//div[@data-rowindex='%d']";
+  public static final String ITEM_FILTER_LOCATOR = "//div[@data-testid = 'filterInput.%s']";
 
   public AntSelect2(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
@@ -45,6 +46,11 @@ public class AntSelect2 extends PageElement {
 
   public void selectValue(String value) {
     enterSearchTerm(value);
+    clickMenuItem(value);
+  }
+
+  public void selectValueV2(String column,String value) {
+    SearchTermV2(column,value);
     clickMenuItem(value);
   }
 
@@ -85,6 +91,11 @@ public class AntSelect2 extends PageElement {
     pause1s();
   }
 
+  public void SearchTermV2(String column,String value) {
+    openMenu();
+    findElementByXpath(f(ITEM_FILTER_LOCATOR,column)).click();
+    pause1s();
+  }
   public void enterSearchTerm(String value) {
     openMenu();
     searchInput.clearAndSendKeys(value);
