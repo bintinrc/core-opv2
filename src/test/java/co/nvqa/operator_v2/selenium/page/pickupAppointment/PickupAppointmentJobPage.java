@@ -60,6 +60,8 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   @FindBy(xpath = "//span[text()='Fail']/parent::button")
   public PageElement forceFail;
 
+  @FindBy(xpath = "//span[text()='Proceed']/parent::button")
+  public PageElement failProceed;
   @FindBy(xpath = "//div[@role='tooltip' and contains(text(),'Job cannot be')]")
   public PageElement successFailToolTip;
 
@@ -124,8 +126,22 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   private PageElement inProgressFilterOption;
 
   @FindBy(css = "input[data-testid='successPickupAppointmentModal.photoSelect']")
-  private PageElement uploadPhotoInput;
+  private PageElement uploadSuccessPhotoInput;
 
+  @FindBy(css = "input[data-testid='failureReasonPopover.photoSelect']")
+  private PageElement uploadFailPhotoInput;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(text(),'Fail job')]")
+  private PageElement failModelTitle;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//span[contains(@class,'ant-typo')]")
+  private List<PageElement> failModelLines;
+
+  @FindBy(xpath = "//div[@class='ant-space-item']/img")
+  private PageElement proofPhotoInDrawer;
+
+  @FindBy(css = "div[data-testid='photoPreview']")
+  private PageElement failModelPhotoPreview;
   public final String ID_NEXT = "__next";
   public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
   public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shippers_list_0']";
@@ -139,8 +155,41 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
+  public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
+  public final String FAILURE_REASON_DROPDOWN_ITEM = "//div[@label='%s']";
+
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
+  }
+
+
+  public void clickFailureReasonDropDown(String index) {
+    WebElement dropDown = getWebDriver().findElement(By.xpath(f(FAILURE_REASON_DROPDOWN, index)));
+    dropDown.click();
+  }
+
+  public PageElement getProofPhotoInDrawer() {
+    return proofPhotoInDrawer;
+  }
+
+  public void clickFailProceed() {
+    failProceed.click();
+  }
+
+  public String getFailModelReasons() {
+    String modelReason = failModelLines.get(1).getText();
+    return modelReason;
+  }
+
+  public String getFailModelTitle() {
+    String modalTitle = failModelTitle.getText();
+    return modalTitle;
+  }
+
+  public void selectFailureReasonItem(String Reason) {
+    WebElement reasonItem = getWebDriver().findElement(
+        By.xpath(f(FAILURE_REASON_DROPDOWN_ITEM, Reason)));
+    reasonItem.click();
   }
 
   public PickupAppointmentJobPage clickLoadSelectionButton() {
@@ -148,35 +197,45 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     loadSelection.click();
     return this;
   }
-  public PickupAppointmentJobPage clearJobStatusFilter()
-  {
+
+  public PickupAppointmentJobPage clearJobStatusFilter() {
 
     jobStatusInput.click();
     clearJobStatusButton.click();
     return this;
   }
 
-  public PickupAppointmentJobPage addProofPhoto()
-  {
+  public PickupAppointmentJobPage addSuccessProofPhoto() {
     final ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
-    uploadPhotoInput.sendKeys(file.getPath());
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    uploadSuccessPhotoInput.sendKeys(file.getPath());
     return this;
   }
-  public PickupAppointmentJobPage selectInprogressJobStatus()
-  {
+
+  public PickupAppointmentJobPage addFailProofPhoto() {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    uploadFailPhotoInput.sendKeys(file.getPath());
+    return this;
+  }
+
+  public PickupAppointmentJobPage selectInprogressJobStatus() {
 
     jobStatusInput.click();
 
     inProgressFilterOption.click();
     return this;
   }
+
   public PickupAppointmentJobPage clickEditButton() {
     waitUntilVisibilityOfElementLocated(editButton.getWebElement());
     editButton.click();
 
     return this;
   }
+
   public PickupAppointmentJobPage clickSubmitButton() {
     waitUntilVisibilityOfElementLocated(submitButton.getWebElement());
     submitButton.click();
@@ -184,9 +243,16 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     return this;
   }
 
-  public PickupAppointmentJobPage clickFourceSuccessButton() {
+  public PickupAppointmentJobPage clickForceSuccessButton() {
     waitUntilVisibilityOfElementLocated(forceSuccess.getWebElement());
     forceSuccess.click();
+
+    return this;
+  }
+
+  public PickupAppointmentJobPage clickForceFailButton() {
+    waitUntilVisibilityOfElementLocated(forceFail.getWebElement());
+    forceFail.click();
 
     return this;
   }

@@ -40,6 +40,19 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage = new PickupAppointmentJobPage(getWebDriver());
   }
 
+
+  @When("Operator select from failure drop down number = {string}, failure reason = {string}")
+  public void operatorSelectFromFailureReasonDropdown(String dropdownIndex, String failReason) {
+    String dropDownIndex = String.valueOf(Integer.parseInt(resolveValue(dropdownIndex)) - 1);
+    String failureReason = resolveValue(failReason);
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickFailureReasonDropDown(dropDownIndex);
+      page.selectFailureReasonItem(failureReason);
+    });
+
+  }
+
   @When("Operator loads Shipper Address Configuration page Pickup Appointment")
   public void operatorLoadsShipperAddressConfigurationPage() {
     getWebDriver().manage().window().maximize();
@@ -82,20 +95,17 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isElementDisplayedByTitle(shipperId.concat(" - ").concat(shipperName)))
-        .as("Shipper field is filled")
-        .isTrue();
+        .as("Shipper field is filled").isTrue();
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().isElementDisplayedByTitle(shipperAddress))
-        .as("Shipper field is filled")
-        .isTrue();
+        .as("Shipper field is filled").isTrue();
   }
 
   @And("Operator verify Create button in displayed")
   public void isCreateButtonDisplayed() {
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().isCreateButtonDisplayed())
-        .as("Create button is displayed")
-        .isTrue();
+        .as("Create button is displayed").isTrue();
   }
 
   @When("Operator select the data range")
@@ -129,32 +139,25 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperNameString())
-        .as("Shipper name is correct")
-        .isEqualTo(shipperName);
+        .as("Shipper name is correct").isEqualTo(shipperName);
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getShipperAddressString())
-        .as("Shipper address is correct")
-        .contains(shipperAddress);
+        .as("Shipper address is correct").contains(shipperAddress);
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getStartTimeString())
-        .as("Start time is correct")
-        .isEqualTo(startTime);
+        .as("Start time is correct").isEqualTo(startTime);
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getEndTimeString())
-        .as("End time is correct")
-        .isEqualTo(endTime);
+        .as("End time is correct").isEqualTo(endTime);
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString())
-        .as("Start day is correct")
-        .contains(startDay);
+        .as("Start day is correct").contains(startDay);
     Assertions.assertThat(
             pickupAppointmentJobPage.getJobCreatedModalWindowElement().getDatesString())
-        .as("End day is correct")
-        .contains(endDay);
+        .as("End day is correct").contains(endDay);
     if (tag != null) {
       Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement().getTags())
-          .as("Job tags is correct")
-          .contains(tag);
+          .as("Job tags is correct").contains(tag);
     }
 
     pickupAppointmentJobPage.getJobCreatedModalWindowElement().clickOnOKButton();
@@ -181,11 +184,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void completePickupJobWithRouteId() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
     operatorLoadsShipperAddressConfigurationPage();
-    pickupAppointmentJobPage
-        .clickEditButton()
-        .setRouteId(String.valueOf(routeId))
-        .clickUpdateRouteButton()
-        .clickSuccessJobButton();
+    pickupAppointmentJobPage.clickEditButton().setRouteId(String.valueOf(routeId))
+        .clickUpdateRouteButton().clickSuccessJobButton();
   }
 
   @And("Operator load selection job by date range and shipper")
@@ -197,9 +197,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
       shipperId = get(KEY_LEGACY_SHIPPER_ID);
     }
     operatorLoadsShipperAddressConfigurationPage();
-    pickupAppointmentJobPage
-        .selectDataRangeByTitle(startDay, endDay)
-        .setShipperIDInField(shipperId)
+    pickupAppointmentJobPage.selectDataRangeByTitle(startDay, endDay).setShipperIDInField(shipperId)
         .clickLoadSelectionButton();
   }
 
@@ -229,8 +227,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("QA verify the {int} Job displayed on the Pickup Jobs page")
   public void verifyTheNewJobCreatedOnThePickupJobsPage(Integer numberJobs) {
     Assertions.assertThat(pickupAppointmentJobPage.getNumberOfJobs())
-        .as("The new Job created on the Pickup Jobs page")
-        .isEqualTo(numberJobs);
+        .as("The new Job created on the Pickup Jobs page").isEqualTo(numberJobs);
   }
 
   @And("Operator get Job Id from Pickup Jobs page")
@@ -255,57 +252,58 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   @When("Operator click edit icon for Pickup job row")
-  public void clickEditIconRouteRow(){
+  public void clickEditIconRouteRow() {
     pickupAppointmentJobPage.clickEditButton();
   }
 
   @When("Operator click success button in pickup job drawer")
-  public void clickFourceSuccess()
-  {
-    pickupAppointmentJobPage.inFrame(page->{
-      page.clickFourceSuccessButton();
+  public void clickFourceSuccess() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickForceSuccessButton();
     });
   }
 
+  @When("Operator click Fail button in pickup job drawer")
+  public void clickForceFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickForceFailButton();
+    });
+  }
+
+
   @When("^Operator check Success button (enabled|disabled) in pickup job drawer")
-  public void checkSuccessButtonState(String state)
-  {
-    pickupAppointmentJobPage.inFrame(page->{
-      if (state.equals("enabled")){
+  public void checkSuccessButtonState(String state) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      if (state.equals("enabled")) {
         page.forceSuccess.waitUntilClickable();
       }
-      Assertions.assertThat(page.forceSuccess.isEnabled())
-          .as("Force Success button enable state")
+      Assertions.assertThat(page.forceSuccess.isEnabled()).as("Force Success button enable state")
           .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
     });
 
   }
 
   @When("Operator hover on Success button in pickup job drawer")
-  public void hoverOnSuccessButton()
-  {
-    pickupAppointmentJobPage.inFrame(page->{
+  public void hoverOnSuccessButton() {
+    pickupAppointmentJobPage.inFrame(page -> {
       page.forceSuccess.moveToElement();
 
     });
   }
 
   @When("Operator hover on Fail button in pickup job drawer")
-  public void hoverOnFailButton()
-  {
-    pickupAppointmentJobPage.inFrame(page->{
+  public void hoverOnFailButton() {
+    pickupAppointmentJobPage.inFrame(page -> {
       page.forceFail.moveToElement();
 
     });
   }
 
   @When("^Operator check Tool tip is (shown|hidden)")
-  public void successFailTooltipStatus(String state)
-  {
-    pickupAppointmentJobPage.inFrame(page->{
+  public void successFailTooltipStatus(String state) {
+    pickupAppointmentJobPage.inFrame(page -> {
       page.waitUntilLoaded();
-      Assertions.assertThat(page.successFailToolTip.isDisplayed())
-          .as("Check Success Fail tool tip")
+      Assertions.assertThat(page.successFailToolTip.isDisplayed()).as("Check Success Fail tool tip")
           .isEqualTo(StringUtils.equalsIgnoreCase(state, "shown"));
     });
 
@@ -313,28 +311,41 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
 
-
   @When("^Operator check Fail button (enabled|disabled) in pickup job drawer")
-  public void checkFailButtonState(String state)
-  {
-    pickupAppointmentJobPage.inFrame(page->{
-      if (state.equals("enabled")){
+  public void checkFailButtonState(String state) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      if (state.equals("enabled")) {
         page.forceFail.waitUntilClickable();
       }
-      Assertions.assertThat(page.forceFail.isEnabled())
-          .as("Force Fail button enable state")
+      Assertions.assertThat(page.forceFail.isEnabled()).as("Force Fail button enable state")
           .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
     });
 
   }
 
   @When("Operator click submit button on pickup success job")
-  public void clickSubmitSuccess(){
-    pickupAppointmentJobPage.inFrame(page->{
+  public void clickSubmitSuccess() {
+    pickupAppointmentJobPage.inFrame(page -> {
       page.clickSubmitButton();
 
     });
   }
+
+  @When("Operator click submit button on pickup fail job")
+  public void clickSubmitFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickSubmitButton();
+
+    });
+  }
+
+  @When("Operator check proof photo in edit pickup job drawer")
+  public void checkProofPhotoInEditDrawer() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.getProofPhotoInDrawer()).as("Proof photo appears").isNotNull();
+    });
+  }
+
 
   @When("Operator add pickup instructions = {string} in Comment Field")
   public void addPickupInstructionsInJobCommentField(String comment) {
@@ -351,8 +362,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isDeleteButtonByJobIdDisplayed(listJobIds.get(0)))
-        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed")
-        .isTrue();
+        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed").isTrue();
   }
 
   @Then("QA verify there is no Delete button in that particular job tag")
@@ -360,24 +370,23 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isDeleteButtonByJobIdDisplayed(listJobIds.get(0)))
-        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed")
-        .isFalse();
+        .as("Delete Button in Job with id = " + listJobIds.get(0) + " displayed").isFalse();
   }
 
   @Then("QA verify that particular job is removed from calendar on date {string} with status {string}")
   public void verifyParticularJobIsRemoved(String date, String status) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().waitNotificationMessageInvisibility();
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .isParticularJobDisplayedByDateAndStatus(date,status))
-        .as("Particular job is removed from calendar on date " + date  + " with status " + status)
+            .isParticularJobDisplayedByDateAndStatus(date, status))
+        .as("Particular job is removed from calendar on date " + date + " with status " + status)
         .isFalse();
   }
 
   @Then("QA verify the jobs with status {string} displayed in the Calendar on the date {string} as well")
-  public void verifyJobWithStatusIsDisplayed(String status,String date) {
+  public void verifyJobWithStatusIsDisplayed(String status, String date) {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .isParticularJobDisplayedByDateAndStatus(date,status))
-        .as("Job in the calendar on date " + date  + " with status " + status + " displayed")
+            .isParticularJobDisplayedByDateAndStatus(date, status))
+        .as("Job in the calendar on date " + date + " with status " + status + " displayed")
         .isTrue();
   }
 
@@ -386,8 +395,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
-        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
-        .isTrue();
+        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed").isTrue();
   }
 
   @Then("QA verify there is no Edit button in that particular job tag")
@@ -395,8 +403,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     List<String> listJobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
             .isEditButtonByJobIdDisplayed(listJobIds.get(0)))
-        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed")
-        .isFalse();
+        .as("Edit Button in Job with id = " + listJobIds.get(0) + " displayed").isFalse();
   }
 
   @When("Operator click on Edit button")
@@ -426,51 +433,43 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getValueSelectedStartDay())
-        .as("Selected start day is correct")
-        .isEqualTo(startDay);
+        .as("Selected start day is correct").isEqualTo(startDay);
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getValueSelectedEndDay())
-        .as("Selected end day is correct")
-        .isEqualTo(endDay);
+        .as("Selected end day is correct").isEqualTo(endDay);
     if (timeRange != null) {
       Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-              .isSelectedTimeRangeWebElementDisplayed(timeRange))
-          .as("Selected time range is correct")
+              .isSelectedTimeRangeWebElementDisplayed(timeRange)).as("Selected time range is correct")
           .isTrue();
     }
     if (tag != null) {
       Assertions.assertThat(
               pickupAppointmentJobPage.getCreateOrEditJobPage().getAllTagsFromJobTagsField())
-          .as("Selected tags is correct")
-          .contains(tag);
+          .as("Selected tags is correct").contains(tag);
     }
     if (comments != null) {
       Assertions.assertThat(
               pickupAppointmentJobPage.getCreateOrEditJobPage().getCommentFromJobCommentField())
-          .as("Comment is correct")
-          .isEqualToIgnoringCase(comments);
+          .as("Comment is correct").isEqualToIgnoringCase(comments);
     }
   }
 
   @Then("Operator verify the Save button still disabled")
   public void verifyIsSaveButtonDisabled() {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isSaveButtonEnable())
-        .as("Save button still disabled")
-        .isFalse();
+        .as("Save button still disabled").isFalse();
   }
 
   @Then("Operator verify the Cancel button is enabled")
   public void verifyIsCancelButtonIsEnabled() {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isCancelButtonEnable())
-        .as("Cancel button is enabled")
-        .isTrue();
+        .as("Cancel button is enabled").isTrue();
   }
 
   @Then("Operator verify the Save button is enabled")
   public void verifyIsSaveButtonIsEnabled() {
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage().isSaveButtonEnable())
-        .as("Save button is enabled")
-        .isTrue();
+        .as("Save button is enabled").isTrue();
   }
 
   @When("Operator click on Save Button")
@@ -493,34 +492,26 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     }
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationMessage())
-        .as("Notification message is displayed")
-        .isEqualTo(notificationMessage);
+        .as("Notification message is displayed").isEqualTo(notificationMessage);
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationDescription())
-        .as("Notification message is contains " + startDay)
-        .contains(startDay);
+        .as("Notification message is contains " + startDay).contains(startDay);
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().getTextFromNotificationDescription())
-        .as("Notification message is contains " + timeRange)
-        .contains(timeRange);
+        .as("Notification message is contains " + timeRange).contains(timeRange);
   }
 
   @Then("QA verify successful message is displayed with the jobID:")
   public void verifySuccessfulMessageIsDisplayedWithJobID(Map<String, String> dataTable) {
 
-
     String jobID = resolveValue(dataTable.get("jobID"));
     final String notificationMessage = dataTable.get("notificationMessage");
 
-    pickupAppointmentJobPage.inFrame(page->{
-      Assertions.assertThat(
-              page.getCreateOrEditJobPage().getTextFromNotificationMessage())
-          .as("Notification message is displayed")
-          .isEqualTo(notificationMessage);
-      Assertions.assertThat(
-              page.getCreateOrEditJobPage().getTextFromNotificationDescription())
-          .as("Notification message is contains " + jobID)
-          .contains(jobID);
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationMessage())
+          .as("Notification message is displayed").isEqualTo(notificationMessage);
+      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationDescription())
+          .as("Notification message is contains " + jobID).contains(jobID);
     });
 
 
@@ -532,9 +523,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String tag = dataTable.get("tag");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .isTagDisplayedOnPickupJobByDate(date, tag))
-        .as("Tag is displayed")
-        .isTrue();
+        .isTagDisplayedOnPickupJobByDate(date, tag)).as("Tag is displayed").isTrue();
   }
 
   @Then("Operator verify the dialog shows the comment")
@@ -543,9 +532,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String comment = dataTable.get("comment");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .isDisplayedCommentTextInCalendar(date, comment))
-        .as("Comment is displayed")
-        .isTrue();
+        .isDisplayedCommentTextInCalendar(date, comment)).as("Comment is displayed").isTrue();
   }
 
   @Then("Operator verify the particular job tag in the Calendar changes from grey to black with white text")
@@ -555,8 +542,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String color = dataTable.get("color");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .getColorAttributeInPickupJobFromCalendar(date,status))
-        .as("Pickup job has correct color")
+            .getColorAttributeInPickupJobFromCalendar(date, status)).as("Pickup job has correct color")
         .contains("color: " + color);
   }
 
@@ -566,9 +552,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String tag = dataTable.get("tag");
 
     Assertions.assertThat(pickupAppointmentJobPage.getCreateOrEditJobPage()
-            .isTagDisplayedOnPickupJobByDate(date, tag))
-        .as("Tag is displayed")
-        .isFalse();
+        .isTagDisplayedOnPickupJobByDate(date, tag)).as("Tag is displayed").isFalse();
   }
 
   @When("Operator remove the tags in Job Tag field")
@@ -598,54 +582,45 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     if (jobServiceLevel == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
-          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(),
-          "Job Service Level is correct");
+          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(), "Job Service Level is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(jobServiceLevel.split(", ")),
-          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(),
-          "Job Service Level is correct");
+          PickupAppointmentFilterNameEnum.SERVICE_LEVEL.getName(), "Job Service Level is correct");
     }
     if (jobServiceType == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
-          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(),
-          "Job Service Type is correct");
+          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(), "Job Service Type is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(jobServiceType.split(", ")),
-          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(),
-          "Job Service Type is correct");
+          PickupAppointmentFilterNameEnum.SERVICE_TYPE.getName(), "Job Service Type is correct");
     }
     if (jobStatus == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
           PickupAppointmentFilterNameEnum.STATUS.getName(), "Job Status is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(jobStatus.split(", ")),
-          PickupAppointmentFilterNameEnum.STATUS.getName(),
-          "Job Status is correct");
+          PickupAppointmentFilterNameEnum.STATUS.getName(), "Job Status is correct");
     }
     if (zones == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
           PickupAppointmentFilterNameEnum.ZONES.getName(), "Zones is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(zones.split(", ")),
-          PickupAppointmentFilterNameEnum.ZONES.getName(),
-          "Zones is correct");
+          PickupAppointmentFilterNameEnum.ZONES.getName(), "Zones is correct");
     }
     if (masterShippers == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
-          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(),
-          "Master Shippers is correct");
+          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(), "Master Shippers is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(masterShippers.split(", ")),
-          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(),
-          "Master Shippers is correct");
+          PickupAppointmentFilterNameEnum.MASTER_SHIPPER.getName(), "Master Shippers is correct");
     }
     if (shippers == null) {
       verifySelectedInJobAppointmentPage(new ArrayList<>(),
           PickupAppointmentFilterNameEnum.SHIPPER.getName(), "Shippers is correct");
     } else {
       verifySelectedInJobAppointmentPage(Arrays.asList(shippers.split(", ")),
-          PickupAppointmentFilterNameEnum.SHIPPER.getName(),
-          "Shippers is correct");
+          PickupAppointmentFilterNameEnum.SHIPPER.getName(), "Shippers is correct");
     }
   }
 
@@ -657,24 +632,25 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("QA verify filters are hidden")
   public void verifyFiltersAreHidden() {
     Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
-        .as("Filters are hidden")
-        .isTrue();
+        .as("Filters are hidden").isTrue();
   }
 
   @When("Operator fills in the Shippers field with valid shipper = {string}")
   public void fillInTheShippersFieldValidShipper(String shipperId) {
     pickupAppointmentJobPage.setShipperIDInField(shipperId);
   }
+
   @When("Operator click load selection on pickup jobs filter")
   public void clickLoadSelection() {
     pickupAppointmentJobPage.clickLoadSelectionButton();
   }
+
   @After("@CreatPickupJob")
-  public void deletePickUpJob()
-  {
+  public void deletePickUpJob() {
     List<String> jobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
     new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(jobIds.get(0));
   }
+
   @When("Operator select only In progress job status, on pickup jobs filter")
   public void selectInProgressJobStatus() {
     pickupAppointmentJobPage.clearJobStatusFilter();
@@ -682,19 +658,51 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
 
-
   @When("Operator click on Clear Selection button")
   public void clickOnClearSelectionButton() {
     pickupAppointmentJobPage.clickOnClearSelectionButton();
   }
 
-  @When("Operator upload proof photo on pickup appointment job")
-  public void uploadProofPhoto()
-  {
-    pickupAppointmentJobPage.inFrame(page->{
-      pickupAppointmentJobPage.addProofPhoto();
+  @When("Operator upload Success proof photo on pickup appointment job")
+  public void uploadSuccessProofPhoto() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      pickupAppointmentJobPage.addSuccessProofPhoto();
     });
   }
+
+  @When("Operator upload Fail proof photo on pickup appointment job")
+  public void uploadFailProofPhoto() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      pickupAppointmentJobPage.addFailProofPhoto();
+    });
+  }
+
+  @When("Operator click proceed fail on pickup appointment job")
+  public void clickProceedOnFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      pickupAppointmentJobPage.clickFailProceed();
+    });
+  }
+
+  @When("Operator check pickup fail modal for job id = {string} has:")
+  public void checkFailPickupModal(String jobID, List<String> data) {
+
+    String finalJobID = resolveValue(jobID);
+    pickupAppointmentJobPage.inFrame(page -> {
+      String failTitle = page.getFailModelTitle();
+      Assertions.assertThat(failTitle).as("Fail Model contain reason").contains(finalJobID);
+    });
+
+    data = resolveValues(data);
+    data.forEach(reason -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        String failReason = page.getFailModelReasons();
+        Assertions.assertThat(failReason).as("Fail Model contain reason").contains(reason);
+      });
+    });
+
+  }
+
 
   @When("Operator click Preset Filters field")
   public void openPresetFiltersField() {
@@ -705,8 +713,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyDropdownMenuShownWIthAListOfSavedPreset() {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Preset Filter Dropdown Menu is displayed")
-        .isTrue();
+        .as("Preset Filter Dropdown Menu is displayed").isTrue();
     pickupAppointmentJobPage.clickOnPresetFilters();
   }
 
@@ -725,13 +732,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
     Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
             PickupAppointmentPriorityEnum.PRIORITY.getName()))
-        .as("Priority in Priority Filter is displayed")
-        .isTrue();
-    Assertions.assertThat(
-            pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
-                PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
-        .as("Non-Priority in Priority Filter is displayed")
-        .isTrue();
+        .as("Priority in Priority Filter is displayed").isTrue();
+    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+            PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
+        .as("Non-Priority in Priority Filter is displayed").isTrue();
     pickupAppointmentJobPage.clickOnPriorityButton();
   }
 
@@ -744,8 +748,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyServiceTypeDropdownMenuShown() {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Service Type Filter Dropdown Menu is displayed")
-        .isTrue();
+        .as("Service Type Filter Dropdown Menu is displayed").isTrue();
     pickupAppointmentJobPage.clickOnJobServiceType();
   }
 
@@ -763,8 +766,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyDataStartToEndLimitedToSevenDays() {
     String startDay = getDateByDaysAgo(7);
     String endDay = getDateByDaysLater(7);
-    pickupAppointmentJobPage
-        .verifyDataStartToEndLimited(startDay, endDay);
+    pickupAppointmentJobPage.verifyDataStartToEndLimited(startDay, endDay);
   }
 
   @And("Select multiple service level")
@@ -828,20 +830,17 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void verifyADropdownMenuShown() {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Dropdown Menu is displayed")
-        .isTrue();
+        .as("Dropdown Menu is displayed").isTrue();
   }
 
   @Then("QA verify Shipper list will be shown after operator type 3 characters or more {string} in the Shipper field")
   public void verifyShipperListShownAfterTypeThreeCharacters(String text) {
     pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
-        .as("Dropdown Menu No Data is displayed")
-        .isTrue();
+        .as("Dropdown Menu No Data is displayed").isTrue();
     pickupAppointmentJobPage.inputOnJobShipper(text);
     Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
-        .as("Dropdown Menu No Data is displayed")
-        .isTrue();
+        .as("Dropdown Menu No Data is displayed").isTrue();
     pickupAppointmentJobPage.clearOnJobShipper();
   }
 
@@ -852,33 +851,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     final String readyBy = dataTable.get("readyBy");
     final String latestBy = dataTable.get("latestBy");
     final String priority = dataTable.get("priority");
-    Assertions.assertThat(
-            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
-                .getItemTextOnDeleteJobModalByNameItem(
-                    ItemsDeleteJobModalWindow.SHIPPER_NAME.getName()))
-        .as("Shipper name is correct")
-        .isEqualTo(shipperName);
-    Assertions.assertThat(
-            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
-                .getItemTextOnDeleteJobModalByNameItem(
-                    ItemsDeleteJobModalWindow.SHIPPER_ADDRESS.getName()))
-        .as("Shipper address is correct")
-        .contains(shipperAddress);
-    Assertions.assertThat(
-            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
-                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.READY_BY.getName()))
-        .as("Ready by is correct")
-        .isEqualTo(readyBy);
-    Assertions.assertThat(
-            pickupAppointmentJobPage.getJobCreatedModalWindowElement()
-                .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.LATEST_BY.getName()))
-        .as("Latest by is correct")
-        .isEqualTo(latestBy);
+    Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+            .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.SHIPPER_NAME.getName()))
+        .as("Shipper name is correct").isEqualTo(shipperName);
+    Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+            .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.SHIPPER_ADDRESS.getName()))
+        .as("Shipper address is correct").contains(shipperAddress);
+    Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+            .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.READY_BY.getName()))
+        .as("Ready by is correct").isEqualTo(readyBy);
+    Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
+            .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.LATEST_BY.getName()))
+        .as("Latest by is correct").isEqualTo(latestBy);
     if (priority != null) {
       Assertions.assertThat(pickupAppointmentJobPage.getJobCreatedModalWindowElement()
               .getItemTextOnDeleteJobModalByNameItem(ItemsDeleteJobModalWindow.PRIORITY.getName()))
-          .as("Priority tags is correct")
-          .contains(priority);
+          .as("Priority tags is correct").contains(priority);
     }
   }
 
@@ -895,16 +883,13 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   public void verifyDataRange(String dataRangeStart, String dataRangeEnd) {
     Assertions.assertThat(pickupAppointmentJobPage.getSelectedStartDay())
-        .as("Start day in Date range is correct")
-        .isEqualTo(dataRangeStart);
+        .as("Start day in Date range is correct").isEqualTo(dataRangeStart);
     Assertions.assertThat(pickupAppointmentJobPage.getSelectedEndDay())
-        .as("End day in Date range is correct")
-        .isEqualTo(dataRangeEnd);
+        .as("End day in Date range is correct").isEqualTo(dataRangeEnd);
   }
 
   public void verifyPriority(String priority) {
-    Assertions.assertThat(pickupAppointmentJobPage.getSelectedPriority())
-        .as("Priority is correct")
+    Assertions.assertThat(pickupAppointmentJobPage.getSelectedPriority()).as("Priority is correct")
         .isEqualTo(priority);
   }
 
@@ -915,14 +900,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   private void verifyFilters(List<String> actualList, List<String> expectedList, String message) {
-    Assertions.assertThat(actualList)
-        .as(message)
-        .isEqualTo(expectedList);
+    Assertions.assertThat(actualList).as(message).isEqualTo(expectedList);
   }
 
   private String getDateByDaysAgo(int amount) {
-    DateTimeFormatter format =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime then = now.minusDays(amount);
@@ -930,8 +912,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   private String getDateByDaysLater(int amount) {
-    DateTimeFormatter format =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime then = now.plusDays(amount);

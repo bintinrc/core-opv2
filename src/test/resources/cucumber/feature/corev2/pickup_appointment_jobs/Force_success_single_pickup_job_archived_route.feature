@@ -1,11 +1,10 @@
-@CWF
 Feature: Force Success Single Pickup Job, Route Archived
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @RT @CreatPickupJob
+  @CreatPickupJob
   Scenario:Force Success Single Pickup Job Routed route is archived
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -28,7 +27,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Tool tip is shown
 
 
-  @RT @CreatPickupJob
+  @CreatPickupJob
   Scenario:Force Fail Single Pickup Job Routed route is archived
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -50,7 +49,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Fail button disabled in pickup job drawer
     Then Operator check Tool tip is shown
 
-  @RT @CreatPickupJob
+  @CreatPickupJob
   Scenario:Force Fail Single Pickup Job In Progress route is archived
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -74,7 +73,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Fail button disabled in pickup job drawer
     Then Operator check Tool tip is shown
 
-  @RT @CreatPickupJob
+  @CreatPickupJob
   Scenario:Force Success Single Pickup Job In Progress route is archived
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -97,6 +96,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When Operator hover on Success button in pickup job drawer
     Then Operator check Success button disabled in pickup job drawer
     Then Operator check Tool tip is shown
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

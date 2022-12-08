@@ -193,8 +193,8 @@ public class CreateOrEditJobPage extends PageElement {
 
   public boolean isDisplayedCommentTextInCalendar(String date, String text) {
     moveToElement(getCalendarWebElementByDate(date));
-    return getWebDriver().findElements(By.cssSelector(VISIBLE_SPAN_COMMENT_LOCATOR))
-        .stream().anyMatch(pageElement -> pageElement.getText().equalsIgnoreCase(text));
+    return getWebDriver().findElements(By.cssSelector(VISIBLE_SPAN_COMMENT_LOCATOR)).stream()
+        .anyMatch(pageElement -> pageElement.getText().equalsIgnoreCase(text));
   }
 
   public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
@@ -293,7 +293,7 @@ public class CreateOrEditJobPage extends PageElement {
     return day;
   }
 
-  public String getColorAttributeInPickupJobFromCalendar(String date,String status) {
+  public String getColorAttributeInPickupJobFromCalendar(String date, String status) {
     return webDriver.findElement(
             By.cssSelector(f(CALENDAR_DAY_WEB_ELEMENT_LOCATOR, getDayFromFullDate(date))))
         .findElement(By.cssSelector(f(CALENDAR_STATUS_WEB_ELEMENT_LOCATOR, status)))
