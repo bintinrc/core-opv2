@@ -61,6 +61,10 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public PageElement forceFail;
 
 
+  @FindBy(xpath = "//div[@role='tooltip' and contains(text(),'Job cannot be')]")
+  public PageElement successFailToolTip;
+
+
   @FindBy(xpath = "//span[text()='Submit']/..")
   private PageElement submitButton;
 
