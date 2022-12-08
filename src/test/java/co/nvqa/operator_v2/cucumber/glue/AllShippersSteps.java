@@ -47,7 +47,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -318,17 +317,8 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       ms.setNoOfReservation(Integer.valueOf(value));
     }
-
-    List<MilkrunSettings> milkrunSettings = new LinkedList<>();
-    milkrunSettings.add(ms);
-
     address.setMilkRun(true);
-
-    if (address.getMilkrunSettings() == null) {
-      address.setMilkrunSettings(milkrunSettings);
-    } else {
-      address.getMilkrunSettings().addAll(milkrunSettings);
-    }
+    address.addMilkrunSettings(ms);
   }
 
   @Then("^Operator verify the new Shipper is created successfully$")

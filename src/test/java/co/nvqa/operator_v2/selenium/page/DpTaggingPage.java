@@ -9,33 +9,29 @@ import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.time.LocalDate;
-
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class DpTaggingPage extends OperatorV2SimplePage {
+public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
 
   public DpTaggingTable dpTaggingTable;
 
@@ -64,9 +60,6 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-upload-select')]//input")
   public FileInput selectFile;
 
-  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
-  public PageElement antNotificationMessage;
-
   @FindBy(xpath = LOCATOR_DROP_OFF_DATE)
   public MdSelect selectDate;
 
@@ -83,12 +76,14 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   }
 
   public void verifyTaggingToast(String message) {
-    antNotificationMessage.waitUntilVisible();
-    String actualNotificationMessage = antNotificationMessage.getText();
+    AntNotification notification = noticeNotifications.get(0);
+    notification.waitUntilVisible();
+    String actualNotificationMessage = notification.getText();
     Assertions.assertThat(actualNotificationMessage)
-            .as("Notification message is the same")
-            .isEqualTo(message);
+        .as("Notification message")
+        .isEqualTo(message);
   }
+
   public void switchToIframe() {
     getWebDriver().switchTo().frame(pageFrame.getWebElement());
   }
@@ -108,16 +103,14 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     for (DpTagging dpTagging : listOfDpTagging) {
       String xpath = f(LOCATOR_TRACKING_ID, dpTagging.getTrackingId());
       Assertions.assertThat(isElementExist(xpath))
-              .as("Tracking ID is not listed on table")
-              .isTrue();
+          .as("Tracking ID is not listed on table")
+          .isTrue();
     }
   }
+
   public void verifyInvalidDpTaggingCsvIsNotUploadedSuccessfully() {
     String expectedErrorMessageOnToast = "No order data to process, please check the file";
-    antNotificationMessage.waitUntilVisible();
-    String actualNotificationMessage = antNotificationMessage.getText();
-    assertEquals("Error Message", expectedErrorMessageOnToast, actualNotificationMessage);
-    waitUntilInvisibilityOfToast(expectedErrorMessageOnToast, false);
+    verifyTaggingToast(expectedErrorMessageOnToast);
   }
 
   private File buildCsv(List<DpTagging> listOfDpTagging) {
@@ -152,24 +145,23 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   public void checkAndAssignAll(boolean isMultipleOrders) {
     int row = 0;
-    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
-      clickf(LOCATOR_ROW_CHECKBOX,row);
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))) {
+      clickf(LOCATOR_ROW_CHECKBOX, row);
       row++;
     }
     assignAll.click();
     pause1s();
     if (isMultipleOrders) {
       verifyTaggingToast("DP tagging performed successfully");
-    }
-    else {
-      verifyTaggingToast(row +" order(s) tagged successfully");
+    } else {
+      verifyTaggingToast(row + " order(s) tagged successfully");
     }
   }
 
   public void untagAll() {
     int row = 0;
-    while (isElementExist(f(LOCATOR_DATA_ROWS, row))){
-      clickf(LOCATOR_ROW_CHECKBOX,row);
+    while (isElementExist(f(LOCATOR_DATA_ROWS, row))) {
+      clickf(LOCATOR_ROW_CHECKBOX, row);
       row++;
     }
     untagAll.click();
@@ -203,16 +195,16 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   public void selectMultiDateToNextDay(int size) {
     String nextDay = dropOffDate();
     int tableRowId = 1;
-    for (int i = 0; i <= size-1; i++) {
-      click("//div[@data-row-index='"+i+"']" + LOCATOR_DROP_OFF_DATE);
-      clickf("//div[@id='rc_select_"+tableRowId+"_list']/div[@aria-label='%s']", nextDay);
-      tableRowId=tableRowId+2;
+    for (int i = 0; i <= size - 1; i++) {
+      click("//div[@data-row-index='" + i + "']" + LOCATOR_DROP_OFF_DATE);
+      clickf("//div[@id='rc_select_" + tableRowId + "_list']/div[@aria-label='%s']", nextDay);
+      tableRowId = tableRowId + 2;
     }
   }
 
   private String dropOffDate() {
     clickAndWaitUntilDone("//div[@data-row-index='0']" + LOCATOR_DROP_OFF_DATE);
-    String date =getWebDriver().findElement(By.xpath(DROP_OFF_DATE)).getText();
+    String date = getWebDriver().findElement(By.xpath(DROP_OFF_DATE)).getText();
     LocalDate localDate = LocalDate.parse(date);
     return localDate.plusDays(1).toString();
   }

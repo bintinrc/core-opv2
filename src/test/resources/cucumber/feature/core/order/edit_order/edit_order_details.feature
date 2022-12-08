@@ -150,6 +150,7 @@ Feature: Edit Order Details
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Order Settings -> Edit Order Details on Edit Order page
     When Operator Edit Order Details on Edit Order page
+    And Operator waits for 5 seconds
     Then Operator Edit Order Details on Edit Order page successfully
 
   Scenario: Operator Edit Pickup Details on Edit Order page - Create New Pickup Waypoint
