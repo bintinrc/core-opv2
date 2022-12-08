@@ -115,6 +115,170 @@ Feature: Total Completion Rate
       | HubName      | HubId      | Country | TileName         |
       | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates |
 
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
+  Scenario Outline: Create New Job for No Job Address
+    Given Operator loads Operator portal home page
+    And DB Operator update the parcel details to past date "{gradle-previous-2-day-yyyy-MM-dd} 00:00:00" for the hub "<HubId>"
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    When Operator get the count from the pending pickup tile: "<TileName1>"
+    When Operator get the count from one more tile in pending pickup: "<TileName2>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given DB Operator get Grab reservation id
+    And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
+    And API Operator add reservation pick-up to the route
+    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver fail the waypoint "{KEY_WAYPOINT_ID}" in the reservation "{KEY_CREATED_RESERVATION_ID}"
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 11          |
+      | failureReasonIndexMode | FIRST       |
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And API Operator calls pending pickup job trigger for station
+    And Operator waits for 120 seconds
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<ModalName>"
+    When Operator clicks on the create job button in the Pending pickup page
+    Then Operator verifies that url is redirected to "pickup-appointment" page
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Driver collect all his routes
+    And API Operator calls pending pickup job trigger for station
+    And Operator waits for 120 seconds
+    And Operator refresh page
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has decreased by 1
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<ModalName>"
+    Then Operator verifies "{KEY_CREATED_RESERVATION_ID}" is matching in the jobs for today
+    Then Operator verify Assign to Route button is displayed for the record
+
+    Examples:
+      | HubName      | HubId      | Country | ModalName        | TileName1                      | TileName2                    |
+      | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
+
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
+  Scenario Outline: Success Pickup All parcel in Reservation
+    Given Operator loads Operator portal home page
+    And DB Operator update the parcel details to past date "{gradle-previous-2-day-yyyy-MM-dd} 00:00:00" for the hub "<HubId>"
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    When Operator get the count from the pending pickup tile: "<TileName1>"
+    When Operator get the count from one more tile in pending pickup: "<TileName2>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
+    And API Operator calls pending pickup job trigger for station
+    And Operator refresh page
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in the pending pickup tile: "<TileName2>" has increased by 1
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given DB Operator get Grab reservation id
+    And API Operator add reservation pick-up to the route
+    And API Operator start the route
+    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver success Reservation by scanning created parcel
+    And API Operator calls pending pickup job trigger for station
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in the pending pickup tile: "<TileName2>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<ModalName>"
+    Then Operator verifies that url is redirected to "pickup-appointment" page
+    And Operator expects no results when searching address by applying the following filters:
+      | Pickup Address/ Address ID |
+      | testaddress23              |
+
+    Examples:
+      | HubName      | HubId      | Country | ModalName        | TileName1                      | TileName2                    |
+      | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
+  Scenario Outline: Success Pickup All parcel in Reservation
+    Given Operator loads Operator portal home page
+    And DB Operator update the parcel details to past date "{gradle-previous-2-day-yyyy-MM-dd} 00:00:00" for the hub "<HubId>"
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    When Operator get the count from the pending pickup tile: "<TileName1>"
+    When Operator get the count from one more tile in pending pickup: "<TileName2>"
+    And API Shipper create V4 order using data below:
+      | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"testaddress23","address2":"","country":"VN","postcode":"018981","latitude":"5.55555","longitude":"5.55555"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
+    And API Operator calls pending pickup job trigger for station
+    And Operator refresh page
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in the pending pickup tile: "<TileName2>" has increased by 1
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given DB Operator get Grab reservation id
+    And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
+    And API Operator add reservation pick-up to the route
+    And API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver fail the waypoint "{KEY_WAYPOINT_ID}" in the reservation "{KEY_CREATED_RESERVATION_ID}"
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 11          |
+      | failureReasonIndexMode | FIRST       |
+    And API Operator calls pending pickup job trigger for station
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has decreased by 1
+    Then Operator verifies that the count in the pending pickup tile: "<TileName2>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<ModalName>"
+    Then Operator verifies that url is redirected to "pickup-appointment" page
+    And Operator expects no results when searching address by applying the following filters:
+      | Pickup Address/ Address ID |
+      | testaddress23              |
+
+    Examples:
+      | HubName      | HubId      | Country | ModalName        | TileName1                      | TileName2                    |
+      | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
+
+  @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @Debug
+  Scenario Outline: Search Pending Pickup Job - dataset
+    Given Operator loads Operator portal home page
+#    And DB Operator update the parcel details to past date "{gradle-previous-2-day-yyyy-MM-dd} 00:00:00" for the hub "<HubId>"
+#    And API Shipper create V4 order using data below:
+#      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+#      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+#      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-STATION-SHIPPER","phone_number":"+6591434259","address":{"address1":"Pending Pickup","address2":"","country":"SG","postcode":"018981","latitude":"7.7777","longitude":"7.7777"}},"to":{"name":"Station","phone_number":"+6591434259","email":"Station@ninjavan.co","address":{"address1":"Test","address2":"NVQA","country":"SG","postcode":"128070"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"Pending Pickup","phone_number":"+6591434259","address":{"address1":"Pending Pickup","address2":"","country":"SG","postcode":"018981","latitude":"7.7777","longitude":"7.7777"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
+#    And API Operator calls pending pickup job trigger for station
+#    And Operator refresh page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "SingaporeQ12" and proceed
+    And Operator clicks on the hamburger button for the tile: "<ModalName>"
+    And Operator searches data in the pending pickup table by applying the following filters:
+      | <ColumnName>  |
+      | <SearchValue> |
+    Then Operator verifies one row is displayed in the table after applying filter
+
+    Examples:
+      | HubName       | HubId       | Country   | ModalName        | ColumnName                 | SearchValue |
+      | {hub-name-17} | {hub-id-17} | Singapore | N+0 Pickup Rates | Pickup Address/ Address ID | 475703      |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

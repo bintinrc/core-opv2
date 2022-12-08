@@ -254,7 +254,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
   }
 
-  public String getNumberFromPendingPickupTile(String tileName) {
+  public int getNumberFromPendingPickupTile(String tileName) {
     try {
       String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
       waitWhilePageIsLoading();
@@ -270,10 +270,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         tileValue = tileValue.substring(0, tileValue.indexOf(' '));
       }
       LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
-      return tileValue;
+      return Integer.parseInt(tileValue);
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
-      return null;
+      return 0;
     }
   }
 
