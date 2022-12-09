@@ -59,7 +59,7 @@ Feature: Get Report in Ledger
       | codFee           | 0.05                                          |
       | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
+      | rtsFee           | null                                          |
       | totalTax         | 0.59                                          |
       | totalWithTax     | 9.14                                          |
       | type             | Completed                                     |
@@ -127,7 +127,7 @@ Feature: Get Report in Ledger
       | codFee           | 0.5                                           |
       | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
+      | rtsFee           | null                                          |
       | totalTax         | 0.63                                          |
       | totalWithTax     | 9.63                                          |
       | type             | Completed                                     |
@@ -198,7 +198,7 @@ Feature: Get Report in Ledger
       | codFee           | 0.5                                           |
       | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
+      | rtsFee           | null                                          |
       | totalTax         | 0.63                                          |
       | totalWithTax     | 9.63                                          |
       | type             | Completed                                     |
@@ -262,7 +262,7 @@ Feature: Get Report in Ledger
       | codFee           | null                                       |
       | insuredFee       | null                                       |
       | deliveryFee      | 8.5                                        |
-      | rtsFee           | 0.0                                        |
+      | rtsFee           | null                                       |
       | totalTax         | 0.59                                       |
       | totalWithTax     | 9.09                                       |
       | type             | Returned to Sender                         |
@@ -331,7 +331,7 @@ Feature: Get Report in Ledger
       | codFee           | 100.0                                         |
       | insuredFee       | null                                          |
       | deliveryFee      | 19.0                                          |
-      | rtsFee           | 0.0                                           |
+      | rtsFee           | null                                          |
       | totalTax         | 8.33                                          |
       | totalWithTax     | 127.33                                        |
       | type             | Completed                                     |
