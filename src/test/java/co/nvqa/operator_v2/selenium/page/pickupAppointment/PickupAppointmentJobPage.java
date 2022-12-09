@@ -5,13 +5,12 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
-import java.io.File;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -453,9 +452,6 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
     @FindBy(css = "[data-testid='resultTable.rowCount']")
     public AntSelect3 rowCount;
-
-    @FindBy(xpath = ".//div[contains(@class,'create-route-field')][.//label[.='Vehicle']]//div[contains(@class,'ant-select')]")
-    public AntSelect3 vehicle;
 
     @FindBy(css = "[data-testid='resultTable.selectedRowsCount']")
     public ForceClearTextBox selectedRowCount;
