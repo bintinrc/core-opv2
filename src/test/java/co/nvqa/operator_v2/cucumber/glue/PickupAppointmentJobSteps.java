@@ -872,11 +872,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
           break;
         case "Unselect All Shown":
           pickupAppointmentJobPage.bulkSelect.unSelectAll.click();
-
           break;
         case "Clear Selection":
           pickupAppointmentJobPage.bulkSelect.clearSelection.click();
-
           break;
         case "Display only selected":
           pickupAppointmentJobPage.bulkSelect.displayOnlySelected.click();
