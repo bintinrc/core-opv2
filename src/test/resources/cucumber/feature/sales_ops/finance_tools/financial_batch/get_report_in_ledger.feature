@@ -57,7 +57,7 @@ Feature: Get Report in Ledger
       | codAmount        | 5.00                                          |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
-      | insuredFee       | 0.0                                           |
+      | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.59                                          |
@@ -125,7 +125,7 @@ Feature: Get Report in Ledger
       | codAmount        | 50.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.5                                           |
-      | insuredFee       | 0.0                                           |
+      | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.63                                          |
@@ -196,7 +196,7 @@ Feature: Get Report in Ledger
       | codAmount        | 50.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.5                                           |
-      | insuredFee       | 0.0                                           |
+      | insuredFee       | null                                          |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.63                                          |
@@ -259,8 +259,8 @@ Feature: Get Report in Ledger
       | toBillingZone    | WEST                                       |
       | codAmount        | 0.00                                       |
       | insuredAmount    | 0.00                                       |
-      | codFee           | 0.0                                        |
-      | insuredFee       | 0.0                                        |
+      | codFee           | null                                       |
+      | insuredFee       | null                                       |
       | deliveryFee      | 8.5                                        |
       | rtsFee           | 0.0                                        |
       | totalTax         | 0.59                                       |
@@ -329,7 +329,7 @@ Feature: Get Report in Ledger
       | codAmount        | 5000.00                                       |
       | insuredAmount    | 0.00                                          |
       | codFee           | 100.0                                         |
-      | insuredFee       | 0.0                                           |
+      | insuredFee       | null                                          |
       | deliveryFee      | 19.0                                          |
       | rtsFee           | 0.0                                           |
       | totalTax         | 8.33                                          |
