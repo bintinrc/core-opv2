@@ -505,9 +505,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     public List<String> getListIDs(){
       String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
       return findElementsByXpath(PICKUP_JOBS_IDS_XPATH).stream().map(WebElement::getText).collect(Collectors.toList());
-
     }
-
   }
 
   public void verifyBulkSelectResult(){
