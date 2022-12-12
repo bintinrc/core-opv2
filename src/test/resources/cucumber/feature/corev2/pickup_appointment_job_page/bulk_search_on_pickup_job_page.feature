@@ -34,7 +34,7 @@ Feature: Force Success Single Pickup Job
     Then Operator verify pickup job table on Pickup Jobs page:
       | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]} |
       | {KEY_CONTROL_CREATED_PA_JOB_IDS[2]} |
-    
+
   @deletePickupJob
   Scenario:Search pickup jobs and reservations by ID on Pickup Jobs page - empty ids
     Given API Control - Operator create pickup appointment job with data below:
