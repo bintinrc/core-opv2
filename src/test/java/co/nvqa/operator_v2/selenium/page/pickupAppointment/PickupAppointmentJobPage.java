@@ -545,9 +545,5 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
     @FindBy(xpath = "//span[text()='Filter Jobs']//parent::button")
     public Button confirmButton;
-
   }
-
-
-
 }
