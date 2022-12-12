@@ -274,6 +274,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
   @When("Operator click proceed in trip completion dialog")
   public void clickProceedInTripCompletionDialog() {
     scanningPage.completeTrip();
+    pause5s();
   }
 
   @Then("Operator verify hub {string} not found on Shipment Inbound Scanning page")
