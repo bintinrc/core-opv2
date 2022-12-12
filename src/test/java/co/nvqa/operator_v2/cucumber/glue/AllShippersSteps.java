@@ -2077,4 +2077,14 @@ public class AllShippersSteps extends AbstractSteps {
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     openSpecificShipperEditPage(String.valueOf(createdSubShipper.get().getLegacyId()));
   }
+
+  @When("Operator delete all shipper pickup services on Edit Shipper page")
+  public void operatorDeleteAllShipperPickupServices() {
+    allShippersPage.allShippersCreateEditPage.deleteAllPickupServices();
+  }
+
+  @Then("Operator verifies all shipper pickup services are deleted on Edit Shipper page")
+  public void allShipperPickupServicesdeleted() {
+    allShippersPage.allShippersCreateEditPage.verifyPickupServicesIsEmpty();
+  }
 }
