@@ -5,7 +5,9 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
@@ -151,6 +153,9 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public BulkSelectTable bulkSelect;
+
+  @FindBy(className = "ant-modal-wrap")
+  public FilterJobByID filterJobByIDModal;
 
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
@@ -468,8 +473,11 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     @FindBy(xpath = "//li[.='Display only selected']")
     public PageElement displayOnlySelected;
 
+    @FindBy(xpath = "//button[. ='Filter by job ID']")
+    public PageElement filterByJobId;
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_ID = "id";
 
     public static final String ACTION_EDIT = "Edit Job";
     public static final String ACTION_DETAILS = "view Job";
@@ -481,6 +489,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_TAGS, "tagNames")
           .put(COLUMN_STATUS, "status")
+          .put(COLUMN_ID,"pickupAppointmentJobId")
           .build()
       );
       setEntityClass(CoreV2PickupJobsParams.class);
@@ -491,6 +500,12 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
           "//div[@role='row'][%d]//div[@role='gridcell']//button[contains(@data-testid,'showDetailButton')]",
           ACTION_SELECTED,
           "//div[@role='row'][%d]//div[@role='gridcell']//input[contains(@data-testid,'checkbox')]"));
+    }
+
+    public List<String> getListIDs(){
+      String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
+      return findElementsByXpath(PICKUP_JOBS_IDS_XPATH).stream().map(WebElement::getText).collect(Collectors.toList());
+
     }
 
   }
@@ -514,4 +529,27 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     String selectedRows  = bulkSelect.selectedRowCount.getText();
     Assertions.assertThat(selectedRows).as("Number of selected rows are the same").contains(expectedRowCount);
   }
+
+  public static class FilterJobByID extends AntModal {
+    public FilterJobByID(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//button[@class = 'ant-modal-close']")
+    public Button close;
+
+    @FindBy(xpath = "//div[text()='Filter by job ID']")
+    public PageElement title;
+
+    @FindBy(id = "jobIds")
+    public TextBox inputJobId;
+
+    @FindBy(xpath = "//span[text()='Filter Jobs']//parent::button")
+    public Button confirmButton;
+
+  }
+
+
+
 }
