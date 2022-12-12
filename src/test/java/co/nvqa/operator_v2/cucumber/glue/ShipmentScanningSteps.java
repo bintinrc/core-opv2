@@ -267,6 +267,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     String shipmentId = resolveValue(shipmentIdAsString);
     shipmentScanningPage.scanBarcode(shipmentId);
     shipmentScanningPage.waitUntilVisibilityOfElementLocated(shipmentScanningPage.XPATH_SMALL_SUCCESS_MESSAGE);
+    pause2s();
   }
 
   @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
