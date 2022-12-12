@@ -46,9 +46,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String CLASS_E = "Class E";
   private static final String RESTRICTION_5 = "Restriction 5";
 
-  private static final String FULL_TIME = "FULL_TIME";
-  private static final String PART_TIME = "PART_TIME";
-  private static final String VENDOR = "VENDOR";
+  private static final String IN_HOUSE_FULL_TIME = "IN_HOUSE_FULL_TIME";
+  private static final String IN_HOUSE_PART_TIME = "IN_HOUSE_PART_TIME";
+  private static final String OUTSOURCED_SUBCON = "OUTSOURCED_SUBCON";
+  private static final String OUTSOURCED_VENDOR = "OUTSOURCED_VENDOR";
 
   private static final String NAME_FILTER = "name";
   private static final String ID_FILTER = "id";
@@ -60,7 +61,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String LICENSE_STATUS_FILTER = "license status";
   private static final String COMMENTS_FILTER = "comments";
 
-  private static final String FULL_TIME_CONTRACT = "Full-time / Contract";
+  private static final String IN_HOUSE_FULL_TIME_CONTRACT = "In-House - Full-Time";
+  private static final String IN_HOUSE_PART_TIME_CONTRACT = "In-House - Part-Time";
+  private static final String OUTSOURCED_SUBCON_CONTRACT = "Outsourced - Subcon";
+  private static final String OUTSOURCED_VENDORS_CONTRACT = "Outsourced - Vendors";
   private static final String PART_TIME_FREELANCE = "Part-time / Freelance";
   private static final String VENDOR_SELECTION = "Vendor";
   private static final String COUNTRY = "country";
@@ -200,12 +204,14 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
 
           middleMileDriver.setEmploymentType(data.get("employmentType"));
-          if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
-          } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
-          } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(VENDOR_SELECTION);
+          if (IN_HOUSE_FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(IN_HOUSE_FULL_TIME_CONTRACT);
+          } else if (IN_HOUSE_PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(IN_HOUSE_PART_TIME_CONTRACT);
+          } else if (OUTSOURCED_SUBCON.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(OUTSOURCED_SUBCON_CONTRACT);
+          } else if (OUTSOURCED_VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(OUTSOURCED_VENDORS_CONTRACT);
           }
           middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
 
@@ -538,12 +544,14 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
 
           middleMileDriver.setEmploymentType(data.get("employmentType"));
-          if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
-          } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
-          } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
-            middleMileDriver.setEmploymentType(VENDOR_SELECTION);
+          if (IN_HOUSE_FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(IN_HOUSE_FULL_TIME_CONTRACT);
+          } else if (IN_HOUSE_PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(IN_HOUSE_PART_TIME_CONTRACT);
+          } else if (OUTSOURCED_SUBCON.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(OUTSOURCED_SUBCON_CONTRACT);
+          } else if (OUTSOURCED_VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(OUTSOURCED_VENDORS_CONTRACT);
           }
           middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
 
