@@ -137,6 +137,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
   public TextBox premiumPickupDailyLimit;
   @FindBy(name = "container.shippers.add-new-service")
   public NvIconTextButton addNewService;
+  @FindBy(name = "commons.delete")
+  public NvIconButton deleteService;
+  @FindBy(xpath = "//*[@class='nv-text-center' and descendant::*[contains(text(),'No Results Found')]]")
+  public PageElement noResultText;
   //endregion
 
   //endregion
@@ -245,6 +249,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
       saveChanges.click();
       waitUntilInvisibilityOfToast("All changes saved successfully");
     }
+    waitUntilShipperCreateEditPageIsLoaded();
     backToShipperList();
     pause3s();
     getWebDriver().switchTo().window(currentWindowHandle);
@@ -739,6 +744,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     backToShipperList();
   }
 
+  public void deleteAllPickupServices() {
+    waitUntilShipperCreateEditPageIsLoaded();
+    clickTabItem("More Settings");
+    int looping = 0;
+    while (!noResultText.isDisplayedFast() && looping < DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE) {
+      deleteService.click();
+      looping++;
+    }
+  }
+
   public ShipperBasicSettings getBasicSettings() {
     ShipperBasicSettings settings = new ShipperBasicSettings();
     settings.setVersion(basicSettingsForm.ocVersion.getValue());
@@ -975,6 +990,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
         .as("Number of Milkrun Reservations").isEqualTo(reservationsCount);
     addAddressDialog.saveChanges.click();
     addAddressDialog.waitUntilInvisible();
+  }
+
+  public void verifyPickupServicesIsEmpty() {
+    waitUntilShipperCreateEditPageIsLoaded();
+    clickTabItem("More Settings");
+    Assertions.assertThat(noResultText.isDisplayed()).as("Check pickup service is empty").isTrue();
   }
 
   public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper,
