@@ -53,7 +53,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   }
 
-  @When("Operator goes to Pickup Jobs Page")
+//  @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
@@ -65,18 +65,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.getLoadSelection().getWebElement());
   }
 
-  @And("Operator click on Create or edit job button on this top right corner of the page")
+//  @When("Operator click on Create or edit job button on this top right corner of the page")
   public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
     pickupAppointmentJobPage.clickOnCreateOrEditJob();
   }
 
-  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
+//  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
   public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperIDInField(shipperId);
     put(KEY_LEGACY_SHIPPER_ID, shipperId);
   }
 
-  @And("Operator select address = {string} in Shipper Address field")
+//  @And("Operator select address = {string} in Shipper Address field")
   public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperAddressField(shipperAddress);
   }

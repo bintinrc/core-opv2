@@ -1,4 +1,4 @@
-@CWF
+
 Feature: Force Fail Single Pickup Job
 
   @LaunchBrowser @ShouldAlwaysRun
