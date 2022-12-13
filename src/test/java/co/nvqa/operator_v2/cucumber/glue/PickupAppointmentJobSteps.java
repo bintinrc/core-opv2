@@ -17,12 +17,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage.BulkSelectTable.ACTION_SELECTED;
 
 
@@ -616,8 +619,15 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @After("@deletePickupJob")
   public void deletePickUpJob() {
-    List<String> jobIds = get(KEY_LIST_OF_PICKUP_JOB_IDS);
-    new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(jobIds.get(0));
+    try{
+      List<Long> jobIds = get(KEY_CONTROL_CREATED_PA_JOB_IDS);
+      jobIds.forEach((jobId) -> {
+        new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(String.valueOf(jobId));
+      });
+    } catch (Throwable ex ){
+      LOGGER.warn(f("Can not delete pickup job: %s",ex.getMessage()));
+    }
+
   }
 
   @When("Operator select only In progress job status, on pickup jobs filter")
@@ -880,6 +890,15 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
           pickupAppointmentJobPage.bulkSelect.displayOnlySelected.click();
           pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
           break;
+        case "Filter by job ID":
+          pickupAppointmentJobPage.bulkSelect.filterByJobId.click();
+          pickupAppointmentJobPage.filterJobByIDModal.close.waitUntilVisible();
+          break;
+        case "Filter Jobs":
+          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.waitUntilClickable();
+          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.click();
+          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.waitUntilInvisible();
+          break;
       }
     });
   }
@@ -917,6 +936,67 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(() -> {
       for (int i = 1; i<=numberOfRows; i++)
         pickupAppointmentJobPage.bulkSelect.clickActionButton(i,ACTION_SELECTED);
+    });
+  }
+
+  @Then("Operator verifies Filter Job button is disabled on Pickup job page")
+  public void operatorVerifiesFilterJobButtonDisabled(){
+    pickupAppointmentJobPage.inFrame(() ->Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
+        getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
+  }
+
+  @Given("Operator fills the pickup job ID list below:")
+  public void operatorFillsThePickupJobIDs(List<String> data){
+    List<String> listOfPickupJobIds = resolveValues(data);
+    pickupAppointmentJobPage.inFrame(() -> {
+      listOfPickupJobIds.forEach((Id) -> {
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Id);
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
+        pause100ms();
+      });
+    });
+  }
+
+  @Then("Operator verify pickup job table on Pickup Jobs page:")
+  public void verifyPickupJobsTable(List<String> data) {
+    List<String> expectedIDs = resolveValues(data);
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.waitUntilLoaded(1);
+      List<String> actualIDs = page.bulkSelect.getListIDs();
+      Assertions.assertThat(actualIDs).as("Result is the same").isEqualTo(expectedIDs);
+    });
+  }
+
+  @Then("Operator verifies error message below:")
+  public void operatorVerifiesErrorMessage(String expectedResult){
+    pickupAppointmentJobPage.inFrame(page ->{
+      Assertions.assertThat(expectedResult).as("Message is the same").isEqualToIgnoringCase(page.getAntTopRightText());
+    });
+  }
+
+  @Given("Operator clears the filter jobs list on Pickup Jobs Page")
+  public void operatorClearsPickupJobsList(){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(
+        Keys.chord(Keys.CONTROL, "a", Keys.DELETE)));
+  }
+
+  @Then("Operator verifies invalid pickup ID error message below on Pickup Jobs Page:")
+  public void operatorVerifiesErrorMessageOnPickupJobsPage(String expectedMessage){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.verifyErrorMessages(expectedMessage));
+  }
+
+  @Given("Operator fill more than 1000 pickup jobs Id on Pickup Jobs Page:")
+  public void addmore1000(String ID){
+    String jobId = resolveValue(ID);
+    Random random = new Random();
+    int numberOfId = random.ints(1002, 1010)
+        .findFirst()
+        .getAsInt();
+    pickupAppointmentJobPage.inFrame(page -> {
+      for (int i=0;i<numberOfId;i++){
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(jobId);
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
+      }
     });
   }
 }
