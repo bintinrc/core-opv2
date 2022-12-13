@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -953,9 +954,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
         pause100ms();
       });
-
     });
-
   }
 
   @Then("Operator verify pickup job table on Pickup Jobs page:")
@@ -967,6 +966,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
       Assertions.assertThat(actualIDs).as("Result is the same").isEqualTo(expectedIDs);
     });
   }
+
   @Then("Operator verifies error message below:")
   public void operatorVerifiesErrorMessage(String expectedResult){
     pickupAppointmentJobPage.inFrame(page ->{
@@ -978,5 +978,25 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void operatorClearsPickupJobsList(){
     pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(
         Keys.chord(Keys.CONTROL, "a", Keys.DELETE)));
+  }
+
+  @Then("Operator verifies invalid pickup ID error message below on Pickup Jobs Page:")
+  public void operatorVerifiesErrorMessageOnPickupJobsPage(String expectedMessage){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.verifyErrorMessages(expectedMessage));
+  }
+
+  @Given("Operator fill more than 1000 pickup jobs Id on Pickup Jobs Page:")
+  public void addmore1000(String ID){
+    String jobId = resolveValue(ID);
+    Random random = new Random();
+    int numberOfId = random.ints(1002, 1100)
+        .findFirst()
+        .getAsInt();
+    pickupAppointmentJobPage.inFrame(page -> {
+      for (int i=0;i<numberOfId;i++){
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(jobId);
+        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
+      }
+    });
   }
 }

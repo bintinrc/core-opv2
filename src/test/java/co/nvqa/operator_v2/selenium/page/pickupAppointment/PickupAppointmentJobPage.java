@@ -545,5 +545,11 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
     @FindBy(xpath = "//span[text()='Filter Jobs']//parent::button")
     public Button confirmButton;
+
+    public static final String ERROR_MESSAGE_XPATH = "//span[text()='%s']";
+
+    public void verifyErrorMessages(String message){
+      Assertions.assertThat(findElementByXpath(f(ERROR_MESSAGE_XPATH,message)).isDisplayed()).as("Error message is the same").isTrue();
+    }
   }
 }
