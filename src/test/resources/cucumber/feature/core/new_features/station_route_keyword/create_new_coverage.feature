@@ -1,5 +1,5 @@
 @OperatorV2 @Route @NewFeatures @StationRouteKeyword @StationRoute
-Feature: Kreate New Coverage
+Feature: Create New Coverage
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
