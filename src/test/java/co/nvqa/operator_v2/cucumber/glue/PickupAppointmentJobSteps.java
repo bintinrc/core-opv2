@@ -989,7 +989,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void addmore1000(String ID){
     String jobId = resolveValue(ID);
     Random random = new Random();
-    int numberOfId = random.ints(1002, 1100)
+    int numberOfId = random.ints(1002, 1010)
         .findFirst()
         .getAsInt();
     pickupAppointmentJobPage.inFrame(page -> {
