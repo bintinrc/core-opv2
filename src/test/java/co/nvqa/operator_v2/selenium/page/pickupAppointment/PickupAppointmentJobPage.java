@@ -534,9 +534,6 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(xpath = "//button[@class = 'ant-modal-close']")
-    public Button close;
-
     @FindBy(xpath = "//div[text()='Filter by job ID']")
     public PageElement title;
 
