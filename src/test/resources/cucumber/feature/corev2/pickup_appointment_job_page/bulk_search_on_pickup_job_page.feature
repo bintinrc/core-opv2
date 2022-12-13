@@ -6,7 +6,7 @@ Feature: Bulk search on pickup jobs
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
   @deletePickupJob
-  Scenario:Force Search pickup jobs by job ID on Pickup Jobs page - single valid ID
+  Scenario:Search pickup jobs by job ID on Pickup Jobs page - single valid ID
     Given API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When Operator goes to Pickup Jobs Page
