@@ -406,7 +406,7 @@ Feature: Financial Batch Report
       | codAmount        | -5.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
-      | insuredFee       | null                                          |
+      | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.59                                          |
@@ -465,7 +465,7 @@ Feature: Financial Batch Report
       | codAmount        | -5.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
-      | insuredFee       | null                                          |
+      | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.59                                          |
@@ -511,8 +511,8 @@ Feature: Financial Batch Report
       | toBillingZone    | WEST                                          |
       | codAmount        | 0.00                                          |
       | insuredAmount    | 0.00                                          |
-      | codFee           | null                                          |
-      | insuredFee       | null                                          |
+      | codFee           | 0.0                                           |
+      | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.59                                          |
@@ -520,8 +520,8 @@ Feature: Financial Batch Report
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
-  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - Include Order-Level Details (uid:476722a8-beb7-4724-9bcc-247cadbd8521)
-    Given API Operator create new 'marketplace' shipper
+  Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected Shipper - Include Order-Level Details - With No COD, INS and handling fee (uid:6046902b-d077-43c0-babc-9683f3dd2b3b)
+    Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
       | {"shipper_id": "{KEY_SHIPPER_ID}","effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","comments": null,"pricing_script_id": {pricing-script-id-all},"salesperson_discount": {"shipper_id": "{KEY_SHIPPER_ID}","discount_amount": 2,"type": "FLAT"},"pricing_levers": {"cod_min_fee": 50,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25}} |
     And API Shipper set Shipper V4 using data below:
@@ -532,7 +532,7 @@ Feature: Financial Batch Report
       | account_id      | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} |
       | overall_balance | 0.00                                                       |
     Given API Shipper create V4 order using data below:
-      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 5,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "from": {"name": "QA-SO-Test-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": 1.0 },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
@@ -541,22 +541,10 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
-    Then Operator verifies financial batch report data in CSV is as below
-      | globalShipperId          | {KEY_SHIPPER_ID}                 |
-      | legacyShipperId          | {KEY_LEGACY_SHIPPER_ID}          |
-      | shipperName              | {KEY_CREATED_SHIPPER.name}       |
-      | date                     | {gradle-current-date-yyyy-MM-dd} |
-      | totalCOD                 | -5.00                            |
-      | CODAdjustment            | 0.00                             |
-      | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.14                             |
-      | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
     Then Operator verifies extended financial batch report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
@@ -568,12 +556,12 @@ Feature: Financial Batch Report
       | fromCity         | null                                          |
       | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
       | toBillingZone    | WEST                                          |
-      | codAmount        | -5.00                                         |
+      | codAmount        | 0.00                                          |
       | insuredAmount    | 0.00                                          |
-      | codFee           | 0.05                                          |
-      | insuredFee       | null                                          |
+      | codFee           | 0.00                                          |
+      | insuredFee       | 0.00                                          |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
       | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.14                                          |
+      | totalWithTax     | 9.09                                          |
       | type             | Completed                                     |
