@@ -1,4 +1,4 @@
-@MileZero @TargetFeature
+@MileZero
 Feature: All Shippers page
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -104,7 +104,7 @@ Feature: All Shippers page
     And Operator login to Ninja Dash as shipper "TEST-SHIPPER-{gradle-current-date-yyyyMMddHHmmsss}" from All Shippers page
     Then account name is "TEST-SHIPPER-{gradle-current-date-yyyyMMddHHmmsss}" on Ninja Dash page
 
-  @DeleteShipper @CloseNewWindows @Target
+  @DeleteShipper @CloseNewWindows
   Scenario: Ninja dash - delete all shipper pickup services
     When Operator go to menu Shipper -> All Shippers
     And Operator create new Shipper with basic settings using data below:
