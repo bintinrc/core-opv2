@@ -176,6 +176,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     failProceed.click();
   }
 
+
   public String getFailModelReasons() {
     String modelReason = failModelLines.get(1).getText();
     return modelReason;

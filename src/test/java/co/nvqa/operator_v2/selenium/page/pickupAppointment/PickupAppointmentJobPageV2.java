@@ -15,112 +15,111 @@ import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class PickupAppointmentJobPageV2  extends SimpleReactPage<PickupAppointmentJobPageV2> {
+public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmentJobPageV2> {
 
-    Logger LOGGER = getLogger(PickupAppointmentJobPage.class);
-    public PickupAppointmentJobPageV2(WebDriver webDriver) {
-        super(webDriver);
+  Logger LOGGER = getLogger(PickupAppointmentJobPage.class);
+
+  public PickupAppointmentJobPageV2(WebDriver webDriver) {
+    super(webDriver);
+  }
+
+  @FindBy(css = "#toast-container")
+  private PageElement toastContainer;
+  @FindBy(css = "[type='submit']")
+  private PageElement loadSelection;
+  @FindBy(xpath = "//a[text()='Create / edit job']")
+  private Button createEditJobButton;
+  @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
+  public CreateOrEditJobPage createOrEditJobPage;
+
+  public boolean isToastContainerDisplayed() {
+    try {
+      return toastContainer.isDisplayed();
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  public PageElement getLoadSelection() {
+    return loadSelection;
+  }
+
+  public void clickOnCreateOrEditJob() {
+    waitUntilElementIsClickable(createEditJobButton.getWebElement());
+    createEditJobButton.click();
+  }
+
+  public static class CreateOrEditJobPage extends PageElement {
+
+    @FindBy(css = "input[id='shipper']")
+    private PageElement shipperIDField;
+    @FindBy(css = "input[id='shipperAddress']")
+    private PageElement shipperAddressField;
+
+    public final String shipperListItem = "//div[@legacyshipperid='%s']";
+    public final String shipperAddressListItem = "//div[@label='%s']";
+
+    public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
+
+    public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
+
+    public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(css = "#toast-container")
-    private PageElement toastContainer;
-    @FindBy(css = "[type='submit']")
-    private PageElement loadSelection;
-    @FindBy(xpath = "//a[text()='Create / edit job']")
-    private Button createEditJobButton;
-    @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
-    public CreateOrEditJobPage createOrEditJobPage;
-
-    public boolean isToastContainerDisplayed() {
-        try {
-            return toastContainer.isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+    public void clickDeleteButton(String jobId) {
+      WebElement deleteButton = getWebDriver().findElement(
+          By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId)));
+      deleteButton.click();
     }
 
-    public PageElement getLoadSelection() {
-        return loadSelection;
+    public void fillShipperIdField(String shipperID) {
+      shipperIDField.sendKeys(shipperID);
     }
 
-    public void clickOnCreateOrEditJob() {
-        waitUntilElementIsClickable(createEditJobButton.getWebElement());
-        createEditJobButton.click();
+    public void selectShipperFromList(String shipperID) {
+      WebElement shipperItem = getWebDriver().findElement(By.xpath(f(shipperListItem, shipperID)));
+      shipperItem.click();
     }
 
-    public static class CreateOrEditJobPage extends PageElement
-    {
-
-        @FindBy(css = "input[id='shipper']")
-        private PageElement shipperIDField;
-        @FindBy(css = "input[id='shipperAddress']")
-        private PageElement shipperAddressField;
-
-        public final String shipperListItem = "//div[@legacyshipperid='%s']";
-        public final String shipperAddressListItem = "//div[@label='%s']";
-
-        public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
-
-        public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
-
-        public CreateOrEditJobPage (WebDriver webDriver, WebElement webElement) {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
-
-        public void clickDeleteButton(String jobId)
-        {
-            WebElement deleteButton = getWebDriver().findElement(By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId)));
-            deleteButton.click();
-        }
-        public void fillShipperIdField(String shipperID)
-        {
-            shipperIDField.sendKeys(shipperID);
-        }
-
-        public void selectShipperFromList(String shipperID)
-        {
-            WebElement shipperItem = getWebDriver().findElement(By.xpath(f(shipperListItem, shipperID)));
-            shipperItem.click();
-        }
-        public void fillShipperAddressField(String address)
-        {
-            shipperAddressField.sendKeys(address);
-        }
-        public void selectShipperAddressFromList(String address)
-        {
-            WebElement addressItem = getWebDriver().findElement(By.xpath(f(shipperAddressListItem, address)));
-            addressItem.click();
-        }
-
-        public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
-            try {
-                return webDriver.findElement(By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId)))
-                        .isDisplayed();
-            } catch (NoSuchElementException noSuchElementException) {
-                return false;
-            }
-        }
-
-        public boolean isEditButtonByJobIdDisplayed(String jobId) {
-            try {
-                return webDriver.findElement(By.cssSelector(f(EDIT_BUTTON_IN_CALENDAR_LOCATOR, jobId)))
-                        .isDisplayed();
-            } catch (NoSuchElementException noSuchElementException) {
-                return false;
-            }
-        }
+    public void fillShipperAddressField(String address) {
+      shipperAddressField.sendKeys(address);
     }
 
-
-    public static class DeletePickupJobModal extends AntModal {
-        public DeletePickupJobModal(WebDriver webDriver, WebElement webElement) {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
-
-
+    public void selectShipperAddressFromList(String address) {
+      WebElement addressItem = getWebDriver().findElement(
+          By.xpath(f(shipperAddressListItem, address)));
+      addressItem.click();
     }
+
+    public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
+      try {
+        return webDriver.findElement(By.cssSelector(f(DELETE_BUTTON_IN_CALENDAR_LOCATOR, jobId)))
+            .isDisplayed();
+      } catch (NoSuchElementException noSuchElementException) {
+        return false;
+      }
+    }
+
+    public boolean isEditButtonByJobIdDisplayed(String jobId) {
+      try {
+        return webDriver.findElement(By.cssSelector(f(EDIT_BUTTON_IN_CALENDAR_LOCATOR, jobId)))
+            .isDisplayed();
+      } catch (NoSuchElementException noSuchElementException) {
+        return false;
+      }
+    }
+  }
+
+
+  public static class DeletePickupJobModal extends AntModal {
+
+    public DeletePickupJobModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
 
 
 }

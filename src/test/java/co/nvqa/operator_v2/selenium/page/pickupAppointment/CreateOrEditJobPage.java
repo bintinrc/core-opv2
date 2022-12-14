@@ -71,7 +71,7 @@ public class CreateOrEditJobPage extends PageElement {
   public final String TIME_RANGE_FILTER_LABEL = "div[label='%s']";
   public final String JOB_TAG_FILTER_LOCATOR = "div[aria-label='%s']";
   public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
-  public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
+ 
   public final String SELECTED_TIME_RANGE_LOCATOR = "span[title='%s']";
   public final String STYLE = "style";
   public final String NOTIFICATION_MESSAGE_LOCATOR = "//div[@class='ant-notification-notice-message']";
