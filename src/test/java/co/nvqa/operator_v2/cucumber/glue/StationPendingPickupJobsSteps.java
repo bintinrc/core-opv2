@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.StationPendingPickupJobsPage;
+import co.nvqa.operator_v2.selenium.page.StationPendingPickupJobsPage.PendingPickupJobs;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -9,6 +10,7 @@ import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
 import java.util.List;
 import java.util.Map;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,15 +50,19 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
   }
 
-  @When("Operator clicks on the create job button in the Pending pickup page")
-  public void operatorClicksOnTheCreateJobButtonInThePendingPickupPage() {
-    stationPendingPickupJobsPage.clickCreateJobButton();
+  @When("Operator clicks on the {string} button in the Pending pickup page")
+  public void operatorClicksOnTheButtonInThePendingPickupPage(String buttonText) {
+    stationPendingPickupJobsPage.clickButton(buttonText);
     takesScreenshot();
   }
 
-  @Then("Operator verifies that url is redirected to {string} page")
-  public void operatorVerifiesThatUrlIsRedirectedToPickupAppointmentPage(String expectedURL) {
+  @Then("Operator verifies that url is redirected to {string} page on clicking the {string} button")
+  public void operatorVerifiesThatUrlIsRedirectedToPickupAppointmentPageOnclickingTheButton(
+      String expectedURL, String buttonText) {
+    String windowHandle = getWebDriver().getWindowHandle();
+    stationPendingPickupJobsPage.clickButton(buttonText);
     stationPendingPickupJobsPage.verifyCurrentPageURL(expectedURL);
+    //stationPendingPickupJobsPage.closeAllWindows(windowHandle);
   }
 
   @Then("Operator verifies {string} is matching in the jobs for today")
@@ -71,7 +77,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   public void operatorVerifyAssignToRouteButtonIsDisplayedForTheRecord() {
     Assertions.assertThat(
             stationPendingPickupJobsPage.assignToRouteButton.get(0).getWebElement().isDisplayed())
-        .as("Validation for presence of Assign to Route button").isEqualTo(true);
+        .as("Validation for presence of Assign to Route button").isTrue();
     takesScreenshot();
   }
 
@@ -82,4 +88,28 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies zero row is displayed in the table after applying filter")
+  public void operatorVerifiesZeroRowIsDisplayedInTheTableAfterApplyingFilter() {
+    Assertions.assertThat(stationPendingPickupJobsPage.noOfReultsInTable.size() == 0)
+        .as("Validation for presence of Assign to Route button").isTrue();
+    takesScreenshot();
+  }
+
+  @Then("Operator verify value on pending pickup table for the {string} column is equal to {string}")
+  public void operatorVerifyValueOnPendingPickupTableForTheColumnIsEqualTo(
+      String columnName, String expectedValue) {
+    pause5s();
+    stationPendingPickupJobsPage.switchToNewWindow();
+    PendingPickupJobs columnValue = PendingPickupJobs.valueOf(columnName);
+    String actualColumnValue = stationPendingPickupJobsPage.getColumnValue(columnValue);
+    Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
+        expectedValue, actualColumnValue);
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that {string} action button is displayed")
+  public void operatorVerifiesThatActionButtonIsDisplayed(String buttonText) {
+    stationPendingPickupJobsPage.validateThePresenceOfButton(buttonText);
+
+  }
 }

@@ -20,6 +20,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -313,9 +314,18 @@ public class StationManagementHomeSteps extends AbstractSteps {
     stationManagementHomePage.openModalPopup(modalTitle, tile);
   }
 
+  @SuppressWarnings("unchecked")
   @When("Operator clicks on the hamburger button for the tile: {string}")
   public void operator_clicks_hamburger_button_for_the_tile(String tileName) {
-    stationManagementHomePage.clickHamburgerIcon(tileName);
+    retryIfExpectedExceptionOccurred(() -> {
+          String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+          stationManagementHomePage.clickHamburgerIcon(tileName);
+          ;
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        StaleElementReferenceException.class);
   }
 
   @And("Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: {string}")
