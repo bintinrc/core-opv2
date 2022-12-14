@@ -477,7 +477,8 @@ Feature: Shipper Address Configuration
       | Hubs            |
       | Failure Reasons |
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
-      | Unable to update pickup type, error: sql: no rows in result set |
+      | Shipper address id 13891071 does not exist |
+      | Shipper address id 13913251 does not exist |
 
 
   Scenario: Unable to Bulk Configure Some Addresses Pickup Type
@@ -513,7 +514,7 @@ Feature: Shipper Address Configuration
       | Hubs            |
       | Failure Reasons |
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
-      | Unable to update pickup type, error: sql: no rows in result set |
+      | Shipper address id 2001389 does not exist |
 
 
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
@@ -538,7 +539,7 @@ Feature: Shipper Address Configuration
       | Hubs            |
       | Failure Reasons |
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
-      | Unable to update pickup type, error: sql: no rows in result set |
+      | Shipper address id 13913251 does not exist |
 
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     When Operator loads Shipper Address Configuration page
