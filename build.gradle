@@ -64,7 +64,7 @@ dependencies {
     implementation "co.nvqa:common-dp:1.1.2"
     implementation "co.nvqa:common-auth:1.1.1"
     implementation "co.nvqa:common-sort:1.0.7"
-    implementation "co.nvqa:commons:2.3.9"
+    implementation "co.nvqa:commons:2.3.10"
 }
 
 
