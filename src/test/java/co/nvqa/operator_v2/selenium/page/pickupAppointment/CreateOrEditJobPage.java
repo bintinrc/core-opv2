@@ -83,6 +83,7 @@ public class CreateOrEditJobPage extends PageElement {
   public final String CALENDAR_WEB_ELEMENT_LOCATOR = ".//*[@data-testid='paJobCalendar.day.%s']//*[@status='ready-for-routing']";
   public final String CALENDAR_DAY_WEB_ELEMENT_LOCATOR = "div[data-testid='paJobCalendar.day.%s']";
   public final String CALENDAR_STATUS_WEB_ELEMENT_LOCATOR = "div[status='%s']";
+  public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
 
   public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);

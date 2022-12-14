@@ -4,6 +4,8 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -31,7 +33,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   private Button createEditJobButton;
   @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
   public CreateOrEditJobPage createOrEditJobPage;
-
+  @FindBy(className = "ant-modal-wrap")
+  public DeletePickupJobModal deletePickupJobModal;
+  @FindBy(css = ".ant-notification")
+  public PickupPageNotification notificationModal;
   public boolean isToastContainerDisplayed() {
     try {
       return toastContainer.isDisplayed();
@@ -114,12 +119,28 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
 
   public static class DeletePickupJobModal extends AntModal {
+    @FindBy(xpath = "//span[text()='Submit']/parent::button")
+    public PageElement submitButton;
+    public final String ITEMS_ON_DELETE_JOB_MODAL = "//div[span[text()='%s']]//following-sibling::div//span";
 
     public DeletePickupJobModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
+
+    public String getFieldTextOnDeleteJobModal(String fieldName) {
+      waitUntilVisibilityOfElementLocated(
+          webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))));
+      return webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))).getText();
+    }
   }
 
+
+  public static class PickupPageNotification extends AntNotification {
+    public PickupPageNotification(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
 
 }
