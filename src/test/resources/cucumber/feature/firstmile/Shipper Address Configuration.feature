@@ -95,8 +95,8 @@ Feature: Shipper Address Configuration
       | dataset_name             | search_field   | search_value                                     | column_datakey |
       | Search by Address ID     | Address ID     | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | id             |
       | Search by Pickup Address | Pickup Address | 15SenokoRd,Singapore, SG, 000000                 | pickup_address |
-      | Search by Lat Long       | Lat Long       | 1.288147,103.740233                              | lat_long       |
-      | Search by Shipper ID     | Shipper ID     | 5356053                                          | shipper_id     |
+      | Search by Lat Long       | Lat Long       | 1.288147,103.740233                              | lat_long          |
+      | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id |
 
   Scenario: Download CSV of Shipper Address
     When Operator loads Shipper Address Configuration page

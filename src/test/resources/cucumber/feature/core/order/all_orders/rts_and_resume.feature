@@ -9,7 +9,7 @@ Feature: All Orders - RTS & Resume
   Scenario: Operator RTS Failed Delivery Order on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
@@ -33,6 +33,27 @@ Feature: All Orders - RTS & Resume
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator RTS single order on next day on All Orders page
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                                |
+      | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-working-day-yyyy-MM-dd}         |
+    And Operator verify order event on Edit order page using data below:
+      | name | RTS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE ADDRESS |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE CONTACT INFORMATION |
+    And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
+    And API Operator get order details
+    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
+    And DB Operator verifies waypoints record:
+      | id     | {KEY_TRANSACTION.waypointId} |
+      | status | Pending                      |
+    And DB Operator verifies orders record using data below:
+      | rts | 1 |
 
   @DeleteOrArchiveRoute
   Scenario: Operator RTS Multiple Orders on All Orders Page (uid:0061ef8a-2496-4ed9-a259-4dd01e8c7cba)

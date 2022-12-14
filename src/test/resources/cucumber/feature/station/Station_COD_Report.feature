@@ -623,7 +623,6 @@ Feature: Station COD Report
     When Operator filter driver strength using data below:
       | zones       | {zone-name}        |
       | driverTypes | {driver-type-name} |
-      | resigned    | No                 |
     And Operator updates driver details with the following info:
       | firstName | AUTO-DRIVER-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that success react notification displayed:

@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -30,7 +31,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class DpTaggingPage extends OperatorV2SimplePage {
+public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
 
   public DpTaggingTable dpTaggingTable;
 
@@ -59,9 +60,6 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class,'ant-upload-select')]//input")
   public FileInput selectFile;
 
-  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
-  public PageElement antNotificationMessage;
-
   @FindBy(xpath = LOCATOR_DROP_OFF_DATE)
   public MdSelect selectDate;
 
@@ -78,8 +76,9 @@ public class DpTaggingPage extends OperatorV2SimplePage {
   }
 
   public void verifyTaggingToast(String message) {
-    antNotificationMessage.waitUntilVisible();
-    String actualNotificationMessage = antNotificationMessage.getText();
+    AntNotification notification = noticeNotifications.get(0);
+    notification.waitUntilVisible();
+    String actualNotificationMessage = notification.getText();
     Assertions.assertThat(actualNotificationMessage)
         .as("Notification message is the same")
         .isEqualTo(message);
@@ -104,17 +103,14 @@ public class DpTaggingPage extends OperatorV2SimplePage {
     for (DpTagging dpTagging : listOfDpTagging) {
       String xpath = f(LOCATOR_TRACKING_ID, dpTagging.getTrackingId());
       Assertions.assertThat(isElementExist(xpath))
-              .as("Tracking ID is not listed on table")
-              .isTrue();
+          .as("Tracking ID is not listed on table")
+          .isTrue();
     }
   }
 
   public void verifyInvalidDpTaggingCsvIsNotUploadedSuccessfully() {
     String expectedErrorMessageOnToast = "No order data to process, please check the file";
-    String actualMessage = getText(
-        "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-    Assertions.assertThat(actualMessage).as("Error Message").isEqualTo(expectedErrorMessageOnToast);
-    waitUntilInvisibilityOfToast(expectedErrorMessageOnToast, false);
+    verifyTaggingToast(expectedErrorMessageOnToast);
   }
 
   private File buildCsv(List<DpTagging> listOfDpTagging) {
@@ -208,7 +204,7 @@ public class DpTaggingPage extends OperatorV2SimplePage {
 
   private String dropOffDate() {
     clickAndWaitUntilDone("//div[@data-row-index='0']" + LOCATOR_DROP_OFF_DATE);
-    String date =getWebDriver().findElement(By.xpath(DROP_OFF_DATE)).getText();
+    String date = getWebDriver().findElement(By.xpath(DROP_OFF_DATE)).getText();
     LocalDate localDate = LocalDate.parse(date);
     return localDate.plusDays(1).toString();
   }

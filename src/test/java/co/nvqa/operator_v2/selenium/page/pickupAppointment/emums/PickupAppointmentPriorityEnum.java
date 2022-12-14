@@ -11,7 +11,6 @@ public enum PickupAppointmentPriorityEnum {
     public String getName() {
         return name;
     }
-
     PickupAppointmentPriorityEnum(String name) {
         this.name = name;
     }

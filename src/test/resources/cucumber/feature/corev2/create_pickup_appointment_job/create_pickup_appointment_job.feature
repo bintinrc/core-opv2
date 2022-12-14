@@ -7,7 +7,7 @@ Feature: Create Pickup Appointment Job
 
   @CreateNewPickupJobs @DeletePickupJob
   Scenario: Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -50,7 +50,7 @@ Feature: Create Pickup Appointment Job
 
   @CreateNewPickupJobsOverlappingDateAndTime @DeletePickupJob
   Scenario: Create new pickup jobs on Pickup Jobs page calendar view - overlapping date and time
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -118,7 +118,7 @@ Feature: Create Pickup Appointment Job
 
   @CreateNewCustomisedPickupJobsPremiumShipper @DeletePickupJob
   Scenario: Create new Customised pickup jobs on Pickup Jobs page calendar view - Premium shipper
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-name}" in Shipper ID or Name field
     And Operator select address = "{premium-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -164,7 +164,7 @@ Feature: Create Pickup Appointment Job
 
   @CreateNewCustomisedPickupJobsStandardShipper @DeletePickupJob
   Scenario: Create new Customised pickup jobs on Pickup Jobs page calendar view - Standard shipper
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field

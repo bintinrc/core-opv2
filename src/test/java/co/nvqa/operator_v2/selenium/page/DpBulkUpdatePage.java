@@ -39,10 +39,10 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "(//input[@type='checkbox'])[1]/..")
   public Button firstCheckbox;
 
-  @FindBy(xpath = "//li[text()='Set Public']")
+  @FindBy(xpath = "//li[@data-testid='button_set_public']")
   public Button setPublic;
 
-  @FindBy(xpath = "//li[text()='Set Not Public']")
+  @FindBy(xpath = "//li[@data-testid='button_set_not_public']")
   public Button setNotPublic;
 
   @FindBy(xpath = "//div[contains(@id,'rcDialogTitle')]")

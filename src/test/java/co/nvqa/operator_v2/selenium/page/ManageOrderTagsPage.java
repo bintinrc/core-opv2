@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Tag;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,16 +14,16 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class ManageOrderTagsPage extends OperatorV2SimplePage {
+public class ManageOrderTagsPage extends SimpleReactPage<ManageOrderTagsPage> {
 
-  @FindBy(name = "container.manage-order-tags.create-tag")
-  public NvIconTextButton createTag;
+  @FindBy(css = "[data-testid='create-new-order-tag-button']")
+  public Button createTag;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public AddTagDialog addTagDialog;
 
-  @FindBy(css = "md-dialog")
-  public ConfirmDeleteDialog confirmDeleteDialog;
+  @FindBy(css = ".ant-modal")
+  public ConfirmDeleteModal confirmDeleteDialog;
 
   public TagsTable tagsTable;
 
@@ -31,16 +32,26 @@ public class ManageOrderTagsPage extends OperatorV2SimplePage {
     tagsTable = new TagsTable(webDriver);
   }
 
-  public static class AddTagDialog extends MdDialog {
+  @Override
+  public void waitUntilLoaded() {
+    if (createTag.isDisplayedFast()) {
+      waitUntilLoaded(2);
+    } else {
+      waitUntilLoaded(10);
+    }
 
-    @FindBy(css = "[id^='tag-name']")
-    public TextBox tagName;
+  }
 
-    @FindBy(id = "description")
+  public static class AddTagDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='tag-name-input']")
+    public ForceClearTextBox tagName;
+
+    @FindBy(css = "[data-testid='description-input']")
     public TextBox description;
 
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
+    @FindBy(css = "[data-testid='order-tag-dialog-form-submit-button']")
+    public Button submit;
 
     @FindBy(name = "Submit Changes")
     public NvButtonSave submitChanges;
@@ -50,7 +61,17 @@ public class ManageOrderTagsPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class TagsTable extends MdVirtualRepeatTable<Tag> {
+  public static class ConfirmDeleteModal extends AntModal {
+
+    @FindBy(css = "[data-testid='confirm-button']")
+    public Button delete;
+
+    public ConfirmDeleteModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class TagsTable extends AntTableV2<Tag> {
 
     public static final String COLUMN_NAME = "name";
     public static final String ACTION_DELETE = "Delete";
@@ -62,8 +83,8 @@ public class ManageOrderTagsPage extends OperatorV2SimplePage {
           .put("description", "description")
           .build()
       );
-      setMdVirtualRepeat("tag in getTableData()");
-      setActionButtonsLocators(ImmutableMap.of(ACTION_DELETE, "commons.delete"));
+      setActionButtonsLocators(ImmutableMap.of(ACTION_DELETE,
+          "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button"));
       setEntityClass(Tag.class);
     }
   }

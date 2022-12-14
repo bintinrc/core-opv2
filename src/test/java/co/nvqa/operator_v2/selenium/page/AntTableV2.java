@@ -59,7 +59,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    click(xpath);
+    new Button(getWebDriver(), xpath).click();
   }
 
   @Override
