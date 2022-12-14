@@ -41,15 +41,16 @@ public class CodReportSteps extends AbstractSteps {
     }
     codReportPage.date.setDate(
         StandardTestUtils.convertToZonedDateTime(dateAsString, DTF_NORMAL_DATE));
+    pause2s();
     codReportPage.waitWhilePageIsLoading();
   }
 
-  @Then("^Operator verify COR record on COD Report page:$")
+  @Then("^Operator verify COD record on COD Report page:$")
   public void operatorVerifyOrderIsExistWithCorrectInfo(Map<String, String> data) {
     CodInfo expected = new CodInfo(resolveKeyValues(data));
     int index = codReportPage.codTable.findRow(expected.getTrackingId());
     Assertions.assertThat(index)
-        .as("Index of row with Tracking ID " + expected.getTrackingId())
+        .withFailMessage("Row with Tracking ID " + expected.getTrackingId() + " was not found")
         .isPositive();
     CodInfo actual = codReportPage.codTable.readEntity(index);
     expected.compareWithActual(actual);

@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
@@ -45,6 +46,7 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +108,29 @@ public class EditOrderSteps extends AbstractSteps {
     order.setParcelSize(parcelSize.getRegular());
     editOrderPage.editOrderDetails(order);
     takesScreenshot();
+  }
+
+  @When("Operator update order details on Edit Order page:")
+  public void updateOrderDetails(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    editOrderPage.clickMenu("Order Settings", "Edit Order Details");
+    editOrderPage.editOrderDetailsDialog.waitUntilVisible();
+    if (data.containsKey("weight")) {
+      editOrderPage.editOrderDetailsDialog.weight.setValue(data.get("weight"));
+    }
+    if (data.containsKey("size")) {
+      editOrderPage.editOrderDetailsDialog.parcelSize.setValue(data.get("size"));
+    }
+    if (data.containsKey("length")) {
+      editOrderPage.editOrderDetailsDialog.length.setValue(data.get("length"));
+    }
+    if (data.containsKey("width")) {
+      editOrderPage.editOrderDetailsDialog.width.setValue(data.get("width"));
+    }
+    if (data.containsKey("breadth")) {
+      editOrderPage.editOrderDetailsDialog.breadth.setValue(data.get("breadth"));
+    }
+    editOrderPage.editOrderDetailsDialog.saveChanges.click();
   }
 
   @Then("^Operator verifies dimensions information on Edit Order page:$")
@@ -1477,11 +1502,24 @@ public class EditOrderSteps extends AbstractSteps {
     operatorVerifyZone(zone.getShortName());
   }
 
+  @Then("Operator verify {value} RTS hint is displayed on Edit Order page")
+  public void verifyRtsHint(String value) {
+    editOrderPage.editRtsDetailsDialog.waitUntilVisible();
+    Assertions.assertThat(editOrderPage.editRtsDetailsDialog.hint.isDisplayed())
+        .withFailMessage("RTS hint is not displayed")
+        .isTrue();
+    Assertions.assertThat(editOrderPage.editRtsDetailsDialog.hint.getText())
+        .as("RTS hint text")
+        .isEqualTo(value);
+  }
+
   @Then("Operator RTS order on Edit Order page using data below:")
   public void operatorRtsOnEditOrderPage(Map<String, String> data) {
     data = resolveKeyValues(data);
-    editOrderPage.clickMenu("Delivery", "Return to Sender");
-    editOrderPage.editRtsDetailsDialog.waitUntilVisible();
+    if (!editOrderPage.editRtsDetailsDialog.isDisplayedFast()) {
+      editOrderPage.clickMenu("Delivery", "Return to Sender");
+      editOrderPage.editRtsDetailsDialog.waitUntilVisible();
+    }
     String value = data.get("reason");
     if (StringUtils.isNotBlank(value)) {
       editOrderPage.editRtsDetailsDialog.reason.selectValue(value);

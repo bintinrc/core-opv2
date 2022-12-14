@@ -324,17 +324,10 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       ms.setNoOfReservation(Integer.valueOf(value));
     }
-
-    List<MilkrunSettings> milkrunSettings = new LinkedList<>();
-    milkrunSettings.add(ms);
-
     address.setMilkRun(true);
 
-    if (address.getMilkrunSettings() == null) {
-      address.setMilkrunSettings(milkrunSettings);
-    } else {
-      address.getMilkrunSettings().addAll(milkrunSettings);
-    }
+    List<MilkrunSettings> milkrunSettings = Collections.singletonList(ms);
+    address.setMilkrunSettings(milkrunSettings);
   }
 
   @Then("^Operator verify the new Shipper is created successfully$")

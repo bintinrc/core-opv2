@@ -672,8 +672,8 @@ Feature: RTS
     When Operator RTS order on Edit Order page using data below:
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                           |
-      | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING |
+      | top    | Network Request Error                                                                                             |
+      | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Operator verifies orders record using data below:
       | rts | 0 |
     Examples:
@@ -754,17 +754,21 @@ Feature: RTS
     And API Shipper create V4 order using data below:
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"Elsa Customer","phone_number":"+6583014911","email":"elsa@ninja.com","address":{"address1":"233E ST. JOHN'S ROAD","postcode":"757995","city":"Singapore","country":"Singapore","latitude":1.31800143464103,"longitude":103.923977928076}},"to":{"name":"Elsa Sender","phone_number":"+6583014912","email":"elsaf@ninja.com","address":{"address1":"9 TUA KONG GREEN","country":"Singapore","postcode":"455384","city":"Singapore","latitude":1.3184395712682,"longitude":103.925311276846}},"parcel_job":{ "is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
+    And Operator waits for 10 seconds
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | distribution_point_id | {dpms-id} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And Operator refresh page
+    And Operator click Delivery -> Return to Sender on Edit Order page
+    And Operator verify "Order have DP attached to Pickup Transactions, contact and address details disabled" RTS hint is displayed on Edit Order page
     And Operator RTS order on Edit Order page using data below:
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
-      | country      | Singapore                      |
-      | city         | Singapore                      |
-      | address1     | 50 Amber Rd                    |
-      | postalCode   | 439888                         |
     Then Operator verifies that info toast displayed:
       | top                | 1 order(s) RTS-ed |
       | waitUntilInvisible | true              |
@@ -778,30 +782,30 @@ Feature: RTS
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     When API Operator get order details
-    When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
+    When API Operator get order details
+    When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
     Then DB Operator verifies transactions record:
-      | orderId    | {KEY_CREATED_ORDER_ID}              |
-      | waypointId | {KEY_TRANSACTION_BEFORE.waypointId} |
-      | type       | DD                                  |
-      | status     | Fail                                |
-    Then DB Operator verifies transactions record:
-      | orderId    | {KEY_CREATED_ORDER_ID}             |
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | type       | DD                                 |
-      | status     | Pending                            |
-      | routeId    | null                               |
-      | address1   | 50 Amber Rd                        |
-      | postcode   | 439888                             |
-      | city       | Singapore                          |
-      | country    | Singapore                          |
-    And DB Operator verifies transactions after RTS
-      | number_of_txn       | 3       |
-      | old_delivery_status | Fail    |
-      | new_delivery_status | Pending |
-      | new_delivery_type   | DD      |
-    And DB Operator verifies waypoint status is "PENDING"
-    And DB Operator verifies waypoints.route_id & seq_no is NULL
-    When DB Operator gets waypoint record
+      | orderId    | {KEY_CREATED_ORDER_ID}                    |
+      | waypointId | {KEY_TRANSACTION.waypointId}              |
+      | type       | DD                                        |
+      | status     | Pending                                   |
+      | routeId    | null                                      |
+      | address1   | {KEY_CREATED_ORDER_ORIGINAL.fromAddress1} |
+      | address2   | {KEY_CREATED_ORDER_ORIGINAL.fromAddress2} |
+      | postcode   | {KEY_CREATED_ORDER_ORIGINAL.fromPostcode} |
+      | city       | {KEY_CREATED_ORDER_ORIGINAL.fromCity}     |
+      | country    | {KEY_CREATED_ORDER_ORIGINAL.fromCountry}  |
+    And DB Operator verifies waypoints record:
+      | id       | {KEY_TRANSACTION.waypointId}              |
+      | status   | Pending                                   |
+      | routeId  | null                                      |
+      | seqNo    | null                                      |
+      | address1 | {KEY_CREATED_ORDER_ORIGINAL.fromAddress1} |
+      | address2 | {KEY_CREATED_ORDER_ORIGINAL.fromAddress2} |
+      | postcode | {KEY_CREATED_ORDER_ORIGINAL.fromPostcode} |
+      | city     | {KEY_CREATED_ORDER_ORIGINAL.fromCity}     |
+      | country  | {KEY_CREATED_ORDER_ORIGINAL.fromCountry}  |
+    When DB Operator gets "{KEY_TRANSACTION.waypointId}" waypoint record
     And API Operator get Addressing Zone from a lat long with type "RTS"
     Then Operator verifies Zone is correct after RTS on Edit Order page
     And Operator verifies waypoints.routing_zone_id is correct

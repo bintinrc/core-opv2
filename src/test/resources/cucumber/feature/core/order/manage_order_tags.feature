@@ -21,7 +21,7 @@ Feature: Manage Order Tags
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
     When Operator go to menu Order -> Manage Order Tags
     And Operator deletes created tag on Manage Order Tags page
-    Then Operator verifies that success toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top | 1 Order Tag Deleted |
     And Operator verifies that created tag has been deleted on Manage Order Tags page
 
