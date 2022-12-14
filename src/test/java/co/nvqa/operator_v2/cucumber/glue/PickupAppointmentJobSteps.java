@@ -999,4 +999,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
       }
     });
   }
+
+  @Then("Operator verifies the Table on Pickup Jobs Page")
+  public void operatorVerifiesTableOnPickupJobsPage(){
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyPickupJobsTable());
+  }
 }
