@@ -760,7 +760,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
   @Then("Operator verifies that the mouseover text is not displayed on moving away from the tile title")
   public void operator_verifies_that_the_mouseover_text_is_not_displayed_on_moving_away_from_the_tile_title() {
-    stationManagementHomePage.mouseOverToHubDropdown();
+    stationManagementHomePage.mouseOverToManualButton();
   }
 
   @Then("Operator verifies that the chart is displayed in incoming shipment modal")

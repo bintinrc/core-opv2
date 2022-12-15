@@ -80,7 +80,7 @@ Feature: English (SG, MY, PH)
     Examples:
       | HubName      | Language | TileText                               |
       | {hub-name-9} | English  | Number of parcels with exception cases |
-
+@Debug
   Scenario Outline: English Tooltip for Parcel in Hub (uid:861822ab-5f81-4b0f-b7d2-07a9dfc78f6a)
     Given Operator loads Operator portal home page
     And Operator opens profile and navigates to settings screen
@@ -202,10 +202,9 @@ Feature: English (SG, MY, PH)
       | HubName      | Language | TileText     |
       | {hub-name-9} | English  | For Shipment |
 
+  @Debug
   Scenario Outline: English Tooltip for N+0 Pickup Rates
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
@@ -216,10 +215,9 @@ Feature: English (SG, MY, PH)
       | HubName        | Country | TileText         |
       | {hub-name-1vn} | Vietnam | N+0 Pickup Rates |
 
+  @Debug
   Scenario Outline: English Tooltip for Addresses with No Job Created
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
@@ -230,10 +228,9 @@ Feature: English (SG, MY, PH)
       | HubName        | Country | TileText                       |
       | {hub-name-1vn} | Vietnam | Addresses with no jobs created |
 
+  @Debug
   Scenario Outline: English Tooltip for Addresses with Unrouted Jobs
     Given Operator loads Operator portal home page
-    And Operator changes the country to "<Country>"
-    And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following text is displayed on hover over the tile text: "<TileText>"
