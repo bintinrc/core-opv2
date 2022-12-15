@@ -191,7 +191,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
-  public final String PICKUP_JOBS_COLUMN_HEADER_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+  public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
   public BulkSelectTable bulkSelect;
 
   @FindBy(className = "ant-modal-wrap")
@@ -717,22 +717,22 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public void verifyPickupJobsTable(){
 
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupAppointmentJobId")).isEnabled()).as("Job ID is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"status")).isEnabled()).as("Job status is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"tagNames")).isEnabled()).as("Job tags is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"priorityLevel")).isEnabled()).as("Priority level is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"legacyShipperId")).isEnabled()).as("Shipper ID is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"shipperInfo")).isEnabled()).as("Shipper name & contact is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupAddress")).isEnabled()).as("Pickup address is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"driverName")).isEnabled()).as("Driver name is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"routeId")).isEnabled()).as("Route ID is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupReadyDatetimeStr")).isEnabled()).as("Ready by is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupLatestDatetimeStr")).isEnabled()).as("Latest by is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupAppointmentJobId")).isEnabled()).as("Job ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"status")).isEnabled()).as("Job status is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"tagNames")).isEnabled()).as("Job tags is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"priorityLevel")).isEnabled()).as("Priority level is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"legacyShipperId")).isEnabled()).as("Shipper ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"shipperInfo")).isEnabled()).as("Shipper name & contact is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupAddress")).isEnabled()).as("Pickup address is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"driverName")).isEnabled()).as("Driver name is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"routeId")).isEnabled()).as("Route ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupReadyDatetimeStr")).isEnabled()).as("Ready by is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupLatestDatetimeStr")).isEnabled()).as("Latest by is display and can be sorted").isTrue();
     Assertions.assertThat(findElementByXpath("//div[@data-testid = 'tableHeaderTitle.historicalSize']").isEnabled()).as("Historical size breakdown is display").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupApproxVolume")).isEnabled()).as("Approx vol is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupServiceLevel")).isEnabled()).as("Job service level is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupServiceType")).isEnabled()).as("Job service type is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"failureReasonDescription")).isEnabled()).as("Failure reason is display and can be sorted").isTrue();
-    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_XPATH,"pickupInstructions")).isEnabled()).as("Comments is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupApproxVolume")).isEnabled()).as("Approx vol is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupServiceLevel")).isEnabled()).as("Job service level is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupServiceType")).isEnabled()).as("Job service type is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"failureReasonDescription")).isEnabled()).as("Failure reason is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupInstructions")).isEnabled()).as("Comments is display and can be sorted").isTrue();
   }
 }
