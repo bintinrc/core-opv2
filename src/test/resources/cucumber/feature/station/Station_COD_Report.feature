@@ -376,7 +376,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @Happypath @ArchiveRoute @default-sg
+  @Happypath @ArchiveRoute @default-sg @Debug
   Scenario Outline: [SG, MY, TH, PH] View COD Collected in Summary Tab (uid:bad20f02-1d6e-4014-a9fc-226b21a0b8cb)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
