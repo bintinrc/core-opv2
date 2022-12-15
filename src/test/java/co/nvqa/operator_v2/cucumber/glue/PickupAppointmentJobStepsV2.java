@@ -37,6 +37,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         getWebDriver().switchTo().frame(0);
         pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
                 pickupAppointmentJobPage.getLoadSelection().getWebElement());
+        pickupAppointmentJobPage.waitWhilePageIsLoading();
     }
 
     @When("Operator click on Create or edit job button on this top right corner of the page")
