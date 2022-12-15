@@ -49,6 +49,7 @@ import java.util.Optional;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -287,7 +288,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editOrderDetailsDialog.parcelSize.selectValue(parcelSize);
     editOrderDetailsDialog.weight.setValue(dimension.getWeight());
     editOrderDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Current order updated successfully", true);
   }
 
   public void editOrderInstructions(String pickupInstruction, String deliveryInstruction) {
@@ -430,8 +430,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String trackingId = order.getTrackingId();
     String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename(fileName);
     verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
-    AirwayBill airwayBill = PdfUtils
-        .getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, index);
+    AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(
+        TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, index);
 
     Assertions.assertThat(airwayBill.getTrackingId()).as("Tracking ID").isEqualTo(trackingId);
 
@@ -460,12 +460,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
     Assertions.assertThat(airwayBill.getComments()).as("Comments")
         .isEqualTo(order.getInstruction());
 
-    String actualQrCodeTrackingId = TestUtils
-        .getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
+    String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(
+        airwayBill.getTrackingIdQrCodeFile());
     Assertions.assertThat(actualQrCodeTrackingId).as("Tracking ID - QR Code").isEqualTo(trackingId);
 
-    String actualBarcodeTrackingId = TestUtils
-        .getTextFromQrCodeImage(airwayBill.getTrackingIdBarcodeFile());
+    String actualBarcodeTrackingId = TestUtils.getTextFromQrCodeImage(
+        airwayBill.getTrackingIdBarcodeFile());
     Assertions.assertThat(actualBarcodeTrackingId).as("Tracking ID - Barcode 128")
         .isEqualTo(trackingId);
   }
@@ -528,8 +528,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected,
       String stringContained) {
-    ZonedDateTime eventDateExpected = DateUtil
-        .getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
+    ZonedDateTime eventDateExpected = DateUtil.getDate(
+        ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
     int rowWithExpectedEvent = 1;
     for (int i = 1; i <= eventsTable.getRowsCount(); i++) {
@@ -839,8 +839,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     Dimension dimension = new Dimension();
     String actualText = getText("//label[text()='Dimensions']/following-sibling::p");
 
-    if (!actualText.contains("-") && !actualText.contains("x x cm") && !actualText
-        .contains("(L) x (B) x (H) cm")) {
+    if (!actualText.contains("-") && !actualText.contains("x x cm") && !actualText.contains(
+        "(L) x (B) x (H) cm")) {
       String temp = actualText.replace("cm", "");
       String[] dims = temp.split("x");
       Double height = Double.parseDouble(dims[1]);
@@ -1078,20 +1078,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromCountryPattern = f(".* From Country .* (to|new value) %s.*",
           order.getFromCountry());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress1Pattern,
-              eventDescription),
-          eventDescription.matches(fromAddress1Pattern));
+          eventDescription), eventDescription.matches(fromAddress1Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress2Pattern,
-              eventDescription),
-          eventDescription.matches(fromAddress2Pattern));
+          eventDescription), eventDescription.matches(fromAddress2Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromPostcodePattern,
-              eventDescription),
-          eventDescription.matches(fromPostcodePattern));
+          eventDescription), eventDescription.matches(fromPostcodePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCityPattern,
-              eventDescription),
-          eventDescription.matches(fromCityPattern));
+          eventDescription), eventDescription.matches(fromCityPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCountryPattern,
-              eventDescription),
-          eventDescription.matches(fromCountryPattern));
+          eventDescription), eventDescription.matches(fromCountryPattern));
     }
 
     public void verifyUpdateDeliveryAddressEventDescription(Order order, String eventDescription) {
@@ -1101,20 +1096,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String toCityPattern = f(".* To City .* (to|new value) %s.*", order.getToCity());
       String toCountryPattern = f(".* To Country .* (to|new value) %s.*", order.getToCountry());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress1Pattern,
-              eventDescription),
-          eventDescription.matches(toAddress1Pattern));
+          eventDescription), eventDescription.matches(toAddress1Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress2Pattern,
-              eventDescription),
-          eventDescription.matches(toAddress2Pattern));
+          eventDescription), eventDescription.matches(toAddress2Pattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toPostcodePattern,
-              eventDescription),
-          eventDescription.matches(toPostcodePattern));
+          eventDescription), eventDescription.matches(toPostcodePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toCityPattern,
-              eventDescription),
-          eventDescription.matches(toCityPattern));
+          eventDescription), eventDescription.matches(toCityPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toCountryPattern,
-              eventDescription),
-          eventDescription.matches(toCountryPattern));
+          eventDescription), eventDescription.matches(toCountryPattern));
     }
 
     public void verifyUpdatePickupContactInformationEventDescription(Order order,
@@ -1124,14 +1114,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String fromContactPattern = f(".* From Contact .* (to|new value) \\%s.*",
           order.getFromContact());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromNamePattern,
-              eventDescription),
-          eventDescription.matches(fromNamePattern));
+          eventDescription), eventDescription.matches(fromNamePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromEmailPattern,
-              eventDescription),
-          eventDescription.matches(fromEmailPattern));
+          eventDescription), eventDescription.matches(fromEmailPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", fromContactPattern,
-              eventDescription),
-          eventDescription.matches(fromContactPattern));
+          eventDescription), eventDescription.matches(fromContactPattern));
     }
 
     public void verifyUpdateDeliveryContactInformationEventDescription(Order order,
@@ -1140,14 +1127,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
       String toEmailPattern = f(".* To Email .* (to|new value) %s.*", order.getToEmail());
       String toContactPattern = f(".* To Contact .* (to|new value) \\%s.*", order.getToContact());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toNamePattern,
-              eventDescription),
-          eventDescription.matches(toNamePattern));
+          eventDescription), eventDescription.matches(toNamePattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toEmailPattern,
-              eventDescription),
-          eventDescription.matches(toEmailPattern));
+          eventDescription), eventDescription.matches(toEmailPattern));
       assertTrue(f("'%s' pattern is not present in the '%s' event description", toContactPattern,
-              eventDescription),
-          eventDescription.matches(toContactPattern));
+          eventDescription), eventDescription.matches(toContactPattern));
     }
 
     public void verifyUpdatePickupSlaEventDescription(Order order, String eventDescription) {
@@ -1157,12 +1141,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
           order.getPickupEndDate(), order.getPickupTimeslot().getEndTime());
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", fromPickUpStartTimePattern,
-              eventDescription),
-          eventDescription.matches(fromPickUpStartTimePattern));
+              eventDescription), eventDescription.matches(fromPickUpStartTimePattern));
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", fromPickUpEndTimePattern,
-              eventDescription),
-          eventDescription.matches(fromPickUpEndTimePattern));
+              eventDescription), eventDescription.matches(fromPickUpEndTimePattern));
     }
 
     public void verifyUpdateDeliverySlaEventDescription(Order order, String eventDescription) {
@@ -1172,30 +1154,25 @@ public class EditOrderPage extends OperatorV2SimplePage {
           order.getDeliveryDate(), order.getDeliveryTimeslot().getEndTime());
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", deliveryStartTimePattern,
-              eventDescription),
-          eventDescription.matches(deliveryStartTimePattern));
+              eventDescription), eventDescription.matches(deliveryStartTimePattern));
       assertTrue(
           f("'%s' pattern is not present in the '%s' event description", deliveryEndTimePattern,
-              eventDescription),
-          eventDescription.matches(deliveryEndTimePattern));
+              eventDescription), eventDescription.matches(deliveryEndTimePattern));
     }
 
     public void verifyPickupAddressEventDescription(Order order, String eventDescription) {
       String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getFromAddress1(),
-          order.getFromAddress2(),
-          order.getFromCity(), order.getFromCountry(), order.getFromPostcode());
+          order.getFromAddress2(), order.getFromCity(), order.getFromCountry(),
+          order.getFromPostcode());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern,
-              eventDescription),
-          eventDescription.matches(addressPattern));
+          eventDescription), eventDescription.matches(addressPattern));
     }
 
     public void verifyDeliveryAddressEventDescription(Order order, String eventDescription) {
       String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getToAddress1(),
-          order.getToAddress2(),
-          order.getToCity(), order.getToCountry(), order.getToPostcode());
+          order.getToAddress2(), order.getToCity(), order.getToCountry(), order.getToPostcode());
       assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern,
-              eventDescription),
-          eventDescription.matches(addressPattern));
+          eventDescription), eventDescription.matches(addressPattern));
     }
 
     public void verifyVerifyUpdateCashDescription(Order order, String eventDescription) {
@@ -1203,13 +1180,11 @@ public class EditOrderPage extends OperatorV2SimplePage {
       if (String.valueOf(order.getCod().getGoodsAmount()) == null) {
         cashPattern = f("Cash On Delivery changed from 0 to .*", order.getCod().getGoodsAmount());
         assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern,
-                eventDescription),
-            eventDescription.matches(cashPattern));
+            eventDescription), eventDescription.matches(cashPattern));
       } else {
         cashPattern = f("Cash On Delivery changed from %s to .*", order.getCod().getGoodsAmount());
         assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern,
-                eventDescription),
-            eventDescription.matches(cashPattern));
+            eventDescription), eventDescription.matches(cashPattern));
       }
     }
 
@@ -1220,18 +1195,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
           order.getDimensions().getLength().intValue());
       String heightPattern = f(".* Height changed from .* to %s.*",
           order.getDimensions().getHeight().intValue());
-      assertTrue(
-          f("'%s' pattern is not present in the '%s' event description", widthPattern,
-              eventDescription),
-          eventDescription.matches(widthPattern));
-      assertTrue(
-          f("'%s' pattern is not present in the '%s' event description", lengthPattern,
-              eventDescription),
-          eventDescription.matches(lengthPattern));
-      assertTrue(
-          f("'%s' pattern is not present in the '%s' event description", heightPattern,
-              eventDescription),
-          eventDescription.matches(heightPattern));
+      assertTrue(f("'%s' pattern is not present in the '%s' event description", widthPattern,
+          eventDescription), eventDescription.matches(widthPattern));
+      assertTrue(f("'%s' pattern is not present in the '%s' event description", lengthPattern,
+          eventDescription), eventDescription.matches(lengthPattern));
+      assertTrue(f("'%s' pattern is not present in the '%s' event description", heightPattern,
+          eventDescription), eventDescription.matches(heightPattern));
     }
 
     public void verifyHubInboundWithDeviceIdEventDescription(Order order, String eventDescription) {
@@ -1239,16 +1208,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
       deviceIdPattern = f(".* Device Id: 12345 .*");
       assertTrue(f("'%s' pattern is not present in the '%s' event description", deviceIdPattern,
-              eventDescription),
-          eventDescription.matches(deviceIdPattern));
+          eventDescription), eventDescription.matches(deviceIdPattern));
     }
   }
 
   public void tagOrderToDP(String dpId) {
     dpDropOffSettingDialog.dropOffDp.selectValue(dpId);
     List<String> dpDropOffDates = dpDropOffSettingDialog.dropOffDate.getOptions();
-    dpDropOffSettingDialog.dropOffDate
-        .selectValue(dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
+    dpDropOffSettingDialog.dropOffDate.selectValue(
+        dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
     dpDropOffSettingDialog.saveChanges.clickAndWaitUntilDone();
     waitUntilInvisibilityOfToast("Tagging to DP done successfully", true);
   }
@@ -2031,6 +1999,15 @@ public class EditOrderPage extends OperatorV2SimplePage {
     @FindBy(id = "weight")
     public TextBox weight;
 
+    @FindBy(id = "length")
+    public TextBox length;
+
+    @FindBy(id = "width")
+    public TextBox width;
+
+    @FindBy(id = "breadth")
+    public TextBox breadth;
+
     @FindBy(name = "commons.save-changes")
     public NvApiTextButton saveChanges;
   }
@@ -2142,6 +2119,9 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
+
+    @FindBy(css = "[text='container.order.edit.rts-hint'] p")
+    public PageElement hint;
 
     @FindBy(css = "md-select[id^='commons.reason']")
     public MdSelect reason;
@@ -2268,8 +2248,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     createTicketDialog.shipperZendeskId.setValue(recoveryTicket.getShipperZendeskId());
     createTicketDialog.ticketNotes.setValue(recoveryTicket.getTicketNotes());
 
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       if (createTicketDialog.createTicket.isDisabled()) {
         createTicketDialog.trackingId.setValue(trackingId + " ");
         pause100ms();
@@ -2472,8 +2451,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public ChatOrderItem findOrderItemByTrackingId(String trackingId) {
       return orderItems.stream()
           .filter(chatOrderItem -> equalsIgnoreCase(trackingId, chatOrderItem.trackingId.getText()))
-          .findFirst()
-          .orElseThrow(() -> new AssertionError(
+          .findFirst().orElseThrow(() -> new AssertionError(
               "Tracking ID " + trackingId + " not found in Chat With Driver dialog"));
     }
 

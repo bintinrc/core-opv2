@@ -11,6 +11,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"<serviceLevel>","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
       | shipper      | {filter-shipper-name} |
@@ -47,6 +48,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime    | today                                                    |
       | shipper         | {filter-shipper-name}                                    |
@@ -68,6 +70,7 @@ Feature: Create Route Groups - Priority Parcel Filters
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard","parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime    | today                              |
       | shipper         | {filter-shipper-name}              |
@@ -95,6 +98,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | shipper                | {filter-shipper-name}            |
       | hubInboundDatetimeFrom | {gradle-current-date-yyyy-MM-dd} |
@@ -118,6 +122,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And API Operator global inbounds the order belongs to specific Hub Inbound User:
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime   | today         |
       | hubInboundUser | {vendor-name} |
@@ -138,6 +143,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And API Operator global inbounds the order belongs to specific Hub Inbound User:
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime           | today                            |
       | shipper                | {filter-shipper-name}            |
@@ -162,6 +168,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And API Operator global inbounds the order belongs to specific Hub Inbound User:
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | startDateTimeFrom | {gradle-current-date-yyyy-MM-dd} |
       | startDateTimeTo   | {gradle-next-3-day-yyyy-MM-dd}   |
@@ -187,6 +194,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And API Operator global inbounds the order belongs to specific Hub Inbound User:
       | jsonRequest | {"barcodes":["{KEY_CREATED_ORDER_TRACKING_ID}"],"weight":{"value":10},"dimensions":{"l":500.1,"w":220,"h":710},"hub_id":{hub-id}} |
     When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime                   | today                            |
       | shipper                        | {filter-shipper-name}            |

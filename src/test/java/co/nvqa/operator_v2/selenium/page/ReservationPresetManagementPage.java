@@ -85,6 +85,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage {
 
   public void addNewGroup(ReservationGroup reservationPreset) {
     waitUntilPageLoaded();
+    overviewTab.click();
     moreActions.selectOption("Add New Group");
     addNewGroupDialog.waitUntilVisible();
     addNewGroupDialog.fillForm(reservationPreset);

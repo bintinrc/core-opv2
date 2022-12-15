@@ -71,9 +71,9 @@ public class CreateOrEditJobPage extends PageElement {
   public final String TIME_RANGE_FILTER_LABEL = "div[label='%s']";
   public final String JOB_TAG_FILTER_LOCATOR = "div[aria-label='%s']";
   public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
- 
+
   public final String SELECTED_TIME_RANGE_LOCATOR = "span[title='%s']";
-  public final String STYLE = "style";
+  public final String BACKGROUND_COLOR = "background-color";
   public final String NOTIFICATION_MESSAGE_LOCATOR = "//div[@class='ant-notification-notice-message']";
   public final String NOTIFICATION_DESCRIPTION_LOCATOR = "div.ant-notification-notice-description";
   public final String TEXT_CONTENT = "textContent";
@@ -83,6 +83,8 @@ public class CreateOrEditJobPage extends PageElement {
   public final String CALENDAR_WEB_ELEMENT_LOCATOR = ".//*[@data-testid='paJobCalendar.day.%s']//*[@status='ready-for-routing']";
   public final String CALENDAR_DAY_WEB_ELEMENT_LOCATOR = "div[data-testid='paJobCalendar.day.%s']";
   public final String CALENDAR_STATUS_WEB_ELEMENT_LOCATOR = "div[status='%s']";
+  public final String CUSTOMISED_TIME_RANGE_BY_LOCATOR = "//label[@for='%s']//parent::div//following-sibling::div//span[@class='ant-select-selection-item']";
+  public final String TITLE = "title";
   public final String EDIT_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.edit.%s']";
 
   public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
@@ -298,7 +300,7 @@ public class CreateOrEditJobPage extends PageElement {
     return webDriver.findElement(
             By.cssSelector(f(CALENDAR_DAY_WEB_ELEMENT_LOCATOR, getDayFromFullDate(date))))
         .findElement(By.cssSelector(f(CALENDAR_STATUS_WEB_ELEMENT_LOCATOR, status)))
-        .getAttribute(STYLE);
+        .getCssValue(BACKGROUND_COLOR);
   }
 
   public List<String> getAllTagsFromJobTagsField() {
@@ -323,5 +325,9 @@ public class CreateOrEditJobPage extends PageElement {
     } catch (NoSuchElementException noSuchElementException) {
       return false;
     }
+  }
+
+  public String getCustomisedTimeRangeByTitleAndStringName(String name) {
+    return webDriver.findElement(By.xpath(f(CUSTOMISED_TIME_RANGE_BY_LOCATOR, name))).getAttribute(TITLE);
   }
 }

@@ -324,17 +324,10 @@ public class AllShippersSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(value)) {
       ms.setNoOfReservation(Integer.valueOf(value));
     }
-
-    List<MilkrunSettings> milkrunSettings = new LinkedList<>();
-    milkrunSettings.add(ms);
-
     address.setMilkRun(true);
 
-    if (address.getMilkrunSettings() == null) {
-      address.setMilkrunSettings(milkrunSettings);
-    } else {
-      address.getMilkrunSettings().addAll(milkrunSettings);
-    }
+    List<MilkrunSettings> milkrunSettings = Collections.singletonList(ms);
+    address.setMilkrunSettings(milkrunSettings);
   }
 
   @Then("^Operator verify the new Shipper is created successfully$")
@@ -2076,5 +2069,15 @@ public class AllShippersSteps extends AbstractSteps {
         .isTrue();
     put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
     openSpecificShipperEditPage(String.valueOf(createdSubShipper.get().getLegacyId()));
+  }
+
+  @When("Operator delete all shipper pickup services on Edit Shipper page")
+  public void operatorDeleteAllShipperPickupServices() {
+    allShippersPage.allShippersCreateEditPage.deleteAllPickupServices();
+  }
+
+  @Then("Operator verifies all shipper pickup services are deleted on Edit Shipper page")
+  public void allShipperPickupServicesdeleted() {
+    allShippersPage.allShippersCreateEditPage.verifyPickupServicesIsEmpty();
   }
 }

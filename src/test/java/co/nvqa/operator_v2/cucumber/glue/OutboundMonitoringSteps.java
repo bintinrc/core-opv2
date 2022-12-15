@@ -128,7 +128,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
         OutboundBreakrouteV2Page.OrderInfo expected = new OutboundBreakrouteV2Page.OrderInfo(
             resolveKeyValues(item));
         outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable
-            .filterByColumn("tracking_id", expected.getTrackingId());
+            .filterByColumn("trackingId", expected.getTrackingId());
         Assertions.assertThat(
                 outboundMonitoringPage.outboundBreakrouteV2Page.ordersInRouteTable.isEmpty())
             .as("Orders table is empty")
@@ -209,7 +209,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   @And("^Operator click on flag icon on chosen route ID on Outbound Monitoring Page$")
   public void clickFlagButton() {
     outboundMonitoringPage.routesTable.clickActionButton(1, ACTION_FLAG);
-    pause5s();
+    pause10s();
   }
 
   @And("^Operator verifies route record on Outbound Monitoring page:$")
@@ -370,7 +370,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     List<String> finalTrackingIds = resolveValues(trackingIds);
     outboundMonitoringPage.outboundBreakrouteV2Page.inFrame(page -> {
       finalTrackingIds.forEach(trackingId -> {
-        page.ordersInRouteTable.filterByColumn("tracking_id", trackingId);
+        page.ordersInRouteTable.filterByColumn("trackingId", trackingId);
         Assertions.assertThat(page.ordersInRouteTable.isEmpty())
             .as("Orders table is empty")
             .isFalse();

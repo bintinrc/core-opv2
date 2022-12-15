@@ -111,7 +111,7 @@ Feature: View Tagged Orders
       | {order-tag-id} |
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
-      | granularStatus | On Hold              |
+      | granularStatus | On Hold                           |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |
@@ -134,6 +134,7 @@ Feature: View Tagged Orders
     And API Shipper tags "KEY_CREATED_ORDER_ID" parcel with following tags:
       | {order-tag-id} |
     Given Operator go to menu Distribution Points -> DP Tagging
+    And Operator wait for DP tagging page to load
     When Operator tags single order to DP with DPMS ID = "{dpms-id}"
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |

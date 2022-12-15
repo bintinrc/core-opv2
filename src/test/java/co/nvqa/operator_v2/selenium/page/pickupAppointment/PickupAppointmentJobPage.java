@@ -1,10 +1,17 @@
 package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 
+import co.nvqa.operator_v2.model.CoreV2PickupJobsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-
-
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +25,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -36,7 +44,10 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   private Button createEditJobButton;
 
   @FindBy(css = "[type='submit']")
-  private PageElement loadSelection;
+  public PageElement loadSelection;
+
+  @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
+  public PageElement loadingIcon;
 
 
   @FindAll(@FindBy(css = ".BaseTable__table-frozen-left .BaseTable__row-cell-text"))
@@ -64,6 +75,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public PageElement failProceed;
   @FindBy(xpath = "//div[@role='tooltip' and contains(text(),'Job cannot be')]")
   public PageElement successFailToolTip;
+
 
   @FindBy(xpath = "//span[text()='Submit']/..")
   private PageElement submitButton;
@@ -142,6 +154,45 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   @FindBy(css = "div[data-testid='photoPreview']")
   private PageElement failModelPhotoPreview;
+  @FindBy(css = "#priority")
+  private PageElement priorityInput;
+
+  @FindBy(css = "button.ant-dropdown-trigger")
+  private Button createOrModifyPresetButton;
+
+  @FindBy(xpath = "//li[text()='Save as Preset']")
+  private Button saveAsPresetButton;
+
+  @FindBy(css = "div.ant-modal-content")
+  private PageElement presetModal;
+
+  @FindBy(css = "input[data-testid='presetAction.presetNameInput']")
+  private PageElement presetNameInput;
+
+  @FindBy(css = "div.ant-modal-footer button")
+  private Button confirmPresetButton;
+
+  @FindBy(css = "div.ant-notification-notice")
+  private PageElement newPresetCreatedPopup;
+
+  @FindBy(css = "div.ant-select-item-option-active div")
+  private PageElement selectedPresetInDropdownMenu;
+
+  @FindBy(xpath = "//span[text()='Update Current Preset']")
+  private Button updateCurrentPresetButton;
+
+  @FindBy(xpath = "//div[text()='Current Preset Updated']")
+  private PageElement currentPresetUpdatedPopup;
+
+  @FindBy(xpath = "//span[text()='Delete']")
+  private Button deletePresetButton;
+
+  @FindBy(xpath = "//div[text()='Preset Deleted']")
+  private PageElement presetDeletedPopup;
+
+  @FindBy(css = "div.ant-notification-notice-description")
+  private PageElement newPresetCreatedPopupName;
+
   public final String ID_NEXT = "__next";
   public final String MODAL_CONTENT_LOCAL = "div.ant-modal-content";
   public final String VERIFY_SHIPPER_FIELD_LOCATOR = "//input[@aria-activedescendant='shippers_list_0']";
@@ -154,12 +205,24 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String DROPDOWN_MENU_NO_DATA_LOCATOR = ".ant-empty";
   public final String SELECTION_LABEL_LOCATOR = "div[label='%s']";
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
+  public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+  public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+  public BulkSelectTable bulkSelect;
+
+  @FindBy(className = "ant-modal-wrap")
+  public FilterJobByID filterJobByIDModal;
+  public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
+  public final String ARIA_LABEL = "aria-label";
+  public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
+  public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "td.ant-picker-cell-selected";
+  public final String SHOW_PREVIOUS_MONTH_BUTTON_LOCATION = "button.ant-picker-header-prev-btn";
 
   public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
   public final String FAILURE_REASON_DROPDOWN_ITEM = "//div[@label='%s']";
 
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
+    bulkSelect = new BulkSelectTable(webDriver);
   }
 
 
@@ -421,17 +484,18 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public void verifyDataStartToEndLimited(String dayStart, String dayEnd) {
     waitUntilVisibilityOfElementLocated(webDriver.findElement(
-        By.cssSelector(String.format(CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart))));
-    Assertions.assertThat(
-            webDriver.findElement(
-                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
-                .isDisplayed())
-        .as("The previous 7th day is not active for selection").isTrue();
+        By.cssSelector(SELECTED_DAY_IN_CALENDAR_LOCATOR)));
     Assertions.assertThat(
             webDriver.findElement(
                     By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayEnd)))
                 .isDisplayed())
         .as("The next 7th day is not active for selection").isTrue();
+    webDriver.findElement(By.cssSelector(SHOW_PREVIOUS_MONTH_BUTTON_LOCATION)).click();
+    Assertions.assertThat(
+            webDriver.findElement(
+                    By.cssSelector(String.format(DISABLE_CALENDAR_DAY_BY_TITLE_LOCATOR, dayStart)))
+                .isDisplayed())
+        .as("The previous 7th day is not active for selection").isTrue();
     contentBox.click();
   }
 
@@ -461,12 +525,10 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public void inputOnJobZone(String text) {
-    jobZonesInput.clear();
     jobZonesInput.sendKeys(text);
   }
 
   public void inputOnJobMasterShipper(String text) {
-    jobMasterShipperInput.clear();
     jobMasterShipperInput.sendKeys(text);
   }
 
@@ -488,5 +550,253 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
   public void selectJobStatus() {
     jobStatusInput.sendKeys(Keys.RETURN);
+  }
+
+  public static class BulkSelectTable extends AntTableV2<CoreV2PickupJobsParams> {
+
+    @FindBy(css = "[data-testid='bulkSelect.dropdown']")
+    public PageElement bulkSelectDropdown;
+
+    @FindBy(xpath = "//li[.='Select All Shown']")
+    public PageElement selectAll;
+
+    @FindBy(css = "[data-testid='bulkUpdate.dropdown']")
+    public PageElement bulkUpdateDropdown;
+
+    @FindBy(css = "[data-testid='resultTable.rowCount']")
+    public AntSelect3 rowCount;
+
+    @FindBy(css = "[data-testid='resultTable.selectedRowsCount']")
+    public ForceClearTextBox selectedRowCount;
+
+    @FindBy(css = "button[data-testid='create-button']")
+    public AntButton saveChanges;
+
+    @FindBy(xpath = "//li[.='Unselect All Shown']")
+    public PageElement unSelectAll;
+
+    @FindBy(xpath = "//li[.='Clear Selection']")
+    public PageElement clearSelection;
+
+    @FindBy(xpath = "//li[.='Display only selected']")
+    public PageElement displayOnlySelected;
+
+    @FindBy(xpath = "//button[. ='Filter by job ID']")
+    public PageElement filterByJobId;
+    public static final String COLUMN_TAGS = "tags";
+    public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_ID = "id";
+
+    public static final String ACTION_EDIT = "Edit Job";
+    public static final String ACTION_DETAILS = "view Job";
+    public static final String ACTION_SELECTED = "Select row";
+
+    public BulkSelectTable(WebDriver webDriver) {
+      super(webDriver);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(COLUMN_TAGS, "tagNames")
+          .put(COLUMN_STATUS, "status")
+          .put(COLUMN_ID, "pickupAppointmentJobId")
+          .build()
+      );
+      setEntityClass(CoreV2PickupJobsParams.class);
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT,
+          "//div[@role='row'][%d]//div[@role='gridcell']//button[@data-testid='resultTable.editButton']",
+          ACTION_DETAILS,
+          "//div[@role='row'][%d]//div[@role='gridcell']//button[contains(@data-testid,'showDetailButton')]",
+          ACTION_SELECTED,
+          "//div[@role='row'][%d]//div[@role='gridcell']//input[contains(@data-testid,'checkbox')]"));
+    }
+
+    public List<String> getListIDs() {
+      String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
+      return findElementsByXpath(PICKUP_JOBS_IDS_XPATH).stream().map(WebElement::getText)
+          .collect(Collectors.toList());
+    }
+  }
+
+  public void verifyBulkSelectResult() {
+
+    String ShowingResults = bulkSelect.rowCount.getText();
+    String selectedRows = bulkSelect.selectedRowCount.getText();
+    char SPACE_CHAR = ' ';
+    String numberOfSelectedRows = selectedRows.substring(0, selectedRows.lastIndexOf(SPACE_CHAR))
+        .trim();
+    Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
+        .contains(numberOfSelectedRows);
+    KEY_LAST_SELECTED_ROWS_COUNT = numberOfSelectedRows;
+  }
+
+  public void verifyRowCountHasNotChanged() {
+    String selectedRows = bulkSelect.selectedRowCount.getText();
+    Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
+        .contains(KEY_LAST_SELECTED_ROWS_COUNT);
+  }
+
+  public void verifyRowCountisEqualTo(String expectedRowCount) {
+    String selectedRows = bulkSelect.selectedRowCount.getText();
+    Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
+        .contains(expectedRowCount);
+  }
+
+  public static class FilterJobByID extends AntModal {
+
+    public FilterJobByID(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//div[text()='Filter by job ID']")
+    public PageElement title;
+
+    @FindBy(id = "jobIds")
+    public TextBox inputJobId;
+
+    @FindBy(xpath = "//span[text()='Filter Jobs']//parent::button")
+    public Button confirmButton;
+
+    public static final String ERROR_MESSAGE_XPATH = "//span[text()='%s']";
+
+    public void verifyErrorMessages(String message) {
+      Assertions.assertThat(findElementByXpath(f(ERROR_MESSAGE_XPATH, message)).isDisplayed())
+          .as("Error message is the same").isTrue();
+    }
+  }
+
+
+  public void selectJobStatusByString(String jobStatus) {
+    jobStatusInput.click();
+    int retry = 10;
+    while (retry > 0 && !webDriver.findElement(
+            By.id(jobStatusInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(jobStatus)) {
+      jobStatusInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    jobStatusInput.sendKeys(Keys.ENTER);
+    clickOnJobStatus();
+  }
+
+  public void selectJobServiceLevelByString(String jobServiceLevel) {
+    jobServiceLevelInput.click();
+    int retry = 2;
+    while (retry > 0 && !webDriver.findElement(
+            By.id(jobServiceLevelInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(jobServiceLevel)) {
+      jobServiceLevelInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    jobServiceLevelInput.sendKeys(Keys.ENTER);
+    clickOnJobServiceLevel();
+  }
+
+  public void selectPriorityByString(String priority) {
+    clickOnPriorityButton();
+    int retry = 2;
+    priorityInput.sendKeys(Keys.ARROW_DOWN);
+    while (retry > 0 && !webDriver.findElement(
+            By.id(priorityInput.getAttribute(ARIA_ACTIVEDESCENDANT)))
+        .getAttribute(ARIA_LABEL).equals(priority)) {
+      priorityInput.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    priorityInput.sendKeys(Keys.ENTER);
+    clickOnPriorityButton();
+  }
+
+  public void clickOnCreateOrModifyPresetButton() {
+    moveToElement(createOrModifyPresetButton.getWebElement());
+    createOrModifyPresetButton.click();
+  }
+
+  public void clickOnSaveAsPresetButton() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    saveAsPresetButton.click();
+  }
+
+  public boolean isPresetModalDisplayed() {
+    return presetModal.isDisplayed();
+  }
+
+  public void fillInPresetNamefield(String presetName) {
+    presetNameInput.sendKeys(presetName);
+  }
+
+  public void clickConfirmPresetModalButton() {
+    confirmPresetButton.click();
+  }
+
+  public boolean isNewPresetCreatedPopupDisplayed() {
+    return newPresetCreatedPopup.isDisplayed();
+  }
+
+  public String getSelectedPresetFromDropdownMenu() {
+    return newPresetCreatedPopupName.getText();
+  }
+
+  public void choosePresetByName(String presetName) {
+    int retry = 100;
+    while (retry > 0 && !webDriver.findElement(
+            By.cssSelector("div.ant-select-item-option-active div")).getText()
+        .equalsIgnoreCase(presetName)) {
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+      retry--;
+    }
+    presetFilters.sendKeys(Keys.ENTER);
+  }
+
+  public void clickOnUpdateCurrentPreset() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    updateCurrentPresetButton.click();
+  }
+
+  public boolean isCurrentPresetUpdatedPopupDisplayed() {
+    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+    return currentPresetUpdatedPopup.isDisplayed();
+  }
+
+  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
+    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+  }
+
+  public void clickOnDeletePresetButton() {
+    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+    deletePresetButton.click();
+  }
+
+  public boolean isPresetDeletedPopupDisplayed() {
+    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+    return presetDeletedPopup.isDisplayed();
+  }
+
+  public void waitUntilPresetDeletedPopupInvisible() {
+    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+  }
+
+  public void waitUntilCreateOrModifyPresetDropdownManyIsVisible() {
+    waitUntilVisibilityOfElementLocated(DROPDOWN_BOTTOM_LEFT_LOCATOR);
+  }
+
+  public void verifyPickupJobsTable(){
+
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupAppointmentJobId")).isEnabled()).as("Job ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"status")).isEnabled()).as("Job status is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"tagNames")).isEnabled()).as("Job tags is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"priorityLevel")).isEnabled()).as("Priority level is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"legacyShipperId")).isEnabled()).as("Shipper ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"shipperInfo")).isEnabled()).as("Shipper name & contact is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupAddress")).isEnabled()).as("Pickup address is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"driverName")).isEnabled()).as("Driver name is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"routeId")).isEnabled()).as("Route ID is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupReadyDatetimeStr")).isEnabled()).as("Ready by is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupLatestDatetimeStr")).isEnabled()).as("Latest by is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath("//div[@data-testid = 'tableHeaderTitle.historicalSize']").isEnabled()).as("Historical size breakdown is display").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupApproxVolume")).isEnabled()).as("Approx vol is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupServiceLevel")).isEnabled()).as("Job service level is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupServiceType")).isEnabled()).as("Job service type is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"failureReasonDescription")).isEnabled()).as("Failure reason is display and can be sorted").isTrue();
+    Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupInstructions")).isEnabled()).as("Comments is display and can be sorted").isTrue();
   }
 }

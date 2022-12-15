@@ -116,12 +116,12 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     this.type = type;
   }
 
-  public String getDpmsId(){
+  public String getDpmsId() {
     return dpmsId;
   }
 
-  public void setDpmsId(String dpmsId){
-    if("GENERATED".equalsIgnoreCase(dpmsId)){
+  public void setDpmsId(String dpmsId) {
+    if ("GENERATED".equalsIgnoreCase(dpmsId)) {
       dpmsId = String.valueOf(new Random().nextInt(99999));
     }
     this.dpmsId = dpmsId;
