@@ -213,7 +213,7 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText         |
-      | {hub-name-1vn} | Vietnam | N+0 Pickup Rates |
+      | {hub-name-9} | Vietnam | N+0 Pickup Rates |
 
   @Debug
   Scenario Outline: English Tooltip for Addresses with No Job Created
@@ -226,7 +226,7 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText                       |
-      | {hub-name-1vn} | Vietnam | Addresses with no jobs created |
+      | {hub-name-9} | Vietnam | Addresses with no jobs created |
 
   @Debug
   Scenario Outline: English Tooltip for Addresses with Unrouted Jobs
@@ -239,7 +239,7 @@ Feature: English (SG, MY, PH)
 
     Examples:
       | HubName        | Country | TileText                     |
-      | {hub-name-1vn} | Vietnam | Addresses with unrouted jobs |
+      | {hub-name-9} | Vietnam | Addresses with unrouted jobs |
 
 
   @KillBrowser @ShouldAlwaysRun
