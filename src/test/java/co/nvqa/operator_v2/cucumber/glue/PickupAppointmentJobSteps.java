@@ -46,8 +46,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage = new PickupAppointmentJobPage(getWebDriver());
   }
 
-  @When("Operator goes to Pickup Jobs Page")
-  public void operatorLoadsShipperAddressConfigurationPage() {
+
+  @When("Operator select from failure drop down number = {string}, failure reason = {string}")
+  public void operatorSelectFromFailureReasonDropdown(String dropdownIndex, String failReason) {
+    String dropDownIndex = String.valueOf(Integer.parseInt(resolveValue(dropdownIndex)) - 1);
+    String failureReason = resolveValue(failReason);
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickFailureReasonDropDown(dropDownIndex);
+      page.selectFailureReasonItem(failureReason);
+    });
+
+  }
+
+//  @When("Operator goes to Pickup Jobs Page")
+  public void operatorGoesToPickupJobsPage() {
+    getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
     if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
       pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
@@ -57,18 +71,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.getLoadSelection().getWebElement());
   }
 
-  @And("Operator click on Create or edit job button on this top right corner of the page")
+//  @When("Operator click on Create or edit job button on this top right corner of the page")
   public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
     pickupAppointmentJobPage.clickOnCreateOrEditJob();
   }
 
-  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
+//  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
   public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperIDInField(shipperId);
     put(KEY_LEGACY_SHIPPER_ID, shipperId);
   }
 
-  @And("Operator select address = {string} in Shipper Address field")
+//  @And("Operator select address = {string} in Shipper Address field")
   public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperAddressField(shipperAddress);
   }
@@ -175,7 +189,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @And("Complete Pickup Job With Route Id")
   public void completePickupJobWithRouteId() {
     Long routeId = get(KEY_CREATED_ROUTE_ID);
-    operatorLoadsShipperAddressConfigurationPage();
+    operatorGoesToPickupJobsPage();
     pickupAppointmentJobPage.clickEditButton().setRouteId(String.valueOf(routeId))
         .clickUpdateRouteButton().clickSuccessJobButton();
   }
@@ -188,7 +202,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     if (shipperId == null) {
       shipperId = get(KEY_LEGACY_SHIPPER_ID);
     }
-    operatorLoadsShipperAddressConfigurationPage();
+    operatorGoesToPickupJobsPage();
     pickupAppointmentJobPage.selectDataRangeByTitle(startDay, endDay).setShipperIDInField(shipperId)
         .clickLoadSelectionButton();
   }
@@ -251,9 +265,17 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @When("Operator click success button in pickup job drawer")
   public void clickFourceSuccess() {
     pickupAppointmentJobPage.inFrame(page -> {
-      page.clickFourceSuccessButton();
+      page.clickForceSuccessButton();
     });
   }
+
+  @When("Operator click Fail button in pickup job drawer")
+  public void clickForceFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickForceFailButton();
+    });
+  }
+
 
   @When("^Operator check Success button (enabled|disabled) in pickup job drawer")
   public void checkSuccessButtonState(String state) {
@@ -314,6 +336,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     });
   }
+
+  @When("Operator click submit button on pickup fail job")
+  public void clickSubmitFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.clickSubmitButton();
+
+    });
+  }
+
+  @When("Operator check proof photo in edit pickup job drawer")
+  public void checkProofPhotoInEditDrawer() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.getProofPhotoInDrawer()).as("Proof photo appears").isNotNull();
+    });
+  }
+
 
   @When("Operator add pickup instructions = {string} in Comment Field")
   public void addPickupInstructionsInJobCommentField(String comment) {
@@ -642,12 +680,46 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.clickOnClearSelectionButton();
   }
 
-  @When("Operator upload proof photo on pickup appointment job")
-  public void uploadProofPhoto() {
+  @When("Operator upload Success proof photo on pickup appointment job")
+  public void uploadSuccessProofPhoto() {
     pickupAppointmentJobPage.inFrame(page -> {
-      pickupAppointmentJobPage.addProofPhoto();
+      pickupAppointmentJobPage.addSuccessProofPhoto();
     });
   }
+
+  @When("Operator upload Fail proof photo on pickup appointment job")
+  public void uploadFailProofPhoto() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      pickupAppointmentJobPage.addFailProofPhoto();
+    });
+  }
+
+  @When("Operator click proceed fail on pickup appointment job")
+  public void clickProceedOnFail() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      pickupAppointmentJobPage.clickFailProceed();
+    });
+  }
+
+  @When("Operator check pickup fail modal for job id = {string} has:")
+  public void checkFailPickupModal(String jobID, List<String> data) {
+
+    String finalJobID = resolveValue(jobID);
+    pickupAppointmentJobPage.inFrame(page -> {
+      String failTitle = page.getFailModelTitle();
+      Assertions.assertThat(failTitle).as("Fail Model contain reason").contains(finalJobID);
+    });
+
+    data = resolveValues(data);
+    data.forEach(reason -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        String failReason = page.getFailModelReasons();
+        Assertions.assertThat(failReason).as("Fail Model contain reason").contains(reason);
+      });
+    });
+
+  }
+
 
   @When("Operator click Preset Filters field")
   public void openPresetFiltersField() {
