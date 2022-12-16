@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +42,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   private Button selectDateRange;
 
   @FindBy(css = "div.ant-collapse-extra button")
-  private Button createEditJobButton;
+  public Button createEditJobButton;
 
   @FindBy(css = "[type='submit']")
   public PageElement loadSelection;
@@ -192,10 +193,18 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+
+  public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
   public BulkSelectTable bulkSelect;
 
   @FindBy(className = "ant-modal-wrap")
   public FilterJobByID filterJobByIDModal;
+
+  @FindBy(className = "ant-modal-wrap")
+  public JobCreatedSuccess jobCreatedSuccess;
+
+  public ExistingUpcomingJobModal existingUpcomingJob;
+
   public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
   public final String ARIA_LABEL = "aria-label";
   public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
@@ -205,6 +214,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
     bulkSelect = new BulkSelectTable(webDriver);
+    existingUpcomingJob = new ExistingUpcomingJobModal(webDriver);
   }
 
   public PickupAppointmentJobPage clickLoadSelectionButton() {
@@ -688,28 +698,28 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     updateCurrentPresetButton.click();
   }
 
-  public boolean isCurrentPresetUpdatedPopupDisplayed() {
-    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
-    return currentPresetUpdatedPopup.isDisplayed();
-  }
-
-  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
-    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
-  }
-
-  public void clickOnDeletePresetButton() {
-    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
-    deletePresetButton.click();
-  }
-
-  public boolean isPresetDeletedPopupDisplayed() {
-    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
-    return presetDeletedPopup.isDisplayed();
-  }
-
-  public void waitUntilPresetDeletedPopupInvisible() {
-    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
-  }
+//  public boolean isCurrentPresetUpdatedPopupDisplayed() {
+//    waitUntilVisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+//    return currentPresetUpdatedPopup.isDisplayed();
+//  }
+//
+//  public void waitUntilCurrentPresetUpdatedPopupInvisible() {
+//    waitUntilInvisibilityOfElementLocated(currentPresetUpdatedPopup.getWebElement());
+//  }
+//
+//  public void clickOnDeletePresetButton() {
+//    waitUntilCreateOrModifyPresetDropdownManyIsVisible();
+//    deletePresetButton.click();
+//  }
+//
+//  public boolean isPresetDeletedPopupDisplayed() {
+//    waitUntilVisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+//    return presetDeletedPopup.isDisplayed();
+//  }
+//
+//  public void waitUntilPresetDeletedPopupInvisible() {
+//    waitUntilInvisibilityOfElementLocated(presetDeletedPopup.getWebElement());
+//  }
 
   public void waitUntilCreateOrModifyPresetDropdownManyIsVisible() {
     waitUntilVisibilityOfElementLocated(DROPDOWN_BOTTOM_LEFT_LOCATOR);
@@ -735,4 +745,85 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"failureReasonDescription")).isEnabled()).as("Failure reason is display and can be sorted").isTrue();
     Assertions.assertThat(findElementByXpath(f(PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH,"pickupInstructions")).isEnabled()).as("Comments is display and can be sorted").isTrue();
   }
+
+  public static class ExistingUpcomingJobModal {
+    public ExistingUpcomingJobModal(WebDriver webDriver) {
+      super();
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+    }
+
+    @FindBy (xpath = "//span[text()='Enter new job to create']")
+    public PageElement header;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']")
+    public PageElement title;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'Start date']")
+    public PageElement startDate;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'End date']")
+    public PageElement endDate;
+
+    @FindBy (id = "useExistingTimeslot")
+    public  PageElement useExistingTimeslot;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'timeRange']")
+    public PageElement timeRange;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'pickupTag']")
+    public  PageElement pickupTag;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::button[@type = 'submit']")
+    public Button submit;
+  }
+
+  public void verifyExistingUpcomingJobPage(){
+    existingUpcomingJob.header.waitUntilVisible();
+    Assertions.assertThat(existingUpcomingJob.header.isDisplayed()).as("Existing upcoming job header is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.title.isDisplayed()).as("Existing upcoming job title is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.startDate.isDisplayed()).as("Existing upcoming job Start date is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.endDate.isDisplayed()).as("Existing upcoming job end date is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.timeRange.isEnabled()).as("Existing upcoming job time range is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.useExistingTimeslot.isEnabled()).as("Existing upcoming job Apply existing time slots is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.pickupTag.isEnabled()).as("Existing upcoming job pickup tag is display").isTrue();
+    Assertions.assertThat(existingUpcomingJob.submit.getAttribute("disabled")).as("Existing upcoming job submit is disabled").isEqualTo("true");
+  }
+
+  public void selectItem(String item){
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
+    findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
+  }
+
+  public static class JobCreatedSuccess extends AntModal {
+
+    public JobCreatedSuccess(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//div[text()='Jobs created']")
+    public PageElement title;
+
+    @FindBy(xpath = "//span[text()='Time slot:']/following::span")
+    public PageElement createdTime;
+
+    @FindBy(xpath = "//span[text()='Ok']")
+    public Button confirm;
+
+    public final String COLUMN_DATA_XPATH = "//tbody[@class='ant-table-tbody']//td[text()='%s']";
+  }
+
+  public void verifyCreatedJobSuccess(Map<String,String> data){
+
+    jobCreatedSuccess.title.waitUntilVisible();
+    if (data.get("timeSlot")!=null){
+      System.out.println("Test is :  "+jobCreatedSuccess.createdTime.getText());
+      Assertions.assertThat(jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(data.get("timeSlot"));
+    }
+    if (data.get("pickupTag")!=null){
+      Assertions.assertThat(isElementExist(f(jobCreatedSuccess.COLUMN_DATA_XPATH,data.get("pickupTag")))).as("Job tag is the same").isTrue();
+    }
+
+  }
+
 }
