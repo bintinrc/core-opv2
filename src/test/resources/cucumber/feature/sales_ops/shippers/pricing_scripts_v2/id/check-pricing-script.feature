@@ -45,7 +45,7 @@ Feature: Check Pricing Script
       | destinationPricingZone | empty    |
     Then Operator verify error message
       | message  | Latitude, Longitude and Billing Zones are not provided |
-      | response | 400 Unknown                                       |
+      | response | 400 Unknown                                            |
 
   Scenario: Check Script with Invalid Origin Pricing Zone - ID (uid:9d79aed0-d6de-4928-a7ee-e3e4b5546c60)
     Given Operator go to menu Shipper -> Pricing Scripts V2
