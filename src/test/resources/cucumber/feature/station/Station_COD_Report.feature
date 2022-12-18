@@ -592,7 +592,7 @@ Feature: Station COD Report
       | HubId      | HubName      | CODAmount | ChangeReason | TransactionStatus | GranularStatus | TransStatus   | CollectedAt |
       | {hub-id-1} | {hub-name-1} | 1500.5    | GENERATED    | Success           | Completed      | DD - Delivery | Delivery    |
 
-  @ArchiveRoute @Debug
+  @ArchiveRoute
   Scenario Outline: View Updated Driver Name (uid:3f3c7bfc-ee27-403d-b613-93a4621ecac0)
     Given Operator loads Operator portal home page
     And API Shipper create V4 order using data below:
