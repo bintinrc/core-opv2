@@ -86,6 +86,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-select")
   public AntSelect2 headerHub;
 
+  @FindBy(xpath = "//button[@data-testid='station-management-homepage_manual-button']")
+  public AntSelect2 manualButton;
+
   @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'base-row')]")
   private List<PageElement> results;
 
@@ -1046,11 +1049,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     Assertions.assertThat(expectedTexts).isEqualTo(actualTexts);
   }
 
-  public void mouseOverToHubDropdown() {
+  public void mouseOverToManualButton() {
     waitWhilePageIsLoading();
-    moveToElement(headerHub.getWebElement());
+    moveToElement(manualButton.getWebElement());
     pause2s();
-    Assert.assertTrue("Assert that the title is not displayed" ,
+    Assert.assertTrue("Assert that the title is not displayed",
         mouseOverText.size() == 0);
   }
 

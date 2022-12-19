@@ -72,7 +72,8 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   @FindBy(xpath = "//span[text()='Fail']/parent::button")
   public PageElement forceFail;
 
-
+  @FindBy(xpath = "//span[text()='Proceed']/parent::button")
+  public PageElement failProceed;
   @FindBy(xpath = "//div[@role='tooltip' and contains(text(),'Job cannot be')]")
   public PageElement successFailToolTip;
 
@@ -138,8 +139,22 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   private PageElement inProgressFilterOption;
 
   @FindBy(css = "input[data-testid='successPickupAppointmentModal.photoSelect']")
-  private PageElement uploadPhotoInput;
+  private PageElement uploadSuccessPhotoInput;
 
+  @FindBy(css = "input[data-testid='failureReasonPopover.photoSelect']")
+  private PageElement uploadFailPhotoInput;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(text(),'Fail job')]")
+  private PageElement failModelTitle;
+
+  @FindBy(xpath = "//div[@class='ant-modal-body']//span[contains(@class,'ant-typo')]")
+  private List<PageElement> failModelLines;
+
+  @FindBy(xpath = "//div[@class='ant-space-item']/img")
+  private PageElement proofPhotoInDrawer;
+
+  @FindBy(css = "div[data-testid='photoPreview']")
+  private PageElement failModelPhotoPreview;
   @FindBy(css = "#priority")
   private PageElement priorityInput;
 
@@ -211,10 +226,44 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTED_DAY_IN_CALENDAR_LOCATOR = "td.ant-picker-cell-selected";
   public final String SHOW_PREVIOUS_MONTH_BUTTON_LOCATION = "button.ant-picker-header-prev-btn";
 
+  public final String FAILURE_REASON_DROPDOWN = "//input[@id='failureReasons[%s]']//ancestor::div[contains(@class,'ant-select-show-search')]/parent::div";
+  public final String FAILURE_REASON_DROPDOWN_ITEM = "//div[@label='%s']";
+
   public PickupAppointmentJobPage(WebDriver webDriver) {
     super(webDriver);
     bulkSelect = new BulkSelectTable(webDriver);
     existingUpcomingJob = new ExistingUpcomingJobModal(webDriver);
+  }
+
+
+  public void clickFailureReasonDropDown(String index) {
+    WebElement dropDown = getWebDriver().findElement(By.xpath(f(FAILURE_REASON_DROPDOWN, index)));
+    dropDown.click();
+  }
+
+  public PageElement getProofPhotoInDrawer() {
+    return proofPhotoInDrawer;
+  }
+
+  public void clickFailProceed() {
+    failProceed.click();
+  }
+
+
+  public String getFailModelReasons() {
+    String modelReason = failModelLines.get(1).getText();
+    return modelReason;
+  }
+
+  public String getFailModelTitle() {
+    String modalTitle = failModelTitle.getText();
+    return modalTitle;
+  }
+
+  public void selectFailureReasonItem(String Reason) {
+    WebElement reasonItem = getWebDriver().findElement(
+        By.xpath(f(FAILURE_REASON_DROPDOWN_ITEM, Reason)));
+    reasonItem.click();
   }
 
   public PickupAppointmentJobPage clickLoadSelectionButton() {
@@ -230,11 +279,19 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     return this;
   }
 
-  public PickupAppointmentJobPage addProofPhoto() {
+  public PickupAppointmentJobPage addSuccessProofPhoto() {
     final ClassLoader classLoader = getClass().getClassLoader();
     File file = new File(
         Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
-    uploadPhotoInput.sendKeys(file.getPath());
+    uploadSuccessPhotoInput.sendKeys(file.getPath());
+    return this;
+  }
+
+  public PickupAppointmentJobPage addFailProofPhoto() {
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(
+        Objects.requireNonNull(classLoader.getResource("images/dpPhotoValidSize.png")).getFile());
+    uploadFailPhotoInput.sendKeys(file.getPath());
     return this;
   }
 
@@ -260,9 +317,16 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
     return this;
   }
 
-  public PickupAppointmentJobPage clickFourceSuccessButton() {
+  public PickupAppointmentJobPage clickForceSuccessButton() {
     waitUntilVisibilityOfElementLocated(forceSuccess.getWebElement());
     forceSuccess.click();
+
+    return this;
+  }
+
+  public PickupAppointmentJobPage clickForceFailButton() {
+    waitUntilVisibilityOfElementLocated(forceFail.getWebElement());
+    forceFail.click();
 
     return this;
   }
