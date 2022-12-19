@@ -43,7 +43,7 @@ Feature: Create pickup jobs from existing job
       | useExistingTimeslot| true              |
     And Operator clicks Submit button on Existing Upcoming Job page
     Then Operator verifies job created success following data below:
-      | timeSlot        | {date: 3 days next, yyyy-MM-dd} - {date: 3 days next, yyyy-MM-dd} 18:00 - 22:00 |
+      | timeSlot        | {date: 3 days next, yyyy-MM-dd} - {date: 3 days next, yyyy-MM-dd} 09:00 - 12:00 |
 
   @deletePickupJob
   Scenario:Create new pickup job from existing job on Pickup Jobs page - create/edit jobs button - apply job tag
