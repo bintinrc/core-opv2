@@ -818,7 +818,6 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
 
     jobCreatedSuccess.title.waitUntilVisible();
     if (data.get("timeSlot")!=null){
-      System.out.println("Test is :  "+jobCreatedSuccess.createdTime.getText());
       Assertions.assertThat(jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(data.get("timeSlot"));
     }
     if (data.get("pickupTag")!=null){
