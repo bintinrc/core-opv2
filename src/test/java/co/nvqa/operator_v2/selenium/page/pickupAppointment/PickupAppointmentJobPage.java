@@ -792,6 +792,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public void selectItem(String item){
     waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
     findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
+    waitUntilInvisibilityOfElementLocated("//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]");
   }
 
   public static class JobCreatedSuccess extends AntModal {
