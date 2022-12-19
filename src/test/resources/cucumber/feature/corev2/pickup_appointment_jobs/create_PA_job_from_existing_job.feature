@@ -1,11 +1,11 @@
-@OperatorV2 @CoreV2 @PickupAppointment @createJobFromExistingJob @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @createJobFromExistingJob
 Feature: Create pickup jobs from existing job
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @RT
+  @deletePickupJob
   Scenario:Create new pickup job from existing job on Pickup Jobs page - create/edit jobs button
     Given API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
