@@ -203,6 +203,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
 
   public Map<String, String> getSummaryRowByRouteId(String routeId) {
     Map<String,String> gridContent = new HashMap<String, String>();
+    pause8s();
     String columnName, columnValue;
     String summaryRowXpath = f(STATION_COD_SUMMARY_ROW_BY_ROUTE_ID_XPATH, routeId).concat(STATION_COD_COLUMN_VALUE_XPATH);
     scrollIntoView(footerRow.getWebElement());
