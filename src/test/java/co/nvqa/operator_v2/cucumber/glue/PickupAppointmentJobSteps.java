@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.cucumber.glue.ControlSteps;
+import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.ItemsDeleteJobModalWindow;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -25,7 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
+import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage.BulkSelectTable.ACTION_SELECTED;
 
 
@@ -620,7 +622,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @After("@deletePickupJob")
   public void deletePickUpJob() {
     try{
-      List<Long> jobIds = get(KEY_CONTROL_CREATED_PA_JOB_IDS);
+      List<PickupAppointmentJobResponse> listPAJobs = get(KEY_CONTROL_CREATED_PA_JOBS);
+      List<Long> jobIds = listPAJobs.stream().map(PickupAppointmentJobResponse::getId).collect(
+          Collectors.toList());
       jobIds.forEach((jobId) -> {
         new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(String.valueOf(jobId));
       });
