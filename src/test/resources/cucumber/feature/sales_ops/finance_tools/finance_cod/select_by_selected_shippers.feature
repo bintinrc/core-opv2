@@ -3,7 +3,7 @@
 Feature: Generate COD Report - Selected Shipper(s)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute
