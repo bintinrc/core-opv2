@@ -1,4 +1,4 @@
-@OperatorV2 @LaunchBrowser @DiscountAndPromotion @SalesOps @CreateCampaignID
+@OperatorV2 @LaunchBrowser @DiscountAndPromotionID @SalesOpsID @CreateCampaignID
 
 Feature: Create Campaign
 
