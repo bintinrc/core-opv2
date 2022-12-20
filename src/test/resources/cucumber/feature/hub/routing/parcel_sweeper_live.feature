@@ -352,7 +352,7 @@ Feature: Parcel Sweeper Live
       | routeId | {KEY_CREATED_ROUTE_ID}   |
 
   @ForceSuccessOrder
-  Scenario: Operator Parcel Sweep Scans a Routed Parcel
+  Scenario: Operator Parcel Sweep Scans an Unrouted Parcel
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
