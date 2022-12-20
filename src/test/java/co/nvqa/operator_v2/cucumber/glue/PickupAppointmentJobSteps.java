@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.cucumber.glue.ControlSteps;
+import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.ItemsDeleteJobModalWindow;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointmentFilterNameEnum;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
@@ -25,7 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
+import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage.BulkSelectTable.ACTION_SELECTED;
 
 
@@ -658,7 +660,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @After("@deletePickupJob")
   public void deletePickUpJob() {
     try{
-      List<Long> jobIds = get(KEY_CONTROL_CREATED_PA_JOB_IDS);
+      List<PickupAppointmentJobResponse> listPAJobs = get(KEY_CONTROL_CREATED_PA_JOBS);
+      List<Long> jobIds = listPAJobs.stream().map(PickupAppointmentJobResponse::getId).collect(
+          Collectors.toList());
       jobIds.forEach((jobId) -> {
         new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(String.valueOf(jobId));
       });
@@ -971,6 +975,9 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
           pickupAppointmentJobPage.filterJobByIDModal.confirmButton.click();
           pickupAppointmentJobPage.filterJobByIDModal.confirmButton.waitUntilInvisible();
           break;
+        case "Create / edit job":
+          pickupAppointmentJobPage.createEditJobButton.click();
+          break;
       }
     });
   }
@@ -1075,5 +1082,61 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   @Then("Operator verifies the Table on Pickup Jobs Page")
   public void operatorVerifiesTableOnPickupJobsPage(){
     pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyPickupJobsTable());
+  }
+
+  @Then("Operator verifies Existing upcoming job page")
+  public void operatorVerifiesExistingUpcomingJobPage(){
+    pickupAppointmentJobPage.inFrame(() ->pickupAppointmentJobPage.verifyExistingUpcomingJobPage());
+  }
+
+  @Given("Operator selects time range {string} on Existing Upcoming Job page")
+  public void operatorSelectsTimeRangeOnExistingJobpage(String timeRange){
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.existingUpcomingJob.timeRange.click();
+      pickupAppointmentJobPage.selectItem(timeRange);});
+  }
+
+  @Given("Operator clicks Submit button on Existing Upcoming Job page")
+  public  void operatorClicksSubmitOnExistingJobPage(){
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.existingUpcomingJob.submit.waitUntilClickable();
+      pickupAppointmentJobPage.existingUpcomingJob.submit.click();
+      pickupAppointmentJobPage.existingUpcomingJob.submit.waitUntilInvisible();
+    });
+  }
+
+  @Given("Operator creates new PA Job on Existing Upcoming Job page:")
+  public void operatorCreatesNewPaJobOnExistingJobPage(Map<String,String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    pickupAppointmentJobPage.inFrame(page ->{
+      if (resolvedData.get("startDate")!=null){
+        page.existingUpcomingJob.startDate.click();
+        page.existingUpcomingJob.startDate.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        page.existingUpcomingJob.startDate.sendKeys(resolvedData.get("startDate"));
+        page.existingUpcomingJob.startDate.sendKeys(Keys.ENTER);
+      }
+      if (resolvedData.get("endDate")!=null){
+        page.existingUpcomingJob.endDate.click();
+        page.existingUpcomingJob.endDate.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        page.existingUpcomingJob.endDate.sendKeys(resolvedData.get("endDate"));
+        page.existingUpcomingJob.endDate.sendKeys(Keys.ENTER);
+      }
+      if ((resolvedData.get("useExistingTimeslot")!=null) && (resolvedData.get("useExistingTimeslot").equalsIgnoreCase("true"))){
+        page.existingUpcomingJob.useExistingTimeslot.click();
+      } else {
+        pickupAppointmentJobPage.existingUpcomingJob.timeRange.click();
+        pickupAppointmentJobPage.selectItem(resolvedData.get("timeRange"));
+      }
+      if (resolvedData.get("pickupTag")!=null){
+        page.existingUpcomingJob.pickupTag.click();
+        pickupAppointmentJobPage.selectItem(resolvedData.get("pickupTag"));
+      }
+    });
+  }
+
+  @Then("Operator verifies job created success following data below:")
+  public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
+    Map<String,String> resolvedData = resolveKeyValues(data);
+    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyCreatedJobSuccess(resolvedData));
   }
 }
