@@ -26,6 +26,9 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='discount_operator']]")
   public PageElement discountOperator;
 
+  @FindBy(className = "ant-form-item-explain")
+  public PageElement generalError;
+
   @FindBy(xpath = "//div[.//input[contains(@id,'serviceType')] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
   public PageElement campaignServiceTypeError;
 
@@ -157,12 +160,16 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
     }
   }
 
-  public String getCampaignDiscountValueError() {
-    return campaignDiscountValueError.getText();
+  public String getCampaignGeneralError() {
+    return generalError.getText();
   }
 
   public String getCampaignDiscountValueAlert() {
     return campaign1stDiscountValue.getAttribute("validationMessage");
+  }
+
+  public String getCampaignDiscountValueError() {
+    return generalError.getText();
   }
 
   public List<String> getServiceType() {

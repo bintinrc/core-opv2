@@ -283,6 +283,12 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
           Assertions.assertThat(validation_error).as(field + "Validation is correct")
               .isEqualTo("Value can't more than 100%!");
           break;
+
+        case "campaign-same-rule":
+          validation_error = page.getCampaignGeneralError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Duplicate service type/level");
+          break;
       }
     });
   }
