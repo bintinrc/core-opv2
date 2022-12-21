@@ -924,5 +924,15 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorClickUpdateMAWBButtonOnShipmentWeightDimensionPage() {
     shipmentWeightDimensionTablePage.updateMawbButton.click();
   }
+
+  @Then("Operator click update button only on shipment weight update mawb page")
+  public void operatorClickUpdateButtonOnlyOnShipmentWeightUpdateMawbPage() {
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled"))
+        .as("Update button is enabled")
+        .isNull();
+
+    shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
+    pause2s();
+  }
 }
 
