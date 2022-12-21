@@ -78,6 +78,18 @@ Feature: Route Manifest
       | pickupsCount       | 0                          |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Fail                       |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {filter-shipper-name}            |
+      | status      | FAIL                             |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}    |
+      | approxVolume | Less than 10 Parcels |
+    And Operator verifies reservation is finished using data below:
+      | backgroundColor | #ffc0cb |
+      | status          | FAIL    |
     And DB Operator verifies waypoint status is "FAIL"
 
   @DeleteOrArchiveRoute
@@ -100,6 +112,18 @@ Feature: Route Manifest
       | pickupsCount       | 0                          |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Success                    |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {filter-shipper-name}            |
+      | status      | SUCCESS                          |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}    |
+      | approxVolume | Less than 10 Parcels |
+    And Operator verifies reservation is finished using data below:
+      | backgroundColor | #90ee90 |
+      | status          | SUCCESS |
     And DB Operator verifies waypoint status is "SUCCESS"
 
   @DeleteOrArchiveRoute
@@ -142,8 +166,9 @@ Feature: Route Manifest
       | status | PENDING |
     And Operator verify order event on Edit order page using data below:
       | name | FORCED FAILURE |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                        |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest (uid:275dba78-9a73-4d15-aa3b-d4f14f5ba15d)
@@ -181,8 +206,9 @@ Feature: Route Manifest
       | status | PENDING |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                                |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: ADMIN_UPDATE_WAYPOINT |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest (uid:9063c9fe-bed2-440f-8df5-fe1a4ba6cfe9)
@@ -225,8 +251,9 @@ Feature: Route Manifest
       | status | FAIL |
     And Operator verify order event on Edit order page using data below:
       | name | FORCED FAILURE |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                                         |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest (uid:e3b6bdb4-fad6-44b4-8b8c-e58fff505302)
@@ -266,8 +293,9 @@ Feature: Route Manifest
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Completed\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Show Order Tags in Route Manifest Page (uid:a8166b12-af7e-4d59-88a2-fd14d6181f08)
@@ -542,8 +570,9 @@ Feature: Route Manifest
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | UPDATE STATUS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                                      |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Vehicle for Delivery\nNew Granular Status: Returned to Sender\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And DB Operator verify core_qa_sg/cod_collections record is NOT created:
