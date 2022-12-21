@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.selenium.page.pickupAppointment.emums.PickupAppointme
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.LocalDateTime;
@@ -18,17 +17,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
-import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPage.BulkSelectTable.ACTION_SELECTED;
 
 
 @ScenarioScoped
@@ -941,202 +937,5 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     return then.format(format);
   }
 
-  @Given("Operator clicks {string} button on Pickup Jobs page")
-  public void operatorClicksButtonOnPickupJobsPage(String buttonName) {
-    pickupAppointmentJobPage.inFrame(() -> {
-      switch (buttonName) {
-        case "Load Selection":
-          pickupAppointmentJobPage.loadSelection.click();
-          pickupAppointmentJobPage.loadingIcon.waitUntilInvisible();
-          break;
-        case "Bulk select dropdown":
-          pickupAppointmentJobPage.bulkSelect.bulkSelectDropdown.click();
-          break;
-        case "Select All Shown":
-          pickupAppointmentJobPage.bulkSelect.selectAll.click();
-          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
-          break;
-        case "Unselect All Shown":
-          pickupAppointmentJobPage.bulkSelect.unSelectAll.click();
-          break;
-        case "Clear Selection":
-          pickupAppointmentJobPage.bulkSelect.clearSelection.click();
-          break;
-        case "Display only selected":
-          pickupAppointmentJobPage.bulkSelect.displayOnlySelected.click();
-          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
-          break;
-        case "Filter by job ID":
-          pickupAppointmentJobPage.bulkSelect.filterByJobId.click();
-          pickupAppointmentJobPage.filterJobByIDModal.close.waitUntilVisible();
-          break;
-        case "Filter Jobs":
-          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.waitUntilClickable();
-          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.click();
-          pickupAppointmentJobPage.filterJobByIDModal.confirmButton.waitUntilInvisible();
-          break;
-        case "Create / edit job":
-          pickupAppointmentJobPage.createEditJobButton.click();
-          break;
-      }
-    });
-  }
 
-  @Then("Operator verifies number of selected rows on Pickup Jobs page")
-  public void operatorVerifiesNumberOfSelectedRows(){
-    pickupAppointmentJobPage.inFrame(() ->
-      pickupAppointmentJobPage.verifyBulkSelectResult()
-    );
-  }
-
-  @When("Operator filters on the table with values below:")
-  public void operatorFiltersValueOnTheTable(Map<String, String> data){
-    Map<String,String> resolvedData = resolveKeyValues(data);
-    pickupAppointmentJobPage.inFrame(() -> {
-      if (resolvedData.get("status") != null) {
-        pickupAppointmentJobPage.bulkSelect.filterByColumnV2(
-            pickupAppointmentJobPage.bulkSelect.COLUMN_STATUS, resolvedData.get("status"));
-      }
-    });
-  }
-
-  @Then("Operator verify number of selected row is not updated")
-  public void operatorVerifyNumberOfSelectedRowIsNotUpdated(){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountHasNotChanged());
-  }
-
-  @Then("Operator verify the number of selected rows is {value}")
-  public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountisEqualTo(expectedRowCount));
-  }
-
-  @Given("Operator selects {int} rows on Pickup Jobs page")
-  public void operatorSelectRowsOnPickupJobsPage(int numberOfRows){
-    pickupAppointmentJobPage.inFrame(() -> {
-      for (int i = 1; i<=numberOfRows; i++)
-        pickupAppointmentJobPage.bulkSelect.clickActionButton(i,ACTION_SELECTED);
-    });
-  }
-
-  @Then("Operator verifies Filter Job button is disabled on Pickup job page")
-  public void operatorVerifiesFilterJobButtonDisabled(){
-    pickupAppointmentJobPage.inFrame(() ->Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
-        getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
-  }
-
-  @Given("Operator fills the pickup job ID list below:")
-  public void operatorFillsThePickupJobIDs(List<String> data){
-    List<String> listOfPickupJobIds = resolveValues(data);
-    pickupAppointmentJobPage.inFrame(() -> {
-      listOfPickupJobIds.forEach((Id) -> {
-        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Id);
-        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
-        pause100ms();
-      });
-    });
-  }
-
-  @Then("Operator verify pickup job table on Pickup Jobs page:")
-  public void verifyPickupJobsTable(List<String> data) {
-    List<String> expectedIDs = resolveValues(data);
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.waitUntilLoaded(1);
-      List<String> actualIDs = page.bulkSelect.getListIDs();
-      Assertions.assertThat(actualIDs).as("Result is the same").isEqualTo(expectedIDs);
-    });
-  }
-
-  @Then("Operator verifies error message below:")
-  public void operatorVerifiesErrorMessage(String expectedResult){
-    pickupAppointmentJobPage.inFrame(page ->{
-      Assertions.assertThat(expectedResult).as("Message is the same").isEqualToIgnoringCase(page.getAntTopRightText());
-    });
-  }
-
-  @Given("Operator clears the filter jobs list on Pickup Jobs Page")
-  public void operatorClearsPickupJobsList(){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(
-        Keys.chord(Keys.CONTROL, "a", Keys.DELETE)));
-  }
-
-  @Then("Operator verifies invalid pickup ID error message below on Pickup Jobs Page:")
-  public void operatorVerifiesErrorMessageOnPickupJobsPage(String expectedMessage){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.verifyErrorMessages(expectedMessage));
-  }
-
-  @Given("Operator fill more than 1000 pickup jobs Id on Pickup Jobs Page:")
-  public void addmore1000(String ID){
-    String jobId = resolveValue(ID);
-    Random random = new Random();
-    int numberOfId = random.ints(1002, 1010)
-        .findFirst()
-        .getAsInt();
-    pickupAppointmentJobPage.inFrame(page -> {
-      for (int i=0;i<numberOfId;i++){
-        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(jobId);
-        pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
-      }
-    });
-  }
-
-  @Then("Operator verifies the Table on Pickup Jobs Page")
-  public void operatorVerifiesTableOnPickupJobsPage(){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyPickupJobsTable());
-  }
-
-  @Then("Operator verifies Existing upcoming job page")
-  public void operatorVerifiesExistingUpcomingJobPage(){
-    pickupAppointmentJobPage.inFrame(() ->pickupAppointmentJobPage.verifyExistingUpcomingJobPage());
-  }
-
-  @Given("Operator selects time range {string} on Existing Upcoming Job page")
-  public void operatorSelectsTimeRangeOnExistingJobpage(String timeRange){
-    pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.existingUpcomingJob.timeRange.click();
-      pickupAppointmentJobPage.selectItem(timeRange);});
-  }
-
-  @Given("Operator clicks Submit button on Existing Upcoming Job page")
-  public  void operatorClicksSubmitOnExistingJobPage(){
-    pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.existingUpcomingJob.submit.waitUntilClickable();
-      pickupAppointmentJobPage.existingUpcomingJob.submit.click();
-      pickupAppointmentJobPage.existingUpcomingJob.submit.waitUntilInvisible();
-    });
-  }
-
-  @Given("Operator creates new PA Job on Existing Upcoming Job page:")
-  public void operatorCreatesNewPaJobOnExistingJobPage(Map<String,String> data){
-    Map<String,String> resolvedData = resolveKeyValues(data);
-    pickupAppointmentJobPage.inFrame(page ->{
-      if (resolvedData.get("startDate")!=null){
-        page.existingUpcomingJob.startDate.click();
-        page.existingUpcomingJob.startDate.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
-        page.existingUpcomingJob.startDate.sendKeys(resolvedData.get("startDate"));
-        page.existingUpcomingJob.startDate.sendKeys(Keys.ENTER);
-      }
-      if (resolvedData.get("endDate")!=null){
-        page.existingUpcomingJob.endDate.click();
-        page.existingUpcomingJob.endDate.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
-        page.existingUpcomingJob.endDate.sendKeys(resolvedData.get("endDate"));
-        page.existingUpcomingJob.endDate.sendKeys(Keys.ENTER);
-      }
-      if ((resolvedData.get("useExistingTimeslot")!=null) && (resolvedData.get("useExistingTimeslot").equalsIgnoreCase("true"))){
-        page.existingUpcomingJob.useExistingTimeslot.click();
-      } else {
-        pickupAppointmentJobPage.existingUpcomingJob.timeRange.click();
-        pickupAppointmentJobPage.selectItem(resolvedData.get("timeRange"));
-      }
-      if (resolvedData.get("pickupTag")!=null){
-        page.existingUpcomingJob.pickupTag.click();
-        pickupAppointmentJobPage.selectItem(resolvedData.get("pickupTag"));
-      }
-    });
-  }
-
-  @Then("Operator verifies job created success following data below:")
-  public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
-    Map<String,String> resolvedData = resolveKeyValues(data);
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyCreatedJobSuccess(resolvedData));
-  }
 }
