@@ -169,6 +169,8 @@ Feature: Route Manifest
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                        |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
+    And Operator verify Pickup details on Edit order page using data below:
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest (uid:275dba78-9a73-4d15-aa3b-d4f14f5ba15d)
@@ -209,6 +211,8 @@ Feature: Route Manifest
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                                |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: ADMIN_UPDATE_WAYPOINT |
+    And Operator verify Pickup details on Edit order page using data below:
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest (uid:9063c9fe-bed2-440f-8df5-fe1a4ba6cfe9)
@@ -254,6 +258,8 @@ Feature: Route Manifest
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                                         |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Transit\nNew Order Status: Delivery fail\n\nReason: ADMIN_UPDATE_WAYPOINT |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest (uid:e3b6bdb4-fad6-44b4-8b8c-e58fff505302)
@@ -296,6 +302,8 @@ Feature: Route Manifest
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Completed\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Show Order Tags in Route Manifest Page (uid:a8166b12-af7e-4d59-88a2-fd14d6181f08)
@@ -398,6 +406,8 @@ Feature: Route Manifest
       | transactionMode   | PICKUP                      |
       | expectedCodAmount | {KEY_CASH_ON_PICKUP_AMOUNT} |
       | driverId          | {ninja-driver-id}           |
+    And Operator verify Pickup details on Edit order page using data below:
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP (uid:f16ca446-8af1-49c0-9308-a89a56c18103)
@@ -437,6 +447,8 @@ Feature: Route Manifest
       | transactionMode   | PICKUP            |
       | expectedCodAmount | 0.00              |
       | driverId          | {ninja-driver-id} |
+    And Operator verify Pickup details on Edit order page using data below:
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD (uid:5f718e9c-ff87-44dd-bbc9-6c5d67287852)
@@ -480,6 +492,8 @@ Feature: Route Manifest
       | transactionMode   | DELIVERY                      |
       | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
       | driverId          | {ninja-driver-id}             |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD (uid:3f2b7577-43e2-4354-bed9-2a5faa9aa6b9)
@@ -523,6 +537,8 @@ Feature: Route Manifest
       | transactionMode   | DELIVERY          |
       | expectedCodAmount | 0.00              |
       | driverId          | {ninja-driver-id} |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
@@ -582,6 +598,8 @@ Feature: Route Manifest
       | orderId      | {KEY_CREATED_ORDER_ID} |
       | codValue     | 23.57                  |
       | codCollected | 0                      |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order on Route Manifest
@@ -621,6 +639,8 @@ Feature: Route Manifest
       | PRICING CHANGE |
       | FORCED SUCCESS |
       | UPDATE STATUS  |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction of RTS Order on Route Manifest
@@ -661,6 +681,8 @@ Feature: Route Manifest
       | name           |
       | FORCED FAILURE |
       | UPDATE STATUS  |
+    And Operator verify Delivery details on Edit order page using data below:
+      | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

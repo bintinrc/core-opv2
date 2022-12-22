@@ -755,7 +755,7 @@ Feature: Route Monitoring V2
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
   @DeleteOrArchiveRoute @DeleteDriver
-  Scenario: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
+  Scenario: Show Updated Driver Name & Hub in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
@@ -785,13 +785,13 @@ Feature: Route Monitoring V2
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name}                             |
-      | hub        | {hub-name}                              |
+      | hub        | {hub-name-2}                            |
       | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
       | comments   | Route has been edited by automated test |
     And Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
+      | hubs    | {hub-name-2}                   |
       | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:

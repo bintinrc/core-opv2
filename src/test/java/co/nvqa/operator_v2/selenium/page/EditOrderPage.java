@@ -1255,6 +1255,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public PageElement startDateTime;
     @FindBy(xpath = ".//div[label[.='End Date / Time']]/p")
     public PageElement endDateTime;
+
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
     public PageElement lastServiceEnd;
     @FindBy(xpath = ".//div[label[.='Delivery Instructions']]/p")
@@ -1274,6 +1275,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
         BOX_LOCATOR + "//div[label[text()='Start Date / Time']]/p";
     private static final String END_DATE_TIME_LOCATOR =
         BOX_LOCATOR + "//div[label[text()='End Date / Time']]/p";
+    private static final String LAST_SERVICE_END_DATE_LOCATOR =
+        BOX_LOCATOR + "//div[label[text()='Last Service End']]/p";
     private static final String NV_TAG_LOCATOR = "//nv-tag[@name='commons.ninja-collect']";
 
     public DeliveryDetailsBox(WebDriver webDriver, WebElement webElement) {
@@ -1306,6 +1309,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     public String getEndDateTime() {
       return getText(END_DATE_TIME_LOCATOR);
+    }
+
+    public String getLastServiceEnd() {
+      return getText(LAST_SERVICE_END_DATE_LOCATOR);
     }
 
     public boolean isNinjaCollectTagPresent() {
