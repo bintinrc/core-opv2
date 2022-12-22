@@ -1,11 +1,11 @@
-@CWF
+@OperatorV2 @CoreV2 @PickupAppointment @DeletePickupCalenderView
 Feature: Delete pickup jobs on pickup jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @CreatPickupJob
+  @deletePickupJob
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Ready For Routing
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -29,7 +29,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @CreatPickupJob
+  @deletePickupJob
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Routed
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -58,7 +58,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @CreatPickupJob
+  @deletePickupJob
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - In Progress
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -88,7 +88,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @CreatPickupJob
+  @deletePickupJob
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - disabled - completed
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -108,7 +108,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Then Operator verify there is no Delete button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
     Then Operator verify there is no Edit button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
 
-  @RT @CreatPickupJob
+  @deletePickupJob
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - disabled - failed
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |

@@ -59,7 +59,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   }
 
-//  @When("Operator goes to Pickup Jobs Page")
+  //  @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
@@ -71,18 +71,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.getLoadSelection().getWebElement());
   }
 
-//  @When("Operator click on Create or edit job button on this top right corner of the page")
+  //  @When("Operator click on Create or edit job button on this top right corner of the page")
   public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
     pickupAppointmentJobPage.clickOnCreateOrEditJob();
   }
 
-//  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
+  //  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
   public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperIDInField(shipperId);
     put(KEY_LEGACY_SHIPPER_ID, shipperId);
   }
 
-//  @And("Operator select address = {string} in Shipper Address field")
+  //  @And("Operator select address = {string} in Shipper Address field")
   public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperAddressField(shipperAddress);
   }
@@ -107,7 +107,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .as("Shipper field is filled").isTrue();
   }
 
-  @And("Operator verify Create button in displayed")
+  //  @And("Operator verify Create button in displayed")
   public void isCreateButtonDisplayed() {
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().isCreateButtonDisplayed())
@@ -657,13 +657,13 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @After("@deletePickupJob")
   public void deletePickUpJob() {
-    try{
+    try {
       List<Long> jobIds = get(KEY_CONTROL_CREATED_PA_JOB_IDS);
       jobIds.forEach((jobId) -> {
         new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(String.valueOf(jobId));
       });
-    } catch (Throwable ex ){
-      LOGGER.warn(f("Can not delete pickup job: %s",ex.getMessage()));
+    } catch (Throwable ex) {
+      LOGGER.warn(f("Can not delete pickup job: %s", ex.getMessage()));
     }
 
   }
@@ -976,15 +976,15 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies number of selected rows on Pickup Jobs page")
-  public void operatorVerifiesNumberOfSelectedRows(){
+  public void operatorVerifiesNumberOfSelectedRows() {
     pickupAppointmentJobPage.inFrame(() ->
-      pickupAppointmentJobPage.verifyBulkSelectResult()
+        pickupAppointmentJobPage.verifyBulkSelectResult()
     );
   }
 
   @When("Operator filters on the table with values below:")
-  public void operatorFiltersValueOnTheTable(Map<String, String> data){
-    Map<String,String> resolvedData = resolveKeyValues(data);
+  public void operatorFiltersValueOnTheTable(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
     pickupAppointmentJobPage.inFrame(() -> {
       if (resolvedData.get("status") != null) {
         pickupAppointmentJobPage.bulkSelect.filterByColumnV2(
@@ -994,31 +994,34 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   @Then("Operator verify number of selected row is not updated")
-  public void operatorVerifyNumberOfSelectedRowIsNotUpdated(){
+  public void operatorVerifyNumberOfSelectedRowIsNotUpdated() {
     pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountHasNotChanged());
   }
 
   @Then("Operator verify the number of selected rows is {value}")
-  public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountisEqualTo(expectedRowCount));
+  public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount) {
+    pickupAppointmentJobPage.inFrame(
+        () -> pickupAppointmentJobPage.verifyRowCountisEqualTo(expectedRowCount));
   }
 
   @Given("Operator selects {int} rows on Pickup Jobs page")
-  public void operatorSelectRowsOnPickupJobsPage(int numberOfRows){
+  public void operatorSelectRowsOnPickupJobsPage(int numberOfRows) {
     pickupAppointmentJobPage.inFrame(() -> {
-      for (int i = 1; i<=numberOfRows; i++)
-        pickupAppointmentJobPage.bulkSelect.clickActionButton(i,ACTION_SELECTED);
+      for (int i = 1; i <= numberOfRows; i++) {
+        pickupAppointmentJobPage.bulkSelect.clickActionButton(i, ACTION_SELECTED);
+      }
     });
   }
 
   @Then("Operator verifies Filter Job button is disabled on Pickup job page")
-  public void operatorVerifiesFilterJobButtonDisabled(){
-    pickupAppointmentJobPage.inFrame(() ->Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
-        getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
+  public void operatorVerifiesFilterJobButtonDisabled() {
+    pickupAppointmentJobPage.inFrame(
+        () -> Assertions.assertThat(pickupAppointmentJobPage.filterJobByIDModal.confirmButton.
+            getAttribute("disabled")).as("Filter Job button is disabled").isEqualTo("true"));
   }
 
   @Given("Operator fills the pickup job ID list below:")
-  public void operatorFillsThePickupJobIDs(List<String> data){
+  public void operatorFillsThePickupJobIDs(List<String> data) {
     List<String> listOfPickupJobIds = resolveValues(data);
     pickupAppointmentJobPage.inFrame(() -> {
       listOfPickupJobIds.forEach((Id) -> {
@@ -1040,32 +1043,35 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies error message below:")
-  public void operatorVerifiesErrorMessage(String expectedResult){
-    pickupAppointmentJobPage.inFrame(page ->{
-      Assertions.assertThat(expectedResult).as("Message is the same").isEqualToIgnoringCase(page.getAntTopRightText());
+  public void operatorVerifiesErrorMessage(String expectedResult) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
     });
   }
 
   @Given("Operator clears the filter jobs list on Pickup Jobs Page")
-  public void operatorClearsPickupJobsList(){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(
-        Keys.chord(Keys.CONTROL, "a", Keys.DELETE)));
+  public void operatorClearsPickupJobsList() {
+    pickupAppointmentJobPage.inFrame(
+        () -> pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(
+            Keys.chord(Keys.CONTROL, "a", Keys.DELETE)));
   }
 
   @Then("Operator verifies invalid pickup ID error message below on Pickup Jobs Page:")
-  public void operatorVerifiesErrorMessageOnPickupJobsPage(String expectedMessage){
-    pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.filterJobByIDModal.verifyErrorMessages(expectedMessage));
+  public void operatorVerifiesErrorMessageOnPickupJobsPage(String expectedMessage) {
+    pickupAppointmentJobPage.inFrame(
+        () -> pickupAppointmentJobPage.filterJobByIDModal.verifyErrorMessages(expectedMessage));
   }
 
   @Given("Operator fill more than 1000 pickup jobs Id on Pickup Jobs Page:")
-  public void addmore1000(String ID){
+  public void addmore1000(String ID) {
     String jobId = resolveValue(ID);
     Random random = new Random();
     int numberOfId = random.ints(1002, 1010)
         .findFirst()
         .getAsInt();
     pickupAppointmentJobPage.inFrame(page -> {
-      for (int i=0;i<numberOfId;i++){
+      for (int i = 0; i < numberOfId; i++) {
         pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(jobId);
         pickupAppointmentJobPage.filterJobByIDModal.inputJobId.sendKeys(Keys.ENTER);
       }
@@ -1073,7 +1079,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies the Table on Pickup Jobs Page")
-  public void operatorVerifiesTableOnPickupJobsPage(){
+  public void operatorVerifiesTableOnPickupJobsPage() {
     pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyPickupJobsTable());
   }
 }
