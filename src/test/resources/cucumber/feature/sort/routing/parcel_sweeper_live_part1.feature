@@ -14,8 +14,8 @@ Feature: Parcel Sweeper Live
       | trackingId | invalid    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | RECOVERY |
-      | driverName | INVALID               |
-      | color      | #e86161               |
+      | driverName | INVALID  |
+      | color      | #e86161  |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #e86161 |
@@ -35,8 +35,8 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
+      | driverName | NOT INBOUNDED |
+      | color      | #ffa400       |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #ffa400 |
@@ -59,7 +59,7 @@ Feature: Parcel Sweeper Live
   Scenario: Parcel Sweeper Live - Van enroute to pickup (uid:c69dde9c-d01a-439f-94d1-de932d7e84a6)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -72,8 +72,8 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
+      | driverName | NOT INBOUNDED |
+      | color      | #ffa400       |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #ffa400 |
@@ -96,7 +96,7 @@ Feature: Parcel Sweeper Live
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt unrouted (uid:27d72aac-23ad-4111-8b9f-e2a10c727f62)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -113,8 +113,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -135,7 +135,7 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date = today (uid:ca0f7cf5-13ac-4265-934d-052136902ec7)
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -158,8 +158,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -185,7 +185,7 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date = today (uid:2cc6f8a6-d783-46dd-8408-19f2de63dadd)
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -198,7 +198,7 @@ Feature: Parcel Sweeper Live
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name-10} |
-      | trackingId | CREATED      |
+      | trackingId | CREATED       |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
@@ -208,15 +208,15 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | {hub-name} |
       | color   | #55a1e8    |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED    |
+      | trackingId | CREATED     |
       | hubId      | {hub-id-10} |
     And DB Operator verify order_events record for the created order:
       | type | 27 |
@@ -230,7 +230,7 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date is NOT today (uid:a7076aa8-6f42-4255-b5ac-1cc0aa79e3dd)
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -271,7 +271,7 @@ Feature: Parcel Sweeper Live
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date is NOT today (uid:6ef626ff-51d4-456d-9fb3-b0de0714dae1)
     Given API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"{country}","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -333,8 +333,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -361,7 +361,7 @@ Feature: Parcel Sweeper Live
   Scenario: Parcel Sweeper Live - RTS Order (uid:b2541a22-8243-41bf-8210-b558c83fb4be)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"from":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":"738078","country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -518,8 +518,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -561,8 +561,8 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
+      | driverName | NOT INBOUNDED |
+      | color      | #ffa400       |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #ffa400 |
@@ -608,8 +608,8 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
+      | driverName | NOT INBOUNDED |
+      | color      | #ffa400       |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #ffa400 |
@@ -649,8 +649,8 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
@@ -682,8 +682,8 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | RECOVERY  |
-      | driverName | CANCELLED             |
-      | color      | #e86161               |
+      | driverName | CANCELLED |
+      | color      | #e86161   |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
       | color    | #e86161 |
@@ -701,6 +701,24 @@ Feature: Parcel Sweeper Live
       | hubId     | {hub-id}            |
     And Operator verify order status is "Cancelled" on Edit Order page
     And Operator verify order granular status is "Cancelled" on Edit Order page
+
+  @CloseNewWindows
+  Scenario: Parcel Sweeper Live - should show error when parcel sweep with more than 50 characters
+    Given Operator go to menu Order -> All Orders
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name}                                          |
+      | trackingId | 123456789111315171921232527293133353739414345474951 |
+    Then Operator verifies error toast with "Exception" message is shown
+
+  @CloseNewWindows
+  Scenario: Parcel Sweeper Live - should show error when parcel sweep with invalid characters
+    Given Operator go to menu Order -> All Orders
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | /          |
+    Then Operator verifies error toast with "Exception" message is shown
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
