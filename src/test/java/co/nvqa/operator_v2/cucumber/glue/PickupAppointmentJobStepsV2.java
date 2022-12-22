@@ -304,7 +304,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     @Then("Operator verifies Existing upcoming job page")
     public void operatorVerifiesExistingUpcomingJobPage(){
-        pickupAppointmentJobPage.inFrame(() ->pickupAppointmentJobPage.verifyExistingUpcomingJobPage());
+        pickupAppointmentJobPage.inFrame(() -> {
+            pickupAppointmentJobPage.existingUpcomingJob.header.waitUntilVisible();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.header.isDisplayed()).as("Existing upcoming job header is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.title.isDisplayed()).as("Existing upcoming job title is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.startDate.isDisplayed()).as("Existing upcoming job Start date is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.endDate.isDisplayed()).as("Existing upcoming job end date is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.timeRange.isEnabled()).as("Existing upcoming job time range is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.useExistingTimeslot.isEnabled()).as("Existing upcoming job Apply existing time slots is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.pickupTag.isEnabled()).as("Existing upcoming job pickup tag is display").isTrue();
+            Assertions.assertThat( pickupAppointmentJobPage.existingUpcomingJob.submit.getAttribute("disabled")).as("Existing upcoming job submit is disabled").isEqualTo("true");
+        });
     }
 
     @Given("Operator selects time range {string} on Existing Upcoming Job page")
@@ -355,7 +365,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     @Then("Operator verifies job created success following data below:")
     public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
         Map<String,String> resolvedData = resolveKeyValues(data);
-        pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyCreatedJobSuccess(resolvedData));
+        pickupAppointmentJobPage.inFrame(() -> {
+            pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
+            if (data.get("timeSlot")!=null){
+                Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(resolvedData.get("timeSlot"));
+            }
+            if (resolvedData.get("pickupTag")!=null){
+                Assertions.assertThat(pickupAppointmentJobPage.isElementExist(f(pickupAppointmentJobPage.jobCreatedSuccess.COLUMN_DATA_XPATH,resolvedData.get("pickupTag")))).as("Job tag is the same").isTrue();
+            }});
     }
 
 }

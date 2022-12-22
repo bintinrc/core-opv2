@@ -14,7 +14,6 @@ import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -333,18 +332,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public Button submit;
   }
 
-  public void verifyExistingUpcomingJobPage(){
-    existingUpcomingJob.header.waitUntilVisible();
-    Assertions.assertThat(existingUpcomingJob.header.isDisplayed()).as("Existing upcoming job header is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.title.isDisplayed()).as("Existing upcoming job title is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.startDate.isDisplayed()).as("Existing upcoming job Start date is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.endDate.isDisplayed()).as("Existing upcoming job end date is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.timeRange.isEnabled()).as("Existing upcoming job time range is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.useExistingTimeslot.isEnabled()).as("Existing upcoming job Apply existing time slots is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.pickupTag.isEnabled()).as("Existing upcoming job pickup tag is display").isTrue();
-    Assertions.assertThat(existingUpcomingJob.submit.getAttribute("disabled")).as("Existing upcoming job submit is disabled").isEqualTo("true");
-  }
-
   public void selectItem(String item){
     waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
     findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
@@ -368,18 +355,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public Button confirm;
 
     public final String COLUMN_DATA_XPATH = "//tbody[@class='ant-table-tbody']//td[text()='%s']";
-  }
-
-  public void verifyCreatedJobSuccess(Map<String,String> data){
-
-    jobCreatedSuccess.title.waitUntilVisible();
-    if (data.get("timeSlot")!=null){
-      Assertions.assertThat(jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(data.get("timeSlot"));
-    }
-    if (data.get("pickupTag")!=null){
-      Assertions.assertThat(isElementExist(f(jobCreatedSuccess.COLUMN_DATA_XPATH,data.get("pickupTag")))).as("Job tag is the same").isTrue();
-    }
-
   }
 
 }
