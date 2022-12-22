@@ -1,7 +1,7 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @HubInbound @WithTrip6
 Feature: Shipment Hub Inbound With Trip Scanning 6
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -612,7 +612,7 @@ Feature: Shipment Hub Inbound With Trip Scanning 6
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}   |
       | status       | Completed                            |
 
-  @runthis
+  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Completed Air Haul Shipment in Shipment's Transit Hub - Hub Inbound with Airport to Warehous Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create 2 new airport using data below:
@@ -771,6 +771,6 @@ Feature: Shipment Hub Inbound With Trip Scanning 6
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}   |
       | status       | Completed                            |
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
