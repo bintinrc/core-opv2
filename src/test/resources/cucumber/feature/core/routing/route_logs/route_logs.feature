@@ -63,17 +63,17 @@ Feature: Route Logs
     And Operator bulk edits details of created routes using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
-      | hub        | {hub-name}                              |
+      | zone       | {zone-name-2}                           |
+      | hub        | {hub-name-2}                            |
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
     Then Operator verifies that success react notification displayed:
       | top                | 2 Route(s) Updated |
       | waitUntilInvisible | true               |
     Then Operator verify routes details on Route Logs page using data below:
-      | date                             | id                                | driverName            | hub        | driverTypeName       | comments                                | tags             |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
-      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {hub-name} | {driver-type-name-2} | Route has been edited by automated test | {route-tag-name} |
+      | date                             | id                                | driverName            | zone          | hub          | comments                                | tags             |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
+      | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Multiple Routes from Route Logs Page (uid:03e47864-aa13-4dc3-8775-27f07257320b)
@@ -156,7 +156,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:5aa174fa-7978-490f-8a45-a1c2c2a764dc)
+  Scenario: Operator Edit Details of a Single Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -168,6 +168,7 @@ Feature: Route Logs
     And Operator edits details of created route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
+      | zone       | {zone-name-2}                           |
       | hub        | {hub-name-2}                            |
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
@@ -175,15 +176,14 @@ Feature: Route Logs
       | top                | 1 Route(s) Updated |
       | waitUntilInvisible | true               |
     Then Operator verify route details on Route Logs page using data below:
-      | date           | {gradle-current-date-yyyy-MM-dd}        |
-      | id             | {KEY_CREATED_ROUTE_ID}                  |
-      | status         | PENDING                                 |
-      | driverName     | {ninja-driver-2-name}                   |
-      | hub            | {hub-name-2}                            |
-      | zone           | {zone-name}                             |
-      | driverTypeName | {driver-type-name-2}                    |
-      | comments       | Route has been edited by automated test |
-      | tags           | {route-tag-name}                        |
+      | date       | {gradle-current-date-yyyy-MM-dd}        |
+      | id         | {KEY_CREATED_ROUTE_ID}                  |
+      | status     | PENDING                                 |
+      | driverName | {ninja-driver-2-name}                   |
+      | hub        | {hub-name-2}                            |
+      | zone       | {zone-name-2}                           |
+      | comments   | Route has been edited by automated test |
+      | tags       | {route-tag-name}                        |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Add Tag to a Single Route on Route Logs Page (uid:47e4dfc2-b5e3-470a-a832-b99c85905f8a)

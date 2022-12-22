@@ -1172,6 +1172,12 @@ public class EditOrderSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies Delivery Details on Edit Order Page:")
+  public void operatorVerifiesDeliveryDetailsUpdated(Map<String,String> data) {
+    Order order = new Order(resolveKeyValues(data));
+    editOrderPage.verifyDeliveryInfo(order);
+  }
+
   @Then("^Operator verifies (Pickup|Delivery) Transaction is updated on Edit Order Page$")
   public void operatorVerifiesTransactionUpdated(String txnType) {
     Order order = get(KEY_CREATED_ORDER);
