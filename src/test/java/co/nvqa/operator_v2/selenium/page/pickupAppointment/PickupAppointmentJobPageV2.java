@@ -59,6 +59,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+  public final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
 
   public boolean isToastContainerDisplayed() {
     try {
@@ -347,7 +348,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public void selectItem(String item){
     waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
     findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
-    waitUntilInvisibilityOfElementLocated("//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]");
+    waitUntilInvisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
   }
 
   public static class JobCreatedSuccess extends AntModal {
