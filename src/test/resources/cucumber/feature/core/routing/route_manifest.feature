@@ -6,7 +6,7 @@ Feature: Route Manifest
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Load Route Manifest of a Driver Success Delivery (uid:10baa6a7-fb91-43e5-b980-917634c2e844)
+  Scenario: Operator Load Route Manifest of a Driver Success Delivery
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -27,7 +27,7 @@ Feature: Route Manifest
     Then Operator verify 1 delivery success at Route Manifest
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Load Route Manifest of a Driver Failed Delivery (uid:d30febe2-f7a5-49c7-aece-3649a0590ddc)
+  Scenario: Operator Load Route Manifest of a Driver Failed Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -59,7 +59,7 @@ Feature: Route Manifest
       | delivery.failureReason | 6                             |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest (uid:6351c21d-0221-4540-a02b-72a305e385cd)
+  Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -93,7 +93,7 @@ Feature: Route Manifest
     And DB Operator verifies waypoint status is "FAIL"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest (uid:46644aae-1191-4fed-8d85-32e391dc90d3)
+  Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -127,7 +127,7 @@ Feature: Route Manifest
     And DB Operator verifies waypoint status is "SUCCESS"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest (uid:3c0f6d2f-cfa4-4bbb-b177-ac07bff7e650)
+  Scenario: Operator Admin Manifest Force Fail Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -173,7 +173,7 @@ Feature: Route Manifest
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest (uid:275dba78-9a73-4d15-aa3b-d4f14f5ba15d)
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -215,7 +215,7 @@ Feature: Route Manifest
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest (uid:9063c9fe-bed2-440f-8df5-fe1a4ba6cfe9)
+  Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -262,7 +262,7 @@ Feature: Route Manifest
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest (uid:e3b6bdb4-fad6-44b4-8b8c-e58fff505302)
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -306,7 +306,7 @@ Feature: Route Manifest
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Show Order Tags in Route Manifest Page (uid:a8166b12-af7e-4d59-88a2-fd14d6181f08)
+  Scenario: Show Order Tags in Route Manifest Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -330,7 +330,7 @@ Feature: Route Manifest
       | {order-tag-name-2} | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Load Route Manifest of a Driver Multiple Pending Waypoints (uid:d712b733-4edc-420a-baa9-fd042ef41940)
+  Scenario: Operator Load Route Manifest of a Driver Multiple Pending Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -376,7 +376,7 @@ Feature: Route Manifest
       | pickup.status     | Pending                                    |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP (uid:dd6557a3-a532-480e-b51b-d09cec40e7c6)
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Collect COP
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
@@ -410,7 +410,7 @@ Feature: Route Manifest
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP (uid:f16ca446-8af1-49c0-9308-a89a56c18103)
+  Scenario: Operator Admin Manifest Force Success Pickup Transaction with COP on Route Manifest - Do Not Collect COP
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                       |
@@ -451,7 +451,7 @@ Feature: Route Manifest
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD (uid:5f718e9c-ff87-44dd-bbc9-6c5d67287852)
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -496,7 +496,7 @@ Feature: Route Manifest
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD (uid:3f2b7577-43e2-4354-bed9-2a5faa9aa6b9)
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction with COD on Route Manifest -  Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -541,7 +541,7 @@ Feature: Route Manifest
       | lastServiceEnd | {gradle-current-date-yyyy-MM-dd} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Admin Manifest Force Success Delivery Transaction of RTS Order with COD on Route Manifest - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
