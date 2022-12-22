@@ -6,7 +6,7 @@ Feature: Route Monitoring V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Single Transaction (uid:70b113d9-c272-40e8-a637-7489236f93ec)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Single Transaction
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -26,7 +26,7 @@ Feature: Route Monitoring V2
       | totalParcels | 1                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Multiple Transactions (uid:2fa49a65-3398-4c1d-b1f2-f339a6565486)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Multiple Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
@@ -46,7 +46,7 @@ Feature: Route Monitoring V2
       | totalParcels | 3                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Empty Route (uid:928d4d63-c3f3-468c-a565-3f0c6d68db35)
+  Scenario: Operator Filter Route Monitoring Data And Checks Empty Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -69,7 +69,7 @@ Feature: Route Monitoring V2
       | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Pickup (uid:d58b2f01-96b1-490c-8359-e207a77fa3a9)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -94,7 +94,7 @@ Feature: Route Monitoring V2
       | numValidFailed       | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery (uid:8ff7b641-6085-4a03-bd23-2fa7caddc4a3)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -119,7 +119,7 @@ Feature: Route Monitoring V2
       | numValidFailed       | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Delivery (uid:99109042-790f-49cb-a2a0-f39f9d99b788)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -153,7 +153,7 @@ Feature: Route Monitoring V2
       | numValidFailed       | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Pickup (uid:7071c04a-8e7e-4cd8-8c8b-446e3e9798d9)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -183,7 +183,7 @@ Feature: Route Monitoring V2
       | numValidFailed       | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Delivery - <type> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Delivery - <type>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -224,7 +224,7 @@ Feature: Route Monitoring V2
       | Invalid Failed | 5                   | 0                    | 1                | 0              | uid:e4c41d55-0d82-45ab-9dc3-db3d851e9957 |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Pickup - <type> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Pickup - <type>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -261,7 +261,7 @@ Feature: Route Monitoring V2
       | Invalid Failed | 9                   | 0                    | 1                | 0              | uid:a320bc69-a868-46ba-a9b4-0e073ed84d24 |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup (uid:f84418a9-839e-4d8c-b179-98e5b58b643d)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
@@ -298,7 +298,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery (uid:b1a7810d-d762-4546-8dec-87e4a8926acf)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -335,7 +335,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels on NON-PRIOR Waypoints (uid:00efcc8e-6720-4dca-80a8-6da3a11f38c0)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels on NON-PRIOR Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -358,7 +358,7 @@ Feature: Route Monitoring V2
     And Operator check there are 0 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup & Delivery Under the Same Route (uid:ae53d1b3-93b0-4890-b64a-b0084e282ebf)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup & Delivery Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -404,7 +404,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag (uid:4bf8531a-ead3-49ac-bce5-7072f26142dc)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order Has PRIOR Tag
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -461,7 +461,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order with NO Tags (uid:5440bc22-43e1-4d23-a73e-7a0960b21b1c)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Deliveries Parcels - Order with NO Tags
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -516,7 +516,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order Has PRIOR Tag (uid:e48b223f-fab2-4828-9e18-64474676b390)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order Has PRIOR Tag
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
@@ -573,7 +573,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order with NO Tags (uid:bde14f57-e3af-45c8-8dd5-9b0c619d02e2)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups Parcels - Order with NO Tags
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
@@ -628,7 +628,7 @@ Feature: Route Monitoring V2
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed on NON-Failed Waypoints (uid:f152f03a-5b87-4171-b06f-c11f83834f1e)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed on NON-Failed Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -657,7 +657,7 @@ Feature: Route Monitoring V2
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route (uid:a9415bb3-33d2-41aa-b4c6-06975f5f360e)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -718,7 +718,7 @@ Feature: Route Monitoring V2
       | tags         | -                                          |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation (uid:184d89a0-ea55-4d0f-bd94-c6f249eb1b3f)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -755,7 +755,7 @@ Feature: Route Monitoring V2
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
   @DeleteOrArchiveRoute @DeleteDriver
-  Scenario: Show Updated Driver Name & Hub in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
+  Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
@@ -799,7 +799,7 @@ Feature: Route Monitoring V2
       | routeId    | {KEY_CREATED_ROUTE_ID}                |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Reservation (uid:4b9a22ee-afa2-46d7-b5c9-62c63b73f81a)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -819,7 +819,7 @@ Feature: Route Monitoring V2
       | totalParcels | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Reservation (uid:03e8e4e1-bd2d-4ac6-951b-daf7c74199b7)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -855,7 +855,7 @@ Feature: Route Monitoring V2
       | successCount | 1                      |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Reservation - <name> (<hiptest-uid>)
+  Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Reservation - <name>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -937,7 +937,7 @@ Feature: Route Monitoring V2
       | pendingCount  | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery Transactions (uid:7ee66a53-0dc8-4b11-90de-88add722887b)
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -971,7 +971,7 @@ Feature: Route Monitoring V2
       | pendingCount  | 1                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Pickup Transactions (uid:a2b915b0-e821-4d5b-8808-bebf6f69b40f)
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Pickup Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -1002,7 +1002,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 1                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions (uid:5bddde45-bde6-403a-90dc-35c0cc0362ba)
+  Scenario: Operator Filter Route Monitoring Data After Merge Pending Multiple Waypoints - Delivery & Pickup Transactions
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
