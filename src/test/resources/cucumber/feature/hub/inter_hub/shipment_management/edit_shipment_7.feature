@@ -5,7 +5,7 @@ Feature: Shipment Management - Edit Shipment 7
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Edit Shipment with Edit MAWB
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -32,7 +32,7 @@ Feature: Shipment Management - Edit Shipment 7
     When Operator click update MAWB button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update MAWB page UI
     When Operator update MAWB information on shipment weight dimension page with following data
-      | mawb        | 123-12345678     |
+      | mawb        | RANDOM           |
       | vendor      | {vendor-name}    |
       | origin      | {airport-name-1} |
       | destination | {airport-name-2} |

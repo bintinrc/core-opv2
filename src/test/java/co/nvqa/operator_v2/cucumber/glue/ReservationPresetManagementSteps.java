@@ -102,7 +102,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
     String content = StringUtils.join(rows, "\n");
     File file = StandardTestUtils.createFile("bulk-milkrun-action.csv", content);
     reservationPresetManagementPage.overviewTab.click();
-    reservationPresetManagementPage.actionsMenu.selectOption("Upload CSV");
+    reservationPresetManagementPage.moreActions.selectOption("Upload CSV");
     reservationPresetManagementPage.uploadCsvDialog.waitUntilVisible();
     reservationPresetManagementPage.uploadCsvDialog.selectFile.setValue(file);
     reservationPresetManagementPage.uploadCsvDialog.submit.clickAndWaitUntilDone();
@@ -111,7 +111,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps {
   @Then("Operator downloads sample CSV on Reservation Preset Management page")
   public void downloadCsv() {
     reservationPresetManagementPage.overviewTab.click();
-    reservationPresetManagementPage.actionsMenu.selectOption("Download Sample CSV");
+    reservationPresetManagementPage.moreActions.selectOption("Download Sample CSV");
   }
 
   @Then("^sample CSV file on Reservation Preset Management page is downloaded successfully$")

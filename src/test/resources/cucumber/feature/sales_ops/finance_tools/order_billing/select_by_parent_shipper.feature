@@ -8,6 +8,7 @@ Feature: Order Billing Parent Shipper
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    Given API Gmail - Operator connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 

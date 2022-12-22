@@ -20,6 +20,7 @@ import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -121,7 +122,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_verifies_that_the_tile_is_equal_to(String tileName,
       String expectedTilevalue) {
     stationManagementHomePage.closeIfModalDisplay();
-    String actualTileValue = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    String actualTileValue = String.valueOf(
+        stationManagementHomePage.getNumberFromPendingPickupTile(tileName));
     takesScreenshot();
     Assertions.assertThat(actualTileValue)
         .as("expected Value is not matching for %s", tileName)
@@ -236,6 +238,69 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Operator verifies that the count in the pending pickup tile: {string} has increased by {int}")
+  public void operator_verifies_that_the_count_in_pending_pickup_tile_has_increased_by(
+      String tileName,
+      Integer totOrder) {
+    int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+    int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    takesScreenshot();
+    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
+    stationManagementHomePage.closeIfModalDisplay();
+    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
+
+  @Then("Operator verifies that the count in the pending pickup tile: {string} has decreased by {int}")
+  public void operator_verifies_that_the_count_in_pending_pickup_tile_has_decreased_by(
+      String tileName,
+      Integer totOrder) {
+    int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+    int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    takesScreenshot();
+    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder - totOrder));
+    stationManagementHomePage.closeIfModalDisplay();
+    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
+
+  @Then("Operator verifies that the count in the second in the pending pick up tile: {string} has increased by {int}")
+  public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_has_increased_by(
+      String tileName,
+      Integer totOrder) {
+    int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+    int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    takesScreenshot();
+    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
+    stationManagementHomePage.closeIfModalDisplay();
+    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
+
+  @Then("Operator verifies that the count in the second in the pending pick up tile: {string} has decreased by {int}")
+  public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_has_decreased_by(
+      String tileName,
+      Integer totOrder) {
+    int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+    int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    takesScreenshot();
+    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder - totOrder));
+    stationManagementHomePage.closeIfModalDisplay();
+    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+  }
+
+
+  @When("Operator get the count from the pending pickup tile: {string}")
+  public void operator_get_the_count_from_the_pending_pickup_tile(String tileName) {
+    int beforeOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    put(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP, beforeOrder);
+    takesScreenshot();
+  }
+
+  @When("Operator get the count from one more tile in pending pickup: {string}")
+  public void operator_get_the_count_from_one_more_tile_in_pending_pickup(String tileName) {
+    int beforeOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+    put(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2, beforeOrder);
+    takesScreenshot();
+  }
+
   @When("Operator get the count from one more tile: {string}")
   public void operator_get_the_count_from_one_more_tile(String tileName) {
     int beforeOrder = stationManagementHomePage.getNumberFromTile(tileName);
@@ -247,6 +312,20 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_opens_modal_pop_up_through_hamburger_button_for_the_tile(String modalTitle,
       String tile) {
     stationManagementHomePage.openModalPopup(modalTitle, tile);
+  }
+
+  @SuppressWarnings("unchecked")
+  @When("Operator clicks on the hamburger button for the tile: {string}")
+  public void operator_clicks_hamburger_button_for_the_tile(String tileName) {
+    retryIfExpectedExceptionOccurred(() -> {
+          String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+          stationManagementHomePage.clickHamburgerIcon(tileName);
+          ;
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        StaleElementReferenceException.class);
   }
 
   @And("Operator verifies that Route Monitoring page is opened on clicking hamburger button for the tile: {string}")
@@ -681,7 +760,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
 
   @Then("Operator verifies that the mouseover text is not displayed on moving away from the tile title")
   public void operator_verifies_that_the_mouseover_text_is_not_displayed_on_moving_away_from_the_tile_title() {
-    stationManagementHomePage.mouseOverToHubDropdown();
+    stationManagementHomePage.mouseOverToManualButton();
   }
 
   @Then("Operator verifies that the chart is displayed in incoming shipment modal")

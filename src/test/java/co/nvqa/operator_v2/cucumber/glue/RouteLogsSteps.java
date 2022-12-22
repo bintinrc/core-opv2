@@ -279,6 +279,9 @@ public class RouteLogsSteps extends AbstractSteps {
       if (CollectionUtils.isNotEmpty(newParams.getTags())) {
         routeLogsPage.bulkEditDetailsDialog.routeTags.selectValues(newParams.getTags());
       }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.bulkEditDetailsDialog.zone.selectValue(newParams.getZone());
+      }
       if (StringUtils.isNotBlank(newParams.getHub())) {
         routeLogsPage.bulkEditDetailsDialog.hub.selectValue(newParams.getHub());
       }
@@ -310,6 +313,9 @@ public class RouteLogsSteps extends AbstractSteps {
       }
       if (CollectionUtils.isNotEmpty(newParams.getTags())) {
         routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.editDetailsDialog.zone.selectValue(newParams.getZone());
       }
       if (StringUtils.isNotBlank(newParams.getHub())) {
         routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());
@@ -1019,35 +1025,42 @@ public class RouteLogsSteps extends AbstractSteps {
       long start = new Date().getTime();
       AntNotification toastInfo;
       do {
-        toastInfo = routeLogsPage.noticeNotifications.stream().filter(toast -> {
-          String actualTop = toast.message.getNormalizedText();
-          LOGGER.info("Found notification: " + actualTop);
-          String value = finalData.get("top");
-          if (StringUtils.isNotBlank(value)) {
-            if (value.startsWith("^")) {
-              if (!actualTop.matches(value)) {
-                return false;
-              }
-            } else {
-              if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
-                return false;
+        try {
+          toastInfo = routeLogsPage.noticeNotifications.stream().filter(toast -> {
+            String actualTop = toast.message.getNormalizedText();
+            LOGGER.info("Found notification: " + actualTop);
+            String value = finalData.get("top");
+            if (StringUtils.isNotBlank(value)) {
+              if (value.startsWith("^")) {
+                if (!actualTop.matches(value)) {
+                  return false;
+                }
+              } else {
+                if (!StringUtils.equalsIgnoreCase(value, actualTop)) {
+                  return false;
+                }
               }
             }
-          }
-          value = finalData.get("bottom");
-          if (StringUtils.isNotBlank(value)) {
-            String actual = toast.description.getNormalizedText();
-            LOGGER.info("Found description: " + actual);
-            if (value.startsWith("^")) {
-              return actual.matches(value);
-            } else {
-              return StringUtils.equalsIgnoreCase(value, actual);
+            value = finalData.get("bottom");
+            if (StringUtils.isNotBlank(value)) {
+              String actual = toast.description.getNormalizedText();
+              LOGGER.info("Found description: " + actual);
+              if (value.startsWith("^")) {
+                return actual.matches(value);
+              } else {
+                return StringUtils.equalsIgnoreCase(value, actual);
+              }
             }
-          }
-          return true;
-        }).findFirst().orElse(null);
-      } while (toastInfo == null && new Date().getTime() - start < 20000);
-      Assertions.assertThat(toastInfo != null).as("Toast " + finalData + " is displayed").isTrue();
+            return true;
+          }).findFirst().orElse(null);
+        } catch (Exception ex) {
+          toastInfo = null;
+          LOGGER.warn("Could not read notification", ex);
+        }
+      } while (toastInfo == null && new Date().getTime() - start < 30000);
+      Assertions.assertThat(toastInfo)
+          .withFailMessage("Toast is not displayed: " + finalData)
+          .isNotNull();
       if (toastInfo != null && waitUntilInvisible) {
         toastInfo.waitUntilInvisible();
       }

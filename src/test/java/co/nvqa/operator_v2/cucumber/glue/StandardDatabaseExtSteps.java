@@ -43,6 +43,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.internal.assertion.Assertion;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -50,12 +51,14 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
@@ -875,20 +878,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @After(value = "@DeleteShipment")
   public void deleteShipment() {
-    ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-    try {
-      if (shipmentInfo != null) {
-        getHubJdbc().deleteShipment(shipmentInfo.getId());
-        return;
-      }
-
-      Long createdShipmentId = get(KEY_CREATED_SHIPMENT_ID);
-      if (createdShipmentId != null) {
-        getHubJdbc().deleteShipment(createdShipmentId);
-      }
-    } catch (Throwable ex) {
-      LOGGER.warn("Could not delete shipment", ex);
+    Set<Long> ids = new HashSet<>();
+    List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    if (CollectionUtils.isNotEmpty(shipmentIds)) {
+      ids.addAll(shipmentIds);
     }
+    shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+    if (CollectionUtils.isNotEmpty(shipmentIds)) {
+      ids.addAll(shipmentIds);
+    }
+    ids.forEach(id -> {
+      try {
+        getHubJdbc().deleteShipment(id);
+      } catch (Throwable ex) {
+        LOGGER.warn("Could not delete shipment", ex);
+      }
+    });
   }
 
   @After(value = "@DeleteShipments")
@@ -961,6 +966,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String.valueOf(warehouseSweepRecord.get("hub_id")));
     assertEquals(f("Expected order_id in Warehouse_sweeps table"), String.valueOf(order.getId()),
         String.valueOf(warehouseSweepRecord.get("order_id")));
+    put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")
@@ -2107,7 +2113,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Given("DB Operator gets waypoint record")
   public void dbOperatorGetsWaypointRecord() {
     final Long waypointId = get(KEY_WAYPOINT_ID);
-    Waypoint waypoint = getCoreJdbc().getWaypoint(waypointId);
+    dbOperatorGetsWaypointRecord(waypointId.toString());
+  }
+
+  @Given("DB Operator gets {value} waypoint record")
+  public void dbOperatorGetsWaypointRecord(String value) {
+    Waypoint waypoint = getCoreJdbc().getWaypoint(Long.valueOf(value));
     put(KEY_WAYPOINT_DETAILS, waypoint);
   }
 

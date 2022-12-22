@@ -8,14 +8,14 @@ Feature: Delete Pickup Appointment Job Part 2
   @DeletePickupJobCompleted
   Scenario: Delete pickup jobs on Pickup Jobs page calendar view - disabled - Completed
     Given API Operator create new appointment pickup job using data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And API Operator add route to appointment pickup job using data below:
       | overwrite | false |
     And API Operator complete appointment pickup job
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -24,14 +24,14 @@ Feature: Delete Pickup Appointment Job Part 2
     And Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | completed                      |
-      | color  | rgb(199, 255, 233)             |
+      | color  | rgba(199, 255, 233, 1)         |
     And QA verify there is no Delete button in that particular job tag
     And QA verify there is no Edit button in that particular job tag
 
   @DeletePickupJobFailed
   Scenario: Delete pickup jobs on Pickup Jobs page calendar view - disabled - Failed
     Given API Operator create new appointment pickup job using data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address_id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     And API Operator add route to appointment pickup job using data below:
@@ -40,7 +40,7 @@ Feature: Delete Pickup Appointment Job Part 2
       | failureReasonCodeId | 9    |
       | failureReasonId     | 1476 |
 
-    When Operator loads Shipper Address Configuration page Pickup Appointment
+    When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
@@ -49,7 +49,7 @@ Feature: Delete Pickup Appointment Job Part 2
     And Operator verify the particular job tag in the Calendar changes from grey to black with white text
       | date   | {gradle-next-1-day-yyyy-MM-dd} |
       | status | failed                         |
-      | color  | rgb(255, 209, 211)             |
+      | color  | rgba(255, 209, 211, 1)         |
     And QA verify there is no Delete button in that particular job tag
     And QA verify there is no Edit button in that particular job tag
 

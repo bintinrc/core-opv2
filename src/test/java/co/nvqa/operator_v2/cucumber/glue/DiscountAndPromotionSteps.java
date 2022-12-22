@@ -14,6 +14,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -45,9 +46,11 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
 
   @Then("Operator enter campaign details using data below:")
   public void operatorEnterCampaignDetails(DataTable dt) {
-    List<Campaign> campaignDetails = convertDataTableToListWhereDataTableHasListOfData(dt, Campaign.class);
+    List<Campaign> campaignDetails = convertDataTableToListWhereDataTableHasListOfData(dt,
+        Campaign.class);
     Campaign campaignDetail = campaignDetails.get(0);
     put(KEY_OBJECT_OF_CREATED_CAMPAIGN, campaignDetail);
+    put(KEY_CAMPAIGN_NAME_OF_CREATED_CAMPAIGN, campaignDetail.getCampaignName());
     setCampaignData(campaignDetail);
   }
 
@@ -62,15 +65,21 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       if (Objects.nonNull(value)) {
         page.enterCampaignDescription(value);
       }
-      value = campaign.getStartDate();
-      if (Objects.nonNull(value)) {
-        page.startDate.setFromDate(value);
-      }
       value = campaign.getEndDate();
       if (Objects.nonNull(value)) {
         page.endDate.setFromDate(value);
       }
-      page.clickAddButton(campaign.getServiceType());
+      value = campaign.getStartDate();
+      if (Objects.nonNull(value)) {
+        page.startDate.setFromDate(value);
+      }
+      value = campaign.getDiscountOperator();
+      if (Objects.nonNull(value)) {
+        page.selectDiscountOperator(value);
+      }
+      // perform the + Add button
+      performRulesAddButton(campaign, page);
+
       List<String> serviceType = campaign.getServiceType();
       if (Objects.nonNull(serviceType)) {
         page.selectServiceType(serviceType);
@@ -87,23 +96,46 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   }
 
   private void getCampaignData() throws ParseException {
-      Campaign campaignDetail = new Campaign();
-      campaignDetail.setCampaignName(campaignCreateEditPage.getCampaignName());
-      campaignDetail.setCampaignDescription(campaignCreateEditPage.getCampaignDescription());
-      String startDate = DateUtil.formatDate(campaignCreateEditPage.getStartDate(), DATE_FORMAT_SNS_1, DATE_FORMAT);
-      campaignDetail.setStartDate(startDate);
-      String endDate = DateUtil.formatDate(campaignCreateEditPage.getEndDate(), DATE_FORMAT_SNS_1, DATE_FORMAT);
-      campaignDetail.setEndDate(endDate);
-      campaignDetail.setServiceType(campaignCreateEditPage.getServiceType());
-      campaignDetail.setServiceLevel(campaignCreateEditPage.getServiceLevel());
-      campaignDetail.setDiscountValue(campaignCreateEditPage.getDiscountValue());
-      put(KEY_OBJECT_OF_GET_CAMPAIGN, campaignDetail);
+    Campaign campaignDetail = new Campaign();
+    campaignDetail.setCampaignName(campaignCreateEditPage.getCampaignName());
+    campaignDetail.setCampaignDescription(campaignCreateEditPage.getCampaignDescription());
+    String startDate = DateUtil.formatDate(campaignCreateEditPage.getStartDate(), DATE_FORMAT_SNS_1,
+        DATE_FORMAT);
+    campaignDetail.setStartDate(startDate);
+    String endDate = DateUtil.formatDate(campaignCreateEditPage.getEndDate(), DATE_FORMAT_SNS_1,
+        DATE_FORMAT);
+    campaignDetail.setEndDate(endDate);
+    campaignDetail.setServiceType(campaignCreateEditPage.getServiceType());
+    campaignDetail.setServiceLevel(campaignCreateEditPage.getServiceLevel());
+    campaignDetail.setDiscountValue(campaignCreateEditPage.getDiscountValue());
+    put(KEY_OBJECT_OF_GET_CAMPAIGN, campaignDetail);
+  }
+
+  private void performRulesAddButton(Campaign campaign, CampaignCreateEditPage page) {
+    if (campaign.getServiceType() == null) {
+      if (campaign.getServiceLevel() != null) {
+        page.clickAddButton(campaign.getServiceLevel());
+      } else {
+        if (campaign.getDiscountValue() != null) {
+          page.clickAddButton(campaign.getDiscountValue());
+        }
+      }
+    } else {
+      page.clickAddButton(campaign.getServiceType());
+    }
   }
 
   @When("Operator clicks on publish button")
   public void operatorClicksOnPublishButton() {
-    discountAndPromotionsPage.inFrame(page -> {
-      discountAndPromotionsPage.clickPublishButton();
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickPublishButton();
+    });
+  }
+
+  @When("Operator clicks on cancel button")
+  public void operatorClicksOnCancelButton() {
+    campaignCreateEditPage.inFrame(page -> {
+      campaignCreateEditPage.clickCancelButton();
     });
   }
 
@@ -114,6 +146,16 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
       Assertions.assertThat(validateNotificationText).as("Expected Toast Msg is visible")
           .isEqualTo(expectedToastMsg);
     });
+  }
+
+  @Then("Operator verifies toast error for duplicate campaigns")
+  public void operatorVerifiesToastErrorForDuplicateCampaigns() {
+    campaignCreateEditPage.waitUntilVisibilityAndGetErrorToastData();
+    String errorTitle = "Network Request Error";
+    boolean isErrorFound;
+    isErrorFound = campaignCreateEditPage.toastErrors.stream().anyMatch(toastError ->
+        StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle));
+    Assertions.assertThat(isErrorFound).as("Error message is exist").isTrue();
   }
 
   @Then("Operator verifies the published campaign page")
@@ -139,6 +181,115 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
           .isEqualTo(get(KEY_OBJECT_OF_CREATED_CAMPAIGN))
           .as("Campaign Details are matched");
 
+    });
+  }
+
+  @Then("Operator verifies campaign is not created")
+  public void operatorVerifiesCampaignIsNotAdded() {
+    discountAndPromotionsPage.inFrame(page -> {
+      Campaign campaignDetail = get(KEY_OBJECT_OF_CREATED_CAMPAIGN);
+      Assertions.assertThat(
+              page.isCampaignIsDisplayed(campaignDetail.getCampaignName()))
+          .isFalse().as("Campaign is displayed");
+    });
+  }
+
+  @Then("Operator verifies campaign name is not exceeded 50")
+  public void operatorVerifiesCampaignNameIsNotExceeded50() {
+    campaignCreateEditPage.inFrame(page -> {
+      Assertions.assertThat(page.getCampaignName().length()).as("Campaign name is exceeded 50")
+          .isEqualTo(50);
+    });
+  }
+
+  @Then("Operator verifies campaign description is not exceeded 255")
+  public void operatorVerifiesCampaignDescriptionIsNotExceeded255() {
+    campaignCreateEditPage.inFrame(page -> {
+      Assertions.assertThat(page.getCampaignDescription().length())
+          .as("Campaign description is exceeded 255").isEqualTo(255);
+    });
+  }
+
+  @Then("Operator verifies validation error message for {string}")
+  public void operatorVerifiesCampaignValidationErrorMessage(String field) {
+    campaignCreateEditPage.inFrame(page -> {
+      String validation_error = null;
+      switch (field) {
+        case "campaign-name-empty":
+          validation_error = page.getCampaignNameError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please enter campaign name!");
+          break;
+
+        case "campaign-start-date-empty":
+          validation_error = page.getStartDateError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please add a start date!");
+          break;
+
+        case "campaign-end-date-empty":
+          validation_error = page.getEndDateError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please add an end date!");
+          break;
+
+        case "campaign-end-date-is-before-start-date":
+          validation_error = page.getEndDateError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("End date can't be before start date!");
+          break;
+
+        case "campaign-service-type-empty":
+          validation_error = page.getCampaignServiceTypeError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please choose service type!");
+          break;
+
+        case "campaign-service-level-empty":
+          validation_error = page.getCampaignServiceLevelError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please choose service level!");
+          break;
+
+        case "campaign-discount-value-empty":
+          validation_error = page.getCampaignDiscountValueError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please enter discount value!");
+          break;
+
+        case "campaign-discount-value-more_than-2-decimal-points":
+          validation_error = page.getCampaignDiscountValueError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please enter a number with max 2 decimal places!");
+          break;
+
+        case "campaign-discount-value-0":
+        case "campaign-discount-value-negative":
+
+          validation_error = page.getCampaignDiscountValueError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Discount value can't be 0 or less!");
+          break;
+
+        case "campaign-discount-value-characters":
+        case "campaign-discount-value-alphabets":
+          validation_error = page.getCampaignDiscountValueAlert();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Please enter a number.");
+          break;
+
+        case "campaign-discount-value-more-than-100%":
+          validation_error = page.getCampaignDiscountValueError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Value can't more than 100%!");
+          break;
+
+        case "campaign-same-rule":
+          validation_error = page.getCampaignGeneralError();
+          Assertions.assertThat(validation_error).as(field + "Validation is correct")
+              .isEqualTo("Duplicate service type/level");
+          break;
+      }
     });
   }
 

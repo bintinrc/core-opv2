@@ -31,6 +31,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |
@@ -97,6 +98,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2                        |
       | shipperId         | {KEY_CREATED_SHIPPER.id} |
@@ -177,6 +179,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2                        |
       | shipperId         | {KEY_CREATED_SHIPPER.id} |
@@ -211,6 +214,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |
@@ -269,6 +273,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |
@@ -327,6 +332,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |
@@ -429,6 +435,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |
@@ -475,6 +482,7 @@ Feature: Add Shipper To Preset
       | salesPerson                  | {sales-person}        |
     And API Operator reload shipper's cache
     And API Operator fetch id of the created shipper
+    And API Operator disable pickup appointment for Shipper with ID = "{KEY_CREATED_SHIPPER.legacyId}"
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {KEY_CREATED_SHIPPER.id} |
       | generateAddress | RANDOM                   |

@@ -860,6 +860,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         .isNull();
 
     shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
+    pause2s();
+    if(shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.isDisplayed())
+    {
+      shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.confirm();
+      shipmentWeightDimensionUpdateMawbPage.confirmSameMawbDialog.waitUntilInvisible();
+    }
     shipmentWeightSumUpreport.waitUntilLoaded();
   }
 
@@ -917,6 +923,16 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @When("Operator click update MAWB button on Shipment Weight Dimension page")
   public void operatorClickUpdateMAWBButtonOnShipmentWeightDimensionPage() {
     shipmentWeightDimensionTablePage.updateMawbButton.click();
+  }
+
+  @Then("Operator click update button only on shipment weight update mawb page")
+  public void operatorClickUpdateButtonOnlyOnShipmentWeightUpdateMawbPage() {
+    Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled"))
+        .as("Update button is enabled")
+        .isNull();
+
+    shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
+    pause2s();
   }
 }
 

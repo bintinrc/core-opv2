@@ -87,6 +87,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   @FindBy(css = "div.ant-select")
   public AntSelect2 headerHub;
 
+  @FindBy(xpath = "//button[@data-testid='station-management-homepage_manual-button']")
+  public AntSelect2 manualButton;
+
   @FindBy(xpath = "//div[contains(@class,'modal-content')]//div[contains(@class,'base-row')]")
   private List<PageElement> results;
 
@@ -254,7 +257,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     }
   }
 
-  public String getNumberFromPendingPickupTile(String tileName) {
+  public int getNumberFromPendingPickupTile(String tileName) {
     try {
       String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
       waitWhilePageIsLoading();
@@ -270,10 +273,10 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         tileValue = tileValue.substring(0, tileValue.indexOf(' '));
       }
       LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
-      return tileValue;
+      return Integer.parseInt(tileValue);
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
-      return null;
+      return 0;
     }
   }
 
@@ -899,7 +902,8 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" hrs ", ".").replaceAll("mins", "");
+        value = value.replaceAll(" days ", ".").replaceAll(" hours ", "")
+            .replaceAll(" minutes", "");
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(
@@ -1046,11 +1050,11 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     Assertions.assertThat(expectedTexts).isEqualTo(actualTexts);
   }
 
-  public void mouseOverToHubDropdown() {
+  public void mouseOverToManualButton() {
     waitWhilePageIsLoading();
-    moveToElement(headerHub.getWebElement());
+    moveToElement(manualButton.getWebElement());
     pause2s();
-    Assert.assertTrue("Assert that the title is not displayed" ,
+    Assert.assertTrue("Assert that the title is not displayed",
         mouseOverText.size() == 0);
   }
 

@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Tag;
 import co.nvqa.operator_v2.selenium.page.ManageOrderTagsPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,67 +39,72 @@ public class ManageOrderTagsSteps extends AbstractSteps {
     }
     put(KEY_CREATED_ORDER_TAG, newTag);
     putInList(KEY_LIST_OF_CREATED_ORDER_TAGS, newTag);
-    manageOrderTagsPage.createTag.click();
-    manageOrderTagsPage.addTagDialog.waitUntilVisible();
-    manageOrderTagsPage.addTagDialog.tagName.setValue(newTag.getName());
-    manageOrderTagsPage.addTagDialog.description.setValue(newTag.getDescription());
-    manageOrderTagsPage.addTagDialog.submit.clickAndWaitUntilDone();
-    manageOrderTagsPage.addTagDialog.waitUntilInvisible();
-    String id = manageOrderTagsPage.toastSuccess.get(0).toastTop.getText();
-    newTag.setId(Long.valueOf(id.split(" ")[1].trim()));
+    manageOrderTagsPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.createTag.click();
+      page.addTagDialog.waitUntilVisible();
+      page.addTagDialog.tagName.setValue(newTag.getName());
+      page.addTagDialog.description.setValue(newTag.getDescription());
+      page.addTagDialog.submit.click();
+      page.addTagDialog.waitUntilInvisible();
+      String id = manageOrderTagsPage.noticeNotifications.get(0).message.getText();
+      newTag.setId(Long.valueOf(id.split(" ")[1].trim()));
+    });
   }
 
   @Then("^Operator verify the new tag is created successfully on Manage Order Tags page$")
   public void verifyNewTagCreatedSuccessfully() {
     Tag tag = get(KEY_CREATED_ORDER_TAG);
-    manageOrderTagsPage.tagsTable.sortColumn(COLUMN_NAME, true);
-    int size = manageOrderTagsPage.tagsTable.getRowsCount();
-    Tag actual = null;
-    for (int i = 1; i <= size; i++) {
-      Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
-      if (StringUtils.equals(tag.getName(), next.getName())) {
-        actual = next;
-        break;
+    manageOrderTagsPage.inFrame(page -> {
+      page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
+      int size = page.tagsTable.getRowsCount();
+      Tag actual = null;
+      for (int i = 1; i <= size; i++) {
+        Tag next = page.tagsTable.readEntity(i);
+        if (StringUtils.equals(tag.getName(), next.getName())) {
+          actual = next;
+          break;
+        }
       }
-    }
-    assertNotNull("Tag " + tag.getName() + " was not found", actual);
-    tag.compareWithActual(actual, "id");
+      assertNotNull("Tag " + tag.getName() + " was not found", actual);
+      tag.compareWithActual(actual, "id");
+    });
   }
 
   @When("Operator deletes created tag on Manage Order Tags page")
   public void deleteCreatedTag() {
     Tag tag = get(KEY_CREATED_ORDER_TAG);
-
-    manageOrderTagsPage.tagsTable.sortColumn(COLUMN_NAME, true);
-
-    int size = manageOrderTagsPage.tagsTable.getRowsCount();
-    int index = 0;
-    for (int i = 1; i <= size; i++) {
-      Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
-      if (StringUtils.equals(tag.getName(), next.getName())) {
-        index = i;
-        break;
+    manageOrderTagsPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
+      int size = manageOrderTagsPage.tagsTable.getRowsCount();
+      int index = 0;
+      for (int i = 1; i <= size; i++) {
+        Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
+        if (StringUtils.equals(tag.getName(), next.getName())) {
+          index = i;
+          break;
+        }
       }
-    }
-
-    manageOrderTagsPage.tagsTable.clickActionButton(index, ACTION_DELETE);
-    manageOrderTagsPage.confirmDeleteDialog.confirmDelete();
+      page.tagsTable.clickActionButton(index, ACTION_DELETE);
+      page.confirmDeleteDialog.waitUntilVisible();
+      page.confirmDeleteDialog.delete.click();
+    });
   }
 
   @When("Operator verifies that created tag has been deleted on Manage Order Tags page")
   public void verifyTagHasBeenDeleted() {
     Tag tag = get(KEY_CREATED_ORDER_TAG);
-
-    manageOrderTagsPage.tagsTable.sortColumn(COLUMN_NAME, true);
-
-    int size = manageOrderTagsPage.tagsTable.getRowsCount();
-    int index = 0;
-    for (int i = 1; i <= size; i++) {
-      Tag next = manageOrderTagsPage.tagsTable.readEntity(i);
-      if (StringUtils.equals(tag.getName(), next.getName())) {
-        throw new AssertionError(
-            "Tag [" + tag.getName() + "] is not displayed in Manage Order Tags table");
+    manageOrderTagsPage.inFrame(page -> {
+      page.tagsTable.filterByColumn(COLUMN_NAME, tag.getName());
+      int size = page.tagsTable.getRowsCount();
+      for (int i = 1; i <= size; i++) {
+        Tag next = page.tagsTable.readEntity(i);
+        if (StringUtils.equals(tag.getName(), next.getName())) {
+          throw new AssertionError(
+              "Tag [" + tag.getName() + "] is displayed in Manage Order Tags table");
+        }
       }
-    }
+    });
   }
 }

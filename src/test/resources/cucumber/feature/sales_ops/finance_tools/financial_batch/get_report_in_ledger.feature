@@ -4,7 +4,7 @@ Feature: Get Report in Ledger
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   @DeleteNewlyCreatedShipper
@@ -29,7 +29,7 @@ Feature: Get Report in Ledger
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | status | Open |
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 8 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column | expected_value |
@@ -39,7 +39,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -54,7 +54,7 @@ Feature: Get Report in Ledger
       | fromCity         | null                                          |
       | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
       | toBillingZone    | WEST                                          |
-      | codAmount        | 5.00                                          |
+      | codAmount        | -5.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.0                                           |
@@ -96,7 +96,7 @@ Feature: Get Report in Ledger
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
       | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column | expected_value |
@@ -107,7 +107,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -122,7 +122,7 @@ Feature: Get Report in Ledger
       | fromCity         | null                                          |
       | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
       | toBillingZone    | WEST                                          |
-      | codAmount        | 50.00                                         |
+      | codAmount        | -50.00                                        |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.5                                           |
       | insuredFee       | 0.0                                           |
@@ -167,7 +167,7 @@ Feature: Get Report in Ledger
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
       | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column | expected_value |
@@ -178,7 +178,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -231,7 +231,7 @@ Feature: Get Report in Ledger
       | status | Open           |
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column | expected_value |
@@ -242,7 +242,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -300,7 +300,7 @@ Feature: Get Report in Ledger
     # Create Payment
     And API Operator run CreatePaymentMessages endpoint with below data
       | createPaymentRequest | { "amount": "<amount>", "event": "Payment", "source": "<source>","external_id": "<account_id>","type": "<type>","payment_method": "<payment_method>","payee_info": <payee_info>,"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "<transaction_no>"} |
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column | expected_value |
@@ -311,7 +311,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -326,7 +326,7 @@ Feature: Get Report in Ledger
       | fromCity         | null                                          |
       | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
       | toBillingZone    | WEST                                          |
-      | codAmount        | 5000.00                                       |
+      | codAmount        | -5000.00                                      |
       | insuredAmount    | 0.00                                          |
       | codFee           | 100.0                                         |
       | insuredFee       | 0.0                                           |
