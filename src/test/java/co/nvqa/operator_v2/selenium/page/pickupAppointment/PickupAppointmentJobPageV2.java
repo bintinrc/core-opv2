@@ -243,18 +243,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     KEY_LAST_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 
-  public void verifyRowCountHasNotChanged() {
-    String selectedRows = bulkSelect.selectedRowCount.getText();
-    Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
-        .contains(KEY_LAST_SELECTED_ROWS_COUNT);
-  }
-
-  public void verifyRowCountisEqualTo(String expectedRowCount) {
-    String selectedRows = bulkSelect.selectedRowCount.getText();
-    Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
-        .contains(expectedRowCount);
-  }
-
   public static class FilterJobByID extends AntModal {
 
     public FilterJobByID(WebDriver webDriver, WebElement webElement) {

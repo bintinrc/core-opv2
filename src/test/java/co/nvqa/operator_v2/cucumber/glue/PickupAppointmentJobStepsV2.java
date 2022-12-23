@@ -220,12 +220,20 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     @Then("Operator verify number of selected row is not updated")
     public void operatorVerifyNumberOfSelectedRowIsNotUpdated(){
-        pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountHasNotChanged());
+        pickupAppointmentJobPage.inFrame(() -> {
+            String selectedRows = pickupAppointmentJobPage.bulkSelect.selectedRowCount.getText();
+            Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
+                .contains(pickupAppointmentJobPage.KEY_LAST_SELECTED_ROWS_COUNT);
+        });
     }
 
     @Then("Operator verify the number of selected rows is {value}")
     public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount){
-        pickupAppointmentJobPage.inFrame(() -> pickupAppointmentJobPage.verifyRowCountisEqualTo(expectedRowCount));
+        pickupAppointmentJobPage.inFrame(() -> {
+            String selectedRows = pickupAppointmentJobPage.bulkSelect.selectedRowCount.getText();
+            Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
+                .contains(expectedRowCount);
+            });
     }
 
     @Given("Operator selects {int} rows on Pickup Jobs page")
