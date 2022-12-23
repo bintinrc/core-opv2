@@ -651,7 +651,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(order.getToContact());
     String toAddress = deliveryDetailsBox.toAddress.getText();
     assertThat("To Address", toAddress, containsString(order.getToAddress1()));
-    assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+    if (StringUtils.isNotBlank(order.getToAddress2())) {
+      assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+    }
+    if (StringUtils.isNotBlank(order.getToPostcode())) {
+      assertThat("To Address", toAddress, containsString(order.getToPostcode()));
+    }
   }
 
   public void verifyOrderIsGlobalInboundedSuccessfully(Order order,
@@ -1243,7 +1248,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(css = "h5.nv-text-right")
     public PageElement status;
-    @FindBy(xpath = "./div[2]/div/div/div[1]/div/div/h5")
+    @FindBy(xpath = ".//div[@class='layout-row']//h5")
     public PageElement to;
     @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
     public PageElement toEmail;

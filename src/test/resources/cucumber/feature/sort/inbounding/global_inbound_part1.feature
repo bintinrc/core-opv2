@@ -235,7 +235,7 @@ Feature: Global Inbound
       | hubName    | {hub-name-3}                    |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | TRANSFERRED TO 3PL    |
+      | destinationHub | TRANSFERRED TO 3PL |
       | rackInfo       | RECOVERY           |
       | color          | #e86161            |
     And DB Operator verify order_events record for the created order:
@@ -304,6 +304,23 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @KillBrowser @ShouldAlwaysRun
+  Scenario: Global inbounds should show error when inbounding with invalid character
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-3} |
+      | trackingId | /            |
+    Then Operator verifies error toast with "Exception" message is shown
+
+  Scenario: Global inbounds should show error when inbounding with more than 50 characters
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-3}                                        |
+      | trackingId | 123456789111315171921232527293133353739414345474951 |
+    Then Operator verifies error toast with "Exception" message is shown
+
+
+  @KillBrowser @ShouldAlwaysRun @TAG
   Scenario: Kill Browser
     Given no-op
