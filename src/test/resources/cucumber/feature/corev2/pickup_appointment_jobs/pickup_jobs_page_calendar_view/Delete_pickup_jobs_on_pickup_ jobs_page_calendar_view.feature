@@ -1,4 +1,4 @@
-@CWF
+
 Feature: Delete pickup jobs on pickup jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
