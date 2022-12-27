@@ -68,6 +68,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("Station COD Report", "station-cod-report");
     MAP_OF_END_URL.put("Station User Management", "admin/hubs");
     MAP_OF_END_URL.put("Last Mile and RTS Zones", "zones");
+    MAP_OF_END_URL.put("QRCode Printing", "qrcode-printing");
   }
 
   public MainPage(WebDriver webDriver) {
