@@ -459,7 +459,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       VerifyURLinMiddleDriverPage(url);
       operatorVerifiesThatTheDataShownHasTheSameValue();
       operatorVerifyTheElementsAreShown();
-    }, "Retrying until UI is showing the right data...", 1000, 1);
+    }, "Retrying until UI is showing the right data...", 1000, 20);
   }
 
 //  @Then("API Fillter the list of driver")
