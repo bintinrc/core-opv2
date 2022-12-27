@@ -421,9 +421,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void tableFilterByname(Driver middleMileDriver) {
-        nameFilter.setValue(middleMileDriver.getFirstName());
+        displayNameFilter.setValue(middleMileDriver.getFirstName());
         waitUntilVisibilityOfElementLocated(
-                f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+            f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
         String actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
         String actualId = getText(f(TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
@@ -439,8 +439,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualComments = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
 
-        Assertions.assertThat(actualName).as("The Name is the same").isEqualTo(middleMileDriver.getFirstName());
-        Assertions.assertThat(actualUsername).as("The Username is the same").isEqualTo(middleMileDriver.getUsername());
+        Assertions.assertThat(actualName).as("The Name is the same")
+            .isEqualTo(middleMileDriver.getDisplayName());
+        Assertions.assertThat(actualUsername).as("The Username is the same")
+            .isEqualTo(middleMileDriver.getUsername());
         Assertions.assertThat(actualHub).as("The Hub is the same").isEqualTo(middleMileDriver.getHub());
         Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same").isEqualTo(middleMileDriver.getEmploymentType());
         Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same").isEqualTo(getEmploymentStatus(middleMileDriver));
@@ -464,9 +466,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualLicenseType = null;
         String actualComments = null;
         pause3s();
-        nameFilter.setValue(middleMileDriver.getFirstName());
+        displayNameFilter.setValue(middleMileDriver.getFirstName());
         waitUntilVisibilityOfElementLocated(
-                f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+            f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
         switch (filterBy.toLowerCase()) {
             case EMPLOYMENT_TYPE:
