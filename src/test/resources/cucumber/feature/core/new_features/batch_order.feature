@@ -43,6 +43,13 @@ Feature: Batch Order
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      And DB Operator verify the order_events record:
+        | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+        | type      | 49                                      |
+        | userId    | 397                                     |
+        | userName  | AUTOMATION EDITED                       |
+        | userEmail | {operator-portal-uid}                   |
+        | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute
   Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup (uid:4802ac7b-e874-49b2-96bb-cf56451f1cae)
@@ -89,6 +96,13 @@ Feature: Batch Order
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    And DB Operator verify the order_events record:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+      | type      | 49                                      |
+      | userId    | 397                                     |
+      | userName  | AUTOMATION EDITED                       |
+      | userEmail | {operator-portal-uid}                   |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail (uid:6daf555d-d582-4328-9f68-d04b98e6931b)
@@ -138,6 +152,13 @@ Feature: Batch Order
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+    And DB Operator verify the order_events record:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+      | type      | 49                                      |
+      | userId    | 397                                     |
+      | userName  | AUTOMATION EDITED                       |
+      | userEmail | {operator-portal-uid}                   |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   Scenario: Rollback Order - Valid Batch Id, Status = Staging (uid:b4cbfdac-28df-4d85-9e16-578c4d3d473c)
     Given Operator go to menu Utilities -> QRCode Printing

@@ -26,6 +26,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And DB Operator verify the order_events record:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+      | type      | 49                                      |
+      | userId    | 397                                     |
+      | userName  | AUTOMATION EDITED                       |
+      | userEmail | {operator-portal-uid}                   |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Delete Order - Status = Van en-route to Pickup (uid:dcb07b88-ecda-4b51-85c1-381b3ff898e9)
@@ -59,6 +66,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And DB Operator verify the order_events record:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+      | type      | 49                                      |
+      | userId    | 397                                     |
+      | userName  | AUTOMATION EDITED                       |
+      | userEmail | {operator-portal-uid}                   |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   Scenario: Operator Delete Order - Status = Staging (uid:9b41fbd7-7079-49d9-81c6-81505e5ffd2c)
     Given API Shipper create V4 order using data below:
@@ -116,6 +130,13 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
     And DB Operator verifies orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    And DB Operator verify the order_events record:
+      | orderId   | {KEY_LIST_OF_CREATED_ORDER_ID[1]}       |
+      | type      | 49                                      |
+      | userId    | 397                                     |
+      | userName  | AUTOMATION EDITED                       |
+      | userEmail | {operator-portal-uid}                   |
+      | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
