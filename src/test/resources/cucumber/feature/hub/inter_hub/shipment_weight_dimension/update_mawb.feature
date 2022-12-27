@@ -167,7 +167,6 @@ Feature: Update MAWB
       | origin      | {other-airport-name-1}          |
       | destination | {airport-name-2}                |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
   @DeleteShipments
