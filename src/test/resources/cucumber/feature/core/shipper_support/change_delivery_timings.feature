@@ -11,7 +11,7 @@ Feature: Change Delivery Timings
     Then Operator verify CSV file of Change Delivery Timings' sample
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page (uid:c45d09b1-9082-4e8d-86f6-1fee6987ea15)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -21,7 +21,7 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow | 0                                |
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
       | waitUntilInvisible | true                    |
@@ -30,9 +30,8 @@ Feature: Change Delivery Timings
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-  @CloseNewWindows
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id (uid:8f87e215-1680-44d6-86c0-2b517ca85ad3)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -42,7 +41,7 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow |                                  |
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
       | waitUntilInvisible | true                    |
@@ -52,7 +51,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Tracking ID (uid:82ca200a-d5d3-45da-adf6-b9a63d9545ea)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
       | trackingId | INVALID_TRACKING_ID              |
@@ -63,7 +62,7 @@ Feature: Change Delivery Timings
 
   @DeleteOrArchiveRoute
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State (uid:66c7644b-64e7-4c60-963c-1ef5a837cd8e)
-    When Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -83,7 +82,7 @@ Feature: Change Delivery Timings
       | startDate  | {gradle-current-date-yyyy-MM-dd} |
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow | 0                                |
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |
       | bottom             | Change delivery timings |
       | waitUntilInvisible | true                    |
@@ -93,7 +92,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty (uid:16505a85-abcd-4121-a5e5-598e1d9cd2d9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -109,7 +108,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date (uid:7b563c16-28f8-48a7-ac6e-5967d0042c3f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -125,7 +124,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty (uid:bf8bfde6-f452-4bf8-ab4d-c5bb299ce9c4)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

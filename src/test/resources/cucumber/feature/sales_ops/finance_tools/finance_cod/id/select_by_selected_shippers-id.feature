@@ -3,7 +3,7 @@
 Feature: Generate COD Report - Selected Shipper(s)
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute
@@ -28,7 +28,7 @@ Feature: Generate COD Report - Selected Shipper(s)
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-v4-global-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{qa-email-address}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "global_shipper_ids": [ {shipper-v4-global-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries

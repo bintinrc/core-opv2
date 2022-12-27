@@ -4,7 +4,7 @@ Feature: Generate COD Report - All Shippers
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   Scenario: Generate COD Report - Filter By Route Date - All Shippers
@@ -14,7 +14,7 @@ Feature: Generate COD Report - All Shippers
       | startDate    | {gradle-previous-1-day-yyyy-MM-dd} |
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd} |
       | generateFile | All                                |
-      | emailAddress | {order-billing-email}              |
+      | emailAddress | {qa-email-address}                 |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -27,7 +27,7 @@ Feature: Generate COD Report - All Shippers
       | startDate    | {gradle-previous-1-day-yyyy-MM-dd} |
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd} |
       | generateFile | All                                |
-      | emailAddress | {order-billing-email}              |
+      | emailAddress | {qa-email-address}                 |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries

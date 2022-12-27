@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.selenium.elements.PageElement;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -130,7 +128,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
     click(HUB_DROPDOWN_XPATH);
     waitUntilVisibilityOfElementLocated(HUB_DROPDOWN_XPATH);
-    sendKeys(HUB_DROPDOWN_XPATH, hubName,Keys.ENTER);
+    sendKeys(HUB_DROPDOWN_XPATH, hubName, Keys.ENTER);
     pause2s();
 
     //Select Sort Task
@@ -142,7 +140,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
       }
     }
 
-    proceedButton.waitUntilClickable();
-    proceedButton.click();
+    if (proceedButton.waitUntilVisible(5)) {
+      proceedButton.click();
+    }
   }
 }

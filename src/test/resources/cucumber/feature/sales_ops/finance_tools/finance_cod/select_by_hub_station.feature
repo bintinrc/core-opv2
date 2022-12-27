@@ -3,7 +3,7 @@
 Feature: Generate COD Report - Select by Hub/Station
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute
@@ -44,7 +44,7 @@ Feature: Generate COD Report - Select by Hub/Station
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "hub_ids": [ {hub-id},{hub-id-2} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{qa-email-address}"],"date_type": "ORDER_COMPLETED", "report_type" : "COD", "hub_ids": [ {hub-id},{hub-id-2} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -79,7 +79,7 @@ Feature: Generate COD Report - Select by Hub/Station
     Then Operator gets order details from the billing_qa_gl.cod_orders table
     # Finance COD Report
     And API Operator generates finance cod report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{order-billing-email}"],"date_type": "ROUTE", "report_type" : "COD", "hub_ids": [ {hub-id} ], "template_id": {finance-cod-template-id}} |
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}","email_addresses": ["{qa-email-address}"],"date_type": "ROUTE", "report_type" : "COD", "hub_ids": [ {hub-id} ], "template_id": {finance-cod-template-id}} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received finance cod email
     And Operator gets the finance cod report entries
@@ -97,5 +97,5 @@ Feature: Generate COD Report - Select by Hub/Station
     Given Operator go to menu Finance Tools -> Finance COD
     When Operator selects Finance COD Report data as below
       | generateFile | Select By Hub/Station |
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address}    |
     Then Operator verifies error message "Please select at least one hub."

@@ -4,7 +4,8 @@ Feature: Financial Batch Report
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Gmail - Operator connect to "{financial-batch-report-email}" inbox using password "{financial-batch-report-email-password}"
+    Given API Operator whitelist email "{financial-batch-report-email}"
     Given operator marks gmail messages as read
 
   Scenario: Generate Financial Batch Report -  Consolidated by "ALL" - All Shippers (uid:dea803b4-da56-461d-b2c9-b94cdddbf16f)
@@ -14,8 +15,8 @@ Feature: Financial Batch Report
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd} |
       | For          | All Shippers                       |
       | generateFile | All orders batches in 1 file       |
-      | emailAddress | {order-billing-email}              |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | emailAddress | {financial-batch-report-email}     |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
     And Operator gets the financial batch report entries
@@ -52,8 +53,8 @@ Feature: Financial Batch Report
       | createPaymentRequest | { "amount": "4.15", "event": "Payment", "source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
     And Operator gets the financial batch report entries
@@ -92,8 +93,8 @@ Feature: Financial Batch Report
     And Operator verifies the number of entries in billing_qa_gl.ledgers table is 1
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and verifies the financial batch email body contains count 0
 
   @DeleteNewlyCreatedShipper
@@ -118,8 +119,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["ALL"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
     And Operator gets the financial batch report entries
@@ -144,8 +145,8 @@ Feature: Financial Batch Report
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd}                 |
       | For          | All Shippers                                       |
       | generateFile | Batches consolidated by shipper (1 shipper 1 file) |
-      | emailAddress | {order-billing-email}                              |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | emailAddress | {financial-batch-report-email}                     |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     When DB Operator gets the count shippers from ledgers by completed local date
     Then Operator verifies the count of files in financial batch reports zip
@@ -162,8 +163,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-emoji-th-vn-chars-global-id} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-emoji-th-vn-chars-global-id} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
     And Operator gets the financial batch report entries
@@ -186,8 +187,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-100-chars-global-id} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-100-chars-global-id} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the financial batch report entries
     Then Operator verifies financial batch report data in CSV is as below
@@ -217,8 +218,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     Then Operator verifies the financial batch report header using data {default-financial-batch-headers}
     And Operator gets the financial batch report entries
@@ -238,22 +239,22 @@ Feature: Financial Batch Report
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - No Ledgers Found (uid:6a97e9f9-804b-4bc2-ad1d-0e8292d5ef76)
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-next-1-day-yyyy-MM-dd}","end_date": "{gradle-next-1-day-yyyy-MM-dd}", "consolidated_options": ["ALL"], "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-next-1-day-yyyy-MM-dd}","end_date": "{gradle-next-1-day-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL"], "parent_shipper_ids": [ {shipper-sop-mktpl-v4-global-id} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and verifies the financial batch email body contains count 0
 
   Scenario: Generate Financial Batch Report -  Not Choose any Parent Shipper (uid:65e61c9b-5306-4b3b-a5d7-2fbfa6baeaf7)
     Given Operator go to menu Finance Tools -> Financial Batch Report
     When Operator select financial batch report using data below:
       | For          | Select By Parent Shipper |
-      | emailAddress | {order-billing-email}    |
+      | emailAddress | {financial-batch-report-email} |
     Then Operator verifies error message "Please select at least one marketplace." is displayed on Financial Batch Reports Page
 
   Scenario: Generate Financial Batch Report -  Not Choose any Shipper (uid:02ba4b0c-1fc0-4b20-81ba-9a6839712754)
     Given Operator go to menu Finance Tools -> Financial Batch Report
     When Operator select financial batch report using data below:
       | For          | Selected Shippers     |
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {financial-batch-report-email} |
     Then Operator verifies error message "Please select at least one shipper." is displayed on Financial Batch Reports Page
 
   Scenario: Generate Financial Batch Report -  Input Invalid Recipient Emails (uid:963e9bac-58bd-4045-aab0-b311b1cdf496)
@@ -270,7 +271,7 @@ Feature: Financial Batch Report
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd}   |
       | For          | All Shippers                         |
       | generateFile | All orders batches in 1 file         |
-      | emailAddress | {order-billing-email}                |
+      | emailAddress | {financial-batch-report-email}       |
     Then Operator verifies error message "Maximum range allowed is 92 days. Current selection is 100 days." is displayed on Financial Batch Reports Page
 
   Scenario: Generate Financial Batch Report -  Input Maximum Date Range - Include Order-Level Details (uid:f6b7cc1c-f3ab-47aa-b269-f7e80fed27fd)
@@ -281,7 +282,7 @@ Feature: Financial Batch Report
       | endDate       | {gradle-previous-1-day-yyyy-MM-dd}   |
       | For           | All Shippers                         |
       | generateFile  | All orders batches in 1 file         |
-      | emailAddress  | {order-billing-email}                |
+      | emailAddress  | {financial-batch-report-email}       |
     Then Operator verifies error message "Maximum range allowed is 14 days. Current selection is 100 days." is displayed on Financial Batch Reports Page
 
 
@@ -307,8 +308,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["ALL","EXTENDED_DETAILS"]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL","EXTENDED_DETAILS"]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
     Then Operator verifies financial batch report data in CSV is as below
@@ -376,8 +377,8 @@ Feature: Financial Batch Report
       | createPaymentRequest | { "amount": "4.15", "event": "Payment", "source": "Netsuite","shipper_id": "{KEY_SHIPPER_ID}","type": "DEBIT","payment_method": "Banking","payee_info":{"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"},"payment_local_date": {gradle-current-date-yyyyMMdd},"transaction_no": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}"} |
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
     Then Operator verifies financial batch report data in CSV is as below
@@ -435,8 +436,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["ALL","EXTENDED_DETAILS"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL","EXTENDED_DETAILS"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
     Then Operator verifies financial batch report data in CSV is as below
@@ -494,8 +495,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
     Then Operator verifies extended financial batch report data in CSV is as below
@@ -541,8 +542,8 @@ Feature: Financial Batch Report
     And API Operator trigger reconcile scheduler endpoint
     Then Operator waits for 5 seconds
     And API Operator generates financial batch report using data below
-      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
+      | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER","EXTENDED_DETAILS"], "global_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
+    And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch report email
     And Operator gets the extended financial batch reports
     Then Operator verifies extended financial batch report data in CSV is as below

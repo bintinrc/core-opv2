@@ -6,7 +6,7 @@ Feature: Route Inbound Expected Scans
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Pending Deliveries (uid:55f86f84-52a9-4db0-809b-cc8e57474396)
+  Scenario: Route Inbound Expected Scans : Pending Deliveries
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Shipper create V4 order using data below:
@@ -66,7 +66,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid) (uid:bb40e733-b68f-4fe3-85d3-17e98888b270)
+  Scenario: Route Inbound Expected Scans : Failed Deliveries (Invalid)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -134,7 +134,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid) (uid:399467aa-4bf3-474f-ba8a-1b1857f1b571)
+  Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -200,7 +200,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Return Pickups (uid:992ba47a-545f-41ed-9044-7bb4ca39b785)
+  Scenario: Route Inbound Expected Scans : Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -265,7 +265,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Pending Return Pickups (uid:18423e35-086c-46e8-8e46-b67f46dc2264)
+  Scenario: Route Inbound Expected Scans : Pending Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -306,6 +306,8 @@ Feature: Route Inbound Expected Scans
       | pendingC2cReturnPickupsScans | 1 |
       | pendingC2cReturnPickupsTotal | 1 |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
@@ -313,7 +315,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Reservation Pickups (uid:c6dd80a8-6a15-4283-b9a4-850aa645d7e7)
+  Scenario: Route Inbound Expected Scans : Reservation Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -326,12 +328,7 @@ Feature: Route Inbound Expected Scans
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add reservation pick-up to the route
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoints of created orders
-    And API Operator Van Inbound multiple parcels
-    And API Operator start the route
     And API Driver get Reservation Job using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
@@ -352,7 +349,7 @@ Feature: Route Inbound Expected Scans
       | hubName                 | {hub-name}             |
       | routeDate               | GET_FROM_CREATED_ROUTE |
       | parcelProcessedScans    | 0                      |
-      | parcelProcessedTotal    | 2                      |
+      | parcelProcessedTotal    | 1                      |
       | reservationPickupsScans | 0                      |
       | reservationPickupsTotal | 1                      |
     When Operator open Reservation Pickups dialog on Route Inbound page
@@ -360,12 +357,12 @@ Feature: Route Inbound Expected Scans
     And Operator scan a tracking ID of created order on Route Inbound page
     Then Operator verify the Route Inbound Details is correct using data below:
       | parcelProcessedScans    | 1 |
-      | parcelProcessedTotal    | 2 |
+      | parcelProcessedTotal    | 1 |
       | reservationPickupsScans | 1 |
       | reservationPickupsTotal | 1 |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | ROUTE INBOUND SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
@@ -373,7 +370,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Route Inbound Expected Scans : Reservation Extra Orders (uid:6788f2c6-d062-44f5-a415-51028bea9eac)
+  Scenario: Route Inbound Expected Scans : Reservation Extra Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -433,7 +430,7 @@ Feature: Route Inbound Expected Scans
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Show DP Return Pickups Under Return Pickups Modal & Reservation Modal Route Inbound Page (uid:76b0b222-d172-4ac6-8cac-6dff4f6c55a9)
+  Scenario: Show DP Return Pickups Under Return Pickups Modal & Reservation Modal Route Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -480,9 +477,9 @@ Feature: Route Inbound Expected Scans
       | hubName    | {hub-name}             |
       | routeDate  | GET_FROM_CREATED_ROUTE |
     When Operator open C2C / Return Pickups dialog on Route Inbound page
-#    Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
-#      | shipperName       | scanned | total |
-#      | {shipper-v4-name} | 0       | 1     |
+    Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
+      | shipperName       | scanned | total |
+      | {shipper-v4-name} | 0       | 1     |
     When Operator click 'View orders or reservations' button for shipper #1 in C2C / Return Pickups Waypoints dialog
     Then Operator verify Orders table in C2C / Return Pickups Waypoints dialog using data below:
       | trackingId                                 | stampId                                    | location | type             | status  | cmiCount | routeInboundStatus |
