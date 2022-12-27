@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.cucumber.glue.MiddleMileDriversSteps;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -21,12 +22,16 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Tristania Siagian
  */
 
 public class MiddleMileDriversPage extends OperatorV2SimplePage {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MiddleMileDriversSteps.class);
 
     private static final String IFRAME_XPATH = "//iframe[contains(@src,'middle-mile-drivers')]";
     private static final String LOAD_DRIVERS_BUTTON_XPATH = "//div[contains(@class,'col')]/button[contains(@class,'ant-btn-primary')]";
@@ -68,6 +73,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
 
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
+    private static final String FIRST_NAME_INPUT_CREATE_DRIVER_ID = "firstName";
+    private static final String LAST_NAME_INPUT_CREATE_DRIVER_ID = "lastName";
     private static final String HUB_INPUT_CREATE_DRIVER_ID = "hubId";
     private static final String CONTACT_NUMBER_INPUT_CREATE_DRIVER_ID = "contactNumber";
     private static final String LICENSE_NUMBER_INPUT_CREATE_DRIVER_ID = "licenseNumber";
@@ -119,6 +126,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     public Button loadDrivers;
     @FindBy(xpath = "//input[@aria-label='input-name']")
     public TextBox nameFilter;
+    @FindBy(xpath = "//input[@aria-label='input-displayName']")
+    public TextBox displayNameFilter;
     @FindBy(xpath = "//input[@aria-label='input-id']")
     public TextBox idFilter;
     @FindBy(xpath = "//th[div[.='Username']]//input")
@@ -152,6 +161,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[@class='ant-empty-description']")
     public PageElement listEmptyData;
+
+    @FindBy(xpath = "//div[text()='Add Driver']")
+    public PageElement addDriverModalTitle;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -216,6 +228,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void fillName(String name) {
         sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, NAME_INPUT_CREATE_DRIVER_ID), name);
+    }
+
+    public void fillNames(String firstName, String lastName) {
+        addDriverModalTitle.waitUntilVisible();
+        sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, FIRST_NAME_INPUT_CREATE_DRIVER_ID), firstName);
+        sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, LAST_NAME_INPUT_CREATE_DRIVER_ID), lastName);
     }
 
     public void chooseHub(String hubName) {
@@ -292,7 +310,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void tableFilter(Driver middleMileDriver, String filterBy) {
-        String actualName = null;
+        String actualDisplayName = null;
         String actualUsername = null;
         String actualHub = null;
         String actualEmploymentType = null;
@@ -301,10 +319,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
         switch (filterBy.toLowerCase()) {
             case NAME_TABLE_FILTER_ID:
-                nameFilter.setValue(middleMileDriver.getFirstName());
+                displayNameFilter.setValue(middleMileDriver.getDisplayName().trim());
                 waitUntilVisibilityOfElementLocated(
-                        f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+                    f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+                actualDisplayName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
                 actualUsername = getText(f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
                 actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
                 actualEmploymentType = getText(
@@ -317,8 +335,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             case USERNAME_TABLE_FILTER_ID:
                 usernameFilter.setValue(middleMileDriver.getUsername());
                 waitUntilVisibilityOfElementLocated(
-                        f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+                    f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
+                actualDisplayName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
                 actualUsername = getText(f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
                 actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
                 actualEmploymentType = getText(
@@ -332,8 +350,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 nameFilter.setValue(middleMileDriver.getFirstName());
                 hubFilter.setValue(middleMileDriver.getHub());
                 waitUntilVisibilityOfElementLocated(
-                        f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+                    f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
+                actualDisplayName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
                 actualUsername = getText(f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
                 actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
                 actualEmploymentType = getText(
@@ -349,8 +367,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 waitUntilVisibilityOfElementLocated(
                         f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
                 waitUntilVisibilityOfElementLocated(
-                        f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
+                    f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
+                actualDisplayName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
                 actualUsername = getText(f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
                 actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
                 actualEmploymentType = getText(
@@ -364,7 +382,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 NvLogger.warn("Filter is not found");
         }
 
-        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
+        assertEquals("Display Name is not the same : ", middleMileDriver.getDisplayName(),
+            actualDisplayName);
         assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
         assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
         assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
@@ -526,7 +545,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesDataIsNotExisted(String driverName) {
-        nameFilter.setValue(driverName);
+        displayNameFilter.setValue(driverName);
         waitUntilVisibilityOfElementLocated(NO_RESULT_TABLE_XPATH);
     }
 
@@ -593,7 +612,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesDataInViewModalIsTheSame(Driver middleMileDriver) {
-        Assertions.assertThat(middleMileDriver.getFirstName()).
+        Assertions.assertThat(middleMileDriver.getDisplayName()).
             as("Name is as expected").isEqualTo(viewDriverDialog.name.getValue());
         Assertions.assertThat(middleMileDriver.getHub()).
             as("Hub is as expected").isEqualTo(viewDriverDialog.hub.getValue());
@@ -903,7 +922,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public static class ViewDriverDialog extends AntModal {
 
-        @FindBy(id = "name")
+        @FindBy(id = "displayName")
         public TextBox name;
         @FindBy(xpath = "//div[contains(@class,' ant-select')][.//input[@id='hubId']]")
         public co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect hub;
@@ -927,7 +946,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = "//div[@class='ant-modal-title']")
         public TextBox dialogTitle;
-        @FindBy(id = "name")
+        @FindBy(id = "firstName")
         public TextBox name;
         @FindBy(id = "contactNumber")
         public TextBox contactNumber;
