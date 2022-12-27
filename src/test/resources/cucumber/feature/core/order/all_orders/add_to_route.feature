@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @RoutingModules
+@OperatorV2 @Core @AllOrders @RoutingModules @current
 Feature: All Orders - Add To Route
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -135,9 +135,29 @@ Feature: All Orders - Add To Route
     And DB Operator verifies transaction routed to new route id
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-
+    
+  Scenario: Block Add to Route for Cancelled Order on All Orders Page
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    And API Operator cancel created order
+    When Operator add multiple orders to route on All Orders page:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    Then Operator verifies error messages in dialog on All Orders page:
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \| Order is Cancelled and cannot be added to route |
+    When Operator close Errors dialog on All Orders page
+    Then Operator verifies that info toast displayed:
+      | top    | 1 order(s) updated |
+      | bottom | add to route       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

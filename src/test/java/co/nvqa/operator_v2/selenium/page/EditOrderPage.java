@@ -651,7 +651,12 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(order.getToContact());
     String toAddress = deliveryDetailsBox.toAddress.getText();
     assertThat("To Address", toAddress, containsString(order.getToAddress1()));
-    assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+    if (StringUtils.isNotBlank(order.getToAddress2())) {
+      assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+    }
+    if (StringUtils.isNotBlank(order.getToPostcode())) {
+      assertThat("To Address", toAddress, containsString(order.getToPostcode()));
+    }
   }
 
   public void verifyOrderIsGlobalInboundedSuccessfully(Order order,
@@ -1243,7 +1248,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     @FindBy(css = "h5.nv-text-right")
     public PageElement status;
-    @FindBy(xpath = "./div[2]/div/div/div[1]/div/div/h5")
+    @FindBy(xpath = ".//div[@class='layout-row']//h5")
     public PageElement to;
     @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
     public PageElement toEmail;
@@ -1255,6 +1260,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public PageElement startDateTime;
     @FindBy(xpath = ".//div[label[.='End Date / Time']]/p")
     public PageElement endDateTime;
+
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
     public PageElement lastServiceEnd;
     @FindBy(xpath = ".//div[label[.='Delivery Instructions']]/p")
@@ -1274,6 +1280,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
         BOX_LOCATOR + "//div[label[text()='Start Date / Time']]/p";
     private static final String END_DATE_TIME_LOCATOR =
         BOX_LOCATOR + "//div[label[text()='End Date / Time']]/p";
+    private static final String LAST_SERVICE_END_DATE_LOCATOR =
+        BOX_LOCATOR + "//div[label[text()='Last Service End']]/p";
     private static final String NV_TAG_LOCATOR = "//nv-tag[@name='commons.ninja-collect']";
 
     public DeliveryDetailsBox(WebDriver webDriver, WebElement webElement) {
@@ -1306,6 +1314,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
     public String getEndDateTime() {
       return getText(END_DATE_TIME_LOCATOR);
+    }
+
+    public String getLastServiceEnd() {
+      return getText(LAST_SERVICE_END_DATE_LOCATOR);
     }
 
     public boolean isNinjaCollectTagPresent() {

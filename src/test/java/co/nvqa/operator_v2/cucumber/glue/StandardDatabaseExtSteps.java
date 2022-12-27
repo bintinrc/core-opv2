@@ -43,6 +43,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.internal.assertion.Assertion;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -965,6 +966,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String.valueOf(warehouseSweepRecord.get("hub_id")));
     assertEquals(f("Expected order_id in Warehouse_sweeps table"), String.valueOf(order.getId()),
         String.valueOf(warehouseSweepRecord.get("order_id")));
+    put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")
