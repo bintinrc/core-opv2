@@ -67,10 +67,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
-      | totalFees                | 9.14                             |
+      | totalFees                | 9.23                             |
       | FeesAdjustment           | -10.60                           |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
+      | AmountOwingToFromShipper | 4.23                             |
 
   @DeleteNewlyCreatedShipper
   Scenario: Generate Financial Batch Report - Consolidated by "ALL" - Selected Shipper - Batch with status OPEN is exists (uid:127b3e90-948c-47da-b152-d5f6f408a5d9)
@@ -133,10 +133,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.14                             |
+      | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
+      | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - All Shippers (uid:39f855b2-3ac3-4bb3-9647-c00030c27eba)
     Given Operator go to menu Finance Tools -> Financial Batch Report
@@ -232,10 +232,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.14                             |
+      | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
+      | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - No Ledgers Found (uid:6a97e9f9-804b-4bc2-ad1d-0e8292d5ef76)
     And API Operator generates financial batch report using data below
@@ -320,10 +320,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.30                             |
+      | totalFees                | 9.39                             |
       | FeesAdjustment           | 0.00                             |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.30                             |
+      | AmountOwingToFromShipper | 4.39                             |
     Then Operator verifies extended financial batch report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
@@ -341,8 +341,8 @@ Feature: Financial Batch Report
       | insuredFee       | 0.1                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.6                                           |
-      | totalWithTax     | 9.3                                           |
+      | totalTax         | 0.69                                          |
+      | totalWithTax     | 9.39                                          |
       | type             | Completed                                     |
 
 
@@ -389,10 +389,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
-      | totalFees                | 9.14                             |
+      | totalFees                | 9.23                             |
       | FeesAdjustment           | -10.60                           |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
+      | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
@@ -410,8 +410,8 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.14                                          |
+      | totalTax         | 0.68                                          |
+      | totalWithTax     | 9.23                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -448,10 +448,10 @@ Feature: Financial Batch Report
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
-      | totalFees                | 9.14                             |
+      | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
       | TotalAdjustedFess        | -1.46                            |
-      | AmountOwingToFromShipper | 4.14                             |
+      | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch report data in CSV is as below
       | batchId          | notNull                                       |
       | batchDate        | {gradle-current-date-yyyyMMdd}                |
@@ -469,8 +469,8 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.14                                          |
+      | totalTax         | 0.68                                          |
+      | totalWithTax     | 9.23                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -516,8 +516,8 @@ Feature: Financial Batch Report
       | insuredFee       | 0.0                                           |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.09                                          |
+      | totalTax         | 0.68                                          |
+      | totalWithTax     | 9.18                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper  @DeleteOrArchiveRoute
@@ -563,6 +563,6 @@ Feature: Financial Batch Report
       | insuredFee       | 0.00                                          |
       | deliveryFee      | 8.5                                           |
       | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.09                                          |
+      | totalTax         | 0.68                                          |
+      | totalWithTax     | 9.18                                          |
       | type             | Completed                                     |
