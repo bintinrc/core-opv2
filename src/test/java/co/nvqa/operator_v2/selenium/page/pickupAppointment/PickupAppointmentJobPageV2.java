@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -29,6 +30,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(css = "#toast-container")
   private PageElement toastContainer;
+
+
   @FindBy(css = "[type='submit']")
   private PageElement loadSelection;
   @FindBy(xpath = "//a[text()='Create / edit job']")
@@ -42,7 +45,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public JobCreatedModal jobCreatedModal;
   @FindBy(css = ".ant-notification")
   public PickupPageNotification notificationModal;
-
+  @FindBy(xpath = "//div[@id='toast-container']")
+  public PickupPageErrorNotification pickupPageErrorNotification;
 
   public boolean isToastContainerDisplayed() {
     try {
@@ -102,6 +106,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String LAST_ITEM_IN_TIME_LIST = "//div[@class='rc-virtual-list-holder-inner']/descendant::div[@class='ant-select-item ant-select-item-option'][last()]";
 
     public final String Time_LIST_LOCATR = "//div[@id='%s']/parent::div";
+
     public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -196,49 +201,48 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectReadybyTime(String time) {
       readyByField.click();
-      scrollToTimeIfNeeded(time,"readyBy_list");
-      retryIfRuntimeExceptionOccurred(()->{
+      scrollToTimeIfNeeded(time, "readyBy_list");
+      retryIfRuntimeExceptionOccurred(() -> {
 
-          WebElement timeToPick = webDriver.findElement(
-              By.xpath(f(Time_LIST_LOCATR,"readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
-          timeToPick.click();
-
-      });
-
-    }
-
-
-
-    public void selectLatestbyTime(String time) {
-      latestByField.click();
-
-      scrollToTimeIfNeeded(time,"latestBy_list");
-
-      retryIfRuntimeExceptionOccurred(()->{
         WebElement timeToPick = webDriver.findElement(
-            By.xpath(f(Time_LIST_LOCATR,"latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+            By.xpath(
+                f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
 
       });
 
     }
 
-    public void scrollToTimeIfNeeded(String time,String listName)
-    {
+
+    public void selectLatestbyTime(String time) {
+      latestByField.click();
+
+      scrollToTimeIfNeeded(time, "latestBy_list");
+
+      retryIfRuntimeExceptionOccurred(() -> {
+        WebElement timeToPick = webDriver.findElement(
+            By.xpath(
+                f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+        timeToPick.click();
+
+      });
+
+    }
+
+    public void scrollToTimeIfNeeded(String time, String listName) {
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
-      String lastElementTime = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)+LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+      String lastElementTime = webDriver.findElement(
+          By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
       int lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
-      if(lastTime <= neededTime)
-      {
-        WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)));
+      if (lastTime <= neededTime) {
+        WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR, listName)));
         WebElement timeToScroll = readyTimeList.findElement(
             By.xpath(f(JOB_CUSTOM_TIME_FILTER_LOCATOR, lastElementTime)));
-        scrollIntoView(timeToScroll,true);
+        scrollIntoView(timeToScroll, true);
       }
     }
 
-    public void addJobComments(String comment)
-    {
+    public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
@@ -270,6 +274,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement okButton;
     public final String ITEMS_ON_JOB_CREATED_MODAL = "//span[text()='%s']//following-sibling::span";
 
+    public final String ALERT_TEXT = "//span[contains(text(),'%s')]";
+
     public JobCreatedModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -280,12 +286,26 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))));
       return webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))).getText();
     }
+
+    public String getErrorMessageWithText(String message) {
+      waitUntilVisibilityOfElementLocated(
+          webDriver.findElement(By.xpath(f(ALERT_TEXT, message))));
+      return webDriver.findElement(By.xpath(f(ALERT_TEXT, message))).getText();
+    }
   }
 
 
   public static class PickupPageNotification extends AntNotification {
 
     public PickupPageNotification(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
+
+  public static class PickupPageErrorNotification extends ToastInfo {
+
+    public PickupPageErrorNotification(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
 import io.cucumber.java.en.And;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_PA_JOBS_IN_DB;
@@ -81,9 +83,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void verifyDeleteButtonIsDisplayed(String JobId) {
     String jobId = resolveValue(JobId);
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.createOrEditJobPage
-              .isDeleteButtonByJobIdDisplayed(jobId))
-          .as("Delete Button in Job with id = " + jobId + " displayed").isTrue();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.createOrEditJobPage
+                .isDeleteButtonByJobIdDisplayed(jobId))
+            .as("Delete Button in Job with id = " + jobId + " displayed").isTrue();
+      }, 2000, 3);
+
+
     });
   }
 
@@ -238,13 +244,15 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void getPickupFromListWithDate(String date, String jobList) {
 
     List<PickupAppointmentJob> pickupjobs = resolveValue(jobList);
+
     for (PickupAppointmentJob job : pickupjobs) {
       if (job.getPickupReadyDatetime().toString().contains(date)) {
         putInList(KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT, job);
-        putInList(KEY_CONTROL_CREATED_PA_JOB_IDS, job.getId());
+        PickupAppointmentJobResponse mockResponse = new PickupAppointmentJobResponse();
+        mockResponse.setId(job.getId());
+        putInList(KEY_CONTROL_CREATED_PA_JOBS, mockResponse);
       }
     }
-
   }
 
   @Then("Operator check pickup jobs list = {string} size is = {int}")
@@ -286,13 +294,51 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @When("Operator add comment to pickup job = {string}")
   public void selectCustomisedTimeRange(String comment) {
 
-
-    String finalComment = resolveValue(comment);;
+    String finalComment = resolveValue(comment);
+    ;
     pickupAppointmentJobPage.inFrame(page -> {
       page.createOrEditJobPage.addJobComments(finalComment);
 
 
     });
+  }
+
+  @Then("Operator close Job Created dialog")
+  public void verifyJobCreatedModalWindow() {
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.jobCreatedModal.close();
+    });
+  }
+
+  @Then("Operator check pickup id {string} is equal to {string}")
+  public void checkPickupIdIsEquals(String firstID, String secondID) {
+    String Id1 = resolveValue(firstID);
+    String Id2 = resolveValue(secondID);
+    Assertions.assertThat(Id1).as("Created Pickup job id is equal to old Pickup job id")
+        .isEqualTo(Id2);
+  }
+
+  @Then("Operator check Job Created Module have errors:")
+  public void checkPickupJobCreatedModuleErrors(List<Map<String, String>> dataTable) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      dataTable.forEach(entry -> {
+        Map<String, String> data = new HashMap<>(entry);
+        String message = resolveValue(data.get("message"));
+        Assertions.assertThat(page.jobCreatedModal.getErrorMessageWithText(message))
+            .as(f("Job Created error contains: %s", message)).contains(message);
+      });
+    });
+  }
+
+  @Then("Operator check Notification Error contains= {string}")
+  public void checkPickupJobCreatedModuleErrors(String message) {
+
+    String notificationMessage = resolveValue(message);
+    Assertions.assertThat(
+            pickupAppointmentJobPage.pickupPageErrorNotification.toastBottom.getText())
+        .as(f("Job Created error contains: %s", notificationMessage)).contains(notificationMessage);
+
   }
 
 
