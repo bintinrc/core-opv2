@@ -537,4 +537,13 @@ public class ZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesRTSPanel.zones.get(0).click());
   }
+
+  @And("Operator make sure error on Zone is : {string}")
+  public void operatorMakeSureErrorOnZoneIs(String errorDescription) {
+    Assertions.assertThat(
+            zonesPage.isElementExist(
+                String.format(ZonesPage.BULK_ZONE_UPDATE_ERROR_DESCRIPTION, errorDescription)))
+        .as(String.format("Update dialog shows correct error title: %s", errorDescription))
+        .isTrue();
+  }
 }
