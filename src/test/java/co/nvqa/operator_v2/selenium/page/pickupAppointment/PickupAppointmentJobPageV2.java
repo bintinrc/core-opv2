@@ -1,14 +1,22 @@
 package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 
+import co.nvqa.operator_v2.model.CoreV2PickupJobsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import com.google.common.collect.ImmutableMap;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -26,12 +34,17 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   public PickupAppointmentJobPageV2(WebDriver webDriver) {
     super(webDriver);
+    bulkSelect = new BulkSelectTable(webDriver);
+    existingUpcomingJob = new ExistingUpcomingJobModal(webDriver);
   }
-
+  public BulkSelectTable bulkSelect;
+  @FindBy(className = "ant-modal-wrap")
+  public JobCreatedSuccess jobCreatedSuccess;
+  public ExistingUpcomingJobModal existingUpcomingJob;
+  @FindBy(className = "ant-modal-wrap")
+  public FilterJobByID filterJobByIDModal;
   @FindBy(css = "#toast-container")
   private PageElement toastContainer;
-
-
   @FindBy(css = "[type='submit']")
   private PageElement loadSelection;
   @FindBy(xpath = "//a[text()='Create / edit job']")
@@ -47,6 +60,13 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public PickupPageNotification notificationModal;
   @FindBy(xpath = "//div[@id='toast-container']")
   public PickupPageErrorNotification pickupPageErrorNotification;
+
+  @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
+  public PageElement loadingIcon;
+  public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+  public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
+  public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+  public final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
 
   public boolean isToastContainerDisplayed() {
     try {
@@ -309,6 +329,163 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
+  }
+
+  public static class BulkSelectTable extends AntTableV2<CoreV2PickupJobsParams> {
+
+    @FindBy(css = "[data-testid='bulkSelect.dropdown']")
+    public PageElement bulkSelectDropdown;
+
+    @FindBy(xpath = "//li[.='Select All Shown']")
+    public PageElement selectAll;
+
+    @FindBy(css = "[data-testid='bulkUpdate.dropdown']")
+    public PageElement bulkUpdateDropdown;
+
+    @FindBy(css = "[data-testid='resultTable.rowCount']")
+    public AntSelect3 rowCount;
+
+    @FindBy(css = "[data-testid='resultTable.selectedRowsCount']")
+    public ForceClearTextBox selectedRowCount;
+
+    @FindBy(css = "button[data-testid='create-button']")
+    public AntButton saveChanges;
+
+    @FindBy(xpath = "//li[.='Unselect All Shown']")
+    public PageElement unSelectAll;
+
+    @FindBy(xpath = "//li[.='Clear Selection']")
+    public PageElement clearSelection;
+
+    @FindBy(xpath = "//li[.='Display only selected']")
+    public PageElement displayOnlySelected;
+
+    @FindBy(xpath = "//button[. ='Filter by job ID']")
+    public PageElement filterByJobId;
+    public static final String COLUMN_TAGS = "tags";
+    public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_ID = "id";
+
+    public static final String ACTION_EDIT = "Edit Job";
+    public static final String ACTION_DETAILS = "view Job";
+    public static final String ACTION_SELECTED = "Select row";
+
+    public BulkSelectTable(WebDriver webDriver) {
+      super(webDriver);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+      setColumnLocators(ImmutableMap.<String, String>builder()
+          .put(COLUMN_TAGS, "tagNames")
+          .put(COLUMN_STATUS, "status")
+          .put(COLUMN_ID, "pickupAppointmentJobId")
+          .build()
+      );
+      setEntityClass(CoreV2PickupJobsParams.class);
+      setActionButtonsLocators(ImmutableMap.of(
+          ACTION_EDIT,
+          "//div[@role='row'][%d]//div[@role='gridcell']//button[@data-testid='resultTable.editButton']",
+          ACTION_DETAILS,
+          "//div[@role='row'][%d]//div[@role='gridcell']//button[contains(@data-testid,'showDetailButton')]",
+          ACTION_SELECTED,
+          "//div[@role='row'][%d]//div[@role='gridcell']//input[contains(@data-testid,'checkbox')]"));
+    }
+
+    public List<String> getListIDs() {
+      String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
+      return findElementsByXpath(PICKUP_JOBS_IDS_XPATH).stream().map(WebElement::getText)
+          .collect(Collectors.toList());
+    }
+  }
+
+  public void verifyBulkSelectResult() {
+
+    String ShowingResults = bulkSelect.rowCount.getText();
+    String selectedRows = bulkSelect.selectedRowCount.getText();
+    char SPACE_CHAR = ' ';
+    String numberOfSelectedRows = selectedRows.substring(0, selectedRows.lastIndexOf(SPACE_CHAR))
+        .trim();
+    Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
+        .contains(numberOfSelectedRows);
+    KEY_LAST_SELECTED_ROWS_COUNT = numberOfSelectedRows;
+  }
+
+  public static class FilterJobByID extends AntModal {
+
+    public FilterJobByID(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//div[text()='Filter by job ID']")
+    public PageElement title;
+
+    @FindBy(id = "jobIds")
+    public TextBox inputJobId;
+
+    @FindBy(xpath = "//span[text()='Filter Jobs']//parent::button")
+    public Button confirmButton;
+
+    public static final String ERROR_MESSAGE_XPATH = "//span[text()='%s']";
+
+    public void verifyErrorMessages(String message) {
+      Assertions.assertThat(findElementByXpath(f(ERROR_MESSAGE_XPATH, message)).isDisplayed())
+          .as("Error message is the same").isTrue();
+    }
+  }
+
+  public static class ExistingUpcomingJobModal {
+    public ExistingUpcomingJobModal(WebDriver webDriver) {
+      super();
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+    }
+
+    @FindBy (xpath = "//span[text()='Enter new job to create']")
+    public PageElement header;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']")
+    public PageElement title;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'Start date']")
+    public PageElement startDate;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'End date']")
+    public PageElement endDate;
+
+    @FindBy (id = "useExistingTimeslot")
+    public  PageElement useExistingTimeslot;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'timeRange']")
+    public PageElement timeRange;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'pickupTag']")
+    public  PageElement pickupTag;
+
+    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::button[@type = 'submit']")
+    public Button submit;
+  }
+
+  public void selectItem(String item){
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
+    findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
+    waitUntilInvisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
+  }
+
+  public static class JobCreatedSuccess extends AntModal {
+
+    public JobCreatedSuccess(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//div[text()='Jobs created']")
+    public PageElement title;
+
+    @FindBy(xpath = "//span[text()='Time slot:']/following::span")
+    public PageElement createdTime;
+
+    @FindBy(xpath = "//span[text()='Ok']")
+    public Button confirm;
+
+    public final String COLUMN_DATA_XPATH = "//tbody[@class='ant-table-tbody']//td[text()='%s']";
   }
 
 }
