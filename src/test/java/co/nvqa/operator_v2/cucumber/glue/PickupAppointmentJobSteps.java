@@ -57,7 +57,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   }
 
-//  @When("Operator goes to Pickup Jobs Page")
+  //  @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
     getWebDriver().manage().window().maximize();
     loadShipperAddressConfigurationPage();
@@ -69,18 +69,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.getLoadSelection().getWebElement());
   }
 
-//  @When("Operator click on Create or edit job button on this top right corner of the page")
+  //  @When("Operator click on Create or edit job button on this top right corner of the page")
   public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
     pickupAppointmentJobPage.clickOnCreateOrEditJob();
   }
 
-//  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
+  //  @And("Operator select shipper id or name = {string} in Shipper ID or Name field")
   public void operatorSelectShipperByIdInSHipperIdOrNameField(String shipperId) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperIDInField(shipperId);
     put(KEY_LEGACY_SHIPPER_ID, shipperId);
   }
 
-//  @And("Operator select address = {string} in Shipper Address field")
+  //  @And("Operator select address = {string} in Shipper Address field")
   public void operatorSelectShipperAddressInShipperAddressField(String shipperAddress) {
     pickupAppointmentJobPage.getCreateOrEditJobPage().setShipperAddressField(shipperAddress);
   }
@@ -105,7 +105,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         .as("Shipper field is filled").isTrue();
   }
 
-  @And("Operator verify Create button in displayed")
+  //  @And("Operator verify Create button in displayed")
   public void isCreateButtonDisplayed() {
     Assertions.assertThat(
             pickupAppointmentJobPage.getCreateOrEditJobPage().isCreateButtonDisplayed())
@@ -662,8 +662,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
       jobIds.forEach((jobId) -> {
         new ControlSteps().operatorDeletePickupAppointmentJobWithJobID(String.valueOf(jobId));
       });
-    } catch (Throwable ex ){
-      LOGGER.warn(f("Can not delete pickup job: %s",ex.getMessage()));
+    } catch (Throwable ex) {
+      LOGGER.warn(f("Can not delete pickup job: %s", ex.getMessage()));
     }
 
   }
@@ -936,6 +936,5 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
     return then.format(format);
   }
-
 
 }
