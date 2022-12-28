@@ -356,7 +356,7 @@ public class AirportTripManagementPage extends OperatorV2SimplePage{
         Assertions.assertThat(isElementEnabled("//button[.='Load Trips']"))
             .as("Load Trips appear in Airport trip Management page").isFalse();
         Assertions.assertThat(isElementVisible("//button[.='Manage Airport Facility']", 5))
-                .as("Manage Airport Facility button appear in Airport trip Management page").isTrue();
+                .as("Manage Port Facility button appear in Airport Trip Management page").isTrue();
         Assertions.assertThat(selectFacility.isDisplayed())
                 .as("Facilities input appear in Airport trip Management page").isTrue();
     }
