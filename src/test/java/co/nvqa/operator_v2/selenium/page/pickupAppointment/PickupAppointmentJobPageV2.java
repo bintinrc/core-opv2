@@ -252,7 +252,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public void scrollToTimeIfNeeded(String time, String listName) {
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
 
-      int lastTime = 1000;
+      int lastTime = -1;
       while (lastTime < neededTime)
       {
         String lastElementTime = webDriver.findElement(
