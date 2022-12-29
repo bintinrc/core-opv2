@@ -355,3 +355,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator check pickup id "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}" is equal to "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
