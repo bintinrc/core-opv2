@@ -244,7 +244,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(
                 f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-
       });
 
     }
