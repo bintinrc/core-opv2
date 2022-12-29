@@ -20,13 +20,13 @@ Feature: All Orders
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verifies pricing information on Edit Order page:
-      | total        | 11.717 |
+      | total        | 11.826 |
       | deliveryFee  | 10.5   |
       | codFee       | -      |
       | insuranceFee | 2.4    |
       | handlingFee  | 1.2    |
       | rtsFee       | -3.15  |
-      | gst          | 0.767  |
+      | gst          | 0.876  |
       | insuredValue | 120    |
 
   Scenario: Operator Check Parcel Fees and Total Tax in Edit Order Page - Order is Not RTS (uid:54939c63-2079-416f-b58d-2dbffb0e59bb)
@@ -40,13 +40,13 @@ Feature: All Orders
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verifies pricing information on Edit Order page:
-      | total        | 14.98 |
+      | total        | 15.12 |
       | deliveryFee  | 9.5   |
       | codFee       | 0.9   |
       | insuranceFee | 2.4   |
       | handlingFee  | 1.2   |
       | rtsFee       | -     |
-      | gst          | 0.98  |
+      | gst          | 1.12  |
       | insuredValue | 120   |
 
   Scenario: Operator Check Billing Weight, Size, Source in Edit Order Page - Normal Order by Shipper With billing_weight_logic STANDARD - Provide Shipper, DWS and Manual Measurement - Manually Completed Order (uid:d31ba1e2-4121-4537-8471-7be918ee783a)
@@ -158,13 +158,13 @@ Feature: All Orders
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
     And Operator verifies pricing information on Edit Order page:
-      | total         | 14.98  |
+      | total         | 15.12  |
       | deliveryFee   | 9.5    |
       | codFee        | 0.9    |
       | insuranceFee  | 2.4    |
       | handlingFee   | 1.2    |
       | rtsFee        | -      |
-      | gst           | 0.98   |
+      | gst           | 1.12   |
       | insuredValue  | 120    |
       | billingWeight | 1 kg   |
       | billingSize   | S      |
