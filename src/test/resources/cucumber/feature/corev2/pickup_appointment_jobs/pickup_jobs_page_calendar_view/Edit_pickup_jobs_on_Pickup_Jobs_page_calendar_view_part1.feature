@@ -1,11 +1,11 @@
-@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalenderView @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalenderView
 Feature: Edit pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @RT
+  @deletePickupJob
   Scenario: Edit pickup appointment job - no edit icon - completed PA Job
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
@@ -25,7 +25,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is no Edit button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
     Then Operator verify there is no Delete button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
 
-  @deletePickupJob @RT
+  @deletePickupJob
   Scenario: Edit pickup appointment job - no edit icon - failed PA Job
     Given API Operator create new appointment pickup job using data below:
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{normal-shipper-pickup-appointment-1-address-id}}, "pickupService":{ "level":"Standard"}, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
