@@ -37,6 +37,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     bulkSelect = new BulkSelectTable(webDriver);
     existingUpcomingJob = new ExistingUpcomingJobModal(webDriver);
   }
+
   public BulkSelectTable bulkSelect;
   @FindBy(className = "ant-modal-wrap")
   public JobCreatedSuccess jobCreatedSuccess;
@@ -63,6 +64,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
   public PageElement loadingIcon;
+
+
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
@@ -437,39 +440,40 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   }
 
   public static class ExistingUpcomingJobModal {
+
     public ExistingUpcomingJobModal(WebDriver webDriver) {
       super();
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
-    @FindBy (xpath = "//span[text()='Enter new job to create']")
+    @FindBy(xpath = "//span[text()='Enter new job to create']")
     public PageElement header;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']")
+    @FindBy(xpath = "//span[text()='Existing upcoming job']")
     public PageElement title;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'Start date']")
+    @FindBy(xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'Start date']")
     public PageElement startDate;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'End date']")
+    @FindBy(xpath = "//span[text()='Existing upcoming job']/following::input[@placeholder = 'End date']")
     public PageElement endDate;
 
-    @FindBy (id = "useExistingTimeslot")
-    public  PageElement useExistingTimeslot;
+    @FindBy(id = "useExistingTimeslot")
+    public PageElement useExistingTimeslot;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'timeRange']")
+    @FindBy(xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'timeRange']")
     public PageElement timeRange;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'pickupTag']")
-    public  PageElement pickupTag;
+    @FindBy(xpath = "//span[text()='Existing upcoming job']/following::input[@id = 'pickupTag']")
+    public PageElement pickupTag;
 
-    @FindBy (xpath = "//span[text()='Existing upcoming job']/following::button[@type = 'submit']")
+    @FindBy(xpath = "//span[text()='Existing upcoming job']/following::button[@type = 'submit']")
     public Button submit;
   }
 
-  public void selectItem(String item){
-    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,item));
-    findElementByXpath(f(SELECTED_VALUE_XPATH,item)).click();
+  public void selectItem(String item) {
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH, item));
+    findElementByXpath(f(SELECTED_VALUE_XPATH, item)).click();
     waitUntilInvisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
   }
 
