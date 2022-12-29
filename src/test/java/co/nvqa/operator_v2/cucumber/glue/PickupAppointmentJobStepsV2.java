@@ -628,7 +628,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       }
     });
   }
-  
+
     @Then("Operator verifies job created success following data below:")
     public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
         Map<String,String> resolvedData = resolveKeyValues(data);
