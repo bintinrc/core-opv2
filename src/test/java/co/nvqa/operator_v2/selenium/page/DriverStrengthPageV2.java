@@ -258,6 +258,9 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "firstName")
     public ForceClearTextBox firstName;
 
+    @FindBy(id = "displayName")
+    public ForceClearTextBox displayName;
+
     @FindBy(id = "lastName")
     public ForceClearTextBox lastName;
 
@@ -390,6 +393,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     public AddDriverDialog setFirstName(String value) {
       if (value != null) {
         firstName.setValue(value);
+      }
+      return this;
+    }
+
+    public AddDriverDialog setDisplayNameName(String value) {
+      if (value != null) {
+        displayName.setValue(value);
       }
       return this;
     }
@@ -649,6 +659,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void fillForm(DriverInfo driverInfo) {
       waitUntilVisible();
+      setDisplayNameName(driverInfo.getFirstName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
