@@ -13,6 +13,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
+import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
@@ -44,6 +45,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public FilterJobByID filterJobByIDModal;
   @FindBy(css = "#toast-container")
   private PageElement toastContainer;
+  @FindBy(css = "[type='submit']")
+  public PageElement loadSelection;
+  @FindBy(xpath = "//a[text()='Create / edit job']")
+  public Button createEditJobButton;
   @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
   public CreateOrEditJobPage createOrEditJobPage;
   @FindBy(className = "ant-modal-wrap")
@@ -53,10 +58,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public JobCreatedModal jobCreatedModal;
   @FindBy(css = ".ant-notification")
   public PickupPageNotification notificationModal;
-  @FindBy(css = "[type='submit']")
-  public PageElement loadSelection;
-  @FindBy(css = "div.ant-collapse-extra button")
-  public Button createEditJobButton;
+  @FindBy(xpath = "//div[@id='toast-container']")
+  public PickupPageErrorNotification pickupPageErrorNotification;
+
   @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
   public PageElement loadingIcon;
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
@@ -122,6 +126,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String LAST_ITEM_IN_TIME_LIST = "//div[@class='rc-virtual-list-holder-inner']/descendant::div[@class='ant-select-item ant-select-item-option'][last()]";
 
     public final String Time_LIST_LOCATR = "//div[@id='%s']/parent::div";
+
     public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -219,35 +224,32 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
       scrollToTimeIfNeeded(time,"readyBy_list");
       retryIfRuntimeExceptionOccurred(()->{
-
-          WebElement timeToPick = webDriver.findElement(
-              By.xpath(f(Time_LIST_LOCATR,"readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
-          timeToPick.click();
-
+        WebElement timeToPick = webDriver.findElement(
+            By.xpath(
+                f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+        timeToPick.click();
       });
 
     }
 
 
-
     public void selectLatestbyTime(String time) {
       latestByField.click();
-      waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
-      scrollToTimeIfNeeded(time,"latestBy_list");
-
-      retryIfRuntimeExceptionOccurred(()->{
+      scrollToTimeIfNeeded(time, "latestBy_list");
+      retryIfRuntimeExceptionOccurred(() -> {
         WebElement timeToPick = webDriver.findElement(
-            By.xpath(f(Time_LIST_LOCATR,"latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
+            By.xpath(
+                f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
 
       });
 
     }
 
-    public void scrollToTimeIfNeeded(String time,String listName)
-    {
+    public void scrollToTimeIfNeeded(String time, String listName) {
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
-      String lastElementTime = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)+LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+      String lastElementTime = webDriver.findElement(
+          By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
       int lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
       while(lastTime < neededTime)
       {
@@ -261,8 +263,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
-    public void addJobComments(String comment)
-    {
+    public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
@@ -297,6 +298,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement okButton;
     public final String ITEMS_ON_JOB_CREATED_MODAL = "//span[text()='%s']//following-sibling::span";
     public final String ERROR_MESSAGE_XPATH = "//div[contains(@class,'ant-alert-error')]//span[contains(text(),'%s')]";
+    public final String ALERT_TEXT = "//span[contains(text(),'%s')]";
+
     public JobCreatedModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -307,12 +310,26 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))));
       return webDriver.findElement(By.xpath(f(ITEMS_ON_JOB_CREATED_MODAL, fieldName))).getText();
     }
+
+    public String getErrorMessageWithText(String message) {
+      waitUntilVisibilityOfElementLocated(
+          webDriver.findElement(By.xpath(f(ALERT_TEXT, message))));
+      return webDriver.findElement(By.xpath(f(ALERT_TEXT, message))).getText();
+    }
   }
 
 
   public static class PickupPageNotification extends AntNotification {
 
     public PickupPageNotification(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+  }
+
+  public static class PickupPageErrorNotification extends ToastInfo {
+
+    public PickupPageErrorNotification(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
