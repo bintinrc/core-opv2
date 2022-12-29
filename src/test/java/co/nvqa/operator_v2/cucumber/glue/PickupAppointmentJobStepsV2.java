@@ -86,11 +86,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @Then("Operator verify there is Delete button in job with id = {string}")
   public void verifyDeleteButtonIsDisplayed(String JobId) {
     String jobId = resolveValue(JobId);
+    pause8s();
     pickupAppointmentJobPage.inFrame(page -> {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         Assertions.assertThat(page.createOrEditJobPage
                 .isDeleteButtonByJobIdDisplayed(jobId))
-            .as(f("Delete Button in Job with id = %s displayed"), jobId).isTrue();
+            .as(f("Delete Button in Job with id = %s displayed", jobId)).isTrue();
       }, 2000, 3);
 
 
