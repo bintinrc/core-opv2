@@ -48,7 +48,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   private PageElement toastContainer;
   @FindBy(css = "[type='submit']")
   public PageElement loadSelection;
-  @FindBy(xpath = "//a[text()='Create / edit job']")
+  @FindBy(xpath = "//button[.='Create / edit job']")
   public Button createEditJobButton;
   @FindBy(xpath = "//span[text()='Create or edit job']//ancestor::div[@id='__next']")
   public CreateOrEditJobPage createOrEditJobPage;
