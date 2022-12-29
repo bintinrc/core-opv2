@@ -88,7 +88,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         Assertions.assertThat(page.createOrEditJobPage
                 .isDeleteButtonByJobIdDisplayed(jobId))
             .as(f("Delete Button in Job with id = %s displayed", jobId)).isTrue();
-      }, 2000, 3);
+      }, 5000, 3);
 
 
     });
