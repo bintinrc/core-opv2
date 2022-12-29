@@ -62,7 +62,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
-  public final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
+  public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
 
   public boolean isToastContainerDisplayed() {
     try {
@@ -108,7 +108,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public final String timeScrollBar = ".rc-virtual-list-scrollbar";
     public final String shipperListItem = "//div[@legacyshipperid='%s']";
-    public final String shipperAddressListItem = "//div[@label='%s']";
+    public final String shipperAddressListItem = "//div[contains(@label,'%s')]";
 
     public final String DELETE_BUTTON_IN_CALENDAR_LOCATOR = "div[data-testid='paJob.cancel.%s']";
 
@@ -216,6 +216,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectReadybyTime(String time) {
       readyByField.click();
+      waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
       scrollToTimeIfNeeded(time,"readyBy_list");
       retryIfRuntimeExceptionOccurred(()->{
 
@@ -231,7 +232,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectLatestbyTime(String time) {
       latestByField.click();
-
+      waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
       scrollToTimeIfNeeded(time,"latestBy_list");
 
       retryIfRuntimeExceptionOccurred(()->{
@@ -248,12 +249,15 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
       String lastElementTime = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)+LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
       int lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
-      if(lastTime <= neededTime)
+      while(lastTime < neededTime)
       {
+        moveToElementWithXpath(ACTIVE_DROPDOWN_XPATH+LAST_ITEM_IN_TIME_LIST);
         WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)));
         WebElement timeToScroll = readyTimeList.findElement(
             By.xpath(f(JOB_CUSTOM_TIME_FILTER_LOCATOR, lastElementTime)));
         scrollIntoView(timeToScroll,true);
+        lastElementTime = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)+LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+        lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
       }
     }
 
@@ -286,10 +290,13 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   public static class JobCreatedModal extends AntModal {
 
+    @FindBy(xpath = "//div[text()='Job created']")
+    public PageElement title;
+
     @FindBy(xpath = "//span[text()='Ok']/parent::button")
     public PageElement okButton;
     public final String ITEMS_ON_JOB_CREATED_MODAL = "//span[text()='%s']//following-sibling::span";
-
+    public final String ERROR_MESSAGE_XPATH = "//div[contains(@class,'ant-alert-error')]//span[contains(text(),'%s')]";
     public JobCreatedModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -466,6 +473,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public Button confirm;
 
     public final String COLUMN_DATA_XPATH = "//tbody[@class='ant-table-tbody']//td[text()='%s']";
+
   }
 
 }

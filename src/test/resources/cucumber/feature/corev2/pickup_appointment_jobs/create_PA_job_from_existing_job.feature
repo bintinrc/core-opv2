@@ -51,7 +51,7 @@ Feature: Create pickup jobs from existing job
     Then Operator verifies job created success following data below:
       | timeSlot        | {date: 3 days next, yyyy-MM-dd} - {date: 3 days next, yyyy-MM-dd} 09:00 - 12:00 |
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup job from existing job on Pickup Jobs page - create/edit jobs button - apply job tag
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -76,7 +76,7 @@ Feature: Create pickup jobs from existing job
       | timeSlot        | {date: 3 days next, yyyy-MM-dd} - {date: 3 days next, yyyy-MM-dd} 18:00 - 22:00 |
       | pickupTag          | DUPE1                           |
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup job from existing job on Pickup Jobs page - create/edit jobs button - premium shipper - overlaping date and time
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
@@ -101,7 +101,7 @@ Feature: Create pickup jobs from existing job
       | timeSlot        | {date: 1 days next, yyyy-MM-dd} - {date: 1 days next, yyyy-MM-dd} 09:00 - 12:00 |
       | pickupTag          | DUPE1                           |
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup job from existing job on Pickup Jobs page - create/edit jobs button - premium shipper - match date and time with existing PA Job
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|

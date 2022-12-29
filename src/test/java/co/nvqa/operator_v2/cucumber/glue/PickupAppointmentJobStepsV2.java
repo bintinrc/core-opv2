@@ -2,28 +2,23 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 import java.util.Random;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
-
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
-import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_PA_JOBS_IN_DB;
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
 
 public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
@@ -531,13 +526,21 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
         Map<String,String> resolvedData = resolveKeyValues(data);
         pickupAppointmentJobPage.inFrame(() -> {
-            pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
+
             if (data.get("timeSlot")!=null){
+              pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
                 Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(resolvedData.get("timeSlot"));
             }
             if (resolvedData.get("pickupTag")!=null){
+              pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
                 Assertions.assertThat(pickupAppointmentJobPage.isElementExist(f(pickupAppointmentJobPage.jobCreatedSuccess.COLUMN_DATA_XPATH,resolvedData.get("pickupTag")))).as("Job tag is the same").isTrue();
-            }});
+            }
+            if (resolvedData.get("errorMessage")!=null){
+              pickupAppointmentJobPage.jobCreatedModal.title.waitUntilVisible();
+              Assertions.assertThat(pickupAppointmentJobPage.isElementExist(f(pickupAppointmentJobPage.jobCreatedModal.ERROR_MESSAGE_XPATH,resolvedData.get("errorMessage"))))
+                  .as("Error mesaage is the same").isTrue();
+            }
+        });
     }
 
 }
