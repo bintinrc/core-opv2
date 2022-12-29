@@ -231,7 +231,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(
                 f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      },2000,3);
+      },2000,10);
 
     }
 
@@ -245,18 +245,17 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(
                 f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      },2000,3);
+      },2000,10);
 
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
-      String lastElementTime = webDriver.findElement(
-          By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
-      int lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
+
+      int lastTime = 1000;
       while (lastTime < neededTime)
       {
-         lastElementTime = webDriver.findElement(
+        String lastElementTime = webDriver.findElement(
             By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
          lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
         LOGGER.debug(String.valueOf(lastTime));
