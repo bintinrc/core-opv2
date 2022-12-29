@@ -44,3 +44,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
     Then Operator verify there is no Edit button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
     Then Operator verify there is no Delete button in job with id = "{KEY_LIST_OF_PICKUP_JOB_IDS[1]}"
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
