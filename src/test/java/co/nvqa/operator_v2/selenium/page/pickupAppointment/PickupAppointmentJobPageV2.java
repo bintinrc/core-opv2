@@ -224,7 +224,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectReadybyTime(String time) {
       readyByField.click();
-      waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
+//      waitUntilVisibilityOfElementLocated(ACTIVE_DROPDOWN_XPATH);
       scrollToTimeIfNeeded(time,"readyBy_list");
       retryIfRuntimeExceptionOccurred(()->{
         WebElement timeToPick = webDriver.findElement(
@@ -253,9 +253,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String lastElementTime = webDriver.findElement(
           By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
       int lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
-      while(lastTime < neededTime)
+      while(lastTime <= neededTime)
       {
-        moveToElementWithXpath(ACTIVE_DROPDOWN_XPATH+LAST_ITEM_IN_TIME_LIST);
+//        moveToElementWithXpath(ACTIVE_DROPDOWN_XPATH+LAST_ITEM_IN_TIME_LIST);
         WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)));
         WebElement timeToScroll = readyTimeList.findElement(
             By.xpath(f(JOB_CUSTOM_TIME_FILTER_LOCATOR, lastElementTime)));

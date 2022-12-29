@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalenderView
+@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalenderView @CWF
 Feature: Create pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -81,7 +81,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
 
-  @deletePickupJob
+  @deletePickupJob @RT
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Standard shipper
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
