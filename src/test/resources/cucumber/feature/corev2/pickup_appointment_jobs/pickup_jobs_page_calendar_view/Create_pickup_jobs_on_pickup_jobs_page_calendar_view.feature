@@ -5,12 +5,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {normal-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM                                          |
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -28,7 +31,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                         |
       | latestBy       | 12:00                                         |
       | jobTags        |                                               |
@@ -42,12 +45,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - all field
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {normal-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -66,7 +72,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                         |
       | latestBy       | 12:00                                         |
       | jobTags        | DUPE1                                         |
@@ -81,12 +87,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Standard shipper
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {normal-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -109,7 +118,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                         |
       | latestBy       | 12:00                                         |
       | jobTags        | DUPE1                                         |
@@ -124,12 +133,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Premium shipper - success
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{premium-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -152,7 +164,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                          |
       | latestBy       | 12:00                                          |
       | jobTags        | DUPE1                                          |
@@ -166,12 +178,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {normal-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{normal-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -189,7 +204,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                         |
       | latestBy       | 12:00                                         |
       | jobTags        |                                               |
@@ -211,7 +226,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {normal-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {normal-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                         |
       | latestBy       | 12:00                                         |
       | jobTags        |                                               |
@@ -226,12 +241,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - match date and time with existing PA Job
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{premium-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -249,7 +267,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                          |
       | latestBy       | 12:00                                          |
       | jobTags        |                                                |
@@ -271,7 +289,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
+      | shipperAddress |  {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                          |
       | latestBy       | 12:00                                          |
       | jobTags        |                                                |
@@ -286,12 +304,15 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - overlapping date and time
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
+      | generateAddress | RANDOM
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
-    And Operator select address = "{premium-shipper-pickup-appointment-1-address}" in Shipper Address field
+    And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
     When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
       | status            |
@@ -309,7 +330,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 09:00                                          |
       | latestBy       | 12:00                                          |
       | jobTags        |                                                |
@@ -334,7 +355,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verify Job Created dialog displays data below:
       | shipperName    | {premium-shipper-pickup-appointment-1-name}    |
-      | shipperAddress | {premium-shipper-pickup-appointment-1-address} |
+      | shipperAddress | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} |
       | readyBy        | 11:00                                          |
       | latestBy       | 15:00                                          |
       | jobTags        |                                                |
