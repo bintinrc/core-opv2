@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @DeletePickupCalenderView
+@OperatorV2 @CoreV2 @PickupAppointment @DeletePickupCalendarView
 Feature: Delete pickup jobs on pickup jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun

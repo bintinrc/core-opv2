@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalenderView
+@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalendarView
 Feature: Edit pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
