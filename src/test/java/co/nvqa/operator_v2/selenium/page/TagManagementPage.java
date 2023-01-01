@@ -49,13 +49,14 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
   public static class TagsTable extends AntTableV2<Tag> {
 
     public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DESCRIPTION = "description";
     public static final String ACTION_EDIT = "Edit";
 
     public TagsTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_NAME, "name")
-          .put("description", "description")
+          .put(COLUMN_DESCRIPTION, "description")
           .build()
       );
       setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit Tag"));
