@@ -304,8 +304,10 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public PickupAppointmentJobPage clickForceFailButton() {
-    waitUntilVisibilityOfElementLocated(forceFail.getWebElement());
-    forceFail.click();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      waitUntilVisibilityOfElementLocated(forceFail.getWebElement());
+      forceFail.click();
+    }, 1000, 3);
 
     return this;
   }
