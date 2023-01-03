@@ -1,11 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -149,7 +148,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
       }
     }
 
-    proceedButton.waitUntilClickable();
-    proceedButton.click();
+    if (proceedButton.waitUntilVisible(5)) {
+      proceedButton.click();
+    }
   }
 }

@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Tristania Siagian
@@ -17,24 +18,24 @@ import java.util.Map;
 @ScenarioScoped
 public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
-  private ChangeDeliveryTimingsPage changeDeliveryTimingsPage;
+  private ChangeDeliveryTimingsPage page;
 
   public ChangeDeliveryTimingsSteps() {
   }
 
   @Override
   public void init() {
-    changeDeliveryTimingsPage = new ChangeDeliveryTimingsPage(getWebDriver());
+    page = new ChangeDeliveryTimingsPage(getWebDriver());
   }
 
   @When("^Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample$")
   public void operatorClickOnDownloadSampleCSVFile() {
-    changeDeliveryTimingsPage.downloadSampleCsv.click();
+    page.inFrame(() -> page.downloadSampleCsv.click());
   }
 
   @Then("^Operator verify CSV file of Change Delivery Timings' sample$")
   public void verifyTheCSVFileSample() {
-    changeDeliveryTimingsPage.csvSampleDownloadSuccessful();
+    page.inFrame(() -> page.csvSampleDownloadSuccessful());
   }
 
   @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
@@ -64,17 +65,27 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     List<ChangeDeliveryTiming> listOfChangeDeliveryTimings = new ArrayList<>();
     listOfChangeDeliveryTimings.add(changeDeliveryTiming);
 
-    File csvResultFile = changeDeliveryTimingsPage.createDeliveryTimingChanging(
-        listOfChangeDeliveryTimings);
-    changeDeliveryTimingsPage.uploadCsv.click();
-    changeDeliveryTimingsPage.uploadCsvDialog.waitUntilVisible();
-    changeDeliveryTimingsPage.uploadCsvDialog.selectFile.setValue(csvResultFile);
-    changeDeliveryTimingsPage.uploadCsvDialog.upload.clickAndWaitUntilDone();
+    page.inFrame(() -> {
+      File csvResultFile = page.createDeliveryTimingChanging(
+          listOfChangeDeliveryTimings);
+      page.uploadCsv.click();
+      page.uploadCsvDialog.waitUntilVisible();
+      page.uploadCsvDialog.selectFile.setValue(csvResultFile);
+      page.uploadCsvDialog.upload.click();
+    });
+
     put("changeDeliveryTiming", changeDeliveryTiming);
   }
 
   @Then("^Operator verify the tracking ID is invalid on Change Delivery Timings page$")
   public void invalidTrackingIdVerification() {
-    changeDeliveryTimingsPage.invalidTrackingIdVerification();
+    page.inFrame(() -> {
+      Assertions.assertThat(page.errorMessage.waitUntilVisible(10))
+          .withFailMessage("Error message is not displayed")
+          .isTrue();
+      Assertions.assertThat(page.errorMessage.getText())
+          .as("Error message text")
+          .containsIgnoringCase("Invalid tracking id");
+    });
   }
 }

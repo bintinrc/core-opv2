@@ -12,7 +12,6 @@ import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.ChatWithDriverDialog.ChatMessage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage.PodDetailsDialog;
@@ -46,7 +45,6 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.data.Offset;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -802,12 +800,29 @@ public class EditOrderSteps extends AbstractSteps {
     expectedData = resolveKeyValues(expectedData);
     expectedData = StandardTestUtils.replaceDataTableTokens(expectedData);
 
+    SoftAssertions assertions = new SoftAssertions();
     if (expectedData.containsKey("status")) {
-      Assertions.assertThat(editOrderPage.deliveryDetailsBox.status.getText())
-          .as("Delivery Details - Status").isEqualTo(f("Status: %s", expectedData.get("status")));
+      assertions.assertThat(editOrderPage.deliveryDetailsBox.status.getText())
+          .as("Delivery Details - Status")
+          .isEqualTo(f("Status: %s", expectedData.get("status")));
+    }
+    if (expectedData.containsKey("name")) {
+      assertions.assertThat(editOrderPage.deliveryDetailsBox.to.getNormalizedText())
+          .as("Delivery Details - Name")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+    }
+    if (expectedData.containsKey("contact")) {
+      assertions.assertThat(editOrderPage.deliveryDetailsBox.toContact.getNormalizedText())
+          .as("Delivery Details - Contact")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+    }
+    if (expectedData.containsKey("email")) {
+      assertions.assertThat(editOrderPage.deliveryDetailsBox.toEmail.getNormalizedText())
+          .as("Delivery Details - Email")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
     }
     if (expectedData.containsKey("address")) {
-      Assertions.assertThat(editOrderPage.deliveryDetailsBox.toAddress.getNormalizedText())
+      assertions.assertThat(editOrderPage.deliveryDetailsBox.toAddress.getNormalizedText())
           .as("Delivery Details - address")
           .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
     }
@@ -817,8 +832,9 @@ public class EditOrderSteps extends AbstractSteps {
               DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-          .isInSameDayAs(expectedDateTime);
+      assertions.assertThat(actualDateTime)
+          .as("Delivery Details - Start Date / Time")
+          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
     }
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
@@ -827,8 +843,9 @@ public class EditOrderSteps extends AbstractSteps {
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-          .isInSameSecondAs(expectedDateTime);
+      assertions.assertThat(actualDateTime)
+          .as("Delivery Details - Start Date / Time")
+          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
     }
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
@@ -836,8 +853,9 @@ public class EditOrderSteps extends AbstractSteps {
               DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-          .isInSameDayAs(expectedDateTime);
+      assertions.assertThat(actualDateTime)
+          .as("Delivery Details - End Date / Time")
+          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
     }
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
@@ -846,10 +864,23 @@ public class EditOrderSteps extends AbstractSteps {
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-          .isInSameSecondAs(expectedDateTime);
+      assertions.assertThat(actualDateTime)
+          .as("Delivery Details - End Date / Time")
+          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
+    }
+    if (expectedData.containsKey("lastServiceEnd")) {
+      String actual = editOrderPage.deliveryDetailsBox.lastServiceEnd.getText();
+      Date actualDateTime = Date.from(DateUtil.getDate(actual,
+              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+          .toInstant());
+      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD
+          .parse(expectedData.get("lastServiceEnd"));
+      assertions.assertThat(actualDateTime)
+          .as("Delivery Details - Last Service End")
+          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
     }
     takesScreenshot();
+    assertions.assertAll();
   }
 
   @Then("Operator verify Pickup details on Edit order page using data below:")
@@ -859,6 +890,26 @@ public class EditOrderSteps extends AbstractSteps {
     if (expectedData.containsKey("status")) {
       Assertions.assertThat(editOrderPage.pickupDetailsBox.getStatus())
           .as("Pickup Details - Status").isEqualTo(expectedData.get("status"));
+    }
+    if (expectedData.containsKey("name")) {
+      Assertions.assertThat(editOrderPage.pickupDetailsBox.from.getNormalizedText())
+          .as("Pickup Details - Name")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+    }
+    if (expectedData.containsKey("contact")) {
+      Assertions.assertThat(editOrderPage.pickupDetailsBox.fromContact.getNormalizedText())
+          .as("Pickup Details - Contact")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+    }
+    if (expectedData.containsKey("email")) {
+      Assertions.assertThat(editOrderPage.pickupDetailsBox.fromEmail.getNormalizedText())
+          .as("Delivery Details - Email")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
+    }
+    if (expectedData.containsKey("address")) {
+      Assertions.assertThat(editOrderPage.pickupDetailsBox.fromAddress.getNormalizedText())
+          .as("Pickup Details - address")
+          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
     }
     if (expectedData.containsKey("startDate")) {
       String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
@@ -1159,6 +1210,12 @@ public class EditOrderSteps extends AbstractSteps {
     Order order = get(KEY_CREATED_ORDER);
     editOrderPage.verifyDeliveryInfo(order);
     takesScreenshot();
+  }
+
+  @Then("Operator verifies Delivery Details on Edit Order Page:")
+  public void operatorVerifiesDeliveryDetailsUpdated(Map<String, String> data) {
+    Order order = new Order(resolveKeyValues(data));
+    editOrderPage.verifyDeliveryInfo(order);
   }
 
   @Then("^Operator verifies (Pickup|Delivery) Transaction is updated on Edit Order Page$")

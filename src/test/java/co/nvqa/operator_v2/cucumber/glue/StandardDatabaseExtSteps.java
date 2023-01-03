@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.Dimension;
@@ -346,6 +347,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 f("No order event with type %s is found in order events DB table", type))));
+  }
+
+  @Then("^DB Operator verify the order_events record:$")
+  public void operatorVerifyOrderEventExists(Map<String, String> data) {
+    OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
+    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
+    DataEntity.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -986,6 +994,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("order_id")))
         .as(f("Expected order_id in Warehouse_sweeps table"))
         .isEqualTo(String.valueOf(order.getId()));
+      put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")

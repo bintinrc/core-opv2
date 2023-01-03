@@ -147,11 +147,16 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriver.setFirstName(data.get("name"));
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
-            String name = AUTO + StandardTestUtils.generateRequestedTrackingNumber();
-            System.out.println("Name and Username : " + name);
+            String name = AUTO;
+            String lastName = generateRequestedTrackingNumber();
+            String displayName = name + " " + lastName;
+            System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
+            middleMileDriver.setLastName(lastName);
+            middleMileDriver.setDisplayName(displayName);
           }
-          middleMileDriversPage.fillName(middleMileDriver.getFirstName());
+          middleMileDriversPage.fillNames(middleMileDriver.getFirstName(),
+              middleMileDriver.getLastName());
 
           middleMileDriver.setHub(resolveValue(data.get("hub")));
           if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
@@ -221,7 +226,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
               EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
-            middleMileDriver.setUsername(middleMileDriver.getFirstName());
+            middleMileDriver.setUsername(
+                middleMileDriver.getFirstName() + middleMileDriver.getLastName());
           }
           middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
 
@@ -487,11 +493,16 @@ public class MiddleMileDriversSteps extends AbstractSteps {
           middleMileDriver.setFirstName(data.get("name"));
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
-            String name = AUTO + StandardTestUtils.generateRequestedTrackingNumber();
-            System.out.println("Name and Username : " + name);
+            String name = AUTO;
+            String lastName = generateRequestedTrackingNumber();
+            String displayName = name + " " + lastName;
+            System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
+            middleMileDriver.setLastName(lastName);
+            middleMileDriver.setDisplayName(displayName);
           }
-          middleMileDriversPage.fillName(middleMileDriver.getFirstName());
+          middleMileDriversPage.fillNames(middleMileDriver.getFirstName(),
+              middleMileDriver.getLastName());
 
           middleMileDriver.setHub(resolveValue(data.get("hub")));
           if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
@@ -561,7 +572,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                   EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
           middleMileDriver.setUsername(data.get("username"));
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
-            middleMileDriver.setUsername(middleMileDriver.getFirstName());
+            middleMileDriver.setUsername(
+                middleMileDriver.getFirstName() + middleMileDriver.getLastName());
           }
           middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
           middleMileDriversPage.clickCheckAvailabilityButton();

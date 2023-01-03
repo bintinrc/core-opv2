@@ -28,6 +28,7 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
 
   public static final String CSV_FILENAME = "zones.csv";
   public static final String BULK_ZONE_UPDATE_ERROR_TITLE = "//p[@class='error-title' and text()='%s']";
+  public static final String BULK_ZONE_UPDATE_ERROR_DESCRIPTION = "//div[@class='ant-modal-body']//li[contains(text(),'%s')]";
 
   @FindBy(css = ".loading-container")
   public PageElement loading;

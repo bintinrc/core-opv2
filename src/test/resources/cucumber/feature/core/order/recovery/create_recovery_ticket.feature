@@ -6,7 +6,7 @@ Feature: Create Recovery Ticket
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Recovery Ticket For Return Pickup (uid:a0dc605d-7a22-43db-929c-d38311720b52)
+  Scenario: Operator Create Recovery Ticket For Return Pickup
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -62,7 +62,7 @@ Feature: Create Recovery Ticket
     And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Recovery Ticket For Pending Reschedule Order (uid:3812f660-c9d7-45a8-96ef-2ae379eace0d)
+  Scenario: Operator Create Recovery Ticket For Pending Reschedule Order
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -128,7 +128,7 @@ Feature: Create Recovery Ticket
       | routeId    | null                               |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Recovery Ticket For On Vehicle for Delivery (uid:baf8f8c8-6c0f-4e36-a182-948a8d6f3028)
+  Scenario: Operator Create Recovery Ticket For On Vehicle for Delivery
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -178,7 +178,7 @@ Feature: Create Recovery Ticket
       | routeId    | null                               |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Recovery Ticket For Pickup Fail (uid:4c2a89c6-0345-4775-9d27-23c3b222d615)
+  Scenario: Operator Create Recovery Ticket For Pickup Fail
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -234,6 +234,334 @@ Feature: Create Recovery Ticket
       | type       | PP                                 |
       | status     | Pending                            |
       | routeId    | null                               |
+
+  Scenario: Operator Create and Search Recovery Ticket For Hub Inbound Scan
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                     |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: HUB_INBOUND |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Create and Search Recovery Ticket For Route Inbound Scan
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator merge route transactions
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver pickup the created parcel successfully
+    When Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}             |
+      | fetchBy      | FETCH_BY_ROUTE_ID      |
+      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
+    And Operator scan a tracking ID of created order on Route Inbound page
+    Then Operator verify the Route Inbound Details is correct using data below:
+      | parcelProcessedScans  | 1 |
+      | parcelProcessedTotal  | 2 |
+      | c2cReturnPickupsScans | 1 |
+      | c2cReturnPickupsTotal | 2 |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name               |
+      | TICKET CREATED     |
+      | ROUTE INBOUND SCAN |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Create and Search Recovery Ticket For Outbound Scan
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_DESTINATION_HUB_ID}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator sweep parcel:
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | hubId | {KEY_DESTINATION_HUB_ID}        |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | PARCEL ROUTING SCAN                     |
+      | hubName     | {KEY_CREATED_ORDER.destinationHub}      |
+      | description | Scanned at Hub {KEY_DESTINATION_HUB_ID} |
+    And Operator verify order event on Edit order page using data below:
+      | name        | OUTBOUND SCAN                           |
+      | hubName     | {KEY_CREATED_ORDER.destinationHub}      |
+      | description | Scanned at Hub {KEY_DESTINATION_HUB_ID} |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | FOUND - INBOUND    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    When API Operator get order details
+    Then Operator verify Delivery transaction on Edit order page using data below:
+      | routeId |  |
+    And Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator sweep parcel:
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | hubId | {hub-id}                        |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name        | PARCEL ROUTING SCAN     |
+      | hubName     | {hub-name}              |
+      | description | Scanned at Hub {hub-id} |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | FOUND - INBOUND    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Create and Search Recovery Ticket For Driver Inbound Scan
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_DESTINATION_HUB_ID}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator sweep parcel:
+      | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | hubId | {KEY_DESTINATION_HUB_ID}        |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the tracking ID on Van Inbound Page then click enter
+    Then Operator verify the van inbound process is succeed
+    And Operator click on start route after van inbounding
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER INBOUND SCAN  |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER START ROUTE   |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | FOUND - INBOUND    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+    When API Operator get order details
+    Then Operator verify Delivery transaction on Edit order page using data below:
+      | routeId |  |
+    And Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                              |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Vehicle for Delivery\nNew Granular Status: Arrived at Sorting Hub\nReason: PULLED_OUT_FROM_ROUTE |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | routeId | 0 |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+    And DB Operator verifies transaction route id is null
+    And DB Operator verifies waypoint status is "PENDING"
+    And DB Operator verifies waypoints.route_id & seq_no is NULL
+    And DB Operator verifies route_waypoint is hard-deleted
+    And DB Operator verifies route_monitoring_data is hard-deleted
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: BATCH_POD_UPDATE |
+    And Operator verify order event on Edit order page using data below:
+      | name    | DRIVER PICKUP SCAN   |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource                   | CUSTOMER COMPLAINT |
+      | investigatingDepartment       | Recovery           |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RESUME DELIVERY    |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | name           |
+      | TICKET CREATED |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                   |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -418,6 +418,58 @@ Feature: Cancel Order
     And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived
     And DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived
 
+  @DeleteOrArchiveRoute
+  Scenario: Cancel Order - Merged Delivery Waypoints
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "+6595557073","email": "binti@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest | { "service_type":"Parcel","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "+6595557073","email": "another@test.co","address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator merge route transactions
+    And API Operator get order details
+    And API Operator verifies Delivery transactions of following orders have same waypoint id:
+      | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    When Operator cancel order on Edit order page using data below:
+      | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator get order details
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator save the last DELIVERY transaction of the created order as "KEY_TRANSACTION_AFTER"
+    And DB Operator verifies waypoints record:
+      | id       | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status   | Pending                            |
+      | address1 | Orchard Road central               |
+      | country  | SG                                 |
+      | postcode | 511200                             |
+      | routeId  | null                               |
+      | seqNo    | null                               |
+    And Operator verify order events on Edit order page using data below:
+      | name              |
+      | UPDATE STATUS     |
+      | PULL OUT OF ROUTE |
+      | CANCEL            |
+    And API Operator verify order info using data below:
+      | id             | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
+      | status         | PENDING                           |
+      | granularStatus | PENDING_PICKUP                    |
+    And Operator save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order as "KEY_TRANSACTION_AFTER"
+    And DB Operator verifies waypoints record:
+      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status  | Routed                             |
+      | routeId | {KEY_CREATED_ROUTE_ID}             |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

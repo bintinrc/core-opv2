@@ -6,6 +6,7 @@ Feature: Order Billing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
     And API Operator whitelist email "{order-billing-email}"
+    Given API Gmail - Operator connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
     And operator marks gmail messages as read
 
   @DeleteOrArchiveRoute

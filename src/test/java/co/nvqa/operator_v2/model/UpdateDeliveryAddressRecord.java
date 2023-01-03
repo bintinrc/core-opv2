@@ -196,4 +196,25 @@ public class UpdateDeliveryAddressRecord extends DataEntity<UpdateDeliveryAddres
         + "\"" + getToAddressLatitude() + "\","
         + "\"" + getToAddressLongitude() + "\"";
   }
+
+  public String buildString() {
+    String address = toAddressAddress1;
+    if (StringUtils.isNotBlank(toAddressAddress2) && !"-".equals(toAddressAddress2.trim())) {
+      address += " " + toAddressAddress2;
+    }
+    address += " " + toAddressPostcode;
+    if (StringUtils.isNotBlank(toAddressCity)) {
+      address += " " + toAddressCity;
+    }
+    if (StringUtils.isNotBlank(toAddressDistrict)) {
+      address += " " + toAddressDistrict;
+    }
+    if (StringUtils.isNotBlank(toAddressState)) {
+      address += " " + toAddressState;
+    }
+    if (StringUtils.isNotBlank(toAddressCountry)) {
+      address += " " + toAddressCountry;
+    }
+    return address;
+  }
 }

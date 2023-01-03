@@ -11,7 +11,7 @@ Feature: Finance COD
       | basedOn      | Order Completed Date                |
       | startDate    | {gradle-previous-61-day-yyyy-MM-dd} |
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd}  |
-      | emailAddress | {order-billing-email}               |
+      | emailAddress | {qa-email-address}                  |
     Then Operator verifies error message "Maximum range allowed is 60 days. Current selection is 61 days."
 
   Scenario: Generate COD Report - More Than 60 Days Range - Route Date (uid:cde07c7e-08c8-4718-b2d8-97ac2cf406ac)
@@ -20,7 +20,7 @@ Feature: Finance COD
       | basedOn      | Route Date                          |
       | startDate    | {gradle-previous-61-day-yyyy-MM-dd} |
       | endDate      | {gradle-previous-1-day-yyyy-MM-dd}  |
-      | emailAddress | {order-billing-email}               |
+      | emailAddress | {qa-email-address}                  |
     Then Operator verifies error message "Maximum range allowed is 60 days. Current selection is 61 days."
 
   Scenario Outline: Generate COD Report - Invalid Email - <dataset_name> (<hiptest-uid>)

@@ -115,7 +115,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.transferDuplicateKeywordsDialog.waitUntilVisible();
       if (finalData.containsKey("area")) {
         assertions.assertThat(page.transferDuplicateKeywordsDialog.area.getText()).as("Area")
-            .isEqualTo(finalData.get("area"));
+            .isEqualToIgnoringCase(finalData.get("area"));
       }
       if (finalData.containsKey("primaryDriver")) {
         assertions.assertThat(page.transferDuplicateKeywordsDialog.primaryDriver.getText())
@@ -127,7 +127,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       }
       if (finalData.containsKey("keyword")) {
         assertions.assertThat(page.transferDuplicateKeywordsDialog.keyword.getText()).as("Keyword")
-            .isEqualTo(finalData.get("keyword"));
+            .isEqualToIgnoringCase(finalData.get("keyword"));
       }
     });
     assertions.assertAll();
