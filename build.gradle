@@ -14,7 +14,9 @@ project.ext {
                            "classpath:co.nvqa.common.ordercreate.cucumber.glue",
                            "classpath:co.nvqa.common.corev2.cucumber.glue",
                            "classpath:co.nvqa.common.dp.cucumber.glue",
-                           "classpath:co.nvqa.commonauth.cucumber.glue"
+                           "classpath:co.nvqa.commonauth.cucumber.glue",
+                           "classpath:co.nvqa.common.core.cucumber.glue",
+
     ]
 }
 
@@ -58,8 +60,8 @@ dependencies {
     implementation "co.nvqa:common-ui:1.2.0-RC1"
     implementation "co.nvqa:common-ordercreate:1.2.0"
     implementation "co.nvqa:common-driver:1.2.0"
-    implementation "co.nvqa:common-corev2:1.2.1"
-    implementation "co.nvqa:common-core:1.2.0"
+    implementation "co.nvqa:common-corev2:1.2.1abd"
+    implementation "co.nvqa:common-core:1.2.1"
     implementation "co.nvqa:common-dp:1.2.0"
     implementation "co.nvqa:common-auth:1.2.0"
     implementation "co.nvqa:common-sort:1.2.2"

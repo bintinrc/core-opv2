@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView
 Feature: Create pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -414,7 +414,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 0
 
-  @RT
+  
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - multiple job in a day
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |

@@ -197,12 +197,6 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   public final String SELECTION_ITEMS = "//input[@id='%s']//parent::span//preceding-sibling::span//span[@class='ant-select-selection-item-content']";
 
 
-
-
-
-
-
-
   public final String ARIA_ACTIVEDESCENDANT = "aria-activedescendant";
   public final String ARIA_LABEL = "aria-label";
   public final String DROPDOWN_BOTTOM_LEFT_LOCATOR = "//div[contains(@class,'ant-dropdown-placement-bottomLeft') and not(contains(@class,'ant-dropdown-hidden'))]";
@@ -243,9 +237,12 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public void selectFailureReasonItem(String Reason) {
-    WebElement reasonItem = getWebDriver().findElement(
-        By.xpath(f(FAILURE_REASON_DROPDOWN_ITEM, Reason)));
-    reasonItem.click();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      WebElement reasonItem = getWebDriver().findElement(
+          By.xpath(f(FAILURE_REASON_DROPDOWN_ITEM, Reason)));
+      reasonItem.click();
+    }, 1000, 3);
+
   }
 
   public PickupAppointmentJobPage clickLoadSelectionButton() {
