@@ -277,10 +277,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @When("Operator select Pickup job tag = {string} in Job Tags Field")
   public void selectJobTagsInJobTagsField(String tag) {
 
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.createOrEditJobPage.selectTagInJobTagsField(tag);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.createOrEditJobPage.selectTagInJobTagsField(tag);
+      });
+    }, 1000, 5);
 
-    });
   }
 
   @When("Operator select Ready by and Latest by in Pickup Job create:")
