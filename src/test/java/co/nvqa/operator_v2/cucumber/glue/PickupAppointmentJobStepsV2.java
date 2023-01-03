@@ -226,19 +226,22 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     final String latestBy = data.get("latestBy");
     final String jobTags = (data.get("jobTags") == null) ? "" : data.get("jobTags");
 
-    pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper name:"))
-          .as("Shipper name is correct").isEqualTo(shipperName);
-      Assertions.assertThat(
-              page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper address:"))
-          .as("Shipper address is correct").contains(shipperAddress);
-      Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Ready by:"))
-          .as("Ready by is correct").isEqualTo(readyBy);
-      Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Latest by:"))
-          .as("Latest by is correct").isEqualTo(latestBy);
-      Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Job Tags:"))
-          .as("Job Tags is correct").isEqualTo(jobTags);
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper name:"))
+            .as("Shipper name is correct").isEqualTo(shipperName);
+        Assertions.assertThat(
+                page.jobCreatedModal.getFieldTextOnJobCreatedModal("Shipper address:"))
+            .as("Shipper address is correct").contains(shipperAddress);
+        Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Ready by:"))
+            .as("Ready by is correct").isEqualTo(readyBy);
+        Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Latest by:"))
+            .as("Latest by is correct").isEqualTo(latestBy);
+        Assertions.assertThat(page.jobCreatedModal.getFieldTextOnJobCreatedModal("Job Tags:"))
+            .as("Job Tags is correct").isEqualTo(jobTags);
+      });
+    }, 2000, 3);
+
   }
 
   @Then("Operator get Pickup Jobs for date = {string} from pickup jobs list = {string}")
@@ -629,25 +632,30 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-    @Then("Operator verifies job created success following data below:")
-    public void operatorVerifiesJobCreatedSuccess(Map<String,String> data){
-        Map<String,String> resolvedData = resolveKeyValues(data);
-        pickupAppointmentJobPage.inFrame(() -> {
+  @Then("Operator verifies job created success following data below:")
+  public void operatorVerifiesJobCreatedSuccess(Map<String, String> data) {
+    Map<String, String> resolvedData = resolveKeyValues(data);
+    pickupAppointmentJobPage.inFrame(() -> {
 
-            if (data.get("timeSlot")!=null){
-              pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
-                Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.createdTime.getText()).as("Time slot is the same").isEqualToIgnoringCase(resolvedData.get("timeSlot"));
-            }
-            if (resolvedData.get("pickupTag")!=null){
-              pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
-                Assertions.assertThat(pickupAppointmentJobPage.isElementExist(f(pickupAppointmentJobPage.jobCreatedSuccess.COLUMN_DATA_XPATH,resolvedData.get("pickupTag")))).as("Job tag is the same").isTrue();
-            }
-            if (resolvedData.get("errorMessage")!=null){
-              pickupAppointmentJobPage.jobCreatedModal.title.waitUntilVisible();
-              Assertions.assertThat(pickupAppointmentJobPage.isElementExist(f(pickupAppointmentJobPage.jobCreatedModal.ERROR_MESSAGE_XPATH,resolvedData.get("errorMessage"))))
-                  .as("Error mesaage is the same").isTrue();
-            }
-        });
-    }
+      if (data.get("timeSlot") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.createdTime.getText())
+            .as("Time slot is the same").isEqualToIgnoringCase(resolvedData.get("timeSlot"));
+      }
+      if (resolvedData.get("pickupTag") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isElementExist(
+            f(pickupAppointmentJobPage.jobCreatedSuccess.COLUMN_DATA_XPATH,
+                resolvedData.get("pickupTag")))).as("Job tag is the same").isTrue();
+      }
+      if (resolvedData.get("errorMessage") != null) {
+        pickupAppointmentJobPage.jobCreatedModal.title.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isElementExist(
+                f(pickupAppointmentJobPage.jobCreatedModal.ERROR_MESSAGE_XPATH,
+                    resolvedData.get("errorMessage"))))
+            .as("Error mesaage is the same").isTrue();
+      }
+    });
+  }
 
 }

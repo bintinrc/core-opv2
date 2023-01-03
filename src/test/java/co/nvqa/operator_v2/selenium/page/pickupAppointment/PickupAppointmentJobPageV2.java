@@ -146,8 +146,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void selectShipperFromList(String shipperID) {
-      WebElement shipperItem = getWebDriver().findElement(By.xpath(f(shipperListItem, shipperID)));
-      shipperItem.click();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        WebElement shipperItem = getWebDriver().findElement(
+            By.xpath(f(shipperListItem, shipperID)));
+        shipperItem.click();
+      }, 1000, 3);
+
     }
 
     public void fillShipperAddressField(String address) {
@@ -155,9 +159,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void selectShipperAddressFromList(String address) {
-      WebElement addressItem = getWebDriver().findElement(
-          By.xpath(f(shipperAddressListItem, address)));
-      addressItem.click();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        WebElement addressItem = getWebDriver().findElement(
+            By.xpath(f(shipperAddressListItem, address)));
+        addressItem.click();
+      }, 1000, 3);
+
     }
 
     public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
@@ -224,14 +231,14 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectReadybyTime(String time) {
       readyByField.click();
-      scrollToTimeIfNeeded(time,"readyBy_list");
+      scrollToTimeIfNeeded(time, "readyBy_list");
 
-      retryIfAssertionErrorOrRuntimeExceptionOccurred(()->{
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         WebElement timeToPick = webDriver.findElement(
             By.xpath(
                 f(Time_LIST_LOCATR, "readyBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      },2000,10);
+      }, 2000, 10);
 
     }
 
@@ -245,25 +252,30 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(
                 f(Time_LIST_LOCATR, "latestBy_list") + f(JOB_CUSTOM_TIME_FILTER_LOCATOR, time)));
         timeToPick.click();
-      },2000,10);
+      }, 2000, 10);
 
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
 
-      int lastTime = -1;
-      while (lastTime < neededTime)
-      {
-        String lastElementTime = webDriver.findElement(
-            By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
-         lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
+      String lastElementTime = webDriver.findElement(
+          By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+      Integer lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
+      Integer tempLastTime = -1;
+      while (lastTime <= neededTime && lastTime != tempLastTime) {
+        tempLastTime = lastTime;
+
         LOGGER.debug(String.valueOf(lastTime));
-        moveToElementWithXpath(f(Time_LIST_LOCATR,listName));
-        WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR,listName)));
+        moveToElementWithXpath(f(Time_LIST_LOCATR, listName));
+        WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR, listName)));
         WebElement timeToScroll = readyTimeList.findElement(
             By.xpath(f(JOB_CUSTOM_TIME_FILTER_LOCATOR, lastElementTime)));
-        scrollIntoView(timeToScroll,true);
+        scrollIntoView(timeToScroll, true);
+        lastElementTime = webDriver.findElement(
+            By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
+        lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
+
       }
     }
 

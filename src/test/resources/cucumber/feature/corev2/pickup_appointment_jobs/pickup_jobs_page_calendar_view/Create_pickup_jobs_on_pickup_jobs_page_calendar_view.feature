@@ -5,7 +5,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress @RT
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -15,7 +15,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -35,7 +35,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -55,7 +55,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -76,7 +76,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        | DUPE1                                       |
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -97,7 +97,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -122,7 +122,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        | DUPE1                                       |
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -143,7 +143,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -168,7 +168,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        | DUPE1                                       |
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -188,7 +188,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -209,7 +209,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
     When Operator close Job Created dialog
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -230,7 +230,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
-    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{normal-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -251,7 +251,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -272,7 +272,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
     When Operator close Job Created dialog
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -293,7 +293,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 09:00                                       |
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -314,7 +314,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -335,7 +335,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | latestBy       | 12:00                                       |
       | jobTags        |                                             |
     When Operator close Job Created dialog
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -366,7 +366,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | Errors occurred during creation of jobs:                                   |
       | Pickup timeslot requested overlaps with existing Pickup Appointment Job(s) |
     Then Operator check Notification Error contains= "Pickup timeslot requested overlaps with existing Pickup Appointment Job(s)"
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -387,7 +387,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -406,7 +406,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator click Create button
     Then Operator verifies job created success following data below:
       | errorMessage | Timeslot provided is not valid. Please refer to documentation for valid timeslot |
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -414,7 +414,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 0
 
-  @deletePickupJob @DeleteShipperAddress
+  @RT
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - multiple job in a day
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
@@ -426,7 +426,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
     And Operator select address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in Shipper Address field
     Then Operator verify Create button in disabled
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
@@ -451,13 +451,13 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | readyBy        | 12:00                                       |
       | latestBy       | 15:00                                       |
       | jobTags        | DUPE1                                       |
-    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" with status:
+    When DB Control - get pickup jobs for shipper globalId = "{premium-shipper-pickup-appointment-1-global-id}" and address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" with status:
       | status            |
       | READY_FOR_ROUTING |
       | ROUTED            |
       | IN_PROGRESS       |
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
-    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 2
+    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 3
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
