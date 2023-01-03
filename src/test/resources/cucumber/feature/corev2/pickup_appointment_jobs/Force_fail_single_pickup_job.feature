@@ -5,7 +5,7 @@ Feature: Force Fail Single Pickup Job
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Force Fail Single Pickup Job Routed With Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -42,7 +42,7 @@ Feature: Force Fail Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Force Success Single Pickup Job In Progress With Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -80,7 +80,7 @@ Feature: Force Fail Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
-  @deletePickupJob
+  @deletePickupJob @DeleteShipperAddress
   Scenario:Force Success Single Pickup Job Routed With No Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
