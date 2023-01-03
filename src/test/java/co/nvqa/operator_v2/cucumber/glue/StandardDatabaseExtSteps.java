@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
-import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.Dimension;
@@ -66,7 +65,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -353,7 +351,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void operatorVerifyOrderEventExists(Map<String, String> data) {
     OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
     List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
-    DataEntity.assertListContains(orderEvents, expected, "Order event");
+    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")

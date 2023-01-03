@@ -96,7 +96,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
     Tag expected = new Tag(resolveKeyValues(data));
     manageOrderTagsPage.inFrame(page -> {
       List<Tag> actual = page.tagsTable.readAllEntities();
-      DataEntity.assertListContains(actual, expected, "Tag");
+      Tag.assertListContains(actual, expected, "Tag");
     });
   }
 

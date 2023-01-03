@@ -148,7 +148,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = generateRequestedTrackingNumber();
+            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
@@ -494,7 +494,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = generateRequestedTrackingNumber();
+            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);

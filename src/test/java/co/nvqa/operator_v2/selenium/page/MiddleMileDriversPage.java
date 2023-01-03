@@ -381,7 +381,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 NvLogger.warn("Filter is not found");
         }
 
-       Assertions.assertThat(actualName).as("Display Name is not the same : ").isEqualTo(middleMileDriver.getDisplayName());
+       Assertions.assertThat(actualDisplayName).as("Display Name is not the same : ").isEqualTo(middleMileDriver.getDisplayName());
        Assertions.assertThat(actualUsername).as("Username is not the same : ").isEqualTo(middleMileDriver.getUsername());
        Assertions.assertThat(actualHub).as("Hub is not the same : ").isEqualTo(middleMileDriver.getHub());
        Assertions.assertThat(actualEmploymentType).as("Employment Type is not the same : ").isEqualTo(middleMileDriver.getEmploymentType());

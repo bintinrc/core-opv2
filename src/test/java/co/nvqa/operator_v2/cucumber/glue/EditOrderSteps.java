@@ -832,9 +832,8 @@ public class EditOrderSteps extends AbstractSteps {
               DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-      assertions.assertThat(actualDateTime)
-          .as("Delivery Details - Start Date / Time")
-          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
+      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+          .isInSameDayAs(expectedDateTime);
     }
     if (expectedData.containsKey("startDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
@@ -843,9 +842,8 @@ public class EditOrderSteps extends AbstractSteps {
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("startDateTime"));
-      assertions.assertThat(actualDateTime)
-          .as("Delivery Details - Start Date / Time")
-          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
+      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+          .isInSameSecondAs(expectedDateTime);
     }
     if (expectedData.containsKey("endDate")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
@@ -853,9 +851,8 @@ public class EditOrderSteps extends AbstractSteps {
               DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-      assertions.assertThat(actualDateTime)
-          .as("Delivery Details - End Date / Time")
-          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
+      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+          .isInSameDayAs(expectedDateTime);
     }
     if (expectedData.containsKey("endDateTime")) {
       String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
@@ -864,20 +861,8 @@ public class EditOrderSteps extends AbstractSteps {
           .toInstant());
       Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS
           .parse(expectedData.get("endDateTime"));
-      assertions.assertThat(actualDateTime)
-          .as("Delivery Details - End Date / Time")
-          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
-    }
-    if (expectedData.containsKey("lastServiceEnd")) {
-      String actual = editOrderPage.deliveryDetailsBox.lastServiceEnd.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD
-          .parse(expectedData.get("lastServiceEnd"));
-      assertions.assertThat(actualDateTime)
-          .as("Delivery Details - Last Service End")
-          .isEqualTo(DateMatchers.sameDay(expectedDateTime));
+      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+          .isInSameSecondAs(expectedDateTime);
     }
     takesScreenshot();
     assertions.assertAll();

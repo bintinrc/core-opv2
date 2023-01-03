@@ -49,7 +49,6 @@ import java.util.Optional;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -662,7 +661,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
       Assertions.assertThat(toAddress).as("To Address").contains(order.getToAddress2());
     }
     if (StringUtils.isNotBlank(order.getToPostcode())) {
-      assertThat("To Address", toAddress, containsString(order.getToPostcode()));
       Assertions.assertThat(toAddress).as("To Address").contains(order.getToPostcode());
     }
   }
