@@ -660,4 +660,24 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+
+  @When("Operator search for address = {string} in pickup jobs table")
+  public void searchForAddressInPickupTable(String address) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupAddress", resolveValue(address));
+    });
+  }
+
+  @When("Operator click edit icon for Pickup job row")
+  public void clickEditIconRouteRow() {
+
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame((page) -> {
+        page.bulkSelect.clickEditButton();
+      });
+    }, 1000, 5);
+
+
+  }
+
 }

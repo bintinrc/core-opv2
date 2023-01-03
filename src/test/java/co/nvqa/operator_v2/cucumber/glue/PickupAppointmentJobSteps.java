@@ -255,10 +255,6 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.getCreateOrEditJobPage().selectTagInJobTagsField(tag);
   }
 
-  @When("Operator click edit icon for Pickup job row")
-  public void clickEditIconRouteRow() {
-    pickupAppointmentJobPage.clickEditButton();
-  }
 
   @When("Operator click success button in pickup job drawer")
   public void clickFourceSuccess() {

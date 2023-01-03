@@ -25,6 +25,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Tool tip is hidden
     When Operator hover on Success button in pickup job drawer
@@ -52,6 +53,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Tool tip is hidden
     When Operator hover on Fail button in pickup job drawer
@@ -80,6 +82,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Tool tip is hidden
     When Operator hover on Fail button in pickup job drawer
@@ -108,6 +111,7 @@ Feature: Force Success Single Pickup Job, Route Archived
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Tool tip is hidden
     When Operator hover on Success button in pickup job drawer

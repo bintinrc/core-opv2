@@ -69,6 +69,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
+  public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
+
   public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
 
   public boolean isToastContainerDisplayed() {
@@ -380,6 +382,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//li[.='Display only selected']")
     public PageElement displayOnlySelected;
 
+    @FindBy(css = "[data-testid='resultTable.editButton']")
+    public PageElement editButton;
     @FindBy(xpath = "//button[. ='Filter by job ID']")
     public PageElement filterByJobId;
     public static final String COLUMN_TAGS = "tags";
@@ -389,6 +393,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String ACTION_EDIT = "Edit Job";
     public static final String ACTION_DETAILS = "view Job";
     public static final String ACTION_SELECTED = "Select row";
+    public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//input[@data-testid = 'searchInput.%s']";
+    public final String PICKUP_JOBS_COLUMN_EDIT_BUTTON = "//button[@data-testid = 'resultTable.editButton']";
 
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
@@ -413,6 +419,17 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
       return findElementsByXpath(PICKUP_JOBS_IDS_XPATH).stream().map(WebElement::getText)
           .collect(Collectors.toList());
+    }
+
+    public void filterTableUsing(String columName, String value) {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        findElementBy(By.xpath(f(PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH, columName))).sendKeys(
+            value);
+      }, 1000, 5);
+    }
+
+    public void clickEditButton() {
+      findElementBy(By.xpath(PICKUP_JOBS_COLUMN_EDIT_BUTTON)).click();
     }
   }
 

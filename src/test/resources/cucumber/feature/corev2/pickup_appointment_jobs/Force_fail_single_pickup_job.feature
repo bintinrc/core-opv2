@@ -24,6 +24,7 @@ Feature: Force Fail Single Pickup Job
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
@@ -63,6 +64,7 @@ Feature: Force Fail Single Pickup Job
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
@@ -99,6 +101,7 @@ Feature: Force Fail Single Pickup Job
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
@@ -137,6 +140,7 @@ Feature: Force Fail Single Pickup Job
       | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
+    When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
