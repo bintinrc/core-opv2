@@ -65,7 +65,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -346,6 +345,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException(
                 f("No order event with type %s is found in order events DB table", type))));
+  }
+
+  @Then("^DB Operator verify the order_events record:$")
+  public void operatorVerifyOrderEventExists(Map<String, String> data) {
+    OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
+    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
+    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -986,6 +992,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("order_id")))
         .as(f("Expected order_id in Warehouse_sweeps table"))
         .isEqualTo(String.valueOf(order.getId()));
+      put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")

@@ -79,7 +79,6 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Vendor
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -123,9 +122,7 @@ Feature: Update MAWB
       | origin      | {airport-name-1}                |
       | destination | {airport-name-2}                |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
-
 
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Origin Airport
@@ -170,9 +167,7 @@ Feature: Update MAWB
       | origin      | {other-airport-name-1}          |
       | destination | {airport-name-2}                |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
-
 
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Destination Airport
@@ -217,9 +212,7 @@ Feature: Update MAWB
       | origin      | {airport-name-1}                |
       | destination | {other-airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
-
 
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with existing MAWB - Update Vendor, Origin Airport, and Destination Airport
@@ -264,9 +257,7 @@ Feature: Update MAWB
       | origin      | {other-airport-name-1}          |
       | destination | {other-airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
-
 
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Invalid Format
@@ -340,7 +331,6 @@ Feature: Update MAWB
     Then Operator verify Shipment Weight Update MAWB page UI has error
       | message     | Invalid MAWB Format |
 
-
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Cancel Update MAWB with existing MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -383,9 +373,8 @@ Feature: Update MAWB
       | vendor      | {other-vendor-name}             |
       | origin      | {other-airport-name-1}          |
       | destination | {other-airport-name-2}          |
-    Then Operator click update button on shipment weight update mawb page
+    And Operator click update button only on shipment weight update mawb page
     And Operator click cancel on the Shipment weight update confirm dialog
-
 
   @DeleteShipments
   Scenario: Select SID from Sum up Report and Update MAWB with Empty MAWB
@@ -456,7 +445,6 @@ Feature: Update MAWB
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-
   @DeleteShipments
   Scenario: Update MAWB without Download Sum Up Report - Update Vendor
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -497,9 +485,7 @@ Feature: Update MAWB
       | origin      | {airport-name-1}          |
       | destination | {airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
-
 
   @DeleteShipments
   Scenario: Update MAWB without Download Sum Up Report - Update Origin Airport
@@ -541,7 +527,6 @@ Feature: Update MAWB
       | origin      | {other-airport-name-1}          |
       | destination | {airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
   @DeleteShipments
@@ -584,7 +569,6 @@ Feature: Update MAWB
       | origin      | {airport-name-1}          |
       | destination | {other-airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
   @DeleteShipments
@@ -627,8 +611,8 @@ Feature: Update MAWB
       | origin      | {other-airport-name-1}          |
       | destination | {other-airport-name-2}          |
     Then Operator click update button on shipment weight update mawb page
-    And Operator click confirm on the Shipment weight update confirm dialog
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op

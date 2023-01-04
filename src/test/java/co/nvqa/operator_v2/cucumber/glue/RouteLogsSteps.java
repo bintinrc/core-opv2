@@ -280,6 +280,9 @@ public class RouteLogsSteps extends AbstractSteps {
       if (CollectionUtils.isNotEmpty(newParams.getTags())) {
         routeLogsPage.bulkEditDetailsDialog.routeTags.selectValues(newParams.getTags());
       }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.bulkEditDetailsDialog.zone.selectValue(newParams.getZone());
+      }
       if (StringUtils.isNotBlank(newParams.getHub())) {
         routeLogsPage.bulkEditDetailsDialog.hub.selectValue(newParams.getHub());
       }
@@ -311,6 +314,9 @@ public class RouteLogsSteps extends AbstractSteps {
       }
       if (CollectionUtils.isNotEmpty(newParams.getTags())) {
         routeLogsPage.editDetailsDialog.routeTags.selectValues(newParams.getTags());
+      }
+      if (StringUtils.isNotBlank(newParams.getZone())) {
+        routeLogsPage.editDetailsDialog.zone.selectValue(newParams.getZone());
       }
       if (StringUtils.isNotBlank(newParams.getHub())) {
         routeLogsPage.editDetailsDialog.hub.selectValue(newParams.getHub());

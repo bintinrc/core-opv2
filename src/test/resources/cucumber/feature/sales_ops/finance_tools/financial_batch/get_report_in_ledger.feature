@@ -4,7 +4,7 @@ Feature: Get Report in Ledger
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator whitelist email "{order-billing-email}"
+    Given API Operator whitelist email "{qa-email-address}"
     Given operator marks gmail messages as read
 
   @DeleteNewlyCreatedShipper
@@ -39,7 +39,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -107,7 +107,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -178,7 +178,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -242,7 +242,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file
@@ -311,7 +311,7 @@ Feature: Get Report in Ledger
       | shipper | {KEY_LEGACY_SHIPPER_ID}          |
       | date    | {gradle-current-date-yyyy-MM-dd} |
     And Operator generated financial batch report using data below:
-      | emailAddress | {order-billing-email} |
+      | emailAddress | {qa-email-address} |
     And Finance Operator waits for "{order-billing-wait-time}" seconds
     And Operator opens Gmail and checks received financial batch orders report email
     And Operator gets the extended financial batch reports csv file

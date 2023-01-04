@@ -48,14 +48,10 @@ public class StationRouteSteps extends AbstractSteps {
         value = finalData.get("shipmentDateFrom");
         if (StringUtils.isNotBlank(value)) {
           page.shipmentDate.setFromDate(value);
-          page.shipmentDate.selectFromHours("00");
-          page.shipmentDate.selectFromMinutes("00");
         }
         value = finalData.get("shipmentDateTo");
         if (StringUtils.isNotBlank(value)) {
           page.shipmentDate.setToDate(value);
-          page.shipmentDate.selectToHours("00");
-          page.shipmentDate.selectToMinutes("00");
         }
       }
       if (finalData.containsKey("shipmentCompletionTimeFrom") || finalData.containsKey(
@@ -63,14 +59,10 @@ public class StationRouteSteps extends AbstractSteps {
         value = finalData.get("shipmentCompletionTimeFrom");
         if (StringUtils.isNotBlank(value)) {
           page.shipmentCompletionTime.setFromDate(value);
-          page.shipmentCompletionTime.selectFromHours("00");
-          page.shipmentCompletionTime.selectFromMinutes("00");
         }
         value = finalData.get("shipmentCompletionTimeTo");
         if (StringUtils.isNotBlank(value)) {
           page.shipmentCompletionTime.setToDate(value);
-          page.shipmentCompletionTime.selectToHours("00");
-          page.shipmentCompletionTime.selectToMinutes("00");
         }
       }
       if (finalData.containsKey("additionalTids")) {

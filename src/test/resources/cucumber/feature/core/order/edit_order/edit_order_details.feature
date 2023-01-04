@@ -30,8 +30,8 @@ Feature: Edit Order Details
 
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:bde3592e-843f-4a99-9a60-66c46c4b257c)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-1-working-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest | { "service_type":"Return","service_level":"Standard","to":{"name": "binti v4.1","phone_number": "+65189189","email": "binti@test.co", "address": {"address1": "Orchard Road central","address2": "","country": "SG","postcode": "511200","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Pickup -> Edit Pickup Details on Edit Order page
     And Operator update Pickup Details on Edit Order Page
@@ -46,19 +46,55 @@ Feature: Edit Order Details
       | address1       | 116 Keng Lee Rd                        |
       | address2       | 15                                     |
       | postalCode     | 308402                                 |
-    Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
-    And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
-#    And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
-    And Operator verifies Pickup Details are updated on Edit Order Page
-    And Operator verifies Pickup Transaction is updated on Edit Order Page
-    And DB Operator verifies pickup info is updated in order record
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 17 |
-      | 11 |
-      | 12 |
-    And DB Operator verify Pickup '17' order_events record for the created order
-    And DB Operator verify Pickup transaction record is updated for the created order
-    And DB Operator verify Pickup waypoint record is updated
+    Then Operator verifies that success toast displayed:
+      | top | Pickup Details Updated |
+    And Operator refresh page
+    And Operator verify Pickup details on Edit order page using data below:
+      | name    | test sender name                         |
+      | contact | +9727894434                              |
+      | email   | test@mail.com                            |
+      | address | {KEY_CREATED_ORDER.buildFullFromAddress} |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                       |
+      | description | ^From Address 1.*116 Keng Lee Rd.*From Address 2.*15.*From Postcode changed.*308402.*From City updated.*Singapore.*From Country.*Singapore.*From Latitude changed.*to 1.31401544758955.*From Longitude changed.*103.844767199536.*Is Rts changed from false to false |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE CONTACT INFORMATION                                                                                                                               |
+      | description | ^From Name changed.*to test sender name.*From Email changed.*to test@mail\.com.*From Contact changed.*\+9727894434.*.*Is Rts changed from false to false |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE SLA                                                                                                                                                                        |
+      | description | ^Pickup Start Time changed from .* to {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 Pickup End Time changed from .* 15:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
+    And Operator verify order event on Edit order page using data below:
+      | name        | UPDATE AV                                                                                                                                                                                                                                            |
+      | description | User: AUTO (system AV) (support@ninjavan.co) Address: Orchard Road central \|\|\|\|511200 Zone ID: 30688 Destination Hub ID: 25215 Lat, Long: 1.288147, 103.740233 Address Status: UNVERIFIED AV Mode (Manual/Auto): AUTO Source: DEFAULT_AV |
+    And DB Operator verify zones record:
+      | legacyZoneId | 55       |
+      | systemId     | sg       |
+      | type         | STANDARD |
+    And DB Operator verifies orders record using data below:
+      | fromAddress1 | 116 Keng Lee Rd |
+      | fromAddress2 | 15              |
+      | fromPostcode | 308402          |
+      | fromCity     | Singapore       |
+      | fromCountry  | Singapore       |
+    And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION_AFTER"
+    Then DB Operator verifies transactions record:
+      | orderId    | {KEY_CREATED_ORDER_ID}             |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | type       | PP                                 |
+      | city       | Singapore                          |
+      | address1   | 116 Keng Lee Rd                    |
+      | address2   | 15                                 |
+      | postcode   | 308402                             |
+      | country    | Singapore                          |
+    And DB Operator verifies waypoints record:
+      | id            | {KEY_TRANSACTION_AFTER.waypointId} |
+      | address1      | 116 Keng Lee Rd                    |
+      | address2      | 15                                 |
+      | postcode      | 308402                             |
+      | country       | Singapore                          |
+      | latitude      | 1.31401544758955                   |
+      | longitude     | 103.844767199536                   |
+      | routingZoneId | 55                                 |
 
   Scenario: Operator Edit Delivery Details on Edit Order page (uid:e17ae476-5ccb-436e-b256-21ab3443a2ee)
     Given API Shipper create V4 order using data below:
@@ -80,8 +116,13 @@ Feature: Edit Order Details
       | address2         | 15                                     |
       | postalCode       | 308402                                 |
     Then Operator verifies that success toast displayed:
-      | top                | Delivery Details Updated |
-      | waitUntilInvisible | true                     |
+      | top | Delivery Details Updated |
+    And Operator refresh page
+    And Operator verify Delivery details on Edit order page using data below:
+      | name    | test sender name                       |
+      | contact | +9727894434                            |
+      | email   | test@mail.com                          |
+      | address | {KEY_CREATED_ORDER.buildFullToAddress} |
     And Operator verify order event on Edit order page using data below:
       | name        | UPDATE ADDRESS                                                                                                                                                                                                                       |
       | description | ^To Address 1.*116 Keng Lee Rd.*To Address 2.*15.*To Postcode changed.*308402.*To City updated.*Singapore.*To Country.*Singapore.*To Latitude changed.*to 1.31401544758955.*To Longitude changed.*103.844767199536.*Is Rts changed.* |
@@ -92,25 +133,37 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                     |
       | description | ^Delivery End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
-      | name | UPDATE AV |
-    And Operator verifies Delivery Details are updated on Edit Order Page
-    And Operator verifies Delivery Transaction is updated on Edit Order Page
-    And DB Operator verifies delivery info is updated in order record
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 17 |
-      | 11 |
-      | 12 |
-    And DB Operator verify Delivery '17' order_events record for the created order
-    And DB Operator verify Delivery transaction record of order "KEY_CREATED_ORDER_ID":
-      | address1 | {KEY_CREATED_ORDER.toAddress1} |
-      | address2 | {KEY_CREATED_ORDER.toAddress2} |
-      | postcode | {KEY_CREATED_ORDER.toPostcode} |
-      | city     | {KEY_CREATED_ORDER.toCity}     |
-      | country  | {KEY_CREATED_ORDER.toCountry}  |
-      | name     | {KEY_CREATED_ORDER.toName}     |
-      | email    | {KEY_CREATED_ORDER.toEmail}    |
-      | contact  | {KEY_CREATED_ORDER.toContact}  |
-    And DB Operator verify Delivery waypoint record is updated
+      | name        | UPDATE AV                                                                                                                                                                                                                                            |
+      | description | User: AUTO (system AV) (support@ninjavan.co) Address: 116 Keng Lee Rd 15\|\|Singapore\|\|308402 Zone ID: 55 Destination Hub ID: 2 Lat, Long: 1.31401544758955, 103.844767199536 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+    And DB Operator verify zones record:
+      | legacyZoneId | 55       |
+      | systemId     | sg       |
+      | type         | STANDARD |
+    And DB Operator verifies orders record using data below:
+      | toAddress1 | 116 Keng Lee Rd |
+      | toAddress2 | 15              |
+      | toPostcode | 308402          |
+      | toCity     | Singapore       |
+      | toCountry  | Singapore       |
+    And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION_AFTER"
+    Then DB Operator verifies transactions record:
+      | orderId    | {KEY_CREATED_ORDER_ID}             |
+      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | type       | DD                                 |
+      | city       | Singapore                          |
+      | address1   | 116 Keng Lee Rd                    |
+      | address2   | 15                                 |
+      | postcode   | 308402                             |
+      | country    | Singapore                          |
+    And DB Operator verifies waypoints record:
+      | id            | {KEY_TRANSACTION_AFTER.waypointId} |
+      | address1      | 116 Keng Lee Rd                    |
+      | address2      | 15                                 |
+      | postcode      | 308402                             |
+      | country       | Singapore                          |
+      | latitude      | 1.31401544758955                   |
+      | longitude     | 103.844767199536                   |
+      | routingZoneId | 55                                 |
 
   Scenario: Operator Edit Instructions of an Order on Edit Order Page (uid:a5de8db3-f5a2-4bda-8984-96794753d26c)
     Given API Shipper create V4 order using data below:

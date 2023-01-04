@@ -9,6 +9,7 @@ Feature: Order Billing - Upload CSV
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Finance Tools -> Order Billing
     Given API Operator whitelist email "{order-billing-email}"
+    Given API Gmail - Operator connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
     Given operator marks gmail messages as read
 
   @DeleteOrArchiveRoute @HappyPath
