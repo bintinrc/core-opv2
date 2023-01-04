@@ -12,8 +12,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     When API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
-    When API Operator add route to appointment pickup job using data below:
-      | overwrite | false |
+    When API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_LIST_OF_PICKUP_JOB_IDS[1]}                           |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_LIST_OF_PICKUP_JOB_IDS[1]}        |
       | pickupAppointmentProofRequest | {"status":"completed","photo_urls":[]} |
@@ -32,8 +33,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     When API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
-    When API Operator add route to appointment pickup job using data below:
-      | overwrite | false |
+    When API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_LIST_OF_PICKUP_JOB_IDS[1]}                           |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_LIST_OF_PICKUP_JOB_IDS[1]}                                                            |
       | pickupAppointmentProofRequest | {"failure_reason_code_id": 9, "failure_reason_id": 1476,"status":"failed","photo_urls":[]} |
