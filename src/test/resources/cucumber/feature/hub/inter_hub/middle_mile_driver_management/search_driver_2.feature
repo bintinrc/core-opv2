@@ -55,7 +55,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "name" and verifies the created username
+    Then Operator searches by "NAME_FILTER" and verifies the created username
 
   @DeleteDriver
   Scenario: Search Driver on Search Field ID (uid:dcebd212-12c5-42e6-82fb-76e894f36d73)
@@ -65,7 +65,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "id" and verifies the created username
+    Then Operator searches by "ID_FILTER" and verifies the created username
 
   @DeleteDriver
   Scenario: Search Driver on Search Field Username (uid:5975fcb7-c611-4aa3-9e01-5af1d3ea036b)
@@ -75,7 +75,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "username" and verifies the created username
+    Then Operator searches by "USERNAME_FILTER" and verifies the created username
 
   @DeleteDriver
   Scenario: Search Driver on Search Field Hub (uid:e2590d24-9767-4daf-b9e7-148929184731)
@@ -85,7 +85,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-    Then Operator searches by "hub" and verifies the created username
+    Then Operator searches by "HUB_FILTER" and verifies the created username
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
