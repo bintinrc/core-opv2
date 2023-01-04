@@ -24,10 +24,11 @@ Feature: Airport Trip Management - Cancel Flight Trip
       | longitude   | GENERATED |
     And API Operator refresh Airports cache
     Given API Operator create new air trip with data below:
-      | airtripType         | TO_FROM_AIRPORT_TRIP                 |
+      | airtripType         | FLIGHT_TRIP                          |
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id} |
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id} |
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {default-origin-hub-id} to hub id = {default-destination-hub-id}
+      | flight_no           | 12345                                |
+    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {local-station-1-id} to hub id = {local-station-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | RANDOM                           |
@@ -86,9 +87,10 @@ Feature: Airport Trip Management - Cancel Flight Trip
       | longitude   | GENERATED |
     And API Operator refresh Airports cache
     Given API Operator create new air trip with data below:
-      | airtripType         | TO_FROM_AIRPORT_TRIP                 |
+      | airtripType         | FLIGHT_TRIP                 |
       | originFacility      | {KEY_CREATED_AIRPORT_LIST[1].hub_id} |
       | destinationFacility | {KEY_CREATED_AIRPORT_LIST[2].hub_id} |
+      | flight_no           | 12345                                |
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
