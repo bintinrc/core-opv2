@@ -29,11 +29,11 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
     When Operator upload Fail proof photo on pickup appointment job
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Cannot Make It (CMI) |
+      | Hyperlocal - Cannot Make It (CMI) |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -69,11 +69,11 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
     When Operator upload Fail proof photo on pickup appointment job
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Cannot Make It (CMI) |
+      | Hyperlocal - Cannot Make It (CMI) |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -106,10 +106,10 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Cannot Make It (CMI) |
+      | Hyperlocal - Cannot Make It (CMI) |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -145,10 +145,10 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Cannot Make It (CMI) |
+      | Hyperlocal - Cannot Make It (CMI) |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
