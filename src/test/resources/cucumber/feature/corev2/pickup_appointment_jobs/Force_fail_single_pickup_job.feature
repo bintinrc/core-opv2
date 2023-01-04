@@ -44,7 +44,7 @@ Feature: Force Fail Single Pickup Job
 
 
   @deletePickupJob @DeleteShipperAddress
-  Scenario:Force Success Single Pickup Job In Progress With Photo
+  Scenario:Force Fail Single Pickup Job In Progress With Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -83,7 +83,7 @@ Feature: Force Fail Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
   @deletePickupJob @DeleteShipperAddress
-  Scenario:Force Success Single Pickup Job Routed With No Photo
+  Scenario:Force Fail Single Pickup Job Routed With No Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -120,7 +120,7 @@ Feature: Force Fail Single Pickup Job
 
 
   @deletePickupJob @DeleteShipperAddress
-  Scenario:Force Success Single Pickup Job In Progress With no Photo
+  Scenario:Force Fail Single Pickup Job In Progress With no Photo
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
