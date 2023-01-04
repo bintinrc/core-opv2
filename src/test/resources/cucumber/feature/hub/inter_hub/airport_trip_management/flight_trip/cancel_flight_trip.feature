@@ -1,11 +1,11 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @CancelFlightTrip
 Feature: Airport Trip Management - Cancel Flight Trip
 
-  @LaunchBrowser @ShouldAlwaysRun @runthis
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI @runthis
+  @DeleteShipments @DeleteCreatedMAWBs @DeleteCreatedAirports @DeleteAirportsViaAPI
   Scenario: Cancel Pending Flight Trip with MAWB
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -151,6 +151,6 @@ Feature: Airport Trip Management - Cancel Flight Trip
     Then Operator verifies action buttons below are disable:
       | Cancel |
 
-  @KillBrowser @ShouldAlwaysRun @runthis
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
