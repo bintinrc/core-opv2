@@ -163,17 +163,20 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @Then("Operator verify notification is displayed with message = {string} and description below:")
   public void verifyNotificationDisplayedWith(String notificationMessage,
       List<Map<String, String>> dataTable) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      dataTable.forEach(entry -> {
-        Map<String, String> data = new HashMap<>(entry);
-        String message = resolveValue(notificationMessage);
-        String description = resolveValue(data.get("description"));
-        Assertions.assertThat(page.notificationModal.message.getText())
-            .as(f("Notification Message contains: %s", message)).contains(message);
-        Assertions.assertThat(page.notificationModal.description.getText())
-            .as(f("Notification Description contains: %s", description)).contains(description);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        dataTable.forEach(entry -> {
+          Map<String, String> data = new HashMap<>(entry);
+          String message = resolveValue(notificationMessage);
+          String description = resolveValue(data.get("description"));
+          Assertions.assertThat(page.notificationModal.message.getText())
+              .as(f("Notification Message contains: %s", message)).contains(message);
+          Assertions.assertThat(page.notificationModal.description.getText())
+              .as(f("Notification Description contains: %s", description)).contains(description);
+        });
       });
-    });
+    }, 1000, 5);
+
   }
 
 
