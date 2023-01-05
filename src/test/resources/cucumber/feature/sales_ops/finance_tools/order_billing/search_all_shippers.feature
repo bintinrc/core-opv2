@@ -89,7 +89,7 @@ Feature: Order Billing - All Shippers
     Then Operator verifies the count of files in zip
 
 
-  Scenario: Generate "ALL" Success Billing Report - All Shippers - With No COD, INS and handling fee (uid:59af6bea-ac85-446d-97ba-4d386577f447)
+  Scenario: Generate "ALL" Success Billing Report - All Shippers - With No COD, INS and handling fee (uid:34db5971-615a-4ea1-8dc9-448635a8f732)
     Given API Shipper create V4 order using data below:
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-SSB-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-SSB-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
