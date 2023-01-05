@@ -182,12 +182,15 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @Then("^Operator verify Create button in (enabled|disabled)")
   public void isCreateButtonDisabled(String state) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(
-              page.createOrEditJobPage.isCreateButtonDisabled())
-          .as("Create button is displayed")
-          .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        Assertions.assertThat(
+                page.createOrEditJobPage.isCreateButtonDisabled())
+            .as("Create button enable state")
+            .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
+      });
+    }, 1000, 5);
+
 
   }
 
@@ -673,14 +676,102 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @When("Operator click edit icon for Pickup job row")
   public void clickEditIconRouteRow() {
-
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame((page) -> {
         page.bulkSelect.clickEditButton();
       });
     }, 1000, 5);
+  }
+
+  @When("Operator click on edit button for pickup job id = {string}")
+  public void clickEditButtonForJobId(String JobId) {
+    String jobId = resolveValue(JobId);
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clickEditButton(jobId);
+    });
+  }
+
+  @When("Operator check star icon on job = {string} with status = {string}")
+  public void clickEditButtonForJobId(String JobId, String Status) {
+    String jobId = resolveValue(JobId);
+    String status = resolveValue(Status);
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.createOrEditJobPage
+              .isStarByJobIdDisplayed(jobId, status))
+          .as("Star in Job with id = " + jobId + " is displayed").isTrue();
+    });
+  }
+
+  @When("Operator check tag = {string} is displayed on job")
+  public void clickTagForJobId(String name) {
+    String tagName = resolveValue(name);
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.createOrEditJobPage
+              .isTagDisplayed(tagName))
+
+          .as(f("%s tag is displayed", tagName)).isTrue();
+    });
+  }
+
+  @Then("^Operator verify Save button in (enabled|disabled)")
+  public void isSaveButtonDisabled(String state) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        Assertions.assertThat(
+                page.createOrEditJobPage.isSaveButtonDisabled())
+            .as("Create button enable state")
+            .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
+      });
+    }, 1000, 5);
 
 
+  }
+
+  @Then("Operator click Save button")
+  public void clickSaveButton() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clickSaveButton();
+    });
+
+  }
+
+  @When("Operator hover on job = {string} edit button")
+  public void hoverOnSuccessButton(String JobId) {
+    String jobId = resolveValue(JobId);
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.hoverOnEditButton(jobId);
+    });
+  }
+
+  @When("Operator clear job tags input")
+  public void operatorClearJobTagsInput() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clearTagsInput();
+    });
+  }
+
+  @When("Operator check no star icon on job = {string} with status = {string}")
+  public void checkStarForJobId(String JobId, String Status) {
+    String jobId = resolveValue(JobId);
+    String status = resolveValue(Status);
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.createOrEditJobPage
+              .isStarByJobIdDisplayed(jobId, status))
+          .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+    });
+  }
+
+  @When("Operator check no tag = {string} is displayed on job")
+  public void checkTagForJobId(String name) {
+    String tagName = resolveValue(name);
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      Assertions.assertThat(page.createOrEditJobPage
+              .isTagDisplayed(tagName))
+
+          .as(f("No %s tag is displayed", tagName)).isFalse();
+    });
   }
 
 }

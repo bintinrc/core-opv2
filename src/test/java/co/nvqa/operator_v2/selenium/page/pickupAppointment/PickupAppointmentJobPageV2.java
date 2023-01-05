@@ -98,7 +98,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement shipperAddressField;
     @FindBy(xpath = "//span[text()='Create']/parent::button")
     private Button createButton;
-
+    @FindBy(xpath = "//span[text()='Save']/parent::button")
+    private Button saveButton;
     @FindBy(css = "#dateRange")
     private Button selectDateRange;
 
@@ -113,7 +114,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
-
+    @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobTags;
 
     public final String timeScrollBar = ".rc-virtual-list-scrollbar";
     public final String shipperListItem = "//div[@legacyshipperid='%s']";
@@ -131,6 +133,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String LAST_ITEM_IN_TIME_LIST = "//div[@class='rc-virtual-list-holder-inner']/descendant::div[@class='ant-select-item ant-select-item-option'][last()]";
 
     public final String Time_LIST_LOCATR = "//div[@id='%s']/parent::div";
+
+    public final String STAR_IN_CALENDAR_LOCATOR = "//div[@data-testid='paJob.cancel.%s']//ancestor::div[@status='%s']//span[@data-testid='paJob.priority']";
+    public final String TAG_IN_CALENDAR_LOCATOR = "//div[@class='ant-popover-content']//span[contains(text(),'%s')]";
 
     public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -197,6 +202,15 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
+    public boolean isSaveButtonDisabled() {
+      try {
+
+        return saveButton.isEnabled();
+      } catch (NoSuchElementException noSuchElementException) {
+        return false;
+      }
+    }
+
     public void clickCreateButton() {
       createButton.click();
     }
@@ -224,6 +238,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void selectTagInJobTagsField(String tag) {
       tagsField.click();
+      tagsField.sendKeys(tag);
       WebElement tagElement = webDriver.findElement(By.cssSelector(f(JOB_TAG_FILTER_LOCATOR, tag)));
 
       tagElement.click();
@@ -285,6 +300,45 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       commentsInput.sendKeys(comment);
     }
 
+    public void clickEditButton(String jobId) {
+      WebElement deleteButton = getWebDriver().findElement(
+          By.cssSelector(f(EDIT_BUTTON_IN_CALENDAR_LOCATOR, jobId)));
+      deleteButton.click();
+    }
+
+    public boolean isStarByJobIdDisplayed(String jobId, String status) {
+      try {
+        return webDriver.findElement(By.xpath(f(STAR_IN_CALENDAR_LOCATOR, jobId, status)))
+            .isDisplayed();
+      } catch (NoSuchElementException noSuchElementException) {
+        return false;
+      }
+    }
+
+    public boolean isTagDisplayed(String tag) {
+      try {
+        return webDriver.findElement(By.xpath(f(TAG_IN_CALENDAR_LOCATOR, tag)))
+            .isDisplayed();
+      } catch (NoSuchElementException noSuchElementException) {
+        return false;
+      }
+    }
+
+    public void clickSaveButton() {
+      saveButton.click();
+    }
+
+    public void hoverOnEditButton(String jobID) {
+
+      moveToElement(
+          webDriver.findElement(By.cssSelector(f(EDIT_BUTTON_IN_CALENDAR_LOCATOR, jobID))));
+    }
+
+    public void clearTagsInput() {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobTags.click();
+      }, 1000, 5);
+    }
   }
 
 
@@ -304,6 +358,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))));
       return webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))).getText();
     }
+
+
   }
 
 
