@@ -19,8 +19,14 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -352,7 +358,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
 
     String actualTripManagementId = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
-    assertEquals("Trip Management ID", tripManagementId.toString(), actualTripManagementId);
+   Assertions.assertThat(actualTripManagementId).as("Trip Management ID").isEqualTo(tripManagementId.toString());
 
 
   }
@@ -366,7 +372,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     String actualDestinationHubName = getText(
         f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
-    assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
+   Assertions.assertThat(actualDestinationHubName).as("Destination Hub Name").isEqualTo(destinationHubName);
   }
 
   public void selectsDate(MovementTripType movementTripType, String tomorrowDate) {
@@ -612,26 +618,26 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case DESTINATION_HUB:
         expectedValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
         actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
-        assertEquals("Destination Hub", expectedValue, actualValue);
+       Assertions.assertThat(actualValue).as("Destination Hub").isEqualTo(expectedValue);
         break;
 
       case ORIGIN_HUB:
         expectedValue = tripManagementDetailsData.getData().get(index).getOriginHubName();
         actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ORIGIN_HUB_CLASS));
-        assertEquals("Origin Hub", expectedValue, actualValue);
+       Assertions.assertThat(actualValue).as("Origin Hub").isEqualTo(expectedValue);
         break;
 
       case TRIP_ID:
         expectedValue = tripManagementDetailsData.getData().get(index).getId().toString();
         actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
-        assertEquals("Trip ID", expectedValue, actualValue);
+       Assertions.assertThat(actualValue).as("Trip ID").isEqualTo(expectedValue);
         break;
 
       case MOVEMENT_TYPE:
         expectedValue = movementTypeConverter(
             tripManagementDetailsData.getData().get(index).getMovementType());
         actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, MOVEMENT_TYPE_CLASS));
-        assertEquals("Movement Type", expectedValue, actualValue);
+       Assertions.assertThat(actualValue).as("Movement Type").isEqualTo(expectedValue);
         break;
 
       case EXPECTED_DEPARTURE_TIME:
@@ -664,7 +670,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         expectedValue = expectedValueDateTime(
             tripManagementDetailsData.getData().get(index).getActualEndTime());
         actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
-        assertTrue("Actual Departure Time", actualValue.contains(expectedValue));
+       Assertions.assertThat(actualValue.contains(expectedValue)).as("Actual Departure Time").isTrue();
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -685,7 +691,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
       case LAST_STATUS:
         expectedValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
         actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, LAST_STATUS_CLASS));
-        assertEquals("Last Status", expectedValue, actualValue);
+       Assertions.assertThat(actualValue).as("Last Status").isEqualTo(expectedValue);
         ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
         break;
 
@@ -763,7 +769,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 //    TODO: WIP by MM Dev team
 //    waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
 //    String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
-//    assertThat("Trip ID is correct", actualTripId, containsString(tripId));
+//   Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
 //    getWebDriver().close();
 //    getWebDriver().switchTo().window(windowHandle);
 //    switchTo();
@@ -867,8 +873,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         WebElement toast = findElementByXpath(
             "//div[contains(@class,'notification-notice-message')]");
         String actualToastMessage = toast.getText();
-        assertThat("Trip Management toast message is the same", actualToastMessage,
-            containsString(expectedToastMessage));
+       Assertions.assertThat(actualToastMessage).as("Trip Management toast message is the same").contains(expectedToastMessage);
       } catch (Throwable ex) {
         NvLogger.error(ex.getMessage());
         throw ex;

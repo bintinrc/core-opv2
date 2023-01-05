@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.TaggedOrderParams;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Niko Susanto
@@ -168,9 +170,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
   public void operatorClearAllTags() {
     orderTagManagementPage.actionsMenu.selectOption("Clear All Tags");
     orderTagManagementPage.clearAllTagsDialog.waitUntilClickable();
-    assertEquals("Clear All Tags dialog message",
-        "All existing tags for these orders will be removed.",
-        orderTagManagementPage.clearAllTagsDialog.message.getText());
+    Assertions.assertThat(orderTagManagementPage.clearAllTagsDialog.message.getText())
+        .as("Clear All Tags dialog message")
+        .isEqualTo("All existing tags for these orders will be removed.");
     orderTagManagementPage.clearAllTagsDialog.removeAll.click();
     orderTagManagementPage.clearAllTagsDialog.waitUntilInvisible();
   }
@@ -178,8 +180,10 @@ public class OrderTagManagementSteps extends AbstractSteps {
   @And("Operator verifies selected value of RTS filter is {string} on Order Tag Management page")
   public void operatorVerifyRtsFilter(String expected) {
     expected = resolveValue(expected);
-    assertTrue("RTS filter is displayed", orderTagManagementPage.rtsFilter.isDisplayed());
-    assertEquals("RTS filter value", expected, orderTagManagementPage.rtsFilter.getValue());
+    Assertions.assertThat(orderTagManagementPage.rtsFilter.isDisplayed())
+        .as("RTS filter is displayed").isTrue();
+    Assertions.assertThat(orderTagManagementPage.rtsFilter.getValue()).as("RTS filter value")
+        .isEqualTo(expected);
   }
 
   @And("Operator clicks 'Clear All Selection' button on Order Tag Management page")
@@ -194,8 +198,8 @@ public class OrderTagManagementSteps extends AbstractSteps {
     {
       orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
       orderTagManagementPage.loadingBar.waitUntilInvisible(60);
-      assertTrue(f("Order %s must not be displayed", trackingId),
-          orderTagManagementPage.ordersTable.isEmpty());
+      Assertions.assertThat(orderTagManagementPage.ordersTable.isEmpty())
+          .as(f("Order %s must not be displayed", trackingId)).isTrue();
     });
   }
 
@@ -206,9 +210,9 @@ public class OrderTagManagementSteps extends AbstractSteps {
 
   @And("^Operator verifies that 'Load Selection' button is (enabled|disabled) on Order Tag Management page")
   public void operatorVerifyLoadSelection(String state) {
-    assertEquals("Load selection button enable state",
-        StringUtils.equalsIgnoreCase(state, "enabled"),
-        orderTagManagementPage.loadSelection.isEnabled());
+    Assertions.assertThat(orderTagManagementPage.loadSelection.isEnabled())
+        .as("Load selection button enable state")
+        .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
   }
 
   @And("^Operator verifies order params on Order Tag Management page:")
@@ -239,7 +243,7 @@ public class OrderTagManagementSteps extends AbstractSteps {
     String csvContents = resolveValues(listOfTrackingId).stream()
         .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     File csvFile = orderTagManagementPage.createFile(
-        String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
+        String.format("find-orders-with-csv_%s.csv", StandardTestUtils.generateDateUniqueString()), csvContents);
 
     orderTagManagementPage.findOrdersWithCsv.click();
     orderTagManagementPage.findOrdersWithCsvDialog.waitUntilVisible();

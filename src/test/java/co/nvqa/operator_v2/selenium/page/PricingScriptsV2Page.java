@@ -144,7 +144,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Draft script found");
       }
     }, String.format("Data still not loaded"));
-    assertTrue("No Results Found", isTableEmpty(ACTIVE_TAB_XPATH));
+   Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
   }
 
   public void runCheckDraftScript(Script script, RunCheckParams runCheckParams) {
@@ -395,7 +395,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         fail("Draft script found");
       }
     }, String.format("Data still not loaded"));
-    assertTrue("No Results Found", isTableEmpty(ACTIVE_TAB_XPATH));
+   Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
   }
 
   public void goToEditActiveScript(Script script) {

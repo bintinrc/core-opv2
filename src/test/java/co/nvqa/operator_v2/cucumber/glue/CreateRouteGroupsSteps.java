@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.commons.model.core.Transaction;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
@@ -27,7 +27,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 
-import static co.nvqa.commons.model.DataEntity.toDateTime;
+import static co.nvqa.common.model.DataEntity.toDateTime;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTable.COLUMN_TYPE;
@@ -1512,7 +1512,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
     String fileName = createRouteGroupsPage.getLatestDownloadedFilename(CSV_FILE_NAME);
     String pathName = StandardTestConstants.TEMP_DIR + fileName;
     List<TxnRsvn> actual = DataEntity.fromCsvFile(TxnRsvn.class, pathName, true);
-    assertEquals("Number of records in " + CSV_FILE_NAME, expected.size(), actual.size());
+   Assertions.assertThat(actual.size()).as("Number of records in " + CSV_FILE_NAME).isEqualTo(expected.size());
 
     for (int i = 0; i < expected.size(); i++) {
       expected.get(i).compareWithActual(actual.get(i));
@@ -1649,8 +1649,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
 
       page.txnRsvnTable.filterByColumn(COLUMN_ID, expected.getId());
       pause1s();
-      assertEquals(f("Number of records for id = %s", expected.getId()), 1,
-          page.txnRsvnTable.getRowsCount());
+     Assertions.assertThat(          page.txnRsvnTable.getRowsCount()).as(f("Number of records for id = %s", expected.getId())).isEqualTo(1);
       TxnRsvn actual = page.txnRsvnTable.readEntity(1);
       expected.compareWithActual(actual);
     }));
@@ -1669,8 +1668,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
       page.txnRsvnTable.clearColumnFilter(COLUMN_TRACKING_ID);
       page.txnRsvnTable.clearColumnFilter(COLUMN_TYPE);
       page.txnRsvnTable.filterByColumn(COLUMN_ID, expected.getId());
-      assertEquals(f("Number of records for id = %s", expected.getId()), 0,
-          page.txnRsvnTable.getRowsCount());
+     Assertions.assertThat(          page.txnRsvnTable.getRowsCount()).as(f("Number of records for id = %s", expected.getId())).isEqualTo(0);
     }));
   }
 

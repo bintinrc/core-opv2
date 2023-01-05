@@ -16,6 +16,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,7 +70,7 @@ public class RouteLogsSteps extends AbstractSteps {
   public void operatorCreateNewRouteUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String createdDate = DTF_CREATED_DATE.format(ZonedDateTime.now());
     String comments = f(
         "This route is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".",
         createdDate, scenarioName);
@@ -183,7 +184,7 @@ public class RouteLogsSteps extends AbstractSteps {
   public void operatorCreateMultipleRoutesUsingDataBelow(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String createdDate = DTF_CREATED_DATE.format(ZonedDateTime.now());
 
     int numberOfRoute = Integer.parseInt(mapOfData.get("numberOfRoute"));
     List<RouteLogsParams> routeParamsList = new ArrayList<>();
@@ -1135,7 +1136,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
       String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,
           RoutesTable.COLUMN_STATUS);
-      assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
+      Assertions.assertThat(actualRouteStatus).as("Track is not routed.").isEqualTo("IN_PROGRESS");
     });
   }
 
@@ -1162,8 +1163,8 @@ public class RouteLogsSteps extends AbstractSteps {
           }
         }
         Assertions.assertThat(routeIndex >= 0).as(f("Route %s found", routeId)).isTrue();
-        assertEquals(f("Reason for route %s", routeId), reason,
-            routeLogsPage.selectionErrorDialog.reasons.get(i).getText());
+        Assertions.assertThat(routeLogsPage.selectionErrorDialog.reasons.get(i).getText())
+            .as(f("Reason for route %s", routeId)).isEqualTo(reason);
       }
     });
   }

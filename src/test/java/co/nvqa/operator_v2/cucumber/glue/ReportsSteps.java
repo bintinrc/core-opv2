@@ -1,24 +1,26 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.OrderStatusReportEntry;
 import co.nvqa.operator_v2.selenium.page.ReportsPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
+
+import static co.nvqa.common.utils.StandardTestUtils.generateDateUniqueString;
 
 /**
  * @author Niko Susanto
@@ -39,8 +41,9 @@ public class ReportsSteps extends AbstractSteps {
   @When("^Operator filter COD Reports by Mode = \"([^\"]*)\" and Date = \"([^\"]*)\"$")
   public void operatorFilterCodReportByGivenModeAndDate(String mode, String dateAsString) {
     try {
-      reportsPage.filterCodReportsBy(mode, YYYY_MM_DD_SDF.parse(dateAsString));
-    } catch (ParseException ex) {
+      reportsPage.filterCodReportsBy(mode,
+          StandardTestUtils.convertToZonedDateTime(dateAsString, DTF_NORMAL_DATE));
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse date.", ex);
     }
   }
@@ -81,12 +84,14 @@ public class ReportsSteps extends AbstractSteps {
               .findFirst();
           if (orderOpt.isPresent()) {
             final String rawDeliveryDate = orderOpt.get().getTransactions().get(1).getEndTime();
-            final String formattedDeliveryDate = LocalDate.parse(rawDeliveryDate,DateUtil.ISO8601_LITE_FORMATTER).toString();
+            final String formattedDeliveryDate = LocalDate.parse(rawDeliveryDate,
+                DateUtil.ISO8601_LITE_FORMATTER).toString();
             o.setEstimatedDeliveryDate(formattedDeliveryDate);
           }
         })
         .collect(Collectors.toList());
-    assertEquals("Number of records in order statses report", data.size(), actualData.size());
+    Assertions.assertThat(actualData.size()).as("Number of records in order statses report")
+        .isEqualTo(data.size());
     for (int i = 0; i < expectedData.size(); i++) {
       expectedData.get(i).compareWithActual(actualData.get(i));
     }

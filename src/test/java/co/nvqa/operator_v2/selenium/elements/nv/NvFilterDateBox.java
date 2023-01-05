@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   }
 
   public void selectFromDate(Date value) {
-    fromDate.setDate(value);
+    fromDate.setDate(StandardTestUtils.convertToZonedDateTime(value));
   }
 
   public void selectToDate(String value) {
@@ -38,7 +39,7 @@ public class NvFilterDateBox extends AbstractFilterBox {
   }
 
   public void selectToDate(Date value) {
-    toDate.setDate(value);
+    toDate.setDate(StandardTestUtils.convertToZonedDateTime(value));
   }
 
   public void selectDates(String fromDate, String toDate) {

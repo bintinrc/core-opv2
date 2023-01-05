@@ -11,7 +11,6 @@ import io.cucumber.java.en.When;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.Keys;
 
 @ScenarioScoped
 public class AddressDatasourceSteps extends AbstractSteps {
@@ -372,8 +371,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @Then("^Operator verifies no result found on Address Datasource page$")
   public void operatorVerifiesNoResult() {
-    assertTrue("No result found on Address Datasource page Displayed!",
-        addressDatasourcePage.noResultsFound.isDisplayed());
+   Assertions.assertThat(        addressDatasourcePage.noResultsFound.isDisplayed()).as("No result found on Address Datasource page Displayed!").isTrue();
   }
 
   @When("Operator clicks on Edit Button on Address Datasource Page")

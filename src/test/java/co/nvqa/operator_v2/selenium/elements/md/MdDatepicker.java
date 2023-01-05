@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class MdDatepicker extends PageElement {
 
-  private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
+  private static final DateTimeFormatter DATE_FILTER_SDF = DateTimeFormatter.ofPattern("EEEE MMMM d yyyy");
 
   public MdDatepicker(WebDriver webDriver, WebElement webElement) {
     super(webDriver, webElement);
@@ -42,9 +42,9 @@ public class MdDatepicker extends PageElement {
     return input.getValue();
   }
 
-  public void setDate(Date date) {
+  public void setDate(ZonedDateTime date) {
     try {
-      String value = MD_DATEPICKER_SDF.format(date);
+      String value = DTF_NORMAL_DATE.format(date);
       simpleSetValue(value);
     } catch (InvalidElementStateException ex) {
       String value = DATE_FILTER_SDF.format(date);

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.model.CollectionSummary;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
@@ -22,7 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -256,71 +256,76 @@ public class RouteInboundPage extends OperatorV2SimplePage {
   }
 
   public void verifyRouteSummaryInfoIsCorrect(long expectedRouteId, String expectedDriverName,
-      String expectedHubName, Date expectedRouteDate,
+      String expectedHubName, ZonedDateTime expectedRouteDate,
       WaypointPerformance expectedWaypointPerformance,
       CollectionSummary expectedCollectionSummary) {
-    assertEquals("Route ID", String.valueOf(expectedRouteId), routeId.getText());
-    assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""),
-        driver.getText().replaceAll(" ", ""));
-    assertEquals("Hub Name", expectedHubName, hub.getText());
-    assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), date.getText());
+    Assertions.assertThat(routeId.getText()).as("Route ID")
+        .isEqualTo(String.valueOf(expectedRouteId));
+    Assertions.assertThat(expectedDriverName.replaceAll(" ", "")).as("Driver Name")
+        .isEqualTo(driver.getText().replaceAll(" ", ""));
+    Assertions.assertThat(hub.getText()).as("Hub Name").isEqualTo(expectedHubName);
+    Assertions.assertThat(date.getText()).as("Route Date")
+        .isEqualTo(expectedRouteDate.format(DTF_NORMAL_DATE));
 
-    assertEquals("Waypoint Performance - Pending",
-        String.valueOf(expectedWaypointPerformance.getPending()), pendingButton.text.getText());
-    assertEquals("Waypoint Performance - Partial",
-        String.valueOf(expectedWaypointPerformance.getPartial()), partialButton.text.getText());
-    assertEquals("Waypoint Performance - Failed",
-        String.valueOf(expectedWaypointPerformance.getFailed()), failedButton.text.getText());
-    assertEquals("Waypoint Performance - Completed",
-        String.valueOf(expectedWaypointPerformance.getCompleted()), successButton.text.getText());
-    assertEquals("Waypoint Performance - Total",
-        String.valueOf(expectedWaypointPerformance.getTotal()), totalButton.text.getText());
+    Assertions.assertThat(pendingButton.text.getText()).as("Waypoint Performance - Pending")
+        .isEqualTo(String.valueOf(expectedWaypointPerformance.getPending()));
+    Assertions.assertThat(partialButton.text.getText()).as("Waypoint Performance - Partial")
+        .isEqualTo(String.valueOf(expectedWaypointPerformance.getPartial()));
+    Assertions.assertThat(failedButton.text.getText()).as("Waypoint Performance - Failed")
+        .isEqualTo(String.valueOf(expectedWaypointPerformance.getFailed()));
+    Assertions.assertThat(successButton.text.getText()).as("Waypoint Performance - Completed")
+        .isEqualTo(String.valueOf(expectedWaypointPerformance.getCompleted()));
+    Assertions.assertThat(totalButton.text.getText()).as("Waypoint Performance - Total")
+        .isEqualTo(String.valueOf(expectedWaypointPerformance.getTotal()));
   }
 
   public void verifyRouteInboundInfoIsCorrect(Long expectedRouteId, String expectedDriverName,
-      String expectedHubName, Date expectedRouteDate, ExpectedScans expectedScans) {
+      String expectedHubName, ZonedDateTime expectedRouteDate, ExpectedScans expectedScans) {
     if (expectedRouteId != null) {
-      assertEquals("Route ID", String.valueOf(expectedRouteId), routeId.getText());
+      Assertions.assertThat(routeId.getText()).as("Route ID")
+          .isEqualTo(String.valueOf(expectedRouteId));
     }
     if (StringUtils.isNotBlank(expectedDriverName)) {
-      assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""),
-          driver.getText().replaceAll(" ", ""));
+      Assertions.assertThat(expectedDriverName.replaceAll(" ", "")).
+          as("Driver Name").isEqualTo(
+              driver.getText().replaceAll(" ", ""));
     }
     if (StringUtils.isNotBlank(expectedHubName)) {
-      assertEquals("Hub Name", expectedHubName, hub.getText());
+      Assertions.assertThat(hub.getText()).as("Hub Name").isEqualTo(expectedHubName);
     }
     if (expectedRouteDate != null) {
-      assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), date.getText());
+      Assertions.assertThat(date.getText()).as("Route Date")
+          .isEqualTo(expectedRouteDate.format(DTF_NORMAL_DATE));
     }
     if (expectedScans.getPendingDeliveriesScans() != null) {
       String expectedValue = expectedScans.getPendingDeliveriesScans() + " / " + expectedScans
           .getPendingDeliveriesTotal();
-      assertEquals("Waypoint Performance - Pending Deliveries", expectedValue,
-          pendingDeliveries.getText());
+      Assertions.assertThat(pendingDeliveries.getText())
+          .as("Waypoint Performance - Pending Deliveries").isEqualTo(expectedValue);
     }
     if (expectedScans.getParcelProcessedScans() != null) {
       String expectedValue =
           expectedScans.getParcelProcessedScans() + " / " + expectedScans.getParcelProcessedTotal();
-      assertEquals("Waypoint Performance - Parcel Processed", expectedValue,
-          parcelProcessed.getText());
+      Assertions.assertThat(parcelProcessed.getText()).as("Waypoint Performance - Parcel Processed")
+          .isEqualTo(expectedValue);
     }
     if (expectedScans.getFailedDeliveriesValidScans() != null) {
       String expectedValue = expectedScans.getFailedDeliveriesValidScans() + " / " + expectedScans
           .getFailedDeliveriesValidTotal();
-      assertEquals("Waypoint Performance - Failed Deliveries (Valid)", expectedValue,
-          failedDeliveriesValid.getText());
+      Assertions.assertThat(failedDeliveriesValid.getText())
+          .as("Waypoint Performance - Failed Deliveries (Valid)").isEqualTo(expectedValue);
     }
     if (expectedScans.getFailedDeliveriesInvalidScans() != null) {
       String expectedValue = expectedScans.getFailedDeliveriesInvalidScans() + " / " + expectedScans
           .getFailedDeliveriesInvalidTotal();
-      assertEquals("Waypoint Performance - Failed Deliveries (Valid)", expectedValue,
-          failedDeliveriesInvalid.getText());
+      Assertions.assertThat(failedDeliveriesInvalid.getText())
+          .as("Waypoint Performance - Failed Deliveries (Valid)").isEqualTo(expectedValue);
     }
     if (expectedScans.getC2cReturnPickupsScans() != null) {
       String expectedValue = expectedScans.getC2cReturnPickupsScans() + " / " + expectedScans
           .getC2cReturnPickupsTotal();
-      assertEquals("Waypoint Performance - C2C / Return Pickups", expectedValue,
-          c2cReturnPickups.getText());
+      Assertions.assertThat(c2cReturnPickups.getText())
+          .as("Waypoint Performance - C2C / Return Pickups").isEqualTo(expectedValue);
     }
     if (expectedScans.getReservationPickupsScans() != null) {
       String expectedValue = expectedScans.getReservationPickupsScans() + " / " + expectedScans
@@ -328,8 +333,8 @@ public class RouteInboundPage extends OperatorV2SimplePage {
       if (expectedScans.getReservationPickupsExtraOrders() != null) {
         expectedValue += "  |  +" + expectedScans.getReservationPickupsExtraOrders();
       }
-      assertEquals("Waypoint Performance - Reservation Pickups", expectedValue,
-          reservationPickups.getText());
+      Assertions.assertThat(reservationPickups.getText())
+          .as("Waypoint Performance - Reservation Pickups").isEqualTo(expectedValue);
     }
   }
 
@@ -462,7 +467,8 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   public void validateShippersTable(List<WaypointShipperInfo> expectedShippersInfo) {
     List<WaypointShipperInfo> actualShippersInfo = shippersTable.readAllEntities();
-    assertEquals("Shippers count", expectedShippersInfo.size(), actualShippersInfo.size());
+    Assertions.assertThat(actualShippersInfo.size()).as("Shippers count")
+        .isEqualTo(expectedShippersInfo.size());
 
     for (int i = 0; i < actualShippersInfo.size(); i++) {
       expectedShippersInfo.get(i).compareWithActual(actualShippersInfo.get(i));
@@ -498,20 +504,23 @@ public class RouteInboundPage extends OperatorV2SimplePage {
     Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
 
     if (StringUtils.isNotBlank(status)) {
-      assertThat("Error toast status", toastData.get("status"), equalToIgnoringCase(status));
+      Assertions.assertThat(toastData.get("status")).as("Error toast status")
+          .isEqualToIgnoringCase(status);
     }
 
     if (StringUtils.isNotBlank(url)) {
-      assertThat("Error toast url", toastData.get("url"), equalToIgnoringCase(url));
+      Assertions.assertThat(toastData.get("url")).as("Error toast url")
+          .isEqualToIgnoringCase(url);
     }
 
     if (StringUtils.isNotBlank(errorCode)) {
-      assertThat("Error toast code", toastData.get("errorCode"), equalToIgnoringCase(errorCode));
+      Assertions.assertThat(toastData.get("errorCode")).as("Error toast code")
+          .isEqualToIgnoringCase(errorCode);
     }
 
     if (StringUtils.isNotBlank(errorMessage)) {
-      assertThat("Error toast status", toastData.get("errorMessage"),
-          equalToIgnoringCase(errorMessage));
+      Assertions.assertThat(toastData.get("errorMessage")).as("Error toast status")
+          .isEqualToIgnoringCase(errorMessage);
     }
   }
 

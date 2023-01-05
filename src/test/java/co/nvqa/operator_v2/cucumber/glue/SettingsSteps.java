@@ -1,17 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
-import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.SettingsPage;
-import co.nvqa.operator_v2.selenium.page.StationManagementHomePage;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Veera N

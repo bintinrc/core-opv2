@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -32,8 +34,10 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage {
   public void setTimeBoundedScriptInfo(Script script) {
     clickTabItem(" Time-Bounded Script Info ");
     sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
-    setMdDatepicker("ctrl.data.script.start_date", script.getVersionEffectiveStartDate());
-    setMdDatepicker("ctrl.data.script.end_date", script.getVersionEffectiveEndDate());
+    setMdDatepicker("ctrl.data.script.start_date",
+        StandardTestUtils.convertToZonedDateTime(script.getVersionEffectiveStartDate()));
+    setMdDatepicker("ctrl.data.script.end_date",
+        StandardTestUtils.convertToZonedDateTime(script.getVersionEffectiveEndDate()));
   }
 
   private void setWriteScript(Script script) {
@@ -44,8 +48,8 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage {
     String actualSyntaxInfo = getAttribute(
         "//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]",
         "text");
-    assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.",
-        actualSyntaxInfo);
+    Assertions.assertThat(actualSyntaxInfo).as("Syntax Info")
+        .isEqualTo("No errors found. You may proceed to verify or save the draft.");
   }
 
   private void activateParameters(List<String> activeParameters) {
@@ -83,7 +87,8 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage {
   }
 
   public void verifyScriptIsDeleted(Script script) {
-    assertTrue("Table is not empty. Script is not deleted successfully.", isTableEmpty());
+    Assertions.assertThat(isTableEmpty())
+        .as("Table is not empty. Script is not deleted successfully.").isTrue();
   }
 
   public void selectAction(int actionType) {

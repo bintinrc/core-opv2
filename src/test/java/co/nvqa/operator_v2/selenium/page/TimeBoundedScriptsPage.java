@@ -3,6 +3,9 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +48,18 @@ public class TimeBoundedScriptsPage extends OperatorV2SimplePage {
     String actualChildScriptStatus1 = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS_ON_TABLE);
     String actualChildScriptDuration1 = getTextOnTable(1, COLUMN_CLASS_DATA_DURATION_ON_TABLE);
 
-    String expectedDuration =
-        YYYY_MM_DD_SDF.format(script.getVersionEffectiveStartDate()) + " - " + YYYY_MM_DD_SDF
-            .format(script.getVersionEffectiveEndDate());
+    String startDate = DTF_NORMAL_DATE.format(
+        ZonedDateTime.ofInstant(script.getVersionEffectiveStartDate().toInstant(),
+            ZoneId.systemDefault()));
+    String endDate = DTF_NORMAL_DATE.format(
+        ZonedDateTime.ofInstant(script.getVersionEffectiveStartDate().toInstant(),
+            ZoneId.systemDefault()));
+    String expectedDuration = startDate + " - " + endDate;
 
-    assertEquals("Parent Script Name", parentScript.getName(), actualParentScriptName);
-    assertEquals("Child Script Name 1", script.getName(), actualChildScriptName1);
-    assertEquals("Child Script Status 1", "Active", actualChildScriptStatus1);
-    assertEquals("Child Script Status 1", expectedDuration, actualChildScriptDuration1);
+   Assertions.assertThat(actualParentScriptName).as("Parent Script Name").isEqualTo(parentScript.getName());
+   Assertions.assertThat(actualChildScriptName1).as("Child Script Name 1").isEqualTo(script.getName());
+   Assertions.assertThat(actualChildScriptStatus1).as("Child Script Status 1").isEqualTo("Active");
+   Assertions.assertThat(actualChildScriptDuration1).as("Child Script Status 1").isEqualTo(expectedDuration);
     cancelManageTimeBoundedScripts();
   }
 

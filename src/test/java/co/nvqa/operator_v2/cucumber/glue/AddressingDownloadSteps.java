@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.support.RandomUtil;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddressDownloadFilteringType;
 import co.nvqa.operator_v2.selenium.page.AddressingDownloadPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -73,7 +73,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorCreatesAPresetUsingFilter(String filter) {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
     String presetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+        "AUTO-" + StandardTestConstants.NV_SYSTEM_ID.toUpperCase() + "-" + RandomUtil.randomString(
             7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
@@ -138,7 +138,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
     addressingDownloadPage.selectPresetEditModal.sendKeys(Keys.ENTER);
 
     String newPresetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+        "AUTO-" + StandardTestConstants.NV_SYSTEM_ID.toUpperCase() + "-" + RandomUtil.randomString(
             7);
     pause2s();
     addressingDownloadPage.inputPresetName.sendKeys(newPresetName);
@@ -214,8 +214,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+    if (get(KEY_LIST_OF_CREATED_ORDERS) != null) {
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
       for (Order order : orders) {
         addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
         addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
@@ -258,7 +258,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @Then("Operator verifies that the downloaded csv file details of Address Download is right")
   public void operatorVerifiesThatTheDownloadedCsvFileDetailsOfAddressDownloadIsRight() {
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
     String csvTimestamp = get(KEY_DOWNLOADED_CSV_TIMESTAMP);
 
     addressingDownloadPage.csvDownloadSuccessfullyAndContainsTrackingId(orders, csvTimestamp);
@@ -419,7 +419,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   @And("Operator input the new preset name")
   public void operatorInputTheNewPresetName() {
     String presetName =
-        "AUTO-" + StandardTestConstants.COUNTRY_CODE.toUpperCase() + "-" + RandomUtil.randomString(
+        "AUTO-" + StandardTestConstants.NV_SYSTEM_ID.toUpperCase() + "-" + RandomUtil.randomString(
             7);
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
@@ -448,7 +448,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
         break;
 
       default:
-        assertFalse("Invalid time bracket given.", true);
+       Assertions.assertThat(true).as("Invalid time bracket given.").isFalse();
     }
 
     String[] timeRangePoints = timeRange.split("-");

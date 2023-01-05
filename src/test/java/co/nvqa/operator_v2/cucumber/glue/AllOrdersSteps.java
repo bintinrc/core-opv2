@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
@@ -110,7 +111,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.searchLogicSelect.selectValue(searchLogic.getValue());
     try {
       allOrdersPage.searchTerm.selectValue(searchTerm);
-      fail("Order " + searchTerm + " was found on All Orders page");
+      Assertions.fail("Order " + searchTerm + " was found on All Orders page");
     } catch (NoSuchElementException ex) {
       //passed
     }
@@ -158,16 +159,16 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
     List<Order> listOfCreatedOrder =
         containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS)
-            : get(KEY_LIST_OF_CREATED_ORDER);
+            : get(KEY_LIST_OF_CREATED_ORDERS);
     allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
   }
 
   @When("^Operator uploads CSV that contains invalid Tracking ID on All Orders page$")
   public void operatorUploadsCsvThatContainsInvalidTrackingIdOnAllOrdersPage() {
     List<String> listOfInvalidTrackingId = new ArrayList<>();
-    listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'N');
-    listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'C');
-    listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'R');
+    listOfInvalidTrackingId.add("DUMMY" + StandardTestUtils.generateDateUniqueString() + 'N');
+    listOfInvalidTrackingId.add("DUMMY" + StandardTestUtils.generateDateUniqueString() + 'C');
+    listOfInvalidTrackingId.add("DUMMY" + StandardTestUtils.generateDateUniqueString() + 'R');
 
     allOrdersPage.findOrdersWithCsv(listOfInvalidTrackingId);
     put("listOfInvalidTrackingId", listOfInvalidTrackingId);
@@ -211,8 +212,7 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
-    assertEquals("Number of orders with COD", data.size(),
-        allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size());
+   Assertions.assertThat(        allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size()).as("Number of orders with COD").isEqualTo(data.size());
     for (int i = 0; i < allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size(); i++) {
       String trackingId = allOrdersPage.manuallyCompleteOrderDialog.trackingIds.get(i)
           .getNormalizedText();
@@ -246,7 +246,7 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator verifies error messages in dialog on All Orders page:$")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);
-    assertTrue("Errors dialog is displayed", allOrdersPage.errorsDialog.waitUntilVisible(5));
+   Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5)).as("Errors dialog is displayed").isTrue();
     List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
         .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
             .replaceAll("^\\d{1,2}\\.", ""))
@@ -353,8 +353,7 @@ public class AllOrdersSteps extends AbstractSteps {
       orderData = resolveKeyValues(orderData);
       String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
       String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
-      assertEquals(f("Route Id for %s order", trackingId), expectedRouteId,
-          allOrdersPage.addToRouteDialog.getRouteId(trackingId));
+     Assertions.assertThat(          allOrdersPage.addToRouteDialog.getRouteId(trackingId)).as(f("Route Id for %s order", trackingId)).isEqualTo(expectedRouteId);
     });
   }
 

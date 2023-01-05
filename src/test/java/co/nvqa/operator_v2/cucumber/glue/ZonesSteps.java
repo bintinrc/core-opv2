@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -18,7 +18,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
@@ -40,6 +41,7 @@ public class ZonesSteps extends AbstractSteps {
 
   private static final String RTS = "RTS";
   private static final String NORMAL = "normal";
+  private static final Logger LOGGER = LoggerFactory.getLogger(ZonesSteps.class);
 
   public ZonesSteps() {
   }
@@ -83,9 +85,9 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.inFrame(page -> {
       String actualRtsValue = zonesPage.zonesTable.readEntity(1).getType();
       if (RTS.equalsIgnoreCase(zoneType)) {
-        assertEquals("Zone Type is right", RTS, actualRtsValue);
+       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo(RTS);
       } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-        assertEquals("Zone Type is right", "STANDARD", actualRtsValue);
+       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo("STANDARD");
       }
       takesScreenshot();
     });
@@ -218,38 +220,32 @@ public class ZonesSteps extends AbstractSteps {
 
       zonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
       List<String> values = zonesPage.zonesTable.readColumn(COLUMN_ID);
-      assertThat("ID filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+     Assertions.assertThat(values).as("ID filter results").allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
       values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
-      assertThat("Short Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getShortName())));
+     Assertions.assertThat(values).as("Short Name filter results").allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
-      assertThat("Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getName())));
+     Assertions.assertThat(values).as("Name filter results").allMatch(value -> value.contains(zone.getName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
-      assertThat("Hub Name filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+     Assertions.assertThat(values).as("Hub Name filter results").allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
       values = zonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
-      assertThat("Latitude/Longitude filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+     Assertions.assertThat(values).as("Latitude/Longitude filter results").allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
       values = zonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
-      assertThat("Description filter results", values,
-          Matchers.everyItem(Matchers.containsString(zone.getHubName())));
+     Assertions.assertThat(values).as("Description filter results").allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
@@ -318,13 +314,13 @@ public class ZonesSteps extends AbstractSteps {
   @Then("^Operator verify count of selected zones is (\\d+) on View Selected Polygons page$")
   public void operatorVerifyCountOfSelectedZonesIsOnViewSelectedPolygonsPage(int countOfZones) {
     zonesSelectedPolygonsPage.inFrame(() ->
-        assertEquals("Count of selected zones",
-            countOfZones, zonesSelectedPolygonsPage.zonesPanel.zones.size())
+        Assertions.assertThat(zonesSelectedPolygonsPage.zonesPanel.zones.size())
+            .as("Count of selected zones").isEqualTo(countOfZones)
     );
   }
 
   private void operatorCreateNewZone(String hubName, boolean isRts) {
-    String uniqueCode = generateDateUniqueString();
+    String uniqueCode = StandardTestUtils.generateDateUniqueString();
     long uniqueCoordinate = System.currentTimeMillis();
 
     Zone zone = new Zone();
@@ -389,10 +385,10 @@ public class ZonesSteps extends AbstractSteps {
     // Retry mechanism in case the KML file is not correctly read (a.k.a. vertex = 0)
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       if (zonesSelectedPolygonsPage.sideToolbar.isDisplayed()) {
-        NvAssertions.LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
+        LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
         backToPreviousPage();
       } else {
-        NvAssertions.LOGGER.info("Refreshing on main page...");
+        LOGGER.info("Refreshing on main page...");
         zonesPage.refreshPage_v1();
       }
       zonesPageIsLoaded();

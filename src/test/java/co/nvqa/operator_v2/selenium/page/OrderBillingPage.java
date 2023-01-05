@@ -3,7 +3,8 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import java.io.File;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -50,11 +51,11 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void selectStartDate(Date startDate) {
+  public void selectStartDate(ZonedDateTime startDate) {
     setMdDatepicker(FILTER_START_DATE_MDDATEPICKERNGMODEL, startDate);
   }
 
-  public void selectEndDate(Date endDate) {
+  public void selectEndDate(ZonedDateTime endDate) {
     setMdDatepicker(FILTER_END_DATE_MDDATEPICKERNGMODEL, endDate);
   }
 
@@ -94,8 +95,8 @@ public class OrderBillingPage extends OperatorV2SimplePage {
   public void uploadCsvShippersAndVerifySuccessMsg(String shipperIds, File csvFile) {
     int countOfShipperIds = shipperIds.split(",").length;
     uploadCsvShippers(csvFile);
-    assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),
-        getToastTopText());
+    Assertions.assertThat(getToastTopText()).as("Check toast top text")
+        .isEqualTo(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds));
   }
 
   public void uploadCsvShippers(File csvFile) {

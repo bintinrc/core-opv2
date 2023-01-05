@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
 import co.nvqa.commons.model.dp.dp_user.User;
@@ -7,7 +8,7 @@ import co.nvqa.commons.model.dp.persisted_classes.AuditMetadata;
 import co.nvqa.commons.model.dp.persisted_classes.DpOpeningHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpOperatingHour;
 import co.nvqa.commons.model.dp.persisted_classes.DpSetting;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -28,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,8 +223,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
-            createDefaultTokens());
+    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {
@@ -246,8 +246,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     }
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
-            createDefaultTokens());
+    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {
@@ -267,8 +267,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpUser dpUser = dpAdminReactPage.convertUserToDpUser(user);
 
     searchDetailsAsMap = resolveKeyValues(searchDetailsAsMap);
-    String searchDetailsData = replaceTokens(searchDetailsAsMap.get("searchDetails"),
-            createDefaultTokens());
+    String searchDetailsData = StandardTestUtils.replaceTokens(searchDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {
@@ -341,16 +341,12 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator press submit user button")
   public void operatorPressSubmitUserButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSubmitDpUser.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSubmitDpUser.click());
   }
 
   @Then("Operator press submit edit user button")
   public void operatorPressSubmitEditUserButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSubmitEditDpUser.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSubmitEditDpUser.click());
   }
 
   @Then("Operator will get the error message that the username is duplicate")
@@ -415,24 +411,18 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorFillDpPartnerDetailsForErrorChecking(String errorCheckKey) {
     Partner partner = errorValueInitialize(errorCheckKey);
 
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.errorCheckDpPartner(partner, errorCheckKey);
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.errorCheckDpPartner(partner, errorCheckKey));
   }
 
   @Then("Operator Fill Dp User Details to Check The Error Status with key {string}")
   public void operatorFillDpUserDetailsForErrorChecking(String errorCheckKey) {
 
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.errorCheckDpUser(get(errorCheckKey), errorCheckKey);
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.errorCheckDpUser(get(errorCheckKey), errorCheckKey));
   }
 
   @Then("Operator clear the {string} from DP Partner form")
   public void clearCertainForm(String errorCheckKey) {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.clearDpPartnerForm(errorCheckKey);
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.clearDpPartnerForm(errorCheckKey));
   }
 
   public Partner errorValueInitialize(String errorKey) {
@@ -478,37 +468,27 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator press submit button")
   public void submitDpPartnerButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSubmitPartner.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSubmitPartner.click());
   }
 
   @Then("Operator press edit partner button")
   public void editDpPartnerButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonEditPartner.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonEditPartner.click());
   }
 
   @Then("Operator press submit partner changes button")
   public void submitDpPartnerChangesButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSubmitPartnerChanges.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSubmitPartnerChanges.click());
   }
 
   @Then("The Dp Administration page is displayed")
   public void dpAdminIsDisplayed() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.dpAdminHeader.waitUntilVisible();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.dpAdminHeader.waitUntilVisible());
   }
 
   @Then("The Dp page is displayed")
   public void dpPageIsDisplayed() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.distributionPointHeader.waitUntilVisible();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.distributionPointHeader.waitUntilVisible());
   }
 
   @Then("The Create and Edit Dp page is displayed")
@@ -521,33 +501,25 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator press return to list button")
   public void pressReturnToList() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonReturnToList.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonReturnToList.click());
   }
 
 
   @Then("Operator press leave the page button")
   public void pressLeaveThepage() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonLeaveThePage.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonLeaveThePage.click());
   }
 
   @Then("Operator press save setting button")
   public void pressSaveSetting() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSaveSettings.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSaveSettings.click());
   }
 
   @Then("Operator will receiving error message pop-up {string}")
   public void duplicateDpError(String popUpMsg) {
-    dpAdminReactPage.inFrame(() -> {
-      Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
-              .as(f("Distribution point is Error because of %s", popUpMsg))
-              .containsIgnoringCase(popUpMsg);
-    });
+    dpAdminReactPage.inFrame(() -> Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
+            .as(f("Distribution point is Error because of %s", popUpMsg))
+            .containsIgnoringCase(popUpMsg));
   }
 
 
@@ -588,30 +560,22 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator will get the popup message for alternate DP number {string}")
   public void operatorWillGetPopupMsg(String numberOfDp) {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.popupMsgAlternateDP(numberOfDp);
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.popupMsgAlternateDP(numberOfDp));
   }
 
   @When("Operator press update DP Alternate Button")
   public void operatorPressUpdateDPAlternateButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.elementUpdateDPAlternate.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.elementUpdateDPAlternate.click());
   }
 
   @When("Operator press Select Another DP Alternate Button")
   public void operatorPressSelectAnotherDPAlternateButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.elementSelectAnotherDPAlternate.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.elementSelectAnotherDPAlternate.click());
   }
 
   @When("Operator press cancel choose DP Alternate Button")
   public void operatorPressCancelChooseDPAlternateButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.elementCancelDPAlternate.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.elementCancelDPAlternate.click());
   }
 
   @Then("Operator get the value of DP ID")
@@ -623,9 +587,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator press edit DP button")
   public void operatorPressEditDpButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonDpEdit.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonDpEdit.click());
   }
 
   @Then("Operator check the alternate DP is shown in DP Edit page")
@@ -681,9 +643,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   @And("Operator check the submitted data in the table")
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
-    dpAdminReactPage.inFrame(page -> {
-      dpAdminReactPage.fillFilterDpPartner("name", partner.getName());
-    });
+    dpAdminReactPage.inFrame(page -> dpAdminReactPage.fillFilterDpPartner("name", partner.getName()));
   }
 
   @And("Operator Search Dp Partners by Id")
@@ -699,23 +659,17 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @And("Operator press view DP Button")
   public void operatorPressViewDpButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonViewDps.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonViewDps.click());
   }
 
   @And("Operator press add user Button")
   public void operatorPressAddUserButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonAddUser.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonAddUser.click());
   }
 
   @And("Operator press edit user Button")
   public void operatorPressEditUserButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonEditUser.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonEditUser.click());
   }
 
 
@@ -1207,45 +1161,33 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator need to make sure that the id and dpms partner id from newly created dp partner is same")
   public void dpPartnerIdDpmsIdChecking() {
     Partner partner = get(KEY_DP_PARTNER);
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.checkingIdAndDpmsId(partner);
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.checkingIdAndDpmsId(partner));
   }
 
   @Then("Operator press reset password button")
   public void pressResetPasswordButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonResetPassword.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonResetPassword.click());
   }
 
   @Then("Operator press back to user edit button")
   public void pressBackToUserEditButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonBackToUserEdit.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonBackToUserEdit.click());
   }
 
   @Then("The Edit Dp User popup is Displayed")
   public void editDpUserIsDisplayed() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.labelEditUserTitle.isDisplayed();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.labelEditUserTitle.isDisplayed());
   }
 
   @Then("Operator press save reset password button")
   public void pressSaveResetPasswordButton() {
-    dpAdminReactPage.inFrame(() -> {
-      dpAdminReactPage.buttonSaveResetPassword.click();
-    });
+    dpAdminReactPage.inFrame(() -> dpAdminReactPage.buttonSaveResetPassword.click());
   }
 
   @Then("Operator will get the error message {string}")
   public void pressSaveResetPasswordButton(String errorMessage) {
-    dpAdminReactPage.inFrame(() -> {
-      Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
-              .as(f("error message '%s' appeared", errorMessage)).isEqualTo(errorMessage);
-    });
+    dpAdminReactPage.inFrame(() -> Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
+            .as(f("error message '%s' appeared", errorMessage)).isEqualTo(errorMessage));
   }
 
 
@@ -1285,9 +1227,10 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorVerifiesTheImageIs(String dpDetails,String status) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
     if ("present".equalsIgnoreCase(status)) {
-      assertNotEquals("dp image status is incorrect", dpDetailsResponse.getDpPhotoFile(), null);
+      Assertions.assertThat(dpDetailsResponse.getDpPhotoFile()).as("dp image status is incorrect")
+          .isNotNull();
     }else{
-      assertEquals("dp image status is incorrect", dpDetailsResponse.getDpPhoto(), null);
+     Assertions.assertThat(dpDetailsResponse.getDpPhoto()).as("dp image status is incorrect").isNull();
     }
 
   }
@@ -1430,8 +1373,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = replaceTokens(searchSDetailsAsMap.get("searchDetails"),
-            createDefaultTokens());
+    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+        StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
     dpAdminReactPage.inFrame(() -> {

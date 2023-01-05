@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -67,7 +68,8 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
 
   public void verifyDetailsTicket(String trackingId) {
     String actualTrackingId = getTextOnTable(1, "trackingId");
-    assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+    Assertions.assertThat(actualTrackingId).as("Ticket with this tracking ID is not created")
+        .isEqualTo(trackingId);
   }
 
   public void clickCreateTicketButton() {
@@ -83,7 +85,7 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
   public void verifyTicketIsNotMade() {
     String actualResult = findElementByXpath(
         "//table/tbody/tr[contains(@ng-if,'ctrl.tickets.length')]/td").getText();
-    assertEquals("Ticket is created", "No created ticket", actualResult);
+    Assertions.assertThat(actualResult).as("Ticket is created").isEqualTo("No created ticket");
   }
 
   public void verifyDialogueAndSave() {

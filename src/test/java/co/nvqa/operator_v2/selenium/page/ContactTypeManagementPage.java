@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -61,13 +62,15 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage {
   public void verifyContactTypeIsExistAndDataIsCorrect(ContactType contactType) {
     ContactType actualContactType = searchContactType(contactType.getName());
     contactType.setId(actualContactType.getId());
-    assertEquals("Contact Type Name", contactType.getName(), actualContactType.getName());
+    Assertions.assertThat(actualContactType.getName()).as("Contact Type Name")
+        .isEqualTo(contactType.getName());
   }
 
   public void updateContactType(String searchContactTypesKeyword, ContactType contactType) {
     searchTable(searchContactTypesKeyword);
-    assertFalse(String.format("Table is empty. Contact Type with keywords = '%s' not found.",
-        searchContactTypesKeyword), isTableEmpty());
+    Assertions.assertThat(isTableEmpty())
+        .as("Table is empty. Contact Type with keywords = '%s' not found.",
+            searchContactTypesKeyword).isFalse();
     clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
 
     Optional.ofNullable(contactType.getName()).ifPresent(value -> sendKeysById("name", value));
@@ -80,8 +83,9 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage {
 
   public void deleteContactType(String searchContactTypesKeyword) {
     searchTable(searchContactTypesKeyword);
-    assertFalse(String.format("Table is empty. Contact Type with keywords = '%s' not found.",
-        searchContactTypesKeyword), isTableEmpty());
+    Assertions.assertThat(isTableEmpty())
+        .as("Table is empty. Contact Type with keywords = '%s' not found.",
+            searchContactTypesKeyword).isFalse();
     clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
     confirmDeleteDialog.confirmDelete();
     pause1s();
@@ -96,8 +100,9 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage {
 
   public ContactType searchContactType(String searchContactTypesKeyword) {
     searchTable(searchContactTypesKeyword);
-    assertFalse(String.format("Table is empty. Contact type with keywords = '%s' not found.",
-        searchContactTypesKeyword), isTableEmpty());
+    Assertions.assertThat(isTableEmpty())
+        .as("Table is empty. Contact type with keywords = '%s' not found.",
+            searchContactTypesKeyword).isFalse();
 
     String id = getTextOnTable(1, COLUMN_DATA_TITLE_ID);
     String actualName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);

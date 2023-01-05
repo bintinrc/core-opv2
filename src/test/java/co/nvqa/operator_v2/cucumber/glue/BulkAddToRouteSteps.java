@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.selenium.page.BulkAddToRoutePage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -47,6 +48,7 @@ public class BulkAddToRouteSteps extends AbstractSteps {
         expectedTrackingId);
     takesScreenshot();
     WebElement actualTrackingId = bulkAddToRoutePage.findElementByXpath(xpath);
-    assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());
+    Assertions.assertThat(actualTrackingId.getText()).as("Order did not added to route.")
+        .isEqualTo(expectedTrackingId);
   }
 }

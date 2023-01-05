@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Address;
+import co.nvqa.common.model.address.Address;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV2Page;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -9,7 +10,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,13 +74,13 @@ public class OrderCreationV2Steps extends AbstractSteps {
     String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template");
 
     String scenarioName = getScenarioManager().getCurrentScenario().getName();
-    Date currentDate = new Date();
+    ZonedDateTime currentDate = ZonedDateTime.now();
 
     Map<String, String> mapOfDynamicVariable = new HashMap<>();
-    mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(currentDate));
+    mapOfDynamicVariable.put("cur_date", DTF_CREATED_DATE.format(currentDate));
     mapOfDynamicVariable.put("shipper_id", String.valueOf(shipperV2OrV3Id));
 
-    orderCreationV2TemplateAsJsonString = replaceTokens(orderCreationV2TemplateAsJsonString,
+    orderCreationV2TemplateAsJsonString = StandardTestUtils.replaceTokens(orderCreationV2TemplateAsJsonString,
         mapOfDynamicVariable);
     OrderCreationV2Template order = fromJsonSnakeCase(orderCreationV2TemplateAsJsonString,
         OrderCreationV2Template.class);
@@ -109,8 +110,8 @@ public class OrderCreationV2Steps extends AbstractSteps {
       toName = f("S-R-%s Shipper", trackingRefNo);
     }
 
-    Address fromAddress = generateAddress("RANDOM");
-    Address toAddress = generateAddress("RANDOM");
+    Address fromAddress = StandardTestUtils.generateAddress("RANDOM");
+    Address toAddress = StandardTestUtils.generateAddress("RANDOM");
 
     order.setOrderNo(trackingRefNo);
     order.setShipperOrderNo("SORN-" + trackingRefNo);
@@ -129,10 +130,10 @@ public class OrderCreationV2Steps extends AbstractSteps {
     order.setDeliveryWeekend(true);
     order.setPickupInstruction(
         f("This order's pickup instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.",
-            CREATED_DATE_SDF.format(currentDate), scenarioName));
+            DTF_CREATED_DATE.format(currentDate), scenarioName));
     order.setDeliveryInstruction(
         f("This order's delivery instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.",
-            CREATED_DATE_SDF.format(currentDate), scenarioName));
+            DTF_CREATED_DATE.format(currentDate), scenarioName));
     order.setCodValue(0.0);
     order.setInsuredValue(0.0);
     order.setFromFirstName(fromName);

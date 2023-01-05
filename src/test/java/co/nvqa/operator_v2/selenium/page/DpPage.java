@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -28,7 +29,7 @@ public class DpPage extends OperatorV2SimplePage {
   public static final String DP_USER_USERNAME_COL = "Username";
   public static final String DP_USER_CONTACT_NO_COL = "Contact";
 
-  private static final Map<String, String> BTN_NAME_FILENAME = new HashMap<String, String>() {
+  private static final Map<String, String> BTN_NAME_FILENAME = new HashMap<>() {
     {
       put("dp-partners", "dp-partners.csv");
       put("dps", "dps.csv");
@@ -64,7 +65,7 @@ public class DpPage extends OperatorV2SimplePage {
     while (!isFileExists && counter < MAX_RETRY);
 
     TestUtils.deleteFile(pathname);
-    assertTrue(pathname + " not exist.", isFileExists);
+    Assertions.assertThat(isFileExists).as(pathname + " not exist.").isTrue();
   }
 
   public void search(String type) {

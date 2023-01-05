@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.common.utils.JsonUtils;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.selenium.page.ShipmentLinehaulPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -73,8 +73,8 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
 
     WebElement toast = shipmentLinehaulPage.getToast();
     String toastMessage = toast.getText();
-    assertTrue("Toast message does not contain: linehaul <LINEHAUL_ID> created",
-        toastMessage.contains("Linehaul") && toastMessage.contains("created"));
+    Assertions.assertThat(toastMessage.contains("Linehaul") && toastMessage.contains("created"))
+        .as("Toast message does not contain: linehaul <LINEHAUL_ID> created").isTrue();
     linehaulId = toast.getText().split(" ")[1];
     shipmentLinehaulPage.waitUntilInvisibilityOfToast("created", false);
   }
@@ -106,7 +106,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
       }
     }
 
-    assertTrue("Linehaul does not exist.", isExist);
+    Assertions.assertThat(isExist).as("Linehaul does not exist.").isTrue();
     pause3s();
   }
 
@@ -142,7 +142,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
 
   private void fillLinehaulForm(Map<String, String> arg1) {
     pause3s();
-    linehaul = JsonHelper.mapToObject(arg1, Linehaul.class);
+    linehaul = JsonUtils.fromMapCamelCase(arg1, Linehaul.class);
     linehaul.setComment(linehaul.getComment() + " " + CREATED_DATE_SDF.format(new Date()));
     shipmentLinehaulPage.fillLinehaulNameFT(linehaul.getName());
     shipmentLinehaulPage.fillCommentsFT(linehaul.getComment());
@@ -155,13 +155,10 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
   public void linehaulDeleted() {
     String msg = "Success delete Linehaul ID " + linehaulId;
     WebElement toast = shipmentLinehaulPage.getToast();
-
-    if (toast == null) {
-      fail("Cannot find toast message.");
-    } else {
-      assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), containsString(msg));
-      shipmentLinehaulPage.waitUntilInvisibilityOfToast("Success delete Linehaul ID", false);
-    }
+    Assertions.assertThat(toast).as("Check toast message").isNotNull();
+    Assertions.assertThat(toast.getText()).as(f("Toast message not contains: '%s'", msg))
+        .contains(msg);
+    shipmentLinehaulPage.waitUntilInvisibilityOfToast("Success delete Linehaul ID", false);
   }
 
   @Then("^linehaul edited$")
@@ -169,13 +166,10 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
     String msg = "Linehaul " + linehaulId + " updated";
     WebElement toast = shipmentLinehaulPage.getToast();
 
-    if (toast == null) {
-      fail("Cannot find toast message.");
-    } else {
-      assertThat(f("Toast message not contains: '%s'", msg), toast.getText(),
-          Matchers.containsString(msg));
-      shipmentLinehaulPage.waitUntilInvisibilityOfToast("updated");
-    }
+    Assertions.assertThat(toast).as("Check toast message").isNotNull();
+    Assertions.assertThat(toast.getText()).as(f("Toast message not contains: '%s'", msg))
+        .contains(msg);
+    shipmentLinehaulPage.waitUntilInvisibilityOfToast("updated");
 
     shipmentLinehaulPage.clickTab("LINEHAUL DATE");
     linehaulExist();
@@ -183,9 +177,9 @@ public class ShipmentLinehaulSteps extends AbstractSteps {
 
     for (Linehaul item : list) {
       if (item.getId().equals(linehaulId)) {
-        assertEquals("Linehaul name", linehaul.getName(), item.getName());
-        assertEquals("Linehaul frequency", linehaul.getFrequency().toLowerCase(),
-            item.getFrequency().toLowerCase());
+        Assertions.assertThat(item.getName()).as("Linehaul name").isEqualTo(linehaul.getName());
+        Assertions.assertThat(item.getFrequency().toLowerCase()).as("Linehaul frequency")
+            .isEqualTo(linehaul.getFrequency().toLowerCase());
         break;
       }
     }

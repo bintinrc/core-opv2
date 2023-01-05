@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.QrCodePrintingPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,7 +24,7 @@ public class QrCodePrintingSteps extends AbstractSteps {
 
   @When("^Operator create QR Code from random text on QRCode Printing page$")
   public void operatorCreateQrCodeFromRandomTextOnQrCodePrintingPage() {
-    String qrCodeText = "AUTOM" + generateDateUniqueString();
+    String qrCodeText = "AUTOM" + StandardTestUtils.generateDateUniqueString();
     qrCodePrintingPage.generateQrCode(qrCodeText);
     put("qrCodeText", qrCodeText);
   }

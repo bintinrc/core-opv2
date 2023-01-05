@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,17 +115,20 @@ public class PathManagementSteps extends AbstractSteps {
   }
 
   @And("Operator verify path data from {string} {string} {string} appear in path table")
-  public void operatorVerifyPathDataAppearInPathTable(String originHub, String arrow, String destinationHub) {
+  public void operatorVerifyPathDataAppearInPathTable(String originHub, String arrow,
+      String destinationHub) {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
     List<String> passedHub = Arrays.asList(resolvedOriginHub, resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub, arrow);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub,
+            arrow);
   }
 
   @And("Operator verify path data from {string} {string} {string} appear in path table with following transit hubs:")
-  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,String arrow,
-                                                                              String destinationHubName, List<String> transitHubs) {
+  public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName,
+      String arrow,
+      String destinationHubName, List<String> transitHubs) {
     String resolvedOriginHub = resolveValue(originHubName);
     String resolvedDestinationHub = resolveValue(destinationHubName);
     List<String> resolvedTransitHubs = new ArrayList<>();
@@ -137,7 +140,8 @@ public class PathManagementSteps extends AbstractSteps {
     passedHubs.addAll(resolvedTransitHubs);
     passedHubs.add(resolvedDestinationHub);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs, arrow);
+        .verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs,
+            arrow);
   }
 
   @When("Operator click {string} hyperlink button")
@@ -275,7 +279,7 @@ public class PathManagementSteps extends AbstractSteps {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     String originHubName = resolvedMapOfData.get("originHubName");
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
-    String path = originHubName + " " + resolvedMapOfData.get("path") + " " +destinationHubName;
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " " + destinationHubName;
     pathManagementPage.verifyCreatedPathDetail(path, null);
   }
 
@@ -287,9 +291,9 @@ public class PathManagementSteps extends AbstractSteps {
     String destinationHubName = resolvedMapOfData.get("destinationHubName");
     String transitHubName = resolvedMapOfData.get("transitHubName");
 
-    String path = originHubName + " "+resolvedMapOfData.get("path")+" ";
+    String path = originHubName + " " + resolvedMapOfData.get("path") + " ";
     if (transitHubName != null) {
-      path += transitHubName + " "+resolvedMapOfData.get("path")+" ";
+      path += transitHubName + " " + resolvedMapOfData.get("path") + " ";
     }
     path += destinationHubName;
 
@@ -333,7 +337,8 @@ public class PathManagementSteps extends AbstractSteps {
 
     List<String> passedHub = Arrays.asList(originHubName, transitHubName, destinationHubName);
     pathManagementPage
-        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub,resolvedMapOfData.get("path"));
+        .verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub,
+            resolvedMapOfData.get("path"));
   }
 
   @Then("Operator verify it cannot create manual path {string} with data:")
@@ -458,7 +463,7 @@ public class PathManagementSteps extends AbstractSteps {
   public void operatorVerifyNoNewPathCreated() {
     Integer actualPathRowsSize = pathManagementPage
         .getElementsCount("//tbody//tr[contains(@class,'ant-table-row')]");
-    assertThat("Path rows size is one", actualPathRowsSize, equalTo(1));
+    Assertions.assertThat(actualPathRowsSize).as("Path rows size is one").isEqualTo(1);
   }
 
   @And("Operator verify no path found from {string} to {string} message is shown in create default path modal")
@@ -467,12 +472,14 @@ public class PathManagementSteps extends AbstractSteps {
     String resolvedOriginHub = resolveValue(originHub);
     String resolvedDestinationHub = resolveValue(destinationHub);
 
-    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage.split("Error Message: ")[1];
+    String actualCreateDefaultPathInfoText = pathManagementPage.notificationMessage.split(
+        "Error Message: ")[1];
     String expectedCreateDefaultPathInfoText = f(
         "No path found between %s (sg) and %s (sg). Please ask your manager to check the schedule.",
         resolvedOriginHub, resolvedDestinationHub);
-    assertThat("Create default path message is equal", actualCreateDefaultPathInfoText.toLowerCase(),
-        equalTo(expectedCreateDefaultPathInfoText.toLowerCase()));
+    Assertions.assertThat(actualCreateDefaultPathInfoText.toLowerCase())
+        .as("Create default path message is equal")
+        .isEqualTo(expectedCreateDefaultPathInfoText.toLowerCase());
   }
 
   @Then("Operator verify {string} error info shown on create default path modal")
@@ -483,22 +490,22 @@ public class PathManagementSteps extends AbstractSteps {
           .getText();
       String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo
           .getText();
-      assertThat("Error origin hub info is equal", actualOriginHubErrorInfo,
-          equalTo(expectedErrorInfoCustom + "Origin Hub"));
-      assertThat("Error destination info is equal", actualDestinationHubErrorInfo,
-          equalTo(expectedErrorInfoCustom + "Destination Hub"));
+      Assertions.assertThat(actualOriginHubErrorInfo).as("Error origin hub info is equal")
+          .isEqualTo(expectedErrorInfoCustom + "Origin Hub");
+      Assertions.assertThat(actualDestinationHubErrorInfo).as("Error destination info is equal")
+          .isEqualTo(expectedErrorInfoCustom + "Destination Hub");
     }
     if ("origin hub".equals(errorField)) {
       String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo
           .getText();
-      assertThat("Error origin hub info is equal", actualOriginHubErrorInfo,
-          equalTo(expectedErrorInfoCustom + "Origin Hub"));
+      Assertions.assertThat(actualOriginHubErrorInfo).as("Error origin hub info is equal")
+          .isEqualTo(expectedErrorInfoCustom + "Origin Hub");
     }
     if ("destination hub".equals(errorField)) {
       String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo
           .getText();
-      assertThat("Error destination info is equal", actualDestinationHubErrorInfo,
-          equalTo(expectedErrorInfoCustom + "Destination Hub"));
+      Assertions.assertThat(actualDestinationHubErrorInfo).as("Error destination info is equal")
+          .isEqualTo(expectedErrorInfoCustom + "Destination Hub");
     }
   }
 

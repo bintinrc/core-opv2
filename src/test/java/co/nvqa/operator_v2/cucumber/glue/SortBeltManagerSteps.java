@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.sort.sort_belt_manager.LogicForm;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage;
 import co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.ArmCombinationContainer;
+import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
@@ -51,8 +50,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @When("Operator selects hub and device of Sort Belt Manager")
   public void operatorSelectsHubAndDeviceOfSortBeltManager() {
-    String hub = StandardTestConstants.SORT_BELT_MANAGER_HUB;
-    String device = StandardTestConstants.SORT_BELT_MANAGER_DEVICE;
+    String hub = TestConstants.SORT_BELT_MANAGER_HUB;
+    String device = TestConstants.SORT_BELT_MANAGER_DEVICE;
     operatorSelectsHubAndDeviceOfSortBeltManager(hub, device);
   }
 
@@ -135,7 +134,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void operatorSearchLogicInSortBeltManagerPage(String selection) {
     String createdLogicName;
     if (selection.equals("default")) {
-      createdLogicName = StandardTestConstants.SORT_BELT_MANAGER_DEFAULT_LOGIC;
+      createdLogicName = TestConstants.SORT_BELT_MANAGER_DEFAULT_LOGIC;
     } else {
       createdLogicName = ((LogicForm) get(KEY_SBM_CREATED_LOGIC_FORM)).getName();
     }
@@ -437,14 +436,14 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void operatorVerifyArmEnabled(String armName) {
     armName = resolveValue(armName);
     ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    assertTrue(armName + " is enabled", container.enable.isEnabled());
+    Assertions.assertThat(container.enable.isEnabled()).as(armName + " is enabled").isTrue();
   }
 
   @Given("Operator verify {string} arm is disabled on Create Configuration page")
   public void operatorVerifyArmDisabled(String armName) {
     armName = resolveValue(armName);
     ArmCombinationContainer container = sortBeltManagerPage.getArmCombinationContainer(armName);
-    assertFalse(armName + " is enabled", container.enable.isEnabled());
+    Assertions.assertThat(container.enable.isEnabled()).as(armName + " is enabled").isFalse();
   }
 
   @Given("Operator remove {int} combination for {string}")
@@ -484,7 +483,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
     List<ArmCombination> actualList = sortBeltManagerPage.duplicatedCombinationsTable
         .readAllEntities();
-    assertThat("List of duplicated arm combinations", actualList, Matchers.hasSize(1));
+    Assertions.assertThat(actualList).as("List of duplicated arm combinations").hasSize(1);
     expectedCombination.compareWithActual(actualList.get(0));
   }
 
@@ -495,7 +494,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
     List<ArmCombination> actualList = sortBeltManagerPage.uniqueCombinationsTable
         .readAllEntities();
-    assertThat("List of unique arm combinations", actualList, Matchers.hasSize(1));
+    Assertions.assertThat(actualList).as("List of unique arm combinations").hasSize(1);
     expectedCombination.compareWithActual(actualList.get(0));
   }
 
@@ -503,7 +502,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
   public void makeSureUniqueCombinationsIsAppears(List<Map<String, String>> data) {
     List<ArmCombination> actualList = sortBeltManagerPage.uniqueCombinationsTable
         .readAllEntities();
-    assertThat("List of unique arm combinations", actualList, Matchers.hasSize(data.size()));
+    Assertions.assertThat(actualList).as("List of unique arm combinations").hasSize(data.size());
     data.forEach(map -> {
       ArmCombination expectedCombination = new ArmCombination(resolveKeyValues(map));
       boolean found = actualList.stream().anyMatch(actual -> {
@@ -514,20 +513,21 @@ public class SortBeltManagerSteps extends AbstractSteps {
           return false;
         }
       });
-     Assertions.assertThat(found).as(f("Not found unique arm combination " + expectedCombination.toMap())).isTrue();
+      Assertions.assertThat(found)
+          .as(f("Not found unique arm combination " + expectedCombination.toMap())).isTrue();
     });
   }
 
   @When("^Operator verify there are no result under Duplicate Combination table$")
   public void makeSureThereAreNoDuplicateCombinations() {
-    assertTrue("Duplicate Combination table is empty",
-        sortBeltManagerPage.duplicatedCombinationsTable.isEmpty());
+    Assertions.assertThat(sortBeltManagerPage.duplicatedCombinationsTable.isEmpty())
+        .as("Duplicate Combination table is empty").isTrue();
   }
 
   @When("^Operator verify there are no result under Unique Combination table$")
   public void makeSureThereAreNoUniqueCombinations() {
-    assertTrue("Unique Combination table is empty",
-        sortBeltManagerPage.uniqueCombinationsTable.isEmpty());
+    Assertions.assertThat(sortBeltManagerPage.uniqueCombinationsTable.isEmpty())
+        .as("Unique Combination table is empty").isTrue();
   }
 
   @When("^Operator verifies that \"(.+)\" success notification is displayed$")
@@ -540,8 +540,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @When("Operator verifies Unassigned Parcel Arm is {string} on Sort Belt Manager page")
   public void verifyUnassignedParcelArmValue(String expected) {
-    assertEquals("Unassigned Parcel Arm", expected,
-        sortBeltManagerPage.unassignedParcelArm.getText());
+    Assertions.assertThat(sortBeltManagerPage.unassignedParcelArm.getText())
+        .as("Unassigned Parcel Arm").isEqualTo(expected);
   }
 
   @When("^Operator click Edit Configuration button on Sort Belt Manager page$")
@@ -578,22 +578,24 @@ public class SortBeltManagerSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String value = data.get("Destination Hub");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Destination Hub", value,
-          sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Destination Hub"));
+      Assertions.assertThat(
+              sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Destination Hub"))
+          .as("Destination Hub").isEqualTo(value);
     }
     value = data.get("Order Tag");
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Order Tag", value,
-          sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Order Tag"));
+      Assertions.assertThat(
+              sortBeltManagerPage.changeUnassignedParcelArmModal.getFilterValue("Order Tag"))
+          .as("Order Tag").isEqualTo(value);
     }
   }
 
   @When("Operator verifies {string} message is displayed in Change Unassigned Parcel Arm modal")
   public void operatorVerifyNoteMessage(String value) {
-    assertTrue("Note message is displayed",
-        sortBeltManagerPage.changeUnassignedParcelArmModal.note.isDisplayedFast());
-    assertEquals("Note message", value,
-        sortBeltManagerPage.changeUnassignedParcelArmModal.note.getText());
+    Assertions.assertThat(sortBeltManagerPage.changeUnassignedParcelArmModal.note.isDisplayedFast())
+        .as("Note message is displayed").isTrue();
+    Assertions.assertThat(sortBeltManagerPage.changeUnassignedParcelArmModal.note.getText())
+        .as("Note message").isEqualTo(value);
   }
 
   @When("Operator click Confirm button in Change Unassigned Parcel Arm modal")
@@ -621,17 +623,18 @@ public class SortBeltManagerSteps extends AbstractSteps {
     data = resolveKeyValues(data);
     String expected = data.get("activeConfiguration");
     if (StringUtils.isNotBlank(expected)) {
-      assertEquals("Active Configuration", expected, sortBeltManagerPage.getActiveConfiguration());
+      Assertions.assertThat(sortBeltManagerPage.getActiveConfiguration()).as("Active Configuration")
+          .isEqualTo(expected);
     }
     expected = data.get("previousConfiguration");
     if (StringUtils.isNotBlank(expected)) {
-      assertEquals("Previous Configuration", expected,
-          sortBeltManagerPage.getPreviousConfiguration());
+      Assertions.assertThat(sortBeltManagerPage.getPreviousConfiguration())
+          .as("Previous Configuration").isEqualTo(expected);
     }
     expected = data.get("lastChangedAt");
     if (StringUtils.isNotBlank(expected)) {
-      assertThat("Last Changed At", sortBeltManagerPage.getLastChangedAt(),
-          Matchers.startsWith(expected));
+      Assertions.assertThat(sortBeltManagerPage.getLastChangedAt()).as("Last Changed At")
+          .startsWith(expected);
     }
   }
 }

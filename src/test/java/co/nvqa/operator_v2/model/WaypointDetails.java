@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.DataEntity;
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestUtils;
 
 /**
@@ -38,7 +39,7 @@ public class WaypointDetails extends DataEntity<WaypointDetails> {
 
   public void setAddress1(String address1) {
     if ("GENERATED".equalsIgnoreCase(address1)) {
-      this.address1 = TestUtils.generateRandomAddress().getAddress1();
+      this.address1 = StandardTestUtils.generateRandomAddress().getAddress1();
     } else {
       this.address1 = address1;
     }
@@ -50,7 +51,7 @@ public class WaypointDetails extends DataEntity<WaypointDetails> {
 
   public void setAddress2(String address2) {
     if ("GENERATED".equalsIgnoreCase(address2)) {
-      this.address2 = TestUtils.generateRandomAddress().getAddress2();
+      this.address2 = StandardTestUtils.generateRandomAddress().getAddress2();
     } else {
       this.address2 = address2;
     }
@@ -62,7 +63,7 @@ public class WaypointDetails extends DataEntity<WaypointDetails> {
 
   public void setCity(String city) {
     if ("GENERATED".equalsIgnoreCase(city)) {
-      this.city = TestUtils.generateRandomAddress().getCity();
+      this.city = StandardTestUtils.generateRandomAddress().getCity();
     } else {
       this.city = city;
     }
@@ -74,7 +75,7 @@ public class WaypointDetails extends DataEntity<WaypointDetails> {
 
   public void setCountry(String country) {
     if ("GENERATED".equalsIgnoreCase(country)) {
-      this.country = TestUtils.generateRandomAddress().getCountry();
+      this.country = StandardTestUtils.generateRandomAddress().getCountry();
     } else {
       this.country = country;
     }
@@ -86,7 +87,7 @@ public class WaypointDetails extends DataEntity<WaypointDetails> {
 
   public void setPostalCode(String postalCode) {
     if ("GENERATED".equalsIgnoreCase(postalCode)) {
-      this.postalCode = TestUtils.generateRandomAddress().getPostcode();
+      this.postalCode = StandardTestUtils.generateRandomAddress().getPostcode();
     } else {
       this.postalCode = postalCode;
     }

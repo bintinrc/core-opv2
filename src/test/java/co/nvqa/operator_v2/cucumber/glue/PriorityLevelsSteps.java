@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.PriorityLevelsPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -40,7 +41,7 @@ public class PriorityLevelsSteps extends AbstractSteps {
             .map(entry -> entry.getKey() + "," + entry.getValue())
             .collect(Collectors.joining("\n"));
     File csvFile = priorityLevelsPage.createFile(
-        f(PriorityLevelsPage.SAMPLE_CSV_RESERVATIONS_FILENAME_PATTERN, generateDateUniqueString()),
+        f(PriorityLevelsPage.SAMPLE_CSV_RESERVATIONS_FILENAME_PATTERN, StandardTestUtils.generateDateUniqueString()),
         csvContent);
     priorityLevelsPage.uploadCsvDialog.uploadFile(csvFile);
   }

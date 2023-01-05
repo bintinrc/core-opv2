@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -309,7 +310,8 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
   public void verifyTicketIsMade(String trackingId) {
     pause1s();
     String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-    assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+    Assertions.assertThat(actualTrackingId).as("Ticket with this tracking ID is not created")
+        .isEqualTo(trackingId);
   }
 
   public void verifyTicketStatus(String expectedStatus) {

@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.CsvUtils;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import java.io.File;
@@ -21,7 +21,8 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
 
   private static final String CSV_LOYALTY_NAME = "loyalty.csv";
   private static final String CSV_LOYALTY_HEADER = "shipper_id,email,shipper_name,onboarded_date,phone_number,parent_shipper_id";
-  public static final String FILE_PATH = String.format("%s/%s", StandardTestConstants.TEMP_DIR, CSV_LOYALTY_NAME);
+  public static final String FILE_PATH = String.format("%s/%s", StandardTestConstants.TEMP_DIR,
+      CSV_LOYALTY_NAME);
   public static final String CSV_FILENAME_PATTERN = "template";
 
   @FindBy(xpath = "//button[descendant::text()='Download Template']")
@@ -65,7 +66,8 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
     uploadFile(csvFile.getAbsolutePath());
   }
 
-  public File addDataToLoyaltyCsv(Shipper shipper, boolean isGenerateContact, String shipperParentId) {
+  public File addDataToLoyaltyCsv(Shipper shipper, boolean isGenerateContact,
+      String shipperParentId) {
     File file = new File(FILE_PATH);
     if (file.exists()) {
       return updateLoyaltyCsv(shipper, isGenerateContact, shipperParentId);
@@ -92,7 +94,8 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
     return new File(FILE_PATH);
   }
 
-  private File updateLoyaltyCsv(Shipper shipper, boolean isGenerateContact, String shipperParentId) {
+  private File updateLoyaltyCsv(Shipper shipper, boolean isGenerateContact,
+      String shipperParentId) {
     List<String[]> content = new ArrayList<>(CsvUtils.readAll(FILE_PATH));
     content.add(convertShipperForLoyalty(shipper, shipperParentId, isGenerateContact));
     CsvUtils.writeNext(content, FILE_PATH);
@@ -112,7 +115,7 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
   public String generatePhoneNumber() {
     String uniqueNumber = String.valueOf(System.currentTimeMillis() / 1000);
     String phoneNUmber = null;
-    switch (StandardTestConstants.COUNTRY_CODE.toUpperCase()) {
+    switch (StandardTestConstants.NV_SYSTEM_ID.toUpperCase()) {
       case "ID":
         phoneNUmber = "812" + StringUtils.right(uniqueNumber, 6);
         break;
@@ -130,7 +133,7 @@ public class LoyaltyCreationPage extends OperatorV2SimplePage {
       inFrame(page -> {
         waitUntilVisibilityOfElementLocated(page.resultMessage.getWebElement());
         Assertions.assertThat(page.resultMessage.isDisplayed()).isTrue();
-        wait2sUntil(()-> page.resultMessage.getText().contains(expectedMsg));
+        wait2sUntil(() -> page.resultMessage.getText().contains(expectedMsg));
         Assertions.assertThat(page.resultMessage.getText()).contains(expectedMsg);
       });
       return true;

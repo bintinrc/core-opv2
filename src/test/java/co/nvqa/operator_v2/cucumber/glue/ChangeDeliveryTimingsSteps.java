@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -41,8 +42,9 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
   public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(
       Map<String, String> dataTableAsMap) {
     dataTableAsMap = resolveKeyValues(dataTableAsMap);
-    Map<String, String> mapOfTokens = createDefaultTokens();
-    Map<String, String> dataTableAsMapReplaced = replaceDataTableTokens(dataTableAsMap,
+    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
+    Map<String, String> dataTableAsMapReplaced = StandardTestUtils.replaceDataTableTokens(
+        dataTableAsMap,
         mapOfTokens);
 
     String trackingId = dataTableAsMapReplaced.get("trackingId");

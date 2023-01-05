@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.SortAppUser;
 import co.nvqa.operator_v2.selenium.page.SortAppUserManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
@@ -42,7 +43,7 @@ public class SortAppUserManagementSteps extends AbstractSteps {
         sortAppUserManagementPage.fillUsername(get(KEY_EXISTED_SORT_APP_USERNAME));
         put(KeyConstants.KEY_IS_INVALID, true);
       } else if ("RANDOM".equalsIgnoreCase(sortAppUser.getUsername())) {
-        String username = "AUTO" + generateRequestedTrackingNumber();
+        String username = "AUTO" + StandardTestUtils.generateRequestedTrackingNumber();
         sortAppUser.setUsername(username);
         sortAppUserManagementPage.fillUsername(username);
         put(KeyConstants.KEY_IS_INVALID, false);
@@ -87,7 +88,7 @@ public class SortAppUserManagementSteps extends AbstractSteps {
       sortAppUserManagementPage.fillContact(sortAppUser.getContact());
 
       if ("RANDOM".equalsIgnoreCase(sortAppUser.getUsername())) {
-        sortAppUserManagementPage.fillUsername("AUTO" + generateRequestedTrackingNumber());
+        sortAppUserManagementPage.fillUsername("AUTO" + StandardTestUtils.generateRequestedTrackingNumber());
       }
 
       sortAppUserManagementPage.fillPassword(sortAppUser.getPassword());
@@ -125,9 +126,7 @@ public class SortAppUserManagementSteps extends AbstractSteps {
     } else {
       List<SortAppUser> sortAppUsersToList = get(KEY_LIST_OF_CREATED_SORT_APP_DETAILS);
       for (SortAppUser sortAppUser : sortAppUsersToList) {
-        int index = 0;
         sortAppUserManagementPage.checkTheSortAppUserIsCreated(sortAppUser);
-        index++;
       }
     }
   }

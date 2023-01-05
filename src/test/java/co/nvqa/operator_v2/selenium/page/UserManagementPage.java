@@ -13,7 +13,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -58,7 +58,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
     addUserModal.firstName.setValue(userManagement.getFirstName());
     addUserModal.lastName.setValue(userManagement.getLastName());
     addUserModal.email.setValue(userManagement.getEmail());
-    addUserModal.countryAuthentication.selectValue(TestConstants.COUNTRY_CODE.toLowerCase());
+    addUserModal.countryAuthentication.selectValue(TestConstants.NV_SYSTEM_ID.toLowerCase());
     addUserModal.role.selectValue(userManagement.getRoles());
     addUserModal.addUser.clickAndWaitUntilDone();
     addUserModal.waitUntilInvisible();
@@ -69,11 +69,14 @@ public class UserManagementPage extends OperatorV2SimplePage {
     searchKeywordInput.setValue(userManagement.getEmail());
     loadSelectedUsers.clickAndWaitUntilDone();
     UserManagement actualUserManagement = usersTable.readEntity(1);
-    assertEquals("Grant Type", userManagement.getGrantType(), actualUserManagement.getGrantType());
-    assertEquals("First Name", userManagement.getFirstName(), actualUserManagement.getFirstName());
-    assertEquals("Last Name", userManagement.getLastName(), actualUserManagement.getLastName());
-    assertThat("Roles", actualUserManagement.getRoles(),
-        Matchers.containsString(userManagement.getRoles()));
+    Assertions.assertThat(actualUserManagement.getGrantType()).as("Grant Type")
+        .isEqualTo(userManagement.getGrantType());
+    Assertions.assertThat(actualUserManagement.getFirstName()).as("First Name")
+        .isEqualTo(userManagement.getFirstName());
+    Assertions.assertThat(actualUserManagement.getLastName()).as("Last Name")
+        .isEqualTo(userManagement.getLastName());
+    Assertions.assertThat(actualUserManagement.getRoles()).as("Roles")
+        .contains(userManagement.getRoles());
   }
 
   public void editUser(UserManagement userManagement, UserManagement userManagementEdited) {
@@ -82,7 +85,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
     usersTable.clickActionButton(1, "Edit");
     editUserModal.waitUntilVisible();
     editUserModal.remove.click();
-    editUserModal.countryAuthentication.selectValue(TestConstants.COUNTRY_CODE.toLowerCase());
+    editUserModal.countryAuthentication.selectValue(TestConstants.NV_SYSTEM_ID.toLowerCase());
     editUserModal.role.selectValue(userManagement.getRoles());
     editUserModal.saveUser.clickAndWaitUntilDone();
     editUserModal.waitUntilInvisible();
@@ -98,8 +101,8 @@ public class UserManagementPage extends OperatorV2SimplePage {
   public void verifyGrantType(UserManagement userManagement) {
     List<String> actualGrantTypes = usersTable.readColumn("grantType");
     for (int i = 1; i <= actualGrantTypes.size(); i++) {
-      assertEquals("Grant Type [" + i + "]", userManagement.getGrantType(),
-          actualGrantTypes.get(i - 1));
+      Assertions.assertThat(actualGrantTypes.get(i - 1)).as("Grant Type [" + i + "]")
+          .isEqualTo(userManagement.getGrantType());
     }
   }
 

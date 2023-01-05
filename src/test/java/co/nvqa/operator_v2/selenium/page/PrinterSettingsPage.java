@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -49,7 +50,8 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
   public void verifyAddPrinterFormIsDisplayed() {
     addPrinterDialog.waitUntilVisible();
-    assertTrue("Add Printer Label not Shown", addPrinterDialog.isDisplayed());
+    Assertions.assertThat(addPrinterDialog.isDisplayed()).as("Add Printer Label not Shown")
+        .isTrue();
   }
 
   public void addPrinter(PrinterSettings printerSettings) {
@@ -64,7 +66,8 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
   public void printerSettingWithNameOnDisplay(String name) {
     boolean isExist = isPrinterSettingsDisplayed(name);
-    assertTrue(f("New printer setting with name %s doesn't exist", name), isExist);
+    Assertions.assertThat(isExist).as(f("New printer setting with name %s doesn't exist", name))
+        .isTrue();
   }
 
   public void checkPrinterSettingInfo(int index, PrinterSettings printerSettings) {
@@ -74,7 +77,8 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
 
   public void printerSettingWithNameNotDisplayed(String name) {
     boolean isExist = isPrinterSettingsDisplayed(name);
-    assertFalse(f("Printer Setting with name '%s' still exist.", name), isExist);
+    Assertions.assertThat(isExist).as(f("Printer Setting with name '%s' still exist.", name))
+        .isFalse();
   }
 
   public void deletePrinterSettingWithName(String name) {
@@ -127,7 +131,8 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
         .contains(rowClass, "highlight"));
     String buttonClass = getAttribute(
         "//nv-icon-button[@name='container.printers.column-default']/button", "class");
-    assertTrue("printer icon in dark green", StringUtils.contains(buttonClass, "raised"));
+    Assertions.assertThat(StringUtils.contains(buttonClass, "raised"))
+        .as("printer icon in dark green").isTrue();
   }
 
   public static class AddPrinterDialog extends MdDialog {

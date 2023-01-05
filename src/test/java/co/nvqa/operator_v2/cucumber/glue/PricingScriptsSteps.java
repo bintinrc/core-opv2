@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -8,6 +9,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import java.util.Date;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -30,7 +32,7 @@ public class PricingScriptsSteps extends AbstractSteps {
 
   @When("^Operator create new script on Pricing Scripts page$")
   public void operatorCreateNewScriptOnPricingScriptsPage() {
-    newPricingScriptsName = "Dummy Script #" + generateDateUniqueString();
+    newPricingScriptsName = "Dummy Script #" + StandardTestUtils.generateDateUniqueString();
     pricingScriptsPage.createScript(newPricingScriptsName,
         f("This 'Pricing Script' is created by Operator V2 automation test. Created at %s.",
             new Date()));
@@ -41,7 +43,7 @@ public class PricingScriptsSteps extends AbstractSteps {
     String pricingScriptsNameFromTable = pricingScriptsPage
         .searchAndGetTextOnTable(newPricingScriptsName, 1,
             PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-    assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
+    Assertions.assertThat(pricingScriptsNameFromTable).isEqualTo(newPricingScriptsName);
   }
 
   @When("^Operator update script on Pricing Scripts page$")
@@ -57,7 +59,7 @@ public class PricingScriptsSteps extends AbstractSteps {
     String pricingScriptsNameFromTable = pricingScriptsPage
         .searchAndGetTextOnTable(newPricingScriptsName, 1,
             PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-    assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
+    Assertions.assertThat(pricingScriptsNameFromTable).isEqualTo(newPricingScriptsName);
   }
 
   @When("^Operator delete script on Pricing Scripts page$")
@@ -71,7 +73,7 @@ public class PricingScriptsSteps extends AbstractSteps {
     String pricingScriptsNameFromTable = pricingScriptsPage
         .searchAndGetTextOnTable(newPricingScriptsName, 1,
             PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-    assertEquals(expectedValue, pricingScriptsNameFromTable);
+    Assertions.assertThat(pricingScriptsNameFromTable).isEqualTo(expectedValue);
   }
 
   @Given("^Operator have two default script \"([^\"]*)\" and \"([^\"]*)\"$")
@@ -129,6 +131,7 @@ public class PricingScriptsSteps extends AbstractSteps {
     boolean isPricingScriptsContainShipper = pricingScriptsPage
         .isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
     pricingScriptsPage.clickButtonClose();
-    assertTrue("Pricing Scripts not contain the expected shipper.", isPricingScriptsContainShipper);
+    Assertions.assertThat(isPricingScriptsContainShipper)
+        .as("Pricing Scripts not contain the expected shipper.").isTrue();
   }
 }

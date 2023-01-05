@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.CodInfo;
 import co.nvqa.operator_v2.selenium.page.CodReportPage;
@@ -38,7 +39,8 @@ public class CodReportSteps extends AbstractSteps {
       case "get driver cods for a route day":
         codReportPage.getDriverCodsForARouteDay.click();
     }
-    codReportPage.date.setDate(YYYY_MM_DD_SDF.parse(dateAsString));
+    codReportPage.date.setDate(
+        StandardTestUtils.convertToZonedDateTime(dateAsString, DTF_NORMAL_DATE));
     pause2s();
     codReportPage.waitWhilePageIsLoading();
   }

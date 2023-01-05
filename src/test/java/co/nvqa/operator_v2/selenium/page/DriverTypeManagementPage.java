@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -14,15 +14,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
-import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * Modified by Sergey Mishanin
@@ -88,8 +84,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     NvLogger.info("FILE_NAME = " + fileName);
     List<DriverTypeParams> actualDriverTypeParams = DriverTypeParams.fromCsvFile(pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualDriverTypeParams.size(),
-        greaterThanOrEqualTo(expectedDriverTypeParams.size()));
+    Assertions.assertThat(actualDriverTypeParams.size())
+        .as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(expectedDriverTypeParams.size());
 
     Map<Long, DriverTypeParams> actualMap = actualDriverTypeParams.stream()
         .collect(Collectors.toMap(
@@ -100,15 +97,17 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     for (DriverTypeParams expectedParams : expectedDriverTypeParams) {
       DriverTypeParams actualParams = actualMap.get(expectedParams.getDriverTypeId());
 
-      assertThat("Driver Type with Id", actualParams, notNullValue());
-      assertEquals("Driver Type Name", expectedParams.getDriverTypeName(),
-          actualParams.getDriverTypeName());
-      assertEquals(DELIVERY_TYPE, expectedParams.getDeliveryType(), actualParams.getDeliveryType());
-      assertEquals(PRIORITY_LEVEL, expectedParams.getPriorityLevel(),
-          actualParams.getPriorityLevel());
-      assertEquals(RESERVATION_SIZE, expectedParams.getReservationSize(),
-          actualParams.getReservationSize());
-      assertEquals(PARCEL_SIZE, expectedParams.getParcelSize(), actualParams.getParcelSize());
+      Assertions.assertThat(actualParams).as("Driver Type with Id").isNotNull();
+      Assertions.assertThat(actualParams.getDriverTypeName()).as("Driver Type Name")
+          .isEqualTo(expectedParams.getDriverTypeName());
+      Assertions.assertThat(actualParams.getDeliveryType()).as(DELIVERY_TYPE)
+          .isEqualTo(expectedParams.getDeliveryType());
+      Assertions.assertThat(actualParams.getPriorityLevel()).as(PRIORITY_LEVEL)
+          .isEqualTo(expectedParams.getPriorityLevel());
+      Assertions.assertThat(actualParams.getReservationSize()).as(RESERVATION_SIZE)
+          .isEqualTo(expectedParams.getReservationSize());
+      Assertions.assertThat(actualParams.getParcelSize()).as(PARCEL_SIZE)
+          .isEqualTo(expectedParams.getParcelSize());
     }
   }
 
@@ -118,9 +117,11 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
     filterResults.forEach(driverTypeParams ->
     {
       if (StringUtils.isNotBlank(filterParams.getDeliveryType())) {
-        assertThat(DELIVERY_TYPE,
-            driverTypeParams.getDeliveryTypes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getDeliveryTypes()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getDeliveryTypes()).as(DELIVERY_TYPE)
+            .anySatisfy(deliveryType -> {
+              Assertions.assertThat(deliveryType).isIn(filterParams.getDeliveryTypes());
+              Assertions.assertThat(deliveryType).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getPriorityLevel())) {
         List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item -> {
@@ -129,21 +130,31 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
           }
           return item;
         }).collect(Collectors.toList());
-        assertThat(PRIORITY_LEVEL, driverTypeParams.getPriorityLevels(),
-            anyOf(hasItemsIgnoreCase(expectedItems), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getPriorityLevels()).as(PRIORITY_LEVEL)
+            .anySatisfy(priorityLevel -> {
+              Assertions.assertThat(priorityLevel).isIn(expectedItems);
+              Assertions.assertThat(priorityLevel).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getReservationSize())) {
-        assertThat(RESERVATION_SIZE, driverTypeParams.getReservationSizes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getReservationSizes()),
-                hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getReservationSizes()).as(RESERVATION_SIZE)
+            .anySatisfy(size -> {
+              Assertions.assertThat(size).isIn(filterParams.getReservationSizes());
+              Assertions.assertThat(size).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getParcelSize())) {
-        assertThat(PARCEL_SIZE, driverTypeParams.getParcelSizes(),
-            anyOf(hasItemsIgnoreCase(filterParams.getParcelSizes()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getParcelSizes()).as(PARCEL_SIZE)
+            .anySatisfy(size -> {
+              Assertions.assertThat(size).isIn(filterParams.getParcelSizes());
+              Assertions.assertThat(size).isEqualToIgnoringCase("All");
+            });
       }
       if (StringUtils.isNotBlank(filterParams.getTimeslot())) {
-        assertThat(TIMESLOT, driverTypeParams.getTimeslots(),
-            anyOf(hasItemsIgnoreCase(filterParams.getTimeslots()), hasItemIgnoreCase("All")));
+        Assertions.assertThat(driverTypeParams.getTimeslots()).as(TIMESLOT).anySatisfy(timeslot -> {
+          Assertions.assertThat(timeslot).isIn(filterParams.getTimeslots());
+          Assertions.assertThat(timeslot).isEqualToIgnoringCase("All");
+        });
       }
     });
   }

@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.UploadPaymentsPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
@@ -11,8 +12,6 @@ import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
 
 public class UploadPaymentsSteps extends AbstractSteps {
 
@@ -36,7 +35,7 @@ public class UploadPaymentsSteps extends AbstractSteps {
     List<List<String>> rows = resolveListOfLists(dt.asLists());
     String sb = rows.stream().map(row -> String.join(",", row))
         .collect(Collectors.joining("\n"));
-    File csvFile = createFile(CSV_FILENAME_PATTERN, sb);
+    File csvFile = StandardTestUtils.createFile(CSV_FILENAME_PATTERN, sb);
     uploadPaymentsPage.switchTo();
     uploadPaymentsPage.uploadFile(csvFile);
     LOGGER.info("Path of the created file " + csvFile.getAbsolutePath());

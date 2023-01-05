@@ -1,7 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.model.address.Address;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.UpdateDeliveryAddressWithCsvPage.AddressesTable.COLUMN_VALIDATION;
@@ -58,7 +59,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
   public void operatorUpdateDeliveryAddresses2(List<Map<String, String>> data) {
     List<UpdateDeliveryAddressRecord> records = data.stream()
         .map(map -> {
-          Address address = generateAddress("RANDOM");
+          Address address = StandardTestUtils.generateAddress("RANDOM");
           address.setName("TEST CUSTOMER");
           UpdateDeliveryAddressRecord record = new UpdateDeliveryAddressRecord(address);
           map = resolveKeyValues(map);
@@ -83,7 +84,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
 
     int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-    assertEquals("Number of updated addresses", expected.size(), tableSize);
+    Assertions.assertThat(tableSize).as("Number of updated addresses").isEqualTo(expected.size());
 
     List<UpdateDeliveryAddressRecord> actual = updateDeliveryAddressWithCsvPage.addressesTable
         .readAllEntities();
@@ -105,17 +106,18 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
         map -> resolveValue(map.get("status"))
     ));
     int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-    assertEquals("Number of updated addresses", data.size(), tableSize);
+    Assertions.assertThat(tableSize).as("Number of updated addresses").isEqualTo(data.size());
 
     for (int i = 1; i <= tableSize; i++) {
       String trackingId = updateDeliveryAddressWithCsvPage.addressesTable
           .getColumnText(i, COLUMN_TRACKING_ID);
-      assertTrue("Unexpected Tracking ID " + trackingId, data.containsKey(trackingId));
+      Assertions.assertThat(data.containsKey(trackingId)).as("Unexpected Tracking ID " + trackingId)
+          .isTrue();
       String actualStatus = updateDeliveryAddressWithCsvPage.addressesTable
           .getColumnText(i, COLUMN_VALIDATION);
       String status = data.get(trackingId);
-      assertThat("Validation status for Tracking ID " + trackingId, actualStatus,
-          Matchers.equalToIgnoringCase(status));
+      Assertions.assertThat(actualStatus).as("Validation status for Tracking ID " + trackingId)
+          .isEqualToIgnoringCase(status);
     }
   }
 
@@ -131,9 +133,9 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
   public void operatorVerifyAddressesUpdatedSuccessfully() {
     List<UpdateDeliveryAddressRecord> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
     retryIfAssertionErrorOccurred(
-        () -> assertEquals("Number of updated addresses",
-            f("All %d records updated", addresses.size()),
-            updateDeliveryAddressWithCsvPage.tableDescription.getText()),
+        () -> Assertions.assertThat(updateDeliveryAddressWithCsvPage.tableDescription.getText())
+            .as("Number of updated addresses")
+            .isEqualTo(f("All %d records updated", addresses.size())),
         "Assert Addresses table description after addresses update");
   }
 
@@ -146,7 +148,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
   @And("^Operator verify orders info after address update:$")
   public void apiOperatorVerifyOrdersInfoAfterAddressUpdate(List<String> values) {
     List<String> trackingIds = resolveValues(values);
-    List<Order> orders = get(KEY_LIST_OF_ORDER_DETAILS);
+    List<Order> orders = getList(KEY_LIST_OF_ORDER_DETAILS, Order.class);
     List<UpdateDeliveryAddressRecord> expected = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
     expected = expected.stream().filter(exp -> trackingIds.contains(exp.getTrackingId()))
         .collect(Collectors.toList());
@@ -158,7 +160,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
           .orElseThrow(() -> new AssertionError(
               f("Could not find order with Tracking ID [%s]", record.getTrackingId())));
 
-      UpdateDeliveryAddressRecord actual = new UpdateDeliveryAddressRecord(order.getToAddress());
+      UpdateDeliveryAddressRecord actual = new UpdateDeliveryAddressRecord(getToAddress(order));
       record.compareWithActual(actual, "trackingId");
     });
   }
@@ -172,7 +174,8 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps {
     );
     try {
       File file = TestUtils.createFileOnTempFolder(
-          String.format("update-delivery-address-request_%s.csv", generateDateUniqueString()));
+          String.format("update-delivery-address-request_%s.csv",
+              StandardTestUtils.generateDateUniqueString()));
 
       PrintWriter pw = new PrintWriter(new FileOutputStream(file));
       pw.write("Fill in '-' for non-optional fields that are blank");

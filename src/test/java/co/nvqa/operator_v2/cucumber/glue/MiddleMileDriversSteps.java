@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.hub.Hub;
@@ -147,7 +148,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = generateRequestedTrackingNumber();
+            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
@@ -493,7 +494,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = generateRequestedTrackingNumber();
+            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);

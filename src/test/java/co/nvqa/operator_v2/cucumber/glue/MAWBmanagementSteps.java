@@ -1,13 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.MawbEvent;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestUtils;
-import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage;
 import co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.RecordOffloadModal;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,12 +17,8 @@ import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
-
-
 import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.MAWBmanagementPage.amwbTableModal.COLUMN_MAWB;
-
 
 public class MAWBmanagementSteps extends AbstractSteps {
 

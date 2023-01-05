@@ -1,13 +1,12 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
-import co.nvqa.commons.util.NvSystemProperties;
+import co.nvqa.common.ui.support.CommonUiTestConstants;
 
 /**
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public final class TestConstants extends CommonSeleniumTestConstants {
+public final class TestConstants extends CommonUiTestConstants {
 
   public static final String OPERATOR_PORTAL_BASE_URL;
   public static final String DASH_PORTAL_BASE_URL;
@@ -39,6 +38,11 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final long HUB_ID;
   public static final String HUB_NAME;
 
+  public static String SORT_BELT_MANAGER_DEVICE;
+  public static String SORT_BELT_MANAGER_HUB;
+  public static Integer SORT_BELT_MANAGER_DEVICE_ARMS_COUNT;
+  public static String SORT_BELT_MANAGER_DEFAULT_LOGIC;
+
   public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
   public static final String ADDRESSING_PRESET_NAME;
@@ -54,9 +58,7 @@ public final class TestConstants extends CommonSeleniumTestConstants {
   public static final long IMDA_PICK_BULK_UPDATE_OPV2_DP_2_ID;
 
   static {
-    String apiBase = NvSystemProperties
-        .getString(NV_API_BASE, getString("operator-portal-base-url"));
-    OPERATOR_PORTAL_BASE_URL = apiBase.replace("api", "operatorv2") + "/#";
+    OPERATOR_PORTAL_BASE_URL = NV_API_BASE.replace("api", "operatorv2") + "/#";
     DASH_PORTAL_BASE_URL = getString("dash-portal-base-url");
     OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
     OPERATOR_PORTAL_UID = getString("operator-portal-uid");
@@ -87,6 +89,11 @@ public final class TestConstants extends CommonSeleniumTestConstants {
 
     HUB_ID = getLong("hub-id");
     HUB_NAME = getString("hub-name");
+
+    SORT_BELT_MANAGER_HUB = getString("sbm-hub");
+    SORT_BELT_MANAGER_DEVICE = getString("sbm-device");
+    SORT_BELT_MANAGER_DEVICE_ARMS_COUNT = getInt("sbm-device-arm-count");
+    SORT_BELT_MANAGER_DEFAULT_LOGIC = getString("sbm-default-logic");
 
     ADDRESSING_PRESET_NAME = getString("addressing-preset-name");
     ADDRESSING_SHIPPER_NAME = getString("addressing-shipper-v4-name");

@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
-import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
 import co.nvqa.commons.model.core.Dimension;
@@ -30,8 +29,8 @@ import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.StandardTestConstants;
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
@@ -66,7 +65,6 @@ import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,8 +162,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          assertEquals("Number of jaro scores", 1, jaroScores.size());
-          assertTrue("jaro scores are archived", jaroScores.get(0).getArchived() == 1);
+          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
+          Assertions.assertThat(jaroScores.get(0).getArchived() == 1).as("jaro scores are archived")
+              .isTrue();
         }
       } else {
         fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -190,8 +189,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          assertEquals("Number of jaro scores", 1, jaroScores.size());
-          assertTrue("jaro scores are archived", jaroScores.get(0).getArchived() == 1);
+          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
+          Assertions.assertThat(jaroScores.get(0).getArchived() == 1).as("jaro scores are archived")
+              .isTrue();
         }
       } else {
         fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
@@ -216,7 +216,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          assertEquals("Number of jaro scores", data.size(), jaroScores.size());
+          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores")
+              .isEqualTo(data.size());
           for (int i = 0; i < data.size(); i++) {
             JaroScore expected = new JaroScore(resolveKeyValues(data.get(i)));
             JaroScore actual = jaroScores.get(i);
@@ -328,7 +329,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
-      assertThat("Type contained in orderEvents", orderEventsTypes, hasItem(value));
+      Assertions.assertThat(orderEventsTypes).as("Type contained in orderEvents").contains(value);
     }
   }
 
@@ -350,7 +351,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void operatorVerifyOrderEventExists(Map<String, String> data) {
     OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
     List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
-    DataEntity.assertListContains(orderEvents, expected, "Order event");
+    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -372,14 +373,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           jo.getJSONObject("pickup_start_time").getLong("new_value")), ZoneId.systemDefault());
       LocalTime startTimeExpected = order.getPickupTimeslot().getStartTime();
       String dateExpected = order.getPickupDate();
-      assertEquals("Pickup start date is not as expected in order_events DB record",
-          f("%sT%s", dateExpected, startTimeExpected.toString()), startDateTimeActual.toString());
+      Assertions.assertThat(startDateTimeActual.toString())
+          .as("Pickup start date is not as expected in order_events DB record")
+          .isEqualTo(f("%sT%s", dateExpected, startTimeExpected.toString()));
 
       LocalDateTime endDateTimeActual = LocalDateTime.ofInstant(Instant.ofEpochMilli(
           jo.getJSONObject("pickup_end_time").getLong("new_value")), ZoneId.systemDefault());
       LocalTime endTimeExpected = order.getPickupTimeslot().getEndTime();
-      assertEquals("Pickup end date is not as expected in order_events DB record",
-          f("%sT%s", dateExpected, endTimeExpected.toString()), endDateTimeActual.toString());
+      Assertions.assertThat(endDateTimeActual.toString())
+          .as("Pickup end date is not as expected in order_events DB record")
+          .isEqualTo(f("%sT%s", dateExpected, endTimeExpected.toString()));
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -404,14 +407,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           jo.getJSONObject("delivery_start_time").getLong("new_value")), ZoneId.systemDefault());
       LocalTime startTimeExpected = order.getDeliveryTimeslot().getStartTime();
       String dateExpected = order.getDeliveryDate();
-      assertEquals("Delivery start date is not as expected in order_events DB record",
-          f("%sT%s", dateExpected, startTimeExpected.toString()), startDateTimeActual.toString());
+      Assertions.assertThat(startDateTimeActual.toString())
+          .as("Delivery start date is not as expected in order_events DB record")
+          .isEqualTo(f("%sT%s", dateExpected, startTimeExpected.toString()));
 
       LocalDateTime endDateTimeActual = LocalDateTime.ofInstant(Instant.ofEpochMilli(
           jo.getJSONObject("delivery_end_time").getLong("new_value")), ZoneId.systemDefault());
       LocalTime endTimeExpected = order.getDeliveryTimeslot().getEndTime();
-      assertEquals("Delivery end date is not as expected in order_events DB record",
-          f("%sT%s", dateExpected, endTimeExpected.toString()), endDateTimeActual.toString());
+      Assertions.assertThat(endDateTimeActual.toString())
+          .as("Delivery end date is not as expected in order_events DB record")
+          .isEqualTo(f("%sT%s", dateExpected, endTimeExpected.toString()));
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -429,7 +434,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
+      Assertions.assertThat(theLastOrderEvent.getType()).as("Type")
+          .isEqualTo(Integer.parseInt(value));
     }
   }
 
@@ -465,8 +471,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .orElseThrow(() -> new AssertionError("Delivery transaction not found"));
     TransactionFailureReasonEntity transactionFailureReason = getCoreJdbc()
         .findTransactionFailureReasonByTransactionId(deliveryTransaction.getId());
-    assertEquals("failure_reason_code_id", (long) failureReason.getFailureReasonCodeId(),
-        (long) transactionFailureReason.getFailureReasonCodeId());
+    Assertions.assertThat((long) transactionFailureReason.getFailureReasonCodeId())
+        .as("failure_reason_code_id").isEqualTo((long) failureReason.getFailureReasonCodeId());
   }
 
   @Then("^DB Operator verify Pickup transaction record is updated for the created order$")
@@ -479,19 +485,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("From Address 1", order.getFromAddress1(),
-        StringUtils.normalizeSpace(entity.getAddress1()));
-    assertEquals("From Address 2", order.getFromAddress2(),
-        StringUtils.normalizeSpace(entity.getAddress2()));
-    assertEquals("From Postcode", order.getFromPostcode(),
-        StringUtils.normalizeSpace(entity.getPostcode()));
-    assertEquals("From City", order.getFromCity(), StringUtils.normalizeSpace(entity.getCity()));
-    assertEquals("From Country", order.getFromCountry(),
-        StringUtils.normalizeSpace(entity.getCountry()));
-    assertEquals("From Name", order.getFromName(), StringUtils.normalizeSpace(entity.getName()));
-    assertEquals("From Email", order.getFromEmail(), StringUtils.normalizeSpace(entity.getEmail()));
-    assertEquals("From Contact", order.getFromContact(),
-        StringUtils.normalizeSpace(entity.getContact()));
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress1())).as("From Address 1")
+        .isEqualTo(order.getFromAddress1());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress2())).as("From Address 2")
+        .isEqualTo(order.getFromAddress2());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getPostcode())).as("From Postcode")
+        .isEqualTo(order.getFromPostcode());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getCity())).as("From City")
+        .isEqualTo(order.getFromCity());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getCountry())).as("From Country")
+        .isEqualTo(order.getFromCountry());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getName())).as("From Name")
+        .isEqualTo(order.getFromName());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getEmail())).as("From Email")
+        .isEqualTo(order.getFromEmail());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getContact())).as("From Contact")
+        .isEqualTo(order.getFromContact());
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
@@ -536,19 +545,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()),
         transactions, hasSize(1));
     TransactionEntity entity = transactions.get(0);
-    assertEquals("To Address 1", order.getToAddress1(),
-        StringUtils.normalizeSpace(entity.getAddress1()));
-    assertEquals("To Address 2", order.getToAddress2(),
-        StringUtils.normalizeSpace(entity.getAddress2()));
-    assertEquals("To Postcode", order.getToPostcode(),
-        StringUtils.normalizeSpace(entity.getPostcode()));
-    assertEquals("To City", order.getToCity(), StringUtils.normalizeSpace(entity.getCity()));
-    assertEquals("To Country", order.getToCountry(),
-        StringUtils.normalizeSpace(entity.getCountry()));
-    assertEquals("To Name", order.getToName(), StringUtils.normalizeSpace(entity.getName()));
-    assertEquals("To Email", order.getToEmail(), StringUtils.normalizeSpace(entity.getEmail()));
-    assertEquals("To Contact", order.getToContact(),
-        StringUtils.normalizeSpace(entity.getContact()));
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress1())).as("To Address 1")
+        .isEqualTo(order.getToAddress1());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress2())).as("To Address 2")
+        .isEqualTo(order.getToAddress2());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getPostcode())).as("To Postcode")
+        .isEqualTo(order.getToPostcode());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getCity())).as("To City")
+        .isEqualTo(order.getToCity());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getCountry())).as("To Country")
+        .isEqualTo(order.getToCountry());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getName())).as("To Name")
+        .isEqualTo(order.getToName());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getEmail())).as("To Email")
+        .isEqualTo(order.getToEmail());
+    Assertions.assertThat(StringUtils.normalizeSpace(entity.getContact())).as("To Contact")
+        .isEqualTo(order.getToContact());
     ZonedDateTime entityStartDateTime = ZonedDateTime
         .parse(entity.getStartTime(), DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of("UTC")))
         .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
@@ -695,40 +707,42 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     if (Objects.nonNull(distributionPointId)) {
       Integer distributionPointIdInt = Objects.equals(distributionPointId, "null") ? null
           : NumberUtils.createInteger(distributionPointId);
-      assertEquals("DistributionPointId in Transaction entity is not as expected in db",
-          distributionPointIdInt, entity.getDistributionPointId());
+      Assertions.assertThat(entity.getDistributionPointId())
+          .as("DistributionPointId in Transaction entity is not as expected in db")
+          .isEqualTo(distributionPointIdInt);
     }
     if (Objects.nonNull(address1)) {
-      assertEquals("Address1 in Transaction entity is not as expected in db", address1,
-          StringUtils.normalizeSpace(entity.getAddress1()));
+      Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress1()))
+          .as("Address1 in Transaction entity is not as expected in db").isEqualTo(address1);
     }
     if (Objects.nonNull(address2)) {
-      assertEquals("Address2 in Transaction entity is not as expected in db", address2,
-          StringUtils.normalizeSpace(entity.getAddress2()));
+      Assertions.assertThat(StringUtils.normalizeSpace(entity.getAddress2()))
+          .as("Address2 in Transaction entity is not as expected in db").isEqualTo(address2);
     }
     if (Objects.nonNull(city)) {
-      assertEquals("City in Transaction entity is not as expected in db", city,
-          StringUtils.normalizeSpace(entity.getCity()));
+      Assertions.assertThat(StringUtils.normalizeSpace(entity.getCity()))
+          .as("City in Transaction entity is not as expected in db").isEqualTo(city);
     }
     if (Objects.nonNull(country)) {
-      assertEquals("Country in Transaction entity is not as expected in db", country,
-          StringUtils.normalizeSpace(entity.getCountry()));
+      Assertions.assertThat(StringUtils.normalizeSpace(entity.getCountry()))
+          .as("Country in Transaction entity is not as expected in db").isEqualTo(country);
     }
     if (Objects.nonNull(postcode)) {
-      assertEquals("Postcode in Transaction entity is not as expected in db", postcode,
-          StringUtils.normalizeSpace(entity.getPostcode()));
+      Assertions.assertThat(StringUtils.normalizeSpace(entity.getPostcode()))
+          .as("Postcode in Transaction entity is not as expected in db").isEqualTo(postcode);
     }
     if (Objects.nonNull(routeId)) {
       Integer routeIdInt =
           Objects.equals(routeId, "null") ? null : NumberUtils.createInteger(routeId);
-      assertEquals("RouteId in Transaction entity is not as expected in db", routeIdInt,
-          entity.getRouteId());
+      Assertions.assertThat(entity.getRouteId())
+          .as("RouteId in Transaction entity is not as expected in db").isEqualTo(routeIdInt);
     }
     if (Objects.nonNull(priorityLevel)) {
       Integer priorityLevelInt =
           Objects.equals(priorityLevel, "null") ? null : NumberUtils.createInteger(priorityLevel);
-      assertEquals("PriorityLevel in Transaction entity is not as expected in db", priorityLevelInt,
-          entity.getPriorityLevel());
+      Assertions.assertThat(entity.getPriorityLevel())
+          .as("PriorityLevel in Transaction entity is not as expected in db")
+          .isEqualTo(priorityLevelInt);
     }
   }
 
@@ -767,22 +781,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     if (StringUtils.isNotBlank(routeId)) {
       Integer routeIdInt = StringUtils.equalsIgnoreCase(routeId, "null") ? null :
           NumberUtils.createInteger(routeId);
-      assertEquals("RouteId in DB Transaction entity is not as expected", routeIdInt,
-          entity.getRouteId());
+      Assertions.assertThat(entity.getRouteId())
+          .as("RouteId in DB Transaction entity is not as expected").isEqualTo(routeIdInt);
     }
     if (StringUtils.isNotBlank(priorityLevel)) {
       Integer priorityLevelInt = StringUtils.equalsIgnoreCase(priorityLevel, "null") ? null :
           NumberUtils.createInteger(priorityLevel);
-      assertEquals("PriorityLevel in DB Transaction entity is not as expected", priorityLevelInt,
-          entity.getPriorityLevel());
+      Assertions.assertThat(entity.getPriorityLevel())
+          .as("PriorityLevel in DB Transaction entity is not as expected")
+          .isEqualTo(priorityLevelInt);
     }
     if (StringUtils.isNotBlank(status)) {
-      assertEquals("Status in DB Transaction entity is not as expected", status,
-          entity.getStatus());
+      Assertions.assertThat(entity.getStatus())
+          .as("Status in DB Transaction entity is not as expected").isEqualTo(status);
     }
     if (StringUtils.isNotBlank(serviceEndTime)) {
-      assertEquals("Service End Time in DB Transaction entity is not as expected", serviceEndTime,
-          DateUtil.SDF_YYYY_MM_DD.format(entity.getServiceEndTime()));
+      Assertions.assertThat(DateUtil.SDF_YYYY_MM_DD.format(entity.getServiceEndTime()))
+          .as("Service End Time in DB Transaction entity is not as expected")
+          .isEqualTo(serviceEndTime);
     }
   }
 
@@ -792,20 +808,21 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
     List<InboundScanEntity> inboundScans = getCoreJdbc().findInboundScansByOrderId(orderId);
-    Assert.assertThat("List of inbound scans for order " + orderId, inboundScans,
-        Matchers.not(Matchers.empty()));
+    Assertions.assertThat(inboundScans).as("List of inbound scans for order ").isNotEmpty();
     InboundScanEntity theLastInboundScan = inboundScans.get(inboundScans.size() - 1);
 
     String value = data.get("hubId");
 
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
+      Assertions.assertThat(theLastInboundScan.getHubId()).as("Hub ID")
+          .isEqualTo(Long.valueOf(value));
     }
 
     value = data.get("type");
 
     if (StringUtils.isNotBlank(value)) {
-      assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
+      Assertions.assertThat(theLastInboundScan.getType()).as("Type")
+          .isEqualTo(Short.valueOf(value));
     }
 
     String trackingId =
@@ -813,15 +830,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             data.get("trackingId");
 
     if (StringUtils.isNotBlank(trackingId)) {
-      assertEquals("TrackingId", trackingId, theLastInboundScan.getScan());
+      Assertions.assertThat(theLastInboundScan.getScan()).as("TrackingId").isEqualTo(trackingId);
     }
 
     if (data.containsKey("scan")) {
-      assertEquals("Scan", data.get("scan"), theLastInboundScan.getScan());
+      Assertions.assertThat(theLastInboundScan.getScan()).as("Scan").isEqualTo(data.get("scan"));
     }
 
     if (data.containsKey("orderId")) {
-      assertEquals("Order ID", Long.valueOf(data.get("orderId")), theLastInboundScan.getOrderId());
+      Assertions.assertThat(theLastInboundScan.getOrderId()).as("Order ID")
+          .isEqualTo(Long.valueOf(data.get("orderId")));
     }
   }
 
@@ -962,18 +980,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .filter(record -> record.get("scan").equals(finalTrackingId))
           .collect(Collectors.toList());
 
-      assertEquals(
-          f("Expected 1 record in Warehouse_sweeps table with tracking ID %s", finalTrackingId), 1,
-          warehouseSweepRecordsFilteredTemp.size());
+      Assertions.assertThat(warehouseSweepRecordsFilteredTemp.size())
+          .as(f("Expected 1 record in Warehouse_sweeps table with tracking ID %s", finalTrackingId))
+          .isEqualTo(1);
       return warehouseSweepRecordsFilteredTemp;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Map<String, Object> warehouseSweepRecord = warehouseSweepRecordsFiltered.get(0);
-    assertEquals(f("Expected hub_id in Warehouse_sweeps table"), hubId,
-        String.valueOf(warehouseSweepRecord.get("hub_id")));
-    assertEquals(f("Expected order_id in Warehouse_sweeps table"), String.valueOf(order.getId()),
-        String.valueOf(warehouseSweepRecord.get("order_id")));
-    put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
+    Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("hub_id")))
+        .as(f("Expected hub_id in Warehouse_sweeps table")).isEqualTo(hubId);
+    Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("order_id")))
+        .as(f("Expected order_id in Warehouse_sweeps table"))
+        .isEqualTo(String.valueOf(order.getId()));
+      put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")
@@ -988,29 +1007,35 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .filter(record -> record.getTrackingId().equals(finalTrackingId))
           .collect(Collectors.toList());
 
-      assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
-          pickupInfoRecordsTemp.size());
+      Assertions.assertThat(pickupInfoRecordsTemp.size())
+          .as(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId))
+          .isEqualTo(1);
       return pickupInfoRecordsTemp;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Order pickupInfoRecord = pickupInfoRecordsFiltered.get(0);
 
-    assertEquals(f("Expected %s in %s table", "from_address1", "orders"), order.getFromAddress1(),
-        pickupInfoRecord.getFromAddress1());
-    assertEquals(f("Expected %s in %s table", "from_address2", "orders"), order.getFromAddress2(),
-        pickupInfoRecord.getFromAddress2());
-    assertEquals(f("Expected %s in %s table", "from_postcode", "orders"), order.getFromPostcode(),
-        pickupInfoRecord.getFromPostcode());
-    assertEquals(f("Expected %s in %s table", "from_city", "orders"), order.getFromCity(),
-        pickupInfoRecord.getFromCity());
-    assertEquals(f("Expected %s in %s table", "from_country", "orders"), order.getFromCountry(),
-        pickupInfoRecord.getFromCountry());
-    assertEquals(f("Expected %s in %s table", "from_name", "orders"), order.getFromName(),
-        pickupInfoRecord.getFromName());
-    assertEquals(f("Expected %s in %s table", "from_email", "orders"), order.getFromEmail(),
-        pickupInfoRecord.getFromEmail());
-    assertEquals(f("Expected %s in %s table", "from_contact", "orders"), order.getFromContact(),
-        pickupInfoRecord.getFromContact());
+    Assertions.assertThat(pickupInfoRecord.getFromAddress1())
+        .as(f("Expected %s in %s table", "from_address1", "orders"))
+        .isEqualTo(order.getFromAddress1());
+    Assertions.assertThat(pickupInfoRecord.getFromAddress2())
+        .as(f("Expected %s in %s table", "from_address2", "orders"))
+        .isEqualTo(order.getFromAddress2());
+    Assertions.assertThat(pickupInfoRecord.getFromPostcode())
+        .as(f("Expected %s in %s table", "from_postcode", "orders"))
+        .isEqualTo(order.getFromPostcode());
+    Assertions.assertThat(pickupInfoRecord.getFromCity())
+        .as(f("Expected %s in %s table", "from_city", "orders")).isEqualTo(order.getFromCity());
+    Assertions.assertThat(pickupInfoRecord.getFromCountry())
+        .as(f("Expected %s in %s table", "from_country", "orders"))
+        .isEqualTo(order.getFromCountry());
+    Assertions.assertThat(pickupInfoRecord.getFromName())
+        .as(f("Expected %s in %s table", "from_name", "orders")).isEqualTo(order.getFromName());
+    Assertions.assertThat(pickupInfoRecord.getFromEmail())
+        .as(f("Expected %s in %s table", "from_email", "orders")).isEqualTo(order.getFromEmail());
+    Assertions.assertThat(pickupInfoRecord.getFromContact())
+        .as(f("Expected %s in %s table", "from_contact", "orders"))
+        .isEqualTo(order.getFromContact());
   }
 
   @SuppressWarnings("unchecked")
@@ -1025,30 +1050,32 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .filter(record -> record.getTrackingId().equals(finalTrackingId))
           .collect(Collectors.toList());
 
-      assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
-          deliveryInfoRecordsTemp.size());
+      Assertions.assertThat(deliveryInfoRecordsTemp.size())
+          .as(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId))
+          .isEqualTo(1);
       return deliveryInfoRecordsTemp;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
     Order deliveryInfoRecord = deliveryInfoRecordsFiltered.get(0);
 
-    assertEquals(f("Expected %s in %s table", "to_address1", "orders"), order.getToAddress1(),
-        deliveryInfoRecord.getToAddress1());
-    assertEquals(f("Expected %s in %s table", "to_address2", "orders"),
-        Objects.nonNull(order.getToAddress2()) ? order.getToAddress2() : "",
-        deliveryInfoRecord.getToAddress2());
-    assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), order.getToPostcode(),
-        deliveryInfoRecord.getToPostcode());
-    assertEquals(f("Expected %s in %s table", "to_city", "orders"),
-        Objects.isNull(order.getToCity()) ? "" : order.getToCity(), deliveryInfoRecord.getToCity());
-    assertEquals(f("Expected %s in %s table", "to_country", "orders"), order.getToCountry(),
-        deliveryInfoRecord.getToCountry());
-    assertEquals(f("Expected %s in %s table", "to_name", "orders"), order.getToName(),
-        deliveryInfoRecord.getToName());
-    assertEquals(f("Expected %s in %s table", "to_email", "orders"), order.getToEmail(),
-        deliveryInfoRecord.getToEmail());
-    assertEquals(f("Expected %s in %s table", "to_contact", "orders"), order.getToContact(),
-        deliveryInfoRecord.getToContact());
+    Assertions.assertThat(deliveryInfoRecord.getToAddress1())
+        .as(f("Expected %s in %s table", "to_address1", "orders")).isEqualTo(order.getToAddress1());
+    Assertions.assertThat(deliveryInfoRecord.getToAddress2())
+        .as(f("Expected %s in %s table", "to_address2", "orders"))
+        .isEqualTo(Objects.nonNull(order.getToAddress2()) ? order.getToAddress2() : "");
+    Assertions.assertThat(deliveryInfoRecord.getToPostcode())
+        .as(f("Expected %s in %s table", "to_postcode", "orders")).isEqualTo(order.getToPostcode());
+    Assertions.assertThat(deliveryInfoRecord.getToCity())
+        .as(f("Expected %s in %s table", "to_city", "orders"))
+        .isEqualTo(Objects.isNull(order.getToCity()) ? "" : order.getToCity());
+    Assertions.assertThat(deliveryInfoRecord.getToCountry())
+        .as(f("Expected %s in %s table", "to_country", "orders")).isEqualTo(order.getToCountry());
+    Assertions.assertThat(deliveryInfoRecord.getToName())
+        .as(f("Expected %s in %s table", "to_name", "orders")).isEqualTo(order.getToName());
+    Assertions.assertThat(deliveryInfoRecord.getToEmail())
+        .as(f("Expected %s in %s table", "to_email", "orders")).isEqualTo(order.getToEmail());
+    Assertions.assertThat(deliveryInfoRecord.getToContact())
+        .as(f("Expected %s in %s table", "to_contact", "orders")).isEqualTo(order.getToContact());
   }
 
   @Given("DB Operator verifies reservation record using data below:")
@@ -1058,8 +1085,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     if (Objects.nonNull(mapOfData.get("status"))) {
       int status = Integer.parseInt(mapOfData.get("status"));
-      assertEquals(f("Expected %s in %s table", "status", "reservations"), status,
-          reservation.getStatusValue());
+      Assertions.assertThat(reservation.getStatusValue())
+          .as(f("Expected %s in %s table", "status", "reservations")).isEqualTo(status);
     }
   }
 
@@ -1070,8 +1097,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     if (Objects.nonNull(mapOfData.get("status"))) {
       String status = mapOfData.get("status");
-      assertEquals(f("Expected %s in %s table", "status", "waypoints"), status,
-          waypoint.getStatus());
+      Assertions.assertThat(waypoint.getStatus())
+          .as(f("Expected %s in %s table", "status", "waypoints")).isEqualTo(status);
     }
   }
 
@@ -1088,8 +1115,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
           .filter(record -> record.getTrackingId().equals(finalTrackingId))
           .collect(Collectors.toList());
 
-      assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1,
-          orderRecordsTemp.size());
+      Assertions.assertThat(orderRecordsTemp.size())
+          .as(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId))
+          .isEqualTo(1);
       return orderRecordsTemp;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
 
@@ -1097,71 +1125,71 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     if (Objects.nonNull(data.get("status"))) {
       String status = data.get("status");
-      assertEquals(f("Expected %s in %s table", "status", "orders"), status,
-          orderRecord.getStatus());
+      Assertions.assertThat(orderRecord.getStatus())
+          .as(f("Expected %s in %s table", "status", "orders")).isEqualTo(status);
     }
     if (Objects.nonNull(data.get("granularStatus"))) {
       String granularStatus = data.get("granularStatus");
-      assertEquals(f("Expected %s in %s table", "granularStatus", "orders"), granularStatus,
-          orderRecord.getGranularStatus());
+      Assertions.assertThat(orderRecord.getGranularStatus())
+          .as(f("Expected %s in %s table", "granularStatus", "orders")).isEqualTo(granularStatus);
     }
     if (Objects.nonNull(data.get("toAddress1"))) {
       String toAddress1 =
           Objects.equals(data.get("toAddress1"), "GET_FROM_CREATED_ORDER") ? order
               .getToAddress1() :
               data.get("toAddress1");
-      assertEquals(f("Expected %s in %s table", "to_address1", "orders"), toAddress1,
-          orderRecord.getToAddress1());
+      Assertions.assertThat(orderRecord.getToAddress1())
+          .as(f("Expected %s in %s table", "to_address1", "orders")).isEqualTo(toAddress1);
     }
     if (Objects.nonNull(data.get("toAddress2"))) {
       String toAddress2 =
           Objects.equals(data.get("toAddress2"), "GET_FROM_CREATED_ORDER") ? order
               .getToAddress2() :
               data.get("toAddress2");
-      assertEquals(f("Expected %s in %s table", "to_address2", "orders"), toAddress2,
-          orderRecord.getToAddress2());
+      Assertions.assertThat(orderRecord.getToAddress2())
+          .as(f("Expected %s in %s table", "to_address2", "orders")).isEqualTo(toAddress2);
     }
     if (Objects.nonNull(data.get("toPostcode"))) {
       String toPostcode =
           Objects.equals(data.get("toPostcode"), "GET_FROM_CREATED_ORDER") ? order
               .getToPostcode() :
               data.get("toPostcode");
-      assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), toPostcode,
-          orderRecord.getToPostcode());
+      Assertions.assertThat(orderRecord.getToPostcode())
+          .as(f("Expected %s in %s table", "to_postcode", "orders")).isEqualTo(toPostcode);
     }
     if (Objects.nonNull(data.get("toCity"))) {
       String toCity =
           Objects.equals(data.get("toCity"), "GET_FROM_CREATED_ORDER") ? order.getToCity() :
               data.get("toCity");
-      assertEquals(f("Expected %s in %s table", "to_city", "orders"), toCity,
-          orderRecord.getToCity());
+      Assertions.assertThat(orderRecord.getToCity())
+          .as(f("Expected %s in %s table", "to_city", "orders")).isEqualTo(toCity);
     }
     if (Objects.nonNull(data.get("toCountry"))) {
       String toCountry =
           Objects.equals(data.get("toCountry"), "GET_FROM_CREATED_ORDER") ? order
               .getToCountry() :
               data.get("toCountry");
-      assertEquals(f("Expected %s in %s table", "to_country", "orders"), toCountry,
-          orderRecord.getToCountry());
+      Assertions.assertThat(orderRecord.getToCountry())
+          .as(f("Expected %s in %s table", "to_country", "orders")).isEqualTo(toCountry);
     }
     if (Objects.nonNull(data.get("toState"))) {
       String toState =
           Objects.equals(data.get("toState"), "GET_FROM_CREATED_ORDER") ? order.getToState() :
               data.get("toState");
-      assertEquals(f("Expected %s in %s table", "to_state", "orders"), toState,
-          orderRecord.getToState());
+      Assertions.assertThat(orderRecord.getToState())
+          .as(f("Expected %s in %s table", "to_state", "orders")).isEqualTo(toState);
     }
     if (Objects.nonNull(data.get("toDistrict"))) {
       String toDistrict =
           Objects.equals(data.get("toDistrict"), "GET_FROM_CREATED_ORDER") ? order
               .getToDistrict() :
               data.get("toDistrict");
-      assertEquals(f("Expected %s in %s table", "to_district", "orders"), toDistrict,
-          orderRecord.getToDistrict());
+      Assertions.assertThat(orderRecord.getToDistrict())
+          .as(f("Expected %s in %s table", "to_district", "orders")).isEqualTo(toDistrict);
     }
     if (StringUtils.isNotBlank(data.get("rts"))) {
       boolean expected = StringUtils.equalsAnyIgnoreCase(data.get("rts"), "1", "true");
-      assertEquals("RTS", expected, orderRecord.getRts());
+      Assertions.assertThat(orderRecord.getRts()).as("RTS").isEqualTo(expected);
     }
     if (StringUtils.isNotBlank(data.get("dimensions"))) {
       Dimension expected = new Dimension(data.get("dimensions"));
@@ -1184,8 +1212,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
       List<Order> orderRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
 
-      assertEquals(f("Expected 0 record in Orders table with tracking ID %s", finalTrackingId), 0,
-          orderRecords.size());
+      Assertions.assertThat(orderRecords.size())
+          .as(f("Expected 0 record in Orders table with tracking ID %s", finalTrackingId))
+          .isEqualTo(0);
       return orderRecords;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
@@ -1203,8 +1232,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
       List<Map<String, Object>> waypointRecords = getCoreJdbc().getWaypointRecords(waypointId);
 
-      assertEquals(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId),
-          0, waypointRecords.size());
+      Assertions.assertThat(waypointRecords.size())
+          .as(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId))
+          .isEqualTo(0);
       return waypointRecords;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
@@ -1212,19 +1242,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
-    assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getFromCity(),
-        StringUtils.normalizeSpace(actualWaypoint.getCity()));
-    assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getFromCountry(),
-        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
-    assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId),
-        order.getFromAddress1(), StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
-    assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId),
-        order.getFromAddress2(), StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
-    assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId),
-        order.getFromPostcode(), StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getCity()))
+        .as(f("%s waypoint [%d] city", transactionType, waypointId)).isEqualTo(order.getFromCity());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getCountry()))
+        .as(f("%s waypoint [%d] country", transactionType, waypointId))
+        .isEqualTo(order.getFromCountry());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getAddress1()))
+        .as(f("%s waypoint [%d] address1", transactionType, waypointId))
+        .isEqualTo(order.getFromAddress1());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getAddress2()))
+        .as(f("%s waypoint [%d] address2", transactionType, waypointId))
+        .isEqualTo(order.getFromAddress2());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getPostcode()))
+        .as(f("%s waypoint [%d] postcode", transactionType, waypointId))
+        .isEqualTo(order.getFromPostcode());
     //TODO need to clarify source of timewindow_id
-//    assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
-//        order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
+//   Assertions.assertThat(Integer.parseInt(actualWaypoint.getTimeWindowId())).as(f("%s waypoint [%d] timewindowId", transactionType, waypointId)).isEqualTo(//        order.getPickupTimeslot().getId());
   }
 
   private void validateDeliveryInWaypointRecord(Order order, String transactionType,
@@ -1233,18 +1266,22 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     assertEquals(f("%s waypoint [%d] city", transactionType, waypointId),
         Objects.isNull(order.getToCity()) ? "" :
             order.getToCity(), actualWaypoint.getCity());
-    assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getToCountry(),
-        StringUtils.normalizeSpace(actualWaypoint.getCountry()));
-    assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getToAddress1(),
-        StringUtils.normalizeSpace(actualWaypoint.getAddress1()));
-    assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getToAddress2(),
-        StringUtils.normalizeSpace(actualWaypoint.getAddress2()));
-    assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getToPostcode(),
-        StringUtils.normalizeSpace(actualWaypoint.getPostcode()));
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getCountry()))
+        .as(f("%s waypoint [%d] country", transactionType, waypointId))
+        .isEqualTo(order.getToCountry());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getAddress1()))
+        .as(f("%s waypoint [%d] address1", transactionType, waypointId))
+        .isEqualTo(order.getToAddress1());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getAddress2()))
+        .as(f("%s waypoint [%d] address2", transactionType, waypointId))
+        .isEqualTo(order.getToAddress2());
+    Assertions.assertThat(StringUtils.normalizeSpace(actualWaypoint.getPostcode()))
+        .as(f("%s waypoint [%d] postcode", transactionType, waypointId))
+        .isEqualTo(order.getToPostcode());
     if (Objects.nonNull(order.getDeliveryTimeslot())) {
-      assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId),
-          order.getDeliveryTimeslot().getId(),
-          Integer.parseInt(actualWaypoint.getTimeWindowId()));
+      Assertions.assertThat(Integer.parseInt(actualWaypoint.getTimeWindowId()))
+          .as(f("%s waypoint [%d] timewindowId", transactionType, waypointId))
+          .isEqualTo(order.getDeliveryTimeslot().getId());
     }
   }
 
@@ -1255,9 +1292,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Integer expectedStatus = mapOfData.get("status");
     Integer ticketStatus = getTicketsJdbc().getTicketStatus(orderId);
 
-    assertEquals(
-        f("Expected ticket status %s but actual ticket status %d", expectedStatus, ticketStatus),
-        expectedStatus, ticketStatus);
+    Assertions.assertThat(ticketStatus)
+        .as(f("Expected ticket status %s but actual ticket status %d", expectedStatus,
+            ticketStatus)).isEqualTo(expectedStatus);
   }
 
   @Then("^DB Operator verify reservation priority level$")
@@ -1267,8 +1304,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Integer expectedPriorityLevel = mapOfData.get("priorityLevel");
     Integer priorityLevel = getCoreJdbc().getReservationPriorityLevel(reservationId);
 
-    assertEquals(f("Expected Reservation Priority Level %s but actual Priority Level %d",
-        expectedPriorityLevel, priorityLevel), expectedPriorityLevel, priorityLevel);
+    Assertions.assertThat(priorityLevel)
+        .as("Expected Reservation Priority Level %s but actual Priority Level %d",
+            expectedPriorityLevel, priorityLevel).isEqualTo(expectedPriorityLevel);
   }
 
   @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
@@ -1278,8 +1316,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
     Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
 
-    assertEquals(f("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d",
-        reservationWaypoint, routeWaypoint), reservationWaypoint, routeWaypoint);
+    Assertions.assertThat(routeWaypoint)
+        .as("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d",
+            reservationWaypoint, routeWaypoint).isEqualTo(reservationWaypoint);
   }
 
   @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")
@@ -1287,7 +1326,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long batchId = get(KEY_CREATED_BATCH_ID);
     Long result = getCoreJdbc().getBatchId(batchId);
 
-    assertEquals(f("%s Batch ID Is Not Deleted", batchId), result, null);
+    Assertions.assertThat(result).as(f("%s Batch ID Is Not Deleted", batchId)).isNull();
   }
 
   @When("DB Operator gets the id of the created middle mile driver")
@@ -1372,7 +1411,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     switch (column) {
       case "name":
         String actualName = driverData.getFirstName();
-        assertThat("Updated name is the same", actualName, equalTo(resolvedUpdatedValue));
+        Assertions.assertThat(actualName).as("Updated name is the same")
+            .isEqualTo(resolvedUpdatedValue);
         break;
       case "contactNumber":
         Long driverId = driverData.getId();
@@ -1383,7 +1423,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         break;
       case "hub":
         String actualHubId = String.valueOf(driverData.getHubId());
-        assertThat("Updated hub is the same", actualHubId, equalTo(resolvedUpdatedValue));
+        Assertions.assertThat(actualHubId).as("Updated hub is the same")
+            .isEqualTo(resolvedUpdatedValue);
         break;
       case "licenseNumber":
         String actualLicenseNumber = driverData.getLicenseNumber();
@@ -1459,7 +1500,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     retryIfAssertionErrorOccurred(() -> {
       List<MovementPath> movementPaths = getHubJdbc()
           .getAllMovementPath(originHubId, destinationHubId);
-      assertThat("Movement path length is equal", movementPaths.size(), equalTo(numberOfPaths));
+      Assertions.assertThat(movementPaths.size()).as("Movement path length is equal")
+          .isEqualTo(numberOfPaths);
       movementPaths
           .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
     }, getCurrentMethodName(), 1000, 5);
@@ -1479,7 +1521,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths
             .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
-        assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
+        Assertions.assertThat(movementPaths.size()).as("Movement path length is equal")
+            .isEqualTo(3);
         break;
       case HUB_CD_CD:
       case HUB_CD_ST_DIFF_CD:
@@ -1489,7 +1532,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths
             .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
-        assertThat("Movement path length is equal", movementPaths.size(), equalTo(2));
+        Assertions.assertThat(movementPaths.size()).as("Movement path length is equal")
+            .isEqualTo(2);
         break;
     }
   }
@@ -1514,7 +1558,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         movementPaths = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
         movementPaths
             .forEach(movementPath -> putInList(KEY_LIST_OF_CREATED_PATH_ID, movementPath.getId()));
-        assertThat("Movement path length is equal", movementPaths.size(), equalTo(3));
+        Assertions.assertThat(movementPaths.size()).as("Movement path length is equal")
+            .isEqualTo(3);
         break;
     }
   }
@@ -1523,7 +1568,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   public void dbOperatorVerifyPathIsDeletedInMovementPathTable(String pathIdAsString) {
     Long pathId = Long.valueOf(resolveValue(pathIdAsString));
     MovementPath movementPath = getHubJdbc().getMovementPathById(pathId);
-    assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(), notNullValue());
+    Assertions.assertThat(movementPath.getDeletedAt()).as("Movement path deleted at is not null")
+        .isNotNull();
   }
 
   @Then("DB Operator verify {string} is deleted in hub_relation_schedules")
@@ -1532,7 +1578,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long hubRelationId = Long.valueOf(resolveValue(hubRelationIdAsString));
     HubRelationSchedule hubRelationSchedule = getHubJdbc()
         .getHubRelationScheduleByHubRelationId(hubRelationId);
-    assertThat("Hub Relation not found", hubRelationSchedule.getDeletedAt(), notNullValue());
+    Assertions.assertThat(hubRelationSchedule.getDeletedAt()).as("Hub Relation not found")
+        .isNotNull();
   }
 
   @Then("DB Operator verify {string} is not deleted in hub_relation_schedules")
@@ -1541,7 +1588,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Long hubRelationId = Long.valueOf(resolveValue(hubRelationIdAsString));
     HubRelationSchedule hubRelationSchedule = getHubJdbc()
         .getHubRelationScheduleByHubRelationId(hubRelationId);
-    assertThat("Hub Relation found", hubRelationSchedule.getDeletedAt(), equalTo(null));
+    Assertions.assertThat(hubRelationSchedule.getDeletedAt()).as("Hub Relation found")
+        .isEqualTo(null);
   }
 
   @Then("DB Operator verify created hub relation schedules is not deleted")
@@ -1551,7 +1599,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     createdHubRelations.forEach(hubRelation -> {
       HubRelationSchedule hubRelationSchedule = getHubJdbc()
           .getHubRelationScheduleByHubRelationId(hubRelation.getId());
-      assertThat("Hub Relation found", hubRelationSchedule.getDeletedAt(), equalTo(null));
+      Assertions.assertThat(hubRelationSchedule.getDeletedAt()).as("Hub Relation found")
+          .isEqualTo(null);
     });
   }
 
@@ -1581,15 +1630,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       if ("NOT FOUND".equals(expectedStatus)) {
         Boolean movementEventEntityExistence = getHubJdbc()
             .getMovementEvenExistenceByShipmentId(shipmentId);
-        assertThat("Movement Event not found", movementEventEntityExistence, equalTo(false));
+        Assertions.assertThat(movementEventEntityExistence).as("Movement Event not found")
+            .isEqualTo(false);
         continue;
       }
       retryIfAssertionErrorOccurred(() -> {
         MovementEventEntity movementEventEntity = getHubJdbc()
             .getMovementEventByShipmentId(shipmentId);
-        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
-        assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(expectedExtData));
+        Assertions.assertThat(movementEventEntity.getEvent()).as("Event is equal")
+            .isEqualTo(expectedEvent);
+        Assertions.assertThat(movementEventEntity.getStatus()).as("Status is equal")
+            .isEqualTo(expectedStatus);
+        Assertions.assertThat(movementEventEntity.getExtData()).as("ExtData is equal")
+            .isEqualTo(expectedExtData);
       }, getCurrentMethodName(), 1000, 5);
       pause2s();
     }
@@ -1636,10 +1689,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         MovementEventEntity movementEventEntity = getHubJdbc()
             .getMovementEventByShipmentId(shipmentId);
-        assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-        assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+        Assertions.assertThat(movementEventEntity.getEvent()).as("Event is equal")
+            .isEqualTo(expectedEvent);
+        Assertions.assertThat(movementEventEntity.getStatus()).as("Status is equal")
+            .isEqualTo(expectedStatus);
         if (extData != null) {
-          assertThat("ExtData is equal", movementEventEntity.getExtData(), equalTo(extData));
+          Assertions.assertThat(movementEventEntity.getExtData()).as("ExtData is equal")
+              .isEqualTo(extData);
         }
         pause1s();
       }, "Retrying until SLA is done calculated...", 10000, 30);
@@ -1693,8 +1749,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     for (Long shipmentId : listShipmentIds) {
       MovementEventEntity movementEventEntity = getHubJdbc()
           .getMovementEventByShipmentId(shipmentId);
-      assertThat("Event is equal", movementEventEntity.getEvent(), equalTo(expectedEvent));
-      assertThat("Status is equal", movementEventEntity.getStatus(), equalTo(expectedStatus));
+      Assertions.assertThat(movementEventEntity.getEvent()).as("Event is equal")
+          .isEqualTo(expectedEvent);
+      Assertions.assertThat(movementEventEntity.getStatus()).as("Status is equal")
+          .isEqualTo(expectedStatus);
       assertThat("ExtData is equal", movementEventEntity.getExtData(),
           isOneOf(landHaulExtData, airHaulExtData));
       pause1s();
@@ -1714,13 +1772,17 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     MovementEventEntity landHaulMovementEventEntity = getHubJdbc()
         .getMovementEventByShipmentId(landHaulShipmentId);
-    assertThat("Event is equal", landHaulMovementEventEntity.getEvent(), equalTo(expectedEvent));
-    assertThat("Status is equal", landHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
+    Assertions.assertThat(landHaulMovementEventEntity.getEvent()).as("Event is equal")
+        .isEqualTo(expectedEvent);
+    Assertions.assertThat(landHaulMovementEventEntity.getStatus()).as("Status is equal")
+        .isEqualTo(expectedStatus);
 
     MovementEventEntity airHaulMovementEventEntity = getHubJdbc()
         .getMovementEventByShipmentId(airHaulShipmentId);
-    assertThat("Event is equal", airHaulMovementEventEntity.getEvent(), equalTo(expectedEvent));
-    assertThat("Status is equal", airHaulMovementEventEntity.getStatus(), equalTo(expectedStatus));
+    Assertions.assertThat(airHaulMovementEventEntity.getEvent()).as("Event is equal")
+        .isEqualTo(expectedEvent);
+    Assertions.assertThat(airHaulMovementEventEntity.getStatus()).as("Status is equal")
+        .isEqualTo(expectedStatus);
 
     String expectedExtDataLandHaul;
     String expectedExtDataAirHaul;
@@ -1940,14 +2002,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("DB Operator verify 'inbound_weight_tolerance' parameter is {string}")
   public void dbOperatorVerifyInboundWeightTolerance(String expected) {
-    assertEquals("inbound_weight_tolerance value", Double.valueOf(resolveValue(expected)),
-        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getWeightTolerance());
+    Assertions.assertThat(
+            getSortJdbc().getInboundSetting(StandardTestConstants.NV_SYSTEM_ID).getWeightTolerance())
+        .as("inbound_weight_tolerance value").isEqualTo(Double.valueOf(resolveValue(expected)));
   }
 
   @Then("DB Operator verify 'inbound_max_weight' parameter is {string}")
   public void dbOperatorVerifyInboundMaxWeight(String expected) {
-    assertEquals("inbound_max_weight value", Double.valueOf(resolveValue(expected)),
-        getSortJdbc().getInboundSetting(StandardTestConstants.COUNTRY_CODE).getMaxWeight());
+    Assertions.assertThat(
+            getSortJdbc().getInboundSetting(StandardTestConstants.NV_SYSTEM_ID).getMaxWeight())
+        .as("inbound_max_weight value").isEqualTo(Double.valueOf(resolveValue(expected)));
   }
 
   @Then("DB Operator verify the new COD for created route is created successfully")
@@ -1982,7 +2046,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Double actualLoyaltyPoint = get(KEY_LOYALTY_POINT);
     Double expectedLoyaltyPoint = Double.valueOf(pointAdded);
 
-    assertEquals("Check added loyalty point", expectedLoyaltyPoint, actualLoyaltyPoint);
+    Assertions.assertThat(actualLoyaltyPoint).as("Check added loyalty point")
+        .isEqualTo(expectedLoyaltyPoint);
   }
 
   @Then("DB Operator verify unscanned shipment with following data:")

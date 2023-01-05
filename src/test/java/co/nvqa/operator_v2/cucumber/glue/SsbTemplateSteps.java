@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
 
-import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
+import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 
 public class SsbTemplateSteps extends AbstractSteps {
 
@@ -77,7 +77,7 @@ public class SsbTemplateSteps extends AbstractSteps {
       template.setConfiguration(configuration);
     }
     template.setReportType("SSB");
-    template.setSystemId(COUNTRY_CODE);
+    template.setSystemId(NV_SYSTEM_ID);
 
     put(KEY_TEMPLATE, template);
   }

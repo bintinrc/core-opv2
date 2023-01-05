@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.SalesPerson;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.SalesPage;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.SalesPage.SalesPersonsTable.ACTION_EDIT;
@@ -54,7 +55,7 @@ public class SalesSteps extends AbstractSteps {
 
     for (int i = 0; i < numberOfSalesPerson; i++) {
       pause100ms(); //to avoid same uniqueString
-      String uniqueString = generateDateUniqueString();
+      String uniqueString = StandardTestUtils.generateDateUniqueString();
       SalesPerson salesPerson = new SalesPerson();
       salesPerson.setCode("DSP-" + uniqueString);
       salesPerson.setName("Dummy-" + uniqueString);
@@ -70,7 +71,7 @@ public class SalesSteps extends AbstractSteps {
     List<SalesPerson> salesPersons = data.stream()
         .map(entry -> {
           SalesPerson salesPerson = new SalesPerson(resolveKeyValues(entry));
-          String uniqueString = generateDateUniqueString();
+          String uniqueString = StandardTestUtils.generateDateUniqueString();
           if (StringUtils.endsWithIgnoreCase(salesPerson.getName(), "{uniqueString}")) {
             salesPerson.setName(salesPerson.getName().replace("{uniqueString}", uniqueString));
           }
@@ -91,7 +92,7 @@ public class SalesSteps extends AbstractSteps {
     List<String> actual = salesPage.findOrdersWithCsvDialog.errorRecords.stream()
         .map(PageElement::getNormalizedText)
         .collect(Collectors.toList());
-    assertThat("List of errors", actual, Matchers.contains(data.toArray(new String[0])));
+    Assertions.assertThat(actual).as("List of errors").contains(data.toArray(new String[0]));
   }
 
   @And("^Operator verifies all sales persons parameters on Sales page$")
@@ -163,6 +164,7 @@ public class SalesSteps extends AbstractSteps {
   public void verifyDeletedSalesPerson(String code) {
     String oldCode = resolveValue(code);
     salesPage.salesPersonsTable.filterByColumn(COLUMN_CODE, oldCode);
-    assertTrue(code + " sales person is not displayed", salesPage.salesPersonsTable.isEmpty());
+    Assertions.assertThat(salesPage.salesPersonsTable.isEmpty())
+        .as(code + " sales person is not displayed").isTrue();
   }
 }

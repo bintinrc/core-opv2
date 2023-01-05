@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.NinjaDashPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.guice.ScenarioScoped;
+import org.assertj.core.api.Assertions;
 
 
 @ScenarioScoped
@@ -21,7 +22,8 @@ public class NinjaDashPageSteps extends AbstractSteps {
   @Then("account name is {string} on Ninja Dash page")
   public void checkAccountName(String expected) {
     expected = resolveValue(expected);
-    assertEquals("Account Name", expected, ninjaDashPage.accountName.getNormalizedText());
+    Assertions.assertThat(ninjaDashPage.accountName.getNormalizedText()).as("Account Name")
+        .isEqualTo(expected);
   }
 
 }

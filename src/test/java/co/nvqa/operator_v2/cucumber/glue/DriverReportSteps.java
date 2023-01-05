@@ -5,7 +5,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -25,7 +25,7 @@ public class DriverReportSteps extends AbstractSteps {
 
   @When("Operator set the filter date to current date")
   public void operatorSetTheFilterDateToCurrentDate() {
-    Date currentDate = new Date();
+    ZonedDateTime currentDate = ZonedDateTime.now();
     driverReportPage.setFromDate(currentDate);
     driverReportPage.setToDate(currentDate);
   }

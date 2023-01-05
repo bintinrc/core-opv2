@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -21,7 +22,7 @@ public class PrinterTemplatesPage extends OperatorV2SimplePage {
 
   public void verifyTemplateIsLoadedAndAllNeededFieldsIsShownOnRightPanel() {
     String labelTemplate = getText("//div[@class='template-container']");
-    assertNotNull("Label template not loaded.", labelTemplate);
+    Assertions.assertThat(labelTemplate).as("Label template not loaded.").isNotNull();
 
     String regex = "\\{\\{(.*?)}}";
     Pattern pattern = Pattern.compile(regex);

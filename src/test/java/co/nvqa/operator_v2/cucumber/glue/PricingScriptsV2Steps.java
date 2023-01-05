@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.pricing.ScriptVersion;
 import co.nvqa.commons.model.shipper.v2.Shipper;
@@ -13,6 +14,8 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.utils.StandardTestUtils.generateDateUniqueString;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_ID_ON_TABLE;
 import static co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page.COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE;
@@ -70,7 +74,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   private Script setScriptData(Map<String, String> mapOfData) {
     String dateUniqueString = generateDateUniqueString();
 
-    String createdDate = CREATED_DATE_SDF.format(new Date());
+    String createdDate = DTF_CREATED_DATE.format(ZonedDateTime.now());
     String name = mapOfData.get("name");
     String description = mapOfData.get("description");
 
@@ -111,7 +115,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
       script.setActiveParameters(listOfActiveParameters);
     }
     if (Objects.nonNull(mapOfData.get("setUpdatedAt"))) {
-      script.setUpdatedAt(YYYY_MM_DD_SDF.format(new Date()));
+      script.setUpdatedAt(DTF_NORMAL_DATE.format(ZonedDateTime.now()));
     }
     return script;
   }
@@ -420,8 +424,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     script.setName(name);
     script.setSource(source);
     script.setActiveParameters(listOfActiveParameters);
-    script.setVersionEffectiveStartDate(getBeforeDate(1));
-    script.setVersionEffectiveEndDate(getNextDate(1));
+    script.setVersionEffectiveStartDate(StandardTestUtils.getBeforeDate(1));
+    script.setVersionEffectiveEndDate(
+        Date.from(getNextDate(1).atZone(ZoneId.systemDefault()).toInstant()));
 
     VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
     verifyDraftParams.setStartWeight(startWeight);

@@ -1,22 +1,21 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteCleaningReportCodInfo;
 import co.nvqa.operator_v2.model.RouteCleaningReportParcelInfo;
 import com.google.common.collect.ImmutableMap;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_CREATE_TICKET;
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_SHOW_DETAIL;
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -51,7 +50,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(COD_CSV_FILENAME_PATTERN));
   }
 
-  public void fetchByDate(Date date) {
+  public void fetchByDate(ZonedDateTime date) {
     setMdDatepicker("ctrl.data.date", date);
     clickNvApiTextButtonByNameAndWaitUntilDone("container.route-cleaning-report.fetch");
   }
@@ -95,8 +94,8 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage {
     List<RouteCleaningReportCodInfo> actualCodInfoRecords = RouteCleaningReportCodInfo
         .fromCsvFile(RouteCleaningReportCodInfo.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualCodInfoRecords.size(),
-        greaterThanOrEqualTo(expectedCodInfoRecords.size()));
+    Assertions.assertThat(actualCodInfoRecords.size()).as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(expectedCodInfoRecords.size());
 
     Map<Long, RouteCleaningReportCodInfo> actualMap = actualCodInfoRecords.stream()
         .collect(Collectors.toMap(
@@ -135,8 +134,9 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage {
     List<RouteCleaningReportParcelInfo> actualParcelInfoRecords = RouteCleaningReportParcelInfo
         .fromCsvFile(RouteCleaningReportParcelInfo.class, pathName, true);
 
-    assertThat("Unexpected number of lines in CSV file", actualParcelInfoRecords.size(),
-        greaterThanOrEqualTo(expectedParcelInfoRecords.size()));
+    Assertions.assertThat(actualParcelInfoRecords.size())
+        .as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(expectedParcelInfoRecords.size());
 
     Map<String, RouteCleaningReportParcelInfo> actualMap = actualParcelInfoRecords.stream()
         .collect(Collectors.toMap(
@@ -160,20 +160,20 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage {
   private void verifyCodInfo(RouteCleaningReportCodInfo expectedCodInfo,
       RouteCleaningReportCodInfo actualCodInfo) {
     if (expectedCodInfo.getCodInbound() != null) {
-      assertThat("COD Inbound", actualCodInfo.getCodInbound(),
-          Matchers.equalTo(expectedCodInfo.getCodInbound()));
+      Assertions.assertThat(actualCodInfo.getCodInbound()).as("COD Inbound")
+          .isEqualTo(expectedCodInfo.getCodInbound());
     }
     if (expectedCodInfo.getCodExpected() != null) {
-      assertThat("COD Expected", actualCodInfo.getCodInbound(),
-          Matchers.equalTo(expectedCodInfo.getCodInbound()));
+      Assertions.assertThat(actualCodInfo.getCodInbound()).as("COD Expected")
+          .isEqualTo(expectedCodInfo.getCodInbound());
     }
     if (expectedCodInfo.getRouteId() != null) {
-      assertThat("Route ID", actualCodInfo.getRouteId(),
-          Matchers.equalTo(expectedCodInfo.getRouteId()));
+      Assertions.assertThat(actualCodInfo.getRouteId()).as("Route ID")
+          .isEqualTo(expectedCodInfo.getRouteId());
     }
     if (StringUtils.isNotBlank(expectedCodInfo.getDriverName())) {
-      assertThat("Driver Name", actualCodInfo.getDriverName(),
-          Matchers.equalTo(expectedCodInfo.getDriverName()));
+      Assertions.assertThat(actualCodInfo.getDriverName()).as("Driver Name")
+          .isEqualTo(expectedCodInfo.getDriverName());
     }
   }
 

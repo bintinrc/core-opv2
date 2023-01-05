@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.sort.sort_belt_manager.FilterForm;
 import co.nvqa.commons.model.sort.sort_belt_manager.LogicForm;
 import co.nvqa.commons.model.sort.sort_belt_manager.RuleForm;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ArmCombination;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -12,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.VirtualSelect;
 import co.nvqa.operator_v2.selenium.elements.md.MdSwitch;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -518,7 +518,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     // Check In use arm count
     List<Integer> logicArmsInUse = logicForm.getArmsInUse();
     int logicArmsInUseCount = logicArmsInUse.size();
-    int sbmArmsCount = StandardTestConstants.SORT_BELT_MANAGER_DEVICE_ARMS_COUNT;
+    int sbmArmsCount = TestConstants.SORT_BELT_MANAGER_DEVICE_ARMS_COUNT;
     Assertions.assertThat(checkArmsInUse)
         .as(String.format("Logic arms in use in check logic is CORRECT: %d/%d", logicArmsInUseCount,
             sbmArmsCount))
@@ -916,7 +916,8 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
     pause1s();
 
     selectHub.searchInput.sendKeys(configName);
-    assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
+    Assertions.assertThat(noResult.getText()).as("Check result")
+        .isEqualToIgnoringCase("No Results Found");
   }
 
   public ArmCombinationContainer getArmCombinationContainer(String armName) {

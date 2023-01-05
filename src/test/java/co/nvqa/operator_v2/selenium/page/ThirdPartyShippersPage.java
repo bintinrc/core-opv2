@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -80,18 +81,21 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage {
       }
     } else {
       String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
-      assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()),
-          actualId);
+      Assertions.assertThat(actualId).as("Third Party Shipper - Code")
+          .isEqualTo(String.valueOf(thirdPartyShipper.getId()));
     }
 
     String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_CODE);
-    assertEquals("Third Party Shipper - Code", thirdPartyShipper.getCode(), actualCode);
+    Assertions.assertThat(actualCode).as("Third Party Shipper - Code")
+        .isEqualTo(thirdPartyShipper.getCode());
 
     String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-    assertEquals("Third Party Shipper - Name", thirdPartyShipper.getName(), actualName);
+    Assertions.assertThat(actualName).as("Third Party Shipper - Name")
+        .isEqualTo(thirdPartyShipper.getName());
 
     String actualUrl = getTextOnTable(1, COLUMN_CLASS_DATA_URL);
-    assertEquals("Third Party Shipper - URL", thirdPartyShipper.getUrl(), actualUrl);
+    Assertions.assertThat(actualUrl).as("Third Party Shipper - URL")
+        .isEqualTo(thirdPartyShipper.getUrl());
   }
 
   public void deleteThirdPartyShipper(ThirdPartyShipper thirdPartyShipper) {

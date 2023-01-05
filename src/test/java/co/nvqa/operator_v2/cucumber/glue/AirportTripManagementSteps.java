@@ -3,17 +3,15 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.text.View;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

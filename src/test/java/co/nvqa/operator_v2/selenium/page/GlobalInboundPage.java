@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
-import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,7 +165,7 @@ public class GlobalInboundPage extends SimpleReactPage {
     retryIfAssertionErrorOccurred(() ->
     {
       String lastScannedTrackingId = getText("//h5[@class= 'last-scanned-tracking-id']");
-      assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
+     Assertions.assertThat(lastScannedTrackingId).as("Last Scanned Tracking ID").isEqualTo(trackingId);
     }, "Checking Last Scanned Tracking ID");
   }
 
@@ -216,19 +215,19 @@ public class GlobalInboundPage extends SimpleReactPage {
     globalInbound(globalInboundParams);
 
     if (StringUtils.isNotBlank(toastText)) {
-      assertEquals("Toast text", toastText, getToastTopText());
+     Assertions.assertThat(getToastTopText()).as("Toast text").isEqualTo(toastText);
       waitUntilInvisibilityOfToast(toastText);
     }
 
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
     {
       if (StringUtils.isNotBlank(weightWarning)) {
-        assertEquals("Weight warning message", weightWarning, weightDiffInfo.getText());
+       Assertions.assertThat(weightDiffInfo.getText()).as("Weight warning message").isEqualTo(weightWarning);
       }
 
       if (StringUtils.isNotBlank(rackInfo)) {
         String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
-        assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
+       Assertions.assertThat(waitUntilVisibilityOfElementLocated(xpath)).as("rack info").isNotNull();
       }
 
       if (StringUtils.isNotBlank(rackColor)) {
@@ -239,19 +238,19 @@ public class GlobalInboundPage extends SimpleReactPage {
         NvLogger.infof("Color       : %s", colorString);
         Color color = Color.fromString(colorString);
         NvLogger.infof("Color as Hex: %s", color.asHex());
-        assertThat("Unexpected Rack Sector color", color.asHex(), equalToIgnoringCase(rackColor));
+       Assertions.assertThat(color.asHex()).as("Unexpected Rack Sector color").isEqualToIgnoringCase(rackColor);
       }
       if (StringUtils.isNotBlank(rackSector)) {
         String xpath = f(
             "//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='%s']",
             rackSector);
-        assertNotNull("Rack Sector", waitUntilVisibilityOfElementLocated(xpath));
+       Assertions.assertThat(waitUntilVisibilityOfElementLocated(xpath)).as("Rack Sector").isNotNull();
       }
       if (StringUtils.isNotBlank(destinationHub)) {
         String xpath = f(
             "//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='Hub: %s']",
             destinationHub);
-        assertNotNull("Destination Hub", waitUntilVisibilityOfElementLocated(xpath));
+       Assertions.assertThat(waitUntilVisibilityOfElementLocated(xpath)).as("Destination Hub").isNotNull();
       }
     }, "globalInboundAndCheckAlert", 500, 3);
   }
@@ -261,9 +260,8 @@ public class GlobalInboundPage extends SimpleReactPage {
     Color actualPriorityLevelColor = getBackgroundColor(
         "//div[contains(@class,'priority-container')]");
 
-    assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), priorityLevel.getText());
-    assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex,
-        actualPriorityLevelColor.asHex());
+   Assertions.assertThat(priorityLevel.getText()).as("Priority Level").isEqualTo(String.valueOf(expectedPriorityLevel));
+   Assertions.assertThat(        actualPriorityLevelColor.asHex()).as("Priority Level Color").isEqualTo(expectedPriorityLevelColorAsHex);
   }
 
   public void verifyPetsGlobalInbound(GlobalInboundParams globalInboundParams, String ticketType) {
@@ -271,21 +269,18 @@ public class GlobalInboundPage extends SimpleReactPage {
 
     String actualWarningText = getText(
         "//p[@ng-if='!ctrl.data.setAsideRackSector']/following-sibling::h1");
-    assertEquals("Warning Text is not the same : ", actualWarningText,
-        "RECOVERY " + ticketType.toUpperCase());
+   Assertions.assertThat(        "RECOVERY " + ticketType.toUpperCase()).as("Warning Text is not the same : ").isEqualTo(actualWarningText);
   }
 
   public void verifiesDetailsAreRightForGlobalInbound(DatabaseCheckingNinjaCollectConfirmed result,
       DpDetailsResponse dpDetails, String barcode, String source) {
-    assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
-    assertEquals("DP ID is not the same : ", result.getDpId(), dpDetails.getId());
-    assertEquals("Status is not the same : ", result.getStatus(), "CONFIRMED");
+   Assertions.assertThat(barcode).as("Barcode is not the same : ").isEqualTo(result.getBarcode());
+   Assertions.assertThat(dpDetails.getId()).as("DP ID is not the same : ").isEqualTo(result.getDpId());
+   Assertions.assertThat("CONFIRMED").as("Status is not the same : ").isEqualTo(result.getStatus());
     if (source.equalsIgnoreCase("Fully Integrated")) {
-      assertEquals("Source is not the same : ", result.getSource(),
-          "FULLY_INTEGRATED_NINJA_COLLECT");
+     Assertions.assertThat(          "FULLY_INTEGRATED_NINJA_COLLECT").as("Source is not the same : ").isEqualTo(result.getSource());
     } else if (source.equalsIgnoreCase("Semi Integrated")) {
-      assertEquals("Source is not the same : ", result.getSource(),
-          "SEMI_INTEGRATED_NINJA_COLLECT");
+     Assertions.assertThat(          "SEMI_INTEGRATED_NINJA_COLLECT").as("Source is not the same : ").isEqualTo(result.getSource());
     }
   }
 
@@ -306,23 +301,22 @@ public class GlobalInboundPage extends SimpleReactPage {
     globalInbound(globalInboundParams);
     String xpathRackSector = "//div[contains(@class,'rack-sector')]/h1";
     String rackSector = getText(xpathRackSector);
-    assertEquals("Recovery Ticket Type rack sector is displayed",
-        ("RECOVERY " + recoveryTicketType).toLowerCase(), rackSector.toLowerCase());
+   Assertions.assertThat(rackSector.toLowerCase()).as("Recovery Ticket Type rack sector is displayed").isEqualTo(        ("RECOVERY " + recoveryTicketType).toLowerCase());
   }
 
   public void verifiesDpTag() {
     String actualTag = dpTag.getText();
-    assertEquals("DP tag", "DP Parcel", actualTag);
+   Assertions.assertThat(actualTag).as("DP tag").isEqualTo("DP Parcel");
   }
 
   public void verifiesPriorTag() {
     String actualTag = priorTag.getText();
-    assertEquals("Prior tag", "PRIOR", actualTag);
+   Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("PRIOR");
   }
 
   public void verifiesRtsTag() {
     String actualTag = rtsTag.getText();
-    assertEquals("RTS tag", "RTS", actualTag);
+   Assertions.assertThat(actualTag).as("RTS tag").isEqualTo("RTS");
   }
 
   public void addTag(List<String> orderTags) {

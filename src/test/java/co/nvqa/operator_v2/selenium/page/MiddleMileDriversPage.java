@@ -186,8 +186,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void verifiesTotalDriverIsTheSame(int totalDriver) {
         if (totalDriver > 0) {
-            assertTrue("Total Driver Shown is the same.",
-                    getText(TOTAL_DRIVER_SHOW_XPATH).contains(String.valueOf(totalDriver)));
+           Assertions.assertThat(                    getText(TOTAL_DRIVER_SHOW_XPATH).contains(String.valueOf(totalDriver))).as("Total Driver Shown is the same.").isTrue();
         }
     }
 
@@ -382,15 +381,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 NvLogger.warn("Filter is not found");
         }
 
-        assertEquals("Display Name is not the same : ", middleMileDriver.getDisplayName(),
-            actualDisplayName);
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
-        assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
-                actualEmploymentType);
-        assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
-                actualLicenseType);
-        assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+       Assertions.assertThat(actualDisplayName).as("Display Name is not the same : ").isEqualTo(middleMileDriver.getDisplayName());
+       Assertions.assertThat(actualUsername).as("Username is not the same : ").isEqualTo(middleMileDriver.getUsername());
+       Assertions.assertThat(actualHub).as("Hub is not the same : ").isEqualTo(middleMileDriver.getHub());
+       Assertions.assertThat(actualEmploymentType).as("Employment Type is not the same : ").isEqualTo(middleMileDriver.getEmploymentType());
+       Assertions.assertThat(actualLicenseType).as("License Type is not the same : ").isEqualTo(middleMileDriver.getLicenseType());
+       Assertions.assertThat(actualComments).as("Comment is not the same : ").isEqualTo(middleMileDriver.getComments());
     }
 
     public void tableFilterById(Driver middleMileDriver, Long driverId) {
@@ -409,15 +405,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualComments = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
 
-        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
-        assertEquals("ID is not the same : ", driverId.toString(), actualId);
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
-        assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
-                actualEmploymentType);
-        assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
-                actualLicenseType);
-        assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+       Assertions.assertThat(actualName).as("Name is not the same : ").isEqualTo(middleMileDriver.getFirstName());
+       Assertions.assertThat(actualId).as("ID is not the same : ").isEqualTo(driverId.toString());
+       Assertions.assertThat(actualUsername).as("Username is not the same : ").isEqualTo(middleMileDriver.getUsername());
+       Assertions.assertThat(actualHub).as("Hub is not the same : ").isEqualTo(middleMileDriver.getHub());
+       Assertions.assertThat(                actualEmploymentType).as("Employment Type is not the same : ").isEqualTo(middleMileDriver.getEmploymentType());
+       Assertions.assertThat(                actualLicenseType).as("License Type is not the same : ").isEqualTo(middleMileDriver.getLicenseType());
+       Assertions.assertThat(actualComments).as("Comment is not the same : ").isEqualTo(middleMileDriver.getComments());
     }
 
     public void tableFilterByname(Driver middleMileDriver) {
@@ -536,14 +530,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 break;
         }
 
-        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
-        assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(),
-                actualEmploymentType);
-        assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(),
-                actualLicenseType);
-        assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+       Assertions.assertThat(actualName).as("Name is not the same : ").isEqualTo(middleMileDriver.getFirstName());
+       Assertions.assertThat(actualUsername).as("Username is not the same : ").isEqualTo(middleMileDriver.getUsername());
+       Assertions.assertThat(actualHub).as("Hub is not the same : ").isEqualTo(middleMileDriver.getHub());
+       Assertions.assertThat(                actualEmploymentType).as("Employment Type is not the same : ").isEqualTo(middleMileDriver.getEmploymentType());
+       Assertions.assertThat(                actualLicenseType).as("License Type is not the same : ").isEqualTo(middleMileDriver.getLicenseType());
+       Assertions.assertThat(actualComments).as("Comment is not the same : ").isEqualTo(middleMileDriver.getComments());
     }
 
     public void verifiesDataIsNotExisted(String driverName) {
@@ -606,7 +598,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         switch (column) {
             case "name":
                 String actualName = getText(f(tableColumnValue, column));
-                assertThat("Updated name is the same", actualName, equalTo(value));
+               Assertions.assertThat(actualName).as("Updated name is the same").isEqualTo(value);
                 break;
             case "contact_number":
                 break;
@@ -657,9 +649,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     public void verifiesDriverAvailability(boolean driverAvailability) {
         if (isElementExistFast(YES_COMING_BUTTON_XPATH)) {
-            assertTrue("Driver Availability is True : ", driverAvailability);
+           Assertions.assertThat(driverAvailability).as("Driver Availability is True : ").isTrue();
         } else if (isElementExistFast(NO_COMING_BUTTON_XPATH)) {
-            assertFalse("Driver Availability is false : ", driverAvailability);
+           Assertions.assertThat(driverAvailability).as("Driver Availability is false : ").isFalse();
         }
     }
 

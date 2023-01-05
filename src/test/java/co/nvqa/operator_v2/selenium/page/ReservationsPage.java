@@ -9,9 +9,10 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
-import java.util.Calendar;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 import java.util.Locale;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -53,17 +54,17 @@ public class ReservationsPage extends OperatorV2SimplePage {
   }
 
   private int getNextDateNumber() {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(TestUtils.getNextDate(1));
+    ZonedDateTime tomorrow = ZonedDateTime.now().plusDays(1);
+    tomorrow.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-    String expectedMonth = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+    String expectedMonth = tomorrow.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     String actualMonth = getMdSelectValue("calendar.month");
 
     if (!expectedMonth.equals(actualMonth)) {
       clickButtonByAriaLabel("Next month");
     }
 
-    return calendar.get(Calendar.DATE);
+    return tomorrow.getDayOfMonth();
   }
 
   private String getNextDateCellXpath() {
@@ -108,8 +109,9 @@ public class ReservationsPage extends OperatorV2SimplePage {
 
     String actualTimeslotTextOnCalendar = getText(getNextDateCellXpath()
         + "//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
-    assertEquals("Reservation is not created correctly. Timeslot does not change.",
-        expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
+    Assertions.assertThat(actualTimeslotTextOnCalendar.trim())
+        .as("Reservation is not created correctly. Timeslot does not change.")
+        .isEqualTo(expectedTimeslotTextOnCalendar.trim());
   }
 
   public void editReservation(String shipperName, Address address, Reservation reservation,
@@ -135,8 +137,9 @@ public class ReservationsPage extends OperatorV2SimplePage {
 
     String actualTimeslotTextOnCalendar = getText(getNextDateCellXpath()
         + "//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
-    assertEquals("Reservation is not updated. Timeslot does not change.",
-        expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
+    Assertions.assertThat(actualTimeslotTextOnCalendar.trim())
+        .as("Reservation is not updated. Timeslot does not change.")
+        .isEqualTo(expectedTimeslotTextOnCalendar.trim());
   }
 
   public void deleteReservation(String shipperName, Address address, Reservation reservation) {

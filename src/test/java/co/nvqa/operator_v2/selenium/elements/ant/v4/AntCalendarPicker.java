@@ -4,8 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import java.util.Date;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import java.time.ZonedDateTime;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,7 +47,7 @@ public class AntCalendarPicker extends PageElement {
     new Button(getWebDriver(), f(CAL_ITEM_XPATH, value)).click();
   }
 
-  public void setValue(Date date) {
-    setDate(DateFormatUtils.format(date, "yyyy-MM-dd"));
+  public void setValue(ZonedDateTime date) {
+    setDate(DTF_NORMAL_DATE.format(date));
   }
 }

@@ -1,16 +1,20 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
-import java.text.ParseException;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+
+import static co.nvqa.common.utils.StandardTestUtils.convertToZonedDateTime;
 
 /**
  * @author Sergey Mishanin
@@ -32,19 +36,19 @@ public class NonInboundedOrdersSteps extends AbstractSteps {
   public void operatorSelectFilterAndClickLoadSelectionOnNonInboundedOrdersUsingDataBelow(
       Map<String, String> mapOfData) {
     try {
-      Map<String, String> mapOfTokens = createDefaultTokens();
-      Map<String, String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfTokens);
+      Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
+      Map<String, String> dataTableAsMapReplaced = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
 
       String routeDate = dataTableAsMapReplaced.get("routeDate");
-      Date fromDate = null;
+      ZonedDateTime fromDate = null;
 
       if (StringUtils.isNotBlank(routeDate)) {
-        fromDate = YYYY_MM_DD_SDF.parse(routeDate);
+        fromDate = convertToZonedDateTime(routeDate, DTF_NORMAL_DATE);
       }
 
       String shipperName = dataTableAsMapReplaced.get("shipperName");
       nonInboundedOrdersPage.filterAndLoadSelection(fromDate, shipperName);
-    } catch (ParseException ex) {
+    } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse date.", ex);
     }
   }
@@ -79,8 +83,8 @@ public class NonInboundedOrdersSteps extends AbstractSteps {
   private void checkOrderIsNotFound(String trackingId) {
     nonInboundedOrdersPage
         .filterBy(NonInboundedOrdersPage.OrdersTable.COLUMN_TRACKING_ID, trackingId);
-    assertTrue("Filtered Orders page is empty",
-        nonInboundedOrdersPage.ordersTable().isTableEmpty());
+    Assertions.assertThat(nonInboundedOrdersPage.ordersTable().isTableEmpty())
+        .as("Filtered Orders page is empty").isTrue();
   }
 
   @When("^Operator download CSV file for created orders on Non Inbounded Orders page$")

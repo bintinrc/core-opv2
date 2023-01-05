@@ -13,6 +13,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -168,8 +169,8 @@ public class AddShipperToPresetPage extends OperatorV2SimplePage {
     String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
     waitUntilVisibilityOfElementLocated(notificationXpath);
     WebElement notificationElement = findElementByXpath(notificationXpath);
-    assertThat("Toast message is the same", notificationElement.getText(),
-        equalTo(containsMessage));
+    Assertions.assertThat(notificationElement.getText()).as("Toast message is the same")
+        .isEqualTo(containsMessage);
     waitUntilInvisibilityOfNotification(notificationXpath, false);
   }
 

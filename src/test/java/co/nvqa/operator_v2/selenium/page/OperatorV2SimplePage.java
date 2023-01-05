@@ -1,20 +1,21 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common_selenium.page.SimplePage;
+import co.nvqa.common.ui.page.SimpleWebPage;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
-import java.util.Date;
+import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class OperatorV2SimplePage extends SimplePage {
+public class OperatorV2SimplePage extends SimpleWebPage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OperatorV2SimplePage.class);
 
@@ -201,15 +202,15 @@ public class OperatorV2SimplePage extends SimplePage {
     sendKeys(f("//md-input-container[@model='%s']/input", mdInputContainerModel), keysToSend);
   }
 
-  public void setMdDatepicker(String mdDatepickerNgModel, Date date) {
+  public void setMdDatepicker(String mdDatepickerNgModel, TemporalAccessor date) {
     sendKeys(f("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel),
-        MD_DATEPICKER_SDF.format(date));
+        DTF_NORMAL_DATE.format(date));
     clickf("//md-datepicker[@ng-model='%s']/parent::*", mdDatepickerNgModel);
   }
 
-  public void setMdDatepickerById(String mdDatepickerId, Date date) {
+  public void setMdDatepickerById(String mdDatepickerId, TemporalAccessor date) {
     sendKeys(f("//md-datepicker[@id='%s']/div/input", mdDatepickerId),
-        MD_DATEPICKER_SDF.format(date));
+        DTF_NORMAL_DATE.format(date));
     clickf("//md-datepicker[@id='%s']/parent::*", mdDatepickerId);
   }
 
@@ -370,6 +371,9 @@ public class OperatorV2SimplePage extends SimplePage {
     return getToastText("//div[@class='ant-notification-notice-message']");
   }
 
+  public String getAntTopRightText() {
+    return getToastText("//div[contains(@class,'ant-notification-topRight')]");
+  }
   public WebElement getToastBottom() {
     String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
     return waitUntilVisibilityOfElementLocated(xpathExpression);
@@ -881,8 +885,7 @@ public class OperatorV2SimplePage extends SimplePage {
     if (isMdSelectEnabled(mdSelectNgModel)) {
       selectValueFromMdSelect(mdSelectNgModel, value);
     } else {
-      assertEquals(selectName + " select is disabled and current value is not equal to expected",
-          value, getMdSelectValue(mdSelectNgModel));
+     Assertions.assertThat(getMdSelectValue(mdSelectNgModel)).as(selectName + " select is disabled and current value is not equal to expected").isEqualTo(          value);
     }
   }
 

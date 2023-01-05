@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -25,7 +26,8 @@ public class NinjaHubProvisioningPage extends OperatorV2SimplePage {
   public void verifyTheQrCodeTextIsEqualWithTheLinkText(File qrCodeFile) {
     String qrCodeText = TestUtils.getTextFromQrCodeImage(qrCodeFile);
     String linkText = getText("//div[@class='qrcode-holder']/p");
-    assertEquals("QR Code Text & Link Text is different.", qrCodeText, linkText);
+    Assertions.assertThat(linkText).as("QR Code Text & Link Text is different.")
+        .isEqualTo(qrCodeText);
   }
 
   public void switchToIframe() {

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -10,8 +11,8 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -80,10 +81,12 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage {
     editRtsDetailsDialog.waitUntilVisible();
     editRtsDetailsDialog.reason.selectValue("Other Reason");
     editRtsDetailsDialog.description.setValue(
-        f("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        f("Reason created by OpV2 automation on %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
     editRtsDetailsDialog.internalNotes.setValue(
-        f("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
-    editRtsDetailsDialog.deliveryDate.setDate(TestUtils.getNextDate(1));
+        f("Internal notes created by OpV2 automation on %s.",
+            DTF_CREATED_DATE.format(ZonedDateTime.now())));
+    editRtsDetailsDialog.deliveryDate.setDate(ZonedDateTime.now().plusDays(1));
     editRtsDetailsDialog.timeslot.selectValue("3PM - 6PM");
     editRtsDetailsDialog.saveChanges.clickAndWaitUntilDone();
     editRtsDetailsDialog.waitUntilInvisible();
@@ -95,7 +98,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage {
     failedDeliveriesTable.selectRow(1);
     selectAction(ACTION_SET_RTS_TO_SELECTED);
     setSelectedToReturnToSenderDialog.waitUntilVisible();
-    setSelectedToReturnToSenderDialog.deliveryDate.setDate(TestUtils.getNextDate(1));
+    setSelectedToReturnToSenderDialog.deliveryDate.setDate(ZonedDateTime.now().plusDays(1));
     setSelectedToReturnToSenderDialog.timeslot.selectValue("3PM - 6PM");
     setSelectedToReturnToSenderDialog.setOrderToRts.clickAndWaitUntilDone();
     setSelectedToReturnToSenderDialog.waitUntilInvisible();
@@ -226,7 +229,8 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage {
         internalNotes.setValue(rtsDetails.getInternalNotes());
       }
       if (rtsDetails.getDeliveryDate() != null) {
-        deliveryDate.setDate(rtsDetails.getDeliveryDate());
+        deliveryDate.setDate(
+            StandardTestUtils.convertToZonedDateTime(rtsDetails.getDeliveryDate()));
       }
       if (StringUtils.isNotBlank(rtsDetails.getTimeSlot())) {
         timeslot.selectValue(rtsDetails.getTimeSlot());

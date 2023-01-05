@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Rizaq Pratama
@@ -44,8 +45,8 @@ public class MessagingModuleSteps extends AbstractSteps {
 
   @Then("^Operator verify sms module page reset$")
   public void onSmsModulePageReset() {
-    assertFalse("Compose Message card displayed",
-        messagingModulePage.composeMessageCard.isDisplayedFast());
+    Assertions.assertThat(messagingModulePage.composeMessageCard.isDisplayedFast())
+        .as("Compose Message card displayed").isFalse();
   }
 
   @When("^Operator compose SMS with name = \"([^\"]*)\" and tracking ID = \"([^\"]*)\"$")

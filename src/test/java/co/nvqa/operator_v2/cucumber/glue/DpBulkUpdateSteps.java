@@ -112,7 +112,7 @@ public class DpBulkUpdateSteps extends AbstractSteps {
       case SPECIAL_CHAR:
         dp = get(KEY_DISTRIBUTION_POINT);
         dpIds.add(dp.getId());
-        dpIds.add(TestConstants.DP_ID);
+        dpIds.add(TestConstants.OPV2_DP_DP_ID);
 
         for (Long dpId : dpIds) {
           dpBulkUpdatePage.inputDpIdsTextArea.sendKeys(dpId + ",");

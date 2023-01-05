@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
-import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
@@ -171,7 +170,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
     for(int i=1; i<=Integer.parseInt(shipmentsCount); i++){
       String shipmentId = resolveValue(f(shipment,i));
-      NvAssertions.LOGGER.info("Shipment Count: " + i + ", Shipment Id: " + shipmentId);
+      LOGGER.info("Shipment Count: " + i + ", Shipment Id: " + shipmentId);
       if(i>1){
         shipmentScanningPage.scanAndCloseShipmentsWithData(origHubName, destHubName, shipmentType, shipmentId, trackingId);
       }else{

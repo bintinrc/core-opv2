@@ -187,7 +187,7 @@ public class AntSelect3 extends PageElement {
     String listBoxLocator = getListBoxLocator();
     try {
       waitUntilInvisibilityOfElementLocated(listBoxLocator, 1);
-    } catch (Exception ex) {
+    } catch (Exception ignored) {
     }
     if (isElementVisible(listBoxLocator, 0)) {
       jsClick();

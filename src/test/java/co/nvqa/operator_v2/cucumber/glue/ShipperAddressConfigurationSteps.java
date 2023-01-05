@@ -1,32 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage.InvalidFailedWP;
-import co.nvqa.operator_v2.selenium.page.StationRouteMonitoringPage.StationRouteMonitoring;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.InvalidElementStateException;
@@ -36,11 +18,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.COLUMN_NAME;
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.CSV_DOWNLOADED_FILENAME_PATTERN;
-import static co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage.DOWNLOADED_CSV_FILENAME;
-
 
 @SuppressWarnings("unused")
 @ScenarioScoped
@@ -229,10 +206,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     expected = resolveValues(expected);
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
         filePattern);
-    expected.forEach((expectedText) -> {
-      shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(downloadedCsvFile,
-          expectedText, true);
-    });
+    expected.forEach(
+        (expectedText) -> shipperAddressConfigurationPage.verifyFileDownloadedSuccessfully(
+            downloadedCsvFile,
+            expectedText, true));
   }
 
   @Then("Operator verifies header names are available in the downloaded CSV file {string}")
@@ -245,11 +222,9 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
         downloadedCsvFile);
     String headers = actual.get(0).toString().replaceAll("^\"|\"$", "").replaceAll("^\"|\"$", "");
-    headerNames.forEach((e) -> {
-      Assertions.assertThat(headers)
-          .as("Validation for Header Names in Downloaded CSV file")
-          .contains(e);
-    });
+    headerNames.forEach((e) -> Assertions.assertThat(headers)
+        .as("Validation for Header Names in Downloaded CSV file")
+        .contains(e));
 
   }
 

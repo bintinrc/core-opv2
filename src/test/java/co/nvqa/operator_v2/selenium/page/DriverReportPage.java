@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -32,11 +33,11 @@ public class DriverReportPage extends OperatorV2SimplePage {
     super(webDriver);
   }
 
-  public void setFromDate(Date date) {
+  public void setFromDate(ZonedDateTime date) {
     setMdDatepicker("ctrl.fromDate", date);
   }
 
-  public void setToDate(Date date) {
+  public void setToDate(ZonedDateTime date) {
     setMdDatepicker("ctrl.toDate", date);
   }
 
@@ -90,7 +91,7 @@ public class DriverReportPage extends OperatorV2SimplePage {
     String assertionErrorInfo = String
         .format("ZipEntry with name = '%s' on file = '%s' does not contain Route with ID = '%d'.",
             driverReportFilename, generatedCsvReportFilename, expectedRouteId);
-    assertTrue(assertionErrorInfo, expectedRouteIdFound);
+    Assertions.assertThat(expectedRouteIdFound).as(assertionErrorInfo).isTrue();
   }
 
   public void clickButtonGenerateDriverRouteExcelReport() {
@@ -142,6 +143,6 @@ public class DriverReportPage extends OperatorV2SimplePage {
     String assertionErrorInfo = f(
         "Sheet with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverName,
         generatedExcelReportFilename, expectedRouteId);
-    assertTrue(assertionErrorInfo, expectedRouteIdFound);
+    Assertions.assertThat(expectedRouteIdFound).as(assertionErrorInfo).isTrue();
   }
 }

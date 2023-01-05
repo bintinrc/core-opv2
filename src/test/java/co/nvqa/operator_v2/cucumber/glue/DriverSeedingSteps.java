@@ -9,7 +9,7 @@ import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -70,8 +70,7 @@ public class DriverSeedingSteps extends AbstractSteps {
     List<String> actual = driverSeedingPage.drivers.stream()
         .map(PageElement::getNormalizedText)
         .collect(Collectors.toList());
-    assertThat("Listed Drivers", actual,
-        Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+    Assertions.assertThat(actual).as("Listed Drivers").contains(expected.toArray(new String[0]));
     takesScreenshot();
   }
 
@@ -81,8 +80,7 @@ public class DriverSeedingSteps extends AbstractSteps {
     List<String> actual = driverSeedingPage.driverMarks.stream()
         .map(mark -> mark.label.getNormalizedText())
         .collect(Collectors.toList());
-    assertThat("Drivers on the map", actual,
-        Matchers.containsInAnyOrder(expected.toArray(new String[0])));
+    Assertions.assertThat(actual).as("Drivers on the map").contains(expected.toArray(new String[0]));
     takesScreenshot();
   }
 }

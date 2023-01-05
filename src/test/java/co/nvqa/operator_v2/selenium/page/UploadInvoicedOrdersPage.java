@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import java.io.File;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -44,8 +45,9 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
 
   public void verifyUploadInvoicedOrdersDialogIsDisplayed() {
     uploadInvoicedOrdersDialog.waitUntilVisible();
-    assertTrue("Upload Invoiced Orders Dialog is not displayed",
-        uploadInvoicedOrdersDialog.isDisplayed());
+
+    Assertions.assertThat(uploadInvoicedOrdersDialog.isDisplayed())
+        .as("Upload Invoiced Orders Dialog is not displayed").isTrue();
   }
 
   public void verifySuccessMsgIsDisplayed() {
@@ -54,7 +56,8 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
   }
 
   public void verifySuccessUploadNewFileIsDisplayed() {
-    assertTrue("Upload New Button is not displayed", uploadNewFileButton.isDisplayed());
+    Assertions.assertThat(uploadNewFileButton.isDisplayed())
+        .as("Upload New Button is not displayed").isTrue();
   }
 
   public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {

@@ -21,8 +21,9 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -136,7 +137,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
   }
 
   public void setCreationTimeFilter() {
-    creationTimeFilter.selectToDate(TestUtils.getNextDate(1));
+    creationTimeFilter.selectToDate(Date.from(ZonedDateTime.now().plusDays(1).toInstant()));
     creationTimeFilter.selectToHours("23");
     creationTimeFilter.selectToMinutes("30");
     creationTimeFilter.selectFromHours("00");

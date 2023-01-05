@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import static co.nvqa.commons.util.StandardTestConstants.COUNTRY_CODE;
+
+import static co.nvqa.common.utils.StandardTestConstants.NV_SYSTEM_ID;
 
 /**
  * @author Veera N
@@ -62,7 +64,8 @@ public class StationCODReportSteps extends AbstractSteps {
   }
 
   @When("Operator searches for station cod report by applying following filters:")
-  public void operator_searches_for_station_cod_report_by_applying_following_filters(DataTable searchParam) {
+  public void operator_searches_for_station_cod_report_by_applying_following_filters(
+      DataTable searchParam) {
     List<Map<String, String>> filters = searchParam.asMaps(String.class, String.class);
     for (Map<String, String> filter : filters) {
       Map<String, String> resolvedFilter = resolveKeyValues(filters.get(0));
@@ -112,7 +115,7 @@ public class StationCODReportSteps extends AbstractSteps {
   @Then("^Operator verifies that the following details are displayed in \\w+ tab:$")
   public void operator_verifies_that_the_following_details_are_displayed_in_details_tab(
       Map<String, String> details) {
-    NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
+    NvCountry countryCd = NvCountry.fromString(NV_SYSTEM_ID);
     Map<String, String> actualDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
     Map<String, String> expectedDetails = resolveKeyValues(details);
     String codAmt;
@@ -132,12 +135,12 @@ public class StationCODReportSteps extends AbstractSteps {
       expectedCODAmount = String.valueOf(f("%,f", Float.parseFloat(expectedCODAmount)));
       expectedCODAmount = expectedCODAmount.contains(".") ? expectedCODAmount.replaceAll("0*$", "")
           .replaceAll("\\.$", "") : expectedCODAmount;
-      assertTrue("Assert that COD amount has comma and dot as separators",
-          expectedCODAmount.contentEquals(actualDetails.get("COD Amount")));
+      Assertions.assertThat(expectedCODAmount.contentEquals(actualDetails.get("COD Amount")))
+          .as("Assert that COD amount has comma and dot as separators").isTrue();
       return;
     }
-    assertTrue("Assert that COD amount displays in the result grid",
-        actualDetails.containsKey("COD Amount"));
+    Assertions.assertThat(actualDetails.containsKey("COD Amount"))
+        .as("Assert that COD amount displays in the result grid").isTrue();
     takesScreenshot();
   }
 
@@ -145,31 +148,31 @@ public class StationCODReportSteps extends AbstractSteps {
   @Then("Operator verifies that the COD amount: {string} is separated by dot for thousands and by comma for decimals")
   public void operator_verifies_that_the_COD_amount_is_separated_by_dot_for_thousands_and_by_comma_for_decimals(
       String expectedCODAmount) {
-    NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
+    NvCountry countryCd = NvCountry.fromString(NV_SYSTEM_ID);
     Map<String, String> actualDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
     if (actualDetails.containsKey("COD Amount")) {
       expectedCODAmount = stationCODReportPage.formatCODAmountByCountry(countryCd,
           expectedCODAmount);
-      assertTrue(
-          "Assert that COD amount has comma and dot as separators for thousands and decimals respectively",
-          expectedCODAmount.contentEquals(actualDetails.get("COD Amount")));
+      Assertions.assertThat(expectedCODAmount.contentEquals(actualDetails.get("COD Amount"))).as(
+          "Assert that COD amount has comma and dot as separators for thousands and decimals respectively"
+      ).isTrue();
       return;
     }
-    assertTrue("Assert that COD amount displays in the result grid",
-        actualDetails.containsKey("COD Amount"));
+    Assertions.assertThat(actualDetails.containsKey("COD Amount"))
+        .as("Assert that COD amount displays in the result grid").isTrue();
     takesScreenshot();
   }
 
   @Then("Operator verifies that the COD collected amount is separated by comma for thousands and by dot for decimals")
   public void operator_verifies_that_the_COD_collected_amount_is_separated_by_comma_for_thousands_and_by_dot_for_decimals() {
-    NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
+    NvCountry countryCd = NvCountry.fromString(NV_SYSTEM_ID);
     stationCODReportPage.verifySeparatorsInCashCollected(countryCd);
     takesScreenshot();
   }
 
   @Then("Operator verifies that the COD collected amount is separated by dot for thousands and by comma for decimals")
   public void operator_verifies_that_the_COD_collected_amount_is_separated_by_dot_for_thousands_and_by_comma_for_decimals() {
-    NvCountry countryCd = NvCountry.fromString(COUNTRY_CODE);
+    NvCountry countryCd = NvCountry.fromString(NV_SYSTEM_ID);
     stationCODReportPage.verifySeparatorsInCashCollected(countryCd);
     takesScreenshot();
   }
@@ -198,36 +201,43 @@ public class StationCODReportSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies that the downloaded CSV file matches with the expected details in {string} tab")
-  public void operator_verifies_that_the_downloaded_CSV_file_matches_with_the_expected_details_in_tab(String tab) {
+  public void operator_verifies_that_the_downloaded_CSV_file_matches_with_the_expected_details_in_tab(
+      String tab) {
     final AtomicBoolean asserts = new AtomicBoolean(false);
     Map<String, String> expectedDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
     Map<String, Object> actualDetails = stationCODReportPage.getContentFromDownloadedCSV(tab);
     expectedDetails.forEach((key, value) -> {
-      if(!actualDetails.containsKey(key)){
-        Assert.assertTrue(f("Assert that the record: %s in CSV match with the results displayed in the grid!",value),
-            false);;
+      if (!actualDetails.containsKey(key)) {
+        Assert.assertTrue(
+            f("Assert that the record: %s in CSV match with the results displayed in the grid!",
+                value),
+            false);
       }
-      if(actualDetails.containsKey(key)){
+      if (actualDetails.containsKey(key)) {
         asserts.set(actualDetails.get(key).toString().contentEquals(value));
-        if(key.contentEquals("COD Amount")){
-          asserts.set(actualDetails.get(key).toString().contains(value.replace(",","")));
+        if (key.contentEquals("COD Amount")) {
+          asserts.set(actualDetails.get(key).toString().contains(value.replace(",", "")));
         }
-        Assert.assertTrue(f("Assert that the record: %s in CSV match with the results displayed in the grid!",value),
-            asserts.get());;
+        Assert.assertTrue(
+            f("Assert that the record: %s in CSV match with the results displayed in the grid!",
+                value),
+            asserts.get());
       }
     });
     takesScreenshot();
   }
 
   @Then("Operator verifies that COD amount is rounded off to two decimal in CSV downloaded from {string} tab")
-  public void operator_verifies_that_COD_amount_is_rounded_off_to_two_decimal_in_CSV_downloaded_from_tab(String tab) {
+  public void operator_verifies_that_COD_amount_is_rounded_off_to_two_decimal_in_CSV_downloaded_from_tab(
+      String tab) {
     Map<String, String> expectedDetails = get(KEY_STATION_COD_REPORT_DETAILS_GRID);
     Map<String, Object> actualDetails = stationCODReportPage.getContentFromDownloadedCSV(tab);
-    String formattedExpectedCODAmount = expectedDetails.get("COD Amount").replace(",","");
-    if(actualDetails.containsKey("COD Amount")){
-      formattedExpectedCODAmount = String.format("%.2f",Float.parseFloat(formattedExpectedCODAmount));
+    String formattedExpectedCODAmount = expectedDetails.get("COD Amount").replace(",", "");
+    if (actualDetails.containsKey("COD Amount")) {
+      formattedExpectedCODAmount = String.format("%.2f",
+          Float.parseFloat(formattedExpectedCODAmount));
       Assert.assertTrue("Assert that the cod amount in CSV is rounded off to 2 decimals",
-          formattedExpectedCODAmount.contentEquals((String)actualDetails.get("COD Amount")));
+          formattedExpectedCODAmount.contentEquals((String) actualDetails.get("COD Amount")));
       return;
     }
     Assert.assertTrue("Assert that the downloaded CSV contains COD Amount",

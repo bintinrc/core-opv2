@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
+import org.assertj.core.api.Assertions;
 
 /**
  * @author Sergey Mishanin
@@ -53,21 +53,25 @@ public class MessagingSteps extends AbstractSteps {
   public void checkTotalSelectedCountIsLessThen(int expected) {
     String selectedCount = messagingPage.selectedCount.getText();
     int actual = Integer.parseInt(selectedCount.split(" ")[0]);
-    assertThat("Total count of selected drivers", actual, Matchers.lessThan(expected));
-    assertEquals("Count of shown drivers", actual, messagingPage.driverNames.size());
+    Assertions.assertThat(actual).as("Total count of selected drivers").isLessThan(expected);
+    Assertions.assertThat(messagingPage.driverNames.size()).as("Count of shown drivers")
+        .isEqualTo(actual);
   }
 
   @When("Count of selected drivers is greater than {int} on Messaging panel")
   public void checkTotalSelectedCountIsMoreThen(int expected) {
     String selectedCount = messagingPage.selectedCount.getText();
     int actual = Integer.parseInt(selectedCount.split(" ")[0]);
-    assertThat("Total count of selected drivers", actual, Matchers.greaterThan(expected));
-    assertTrue("Count of hidden drivers is displayed", messagingPage.hiddenCount.isDisplayed());
+    Assertions.assertThat(actual).as("Total count of selected drivers").isGreaterThan(expected);
+    Assertions.assertThat(messagingPage.hiddenCount.isDisplayed())
+        .as("Count of hidden drivers is displayed").isTrue();
     int expectedHiddenCount = actual - 100;
     String hiddenCount = messagingPage.hiddenCount.getText();
     int actualHiddenCount = Integer.parseInt(hiddenCount.split(" ")[1]);
-    assertEquals("Count of hidden drivers", expectedHiddenCount, actualHiddenCount);
-    assertEquals("Count of shown drivers", 100, messagingPage.driverNames.size());
+    Assertions.assertThat(actualHiddenCount).as("Count of hidden drivers")
+        .isEqualTo(expectedHiddenCount);
+    Assertions.assertThat(messagingPage.driverNames.size()).as("Count of shown drivers")
+        .isEqualTo(100);
   }
 
   @When("All selected drivers belongs to selected group")
@@ -103,8 +107,8 @@ public class MessagingSteps extends AbstractSteps {
     if (CollectionUtils.isEmpty(uiDrivers)) {
       throw new IllegalArgumentException("No drivers found on UI");
     }
-    assertEquals("Count of drivers found on UI is not the same as in DB", dbDrivers.size(),
-        uiDrivers.size());
+    Assertions.assertThat(uiDrivers.size())
+        .as("Count of drivers found on UI is not the same as in DB").isEqualTo(dbDrivers.size());
 
     dbDrivers.forEach(dbDriver ->
         uiDrivers.stream()

@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -152,7 +153,8 @@ public class LatLngCleanupPage extends OperatorV2SimplePage {
     }
 
     public EditWaypointDetailsDialog validateWaypointWasFound() {
-      assertFalse("Waypoint Id cannot be found", invalidWaypointIdMessage.isDisplayedFast());
+      Assertions.assertThat(invalidWaypointIdMessage.isDisplayedFast())
+          .as("Waypoint Id cannot be found").isFalse();
       return this;
     }
 

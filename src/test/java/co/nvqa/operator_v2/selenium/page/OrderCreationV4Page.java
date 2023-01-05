@@ -4,7 +4,6 @@ import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
 import co.nvqa.commons.model.order_create.v4.Timeslot;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
@@ -23,7 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
+
+import static co.nvqa.common.utils.StandardTestConstants.TEMP_DIR;
+import static co.nvqa.common.utils.StandardTestUtils.convertToZonedDateTime;
 
 /**
  * @author Sergey Mishanin
@@ -70,24 +73,26 @@ public class OrderCreationV4Page extends OperatorV2SimplePage {
   public void verifyOrderIsCreatedSuccessfully(OrderRequestV4 order) {
     ordersTable.searchOrderByTrackingId(order.getRequestedTrackingNumber());
     String totalSuccess = uploadSummaryTable.getTotalSuccess();
-    assertEquals("Total Success", "1", totalSuccess);
+    Assertions.assertThat(totalSuccess).as("Total Success").isEqualTo("1");
     String totalOrders = uploadSummaryTable.getTotalOrders();
-    assertEquals("Total Orders", "1", totalOrders);
+    Assertions.assertThat(totalOrders).as("Total Orders").isEqualTo("1");
 
     int rowNumber = 1;
-    assertThat("Tracking ID", ordersTable.getTrackingId(rowNumber),
-        endsWith(order.getRequestedTrackingNumber()));
-    assertThat("Service Level", ordersTable.getServiceLevel(rowNumber),
-        equalToIgnoringCase(order.getServiceLevel()));
-    assertThat("From Name", ordersTable.getFromName(rowNumber), equalTo(order.getFrom().getName()));
-    assertThat("From Address", ordersTable.getFromAddress(rowNumber),
-        equalTo(buildAddress(order.getFrom().getAddress())));
-    assertThat("To Name", ordersTable.getToName(rowNumber), equalTo(order.getTo().getName()));
-    assertThat("To Address", ordersTable.getToAddress(rowNumber),
-        equalTo(buildAddress(order.getTo().getAddress())));
+    Assertions.assertThat(ordersTable.getTrackingId(rowNumber)).as("Tracking ID")
+        .endsWith(order.getRequestedTrackingNumber());
+    Assertions.assertThat(ordersTable.getServiceLevel(rowNumber)).as("Service Level")
+        .isEqualToIgnoringCase(order.getServiceLevel());
+    Assertions.assertThat(ordersTable.getFromName(rowNumber)).as("From Name")
+        .isEqualTo(order.getFrom().getName());
+    Assertions.assertThat(ordersTable.getFromAddress(rowNumber)).as("From Address")
+        .isEqualTo(buildAddress(order.getFrom().getAddress()));
+    Assertions.assertThat(ordersTable.getToName(rowNumber)).as("To Name")
+        .isEqualTo(order.getTo().getName());
+    Assertions.assertThat(ordersTable.getToAddress(rowNumber)).as("To Address")
+        .isEqualTo(buildAddress(order.getTo().getAddress()));
     //assertThat("Delivery Start Date", ordersTable.getDeliveryStartDate(rowNumber), equalTo(order.getParcelJob().getDeliveryStartDate())); // Need to add logic to calculate the expected delivery date.
-    assertThat("Delivery Timeslot", ordersTable.getDeliveryTimeslot(rowNumber),
-        equalTo(buildTimeslot(order.getParcelJob().getDeliveryTimeslot())));
+    Assertions.assertThat(ordersTable.getDeliveryTimeslot(rowNumber)).as("Delivery Timeslot")
+        .isEqualTo(buildTimeslot(order.getParcelJob().getDeliveryTimeslot()));
   }
 
   public void downloadSampleFile(Map<String, String> dataTableAsMap) throws ParseException {
@@ -134,7 +139,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage {
 
     // Step 3
     waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
-    setMdDatepicker("ctrl.currentStep.date", YYYY_MM_DD_SDF.parse(deliveryDate));
+    setMdDatepicker("ctrl.currentStep.date", convertToZonedDateTime(deliveryDate, DTF_NORMAL_DATE));
     selectValueFromMdSelectByIdContains("container.order.create.dialog.delivery-timeslot",
         deliveryTimeslot);
     click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
@@ -142,7 +147,8 @@ public class OrderCreationV4Page extends OperatorV2SimplePage {
     // step 4
     if (additionalConfigurationsAsList.contains("Pickup Required")) {
       waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
-      setMdDatepicker("ctrl.currentStep.date", YYYY_MM_DD_SDF.parse(pickupDate));
+      setMdDatepicker("ctrl.currentStep.date",
+          convertToZonedDateTime(deliveryDate, DTF_NORMAL_DATE));
       selectValueFromMdSelectByIdContains("container.order.create.dialog.pickup-type", pickupType);
       selectValueFromMdSelectByIdContains("Pickup Level", pickupLevel);
       selectValueFromMdSelectByIdContains("Pickup Timeslot", pickupTimeslot);
@@ -191,7 +197,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage {
     fileValues.put("parcel_job.pickup_approximate_volume", dataTableAsMap.get("reservationVolume"));
 
     FileInputStream downloadedFile = new FileInputStream(
-        StandardTestConstants.TEMP_DIR + getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
+        TEMP_DIR + getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     XSSFWorkbook myWorkBook = new XSSFWorkbook(downloadedFile);
     XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
@@ -212,7 +218,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage {
   private String buildAddress(Map<String, String> addressMap) {
     String fromAddress;
 
-    switch (TestConstants.COUNTRY_CODE.toUpperCase()) {
+    switch (TestConstants.NV_SYSTEM_ID.toUpperCase()) {
       case "MBS":
       case "FEF":
       case "MMPG":

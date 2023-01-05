@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -114,18 +115,20 @@ public class SortTasksPage extends OperatorV2SimplePage {
   }
 
   public void verifyOutput(String sortName) {
-    assertTrue(sortName + " node displayed", isElementExistWait1Second(f(OUTPUT_XPATH, sortName)));
+    Assertions.assertThat(isElementExistWait1Second(f(OUTPUT_XPATH, sortName)))
+        .as(sortName + " node displayed").isTrue();
   }
 
   public void verifyNumberOutput(String type) {
-    if (type == "RTS") {
+    if (type.equals("RTS")) {
       String outputNumber = numberOfOutput.getText();
       assertEquals("1 (1 RTS zone)", outputNumber);
     }
   }
 
   public void verifyOutputDeleted(String sortName) {
-    assertFalse(sortName + " node displayed", isElementExistFast(f(OUTPUT_XPATH, sortName)));
+    Assertions.assertThat(isElementExistFast(f(OUTPUT_XPATH, sortName)))
+        .as(sortName + " node displayed").isFalse();
   }
 
   public static class EditMiddleTierNameModal extends AntModal {

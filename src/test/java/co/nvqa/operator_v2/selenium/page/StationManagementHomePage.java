@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.StationLanguage;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.Comparators;
@@ -424,7 +423,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void waitUntilTileValueMatches(String tileName, int expected) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
     wdWait.until(driver -> {
       LOGGER.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();
@@ -436,7 +435,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void waitUntilTileValueLoads(String tileName) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
     String tileValueXpath = f(TILE_VALUE_XPATH, tileName, tileName);
     wdWait.until(driver -> {
       double actualCount = -1;
@@ -455,7 +454,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   }
 
   public void waitUntilTileDollarValueMatches(String tileName, double expected) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), 90);
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
     wdWait.until(driver -> {
       LOGGER.info("Refreshing the page to reload the tile value...");
       driver.navigate().refresh();

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -7,7 +8,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
-import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.commons.util.StandardTestUtils.createFile;
+import static co.nvqa.common.utils.StandardTestUtils.createFile;
 
 
 /**
@@ -56,12 +57,12 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("startDate"))) {
         String startDate = mapOfData.get("startDate");
         put(KEY_ORDER_BILLING_START_DATE, startDate);
-        orderBillingPage.selectStartDate(YYYY_MM_DD_SDF.parse(startDate));
+        orderBillingPage.selectStartDate(StandardTestUtils.convertToZonedDateTime(startDate, DTF_NORMAL_DATE));
       }
       if (Objects.nonNull(mapOfData.get("endDate"))) {
         String endDate = mapOfData.get("endDate");
         put(KEY_ORDER_BILLING_END_DATE, endDate);
-        orderBillingPage.selectEndDate(YYYY_MM_DD_SDF.parse(endDate));
+        orderBillingPage.selectEndDate(StandardTestUtils.convertToZonedDateTime(endDate, DTF_NORMAL_DATE));
       }
       if (Objects.nonNull(mapOfData.get("shipper"))) {
         String shipper = mapOfData.get("shipper");
@@ -90,8 +91,8 @@ public class OrderBillingSteps extends AbstractSteps {
         if (generateFile.contains("Orders consolidated by shipper")) {
           put(KEY_ORDER_BILLING_REPORT_TYPE, "SHIPPER");
         } else if (generateFile.contains("All orders grouped by shipper")) {
-          assertTrue(orderBillingPage.isAggregatedInfoMsgExist(
-              "Customized Template is not supported for aggregated report type."));
+          Assertions.assertThat(orderBillingPage.isAggregatedInfoMsgExist(
+              "Customized Template is not supported for aggregated report type.")).isTrue();
         }
       }
       String csvFileTemplate = mapOfData.get("csvFileTemplate");
@@ -103,7 +104,7 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(emailAddress)) {
         orderBillingPage.setEmailAddress(emailAddress);
       }
-    } catch (ParseException e) {
+    } catch (DateTimeParseException e) {
       throw new NvTestRuntimeException("Failed to parse date.", e);
     }
   }
@@ -121,8 +122,8 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies that the name of normal shipper suggestion is not displayed")
   public void operatorVerifiesThatTheNameOfNormalShipperSuggestionIsNotDisplayed() {
-    assertThat("The displayed error msg does not match with the expected error msg",
-        orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
+    Assertions.assertThat(orderBillingPage.getNoParentErrorMsg()).as("Check error msg")
+        .contains("No Parent Shipper matching");
   }
 
   @Then("Operator verifies {string} is selected in Customized CSV File Template")

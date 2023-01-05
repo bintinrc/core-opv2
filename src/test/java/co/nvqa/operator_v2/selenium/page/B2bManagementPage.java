@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.operator_v2.model.shipper.Shipper;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -120,7 +121,8 @@ public class B2bManagementPage extends OperatorV2SimplePage {
   public void shipperDetailsDisplayed(String shipperName) {
     switchToNewWindow();
     String actualShipperName = getInputValueById("shipper-name");
-    assertEquals("Check corporate sub shipper", shipperName, actualShipperName);
+    Assertions.assertThat(actualShipperName).as("Check corporate sub shipper")
+        .isEqualTo(shipperName);
   }
 
   public static class B2bShipperTable extends AntTable<Shipper> {
