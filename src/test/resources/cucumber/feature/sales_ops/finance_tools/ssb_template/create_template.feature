@@ -5,7 +5,7 @@ Feature: Create SSB Template
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteSsbTemplate @mad
+  @DeleteSsbTemplate
   Scenario: Create New Template - Duplicate Template Found (uid:ca713ddb-c583-4375-a15d-dce0b4449af3)
     Given Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded
@@ -69,7 +69,7 @@ Feature: Create SSB Template
       | selectHeaders       | Legacy Shipper ID          |
 
 
-  @DeleteSsbTemplate @mad
+  @DeleteSsbTemplate
   Scenario: Create New Template - All Columns (uid:ccb37c83-1b31-4f0c-9662-49387c30bec0)
     Given Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded

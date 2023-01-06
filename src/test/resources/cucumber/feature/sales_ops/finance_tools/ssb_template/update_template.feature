@@ -59,7 +59,7 @@ Feature: Update Template
       | updated_at            | {gradle-current-date-yyyy-MM-dd} |
       | deleted_at            | null                             |
 
-  @DeleteSsbTemplate @mad
+  @DeleteSsbTemplate
   Scenario: Update Template - Update Name - Duplicate Found (uid:add9c33c-61c6-48c4-afe2-36484c0e00ed)
     #create template with name Dummy-Template-Duplicate-{gradle-current-date-yyyyMMdd}
     Given Operator go to menu Finance Tools -> SSB Template
@@ -88,7 +88,7 @@ Feature: Update Template
       | top    | Network Request Error                                                          |
       | bottom | Template Name Dummy-Template-Duplicate-1-{gradle-current-date-yyyyMMdd} exists |
 
-  @DeleteSsbTemplate @mad
+  @DeleteSsbTemplate
   Scenario: Update Template Name - Existing Template Has The Same Name as Deleted Template (uid:5d8e4056-c33a-453c-93b8-d4156e1e8be9)
     Given Operator go to menu Finance Tools -> SSB Template
     When SSB Template page is loaded
