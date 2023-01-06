@@ -73,6 +73,7 @@ public class SsbTemplatePage extends SimpleReactPage {
   }
 
   public void clickSubmitBtn() {
+    submitBtn.waitUntilClickable();
     submitBtn.click();
   }
 
