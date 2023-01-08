@@ -37,7 +37,7 @@ Feature: Bulk search on pickup jobs
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Then Operator verifies Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
-      |{KEY_CONTROL_CREATED_PA_JOBS[1].id}}|
+      |{KEY_CONTROL_CREATED_PA_JOBS[1].id}|
       |{KEY_CONTROL_CREATED_PA_JOBS[2].id}|
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     Then Operator verify pickup job table on Pickup Jobs page:
