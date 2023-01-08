@@ -6,7 +6,7 @@ Feature: update route on pickup jobs page
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Add route for single pickup job - Routed
+  Scenario: Add route for single pickup job - Routed
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -28,7 +28,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Add route for single pickup job - In progress
+  Scenario: Add route for single pickup job - In progress
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -51,7 +51,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Update Route for Single Job - Routed
+  Scenario: Update Route for Single Job - Routed
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -78,7 +78,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Update Route for Single Job - In progress
+  Scenario: Update Route for Single Job - In progress
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -107,7 +107,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Update Route for Single Job - Routed - Archived
+  Scenario: Update Route for Single Job - Routed - Archived
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -136,7 +136,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Update Route for Single Job - In progress - Archived
+  Scenario: Update Route for Single Job - In progress - Archived
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
@@ -167,7 +167,7 @@ Feature: update route on pickup jobs page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddress @DeleteOrArchiveRoute
-  Scenario:Update Route for Single Job - Start the route
+  Scenario: Update Route for Single Job - Start the route
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id}|
       | generateAddress | RANDOM                                          |
