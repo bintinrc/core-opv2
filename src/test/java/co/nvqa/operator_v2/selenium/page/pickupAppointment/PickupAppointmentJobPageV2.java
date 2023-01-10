@@ -117,6 +117,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
 
+    @FindBy(xpath = "//label[@for='timeRange']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobTimeRange;
     public final String timeScrollBar = ".rc-virtual-list-scrollbar";
     public final String shipperListItem = "//div[@legacyshipperid='%s']";
     public final String shipperAddressListItem = "//div[contains(@label,'%s')]";
@@ -226,11 +228,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void selectTimeRange(String timeRange) {
-      selectTimeRange.click();
 
-      WebElement customTimeRange = webDriver.findElement(
-          By.cssSelector(f(TIME_RANGE_FILTER_BY_LABEL_LOCATOR, timeRange)));
       retryIfRuntimeExceptionOccurred(() -> {
+        selectTimeRange.click();
+
+        WebElement customTimeRange = webDriver.findElement(
+            By.cssSelector(f(TIME_RANGE_FILTER_BY_LABEL_LOCATOR, timeRange)));
         customTimeRange.click();
       });
 
@@ -339,6 +342,13 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         clearJobTags.click();
       }, 1000, 5);
     }
+
+    public void clearTimeRangeInput() {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobTimeRange.click();
+      }, 1000, 5);
+    }
+
   }
 
 
