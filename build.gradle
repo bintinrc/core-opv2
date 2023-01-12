@@ -13,9 +13,10 @@ project.ext {
                            "classpath:co.nvqa.commonauth.cucumber.glue",
                            "classpath:co.nvqa.common.ordercreate.cucumber.glue",
                            "classpath:co.nvqa.common.corev2.cucumber.glue",
+                           "classpath:co.nvqa.common.core.cucumber.glue",
                            "classpath:co.nvqa.common.dp.cucumber.glue",
                            "classpath:co.nvqa.commonauth.cucumber.glue",
-                           "classpath:co.nvqa.common.core.cucumber.glue",
+                         
 
     ]
 }
@@ -57,15 +58,15 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation "co.nvqa:common-base:1.2.0"
-    implementation "co.nvqa:common-ui:1.2.0-RC1"
+    implementation "co.nvqa:common-ui:1.2.0-RC2"
     implementation "co.nvqa:common-ordercreate:1.2.0"
     implementation "co.nvqa:common-driver:1.2.0"
-    implementation "co.nvqa:common-corev2:1.2.4"
-    implementation "co.nvqa:common-core:1.2.1"
-    implementation "co.nvqa:common-dp:1.2.0"
+    implementation "co.nvqa:common-corev2:1.2.5"
+    implementation "co.nvqa:common-core:1.2.3"
+    implementation "co.nvqa:common-dp:1.2.2"
     implementation "co.nvqa:common-auth:1.2.0"
     implementation "co.nvqa:common-sort:1.2.2"
-    implementation "co.nvqa:commons:2.5.6"
+    implementation "co.nvqa:commons:2.5.8"
 }
 
 

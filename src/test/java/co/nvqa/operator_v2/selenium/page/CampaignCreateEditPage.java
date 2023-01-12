@@ -169,7 +169,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   }
 
   public String getCampaignDiscountValueError() {
-    return generalError.getText();
+    return campaignDiscountValueError.getText();
   }
 
   public List<String> getServiceType() {
