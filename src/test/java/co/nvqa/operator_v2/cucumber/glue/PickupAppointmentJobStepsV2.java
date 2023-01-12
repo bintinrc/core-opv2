@@ -17,11 +17,9 @@ import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
-
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS;
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT;
-import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOB_IDS;
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
 
 public class PickupAppointmentJobStepsV2 extends AbstractSteps {
@@ -176,7 +174,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         });
       });
     }, 1000, 5);
-
   }
 
 
@@ -190,7 +187,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
             .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
       });
     }, 1000, 5);
-
 
   }
 
@@ -247,7 +243,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
             .as("Job Tags is correct").isEqualTo(jobTags);
       });
     }, 2000, 3);
-
   }
 
   @Then("Operator get Pickup Jobs for date = {string} from pickup jobs list = {string}")
@@ -666,7 +661,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-
   @When("Operator search for address = {string} in pickup jobs table")
   public void searchForAddressInPickupTable(String address) {
     pickupAppointmentJobPage.inFrame(page -> {
@@ -751,6 +745,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator clear job comments input")
+  public void operatorClearJobCommentsInput() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clearJobComments();
+    });
+  }
+
   @When("Operator check no star icon on job = {string} with status = {string}")
   public void checkStarForJobId(String JobId, String Status) {
     String jobId = resolveValue(JobId);
@@ -774,4 +775,52 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @Given("Operator clicks edit PA job on Pickup Jobs Page")
+  public void operatorCLicksEditPAJob(){
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_EDIT);
+      pickupAppointmentJobPage.editPAJob.close.waitUntilVisible();
+    });
+  }
+
+  @When("Operator selects route {string} on Edit PA job page")
+  public void operatorSelectsRouteOnEditJobPage(String routeIdAsString){
+
+    pickupAppointmentJobPage.inFrame(() ->{
+      String routeId = resolveValue(routeIdAsString);
+      pickupAppointmentJobPage.setRouteOnEditPAJobPage(routeId);
+    });
+  }
+
+  @When("Operator clicks update route button on Edit PA job page")
+  public void operatorClicksUpdateRouteButton(){
+    pickupAppointmentJobPage.inFrame(() ->
+        pickupAppointmentJobPage.updateRouteOnEditPAJobPage());
+  }
+
+  @Then("Operator verifies update route successful message below on Edit PA job page:")
+  public void operatorVerifiesUpdateRouteSuccessfulMessage(String expectedString){
+    pickupAppointmentJobPage.inFrame(page -> {
+      String expectedResult = resolveValue(expectedString);
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
+    });
+  }
+
+  @Then("Operator verifies current route is updated to {string} on Edit PA job page")
+  public void operatorVerifiesCurrentRouteIsUpdated(String routeIdAsString){
+    pickupAppointmentJobPage.inFrame(() ->{
+      String expectedRouteId = resolveValue(routeIdAsString);
+      String actualRouteId = pickupAppointmentJobPage.editPAJob.currentRoute.getText();
+      Assertions.assertThat(actualRouteId).as("Current route is the same").isEqualToIgnoringCase(expectedRouteId);
+    });
+  }
+
+  @Then("Operator verifies PA job status is {string} on Edit PA job page")
+  public void operatorVerifiesPAJobStatus(String expectedStatus){
+    pickupAppointmentJobPage.inFrame(() ->{
+      String actualStatus = pickupAppointmentJobPage.editPAJob.status.getText();
+      Assertions.assertThat(actualStatus).as("Status is the same").isEqualToIgnoringCase(expectedStatus);
+    });
+  }
 }

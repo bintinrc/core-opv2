@@ -7,7 +7,7 @@ Feature: Load Shipment Weight and Dimension 2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820614
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario:  Load Shipment Weight and Dimension by Creation Date Time and MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -30,7 +30,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820623
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension by Creation Date Time
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -46,7 +46,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820624
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension by MAWB
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -72,7 +72,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820637
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario:Load Shipment Weight and Dimension by Enter New Filters
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -103,7 +103,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 # https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820662
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension by Enter New Filters then Clear and Close Filter
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -132,7 +132,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6876578
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension by Creation Date Time Filter
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -148,7 +148,7 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6889151
-  @DeleteShipment
+  @DeleteShipment @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension by MAWB Time Filter
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

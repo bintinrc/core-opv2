@@ -98,7 +98,9 @@ public class DiscountAndPromotionSteps extends AbstractSteps {
   private void getCampaignData() throws ParseException {
     Campaign campaignDetail = new Campaign();
     campaignDetail.setCampaignName(campaignCreateEditPage.getCampaignName());
-    campaignDetail.setCampaignDescription(campaignCreateEditPage.getCampaignDescription());
+    if (!campaignCreateEditPage.getCampaignDescription().isEmpty()) {
+      campaignDetail.setCampaignDescription(campaignCreateEditPage.getCampaignDescription());
+    }
     String startDate = DateUtil.formatDate(campaignCreateEditPage.getStartDate(), DATE_FORMAT_SNS_1,
         DATE_FORMAT);
     campaignDetail.setStartDate(startDate);

@@ -36,12 +36,14 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     super(webDriver);
     bulkSelect = new BulkSelectTable(webDriver);
     existingUpcomingJob = new ExistingUpcomingJobModal(webDriver);
+    editPAJob = new EditPAJobModel(webDriver);
   }
 
   public BulkSelectTable bulkSelect;
   @FindBy(className = "ant-modal-wrap")
   public JobCreatedSuccess jobCreatedSuccess;
   public ExistingUpcomingJobModal existingUpcomingJob;
+  public EditPAJobModel editPAJob;
   @FindBy(className = "ant-modal-wrap")
   public FilterJobByID filterJobByIDModal;
   @FindBy(css = "#toast-container")
@@ -66,8 +68,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public PageElement loadingIcon;
 
 
-  public String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
-  public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[@label = '%s']";
+  public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+  public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
 
@@ -158,7 +160,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(f(shipperListItem, shipperID)));
         shipperItem.click();
       }, 1000, 3);
-
     }
 
     public void fillShipperAddressField(String address) {
@@ -171,7 +172,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             By.xpath(f(shipperAddressListItem, address)));
         addressItem.click();
       }, 1000, 3);
-
     }
 
     public boolean isDeleteButtonByJobIdDisplayed(String jobId) {
@@ -210,6 +210,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         return false;
       }
     }
+
 
     public void clickCreateButton() {
       createButton.click();
@@ -298,6 +299,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
+    }
+
+    public void clearJobComments() {
+      commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
     }
 
     public void clickEditButton(String jobId) {
@@ -583,4 +588,41 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+  public static class EditPAJobModel {
+
+    public EditPAJobModel(WebDriver webDriver) {
+      super();
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+    }
+
+    @FindBy(xpath = "//button[@class = 'ant-drawer-close']")
+    public PageElement close;
+
+    @FindBy(id = "route")
+    public PageElement AddNewRoute;
+
+    @FindBy(xpath = "//button[. = 'Update route']")
+    public Button updateRoute;
+
+    @FindBy(xpath = "//span[text()='Current route']/following-sibling::span")
+    public PageElement currentRoute;
+
+    @FindBy(xpath = "//*[@data-testid='pickupAppointmentDrawer.title']/parent::div/following-sibling::div/span")
+    public PageElement status;
+
+  }
+
+  public void setRouteOnEditPAJobPage(String routeId) {
+    editPAJob.AddNewRoute.click();
+    editPAJob.AddNewRoute.sendKeys(routeId);
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH, routeId));
+    findElementByXpath(f(SELECTED_VALUE_XPATH, routeId)).click();
+    editPAJob.updateRoute.waitUntilClickable();
+  }
+
+  public void updateRouteOnEditPAJobPage() {
+    editPAJob.updateRoute.waitUntilClickable();
+    editPAJob.updateRoute.click();
+    loadingIcon.waitUntilInvisible();
+  }
 }

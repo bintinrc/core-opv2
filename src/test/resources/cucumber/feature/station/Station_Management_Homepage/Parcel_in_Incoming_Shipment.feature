@@ -12,6 +12,7 @@ Feature: Parcel in Incoming Shipment
     And Operator selects the hub as "<DestHubName>" and proceed
     And Operator get the count from the tile: "<TileName1>"
     And Operator get the count from one more tile: "<TileName2>"
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "<OrigHubId>" to hub id = "<DestHubId>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -51,6 +52,7 @@ Feature: Parcel in Incoming Shipment
       | Total Count    |
       | Priority Count |
     And Operator verifies that the chart is displayed in incoming shipment modal
+    When API Operator deletes movement schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" from "<OrigHubId>" to "<DestHubId>" with facility type "STATIONS"
 
     Examples:
       | OrigHubId   | OrigHubName   | DestHubId   | DestHubName   | Country | Comments  | TileName                     | TileName1 | TileName2 | ModalName                    | TableName1     | TableName2 |
@@ -63,6 +65,7 @@ Feature: Parcel in Incoming Shipment
     And Operator selects the hub as "<DestHubName>" and proceed
     And Operator get the count from the tile: "<TileName1>"
     And Operator get the count from one more tile: "<TileName2>"
+    Given API Operator create new "STATIONS" movement schedule with type "LAND_HAUL" from hub id = "<OrigHubId>" to hub id = "<DestHubId>"
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -104,6 +107,7 @@ Feature: Parcel in Incoming Shipment
       | Total Count    |
       | Priority Count |
     And Operator verifies that the chart is displayed in incoming shipment modal
+    When API Operator deletes movement schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}" from "<OrigHubId>" to "<DestHubId>" with facility type "STATIONS"
 
     Examples:
       | OrigHubId   | OrigHubName   | DestHubId   | DestHubName   | Country | Comments  | TileName                     | TileName1 | TileName2 | ModalName                    | TableName1     | TableName2 |
