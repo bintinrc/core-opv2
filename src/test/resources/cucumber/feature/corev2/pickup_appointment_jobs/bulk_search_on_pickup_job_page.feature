@@ -61,7 +61,7 @@ Feature: Bulk search on pickup jobs
     Then Operator verifies error message below:
       | Filter Pickup Appointment Job ID failed\nTry again with valid Pickup Appointment Job IDs |
 
-  Scenario:Search pickup jobs by job ID on Pickup Jobs page - invalid separation
+  Scenario:Search pickup jobs by job ID on Pickup Jobs page - invalid separation - letter
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Then Operator verifies Filter Job button is disabled on Pickup job page
