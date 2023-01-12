@@ -119,7 +119,7 @@ Feature: update route on pickup jobs page
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Operator archives routes:
-      | {KEY_CREATED_ROUTE_ID} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given Operator goes to Pickup Jobs Page
@@ -149,7 +149,7 @@ Feature: update route on pickup jobs page
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Operator archives routes:
-      | {KEY_CREATED_ROUTE_ID} |
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Driver "{driver-id}" Starts the route
