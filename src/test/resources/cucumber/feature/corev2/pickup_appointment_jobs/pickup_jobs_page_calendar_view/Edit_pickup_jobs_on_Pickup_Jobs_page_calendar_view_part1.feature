@@ -17,7 +17,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
       | pickupAppointmentProofRequest | {"status":"completed","photo_urls":[]} |
@@ -41,7 +41,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
       | pickupAppointmentProofRequest | {"failure_reason_code_id": 9, "failure_reason_id": 1476,"status":"failed","photo_urls":[]} |
@@ -64,7 +64,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
@@ -99,7 +99,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
@@ -121,7 +121,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" and tag = "PRIOR" length = 0 in pickup_appointment_jobs_pickup_tags
 
   @deletePickupJob @DeleteShipperAddress
-  Scenario: Edit pickup appointment job - enable jobs priority
+  Scenario: Edit pickup appointment job - back to original value - blank field
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -131,7 +131,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
@@ -148,7 +148,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     Then Operator verify Save button in disabled
 
   @deletePickupJob @DeleteShipperAddress
-  Scenario: Edit pickup appointment job - disable jobs priority
+  Scenario: Edit pickup appointment job - back to original value - filled field
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -162,7 +162,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
