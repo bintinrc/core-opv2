@@ -16,7 +16,7 @@ project.ext {
                            "classpath:co.nvqa.common.core.cucumber.glue",
                            "classpath:co.nvqa.common.dp.cucumber.glue",
                            "classpath:co.nvqa.commonauth.cucumber.glue",
-                           "classpath:co.nvqa.common.core.cucumber.glue",
+                         
 
     ]
 }

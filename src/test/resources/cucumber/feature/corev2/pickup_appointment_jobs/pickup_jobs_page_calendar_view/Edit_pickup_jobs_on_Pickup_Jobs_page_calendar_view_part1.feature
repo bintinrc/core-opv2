@@ -16,7 +16,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
@@ -40,7 +40,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
@@ -53,7 +53,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify there is no Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verify there is no Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - enable jobs priority
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -84,7 +84,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator check tag = "PRIOR" is displayed on job
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" and tag = "PRIOR" length = 1 in pickup_appointment_jobs_pickup_tags
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - disable jobs priority
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -130,7 +130,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -161,7 +161,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
