@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalendarView @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @EditPickupJobCalendarView
 Feature: Edit pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -147,7 +147,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view
     When Operator clear job comments input
     Then Operator verify Save button in disabled
 
-  @deletePickupJob @DeleteShipperAddress @RT
+  @deletePickupJob @DeleteShipperAddress
   Scenario: Edit pickup appointment job - disable jobs priority
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
