@@ -16,7 +16,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}    |
@@ -40,7 +40,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Operator start the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
       | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
@@ -63,7 +63,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -98,7 +98,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -130,7 +130,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
@@ -161,7 +161,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                       |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page

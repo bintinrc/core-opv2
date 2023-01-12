@@ -72,6 +72,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
+
   public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
 
   public boolean isToastContainerDisplayed() {
@@ -137,6 +138,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public final String STAR_IN_CALENDAR_LOCATOR = "//div[@data-testid='paJob.cancel.%s']//ancestor::div[@status='%s']//span[@data-testid='paJob.priority']";
     public final String TAG_IN_CALENDAR_LOCATOR = "//div[@class='ant-popover-content']//span[contains(text(),'%s')]";
+
     public CreateOrEditJobPage(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -208,6 +210,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         return false;
       }
     }
+
+
     public void clickCreateButton() {
       createButton.click();
     }
@@ -297,7 +301,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       commentsInput.sendKeys(comment);
     }
 
-    public void clearJobComments(){
+    public void clearJobComments() {
       commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
     }
 
@@ -359,6 +363,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))));
       return webDriver.findElement(By.xpath(f(ITEMS_ON_DELETE_JOB_MODAL, fieldName))).getText();
     }
+
+
   }
 
 
@@ -606,15 +612,15 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
-  public void setRouteOnEditPAJobPage(String routeId){
+  public void setRouteOnEditPAJobPage(String routeId) {
     editPAJob.AddNewRoute.click();
     editPAJob.AddNewRoute.sendKeys(routeId);
-    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH,routeId));
-    findElementByXpath(f(SELECTED_VALUE_XPATH,routeId)).click();
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH, routeId));
+    findElementByXpath(f(SELECTED_VALUE_XPATH, routeId)).click();
     editPAJob.updateRoute.waitUntilClickable();
   }
 
-  public void updateRouteOnEditPAJobPage(){
+  public void updateRouteOnEditPAJobPage() {
     editPAJob.updateRoute.waitUntilClickable();
     editPAJob.updateRoute.click();
     loadingIcon.waitUntilInvisible();

@@ -255,6 +255,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     pickupAppointmentJobPage.getCreateOrEditJobPage().selectTagInJobTagsField(tag);
   }
 
+
   @When("Operator click success button in pickup job drawer")
   public void clickFourceSuccess() {
     pickupAppointmentJobPage.inFrame(page -> {
@@ -272,13 +273,16 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("^Operator check Success button (enabled|disabled) in pickup job drawer")
   public void checkSuccessButtonState(String state) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      if (state.equals("enabled")) {
-        page.forceSuccess.waitUntilClickable();
-      }
-      Assertions.assertThat(page.forceSuccess.isEnabled()).as("Force Success button enable state")
-          .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        if (state.equals("enabled")) {
+          page.forceSuccess.waitUntilClickable();
+        }
+        Assertions.assertThat(page.forceSuccess.isEnabled()).as("Force Success button enable state")
+            .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
+      });
+    }, 1000, 5);
+
 
   }
 
@@ -650,7 +654,7 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @After("@deletePickupJob")
   public void deletePickUpJob() {
-    try{
+    try {
       List<PickupAppointmentJobResponse> listPAJobs = get(KEY_CONTROL_CREATED_PA_JOBS);
       List<Long> jobIds = listPAJobs.stream().map(PickupAppointmentJobResponse::getId).collect(
           Collectors.toList());
