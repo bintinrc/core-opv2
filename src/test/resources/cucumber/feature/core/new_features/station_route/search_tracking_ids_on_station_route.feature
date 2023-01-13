@@ -708,6 +708,43 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress1}" is displayed in row 1 on Station Route page
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
+  @DeleteDriver @DeleteCoverage @DeleteShipment
+  Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Valid Orders - Hub Inbound Scan
+    And API Shipper create V4 order using data below:
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator create new coverage:
+      | hubId            | {hub-id-2}                                  |
+      | area             | 998 Toa Payoh                               |
+      | areaVariations   | North {gradle-current-date-yyyyMMddHHmmsss} |
+      | keywords         | home {gradle-current-date-yyyyMMddHHmmsss}  |
+      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}         |
+      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}         |
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
+    And Operator select filters on Station Route page:
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator click Assign drivers button on Station Route page
+    Then Operator verify statistics on Station Route page
+    And Operator verify banner is displayed on Station Route page
+    And Operator verify parcel is displayed on Station Route page:
+      | trackingId | {KEY_CREATED_ORDER.trackingId}                                                   |
+      | address    | {KEY_CREATED_ORDER.buildToAddressString}                                         |
+      | parcelSize | Small                                                                            |
+      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} |
+    And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
+    And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -16,7 +16,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
     And Operator selects "Save Current As Preset" preset action on Route Logs page
     Then Operator verifies Save Preset dialog on Route Logs page contains filters:
-      | Route Date: {gradle-previous-1-day-yyyy-MM-dd} to {gradle-current-date-yyyy-MM-dd} |
+      | Route Date: {gradle-previous-1-day-dd/MM/yyyy} to {gradle-current-date-dd/MM/yyyy} |
       | Hub: (1) {hub-name}                                                                |
       | Driver: (1) {ninja-driver-name}                                                    |
       | Archived Routes: Show archived routes                                              |
@@ -86,7 +86,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
     And Operator selects "Save Current As Preset" preset action on Route Logs page
     Then Operator verifies Save Preset dialog on Route Logs page contains filters:
-      | Route Date: {gradle-previous-2-day-yyyy-MM-dd} to {gradle-previous-1-day-yyyy-MM-dd} |
+      | Route Date: {gradle-previous-2-day-dd/MM/yyyy} to {gradle-previous-1-day-dd/MM/yyyy} |
       | Hub: (1) {hub-name-2}                                                                |
       | Driver: (1) {ninja-driver-2-name}                                                    |
       | Archived Routes: Show archived routes                                                |
