@@ -65,6 +65,9 @@ public class StationRouteSteps extends AbstractSteps {
           page.shipmentCompletionTime.setToDate(value);
         }
       }
+      if (finalData.containsKey("alsoSearchInHub")) {
+        page.alsoSearchInHub.setValue(Boolean.parseBoolean(finalData.get("alsoSearchInHub")));
+      }
       if (finalData.containsKey("additionalTids")) {
         page.additionalTids.setValue(finalData.get("additionalTids").replace(",", "\n"));
       }
