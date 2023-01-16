@@ -823,4 +823,36 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       Assertions.assertThat(actualStatus).as("Status is the same").isEqualToIgnoringCase(expectedStatus);
     });
   }
+
+  @When("Operator selects tag {string} on Edit PA job page")
+  public void operatorSelectsTagOnEditJobPage(String tagAsString){
+
+    pickupAppointmentJobPage.inFrame(() ->{
+      String tag = resolveValue(tagAsString);
+      pickupAppointmentJobPage.setTagsOnEditPAJobPage(tag);
+    });
+  }
+
+  @When("Operator clicks update tags button on Edit PA job page")
+  public void operatorClicksUpdateTagsButton(){
+    pickupAppointmentJobPage.inFrame(() ->
+        pickupAppointmentJobPage.updateTagsOnEditPAJobPage());
+  }
+
+  @Then("Operator verifies update tags successful message below on Edit PA job page:")
+  public void operatorVerifiesUpdateTagSuccessfulMessage(String expectedString){
+    pickupAppointmentJobPage.inFrame(page -> {
+      String expectedResult = resolveValue(expectedString);
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
+    });
+  }
+
+  @Given("Operator remove tag {string} on Edit PA job page")
+  public void operatorRemoveTagOnEditPAJobPage(String tagNameAsString){
+    pickupAppointmentJobPage.inFrame(page ->{
+      String tagName = resolveValue(tagNameAsString);
+      page.removeTagOnEditJobpage(tagName);
+    });
+  }
 }
