@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -53,9 +54,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
   @When("Operator click on Create or edit job button on this top right corner of the page")
   public void operatorClickOnCreateOrEditJobButtonOnThisPage() {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.clickOnCreateOrEditJob();
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.clickOnCreateOrEditJob();
+      });
+    }, 1000, 5);
+
 
   }
 
@@ -680,9 +684,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @When("Operator click on edit button for pickup job id = {string}")
   public void clickEditButtonForJobId(String JobId) {
     String jobId = resolveValue(JobId);
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.createOrEditJobPage.clickEditButton(jobId);
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        page.createOrEditJobPage.clickEditButton(jobId);
+      });
+    }, 1000, 5);
+
   }
 
   @When("Operator check star icon on job = {string} with status = {string}")
@@ -714,7 +721,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       pickupAppointmentJobPage.inFrame(page -> {
         Assertions.assertThat(
                 page.createOrEditJobPage.isSaveButtonDisabled())
-            .as("Create button enable state")
+            .as("Save button enable state")
             .isEqualTo(StringUtils.equalsIgnoreCase(state, "enabled"));
       });
     }, 1000, 5);
@@ -823,7 +830,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       Assertions.assertThat(actualStatus).as("Status is the same").isEqualToIgnoringCase(expectedStatus);
     });
   }
-
+  
   @When("Operator selects tag {string} on Edit PA job page")
   public void operatorSelectsTagOnEditJobPage(String tagAsString){
 
@@ -853,6 +860,26 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page ->{
       String tagName = resolveValue(tagNameAsString);
       page.removeTagOnEditJobpage(tagName);
+    });
+  }
+
+  @Then("Operator check pickup jobs {string} ready = {string} and latest = {string}")
+  public void checkPickup(String pickupjob, String ready, String latest) {
+
+    PickupAppointmentJob pickupJob = resolveValue(pickupjob);
+
+    Assertions.assertThat(String.valueOf(pickupJob.getPickupReadyDatetime()))
+        .as(f("PA Jobs ready time %s: ", ready))
+        .contains(ready);
+    Assertions.assertThat(String.valueOf(pickupJob.getPickupLatestDatetime()))
+        .as(f("PA Jobs latest time %s: ", latest))
+        .contains(latest);
+  }
+
+  @When("Operator clear pickup job Time Range input")
+  public void operatorClearTimeRangeInput() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clearTimeRangeInput();
     });
   }
 }
