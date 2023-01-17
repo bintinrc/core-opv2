@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.addressing.AddressingZone;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.sort.sort_code.SortCode;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.RecoveryTicket;
@@ -49,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -590,7 +591,7 @@ public class EditOrderSteps extends AbstractSteps {
 
   @When("^Operator change Stamp ID of the created order to \"(.+)\" on Edit order page$")
   public void operatorEditStampIdOnEditOrderPage(String stampId) {
-    if (StringUtils.equalsIgnoreCase(stampId, "GENERATED")) {
+    if (equalsIgnoreCase(stampId, "GENERATED")) {
       stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7).toUpperCase();
     }
     editOrderPage.editOrderStamp(stampId);
@@ -752,30 +753,45 @@ public class EditOrderSteps extends AbstractSteps {
 
   @Then("^Operator verify order event on Edit order page using data below:$")
   public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
-    OrderEvent expectedEvent = new OrderEvent();
-    expectedEvent.fromMap(mapOfData);
-    OrderEvent actualEvent = events.stream()
-        .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+    OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(mapOfData));
+    OrderEvent actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+        .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
         .findFirst()
-        .orElseThrow(() -> new AssertionError(
-            f("There is no [%s] event on Edit Order page", expectedEvent.getName())));
+        .orElse(null);
+    if (actualEvent == null) {
+      pause5s();
+      editOrderPage.refreshPage();
+      actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+          .findFirst()
+          .orElse(null);
+    }
+    Assertions.assertThat(actualEvent)
+        .withFailMessage("There is no [%s] event on Edit Order page", expectedEvent.getName())
+        .isNotNull();
 
     expectedEvent.compareWithActual(actualEvent);
   }
 
   @Then("^Operator verify order events on Edit order page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
     data.forEach(eventData -> {
       OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
-      OrderEvent actualEvent = events.stream()
-          .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+      OrderEvent actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+          .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
           .findFirst()
-          .orElseThrow(() -> new AssertionError(
-              f("There is no [%s] event on Edit Order page", expectedEvent.getName())));
-
+          .orElse(null);
+      if (actualEvent == null) {
+        pause5s();
+        editOrderPage.refreshPage();
+        actualEvent = editOrderPage.eventsTable().readAllEntities().stream()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .findFirst()
+            .orElse(null);
+      }
+      Assertions.assertThat(actualEvent)
+          .withFailMessage("There is no [%s] event on Edit Order page", expectedEvent.getName())
+          .isNotNull();
       expectedEvent.compareWithActual(actualEvent);
     });
   }
@@ -787,7 +803,7 @@ public class EditOrderSteps extends AbstractSteps {
     SoftAssertions assertions = new SoftAssertions();
     data.forEach(expected ->
         assertions.assertThat(
-                events.stream().anyMatch(e -> StringUtils.equalsIgnoreCase(e.getName(), expected)))
+                events.stream().anyMatch(e -> equalsIgnoreCase(e.getName(), expected)))
             .as("%s event was found")
             .isFalse()
     );
@@ -961,43 +977,43 @@ public class EditOrderSteps extends AbstractSteps {
     final Order order = get(KEY_CREATED_ORDER);
     final List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
     final OrderEvent actualEvent = events.stream()
-        .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEventName))
+        .filter(event -> equalsIgnoreCase(event.getName(), expectedEventName))
         .findFirst()
         .orElseThrow(() -> new AssertionError(
             f("There is no [%s] event on Edit Order page", expectedEventName)));
     final String eventDescription = actualEvent.getDescription();
-    if (StringUtils.equalsIgnoreCase(type, "Pickup")) {
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+    if (equalsIgnoreCase(type, "Pickup")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
         editOrderPage.eventsTable()
             .verifyUpdatePickupAddressEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
         editOrderPage.eventsTable()
             .verifyUpdatePickupContactInformationEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
         editOrderPage.eventsTable().verifyUpdatePickupSlaEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+      if (equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
         editOrderPage.eventsTable().verifyPickupAddressEventDescription(order, eventDescription);
       }
     } else {
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
         editOrderPage.eventsTable()
             .verifyUpdateDeliveryAddressEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
         editOrderPage.eventsTable()
             .verifyUpdateDeliveryContactInformationEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+      if (equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
         editOrderPage.eventsTable()
             .verifyUpdateDeliverySlaEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+      if (equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
         editOrderPage.eventsTable().verifyDeliveryAddressEventDescription(order, eventDescription);
       }
-      if (StringUtils.equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
+      if (equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
         editOrderPage.eventsTable()
             .verifyHubInboundWithDeviceIdEventDescription(order, eventDescription);
       }
@@ -1206,7 +1222,7 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("^Operator verifies (Pickup|Delivery) Transaction is updated on Edit Order Page$")
   public void operatorVerifiesTransactionUpdated(String txnType) {
     Order order = get(KEY_CREATED_ORDER);
-    if (StringUtils.equalsIgnoreCase(txnType, "Pickup")) {
+    if (equalsIgnoreCase(txnType, "Pickup")) {
       editOrderPage.verifyPickupDetailsInTransaction(order, txnType);
     } else {
       editOrderPage.verifyDeliveryDetailsInTransaction(order, txnType);
@@ -1394,15 +1410,15 @@ public class EditOrderSteps extends AbstractSteps {
     Order order = get(KEY_CREATED_ORDER);
     List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
     OrderEvent actualEvent = events.stream()
-        .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEventName))
+        .filter(event -> equalsIgnoreCase(event.getName(), expectedEventName))
         .findFirst()
         .orElseThrow(() -> new AssertionError(
             f("There is no [%s] event on Edit Order page", expectedEventName)));
     String eventDescription = actualEvent.getDescription();
-    if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
+    if (equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
       editOrderPage.eventsTable().verifyVerifyUpdateCashDescription(order, eventDescription);
     }
-    if (StringUtils.equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
+    if (equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN")) {
       editOrderPage.eventsTable().verifyHubInboundEventDescription(order, eventDescription);
     }
   }
@@ -1522,7 +1538,7 @@ public class EditOrderSteps extends AbstractSteps {
   @Then("^Operator verifies RTS tag is (displayed|hidden) in delivery details box on Edit Order page$")
   public void operatorVerifyRtsTag(String state) {
     Assertions.assertThat(editOrderPage.deliveryDetailsBox.rtsTag.isDisplayed())
-        .as("RTS tag is displayed").isEqualTo(StringUtils.equalsIgnoreCase(state, "displayed"));
+        .as("RTS tag is displayed").isEqualTo(equalsIgnoreCase(state, "displayed"));
   }
 
   @Then("Operator verifies Latest Event is {string} on Edit Order page")

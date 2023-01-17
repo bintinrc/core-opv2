@@ -4,11 +4,14 @@ import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
+import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
@@ -212,7 +215,8 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
-   Assertions.assertThat(        allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size()).as("Number of orders with COD").isEqualTo(data.size());
+    Assertions.assertThat(allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size())
+        .as("Number of orders with COD").isEqualTo(data.size());
     for (int i = 0; i < allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size(); i++) {
       String trackingId = allOrdersPage.manuallyCompleteOrderDialog.trackingIds.get(i)
           .getNormalizedText();
@@ -246,7 +250,8 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator verifies error messages in dialog on All Orders page:$")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);
-   Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5)).as("Errors dialog is displayed").isTrue();
+    Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5))
+        .as("Errors dialog is displayed").isTrue();
     List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
         .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
             .replaceAll("^\\d{1,2}\\.", ""))
@@ -353,7 +358,8 @@ public class AllOrdersSteps extends AbstractSteps {
       orderData = resolveKeyValues(orderData);
       String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
       String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
-     Assertions.assertThat(          allOrdersPage.addToRouteDialog.getRouteId(trackingId)).as(f("Route Id for %s order", trackingId)).isEqualTo(expectedRouteId);
+      Assertions.assertThat(allOrdersPage.addToRouteDialog.getRouteId(trackingId))
+          .as(f("Route Id for %s order", trackingId)).isEqualTo(expectedRouteId);
     });
   }
 
@@ -382,6 +388,18 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyWaybillContentsIsCorrect(order);
+  }
+
+  @Then("^Operator verify waybill for single order on All Orders page:$")
+  public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo(
+      Map<String, String> data) {
+    AirwayBill expected = new AirwayBill(resolveKeyValues(data));
+    String latestFilenameOfDownloadedPdf = allOrdersPage.getLatestDownloadedFilename(
+        "awb_" + expected.getTrackingId());
+    allOrdersPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
+    AirwayBill actual = PdfUtils.getOrderInfoFromAirwayBill(
+        TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
+    expected.compareWithActual(actual);
   }
 
   @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")

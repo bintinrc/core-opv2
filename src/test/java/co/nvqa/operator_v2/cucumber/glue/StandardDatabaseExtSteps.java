@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
@@ -23,14 +25,14 @@ import co.nvqa.commons.model.entity.MovementEventEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.ReserveTrackingIdEntity;
+import co.nvqa.commons.model.entity.RouteMonitoringDataEntity;
+import co.nvqa.commons.model.entity.RouteWaypointEntity;
 import co.nvqa.commons.model.entity.ShipmentPathEntity;
 import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
@@ -652,6 +654,30 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     expected.compareWithActual(actual);
   }
 
+  @Then("DB Operator verifies route_waypoint record:")
+  public void verifyRouteWaypoint(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    long waypointId = Long.parseLong(data.get("waypointId"));
+    long routeId = Long.parseLong(data.get("routeId"));
+
+    RouteWaypointEntity result = this.getCoreJdbc().getRouteWaypointEntity(waypointId, routeId);
+    Assertions.assertThat(result)
+        .as("route_waypoint record for waypointId %s and routeId %s", waypointId, routeId)
+        .isNotNull();
+  }
+
+  @Then("DB Operator verifies route_monitoring_data record:")
+  public void verifyRouteMonitoringData(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    long waypointId = Long.parseLong(data.get("waypointId"));
+    long routeId = Long.parseLong(data.get("routeId"));
+
+    RouteMonitoringDataEntity result = this.getCoreJdbc().getRouteMonitoringDataEntity(waypointId, routeId);
+    Assertions.assertThat(result)
+        .as("route_monitoring_data record for waypointId %s and routeId %s", waypointId, routeId)
+        .isNotNull();
+  }
+
   private void assertTransaction(TransactionEntity expected, TransactionEntity actual,
       Map<String, String> data) {
     expected.compareWithActual(actual, data, "startTime", "endTime");
@@ -992,7 +1018,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("order_id")))
         .as(f("Expected order_id in Warehouse_sweeps table"))
         .isEqualTo(String.valueOf(order.getId()));
-      put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
+    put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")
