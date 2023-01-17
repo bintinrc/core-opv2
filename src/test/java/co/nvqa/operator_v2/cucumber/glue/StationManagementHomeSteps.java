@@ -22,7 +22,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -244,6 +243,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     retryIfExpectedExceptionOccurred(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+          navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
               (beforeOrder + totOrder));
@@ -253,7 +253,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -265,8 +265,8 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Integer finalTotOrder = totOrder;
     retryIfExpectedExceptionOccurred(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+          navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          takesScreenshot();
           stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
               (beforeOrder - finalTotOrder));
           stationManagementHomePage.closeIfModalDisplay();
@@ -275,7 +275,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -285,6 +285,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
       Integer totOrder) {
     retryIfExpectedExceptionOccurred(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+          navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
               (beforeOrder + totOrder));
@@ -294,7 +295,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -306,6 +307,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     Integer finalTotOrder = totOrder;
     retryIfExpectedExceptionOccurred(() -> {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+          navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
               (beforeOrder - finalTotOrder));
@@ -315,7 +317,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
