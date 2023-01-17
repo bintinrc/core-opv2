@@ -1,11 +1,11 @@
-@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView
 Feature: Create pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
