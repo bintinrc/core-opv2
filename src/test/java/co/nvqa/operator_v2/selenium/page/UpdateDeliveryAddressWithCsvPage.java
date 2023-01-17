@@ -2,11 +2,9 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.UpdateDeliveryAddressRecord;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,18 +13,19 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author Sergey Mishanin
  */
-public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage {
+public class UpdateDeliveryAddressWithCsvPage extends
+    SimpleReactPage<UpdateDeliveryAddressWithCsvPage> {
 
-  @FindBy(name = "container.order-delivery-update.update-address-with-csv")
-  public NvIconTextButton updateAddressWithCsvButton;
+  @FindBy(css = "[data-testid='upload-csv-button']")
+  public Button updateAddressWithCsvButton;
 
-  @FindBy(name = "container.order-delivery-update.confirm-updates")
-  public NvIconTextButton confirmUpdatesButton;
+  @FindBy(css = "[data-testid='confirm-updates-button']")
+  public Button confirmUpdatesButton;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public UpdateAddressWithCsvDialog updateAddressWithCsvDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ConfirmUpdatesDialog confirmUpdatesDialog;
 
   @FindBy(css = ".table-description")
@@ -39,35 +38,37 @@ public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage {
     addressesTable = new AddressesTable(webDriver);
   }
 
-  public static class UpdateAddressWithCsvDialog extends MdDialog {
+  public static class UpdateAddressWithCsvDialog extends AntModal {
 
-    @FindBy(css = "nv-button-file-picker[label='Select File']")
-    public NvButtonFilePicker selectFile;
+    @FindBy(css = "[data-testid='upload-dragger']")
+    public FileInput selectFile;
 
-    @FindBy(name = "commons.upload")
-    public NvApiTextButton uploadButton;
+    @FindBy(css = "[data-testid='upload-button']")
+    public Button uploadButton;
 
     public UpdateAddressWithCsvDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class ConfirmUpdatesDialog extends MdDialog {
+  public static class ConfirmUpdatesDialog extends AntModal {
 
-    @FindBy(css = "[aria-label='Proceed']")
+    @FindBy(css = "[data-testid='confirm-update-dialog-submit-button']")
     public Button proceedButton;
 
-    @FindBy(css = "[aria-label='Close']")
-    public Button closeButton;
+    @FindBy(css = "[data-testid='confirm-update-dialog-cancel-button']")
+    public Button cancel;
+
+    @FindBy(css = "[data-testid='close-button']")
+    public Button close;
 
     public ConfirmUpdatesDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }
 
-  public static class AddressesTable extends NgRepeatTable<UpdateDeliveryAddressRecord> {
+  public static class AddressesTable extends AntTableV2<UpdateDeliveryAddressRecord> {
 
-    public static final String NG_REPEAT = "row in ctrl.ordersTableData";
     public static final String COLUMN_VALIDATION = "validation";
     public static final String COLUMN_TRACKING_ID = "trackingId";
     public static final String COLUMN_NAME = "toName";
@@ -85,22 +86,21 @@ public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage {
 
     public AddressesTable(WebDriver webDriver) {
       super(webDriver);
-      setNgRepeat(NG_REPEAT);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_VALIDATION, "validation-or-update")
-          .put(COLUMN_TRACKING_ID, "tracking-id")
-          .put(COLUMN_NAME, "name")
-          .put(COLUMN_EMAIL, "email")
-          .put(COLUMN_CONTACT, "contact")
-          .put(COLUMN_ADDRESS1, "address1")
-          .put(COLUMN_ADDRESS2, "address2")
-          .put(COLUMN_POSTCODE, "postcode")
-          .put(COLUMN_CITY, "city")
-          .put(COLUMN_COUNTRY, "country")
-          .put(COLUMN_STATE, "state")
-          .put(COLUMN_DISTRICT, "district")
-          .put(COLUMN_LATITUDE, "latitude")
-          .put(COLUMN_LONGITUDE, "longitude")
+          .put(COLUMN_VALIDATION, "validationErrors")
+          .put(COLUMN_TRACKING_ID, "tracking_id")
+          .put(COLUMN_NAME, "to.name")
+          .put(COLUMN_EMAIL, "to.email")
+          .put(COLUMN_CONTACT, "to.phone_number")
+          .put(COLUMN_ADDRESS1, "to.address.address1")
+          .put(COLUMN_ADDRESS2, "to.address.address2")
+          .put(COLUMN_POSTCODE, "to.address.postcode")
+          .put(COLUMN_CITY, "to.address.city")
+          .put(COLUMN_COUNTRY, "to.address.country")
+          .put(COLUMN_STATE, "to.address.state")
+          .put(COLUMN_DISTRICT, "to.address.district")
+          .put(COLUMN_LATITUDE, "to.address.latitude")
+          .put(COLUMN_LONGITUDE, "to.address.longitude")
 
           .build());
       setEntityClass(UpdateDeliveryAddressRecord.class);
