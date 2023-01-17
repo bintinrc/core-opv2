@@ -76,16 +76,16 @@ Feature: Download AWB
     When Operator print Waybill for single order on All Orders page
     Then Operator verify waybill for single order on All Orders page:
       | trackingId  | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                    |
-      | fromName    | {KEY_CREATED_ORDER.fromName}                             |
+      | fromName    | <fromName>                                               |
       | fromContact | null                                                     |
       | fromAddress | null                                                     |
       | toName      | {KEY_CREATED_ORDER.toName}                               |
       | toContact   | {KEY_CREATED_ORDER.toContact}                            |
       | toAddress   | {KEY_CREATED_ORDER.buildShortToAddressWithCountryString} |
     Examples:
-      | Note   | v4OrderRequest                                                                                                                                                                                                                                                                                                                  |
-      | Normal | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      | Return | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | Note   | fromName                     | v4OrderRequest                                                                                                                                                                                                                                                                                                                  |
+      | Normal | {KEY_CREATED_SHIPPER.name}   | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | Return | {KEY_CREATED_ORDER.fromName} | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
