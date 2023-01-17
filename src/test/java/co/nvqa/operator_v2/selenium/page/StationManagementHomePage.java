@@ -434,6 +434,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     });
   }
 
+  public void waitUntilPendingPickupTileValueMatches(String tileName, int expected) {
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
+    wdWait.until(driver -> {
+      LOGGER.info("Refreshing the page to reload the tile value...");
+      driver.navigate().refresh();
+      waitUntilPageLoaded();
+      closeIfModalDisplay();
+      int actual = getNumberFromPendingPickupTile(tileName);
+      return actual == expected;
+    });
+  }
+
   public void waitUntilTileValueLoads(String tileName) {
     WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
     String tileValueXpath = f(TILE_VALUE_XPATH, tileName, tileName);
