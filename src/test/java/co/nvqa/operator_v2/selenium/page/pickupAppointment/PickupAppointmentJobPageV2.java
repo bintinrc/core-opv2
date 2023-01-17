@@ -650,7 +650,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH, tag));
     findElementByXpath(f(SELECTED_VALUE_XPATH, tag)).click();
     editPAJob.status.click();
-    editPAJob.updateTags.waitUntilClickable();
   }
 
   public void updateTagsOnEditPAJobPage() {

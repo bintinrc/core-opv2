@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.corev2.model.PickupAppointmentJobResponse;
 import co.nvqa.common.corev2.model.persisted_class.PickupAppointmentJob;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -830,7 +829,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       Assertions.assertThat(actualStatus).as("Status is the same").isEqualToIgnoringCase(expectedStatus);
     });
   }
-  
+
   @When("Operator selects tag {string} on Edit PA job page")
   public void operatorSelectsTagOnEditJobPage(String tagAsString){
 
@@ -881,5 +880,19 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       page.createOrEditJobPage.clearTimeRangeInput();
     });
+  }
+
+  @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
+  public void operatorVerifiesUpdateTagButtonStatus(String status){
+    pickupAppointmentJobPage.inFrame(page ->{
+      switch (status){
+        case "enable":
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is enable").isEqualTo(null);
+          break;
+        case "disable":
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is disable").isEqualTo("true");
+      }
+    });
+
   }
 }
