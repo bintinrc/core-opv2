@@ -5,9 +5,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - no edit icon - completed PA Job
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -29,9 +29,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify there is no Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verify there is no Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - no edit icon - failed PA Job
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -53,9 +53,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify there is no Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verify there is no Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - enable jobs priority
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -84,9 +84,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator check tag = "PRIOR" is displayed on job
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" and tag = "PRIOR" length = 1 in pickup_appointment_jobs_pickup_tags
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - disable jobs priority
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     And DB Control - get pickup tag id for tag name = "PRIOR"
@@ -120,9 +120,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator check no tag = "PRIOR" is displayed on job
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" and tag = "PRIOR" length = 0 in pickup_appointment_jobs_pickup_tags
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - back to original value - blank field
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -147,9 +147,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When Operator clear job comments input
     Then Operator verify Save button in disabled
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - back to original value - filled field
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     And DB Control - get pickup tag id for tag name = "PRIOR"
@@ -179,9 +179,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify Save button in disabled
 
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - jobs timeslot - ready for routing
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -208,9 +208,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When Operator get Pickup Jobs for date = "{gradle-next-1-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[1]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 1
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - jobs timeslot - routed
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -242,9 +242,9 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When Operator get Pickup Jobs for date = "{gradle-next-1-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[1]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 1
 
-  @deletePickupJob @DeleteShipperAddress @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Edit pickup appointment job - jobs timeslot - in progress
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:

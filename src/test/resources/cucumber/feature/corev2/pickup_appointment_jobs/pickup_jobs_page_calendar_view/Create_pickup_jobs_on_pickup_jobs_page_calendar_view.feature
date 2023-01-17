@@ -1,13 +1,13 @@
-@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView
+@OperatorV2 @CoreV2 @PickupAppointment @CreatePickupJobCalendarView @CWF
 Feature: Create pickup jobs on Pickup Jobs page calendar view
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given Operator goes to Pickup Jobs Page
@@ -45,9 +45,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - all field
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given Operator goes to Pickup Jobs Page
@@ -87,9 +87,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Standard shipper
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given Operator goes to Pickup Jobs Page
@@ -133,9 +133,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Premium shipper - success
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given Operator goes to Pickup Jobs Page
@@ -178,9 +178,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - is_pickup_appointment_enabled true - mandatory field
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given Operator goes to Pickup Jobs Page
@@ -241,9 +241,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - match date and time with existing PA Job
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given Operator goes to Pickup Jobs Page
@@ -304,9 +304,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - overlapping date and time
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given Operator goes to Pickup Jobs Page
@@ -377,9 +377,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     Then Operator verify there is Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
     Then Operator verify there is Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT[2].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Create new Customised pickup jobs on Pickup Jobs page calendar view - Premium shipper
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given Operator goes to Pickup Jobs Page
@@ -414,9 +414,9 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 0
 
-  
+
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - multiple job in a day
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
