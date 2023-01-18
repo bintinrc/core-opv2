@@ -14,7 +14,7 @@ Feature: Total Completion Rate
     And API Operator calls pending pickup job trigger for station
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the tile:"<TileName>" is equal to "-"
+    Then Operator verifies that the N+0 tile:"<TileName>" is equal to "-"
 
     Examples:
       | HubName      | HubId      | Country | TileName         |
@@ -287,12 +287,12 @@ Feature: Total Completion Rate
 
     Examples:
       | dataset_name             | HubName      | HubId      | Country | ModalName        | ColumnName                 | SearchValuePrefix      | SearchValueSuffix |
-      | Search by Pickup Address | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Pickup Address/ Address ID | Pendingpickup          | pickup            |
-      | Search by Address ID     | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Pickup Address/ Address ID | Pendingpickup          | 000000            |
-      | Search by Shipper Name   | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Shipper Name/ Shipper ID   | STATION-SHIPPER        | PPER              |
-      | Search by Shipper ID     | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Shipper Name/ Shipper ID   | 138                    | 383               |
-      | Search by Driver Name    | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Driver Name/ Route ID      | STATION-DRIVER         | IVER              |
-      | Search by Route ID       | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Driver Name/ Route ID      | {KEY_CREATED_ROUTE_ID} | 15                |
+      | Search by Pickup Address | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Pickup Address/ Address ID | pickup                 | dfhdfh            |
+      | Search by Address ID     | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Pickup Address/ Address ID | pickup                 | 000000            |
+      | Search by Shipper Name   | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Shipper Name/ Shipper ID   | STATION-SHIPPER        | fdgdfg            |
+      | Search by Shipper ID     | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Shipper Name/ Shipper ID   | 138                    | 21212122          |
+      | Search by Driver Name    | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Driver Name/ Route ID      | STATION-DRIVER         | dfgdfg            |
+      | Search by Route ID       | {hub-name-3} | {hub-id-3} | Vietnam | N+0 Pickup Rates | Driver Name/ Route ID      | {KEY_CREATED_ROUTE_ID} | 121212121         |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: View N+0 Pickup Rates - Pending Due Today Parcel
