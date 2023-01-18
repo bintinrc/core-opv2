@@ -30,6 +30,7 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   public enum PendingPickupJobs {
     DRIVER_NAME_ROUTE_ID("station-pending-pickup-jobs_table_driver-name"),
     JOB_ID("station-pending-pickup-jobs_table_jobs-for-today_reservation-id"),
+    NO_UPCOMING_JOB("station-pending-pickup-jobs_table_jobs-for-today_no-upcoming"),
     TIMESLOT("station-pending-pickup-jobs_table_jobs-for-today_timeslot"),
     PRIORITY_LEVEL("station-pending-pickup-jobs_table_jobs-for-today_priority-level"),
     TOTAL_PARCEL_COUNT("station-pending-pickup-jobs_table_parcels-total"),
@@ -75,7 +76,10 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  private void switchToFrame() {
+  @FindBy(xpath = "//div[@data-testid='station-pending-pickup-jobs_table_empty-data']")
+  private PageElement noPendingPickupRecords;
+
+  public void switchToFrame() {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -175,4 +179,11 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     }
   }
 
+  public void validateNoPendingPickupRecords() {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    Assertions.assertThat(noPendingPickupRecords.isDisplayed())
+        .as("Validation for presence of No Pending pickups").isTrue();
+  }
 }
