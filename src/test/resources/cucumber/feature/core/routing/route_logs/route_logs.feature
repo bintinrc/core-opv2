@@ -294,7 +294,7 @@ Feature: Route Logs
       | 0        | 0.5   |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note> (<hiptest-uid >)
+  Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -319,9 +319,9 @@ Feature: Route Logs
       | zone           | {zone-name-2}                     |
       | driverTypeName | {default-driver-type-name}        |
     Examples:
-      | Note          | Search                                                               | hiptest-uid                              |
-      | With Space    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | uid:1751c03a-218b-479b-867c-388129348954 |
-      | With No Space | {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]}  | uid:b3fead8a-ca6e-4922-b8c7-1c90fb76a0e4 |
+      | Note          | Search                                                               |
+      | With Space    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | With No Space | {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]}  |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Optimise Single Route from Route Logs Page (uid:9f9943a6-918d-4388-a19a-7650cdbcba18)

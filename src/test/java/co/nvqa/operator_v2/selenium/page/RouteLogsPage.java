@@ -280,8 +280,11 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class ArchiveSelectedRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Archive Routes']")
+    @FindBy(css = "[data-pa-label='Archive Routes']")
     public AntButton archiveRoutes;
+
+    @FindBy(css = "[data-pa-label='Continue Archive']")
+    public AntButton continueBtn;
 
     public ArchiveSelectedRoutesDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -323,6 +326,12 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
     @FindBy(css = "button[data-testid='create-button']")
     public AntButton saveChanges;
+
+    @FindBy(xpath = ".//div[@class='ant-alert-message']//td[2]")
+    public List<PageElement> errors;
+
+    @FindBy(css = "[data-testid='bulk-progress-cancel.button']")
+    public AntButton cancel;
 
     public BulkEditDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
