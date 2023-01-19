@@ -682,7 +682,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .isFalse();
     Assertions.assertThat(getText(f(LIST_OF_PORT_ELEMENTS, 2))).as("Port Code is same")
         .contains(port.getPortCode());
-    Assertions.assertThat(getText(f(LIST_OF_PORT_ELEMENTS, 4))).as("Port Type is same")
+    Assertions.assertThat(getText(f(LIST_OF_PORT_ELEMENTS, 3))).as("Port Type is same")
         .containsIgnoringCase(port.getType());
     Assertions.assertThat(getText(f(LIST_OF_PORT_ELEMENTS, 4))).as("Port Name is same")
         .contains(port.getPortName());
