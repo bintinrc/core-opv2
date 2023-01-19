@@ -1,11 +1,11 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AddNewAirport @cwf
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AddNewAirport
 Feature: Airport Trip Management - Add New Airport
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @DeleteCreatedPorts @run
+  @ForceSuccessOrder @DeleteCreatedPorts
   Scenario: Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
