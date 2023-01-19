@@ -32,7 +32,7 @@ Feature: Route Logs - Archive & Unarchive
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When API Operator archives routes:
+    When API Route - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Given Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
@@ -57,7 +57,7 @@ Feature: Route Logs - Archive & Unarchive
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When API Operator archives routes:
+    When API Route - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Given Operator go to menu Routing -> Route Logs
