@@ -1,11 +1,11 @@
-@OperatorV2 @Recovery @OperatorV2Part1 @FDMActionFeature @wip
+@OperatorV2 @Recovery @OperatorV2Part1 @FailedDeliveryManagementPage @wip
 Feature: Failed Delivery Management Page - Action Feature
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RT @ForceSuccessOrder
+  @ForceSuccessOrder @ActionFeature
   Scenario: Operator - Find Failed Delivery Order - by some filters
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -31,6 +31,36 @@ Feature: Failed Delivery Management Page - Action Feature
       | trackingId            | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
       | failureReasonComments | {KEY_SELECTED_FAILURE_REASON.description}    |
+
+  @ActionFeature
+  Scenario: Operator - Select all shown - Failed Delivery Management page
+    Given Operator go to menu Shipper Support -> Failed Delivery Management
+    When Operator clicks "Select All Shown" button on Failed Delivery Management page
+    And Operator verifies number of selected rows on Failed Delivery Management page
+
+  @ActionFeature
+  Scenario: Operator - Deselect all shown - Failed Delivery Management page
+    Given Operator go to menu Shipper Support -> Failed Delivery Management
+    When Operator clicks "Select All Shown" button on Failed Delivery Management page
+    And Operator verifies number of selected rows on Failed Delivery Management page
+    When Operator clicks "Deselect All Shown" button on Failed Delivery Management page
+    Then Operator verify the number of selected Failed Delivery rows is "0"
+
+  @ActionFeature
+  Scenario: Operator - Select all shown - Failed Delivery Management page
+    Given Operator go to menu Shipper Support -> Failed Delivery Management
+    When Operator clicks "Select All Shown" button on Failed Delivery Management page
+    And Operator verifies number of selected rows on Failed Delivery Management page
+    When Operator clicks "Clear Current Selection" button on Failed Delivery Management page
+    Then Operator verify the number of selected Failed Delivery rows is "0"
+
+  @ActionFeature
+  Scenario: Operator - Show only selection - Failed Delivery Management page
+    Given Operator go to menu Shipper Support -> Failed Delivery Management
+    And Recovery User - Wait until Recovery Page loaded completely
+    And  Operator selects 1 rows on Failed Delivery Management page
+    When Operator clicks "Show Only Selected" button on Failed Delivery Management page
+    Then Operator verify the number of selected Failed Delivery rows is "1"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

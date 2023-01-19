@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2;
+import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2.FailedDeliveryTable;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.List;
@@ -20,9 +22,13 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage = new FailedDeliveryManagementPageV2(getWebDriver());
   }
 
+  @When("Recovery User - Wait until Recovery Page loaded completely")
+  public void doWaitUntilPageLoaded() {
+    failedDeliveryManagementReactPage.waitUntilHeaderShown();
+  }
+
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
-    failedDeliveryManagementReactPage.waitUntilHeaderShown();
     failedDeliveryManagementReactPage.inFrame(page -> {
       page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId));
     });
@@ -37,7 +43,7 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
   }
 
   @Then("Operator verify failed delivery table on FDM page:")
-  public void verifyPickupJobsTable(Map<String, String> dataTable) {
+  public void doverifyFdmTable(Map<String, String> dataTable) {
     FailedDelivery expected = new FailedDelivery(resolveKeyValues(dataTable));
 
     failedDeliveryManagementReactPage.inFrame(page -> {
@@ -50,6 +56,57 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
           .isEqualTo(expected.getShipperName());
       Assertions.assertThat(actual.get(5)).as("Failure Comments is Match")
           .isEqualTo(expected.getFailureReasonComments());
+    });
+  }
+
+  @Given("Operator clicks {string} button on Failed Delivery Management page")
+  public void operatorClicksButtonOnFdmPage(String buttonName) {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.waitUntilHeaderShown();
+      switch (buttonName) {
+        case "Select All Shown":
+          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
+          failedDeliveryManagementReactPage.fdmTable.selectAll.click();
+          break;
+        case "Deselect All Shown":
+          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
+          failedDeliveryManagementReactPage.fdmTable.deselectAll.click();
+          break;
+        case "Clear Current Selection":
+          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
+          failedDeliveryManagementReactPage.fdmTable.selectAll.click();
+          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
+          failedDeliveryManagementReactPage.fdmTable.clearCurrentSelection.click();
+          break;
+        case "Show Only Selected":
+          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
+          failedDeliveryManagementReactPage.fdmTable.showOnlySelected.click();
+          break;
+      }
+    });
+  }
+
+  @Then("Operator verifies number of selected rows on Failed Delivery Management page")
+  public void operatorVerifiesNumberOfSelectedRows() {
+    failedDeliveryManagementReactPage.inFrame(() ->
+        failedDeliveryManagementReactPage.verifyBulkSelectResult()
+    );
+  }
+
+  @Then("Operator verify the number of selected Failed Delivery rows is {value}")
+  public void operatorVerifiesNumberOfSelectedRow(String expectedRowCount) {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      String selectedRows = failedDeliveryManagementReactPage.fdmTable.selectedRowCount.getText();
+      Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
+          .contains(expectedRowCount);
+    });
+  }
+  @Given("Operator selects {int} rows on Failed Delivery Management page")
+  public void operatorSelectRowsOnFdmPage(int numberOfRows) {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      for (int i = 1; i <= numberOfRows; i++) {
+        failedDeliveryManagementReactPage.fdmTable.clickActionButton(i, FailedDeliveryTable.ACTION_SELECT);
+      }
     });
   }
 }
