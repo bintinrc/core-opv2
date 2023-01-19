@@ -30,7 +30,7 @@ public class StationRouteSteps extends AbstractSteps {
   public void selectFilters(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     page.inFrame(() -> {
-      page.waitUntilLoaded(2);
+      page.waitUntilLoaded(2, 60);
       page.assignDrivers.waitUntilVisible();
       if (finalData.containsKey("hub")) {
         page.hub.selectValue(finalData.get("hub"));
@@ -64,6 +64,9 @@ public class StationRouteSteps extends AbstractSteps {
         if (StringUtils.isNotBlank(value)) {
           page.shipmentCompletionTime.setToDate(value);
         }
+      }
+      if (finalData.containsKey("alsoSearchInHub")) {
+        page.alsoSearchInHub.setValue(Boolean.parseBoolean(finalData.get("alsoSearchInHub")));
       }
       if (finalData.containsKey("additionalTids")) {
         page.additionalTids.setValue(finalData.get("additionalTids").replace(",", "\n"));

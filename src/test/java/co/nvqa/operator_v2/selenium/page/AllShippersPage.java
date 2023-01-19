@@ -2,9 +2,9 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.address.Address;
 import co.nvqa.commons.model.order_create.v4.Marketplace;
-import co.nvqa.operator_v2.model.shipper.Pricing;
-import co.nvqa.operator_v2.model.shipper.Reservation;
-import co.nvqa.operator_v2.model.shipper.Shipper;
+import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
