@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.common.model.DataEntity;
+import java.util.Map;
 
 /**
  * @author Sergey Mishanin
@@ -20,6 +21,10 @@ public class FailedDelivery extends DataEntity<FailedDelivery> {
   private Integer priorityLevel;
   private String lastScannedHubName;
   private String orderTags;
+
+  public FailedDelivery(Map<String, ?> data) {
+    super(data);
+  }
 
   public String getTrackingId() {
     return trackingId;
