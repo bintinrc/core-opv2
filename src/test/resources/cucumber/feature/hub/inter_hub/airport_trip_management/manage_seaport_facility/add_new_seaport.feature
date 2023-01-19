@@ -1,27 +1,27 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AddNewAirport
+@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AddNewAirport @cwf
 Feature: Airport Trip Management - Add New Airport
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @ForceSuccessOrder @DeleteCreatedPorts @run
   Scenario: Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
-      | portName  | Test Airport |
+      | portCode  | AAJQQ        |
+      | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
       | latitude  | 37.9220427   |
       | longitude | -81.6894072  |
-      | portType  | Airport      |
-    And Verify the new port "Port Test Airport has been created" created success message
+      | portType  | Seaport      |
+    And Verify the new port "Port Test Seaport has been created" created success message
     And Verify the newly created port values in table
 
   @ForceSuccessOrder @DeleteCreatedPorts
@@ -29,11 +29,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABA              |
+      | portCode  | ABAQQ            |
       | portName  | ABA Test Airport |
       | city      | SG               |
       | region    | JKB              |
@@ -43,7 +43,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port ABA Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | ABA              |
+      | portCode  | ABAQQ            |
       | portName  | New Test Airport |
       | city      | Singapore        |
       | region    | GW               |
@@ -57,11 +57,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO               |
+      | portCode  | OWOQQ             |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -71,7 +71,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWU               |
+      | portCode  | UWUQQ             |
       | portName  | Auto Test Airport |
       | city      | Singapore         |
       | region    | GW                |
@@ -86,11 +86,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADA          |
+      | portCode  | ADAQQ        |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -104,11 +104,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADA          |
+      | portCode  | ADAQQ        |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -122,11 +122,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO              |
+      | portCode  | OWOQQ            |
       | portName  | OWO Test Airport |
       | city      | SG               |
       | region    | JKB              |
@@ -136,7 +136,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port OWO Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | OWO              |
+      | portCode  | OWOQQ            |
       | portName  | OWO Test Airport |
       | city      | SG               |
       | region    | JKB              |
@@ -150,11 +150,11 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO               |
+      | portCode  | OWOQQ             |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -164,7 +164,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWU               |
+      | portCode  | UWUQQ             |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -179,7 +179,7 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -197,7 +197,7 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -215,7 +215,7 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
@@ -234,7 +234,7 @@ Feature: Airport Trip Management - Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
-    And API Operator refresh Airports cache
+    And API Operator refresh Seaports cache
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
