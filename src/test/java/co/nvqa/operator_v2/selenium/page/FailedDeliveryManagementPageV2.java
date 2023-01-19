@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.FailedDelivery;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import com.google.common.collect.ImmutableMap;
@@ -19,7 +20,14 @@ public class FailedDeliveryManagementPageV2 extends
   @FindBy(css = "[data-testid='virtual-table.stats.header']")
   public PageElement fdmHeader;
 
-  public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+  @FindBy(css = "[data-testid='apply-action-button']")
+  public Button applyAction;
+
+  @FindBy(css = "[data-testid='fdm.apply-action.download-csv-file']")
+  public PageElement downloadCsvFileAction;
+
+  public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
+  public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list";
 
   public FailedDeliveryManagementPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -118,6 +126,6 @@ public class FailedDeliveryManagementPageV2 extends
         .trim();
     Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
         .contains(numberOfSelectedRows);
-    KEY_LAST_SELECTED_ROWS_COUNT = numberOfSelectedRows;
+    KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 }

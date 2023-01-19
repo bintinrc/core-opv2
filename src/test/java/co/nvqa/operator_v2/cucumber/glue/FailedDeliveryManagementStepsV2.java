@@ -29,17 +29,14 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
 
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
-    failedDeliveryManagementReactPage.inFrame(page -> {
-      page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId));
-    });
+    failedDeliveryManagementReactPage.waitUntilHeaderShown();
+    failedDeliveryManagementReactPage.inFrame(page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")
   public void doFilterByShipperId(String shipperName) {
     failedDeliveryManagementReactPage.waitUntilHeaderShown();
-    failedDeliveryManagementReactPage.inFrame(page -> {
-      page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName));
-    });
+    failedDeliveryManagementReactPage.inFrame(page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
   }
 
   @Then("Operator verify failed delivery table on FDM page:")
@@ -108,5 +105,19 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
         failedDeliveryManagementReactPage.fdmTable.clickActionButton(i, FailedDeliveryTable.ACTION_SELECT);
       }
     });
+  }
+
+  @Then("Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list")
+  public void operatorDownloadSelectedRowToCsv() {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.applyAction.click();
+      failedDeliveryManagementReactPage.downloadCsvFileAction.click();
+    });
+  }
+
+  @Then("Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully")
+  public void operatorVerifyCsvFileOfFailedDeliveryOrderOnFailedDeliveryOrdersListDownloadedSuccessfully() {
+    failedDeliveryManagementReactPage.verifyFileDownloadedSuccessfully(
+        FailedDeliveryManagementPageV2.FDM_CSV_FILENAME_PATTERN);
   }
 }
