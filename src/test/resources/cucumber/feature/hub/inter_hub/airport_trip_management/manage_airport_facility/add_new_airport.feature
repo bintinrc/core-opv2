@@ -1,11 +1,11 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AddNewAirport
-Feature: Airport Trip Management - Add New Airport
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @AddNewAirport
+Feature: Port Trip Management - Add New Airport
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -24,8 +24,8 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port Test Airport has been created" created success message
     And Verify the newly created port values in table
 
-  @ForceSuccessOrder @DeleteCreatedPorts
-  Scenario: Add New Airport with existing Port Code
+  @DeleteCreatedPorts
+  Scenario: Add New Airport with existing Airport Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
@@ -52,8 +52,8 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport          |
     And Verify the error "Duplicate Airport code. Airport code ABA is already exists" is displayed while creating new port
 
-  @ForceSuccessOrder @DeleteCreatedPorts
-  Scenario: Add New Airport with existing Port Name
+  @DeleteCreatedPorts
+  Scenario: Add New Airport with existing Airport Name
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
@@ -81,7 +81,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Latitude > 90
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -99,7 +99,7 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport      |
     And Verify the validation error "Latitude must be maximum 90" is displayed in Add New Port form
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Longitude > 180
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -117,8 +117,8 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport      |
     And Verify the validation error "Longitude must be maximum 180" is displayed in Add New Port form
 
-  @ForceSuccessOrder @DeleteCreatedPorts
-  Scenario: Add New Airport with existing Airport Code
+  @DeleteCreatedPorts
+  Scenario: Add New Airport with Duplicate Airport Details
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     Given Operator refresh page v1
@@ -145,7 +145,7 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport          |
     And Verify the error "Duplicate Airport code. Airport code OWO is already exists" is displayed while creating new port
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with existing Airport Details exclude Airport Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -174,7 +174,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new airport "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Airport Code > 3 characters
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -192,7 +192,7 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport      |
     And Verify the validation error "Airport code must be exactly 3 letters" is displayed in Add New Port form
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Airport Code < 3 characters
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -210,7 +210,7 @@ Feature: Airport Trip Management - Add New Airport
       | portType  | Airport      |
     And Verify the validation error "Airport code must be exactly 3 letters" is displayed in Add New Port form
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Latitude <= 90
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
@@ -229,7 +229,7 @@ Feature: Airport Trip Management - Add New Airport
     And Verify the new port "Port Test Airport has been created" created success message
     And Verify the newly created port values in table
 
-  @ForceSuccessOrder @DeleteCreatedPorts
+  @DeleteCreatedPorts
   Scenario: Add New Airport with Longitude <= 180
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management

@@ -4,8 +4,7 @@ import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.sort.hub.AirTrip;
 import co.nvqa.commons.model.sort.hub.Airport;
-import co.nvqa.commons.model.sort.hub.Port;
-import co.nvqa.operator_v2.selenium.page.PortTripManagementPage;
+import co.nvqa.common.mm.model.Port;
 import co.nvqa.operator_v2.selenium.page.PortTripManagementPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -18,10 +17,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_ASSIGN_MAWB;
-//import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_DETAILS;
-//import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.ACTION_EDIT;
-// import static co.nvqa.operator_v2.selenium.page.PortTripManagementPage.PortTable.COLUMN_AIRTRIP_ID;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_CREATED_PORT_CODES;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_CREATED_PORT_DETAILS;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_LIST_OF_UPDATED_PORT_DETAILS;
 
 public class PortTripManagementSteps extends AbstractSteps{
     private static final Logger LOGGER = LoggerFactory.getLogger(PortTripManagementSteps.class);
@@ -106,8 +104,8 @@ public class PortTripManagementSteps extends AbstractSteps{
     @Then("Operator Add new Port")
     public void operatorAddsNewPort(Map<String, String> mapOfData) {
         portTripManagementPage.createNewPort(mapOfData);
-        putInList(KEY_LIST_OF_PORT_DETAILS, mapOfData);
-        putInList(KEY_LIST_OF_PORT_CODES, mapOfData.get("portCode"));
+        putInList(KEY_LIST_OF_CREATED_PORT_DETAILS, mapOfData);
+        putInList(KEY_LIST_OF_CREATED_PORT_CODES, mapOfData.get("portCode"));
     }
 
     @And("Verify the new port {string} created success message")
@@ -117,7 +115,7 @@ public class PortTripManagementSteps extends AbstractSteps{
 
     @And("Verify the newly created port values in table")
     public void verifyNewlyCreatedPort() {
-        List<Map<String, String>> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Map<String, String>> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         portTripManagementPage.verifyNewlyCreatedPort(portDetails.get(portDetails.size() - 1));
     }
 
@@ -134,7 +132,7 @@ public class PortTripManagementSteps extends AbstractSteps{
     @Given("Operator search port by {string}")
     public void operatorSearchPort(String searchValue){
         String invalidValue = "AAAAAA";
-        List<Port> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Port> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         Port port = new Port();
         if (Objects.nonNull(portDetails)) {
             port = portDetails.get(portDetails.size() - 1);
@@ -152,6 +150,13 @@ public class PortTripManagementSteps extends AbstractSteps{
                     portTripManagementPage.searchPort(portTripManagementPage.portCodeFilter, port.getPortCode());
                 } else {
                     portTripManagementPage.searchPort(portTripManagementPage.portCodeFilter, invalidValue);
+                }
+                break;
+            case "port type":
+                if(!(port.getType() ==null)){
+                    portTripManagementPage.searchPort(portTripManagementPage.portTypeFilter, port.getType());
+                } else {
+                    portTripManagementPage.searchPort(portTripManagementPage.portTypeFilter, invalidValue);
                 }
                 break;
             case "port name":
@@ -191,7 +196,7 @@ public class PortTripManagementSteps extends AbstractSteps{
 
     @Then("Operator verifies the search port on Port Facility page")
     public void operatorVerifiesSearchPort() {
-        List<Port> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Port> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         portTripManagementPage.verifySearchedPort(portDetails.get(portDetails.size() - 1));
     }
 
@@ -207,14 +212,14 @@ public class PortTripManagementSteps extends AbstractSteps{
 
     @Then("Edit the {string} for created Port")
     public void operatorAddsNewPort(String editField, Map<String, String> mapOfData) {
-        List<Map<String, String>> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Map<String, String>> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         Map<String, String> map = portDetails.get(portDetails.size() - 1);
         Map<String, String> updatedMap = new HashMap<>();
         updatedMap.putAll(map);
         updatedMap.put(editField, mapOfData.get(editField));
         portTripManagementPage.editExistingPort(editField, updatedMap, map);
         putInList(KEY_LIST_OF_UPDATED_PORT_DETAILS, updatedMap);
-        putInList(KEY_LIST_OF_PORT_CODES, mapOfData.get("portCode"));
+        putInList(KEY_LIST_OF_CREATED_PORT_CODES, mapOfData.get("portCode"));
     }
 
     @And("Verify the newly updated port values in table")
@@ -225,7 +230,7 @@ public class PortTripManagementSteps extends AbstractSteps{
 
     @Then("Operator click on Disable button for the created Port in table")
     public void operatorDisableNewPort() {
-        List<Map<String, String>> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Map<String, String>> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         Map<String, String> portDetail = portDetails.get(portDetails.size() - 1);
         portTripManagementPage.disableExistingPort(portDetail);
     }
@@ -237,14 +242,14 @@ public class PortTripManagementSteps extends AbstractSteps{
 
     @Then("Operator click on Activate button for the created Port in table")
     public void operatorActivateNewPort() {
-        List<Map<String, String>> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Map<String, String>> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         Map<String, String> portDetail = portDetails.get(portDetails.size() - 1);
         portTripManagementPage.activateExistingPort(portDetail);
     }
 
     @Then("Verify the port is displayed with {string} button")
     public void verifyTheButtonIsDisplayed(String buttonName) {
-        List<Map<String, String>> portDetails = get(KEY_LIST_OF_PORT_DETAILS);
+        List<Map<String, String>> portDetails = get(KEY_LIST_OF_CREATED_PORT_DETAILS);
         Map<String, String> portDetail = portDetails.get(portDetails.size() - 1);
         portTripManagementPage.verifyButton(portDetail, buttonName);
     }
