@@ -81,8 +81,7 @@ Feature: Create pickup jobs from existing job part 2
       | readyBy        | 12:00                          |
       | latestBy       | 15:00                          |
       | followingDates | {gradle-next-1-day-yyyy-MM-dd} |
-
-
+    
   @deletePickupJob @DeleteShipperAddress
   Scenario:Create new pickup job from existing job on Pickup Jobs page - job drawer - single creation
     Given API Operator create new shipper address V2 using data below:
