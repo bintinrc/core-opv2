@@ -33,7 +33,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | 12345         |
+      | portCode  | 12345        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -70,7 +70,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | 12AB5         |
+      | portCode  | 12AB5        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -274,7 +274,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ          |
+      | portCode  | AAJQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -293,7 +293,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ          |
+      | portCode  | AAJQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
