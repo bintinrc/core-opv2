@@ -1,12 +1,12 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @ManageAirportFacility @SearchAirport
-Feature: Airport Trip Management - Manage Airport Facility - Search Airport
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @ManageSeaportFacility @SearchSeaport
+Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field ID
+  Scenario: Search Seaport on Search Field ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -15,8 +15,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -24,7 +24,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field Port Code
+  Scenario: Search Seaport on Search Field Port Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -33,8 +33,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -42,7 +42,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field Port Type
+  Scenario: Search Seaport on Search Field Port Type
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -51,8 +51,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -60,7 +60,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field Full Port Name
+  Scenario: Search Seaport on Search Field Full Port Name
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -69,8 +69,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -78,7 +78,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field City
+  Scenario: Search Seaport on Search Field City
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -87,8 +87,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -96,7 +96,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field Region
+  Scenario: Search Seaport on Search Field Region
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -105,8 +105,8 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -114,7 +114,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     Then Operator verifies the search port on Port Facility page
 
   @DeleteCreatedPorts
-  Scenario: Search Airport on Search Field Latitude, Longitude
+  Scenario: Search Seaport on Search Field Latitude, Longitude
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new port using data below:
       | system_id | SG        |
@@ -123,15 +123,15 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
       | city      | GENERATED |
       | latitude  | GENERATED |
       | longitude | GENERATED |
-      | portType  | Airport   |
-    And API Operator refresh Airports cache
+      | portType  | Seaport   |
+    And API Operator refresh "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     And Operator search port by "latitude, longitude"
     Then Operator verifies the search port on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field ID
+  Scenario: No Data Found Search Seaport on Search Field ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -139,7 +139,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "ID"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field Port Code
+  Scenario: No Data Found Search Seaport on Search Field Port Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -147,7 +147,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Code"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field Port Type
+  Scenario: No Data Found Search Seaport on Search Field Port Type
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -155,7 +155,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Type"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field Full Port Name
+  Scenario: No Data Found Search Seaport on Search Field Full Port Name
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -163,7 +163,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Port Name"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field City
+  Scenario: No Data Found Search Seaport on Search Field City
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -171,7 +171,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "City"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field Region
+  Scenario: No Data Found Search Seaport on Search Field Region
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
@@ -179,7 +179,7 @@ Feature: Airport Trip Management - Manage Airport Facility - Search Airport
     And Operator search port by "Region"
     Then Operator verifies that no data appear on Port Facility page
 
-  Scenario: No Data Found Search Airport on Search Field Latitude, Longitude
+  Scenario: No Data Found Search Seaport on Search Field Latitude, Longitude
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
