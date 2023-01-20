@@ -637,6 +637,14 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//*[@data-testid='pickupAppointmentDrawer.title']/parent::div/following-sibling::div/span")
     public PageElement status;
 
+    @FindBy(xpath = "//button[. = 'Update job tags']")
+    public Button updateTags;
+
+    @FindBy(id = "tagIds")
+    public PageElement AddNewTag;
+
+    String JOB_TAG_REMOVE_XPATH = "//span[@class='ant-select-selection-item-content' and text()='%s']/following-sibling::span[contains(@class,'item-remove')]";
+
   }
 
   public void setRouteOnEditPAJobPage(String routeId) {
@@ -651,5 +659,24 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     editPAJob.updateRoute.waitUntilClickable();
     editPAJob.updateRoute.click();
     loadingIcon.waitUntilInvisible();
+  }
+
+  public void setTagsOnEditPAJobPage(String tag) {
+    editPAJob.AddNewTag.click();
+    editPAJob.AddNewTag.sendKeys(tag);
+    waitUntilVisibilityOfElementLocated(f(SELECTED_VALUE_XPATH, tag));
+    findElementByXpath(f(SELECTED_VALUE_XPATH, tag)).click();
+    editPAJob.status.click();
+  }
+
+  public void updateTagsOnEditPAJobPage() {
+    editPAJob.updateTags.waitUntilClickable();
+    editPAJob.updateTags.click();
+    loadingIcon.waitUntilInvisible();
+  }
+
+  public void removeTagOnEditJobpage(String tagName){
+    findElementByXpath(f(editPAJob.JOB_TAG_REMOVE_XPATH,tagName)).click();
+    editPAJob.updateTags.waitUntilClickable();
   }
 }

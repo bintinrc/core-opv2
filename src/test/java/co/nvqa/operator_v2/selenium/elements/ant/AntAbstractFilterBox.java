@@ -21,7 +21,7 @@ public abstract class AntAbstractFilterBox extends PageElement {
     super(webDriver, searchContext, webElement);
   }
 
-  @FindBy(css = "label > svg[data-pa-label='Remove Filter From Selection']")
+  @FindBy(css = "svg[data-pa-label='Remove Filter From Selection']")
   public Button removeFilter;
 
   public void removeFilter() {
