@@ -661,6 +661,22 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                     resolvedData.get("errorMessage"))))
             .as("Error mesaage is the same").isTrue();
       }
+      if (data.get("readyBy") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.startTime.getText())
+            .as("Start time is the same").isEqualToIgnoringCase(resolvedData.get("readyBy"));
+      }
+      if (data.get("latestBy") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.endTime.getText())
+            .as("End time is the same").isEqualToIgnoringCase(resolvedData.get("latestBy"));
+      }
+      if (data.get("followingDates") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.followingDates.getText())
+            .as("Following dates is the same")
+            .isEqualToIgnoringCase(resolvedData.get("followingDates"));
+      }
     });
   }
 
@@ -782,7 +798,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Given("Operator clicks edit PA job on Pickup Jobs Page")
-  public void operatorCLicksEditPAJob(){
+  public void operatorCLicksEditPAJob() {
     pickupAppointmentJobPage.inFrame(() -> {
       pickupAppointmentJobPage.bulkSelect.clickActionButton(1, ACTION_EDIT);
       pickupAppointmentJobPage.editPAJob.close.waitUntilVisible();
@@ -790,22 +806,22 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @When("Operator selects route {string} on Edit PA job page")
-  public void operatorSelectsRouteOnEditJobPage(String routeIdAsString){
+  public void operatorSelectsRouteOnEditJobPage(String routeIdAsString) {
 
-    pickupAppointmentJobPage.inFrame(() ->{
+    pickupAppointmentJobPage.inFrame(() -> {
       String routeId = resolveValue(routeIdAsString);
       pickupAppointmentJobPage.setRouteOnEditPAJobPage(routeId);
     });
   }
 
   @When("Operator clicks update route button on Edit PA job page")
-  public void operatorClicksUpdateRouteButton(){
+  public void operatorClicksUpdateRouteButton() {
     pickupAppointmentJobPage.inFrame(() ->
         pickupAppointmentJobPage.updateRouteOnEditPAJobPage());
   }
 
   @Then("Operator verifies update route successful message below on Edit PA job page:")
-  public void operatorVerifiesUpdateRouteSuccessfulMessage(String expectedString){
+  public void operatorVerifiesUpdateRouteSuccessfulMessage(String expectedString) {
     pickupAppointmentJobPage.inFrame(page -> {
       String expectedResult = resolveValue(expectedString);
       Assertions.assertThat(expectedResult).as("Message is the same")
@@ -814,39 +830,41 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Then("Operator verifies current route is updated to {string} on Edit PA job page")
-  public void operatorVerifiesCurrentRouteIsUpdated(String routeIdAsString){
-    pickupAppointmentJobPage.inFrame(() ->{
+  public void operatorVerifiesCurrentRouteIsUpdated(String routeIdAsString) {
+    pickupAppointmentJobPage.inFrame(() -> {
       String expectedRouteId = resolveValue(routeIdAsString);
       String actualRouteId = pickupAppointmentJobPage.editPAJob.currentRoute.getText();
-      Assertions.assertThat(actualRouteId).as("Current route is the same").isEqualToIgnoringCase(expectedRouteId);
+      Assertions.assertThat(actualRouteId).as("Current route is the same")
+          .isEqualToIgnoringCase(expectedRouteId);
     });
   }
 
   @Then("Operator verifies PA job status is {string} on Edit PA job page")
-  public void operatorVerifiesPAJobStatus(String expectedStatus){
-    pickupAppointmentJobPage.inFrame(() ->{
+  public void operatorVerifiesPAJobStatus(String expectedStatus) {
+    pickupAppointmentJobPage.inFrame(() -> {
       String actualStatus = pickupAppointmentJobPage.editPAJob.status.getText();
-      Assertions.assertThat(actualStatus).as("Status is the same").isEqualToIgnoringCase(expectedStatus);
+      Assertions.assertThat(actualStatus).as("Status is the same")
+          .isEqualToIgnoringCase(expectedStatus);
     });
   }
 
   @When("Operator selects tag {string} on Edit PA job page")
-  public void operatorSelectsTagOnEditJobPage(String tagAsString){
+  public void operatorSelectsTagOnEditJobPage(String tagAsString) {
 
-    pickupAppointmentJobPage.inFrame(() ->{
+    pickupAppointmentJobPage.inFrame(() -> {
       String tag = resolveValue(tagAsString);
       pickupAppointmentJobPage.setTagsOnEditPAJobPage(tag);
     });
   }
 
   @When("Operator clicks update tags button on Edit PA job page")
-  public void operatorClicksUpdateTagsButton(){
+  public void operatorClicksUpdateTagsButton() {
     pickupAppointmentJobPage.inFrame(() ->
         pickupAppointmentJobPage.updateTagsOnEditPAJobPage());
   }
 
   @Then("Operator verifies update tags successful message below on Edit PA job page:")
-  public void operatorVerifiesUpdateTagSuccessfulMessage(String expectedString){
+  public void operatorVerifiesUpdateTagSuccessfulMessage(String expectedString) {
     pickupAppointmentJobPage.inFrame(page -> {
       String expectedResult = resolveValue(expectedString);
       Assertions.assertThat(expectedResult).as("Message is the same")
@@ -855,8 +873,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Given("Operator remove tag {string} on Edit PA job page")
-  public void operatorRemoveTagOnEditPAJobPage(String tagNameAsString){
-    pickupAppointmentJobPage.inFrame(page ->{
+  public void operatorRemoveTagOnEditPAJobPage(String tagNameAsString) {
+    pickupAppointmentJobPage.inFrame(page -> {
       String tagName = resolveValue(tagNameAsString);
       page.removeTagOnEditJobpage(tagName);
     });
@@ -883,16 +901,25 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
-  public void operatorVerifiesUpdateTagButtonStatus(String status){
-    pickupAppointmentJobPage.inFrame(page ->{
-      switch (status){
+  public void operatorVerifiesUpdateTagButtonStatus(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      switch (status) {
         case "enable":
-          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is enable").isEqualTo(null);
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled"))
+              .as("Button is enable").isEqualTo(null);
           break;
         case "disable":
-          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is disable").isEqualTo("true");
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled"))
+              .as("Button is disable").isEqualTo("true");
       }
     });
+  }
 
+  @When("Operator clicks Create new job on Edit PA job page")
+  public void operatorClickCreateNewJobOnEditJobPage() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.editPAJob.createNewJob.waitUntilClickable();
+      page.editPAJob.createNewJob.click();
+    });
   }
 }
