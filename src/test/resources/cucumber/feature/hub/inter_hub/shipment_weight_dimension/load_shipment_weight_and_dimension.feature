@@ -24,7 +24,6 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -53,7 +52,6 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -82,11 +80,10 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
@@ -111,7 +108,6 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -140,7 +136,6 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
@@ -169,7 +164,6 @@ Feature: Load Shipment Weight and Dimension
     When Operator fill in Load Shipment Weight filter
       | presetName  | {shipment-weight-filter-name} |
       | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-      | mawb        | {KEY_SHIPMENT_AWB}            |
     And Operator click Load Selection button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
     And Operator verify can filter Shipment Weight Dimension Table
