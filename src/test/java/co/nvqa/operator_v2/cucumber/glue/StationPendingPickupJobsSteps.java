@@ -67,7 +67,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class);
+        NvTestRuntimeException.class, InterruptedException.class);
     takesScreenshot();
   }
 
@@ -88,7 +88,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class);
+        NvTestRuntimeException.class, InterruptedException.class);
     takesScreenshot();
   }
 

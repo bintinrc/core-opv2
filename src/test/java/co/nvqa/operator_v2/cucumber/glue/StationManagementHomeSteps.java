@@ -265,7 +265,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
     takesScreenshot();
   }
 
@@ -286,7 +286,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
     takesScreenshot();
   }
 
@@ -305,7 +305,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
     takesScreenshot();
   }
 
@@ -326,7 +326,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class);
+        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
     takesScreenshot();
   }
 
