@@ -285,6 +285,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.createOrEditJobPage.selectTagInJobTagsField(tag);
+        pause3s();
       });
     }, 1000, 5);
 
