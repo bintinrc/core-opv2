@@ -22,18 +22,18 @@ Feature: Force Fail Single Pickup Job
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDay   | {gradle-next-2-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
     When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
     When Operator upload Fail proof photo on pickup appointment job
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Hyperlocal - Cannot Make It (CMI) |
+      | Ninja Point - Delivery Parcel Damaged |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -62,7 +62,7 @@ Feature: Force Fail Single Pickup Job
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDay   | {gradle-next-2-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
     When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
@@ -70,11 +70,11 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
     When Operator upload Fail proof photo on pickup appointment job
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Hyperlocal - Cannot Make It (CMI) |
+      | Ninja Point - Delivery Parcel Damaged |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -100,17 +100,17 @@ Feature: Force Fail Single Pickup Job
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDay   | {gradle-next-2-day-yyyy-MM-dd} |
     When Operator click load selection on pickup jobs filter
     When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Hyperlocal - Cannot Make It (CMI) |
+      | Ninja Point - Delivery Parcel Damaged |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |
@@ -139,7 +139,7 @@ Feature: Force Fail Single Pickup Job
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
     When Operator select the data range
       | startDay | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDay   | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDay   | {gradle-next-2-day-yyyy-MM-dd} |
     When Operator select only In progress job status, on pickup jobs filter
     When Operator click load selection on pickup jobs filter
     When Operator search for address = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
@@ -147,10 +147,10 @@ Feature: Force Fail Single Pickup Job
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
     When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Hyperlocal - Cannot Make It (CMI)"
+    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
     When Operator click proceed fail on pickup appointment job
     Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Hyperlocal - Cannot Make It (CMI) |
+      | Ninja Point - Delivery Parcel Damaged |
     When Operator click submit button on pickup fail job
     Then QA verify successful message is displayed with the jobID:
       | notificationMessage | Fail job successful                 |

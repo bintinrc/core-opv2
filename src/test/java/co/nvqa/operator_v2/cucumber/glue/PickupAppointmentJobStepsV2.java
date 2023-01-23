@@ -764,10 +764,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     String status = resolveValue(Status);
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.createOrEditJobPage
-              .isStarByJobIdDisplayed(jobId, status))
-          .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
-    });
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(()->{
+        Assertions.assertThat(page.createOrEditJobPage
+                .isStarByJobIdDisplayed(jobId, status))
+            .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      },1000,5);
+      });
+
   }
 
   @When("Operator check no tag = {string} is displayed on job")
