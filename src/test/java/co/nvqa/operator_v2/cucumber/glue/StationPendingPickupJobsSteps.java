@@ -50,6 +50,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @And("Operator searches data in the pending pickup table by applying the following filters and expect one record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_one_record(
       DataTable searchParameters) {
@@ -70,6 +71,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @And("Operator searches data in the pending pickup table by applying the following filters and expect zero record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_zero_record(
       DataTable searchParameters) {
