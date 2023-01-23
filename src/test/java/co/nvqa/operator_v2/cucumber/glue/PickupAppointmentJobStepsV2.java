@@ -340,6 +340,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         case "Create / edit job":
           pickupAppointmentJobPage.createEditJobButton.click();
           break;
+        case "Bulk Update dropdown":
+          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.click();
+          break;
+        case "Assign job tag":
+          pickupAppointmentJobPage.bulkSelect.assignJobTag.click();
+          break;
       }
     });
   }
@@ -835,22 +841,22 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @When("Operator selects tag {string} on Edit PA job page")
-  public void operatorSelectsTagOnEditJobPage(String tagAsString){
+  public void operatorSelectsTagOnEditJobPage(String tagAsString) {
 
-    pickupAppointmentJobPage.inFrame(() ->{
+    pickupAppointmentJobPage.inFrame(() -> {
       String tag = resolveValue(tagAsString);
       pickupAppointmentJobPage.setTagsOnEditPAJobPage(tag);
     });
   }
 
   @When("Operator clicks update tags button on Edit PA job page")
-  public void operatorClicksUpdateTagsButton(){
+  public void operatorClicksUpdateTagsButton() {
     pickupAppointmentJobPage.inFrame(() ->
         pickupAppointmentJobPage.updateTagsOnEditPAJobPage());
   }
 
   @Then("Operator verifies update tags successful message below on Edit PA job page:")
-  public void operatorVerifiesUpdateTagSuccessfulMessage(String expectedString){
+  public void operatorVerifiesUpdateTagSuccessfulMessage(String expectedString) {
     pickupAppointmentJobPage.inFrame(page -> {
       String expectedResult = resolveValue(expectedString);
       Assertions.assertThat(expectedResult).as("Message is the same")
@@ -859,8 +865,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Given("Operator remove tag {string} on Edit PA job page")
-  public void operatorRemoveTagOnEditPAJobPage(String tagNameAsString){
-    pickupAppointmentJobPage.inFrame(page ->{
+  public void operatorRemoveTagOnEditPAJobPage(String tagNameAsString) {
+    pickupAppointmentJobPage.inFrame(page -> {
       String tagName = resolveValue(tagNameAsString);
       page.removeTagOnEditJobpage(tagName);
     });
@@ -903,16 +909,38 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   }
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
-  public void operatorVerifiesUpdateTagButtonStatus(String status){
-    pickupAppointmentJobPage.inFrame(page ->{
-      switch (status){
+  public void operatorVerifiesUpdateTagButtonStatus(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      switch (status) {
         case "enable":
-          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is enable").isEqualTo(null);
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled"))
+              .as("Button is enable").isEqualTo(null);
           break;
         case "disable":
-          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled")).as("Button is disable").isEqualTo("true");
+          Assertions.assertThat(page.editPAJob.updateTags.getAttribute("disabled"))
+              .as("Button is disable").isEqualTo("true");
       }
     });
 
   }
+
+  @When("Operator select Pickup job tag = {string} in Job Tags Model")
+  public void selectJobTagsInJobTagsModel(String tag) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.editJobTagModel.selectTagInJobTagsField(tag);
+    });
+  }
+
+  @When("Operator check {int} tags with name = {string}")
+  public void checkNumberOfTagsWithName(Integer tagsNumber, String tagName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        List<String> tagsListInTable = page.bulkSelect.getTagsListWithName(tagName);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("tag %s in table count is = %s", tagName, tagsNumber)).hasSize(tagsNumber);
+      }, 1000, 5);
+
+    });
+  }
+
 }
