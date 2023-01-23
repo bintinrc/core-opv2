@@ -47,6 +47,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
     Map<String, String> filter = resolveKeyValues(filters.get(0));
     stationPendingPickupJobsPage.applyFiltersInPendingPickupTableAndValidateResultCount(filter, 0);
+    takesScreenshot();
   }
 
   @And("Operator searches data in the pending pickup table by applying the following filters and expect one record:")
@@ -66,6 +67,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
         NvTestRuntimeException.class);
+    takesScreenshot();
   }
 
   @And("Operator searches data in the pending pickup table by applying the following filters and expect zero record:")
@@ -85,6 +87,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
         NvTestRuntimeException.class);
+    takesScreenshot();
   }
 
   @When("Operator clicks on the {string} button in the Pending pickup page")

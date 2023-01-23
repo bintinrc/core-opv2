@@ -259,8 +259,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder + totOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
         }, null, LOGGER::warn, 30000, 10,
@@ -282,8 +280,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder - finalTotOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
         }, null, LOGGER::warn, 30000, 10,
@@ -303,8 +299,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder + totOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
         }, null, LOGGER::warn, 30000, 10,
@@ -326,8 +320,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder - finalTotOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
         }, null, LOGGER::warn, 30000, 10,
