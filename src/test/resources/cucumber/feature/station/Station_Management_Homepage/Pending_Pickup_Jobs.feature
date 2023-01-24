@@ -1277,6 +1277,7 @@ Feature: Total Completion Rate
       | HubName      | HubId      | Country | ModalName        | TileName1                      | TileName2                    |
       | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: Cancel Some Parcels in Reservation
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
