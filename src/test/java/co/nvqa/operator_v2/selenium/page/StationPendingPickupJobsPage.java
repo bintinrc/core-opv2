@@ -88,7 +88,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTableAndValidateResultCount(Map<String, String> filters,
       int resultsCount) {
-    pause10s();
     switchToFrame();
     waitWhilePageIsLoading();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -102,7 +101,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
       }
     }
     waitWhilePageIsLoading();
-    pause3s();
     Assert.assertTrue(
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
@@ -111,7 +109,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTable(Map<String, String> filters) {
     waitWhilePageIsLoading();
-    pause10s();
     switchToFrame();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterColumnXpath = f(PENDING_PICKUP_TABLE_SEARCH_XPATH, filter.getKey());
@@ -122,7 +119,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
         filterFields.get(0).sendKeys(Keys.chord(Keys.CONTROL, "a"));
         filterFields.get(0).sendKeys(Keys.BACK_SPACE);
         filterFields.get(0).sendKeys(filter.getValue());
-        pause5s();
       }
     }
   }

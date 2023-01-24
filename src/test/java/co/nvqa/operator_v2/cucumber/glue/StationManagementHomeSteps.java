@@ -261,11 +261,11 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -282,11 +282,11 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -301,11 +301,11 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
@@ -322,11 +322,11 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        StaleElementReferenceException.class, AssertionError.class, InterruptedException.class);
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 

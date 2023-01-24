@@ -63,11 +63,11 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
             throw new NvTestRuntimeException("One record is not displayed after filtering "
                 + "the table Pending Pickup table record" + filter);
           }
-        }, null, LOGGER::warn, 5000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class, InterruptedException.class);
+        NvTestRuntimeException.class);
     takesScreenshot();
   }
 
@@ -84,11 +84,11 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
             throw new NvTestRuntimeException("Record are displayed after filtering "
                 + "the table Pending Pickup table record" + filter);
           }
-        }, null, LOGGER::warn, 5000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
-        NvTestRuntimeException.class, InterruptedException.class);
+        NvTestRuntimeException.class);
     takesScreenshot();
   }
 
