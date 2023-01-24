@@ -22,6 +22,8 @@ public class FailedDelivery extends DataEntity<FailedDelivery> {
   private String lastScannedHubName;
   private String orderTags;
 
+  public FailedDelivery() {}
+
   public FailedDelivery(Map<String, ?> data) {
     super(data);
   }

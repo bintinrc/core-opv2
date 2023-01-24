@@ -1,11 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.FailedDelivery;
+import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -27,7 +31,7 @@ public class FailedDeliveryManagementPageV2 extends
   public PageElement downloadCsvFileAction;
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
-  public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list";
+  public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
 
   public FailedDeliveryManagementPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -44,9 +48,7 @@ public class FailedDeliveryManagementPageV2 extends
 
     @FindBy(xpath = "//button[@class='ant-btn ant-btn-sm ant-btn-icon-only']")
     public PageElement bulkSelectDropdown;
-
-    //To-Do find the correct xpath for this element
-    @FindBy(xpath = "//*[@id=\"__next\"]/div/div/div/div/div/div[1]/span")
+    @FindBy(xpath = "//div[@id='__next']//span[contains(text(),'Selected')]")
     public PageElement selectedRowCount;
 
     @FindBy(css = "[data-testid='virtual-table.select-all-shown']")
@@ -128,4 +130,10 @@ public class FailedDeliveryManagementPageV2 extends
         .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
+
+  public void verifyDownloadedFile() {
+    String downloadedFile = getLatestDownloadedFilename(FDM_CSV_FILENAME_PATTERN);
+    verifyFileDownloadedSuccessfully(downloadedFile);
+  }
+
 }

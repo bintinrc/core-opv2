@@ -30,13 +30,15 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
     failedDeliveryManagementReactPage.waitUntilHeaderShown();
-    failedDeliveryManagementReactPage.inFrame(page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
+    failedDeliveryManagementReactPage.inFrame(
+        page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")
   public void doFilterByShipperId(String shipperName) {
     failedDeliveryManagementReactPage.waitUntilHeaderShown();
-    failedDeliveryManagementReactPage.inFrame(page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
+    failedDeliveryManagementReactPage.inFrame(
+        page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
   }
 
   @Then("Operator verify failed delivery table on FDM page:")
@@ -58,26 +60,26 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
 
   @Given("Operator clicks {string} button on Failed Delivery Management page")
   public void operatorClicksButtonOnFdmPage(String buttonName) {
-    failedDeliveryManagementReactPage.inFrame(() -> {
-      failedDeliveryManagementReactPage.waitUntilHeaderShown();
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      page.waitUntilHeaderShown();
       switch (buttonName) {
         case "Select All Shown":
-          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
-          failedDeliveryManagementReactPage.fdmTable.selectAll.click();
+          page.fdmTable.bulkSelectDropdown.click();
+          page.fdmTable.selectAll.click();
           break;
         case "Deselect All Shown":
-          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
-          failedDeliveryManagementReactPage.fdmTable.deselectAll.click();
+          page.fdmTable.bulkSelectDropdown.click();
+          page.fdmTable.deselectAll.click();
           break;
         case "Clear Current Selection":
-          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
-          failedDeliveryManagementReactPage.fdmTable.selectAll.click();
-          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
-          failedDeliveryManagementReactPage.fdmTable.clearCurrentSelection.click();
+          page.fdmTable.bulkSelectDropdown.click();
+          page.fdmTable.selectAll.click();
+          page.fdmTable.bulkSelectDropdown.click();
+          page.fdmTable.clearCurrentSelection.click();
           break;
         case "Show Only Selected":
-          failedDeliveryManagementReactPage.fdmTable.bulkSelectDropdown.click();
-          failedDeliveryManagementReactPage.fdmTable.showOnlySelected.click();
+          page.fdmTable.bulkSelectDropdown.click();
+          page.fdmTable.showOnlySelected.click();
           break;
       }
     });
@@ -98,11 +100,13 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
           .contains(expectedRowCount);
     });
   }
+
   @Given("Operator selects {int} rows on Failed Delivery Management page")
   public void operatorSelectRowsOnFdmPage(int numberOfRows) {
     failedDeliveryManagementReactPage.inFrame(() -> {
       for (int i = 1; i <= numberOfRows; i++) {
-        failedDeliveryManagementReactPage.fdmTable.clickActionButton(i, FailedDeliveryTable.ACTION_SELECT);
+        failedDeliveryManagementReactPage.fdmTable.clickActionButton(i,
+            FailedDeliveryTable.ACTION_SELECT);
       }
     });
   }
@@ -117,7 +121,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
 
   @Then("Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully")
   public void operatorVerifyCsvFileOfFailedDeliveryOrderOnFailedDeliveryOrdersListDownloadedSuccessfully() {
-    failedDeliveryManagementReactPage.verifyFileDownloadedSuccessfully(
-        FailedDeliveryManagementPageV2.FDM_CSV_FILENAME_PATTERN);
+    failedDeliveryManagementReactPage.verifyDownloadedFile();
   }
 }
