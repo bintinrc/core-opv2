@@ -56,6 +56,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentType(shipmentType);
         shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
         shipmentScanningPage.selectShipmentId(shipmentId);
+        shipmentScanningPage.waitUntilShipmentIdFilled(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
         shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[@data-testid='add-parcel-scan-container']//span[contains(.,'"+trackingId+"')]");

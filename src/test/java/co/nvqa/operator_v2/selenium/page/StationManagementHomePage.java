@@ -264,7 +264,6 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
         switchToStationHomeFrame();
       }
       waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
-      pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
       tileValue = tileValue.replace("%", "").trim();
