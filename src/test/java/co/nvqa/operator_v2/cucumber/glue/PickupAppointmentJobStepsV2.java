@@ -908,7 +908,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.createOrEditJobPage.clearCustomTimeRangeInput();
     });
   }
-  g
+  
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
   public void operatorVerifiesUpdateTagButtonStatus(String status) {
