@@ -7,7 +7,6 @@ import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -37,10 +36,6 @@ public class FailedDeliveryManagementPageV2 extends
   }
 
   public FailedDeliveryTable fdmTable;
-
-  public void waitUntilHeaderShown() {
-    fdmHeader.waitUntilVisible(90);
-  }
 
   public static class FailedDeliveryTable extends AntTableV2<FailedDelivery> {
 
