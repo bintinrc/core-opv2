@@ -47,8 +47,10 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
     Map<String, String> filter = resolveKeyValues(filters.get(0));
     stationPendingPickupJobsPage.applyFiltersInPendingPickupTableAndValidateResultCount(filter, 0);
+    takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @And("Operator searches data in the pending pickup table by applying the following filters and expect one record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_one_record(
       DataTable searchParameters) {
@@ -61,13 +63,15 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
             throw new NvTestRuntimeException("One record is not displayed after filtering "
                 + "the table Pending Pickup table record" + filter);
           }
-        }, null, LOGGER::warn, 5000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
         NvTestRuntimeException.class);
+    takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @And("Operator searches data in the pending pickup table by applying the following filters and expect zero record:")
   public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_zero_record(
       DataTable searchParameters) {
@@ -80,11 +84,12 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
             throw new NvTestRuntimeException("Record are displayed after filtering "
                 + "the table Pending Pickup table record" + filter);
           }
-        }, null, LOGGER::warn, 5000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
         NvTestRuntimeException.class);
+    takesScreenshot();
   }
 
   @When("Operator clicks on the {string} button in the Pending pickup page")

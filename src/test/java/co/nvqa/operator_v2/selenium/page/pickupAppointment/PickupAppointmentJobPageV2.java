@@ -616,6 +616,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//div[text()='Jobs created']")
     public PageElement title;
 
+    @FindBy(xpath = "//div[text()='Job created']")
+    public PageElement title2;
+
     @FindBy(xpath = "//span[text()='Time slot:']/following::span")
     public PageElement createdTime;
 
@@ -623,6 +626,16 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public Button confirm;
 
     public final String COLUMN_DATA_XPATH = "//tbody[@class='ant-table-tbody']//td[text()='%s']";
+
+    @FindBy(xpath = "//span[text()='Ready by:']/following-sibling::span")
+    public PageElement startTime;
+
+    @FindBy(xpath = "//span[text()='Latest by:']/following-sibling::span")
+    public PageElement endTime;
+
+    @FindBy(xpath = "//span[text()='Jobs created for the following dates:']/following-sibling::span")
+    public PageElement followingDates;
+
 
   }
 
@@ -655,6 +668,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement AddNewTag;
 
     String JOB_TAG_REMOVE_XPATH = "//span[@class='ant-select-selection-item-content' and text()='%s']/following-sibling::span[contains(@class,'item-remove')]";
+
+    @FindBy(xpath = "//button[. = 'Create new job']")
+    public Button createNewJob;
 
   }
 

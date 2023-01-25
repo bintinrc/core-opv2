@@ -669,6 +669,22 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                     resolvedData.get("errorMessage"))))
             .as("Error mesaage is the same").isTrue();
       }
+      if (data.get("readyBy") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.startTime.getText())
+            .as("Start time is the same").isEqualToIgnoringCase(resolvedData.get("readyBy"));
+      }
+      if (data.get("latestBy") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.endTime.getText())
+            .as("End time is the same").isEqualToIgnoringCase(resolvedData.get("latestBy"));
+      }
+      if (data.get("followingDates") != null) {
+        pickupAppointmentJobPage.jobCreatedSuccess.title2.waitUntilVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.jobCreatedSuccess.followingDates.getText())
+            .as("Following dates is the same")
+            .isEqualToIgnoringCase(resolvedData.get("followingDates"));
+      }
     });
   }
 
@@ -898,15 +914,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.createOrEditJobPage.clearCustomTimeRangeInput();
     });
   }
-
-  @When("Operator get current time {string}")
-  public void getCurrentTime(String date) {
-
-    LOGGER.debug(resolveValue(date));
-    LOGGER.debug(date);
-
-
-  }
+  
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
   public void operatorVerifiesUpdateTagButtonStatus(String status) {
@@ -921,7 +929,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
               .as("Button is disable").isEqualTo("true");
       }
     });
+  }
 
+  @When("Operator clicks Create new job on Edit PA job page")
+  public void operatorClickCreateNewJobOnEditJobPage() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.editPAJob.createNewJob.waitUntilClickable();
+      page.editPAJob.createNewJob.click();
+    });
   }
 
   @When("Operator select Pickup job tag = {string} in Job Tags Model")
