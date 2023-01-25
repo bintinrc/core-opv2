@@ -86,7 +86,6 @@ Feature: Failed Delivery Management Page - Action Feature
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
     When Operator go to menu Shipper Support -> Failed Delivery Management
-    And Operator refresh page
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - selects 1 rows on Failed Delivery Management page
     And Recovery User - Save value of selected failed delivery order
