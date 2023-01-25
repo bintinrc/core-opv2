@@ -121,7 +121,7 @@ Feature: MAWB Management - Search by MAWB number
       | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
+      |We cannot process more than 100 MAWB Number|
 
   @DeleteShipments
   Scenario: Search by MAWB Number with Multiple Invalid MAWB Number > 100
@@ -133,7 +133,7 @@ Feature: MAWB Management - Search by MAWB number
       | adasdasdasdsd              |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
+      |We cannot process more than 100 MAWB Number|
 
   @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Valid and Invalid MAWB Number > 100
@@ -152,7 +152,7 @@ Feature: MAWB Management - Search by MAWB number
       | {KEY_LIST_OF_CREATED_MAWB} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
+      |We cannot process more than 100 MAWB Number|
 
   @DeleteShipments @DeleteCreatedMAWBs
   Scenario: Search by MAWB Number with Multiple Duplicate MAWB Number <= 100
@@ -190,9 +190,9 @@ Feature: MAWB Management - Search by MAWB number
       | {KEY_LIST_OF_CREATED_MAWB[1]} |
     And Operator clicks on "Search MAWB" button on MAWB Management Page
     Then Operator verifies error toast message on MAWB Management Page:
-      |We cannot process more than 100 MAWB number|
+      |We cannot process more than 100 MAWB Number|
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
 
