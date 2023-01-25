@@ -1,5 +1,5 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTrip6
-Feature: Shipment Van Inbound With Trip Scanning 6
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentInboundScanning @VanInbound @WithTripAirHaul1
+Feature: Air Haul Shipment Van Inbound With Trip Scanning 1
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
