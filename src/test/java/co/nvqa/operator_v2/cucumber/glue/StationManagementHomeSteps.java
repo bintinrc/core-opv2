@@ -117,16 +117,24 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the tile:{string} is equal to {string}")
   public void operator_verifies_that_the_tile_is_equal_to(String tileName,
       String expectedTilevalue) {
-    stationManagementHomePage.closeIfModalDisplay();
-    String actualTileValue = String.valueOf(
-        stationManagementHomePage.getNumberFromPendingPickupTile(tileName));
-    takesScreenshot();
-    Assertions.assertThat(actualTileValue)
-        .as("expected Value is not matching for %s", tileName)
-        .isEqualTo(expectedTilevalue);
+    retryIfExpectedExceptionOccurred(() -> {
+          navigateRefresh();
+          stationManagementHomePage.closeIfModalDisplay();
+          String actualTileValue = String.valueOf(
+              stationManagementHomePage.getNumberFromPendingPickupTile(tileName));
+          takesScreenshot();
+          Assertions.assertThat(actualTileValue)
+              .as("expected Value is not matching for %s", tileName)
+              .isEqualTo(expectedTilevalue);
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        StaleElementReferenceException.class, AssertionError.class);
     takesScreenshot();
   }
 
