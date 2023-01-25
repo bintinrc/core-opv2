@@ -908,15 +908,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.createOrEditJobPage.clearCustomTimeRangeInput();
     });
   }
-
-  @When("Operator get current time {string}")
-  public void getCurrentTime(String date) {
-
-    LOGGER.debug(resolveValue(date));
-    LOGGER.debug(date);
-
-
-  }
+  g
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
   public void operatorVerifiesUpdateTagButtonStatus(String status) {
