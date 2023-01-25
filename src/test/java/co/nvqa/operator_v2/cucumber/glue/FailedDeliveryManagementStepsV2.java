@@ -22,17 +22,11 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage = new FailedDeliveryManagementPageV2(getWebDriver());
   }
 
-  @When("Recovery User - Wait until Recovery Page loaded completely")
-  public void doWaitUntilPageLoaded() {
-    failedDeliveryManagementReactPage.waitUntilHeaderShown();
-  }
-
   @When("Recovery User - Search failed orders by trackingId = {string}")
   public void doFilterByTrackingId(String trackingId) {
     failedDeliveryManagementReactPage.waitUntilHeaderShown();
     failedDeliveryManagementReactPage.inFrame(
         page -> page.fdmTable.filterTableByTID("trackingId", resolveValue(trackingId)));
-    takesScreenshot();
   }
 
   @When("Recovery User - Search failed orders by shipperName = {string}")
@@ -40,7 +34,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage.waitUntilHeaderShown();
     failedDeliveryManagementReactPage.inFrame(
         page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
-    takesScreenshot();
   }
 
   @Then("Recovery User - verify failed delivery table on FDM page:")
@@ -68,24 +61,20 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
         case "Select All Shown":
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.selectAll.click();
-          takesScreenshot();
           break;
         case "Deselect All Shown":
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.deselectAll.click();
-          takesScreenshot();
           break;
         case "Clear Current Selection":
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.selectAll.click();
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.clearCurrentSelection.click();
-          takesScreenshot();
           break;
         case "Show Only Selected":
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.showOnlySelected.click();
-          takesScreenshot();
           break;
       }
     });
@@ -96,7 +85,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(() ->
         failedDeliveryManagementReactPage.verifyBulkSelectResult()
     );
-    takesScreenshot();
   }
 
   @Then("Recovery User - verify the number of selected Failed Delivery rows is {value}")
@@ -110,6 +98,7 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
 
   @Given("Recovery User - selects {int} rows on Failed Delivery Management page")
   public void operatorSelectRowsOnFdmPage(int numberOfRows) {
+    failedDeliveryManagementReactPage.waitUntilHeaderShown();
     failedDeliveryManagementReactPage.inFrame(() -> {
       for (int i = 1; i <= numberOfRows; i++) {
         failedDeliveryManagementReactPage.fdmTable.clickActionButton(i,
@@ -123,7 +112,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(() -> {
       failedDeliveryManagementReactPage.applyAction.click();
       failedDeliveryManagementReactPage.downloadCsvFileAction.click();
-      takesScreenshot();
     });
   }
 

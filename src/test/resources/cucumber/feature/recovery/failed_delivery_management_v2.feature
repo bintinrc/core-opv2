@@ -1,4 +1,4 @@
-@OperatorV2 @Recovery @FailedDeliveryManagementV2 @wip
+@OperatorV2 @Recovery @FailedDeliveryManagementV2
 Feature: Failed Delivery Management Page - Action Feature
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -57,18 +57,18 @@ Feature: Failed Delivery Management Page - Action Feature
     When Recovery User - clicks "Clear Current Selection" button on Failed Delivery Management page
     Then Recovery User - verify the number of selected Failed Delivery rows is "0"
 
-  @ActionFeature
+  @ActionFeature @RT
   Scenario: Operator - Show only selection - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator refresh page
-    And Recovery User - Wait until Recovery Page loaded completely
     And Recovery User - selects 1 rows on Failed Delivery Management page
-    When Recovery User - clicks "Show Only Selection" button on Failed Delivery Management page
+    When Recovery User - clicks "Show Only Selected" button on Failed Delivery Management page
     Then Recovery User - verify the number of selected Failed Delivery rows is "1"
 
-  @ActionFeature @RT
+  @ActionFeature
   Scenario: Operator - Download and Verify CSV File
-    Given API Shipper create V4 order using data below:
+    Given Operator refresh page
+    And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
