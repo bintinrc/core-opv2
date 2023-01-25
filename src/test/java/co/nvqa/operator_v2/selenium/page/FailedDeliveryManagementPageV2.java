@@ -39,7 +39,7 @@ public class FailedDeliveryManagementPageV2 extends
   public FailedDeliveryTable fdmTable;
 
   public void waitUntilHeaderShown() {
-    fdmHeader.waitUntilVisible(60);
+    fdmHeader.waitUntilVisible(90);
   }
 
   public static class FailedDeliveryTable extends AntTableV2<FailedDelivery> {
