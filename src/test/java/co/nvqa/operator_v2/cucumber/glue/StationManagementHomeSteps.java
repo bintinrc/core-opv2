@@ -250,6 +250,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the count in the pending pickup tile: {string} has increased by {int}")
   public void operator_verifies_that_the_count_in_pending_pickup_tile_has_increased_by(
       String tileName,
@@ -258,11 +259,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder + totOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
@@ -270,6 +269,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the count in the pending pickup tile: {string} has decreased by {int}")
   public void operator_verifies_that_the_count_in_pending_pickup_tile_has_decreased_by(
       String tileName,
@@ -280,11 +280,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder - finalTotOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
@@ -292,6 +290,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the count in the second in the pending pick up tile: {string} has increased by {int}")
   public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_has_increased_by(
       String tileName,
@@ -300,11 +299,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder + totOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
@@ -312,6 +309,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the count in the second in the pending pick up tile: {string} has decreased by {int}")
   public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_has_decreased_by(
       String tileName,
@@ -322,11 +320,9 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.waitUntilPendingPickupTileValueMatches(tileName,
-              (beforeOrder - finalTotOrder));
           stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
-        }, null, LOGGER::warn, 30000, 10,
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
         ElementNotInteractableException.class, ElementNotInteractableException.class,
         TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
