@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @RecordOffload2 @runthis
+@OperatorV2 @MiddleMile @Hub @InterHub @mawbManagement @RecordOffload2
 Feature: MAWB Management - Record Offload 2
 
   @LaunchBrowser @ShouldAlwaysRun
