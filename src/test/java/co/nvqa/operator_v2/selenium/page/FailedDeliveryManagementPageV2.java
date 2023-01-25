@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.FailedDelivery;
-import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -131,9 +129,17 @@ public class FailedDeliveryManagementPageV2 extends
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 
-  public void verifyDownloadedFile() {
-    String downloadedFile = getLatestDownloadedFilename(FDM_CSV_FILENAME_PATTERN);
-    verifyFileDownloadedSuccessfully(downloadedFile);
+  public void verifyDownloadedCsvFile(List<FailedDelivery> failedDeliveries) {
+    final String fileName = getLatestDownloadedFilename(FDM_CSV_FILENAME_PATTERN);
+    verifyFileDownloadedSuccessfully(fileName);
+    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+    final List<FailedDelivery> actualFailedDeliveryOrder = FailedDelivery.fromCsvFile(
+        FailedDelivery.class, pathName, true);
+
+    Assertions.assertThat(actualFailedDeliveryOrder.size()).as("Unexpected number of lines in CSV file")
+        .isGreaterThanOrEqualTo(failedDeliveries.size());
+
   }
+
 
 }

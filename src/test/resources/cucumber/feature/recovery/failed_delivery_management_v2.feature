@@ -27,7 +27,7 @@ Feature: Failed Delivery Management Page - Action Feature
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - Search failed orders by shipperName = "{KEY_LIST_OF_CREATED_ORDERS[1].shipper.name}"
-    And Operator verify failed delivery table on FDM page:
+    And Recovery User - verify failed delivery table on FDM page:
       | trackingId            | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}   |
       | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
       | failureReasonComments | {KEY_SELECTED_FAILURE_REASON.description}    |
@@ -35,34 +35,38 @@ Feature: Failed Delivery Management Page - Action Feature
   @ActionFeature
   Scenario: Operator - Select all shown - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
-    When Operator clicks "Select All Shown" button on Failed Delivery Management page
-    And Operator verifies number of selected rows on Failed Delivery Management page
+    And Operator refresh page
+    When Recovery User - clicks "Select All Shown" button on Failed Delivery Management page
+    And Recovery User - verifies number of selected rows on Failed Delivery Management page
 
   @ActionFeature
   Scenario: Operator - Deselect all shown - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
-    When Operator clicks "Select All Shown" button on Failed Delivery Management page
-    And Operator verifies number of selected rows on Failed Delivery Management page
-    When Operator clicks "Deselect All Shown" button on Failed Delivery Management page
-    Then Operator verify the number of selected Failed Delivery rows is "0"
+    And Operator refresh page
+    When Recovery User - clicks "Select All Shown" button on Failed Delivery Management page
+    And Recovery User - verifies number of selected rows on Failed Delivery Management page
+    When Recovery User - clicks "Deselect All Shown" button on Failed Delivery Management page
+    Then Recovery User - verify the number of selected Failed Delivery rows is "0"
 
   @ActionFeature
-  Scenario: Operator - Select all shown - Failed Delivery Management page
+  Scenario: Operator - Clear current selection - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
-    When Operator clicks "Select All Shown" button on Failed Delivery Management page
-    And Operator verifies number of selected rows on Failed Delivery Management page
-    When Operator clicks "Clear Current Selection" button on Failed Delivery Management page
-    Then Operator verify the number of selected Failed Delivery rows is "0"
+    And Operator refresh page
+    When Recovery User - clicks "Select All Shown" button on Failed Delivery Management page
+    And Recovery User - verifies number of selected rows on Failed Delivery Management page
+    When Recovery User - clicks "Clear Current Selection" button on Failed Delivery Management page
+    Then Recovery User - verify the number of selected Failed Delivery rows is "0"
 
   @ActionFeature
   Scenario: Operator - Show only selection - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator refresh page
     And Recovery User - Wait until Recovery Page loaded completely
-    And  Operator selects 1 rows on Failed Delivery Management page
-    When Operator clicks "Show Only Selected" button on Failed Delivery Management page
-    Then Operator verify the number of selected Failed Delivery rows is "1"
+    And Recovery User - selects 1 rows on Failed Delivery Management page
+    When Recovery User - clicks "Show Only Selection" button on Failed Delivery Management page
+    Then Recovery User - verify the number of selected Failed Delivery rows is "1"
 
-  @ActionFeature
+  @ActionFeature @RT
   Scenario: Operator - Download and Verify CSV File
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -82,8 +86,10 @@ Feature: Failed Delivery Management Page - Action Feature
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
     When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator refresh page
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
-    And Operator selects 1 rows on Failed Delivery Management page
+    And Recovery User - selects 1 rows on Failed Delivery Management page
+    And Recovery User - Save value of selected failed delivery order
     And Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list
     And Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
 
