@@ -251,31 +251,31 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     // 1. Shipment ID
     shipmentWeightDimensionTablePage
         .filterColumn(Column.SHIPMENT_ID, shipmentData);
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment id with correct value").isGreaterThanOrEqualTo(1);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment id with correct value").isNotEmpty();
 
     shipmentWeightDimensionTablePage.filterColumn(Column.SHIPMENT_ID, "wrong value");
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment id with invalid value").isEqualTo(0);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment id with invalid value").isEmpty();
     shipmentWeightDimensionTablePage.clearFilterColumn(Column.SHIPMENT_ID);
     // 2. Shipment Status
     shipmentWeightDimensionTablePage
         .filterColumn(Column.STATUS, shipmentData);
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment status with correct value").isGreaterThanOrEqualTo(1);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment status with correct value").isNotEmpty();
 
     shipmentWeightDimensionTablePage.filterColumn(Column.STATUS, "wrong value");
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment status with invalid value").isEqualTo(0);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment status with invalid value").isEmpty();
     shipmentWeightDimensionTablePage.clearFilterColumn(Column.STATUS);
     // 3. End Hub
     shipmentWeightDimensionTablePage.filterColumn(Column.END_HUB, shipmentData);
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment end hub with correct value").isGreaterThanOrEqualTo(1);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment end hub with correct value").isNotEmpty();
 
     shipmentWeightDimensionTablePage.filterColumn(Column.END_HUB, "wrong value");
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment end hub with invalid value").isEqualTo(0);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment end hub with invalid value").isEmpty();
     shipmentWeightDimensionTablePage.clearFilterColumn(Column.END_HUB);
     // 4. Creation Date
     LOGGER.debug("Value in the table is " + shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.get(0).createdAt.getText());
@@ -285,9 +285,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
       shipmentWeightDimensionTablePage.filterColumn(Column.CREATION_DATE,
           shipmentData
       );
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
           .as("Able to filter by using shipment creation date with correct value")
-          .isGreaterThanOrEqualTo(1);
+          .isNotEmpty();
     } catch (AssertionError as) {
       //hack to handle date discrepancy
       //temporary solution
@@ -298,38 +298,38 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
       shipmentWeightDimensionTablePage.filterColumn(Column.CREATION_DATE,
           shipmentData
       );
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
           .as("Able to filter by using shipment creation date with correct value")
-          .isGreaterThanOrEqualTo(1);
+          .isNotEmpty();
     }
 
     shipmentWeightDimensionTablePage.filterColumn(Column.CREATION_DATE, "wrong value");
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-        .as("Able to filter by using shipment creation date with invalid value").isEqualTo(0);
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+        .as("Able to filter by using shipment creation date with invalid value").isEmpty();
     shipmentWeightDimensionTablePage.clearFilterColumn(Column.CREATION_DATE);
-    // 5. MAWB
+    // 5. Billing Number
     if (shipmentData.getMawb() != null && !shipmentData.getMawb().isEmpty()) {
-      shipmentWeightDimensionTablePage.filterColumn(Column.MAWB,
+      shipmentWeightDimensionTablePage.filterColumn(Column.BILLING_NUMBER,
           shipmentData
       );
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment mawb with correct value").isGreaterThanOrEqualTo(1);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment billing number with correct value").isNotEmpty();
 
-      shipmentWeightDimensionTablePage.filterColumn(Column.MAWB, "wrong value");
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment mawb with invalid value").isEqualTo(0);
-      shipmentWeightDimensionTablePage.clearFilterColumn(Column.MAWB);
+      shipmentWeightDimensionTablePage.filterColumn(Column.BILLING_NUMBER, "wrong value");
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment billing number with invalid value").isEmpty();
+      shipmentWeightDimensionTablePage.clearFilterColumn(Column.BILLING_NUMBER);
     }
 
     // 6. comments
     if (shipmentData.getComments() != null && !shipmentData.getComments().isEmpty()) {
       shipmentWeightDimensionTablePage.filterColumn(Column.COMMENTS, shipmentData);
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment comments with correct value").isGreaterThanOrEqualTo(1);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment comments with correct value").isNotEmpty();
 
       shipmentWeightDimensionTablePage.filterColumn(Column.COMMENTS, "wrong value");
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment comments with invalid value").isEqualTo(0);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment comments with invalid value").isEmpty();
       shipmentWeightDimensionTablePage.clearFilterColumn(Column.COMMENTS);
     }
 
@@ -337,25 +337,25 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     if (shipmentData.getOrigHubName() != null && !shipmentData.getOrigHubName().isEmpty()) {
       shipmentWeightDimensionTablePage
           .filterColumn(Column.START_HUB, shipmentData);
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment start hub with correct value").isGreaterThanOrEqualTo(1);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment start hub with correct value").isNotEmpty();
 
       shipmentWeightDimensionTablePage.filterColumn(Column.START_HUB, "wrong value");
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment start hub with invalid value").isEqualTo(0);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment start hub with invalid value").isEmpty();
       shipmentWeightDimensionTablePage.clearFilterColumn(Column.START_HUB);
     }
 
-    // 7. shipment type
+    // 8. shipment type
     if (shipmentData.getShipmentType() != null && !shipmentData.getShipmentType().isEmpty()) {
       shipmentWeightDimensionTablePage
           .filterColumn(Column.SHIPMENT_TYPE, shipmentData);
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment shipment type with correct value").isGreaterThanOrEqualTo(1);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment shipment type with correct value").isNotEmpty();
 
       shipmentWeightDimensionTablePage.filterColumn(Column.SHIPMENT_TYPE, "wrong value");
-      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
-          .as("Able to filter by using shipment shipment type with invalid value").isEqualTo(0);
+      Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+          .as("Able to filter by using shipment shipment type with invalid value").isEmpty();
       shipmentWeightDimensionTablePage.clearFilterColumn(Column.SHIPMENT_TYPE);
     }
 
@@ -413,21 +413,21 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @When("Operator filter Shipment Weight Dimension Table by {string} column with first shipment value")
   public void operatorFilterShipmentWeightDimensionTableByColumn(String column,
       Map<String, String> dataTable) {
-    String expectedNumOfRows = Optional.ofNullable(dataTable.get("expectedNumOfRows")).orElse("1");
+    String expectedNumOfRows = dataTable.getOrDefault("expectedNumOfRows", "1");
     String filterValue = dataTable.get("filterValue");
     Column col = Column.fromLabel(column);
     if (filterValue != null) {
       shipmentWeightDimensionTablePage.filterColumn(col, (String) resolveValue(filterValue));
     } else {
-      List<Shipments> shipments = get("KEY_LIST_OF_CREATED_SHIPMENT");
+      List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
       Shipment shipmentData = shipments.get(0).getShipment();
       shipmentWeightDimensionTablePage
           .filterColumn(col, shipmentData);
     }
 
-    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows.size())
+    Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
         .as("Able to filter by using %s with correct value", column)
-        .isEqualTo(Integer.parseInt(expectedNumOfRows));
+        .hasSize(Integer.parseInt(expectedNumOfRows));
   }
 
   @And("Operator select all data on Shipment Weight Dimension Table")
@@ -496,7 +496,6 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     }
 
     shipmentWeightDimensionPage.fillLoadShipmentFilter(map.get("presetName"),
-        map.get("mawb"),
         fromZdt,
         toZdt);
   }
@@ -510,8 +509,8 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorVerifyShipmentWeightDimensionFilterUI() {
     Assertions.assertThat(shipmentWeightDimensionPage.newFilterToggleButton.isDisplayed())
         .as("Enter new Filters link is shown").isTrue();
-    Assertions.assertThat(shipmentWeightDimensionPage.mawbInput.isDisplayed())
-        .as("MAWB field is shown").isTrue();
+    Assertions.assertThat(shipmentWeightDimensionPage.searchByBillinNumberButton.isEnabled())
+        .as("Search by Billing Number is shown").isTrue();
   }
 
   @When("Operator verify search button is disabled on Shipment Weight Dimension page")
