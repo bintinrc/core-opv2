@@ -34,7 +34,7 @@ public class MainSteps extends AbstractSteps {
 
   @Given("^Operator go to this URL \"([^\"]*)\"$")
   public void operatorGoToThisUrl(String url) {
-    mainPage.goToUrl(resolveValue(url));
+    mainPage.goToUrl(url);
   }
 
   @Then("^Operator verify he is in main page$")
