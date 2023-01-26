@@ -1,5 +1,5 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PAJobsUpdateRoute
-Feature: update route on pickup jobs page
+@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobsUpdateRoute
+Feature: Update route on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -46,7 +46,7 @@ Feature: update route on pickup jobs page
     And Operator selects route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Edit PA job page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
-      |Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id}|
+      | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Edit PA job page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
@@ -60,7 +60,7 @@ Feature: update route on pickup jobs page
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
@@ -73,7 +73,7 @@ Feature: update route on pickup jobs page
     And Operator selects route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
-      |Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id}|
+      | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
@@ -88,7 +88,7 @@ Feature: update route on pickup jobs page
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Driver "{driver-id}" Starts the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
@@ -102,7 +102,7 @@ Feature: update route on pickup jobs page
     And Operator selects route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
-      |Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id}|
+      | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
@@ -116,7 +116,7 @@ Feature: update route on pickup jobs page
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -131,7 +131,7 @@ Feature: update route on pickup jobs page
     And Operator selects route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
-      |Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id}|
+      | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
@@ -146,7 +146,7 @@ Feature: update route on pickup jobs page
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Driver "{driver-id}" Starts the route
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Operator archives routes:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -162,7 +162,7 @@ Feature: update route on pickup jobs page
     And Operator selects route "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
-      |Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id}|
+      | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[2].id}" on Edit PA job page
     And Operator verifies PA job status is "In Progress" on Edit PA job page
 
@@ -176,7 +176,7 @@ Feature: update route on pickup jobs page
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page

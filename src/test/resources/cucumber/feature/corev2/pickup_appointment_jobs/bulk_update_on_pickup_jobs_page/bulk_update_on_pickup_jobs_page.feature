@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdateJobsPage
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobs
 Feature: Pickup Appointment Job - Bulk update on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -16,12 +16,12 @@ Feature: Pickup Appointment Job - Bulk update on pickup jobs page
     When Operator goes to Pickup Jobs Page
     Given Operator clicks "Load Selection" button on Pickup Jobs page
     And Operator filters on the table with values below:
-      | status      | Ready for Routing |
+      | status | Ready for Routing |
     And  Operator clicks "Bulk select dropdown" button on Pickup Jobs page
     And  Operator clicks "Select All Shown" button on Pickup Jobs page
     Then Operator verifies number of selected rows on Pickup Jobs page
     And Operator filters on the table with values below:
-      | status      | Clear All |
+      | status | Clear All |
     Then Operator verify number of selected row is not updated
 
 

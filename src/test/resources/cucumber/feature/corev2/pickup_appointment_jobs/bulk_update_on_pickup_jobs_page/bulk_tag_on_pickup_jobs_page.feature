@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsTag @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsTag
 Feature: bulk tag on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -70,7 +70,7 @@ Feature: bulk tag on pickup jobs page
     Then Operator check 2 tags with name = "{tag-name-1}"
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Bulk Update PA Job - Assign job tag - with tag
     Given DB Control - get pickup tag id for tag name = "{tag-name-1}"
     Given API Shipper - Operator create new shipper address using data below:
