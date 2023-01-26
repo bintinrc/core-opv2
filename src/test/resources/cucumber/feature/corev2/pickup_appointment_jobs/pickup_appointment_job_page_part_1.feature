@@ -52,7 +52,7 @@ Feature: Pickup Appointment Job Page Part 1
     When Operator click Job Zone field
     Then QA verify a dropdown menu shown
     And Select multiple job Zone
-      | zones | {zone-name-1}, {zone-name-2} |
+      | zones | {zone-name}, {zone-name-2} |
     When Operator click Job Master Shipper field
     Then QA verify a dropdown menu shown
     And Select multiple job Master Shipper
@@ -67,7 +67,7 @@ Feature: Pickup Appointment Job Page Part 1
       | jobServiceType  | Scheduled                                         |
       | jobServiceLevel | Premium, Standard                                 |
       | jobStatus       | Ready for Routing, Routed, In Progress, Cancelled |
-      | zones           | {zone-name-1}, {zone-name-2}                      |
+      | zones           | {zone-name}, {zone-name-2}                        |
       | masterShippers  | {master-shipper-1}, {master-shipper-2}            |
       | shippers        | 830859 - Pickup Appointment Job Normal            |
 
