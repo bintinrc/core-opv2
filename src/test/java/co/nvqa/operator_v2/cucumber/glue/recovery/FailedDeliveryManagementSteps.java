@@ -1,10 +1,11 @@
-package co.nvqa.operator_v2.cucumber.glue;
+package co.nvqa.operator_v2.cucumber.glue.recovery;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.FailedDelivery;
-import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2;
-import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2.FailedDeliveryTable;
+import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage;
+import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage.FailedDeliveryTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,18 +13,16 @@ import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
 
-import static co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2.FDM_CSV_FILENAME_PATTERN;
+public class FailedDeliveryManagementSteps extends AbstractSteps {
 
-public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
+  private FailedDeliveryManagementPage failedDeliveryManagementReactPage;
 
-  private FailedDeliveryManagementPageV2 failedDeliveryManagementReactPage;
-
-  public FailedDeliveryManagementStepsV2() {
+  public FailedDeliveryManagementSteps() {
   }
 
   @Override
   public void init() {
-    failedDeliveryManagementReactPage = new FailedDeliveryManagementPageV2(getWebDriver());
+    failedDeliveryManagementReactPage = new FailedDeliveryManagementPage(getWebDriver());
   }
 
   @When("Recovery User - Wait until FDM Page loaded completely")
@@ -125,7 +124,7 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(page -> {
       List<FailedDelivery> expectedFailedOrder = page.fdmTable.readAllEntities();
       final String fileName = page.getLatestDownloadedFilename(
-          FDM_CSV_FILENAME_PATTERN);
+          FailedDeliveryManagementPage.FDM_CSV_FILENAME_PATTERN);
       page.verifyFileDownloadedSuccessfully(fileName);
       final String pathName = StandardTestConstants.TEMP_DIR + fileName;
 

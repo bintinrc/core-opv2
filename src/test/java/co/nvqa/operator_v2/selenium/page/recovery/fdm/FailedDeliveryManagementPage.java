@@ -1,12 +1,13 @@
-package co.nvqa.operator_v2.selenium.page;
+package co.nvqa.operator_v2.selenium.page.recovery.fdm;
 
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.page.AntTableV2;
+import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -15,8 +16,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class FailedDeliveryManagementPageV2 extends
-    SimpleReactPage<FailedDeliveryManagementPageV2> {
+public class FailedDeliveryManagementPage extends
+    SimpleReactPage<FailedDeliveryManagementPage> {
 
   @FindBy(css = "[data-testid='virtual-table.stats.header']")
   public PageElement fdmHeader;
@@ -30,7 +31,7 @@ public class FailedDeliveryManagementPageV2 extends
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
 
-  public FailedDeliveryManagementPageV2(WebDriver webDriver) {
+  public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
     fdmTable = new FailedDeliveryTable(webDriver);
   }
