@@ -299,6 +299,29 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verifies errors in Bulk Edit Details dialog on Route Logs page:")
+  public void verifyBulkEditErrors(List<String> data) {
+    routeLogsPage.inFrame(() -> {
+      List<String> expected = resolveValues(data);
+      routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
+      pause5s();
+      List<String> actual = routeLogsPage.bulkEditDetailsDialog.errors.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of errors")
+          .containsExactlyInAnyOrderElementsOf(expected);
+    });
+  }
+
+  @When("Operator click Cancel in Bulk Edit Details dialog on Route Logs page")
+  public void clickBulkEditCancel() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
+      routeLogsPage.bulkEditDetailsDialog.cancel.click();
+    });
+  }
+
   @When("^Operator edits details of created route using data below:$")
   public void operatorEditDetailsMultipleRouteUsingDataBelow(Map<String, String> data) {
     routeLogsPage.inFrame(() -> {
@@ -457,7 +480,11 @@ public class RouteLogsSteps extends AbstractSteps {
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_ARCHIVE_SELECTED);
       routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
-      routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
+      if (routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.waitUntilVisible(1)) {
+        routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
+      } else {
+        routeLogsPage.archiveSelectedRoutesDialog.continueBtn.click();
+      }
     });
     takesScreenshot();
   }
@@ -517,7 +544,7 @@ public class RouteLogsSteps extends AbstractSteps {
   public void loadSelection(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     routeLogsPage.inFrame(page -> {
-      page.waitUntilLoaded();
+      page.waitUntilLoaded(60);
       if (finalData.containsKey("routeDateFrom")) {
         page.routeDateFilter.setInterval(finalData.get("routeDateFrom"),
             finalData.get("routeDateTo"));
@@ -621,7 +648,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getText())
-          .as("Preset Name error text").isEqualTo("This field is required");
+          .as("Preset Name error text").isEqualTo("Field is required");
     });
     takesScreenshot();
   }

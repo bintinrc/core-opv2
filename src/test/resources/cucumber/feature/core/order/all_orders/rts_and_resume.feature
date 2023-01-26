@@ -8,7 +8,7 @@ Feature: All Orders - RTS & Resume
   @DeleteOrArchiveRoute
   Scenario: Operator RTS Failed Delivery Order on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -39,7 +39,7 @@ Feature: All Orders - RTS & Resume
     And Operator verify Delivery details on Edit order page using data below:
       | status    | PENDING                                |
       | startDate | {gradle-next-1-working-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-working-day-yyyy-MM-dd}         |
+      | endDate   | {gradle-next-1-working-day-yyyy-MM-dd} |
     And Operator verify order event on Edit order page using data below:
       | name | RTS |
     And Operator verify order event on Edit order page using data below:

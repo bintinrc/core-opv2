@@ -30,6 +30,7 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   public enum PendingPickupJobs {
     DRIVER_NAME_ROUTE_ID("station-pending-pickup-jobs_table_driver-name"),
     JOB_ID("station-pending-pickup-jobs_table_jobs-for-today_reservation-id"),
+    NO_UPCOMING_JOB("station-pending-pickup-jobs_table_jobs-for-today_no-upcoming"),
     TIMESLOT("station-pending-pickup-jobs_table_jobs-for-today_timeslot"),
     PRIORITY_LEVEL("station-pending-pickup-jobs_table_jobs-for-today_priority-level"),
     TOTAL_PARCEL_COUNT("station-pending-pickup-jobs_table_parcels-total"),
@@ -75,7 +76,10 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  private void switchToFrame() {
+  @FindBy(xpath = "//div[@data-testid='station-pending-pickup-jobs_table_empty-data']")
+  private PageElement noPendingPickupRecords;
+
+  public void switchToFrame() {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -84,7 +88,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTableAndValidateResultCount(Map<String, String> filters,
       int resultsCount) {
-    pause10s();
     switchToFrame();
     waitWhilePageIsLoading();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -98,7 +101,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
       }
     }
     waitWhilePageIsLoading();
-    pause3s();
     Assert.assertTrue(
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
@@ -107,7 +109,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTable(Map<String, String> filters) {
     waitWhilePageIsLoading();
-    pause10s();
     switchToFrame();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterColumnXpath = f(PENDING_PICKUP_TABLE_SEARCH_XPATH, filter.getKey());
@@ -118,7 +119,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
         filterFields.get(0).sendKeys(Keys.chord(Keys.CONTROL, "a"));
         filterFields.get(0).sendKeys(Keys.BACK_SPACE);
         filterFields.get(0).sendKeys(filter.getValue());
-        pause5s();
       }
     }
   }
@@ -175,4 +175,11 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     }
   }
 
+  public void validateNoPendingPickupRecords() {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    Assertions.assertThat(noPendingPickupRecords.isDisplayed())
+        .as("Validation for presence of No Pending pickups").isTrue();
+  }
 }

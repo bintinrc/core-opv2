@@ -10,8 +10,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -23,8 +23,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -36,8 +36,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -49,8 +49,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -62,8 +62,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -75,8 +75,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-10-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -88,8 +88,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -101,8 +101,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
@@ -114,8 +114,8 @@ Feature: Airport Trip Management - Search Airport Trip 2
     Given Operator go to menu Inter-Hub -> Airport Trip Management
     And Operator verifies that the Airport Management Page is opened
     When Operator fill the departure date for Airport Management
-      | startDate  | {gradle-previous-1-day-yyyy-MM-dd} |
-      | endDate    | {gradle-next-1-day-yyyy-MM-dd}      |
+      | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
+      | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Airport Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
     And Operator click on 'Load Trips' on Airport Management
