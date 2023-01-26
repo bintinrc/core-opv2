@@ -256,7 +256,7 @@ Feature: Search by SID
       | numberOfShipments | 2            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1                       |
       | filterValue       | {KEY_SHIPMENT_AWB}      |
     And Operator select all data on Shipment Weight Dimension Table
