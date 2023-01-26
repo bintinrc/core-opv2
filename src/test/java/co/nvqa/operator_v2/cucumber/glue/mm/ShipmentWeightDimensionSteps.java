@@ -40,6 +40,8 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage.Column.SHIPMENT_ID;
+
 @ScenarioScoped
 public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
@@ -250,14 +252,14 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     shipmentWeightDimensionTablePage.clearFilters();
     // 1. Shipment ID
     shipmentWeightDimensionTablePage
-        .filterColumn(Column.SHIPMENT_ID, shipmentData);
+        .filterColumn(SHIPMENT_ID, shipmentData);
     Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
         .as("Able to filter by using shipment id with correct value").isNotEmpty();
 
-    shipmentWeightDimensionTablePage.filterColumn(Column.SHIPMENT_ID, "wrong value");
+    shipmentWeightDimensionTablePage.filterColumn(SHIPMENT_ID, "wrong value");
     Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
         .as("Able to filter by using shipment id with invalid value").isEmpty();
-    shipmentWeightDimensionTablePage.clearFilterColumn(Column.SHIPMENT_ID);
+    shipmentWeightDimensionTablePage.clearFilterColumn(SHIPMENT_ID);
     // 2. Shipment Status
     shipmentWeightDimensionTablePage
         .filterColumn(Column.STATUS, shipmentData);
@@ -421,6 +423,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else {
       List<Shipments> shipments = get(KEY_LIST_OF_CREATED_SHIPMENT);
       Shipment shipmentData = shipments.get(0).getShipment();
+      if (col != SHIPMENT_ID && Integer.parseInt(expectedNumOfRows) == 1) {
+        shipmentWeightDimensionTablePage
+            .filterColumn(SHIPMENT_ID, shipmentData);
+      }
       shipmentWeightDimensionTablePage
           .filterColumn(col, shipmentData);
     }
