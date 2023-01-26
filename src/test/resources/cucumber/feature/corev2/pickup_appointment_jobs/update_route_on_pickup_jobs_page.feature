@@ -24,7 +24,7 @@ Feature: Update route on pickup jobs page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
       | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" on Edit PA job page
+    And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Edit PA job page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
@@ -95,7 +95,7 @@ Feature: Update route on pickup jobs page
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
-    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
@@ -157,7 +157,7 @@ Feature: Update route on pickup jobs page
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
-    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
