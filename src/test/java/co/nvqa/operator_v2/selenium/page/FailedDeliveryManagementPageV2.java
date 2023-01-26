@@ -1,12 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -61,33 +61,30 @@ public class FailedDeliveryManagementPageV2 extends
     public final String XPATH_TRACKING_ID_FILTER_INPUT = "//input[@data-testid='virtual-table.tracking_id.header.filter']";
     public final String XPATH_SHIPPER_NAME_FILTER_INPUT = "//input[@data-testid='virtual-table.shipper_name.header.filter']";
 
-    public static final String COLUMN_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_SHIPPER = "shipper_name";
-
 
     public FailedDeliveryTable(WebDriver webDriver) {
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(COLUMN_TRACKING_ID, "tracking_id")
-          .put("type", "type")
-          .put(COLUMN_SHIPPER, "shipper_name")
-          .put("lastAttemptTime", "lastAttemptTimeDisplay")
-          .put("failureReasonCommentsDisplay", "failureReasonCommentsDisplay")
-          .put("attemptCount", "attempt_count")
-          .put("invalidFailureCount", "invalidFailureCountDisplay")
-          .put("validFailureCount", "validFailureCountDisplay")
-          .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
-          .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
-          .put("priorityLevel", "priorityLevelDisplay")
-          .put("lastScannedHubNameDisplay", "lastScannedHubNameDisplay")
-          .put("String", "tags")
+          .put("trackingId", "//div[@role='gridcell'][@data-datakey='tracking_id']")
+          .put("type", "//div[@role='gridcell'][@data-datakey='type']")
+          .put("shipperName", "//div[@role='gridcell'][@data-datakey='shipper_name']")
+          .put("lastAttemptTime", "//div[@role='gridcell'][@data-datakey='lastAttemptTimeDisplay']")
+          .put("failureReasonComments", "//div[@role='gridcell'][@data-datakey='failureReasonCommentsDisplay']")
+          .put("attemptCount", "//div[@role='gridcell'][@data-datakey='attempt_count']")
+          .put("invalidFailureCount", "//div[@role='gridcell'][@data-datakey='invalidFailureCountDisplay']")
+          .put("validFailureCount", "//div[@role='gridcell'][@data-datakey='validFailureCountDisplay']")
+          .put("failureReasonCodeDescription", "//div[@role='gridcell'][@data-datakey='failureReasonCodeDescriptionsDisplay']")
+          .put("daysSinceLastAttempt", "//div[@role='gridcell'][@data-datakey='daysSinceLastAttemptDisplay']")
+          .put("priorityLevel", "//div[@role='gridcell'][@data-datakey='priorityLevelDisplay']")
+          .put("lastScannedHubName", "//div[@role='gridcell'][@data-datakey='lastScannedHubNameDisplay']")
+          .put("orderTags", "//div[@role='gridcell'][@data-datakey='tags']")
           .build()
       );
       setEntityClass(FailedDelivery.class);
       setActionButtonsLocators(ImmutableMap.of(
           ACTION_SELECT,
-          "//div[@role='row'][%d]//div[@role='gridcell']//input[@class='ant-checkbox-input']"));
+          "//input[@class='ant-checkbox-input']"));
     }
 
     public void filterTableByTID(String columName, String value) {
@@ -99,9 +96,8 @@ public class FailedDeliveryManagementPageV2 extends
     }
 
     public List<String> getFilteredValue() {
-      final String FAILED_DELIVERY_TABLE_XPATH = "//div[contains(@class ,'BaseTable__row')]//div[@class='BaseTable__row-cell']";
-
-      return findElementsByXpath(FAILED_DELIVERY_TABLE_XPATH).stream().map(WebElement::getText)
+      final String FILTERED_TABLE_XPATH = "//div[contains(@class ,'BaseTable__row')]//div[@class='BaseTable__row-cell']";
+      return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
           .collect(Collectors.toList());
     }
 
@@ -124,15 +120,7 @@ public class FailedDeliveryManagementPageV2 extends
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
 
-  public void verifyDownloadedCsvFile(List<FailedDelivery> failedDeliveries) {
-    final String fileName = getLatestDownloadedFilename(FDM_CSV_FILENAME_PATTERN);
-    verifyFileDownloadedSuccessfully(fileName);
-    final String pathName = StandardTestConstants.TEMP_DIR + fileName;
-    final List<FailedDelivery> actualFailedDeliveryOrder = FailedDelivery.fromCsvFile(
-        FailedDelivery.class, pathName, true);
-
-    Assertions.assertThat(actualFailedDeliveryOrder.size()).as("Unexpected number of lines in CSV file")
-        .isGreaterThanOrEqualTo(failedDeliveries.size());
+  public void verifyDownloadedCsvFile(List<Map<String, String>> data) {
 
   }
 

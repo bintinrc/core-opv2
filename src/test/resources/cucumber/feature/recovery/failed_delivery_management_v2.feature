@@ -33,7 +33,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | shipperName           | {KEY_LIST_OF_CREATED_ORDERS[1].shipper.name} |
       | failureReasonComments | {KEY_SELECTED_FAILURE_REASON.description}    |
 
-  @ActionFeature @RT
+  @ActionFeature
   Scenario: Operator - Select all shown - Failed Delivery Management page
     Given Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator refresh page
@@ -94,9 +94,9 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Wait until FDM Page loaded completely
     And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Recovery User - selects 1 rows on Failed Delivery Management page
-    And Recovery User - Save value of selected failed delivery order
     And Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list
     And Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

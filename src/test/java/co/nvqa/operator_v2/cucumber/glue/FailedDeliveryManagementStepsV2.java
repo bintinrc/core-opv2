@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2.FailedDeliveryTable;
@@ -9,7 +11,8 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
+
+import static co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPageV2.FDM_CSV_FILENAME_PATTERN;
 
 public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
 
@@ -45,7 +48,7 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     FailedDelivery expected = new FailedDelivery(resolveKeyValues(dataTable));
 
     failedDeliveryManagementReactPage.inFrame(page -> {
-      page.waitUntilLoaded(1);
+      page.waitUntilLoaded(3);
       List<String> actual = page.fdmTable.getFilteredValue();
 
       Assertions.assertThat(actual.get(1)).as("TrackingId is Match")
@@ -55,7 +58,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
       Assertions.assertThat(actual.get(5)).as("Failure Comments is Match")
           .isEqualTo(expected.getFailureReasonComments());
     });
-    takesScreenshot();
   }
 
   @Given("Recovery User - clicks {string} button on Failed Delivery Management page")
@@ -89,7 +91,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame(() ->
         failedDeliveryManagementReactPage.verifyBulkSelectResult()
     );
-    takesScreenshot();
   }
 
   @Then("Recovery User - verify the number of selected Failed Delivery rows is {value}")
@@ -99,7 +100,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
       Assertions.assertThat(selectedRows).as("Number of selected rows are the same")
           .contains(expectedRowCount);
     });
-    takesScreenshot();
   }
 
   @Given("Recovery User - selects {int} rows on Failed Delivery Management page")
@@ -110,7 +110,6 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
             FailedDeliveryTable.ACTION_SELECT);
       }
     });
-    takesScreenshot();
   }
 
   @Then("Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list")
@@ -122,14 +121,23 @@ public class FailedDeliveryManagementStepsV2 extends AbstractSteps {
   }
 
   @Then("Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully")
-  public void operatorVerifyCsvFileOfFailedDeliveryOrderOnFailedDeliveryOrdersListDownloadedSuccessfully() {
-    List<FailedDelivery> expected = get(KEY_LIST_OF_FAILED_DELIVERY_ORDER);
-    failedDeliveryManagementReactPage.verifyDownloadedCsvFile(expected);
-    takesScreenshot();
-  }
-  @Then("Recovery User - Save value of selected failed delivery order")
-  public void doSaveValueOfSelectedFailedDeliveryOrder() {
-    List<FailedDelivery> failedDeliveries = failedDeliveryManagementReactPage.fdmTable.readAllEntities();
-    put(KEY_LIST_OF_FAILED_DELIVERY_ORDER, failedDeliveries);
+  public void verifyCsvFileDownloadedSuccessfully() {
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      List<FailedDelivery> expectedFailedOrder = page.fdmTable.readAllEntities();
+      final String fileName = page.getLatestDownloadedFilename(
+          FDM_CSV_FILENAME_PATTERN);
+      page.verifyFileDownloadedSuccessfully(fileName);
+      final String pathName = StandardTestConstants.TEMP_DIR + fileName;
+
+      List<FailedDelivery> actualFailedOrder = DataEntity
+          .fromCsvFile(FailedDelivery.class, pathName, true);
+
+      Assertions.assertThat(actualFailedOrder).as("Number of records is match")
+          .hasSameSizeAs(expectedFailedOrder);
+
+      for (int i = 0; i < actualFailedOrder.size(); i++) {
+        expectedFailedOrder.get(i).compareWithActual(actualFailedOrder.get(i), "orderTags");
+      }
+    });
   }
 }
