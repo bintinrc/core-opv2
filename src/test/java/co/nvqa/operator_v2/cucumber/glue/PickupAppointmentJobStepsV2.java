@@ -170,10 +170,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           Map<String, String> data = new HashMap<>(entry);
           String message = resolveValue(notificationMessage);
           String description = resolveValue(data.get("description"));
-          Assertions.assertThat(page.notificationModal.message.getText())
-              .as(f("Notification Message contains: %s", message)).contains(message);
-          Assertions.assertThat(page.notificationModal.description.getText())
-              .as(f("Notification Description contains: %s", description)).contains(description);
+          retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+            Assertions.assertThat(page.notificationModal.message.getText())
+                .as(f("Notification Message contains: %s", message)).contains(message);
+            Assertions.assertThat(page.notificationModal.description.getText())
+                .as(f("Notification Description contains: %s", description)).contains(description);
+          }, 1000, 3);
         });
       });
     }, 1000, 5);
@@ -899,6 +901,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.createOrEditJobPage.clearTimeRangeInput();
     });
   }
+
+  @When("Operator clear pickup job custom time Range input")
+  public void operatorClearCustomTimeRangeInput() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clearCustomTimeRangeInput();
+    });
+  }
+  
 
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
   public void operatorVerifiesUpdateTagButtonStatus(String status) {

@@ -5,9 +5,9 @@ Feature: Force Success Single Pickup Job, Route Archived
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job Routed route is archived
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -33,9 +33,9 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Tool tip is shown
 
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Fail Single Pickup Job Routed route is archived
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -60,9 +60,9 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Fail button disabled in pickup job drawer
     Then Operator check Tool tip is shown
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Fail Single Pickup Job In Progress route is archived
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -89,9 +89,9 @@ Feature: Force Success Single Pickup Job, Route Archived
     Then Operator check Fail button disabled in pickup job drawer
     Then Operator check Tool tip is shown
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job In Progress route is archived
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:

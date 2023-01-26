@@ -5,9 +5,9 @@ Feature: Force Success Single Pickup Job
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job Routed With Photo
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -38,9 +38,9 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job In Progress With Photo
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -73,9 +73,9 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job Routed With No Photo
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -105,9 +105,9 @@ Feature: Force Success Single Pickup Job
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has no proof in proof_photos table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Force Success Single Pickup Job In Progress With no Photo
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:

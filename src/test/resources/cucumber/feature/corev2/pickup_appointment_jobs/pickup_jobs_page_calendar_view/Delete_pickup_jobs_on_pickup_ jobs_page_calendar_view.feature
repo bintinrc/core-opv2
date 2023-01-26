@@ -5,9 +5,9 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Ready For Routing
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -32,9 +32,9 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Routed
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -65,9 +65,9 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - In Progress
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -99,9 +99,9 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - disabled - completed
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:
@@ -123,9 +123,9 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Then Operator verify there is no Delete button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verify there is no Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - disabled - failed
-    Given API Operator create new shipper address V2 using data below:
+    Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
     Given API Control - Operator create pickup appointment job with data below:

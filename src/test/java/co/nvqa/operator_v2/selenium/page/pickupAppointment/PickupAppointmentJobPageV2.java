@@ -121,6 +121,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     @FindBy(xpath = "//label[@for='timeRange']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTimeRange;
+
+    @FindBy(xpath = "//label[@for='latestBy']/following::span[@aria-label='close-circle']")
+    public PageElement clearLatestByTimeRange;
+
+    @FindBy(xpath = "//label[@for='readyBy']/following::span[@aria-label='close-circle']")
+    public PageElement clearReadyByTimeRange;
     public final String timeScrollBar = ".rc-virtual-list-scrollbar";
     public final String shipperListItem = "//div[@legacyshipperid='%s']";
     public final String shipperAddressListItem = "//div[contains(@label,'%s')]";
@@ -251,8 +257,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
 
     public void selectReadybyTime(String time) {
-      readyByField.click();
-      scrollToTimeIfNeeded(time, "readyBy_list");
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        readyByField.click();
+        scrollToTimeIfNeeded(time, "readyBy_list");
+      }, 1000, 5);
 
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         WebElement timeToPick = webDriver.findElement(
@@ -265,8 +273,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
 
     public void selectLatestbyTime(String time) {
-      latestByField.click();
-      scrollToTimeIfNeeded(time, "latestBy_list");
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        latestByField.click();
+        scrollToTimeIfNeeded(time, "latestBy_list");
+      }, 1000, 5);
 
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         WebElement timeToPick = webDriver.findElement(
@@ -278,8 +288,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {
+ 
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
-
       String lastElementTime = webDriver.findElement(
           By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
       Integer lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
@@ -287,12 +297,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       while (lastTime <= neededTime && lastTime != tempLastTime) {
         tempLastTime = lastTime;
 
-        LOGGER.debug(String.valueOf(lastTime));
-        moveToElementWithXpath(f(Time_LIST_LOCATR, listName));
-        WebElement readyTimeList = webDriver.findElement(By.xpath(f(Time_LIST_LOCATR, listName)));
-        WebElement timeToScroll = readyTimeList.findElement(
-            By.xpath(f(JOB_CUSTOM_TIME_FILTER_LOCATOR, lastElementTime)));
+        WebElement timeToScroll = webDriver.findElement(
+            By.xpath(f(Time_LIST_LOCATR, listName) + f(JOB_CUSTOM_TIME_FILTER_LOCATOR,
+                lastElementTime)));
         scrollIntoView(timeToScroll, true);
+
         lastElementTime = webDriver.findElement(
             By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
         lastTime = Integer.parseInt(List.of(lastElementTime.split(":")).get(0));
@@ -353,6 +362,14 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         clearJobTimeRange.click();
       }, 1000, 5);
     }
+
+    public void clearCustomTimeRangeInput() {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearReadyByTimeRange.click();
+        clearLatestByTimeRange.click();
+      }, 1000, 5);
+    }
+
 
   }
 
