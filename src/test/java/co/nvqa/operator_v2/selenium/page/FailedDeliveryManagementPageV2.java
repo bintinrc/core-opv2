@@ -70,14 +70,20 @@ public class FailedDeliveryManagementPageV2 extends
           .put("type", "//div[@role='gridcell'][@data-datakey='type']")
           .put("shipperName", "//div[@role='gridcell'][@data-datakey='shipper_name']")
           .put("lastAttemptTime", "//div[@role='gridcell'][@data-datakey='lastAttemptTimeDisplay']")
-          .put("failureReasonComments", "//div[@role='gridcell'][@data-datakey='failureReasonCommentsDisplay']")
+          .put("failureReasonComments",
+              "//div[@role='gridcell'][@data-datakey='failureReasonCommentsDisplay']")
           .put("attemptCount", "//div[@role='gridcell'][@data-datakey='attempt_count']")
-          .put("invalidFailureCount", "//div[@role='gridcell'][@data-datakey='invalidFailureCountDisplay']")
-          .put("validFailureCount", "//div[@role='gridcell'][@data-datakey='validFailureCountDisplay']")
-          .put("failureReasonCodeDescription", "//div[@role='gridcell'][@data-datakey='failureReasonCodeDescriptionsDisplay']")
-          .put("daysSinceLastAttempt", "//div[@role='gridcell'][@data-datakey='daysSinceLastAttemptDisplay']")
+          .put("invalidFailureCount",
+              "//div[@role='gridcell'][@data-datakey='invalidFailureCountDisplay']")
+          .put("validFailureCount",
+              "//div[@role='gridcell'][@data-datakey='validFailureCountDisplay']")
+          .put("failureReasonCodeDescription",
+              "//div[@role='gridcell'][@data-datakey='failureReasonCodeDescriptionsDisplay']")
+          .put("daysSinceLastAttempt",
+              "//div[@role='gridcell'][@data-datakey='daysSinceLastAttemptDisplay']")
           .put("priorityLevel", "//div[@role='gridcell'][@data-datakey='priorityLevelDisplay']")
-          .put("lastScannedHubName", "//div[@role='gridcell'][@data-datakey='lastScannedHubNameDisplay']")
+          .put("lastScannedHubName",
+              "//div[@role='gridcell'][@data-datakey='lastScannedHubNameDisplay']")
           .put("orderTags", "//div[@role='gridcell'][@data-datakey='tags']")
           .build()
       );
@@ -100,7 +106,6 @@ public class FailedDeliveryManagementPageV2 extends
       return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
           .collect(Collectors.toList());
     }
-
     private void filterTableByColumn(String xPath, String columName, String value) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         findElementBy(By.xpath(f(xPath, columName))).sendKeys(
@@ -119,10 +124,5 @@ public class FailedDeliveryManagementPageV2 extends
         .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
-
-  public void verifyDownloadedCsvFile(List<Map<String, String>> data) {
-
-  }
-
 
 }
