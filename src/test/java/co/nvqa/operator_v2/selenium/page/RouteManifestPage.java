@@ -4,8 +4,13 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.DriverPerformanceInfo;
+import co.nvqa.operator_v2.model.PoaInfo;
+import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
@@ -14,14 +19,20 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import io.cucumber.java.sl.In;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -36,6 +47,8 @@ public class RouteManifestPage extends OperatorV2SimplePage {
   private static final String MD_VIRTUAL_REPEAT = "waypoint in getTableData()";
   private final WaypointDetailsDialog waypointDetailsDialog;
   public final WaypointsTable waypointsTable;
+  @FindBy(xpath = "//md-dialog[contains(@class, 'proof-of-arrival-and-handover')]")
+  public ProofOfArrivalAndHandoverDialog proofOfArrivalAndHandoverDialog;
 
   @FindBy(css = "md-dialog")
   public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
@@ -51,6 +64,9 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
   public ConfirmationDialog confirmationDialog;
+
+  @FindBy(xpath = "//button[contains(text(),'View POA/POH')]")
+  private PageElement viewPoaPohButton;
 
   public RouteManifestPage(WebDriver webDriver) {
     super(webDriver);
@@ -264,6 +280,18 @@ public class RouteManifestPage extends OperatorV2SimplePage {
     clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
   }
 
+  public void waitUntilProofOfArrivalAndHandoverDialogVisible() {
+    proofOfArrivalAndHandoverDialog.waitUntilVisible(3);
+  }
+  public void clickViewPoaPoH() {
+    viewPoaPohButton.click();
+    waitUntilProofOfArrivalAndHandoverDialogVisible();
+  }
+
+  public boolean isViewPoaPohDisabled() {
+    return viewPoaPohButton.isEnabled();
+  }
+
   /**
    * Accessor for Waypoint Details dialog
    */
@@ -411,5 +439,152 @@ public class RouteManifestPage extends OperatorV2SimplePage {
 
     @FindBy(css = "[aria-label='Proceed']")
     public Button proceed;
+  }
+
+  public static class ProofOfArrivalAndHandoverDialog extends MdDialog {
+
+    @FindBy(xpath = "//div[@class='ant-col' and *[text()='Arrival']]//table")
+    public ProofOfArrivalTable proofOfArrivalTable;
+    @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//table")
+    public ProofOfHandoverTable proofOfHandoverTable;
+    public static final String IFRAME_XPATH = "//iframe[@ng-style='iframeStyleObj']";
+    @FindBy(xpath = IFRAME_XPATH)
+    public PageElement iframe;
+
+    public ProofOfArrivalAndHandoverDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      proofOfArrivalTable = new ProofOfArrivalTable(webDriver);
+      proofOfHandoverTable = new ProofOfHandoverTable(webDriver);
+    }
+
+    public void inFrame(Consumer<ProofOfArrivalAndHandoverDialog> consumer) {
+      getWebDriver().switchTo().defaultContent();
+      iframe.waitUntilVisible();
+      getWebDriver().switchTo().frame(iframe.getWebElement());
+      try {
+        consumer.accept(this);
+      } finally {
+        getWebDriver().switchTo().defaultContent();
+      }
+    }
+
+    public static class ProofOfArrivalTable extends AntTableV3<PoaInfo> {
+
+      @FindBy(xpath = "//button/a[contains(@href, 'google.com/maps')]")
+      public PageElement viewOnMap;
+      @FindBy(xpath = "//tr/td[@class='ant-table-cell'][1]")
+      public List<PageElement> arrivalDatetime;
+      @FindBy(xpath = "//tr/td[@class='ant-table-cell'][2]")
+      public List<PageElement> verifiedByGps;
+      @FindBy(xpath = "//tr/td[@class='ant-table-cell'][3]")
+      public List<PageElement> distanceFromSortHub;
+
+
+      public ProofOfArrivalTable(WebDriver webDriver) {
+        super(webDriver);
+        setEntityClass(PoaInfo.class);
+      }
+
+      public void clickViewOnMap(){
+        waitUntilVisibilityOfElementLocated(viewOnMap.getWebElement(), 15);
+        viewOnMap.click();
+      }
+
+      public void verifyPoAInfo(PoaInfo expected, int index) {
+        PoaInfo actual = new PoaInfo();
+        actual.setArrivalDateTime(getTextArrivalDatetime(index));
+        actual.setVerifiedByGps(getTextVerifiedByGps(index));
+        actual.setDistanceFromSortHub(getTextDistanceFromSortHub(index));
+        expected.compareWithActual(actual);
+      }
+
+      private String getTextArrivalDatetime(int index) {
+        waitUntilVisibilityOfElementLocated(arrivalDatetime.get(index).getWebElement(),10);
+        return getText(arrivalDatetime.get(index).getWebElement());
+      }
+
+      private String getTextVerifiedByGps(int index) {
+        waitUntilVisibilityOfElementLocated(verifiedByGps.get(index).getWebElement());
+        return getText(verifiedByGps.get(index).getWebElement());
+      }
+
+      private String getTextDistanceFromSortHub(int index) {
+        waitUntilVisibilityOfElementLocated(distanceFromSortHub.get(index).getWebElement());
+        return getText(distanceFromSortHub.get(index).getWebElement()).replace("View on map", "");
+      }
+    }
+
+    public static class ProofOfHandoverTable extends AntTableV3<PohInfo> {
+
+      @FindBy(xpath = "//button/*[contains(text(),'View Photo')]")
+      private PageElement viewPhoto;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][1]")
+      private List<PageElement> handoverDatetime;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][2]")
+      private List<PageElement> estQty;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][3]")
+      private List<PageElement> cntQty;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][4]")
+      private List<PageElement> handover;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][5]")
+      private List<PageElement> sortHubName;
+      @FindBy(xpath = "//div[@class='ant-col' and *[text()='Handover']]//tr/td[@class='ant-table-cell'][6]")
+      private List<PageElement> staffUsername;
+
+
+      public ProofOfHandoverTable(WebDriver webDriver) {
+        super(webDriver);
+        setEntityClass(PohInfo.class);
+      }
+
+      public void clickViewPhoto(){
+        waitUntilVisibilityOfElementLocated(viewPhoto.getWebElement(), 10);
+        viewPhoto.click();
+      }
+
+      public void verifyPoHInfo(PohInfo expected, int index) {
+        PohInfo actual = new PohInfo();
+        actual.setHandoverDatetime(getTextHandoverDatetime(index));
+        actual.setEstQty(Integer.parseInt(getTextEstQty(index)));
+        actual.setCntQty(Integer.parseInt(getTextCntQt(index)));
+        actual.setHandover(getTextHandover(index));
+        actual.setSortHubName(getTextSortHubName(index));
+        actual.setStaffUsername(getTextStaffUsername(index));
+        expected.compareWithActual(actual);
+        verifyHandoverDatetime(index);
+      }
+
+      public void verifyHandoverDatetime(int index) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String expectedHandoverDatetime = dtf.format(now);
+        Assertions.assertThat(getTextHandoverDatetime(index)).as("Handover datetime").contains(expectedHandoverDatetime);
+      }
+
+      private String getTextHandoverDatetime(int index) {
+        waitUntilVisibilityOfElementLocated(handoverDatetime.get(index).getWebElement(),10);
+        return getText(handoverDatetime.get(index).getWebElement());
+      }
+      private String getTextEstQty(int index) {
+        waitUntilVisibilityOfElementLocated(estQty.get(index).getWebElement());
+        return getText(estQty.get(index).getWebElement());
+      }
+      private String getTextCntQt(int index) {
+        waitUntilVisibilityOfElementLocated(cntQty.get(index).getWebElement());
+        return getText(cntQty.get(index).getWebElement());
+      }
+      private String getTextHandover(int index) {
+        waitUntilVisibilityOfElementLocated(handover.get(index).getWebElement());
+        return getText(handover.get(index).getWebElement());
+      }
+      private String getTextSortHubName(int index) {
+        waitUntilVisibilityOfElementLocated(sortHubName.get(index).getWebElement());
+        return getText(sortHubName.get(index).getWebElement());
+      }
+      private String getTextStaffUsername(int index) {
+        waitUntilVisibilityOfElementLocated(staffUsername.get(index).getWebElement());
+        return getText(staffUsername.get(index).getWebElement());
+      }
+    }
   }
 }
