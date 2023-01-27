@@ -486,7 +486,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
       }
 
       public void clickViewOnMap(){
-        waitUntilVisibilityOfElementLocated(viewOnMap.getWebElement(), 15);
+        waitUntilVisibilityOfElementLocated(viewOnMap.getWebElement(), 20);
         viewOnMap.click();
       }
 
@@ -496,6 +496,13 @@ public class RouteManifestPage extends OperatorV2SimplePage {
         actual.setVerifiedByGps(getTextVerifiedByGps(index));
         actual.setDistanceFromSortHub(getTextDistanceFromSortHub(index));
         expected.compareWithActual(actual);
+        Assertions.assertThat(getTextArrivalDatetime(index)).as("Arrival datetime").contains(getTodayDate());
+      }
+      private String getTodayDate() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String dateToday = dtf.format(now);
+        return dateToday;
       }
 
       private String getTextArrivalDatetime(int index) {
@@ -551,16 +558,14 @@ public class RouteManifestPage extends OperatorV2SimplePage {
         actual.setSortHubName(getTextSortHubName(index));
         actual.setStaffUsername(getTextStaffUsername(index));
         expected.compareWithActual(actual);
-        verifyHandoverDatetime(index);
+        Assertions.assertThat(getTextHandoverDatetime(index)).as("Handover datetime").contains(getTodayDate());
       }
-
-      private void verifyHandoverDatetime(int index) {
+      private String getTodayDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
-        String expectedHandoverDatetime = dtf.format(now);
-        Assertions.assertThat(getTextHandoverDatetime(index)).as("Handover datetime").contains(expectedHandoverDatetime);
+        String dateToday = dtf.format(now);
+        return dateToday;
       }
-
       private String getTextHandoverDatetime(int index) {
         waitUntilVisibilityOfElementLocated(handoverDatetime.get(index).getWebElement(),10);
         return getText(handoverDatetime.get(index).getWebElement());

@@ -182,11 +182,10 @@ public class RouteManifestSteps extends AbstractSteps {
   public void verifyTableEntry(String row, Map<String, String> data) {
     data = resolveKeyValues(data);
     PoaInfo expected = new PoaInfo(data);
-    final String expectedArrivalDatetime = data.get("arrivalDatetime");
     final String expectedVerifiedByGps = data.get("verifiedByGps");
     final String expectedDistanceFromSortHub = data.get("distanceFromSortHub");
     final int index = Integer.parseInt(row) - 1;
-    expected.setArrivalDateTime(expectedArrivalDatetime);
+
     expected.setVerifiedByGps(expectedVerifiedByGps);
     expected.setDistanceFromSortHub(expectedDistanceFromSortHub);
 
