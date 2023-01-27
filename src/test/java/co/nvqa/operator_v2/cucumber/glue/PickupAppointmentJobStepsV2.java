@@ -170,10 +170,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           Map<String, String> data = new HashMap<>(entry);
           String message = resolveValue(notificationMessage);
           String description = resolveValue(data.get("description"));
-          Assertions.assertThat(page.notificationModal.message.getText())
-              .as(f("Notification Message contains: %s", message)).contains(message);
-          Assertions.assertThat(page.notificationModal.description.getText())
-              .as(f("Notification Description contains: %s", description)).contains(description);
+          retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+            Assertions.assertThat(page.notificationModal.message.getText())
+                .as(f("Notification Message contains: %s", message)).contains(message);
+            Assertions.assertThat(page.notificationModal.description.getText())
+                .as(f("Notification Description contains: %s", description)).contains(description);
+          }, 1000, 3);
         });
       });
     }, 1000, 5);
@@ -337,6 +339,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           break;
         case "Create / edit job":
           pickupAppointmentJobPage.createEditJobButton.click();
+          break;
+        case "Bulk Update dropdown":
+          pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.click();
+          break;
+        case "Assign job tag":
+          pickupAppointmentJobPage.bulkSelect.assignJobTag.click();
           break;
       }
     });
@@ -900,6 +908,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator clear pickup job custom time Range input")
+  public void operatorClearCustomTimeRangeInput() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.createOrEditJobPage.clearCustomTimeRangeInput();
+    });
+  }
+  
+
   @Then("Operator verifies button update jobs tag is {string} on Edit PA job page")
   public void operatorVerifiesUpdateTagButtonStatus(String status) {
     pickupAppointmentJobPage.inFrame(page -> {
@@ -922,4 +938,24 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.editPAJob.createNewJob.click();
     });
   }
+
+  @When("Operator select Pickup job tag = {string} in Job Tags Model")
+  public void selectJobTagsInJobTagsModel(String tag) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.editJobTagModel.selectTagInJobTagsField(tag);
+    });
+  }
+
+  @When("Operator check {int} tags with name = {string}")
+  public void checkNumberOfTagsWithName(Integer tagsNumber, String tagName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        List<String> tagsListInTable = page.bulkSelect.getTagsListWithName(tagName);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("tag %s in table count is = %s", tagName, tagsNumber)).hasSize(tagsNumber);
+      }, 1000, 5);
+
+    });
+  }
+
 }
