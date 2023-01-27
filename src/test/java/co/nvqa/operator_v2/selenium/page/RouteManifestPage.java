@@ -554,7 +554,7 @@ public class RouteManifestPage extends OperatorV2SimplePage {
         verifyHandoverDatetime(index);
       }
 
-      public void verifyHandoverDatetime(int index) {
+      private void verifyHandoverDatetime(int index) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         String expectedHandoverDatetime = dtf.format(now);
