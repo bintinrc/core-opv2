@@ -2,24 +2,24 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.address.Address;
 import co.nvqa.common.model.address.MilkrunSettings;
-import co.nvqa.operator_v2.model.shipper.DistributionPoint;
-import co.nvqa.operator_v2.model.shipper.LabelPrinter;
-import co.nvqa.operator_v2.model.shipper.Magento;
-import co.nvqa.operator_v2.model.shipper.MarketplaceBilling;
-import co.nvqa.operator_v2.model.shipper.MarketplaceDefault;
-import co.nvqa.operator_v2.model.shipper.OrderCreate;
-import co.nvqa.operator_v2.model.shipper.Pickup;
-import co.nvqa.operator_v2.model.shipper.Pricing;
-import co.nvqa.operator_v2.model.shipper.Pricing.BillingWeightEnum;
-import co.nvqa.operator_v2.model.shipper.PricingAndBillingSettings;
-import co.nvqa.operator_v2.model.shipper.Qoo10;
-import co.nvqa.operator_v2.model.shipper.Reservation;
-import co.nvqa.operator_v2.model.shipper.Return;
-import co.nvqa.operator_v2.model.shipper.ServiceTypeLevel;
-import co.nvqa.operator_v2.model.shipper.Shipper;
-import co.nvqa.operator_v2.model.shipper.ShipperBasicSettings;
-import co.nvqa.operator_v2.model.shipper.Shopify;
-import co.nvqa.operator_v2.model.shipper.SubShipperDefaultSettings;
+import co.nvqa.commons.model.shipper.v2.DistributionPoint;
+import co.nvqa.commons.model.shipper.v2.LabelPrinter;
+import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.MarketplaceBilling;
+import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
+import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pickup;
+import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Pricing.BillingWeightEnum;
+import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
+import co.nvqa.commons.model.shipper.v2.Qoo10;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
+import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -434,7 +434,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     // Label Printing:
     LabelPrinter labelPrinter = shipper.getLabelPrinter();
     if (labelPrinter != null) {
-      basicSettingsForm.isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+      basicSettingsForm.showShipperDetails.selectValue(labelPrinter.getShowShipperDetails());
       basicSettingsForm.showCod.selectValue(labelPrinter.getShowCod());
       basicSettingsForm.showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
     }
@@ -1060,7 +1060,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
 
     LabelPrinter labelPrinter = shipper.getLabelPrinter();
     sendKeysById("Printer IP", labelPrinter.getPrinterIp());
-    basicSettingsForm.isPrinterAvailable.selectValue(labelPrinter.getShowShipperDetails());
+    basicSettingsForm.showShipperDetails.selectValue(labelPrinter.getShowShipperDetails());
     basicSettingsForm.showCod.selectValue(labelPrinter.getShowCod());
     basicSettingsForm.showParcelDescription.selectValue(labelPrinter.getShowParcelDescription());
     saveChanges.click();
@@ -1996,8 +1996,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage {
     public MdBooleanSwitch enforceParcelPickupTracking;
     @FindBy(css = "[model='ctrl.data.basic.allowEnforceDeliveryVerification']")
     public MdBooleanSwitch allowEnforceDeliveryVerification;
-    @FindBy(css = "[model='ctrl.data.basic.isPrinterAvailable']")
-    public MdBooleanSwitch isPrinterAvailable;
+
+    @FindBy(css = "[model='ctrl.data.basic.showShipperDetails']")
+    public MdBooleanSwitch showShipperDetails;
     @FindBy(css = "[model='ctrl.data.basic.showCod']")
     public MdBooleanSwitch showCod;
     @FindBy(css = "[model='ctrl.data.basic.showParcelDescription']")

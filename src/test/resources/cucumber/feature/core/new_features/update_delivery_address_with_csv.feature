@@ -5,7 +5,7 @@ Feature: Update Delivery Address with CSV
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Bulk Update Order Delivery Address with CSV - Valid Order Status (uid:f8c8e933-017b-44c4-b47d-aa607f97afa7)
+  Scenario: Bulk Update Order Delivery Address with CSV - Valid Order Status
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -60,11 +60,12 @@ Feature: Update Delivery Address with CSV
       | systemId     | sg       |
       | type         | STANDARD |
 
-  Scenario: Bulk Update Order Delivery Address with CSV - Empty File (uid:612068d5-7668-4c0c-a86d-9914477885a1)
+  Scenario: Bulk Update Order Delivery Address with CSV - Empty File
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Update Delivery Address with CSV
     And Operator update delivery address of created orders on Update Delivery Address with CSV page
-    Then Toast "No valid orders found, please check your file" is displayed
+    Then Operator verifies that error react notification displayed:
+      | top | Invalid data in the csv file |
 
   Scenario: Bulk Update Order Delivery Address with CSV - Invalid Order/Format (uid:41d98368-903b-4e17-b366-e1bf64c3b04e)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -75,7 +76,7 @@ Feature: Update Delivery Address with CSV
       | trackingId            | status              |
       | SOMEINVALIDTRACKINGID | Invalid tracking Id |
 
-  Scenario: Bulk Update Order Delivery Address with CSV - Partial (uid:502ecf18-eb43-44f7-9ff5-31c32a59834b)
+  Scenario: Bulk Update Order Delivery Address with CSV - Partial
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -89,7 +90,7 @@ Feature: Update Delivery Address with CSV
       | {KEY_CREATED_ORDER_TRACKING_ID} | Pass                |
       | SOMEINVALIDTRACKINGID           | Invalid tracking Id |
 
-  Scenario: Bulk Update Order Delivery Address with CSV - Empty Compulsory Fields (uid:4037aece-2a03-4fc2-a6dc-aaec873e2852)
+  Scenario: Bulk Update Order Delivery Address with CSV - Empty Compulsory Fields
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -117,7 +118,7 @@ Feature: Update Delivery Address with CSV
       | value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | [sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample][sample] name [sample] |
 
-  Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues and Valid Orders (uid:f10d6916-15d9-4543-837b-49c6a7ba4618)
+  Scenario Outline: Bulk Update Order Delivery Address with CSV - With Technical Issues and Valid Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -147,10 +148,10 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | toAddressLatitude | toAddressLongitude | toPhoneNumber | toAddressAddress2 |
       | {KEY_CREATED_ORDER_TRACKING_ID} | empty             | 1.2860-17          | empty         | empty             |
     Then Operator verify validation statuses on Update Delivery Address with CSV page:
-      | trackingId                      | status                                                                                                                                                |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.phone_number, to.address.address2, Invalid entry '1.2860-17' for to.address.longitude, Invalid entry '' for to.address.latitude |
+      | trackingId                      | status                                                                                                                                         |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.phone_number, to.address.address2, Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
 
-  Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note> (<hiptest-uid>)
+  Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -163,13 +164,13 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status   |
       | {KEY_CREATED_ORDER_TRACKING_ID} | <status> |
     Examples:
-      | Note                | lat          | long          | status                                                                                                       | hiptest-uid                              |
-      | Lat Long Has String | 1.317219a344 | 103.925993?32 | Invalid entry '103.925993?32' for to.address.longitude, Invalid entry '1.317219a344' for to.address.latitude | uid:ca983071-6b37-4cae-92ba-4949bafd7bee |
-      | Lat Long Has Dash   | -            | -             | Invalid entry '-' for to.address.longitude, Invalid entry '-' for to.address.latitude                        | uid:fa23656c-a43e-4630-be61-f6c436695687 |
-      | Lat Is Empty        | empty        | 103.886438    | Invalid entry '' for to.address.latitude                                                                     | uid:6e986036-aeb6-4b42-823e-6b6fa5289404 |
-      | Long Is Empty       | 1.369953     | empty         | Invalid entry '' for to.address.longitude                                                                    | uid:4a2f13c5-5211-4a2f-a007-38515781e406 |
+      | Note                | lat          | long          | status                                                                                |
+      | Lat Long Has String | 1.317219a344 | 103.925993?32 | Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
+      | Lat Long Has Dash   | -            | -             | Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
+      | Lat Is Empty        | empty        | 103.886438    | Invalid entry {x} for to.address.latitude                                             |
+      | Long Is Empty       | 1.369953     | empty         | Invalid entry {x} for to.address.longitude                                            |
 
-  Scenario: Bulk Update Order Delivery Address with CSV - Lat Long is Empty (uid:6fe802a1-4ada-4680-a9c3-db606e83278f)
+  Scenario: Bulk Update Order Delivery Address with CSV - Lat Long is Empty
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -185,7 +186,7 @@ Feature: Update Delivery Address with CSV
     And Operator verify created orders info after address update
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery (uid:c6c4b64a-2171-4c36-bb19-b119ab6a2dce)
+  Scenario: Bulk Update Order Delivery Address with CSV - Routed Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -211,7 +212,6 @@ Feature: Update Delivery Address with CSV
       | status | Routed |
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
 
   @DeleteOrArchiveRoute
   Scenario: Bulk Update Order Delivery Address with CSV - RTS Order

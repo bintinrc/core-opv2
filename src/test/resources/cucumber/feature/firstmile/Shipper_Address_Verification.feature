@@ -12,8 +12,8 @@ Feature: Shipper Address Verification
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"Singapore","country":"<country>","postcode":"758103"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Singapore"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
-    Then DB Operator verifies that latlong is assigned in shipper address table for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
+    Then DB Shipper - verifies that latlong value is assigned in shipper address table for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1            | country | postcode |
@@ -26,8 +26,8 @@ Feature: Shipper Address Verification
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"75810"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Jakarta"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Jakarta"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
-    Then DB Operator verifies that latlong is assigned in shipper address table for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
+    Then DB Shipper - verifies that latlong value is assigned in shipper address table for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode |
@@ -44,8 +44,8 @@ Feature: Shipper Address Verification
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"75810"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Jakarta"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Jakarta"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
-    Then DB Operator verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
+    Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
@@ -60,8 +60,8 @@ Feature: Shipper Address Verification
       | noOfAddress                 | 1                                                                                                                                                                                                                                                       |
       | withLatLong                 | NO                                                                                                                                                                                                                                                      |
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","latitude":"<latitude>","longitude":"<longitude>","milkrun_settings":[],"is_milk_run":false} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
-    Then DB Operator verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
+    Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
@@ -73,8 +73,8 @@ Feature: Shipper Address Verification
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"758100"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Singapore"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
-    Then DB Operator verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
+    Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
@@ -91,8 +91,8 @@ Feature: Shipper Address Verification
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","latitude":"<latitude>","longitude":"<longitude>","milkrun_settings":[],"is_milk_run":false} |
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"758100"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Singapore"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
-    Then DB Operator verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
+    Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
@@ -110,8 +110,8 @@ Feature: Shipper Address Verification
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
     Given API Shipper create an order using below json as request body
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","from":{"name":"<name>","phone_number":"<contact>","email":"FirstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"<name>","phone_number":"<contact>","email":"FirsstMile@ninjavan.co","address":{"address1":"<Address1>","address2":"","country":"<country>","postcode":"75810"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":10,"pickup_timeslot":{"start_time":"18:00","end_time":"22:00","timezone":"Asia/Jakarta"},"pickup_instructions":"ThisiscreatedforQA-TESTING","delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"18:00","timezone":"Asia/Jakarta"},"delivery_instructions":"ThisiscreatedforQA-TESTING","dimensions":{"weight":1,"width":20,"height":10,"length":40,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
-    Then DB Operator verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
+    Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
 
     Examples:
@@ -127,8 +127,8 @@ Feature: Shipper Address Verification
       | noOfAddress                 | 1                                                                                                                                                                                                     |
       | withLatLong                 | NO                                                                                                                                                                                                    |
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
-    Then DB Operator verifies that latlong is assigned in shipper address table for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
+    Then DB Shipper - verifies that latlong value is assigned in shipper address table for shipperID "{shipper-v4-id}"
 
 
     Examples:
@@ -144,8 +144,8 @@ Feature: Shipper Address Verification
       | noOfAddress                 | 1                                                                                                                                                                                                     |
       | withLatLong                 | NO                                                                                                                                                                                                    |
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
-    Then DB Operator verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
-    Then DB Operator verifies that latlong is assigned in shipper address table for shipperID "{shipper-v4-id}"
+    Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
+    Then DB Shipper - verifies that latlong value is assigned in shipper address table for shipperID "{shipper-v4-id}"
 
     Examples:
       | name      | contact    | Address1             | country | postcode |
