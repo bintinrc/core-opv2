@@ -346,7 +346,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
@@ -363,7 +362,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
