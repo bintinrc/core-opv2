@@ -778,7 +778,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     ).as("Download full report button is disabled").isNotNull();
 
     Assertions.assertThat(
-        shipmentWeightSumUpreport.updateMawbBtn.getAttribute("disabled")
+        shipmentWeightSumUpreport.updateBillingNumberBtn.getAttribute("disabled")
     ).as("Update MAWB button is disabled").isNotNull();
 
     Assertions.assertThat(
@@ -792,7 +792,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     List<String> selectedShipmentIds = shipmentWeightSumUpreport.shipmentSumUpReportNvTable
             .rows.stream().map(r -> r.shipmentId.getText()).collect(Collectors.toList());
     put(KEY_LIST_SELECTED_SHIPMENT_IDS, selectedShipmentIds);
-    shipmentWeightSumUpreport.updateMawbBtn.click();
+    shipmentWeightSumUpreport.updateBillingNumberBtn.click();
+    shipmentWeightSumUpreport.selectBillingNumberTypeDialog.waitUntilVisible();
+    shipmentWeightSumUpreport.mawbBillingNumberRadio.check();
+    shipmentWeightSumUpreport.continueUpdateBillingBtn.click();
   }
 
   @Then("Operator verify Shipment Weight Update MAWB page UI")
@@ -802,9 +805,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     //verify the table
     if (selectedShipmentIds.size()!=0) {
       shipmentWeightDimensionUpdateMawbPage.shipmentWeightNvTable.rows.forEach( row -> {
-        Assertions.assertThat(selectedShipmentIds.contains(row.shipmentId.getText()))
-            .as(f("Shipment id %s is selected from previous page", row.shipmentId.getText()))
-            .isTrue();
+        Assertions.assertThat(selectedShipmentIds)
+          .as(f("Shipment id %s is selected from previous page", row.shipmentId.getText()))
+          .contains(row.shipmentId.getText());
       });
     }
 
@@ -927,7 +930,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
   @When("Operator click update MAWB button on Shipment Weight Dimension page")
   public void operatorClickUpdateMAWBButtonOnShipmentWeightDimensionPage() {
-    shipmentWeightDimensionTablePage.updateMawbButton.click();
+    shipmentWeightDimensionTablePage.updateBillingNumberButton.click();
+    shipmentWeightSumUpreport.selectBillingNumberTypeDialog.waitUntilVisible();
+    shipmentWeightSumUpreport.mawbBillingNumberRadio.check();
+    shipmentWeightSumUpreport.continueUpdateBillingBtn.click();
   }
 
   @Then("Operator click update button only on shipment weight update mawb page")

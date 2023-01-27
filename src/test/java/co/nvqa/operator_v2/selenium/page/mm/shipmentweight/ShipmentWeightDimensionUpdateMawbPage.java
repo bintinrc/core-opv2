@@ -23,22 +23,22 @@ public class ShipmentWeightDimensionUpdateMawbPage  extends SimpleReactPage<Ship
   @FindBy(xpath = "//*[@class='ant-table-footer']//h4")
   public PageElement pageTitle;
 
-  @FindBy(css="[data-testid='mawb-number']")
+  @FindBy(css="[data-testid='airway-bill-number']")
   public PageElement mawbInput;
 
-  @FindBy(xpath = "//div[.//input[@data-testid='mawb-number'] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
+  @FindBy(xpath = "//div[.//input[@data-testid='airway-bill-number'] and contains(concat(' ',normalize-space(@class),' '),' ant-form-item-control ')]//div[@class='ant-form-item-explain-error']")
   public PageElement mawbErrorInfo;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='updateMAWBForm_vendor_id']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_airhaul_vendor_id']]")
   public AntSelect vendorSelect;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='updateMAWBForm_origin_airport_id']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_origin_airport_id']]")
   public AntSelect originAirportSelect;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='updateMAWBForm_destination_airport_id']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_destination_airport_id']]")
   public AntSelect destAirportSelect;
 
-  @FindBy(css = "[data-testid='mawb-update-submit-button']")
+  @FindBy(css = "[data-testid='bill-number-update-button']")
   public Button updateMawbBtn;
 
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
