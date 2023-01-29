@@ -1,5 +1,5 @@
 @OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsRoute
-Feature: bulk tag on pickup jobs page
+Feature: bulk route on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
