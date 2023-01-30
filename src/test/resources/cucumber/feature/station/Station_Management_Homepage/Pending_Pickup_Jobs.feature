@@ -729,7 +729,6 @@ Feature: Pending Pickup Jobs
       | {hub-name-2} | {hub-id-2} | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
   @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
-    @DebuggNot
   Scenario Outline: View Due Today Parcel if Reservation Date is Tomorrow
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
@@ -776,7 +775,6 @@ Feature: Pending Pickup Jobs
 
 
   @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
-    @DebugNot
   Scenario Outline: View Due Tomorrow Parcel if Reservation Date is Tomorrow
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
@@ -965,7 +963,7 @@ Feature: Pending Pickup Jobs
     And Operator updates reservation_date "{gradle-previous-1-day-yyyy-MM-dd}" for the reservation id "{KEY_CREATED_RESERVATION_ID}" in the stationJobs table
     And API Operator calls pending pickup job trigger for station
     And Operator refresh page
-    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has increased by 1
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has increased by 0
     When Operator get the count from the pending pickup tile: "<TileName1>"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

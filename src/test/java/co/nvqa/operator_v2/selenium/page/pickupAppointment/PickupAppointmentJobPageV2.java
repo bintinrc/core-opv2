@@ -66,8 +66,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(xpath = "//span[@class='ant-btn-loading-icon']")
   public PageElement loadingIcon;
-
-
+  @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Assign Tags')]")
+  public EditJobTagModel editJobTagModel;
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
@@ -288,7 +288,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void scrollToTimeIfNeeded(String time, String listName) {
- 
+
       int neededTime = Integer.parseInt(List.of(time.split(":")).get(0));
       String lastElementTime = webDriver.findElement(
           By.xpath(f(Time_LIST_LOCATR, listName) + LAST_ITEM_IN_TIME_LIST)).getAttribute("label");
@@ -474,6 +474,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement editButton;
     @FindBy(xpath = "//button[. ='Filter by job ID']")
     public PageElement filterByJobId;
+
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Assign job tag')]")
+    public PageElement assignJobTag;
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
@@ -483,6 +486,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String ACTION_SELECTED = "Select row";
     public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//input[@data-testid = 'searchInput.%s']";
     public final String PICKUP_JOBS_COLUMN_EDIT_BUTTON = "//button[@data-testid = 'resultTable.editButton']";
+
+    public final String PICKUP_JOB_ROW_TAGS = "//span[contains(@class,'ant-tag') and contains(text(),'%s')]";
 
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
@@ -501,6 +506,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           "//div[@role='row'][%d]//div[@role='gridcell']//button[contains(@data-testid,'showDetailButton')]",
           ACTION_SELECTED,
           "//div[@role='row'][%d]//div[@role='gridcell']//input[contains(@data-testid,'checkbox')]"));
+    }
+
+    public List<String> getTagsListWithName(String name) {
+      return findElementsByXpath(f(PICKUP_JOB_ROW_TAGS, name)).stream()
+          .map(WebElement::getText)
+          .collect(Collectors.toList());
     }
 
     public List<String> getListIDs() {
@@ -663,6 +674,33 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+  public static class EditJobTagModel extends AntModal {
+
+    public EditJobTagModel(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//div[@data-testid='assignJobTag.select']//input")
+    public PageElement tagsField;
+    String JOB_TAG_FILTER_LOCATOR = "div[label='%s']";
+
+    public void selectTagInJobTagsField(String tag) {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        tagsField.click();
+        tagsField.sendKeys(tag);
+        WebElement tagElement = webDriver.findElement(
+            By.cssSelector(f(JOB_TAG_FILTER_LOCATOR, tag)));
+
+        tagElement.click();
+
+      }, 1000, 3);
+
+    }
+
+
+  }
+
   public void setRouteOnEditPAJobPage(String routeId) {
     editPAJob.AddNewRoute.click();
     editPAJob.AddNewRoute.sendKeys(routeId);
@@ -695,4 +733,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     findElementByXpath(f(editPAJob.JOB_TAG_REMOVE_XPATH, tagName)).click();
     editPAJob.updateTags.waitUntilClickable();
   }
+
+
 }
