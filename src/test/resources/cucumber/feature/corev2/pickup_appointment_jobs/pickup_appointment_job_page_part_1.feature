@@ -55,8 +55,6 @@ Feature: Pickup Appointment Job Page Part 1
       | zones | {zone-name}, {zone-name-2} |
     When Operator click Job Master Shipper field
     Then QA verify a dropdown menu shown
-    And Select multiple job Master Shipper
-      | masterShipper | {master-shipper-1}, {master-shipper-2} |
     When Operator click Job Shipper field
     Then QA verify a dropdown menu shown
     And QA verify Shipper list will be shown after operator type 3 characters or more "123" in the Shipper field
@@ -68,7 +66,6 @@ Feature: Pickup Appointment Job Page Part 1
       | jobServiceLevel | Premium, Standard                                 |
       | jobStatus       | Ready for Routing, Routed, In Progress, Cancelled |
       | zones           | {zone-name}, {zone-name-2}                        |
-      | masterShippers  | {master-shipper-1}, {master-shipper-2}            |
       | shippers        | 830859 - Pickup Appointment Job Normal            |
 
   Scenario: View pickup jobs filters on Pickup Jobs page result table

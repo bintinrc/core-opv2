@@ -17,7 +17,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
@@ -45,7 +45,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
@@ -74,7 +74,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
@@ -104,7 +104,7 @@ Feature: Force Success Single Pickup Job, Route Archived
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator goes to Pickup Jobs Page
     When Operator fills in the Shippers field with valid shipper = "{normal-shipper-pickup-appointment-1-id}"
