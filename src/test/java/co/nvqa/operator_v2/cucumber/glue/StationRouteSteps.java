@@ -166,6 +166,7 @@ public class StationRouteSteps extends AbstractSteps {
   }
 
   @When("Operator verify area match {value} is displayed in row {int} on Station Route page")
+  @When("Operator verify area match {value} is displayed on {int} position on Station Route page")
   public void verifyAreaMatch(String value, int index) {
     page.inFrame(() -> {
       Assertions.assertThat(page.areaMatch)
@@ -179,11 +180,9 @@ public class StationRouteSteps extends AbstractSteps {
 
   @When("Operator verify area match is not displayed on Station Route page")
   public void verifyNoAreaMatch() {
-    page.inFrame(() -> {
-      Assertions.assertThat(page.areaMatch)
-          .as("Area match list")
-          .isEmpty();
-    });
+    page.inFrame(() -> Assertions.assertThat(page.areaMatch)
+        .as("Area match list")
+        .isEmpty());
   }
 
   @When("Operator verify keyword match {value} is displayed in row {int} on Station Route page")
