@@ -1610,7 +1610,7 @@ Feature: Pending Pickup Jobs
 
     Examples:
       | HubName      | HubId      | latitude | longitude | Country | ModalName        | TileName1                      | TileName2                    |
-      | {hub-name-1} | {hub-id-1} | 9.99999  | 9.99999   | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
+      | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
   @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: Cancel Some Parcels in Reservation
@@ -1659,7 +1659,7 @@ Feature: Pending Pickup Jobs
 
     Examples:
       | HubName      | HubId      | latitude | longitude | Country | ModalName        | TileName1                      | TileName2                    |
-      | {hub-name-1} | {hub-id-1} | 9.99999  | 9.99999   | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
+      | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

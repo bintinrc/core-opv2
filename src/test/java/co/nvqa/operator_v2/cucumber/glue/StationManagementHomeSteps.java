@@ -355,6 +355,7 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
   @Then("Operator verifies that the count in the second in the pending pick up tile: {string} remains unchanged")
   public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_remains_unchanged(
       String tileName) {
