@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkFailPickupJobs @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @BulkFailPickupJobs
 Feature: bulk fail job on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -168,7 +168,7 @@ Feature: bulk fail job on pickup jobs page
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" has "0" proof in proof_photos table
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Bulk Update PA Job - Fail Job - Ready for Routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
