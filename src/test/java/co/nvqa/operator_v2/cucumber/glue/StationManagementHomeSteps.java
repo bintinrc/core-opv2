@@ -338,6 +338,40 @@ public class StationManagementHomeSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @SuppressWarnings("unchecked")
+  @Then("Operator verifies that the count in the pending pickup tile: {string} remains unchanged")
+  public void operator_verifies_that_the_count_in_pending_pickup_tile_remains_unchanged(
+      String tileName) {
+    retryIfExpectedExceptionOccurred(() -> {
+          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
+          navigateRefresh();
+          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        StaleElementReferenceException.class, AssertionError.class);
+    takesScreenshot();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Then("Operator verifies that the count in the second in the pending pick up tile: {string} remains unchanged")
+  public void operator_verifies_that_the_count_in_the_second_tile_in_pending_pickup_remains_unchanged(
+      String tileName) {
+    retryIfExpectedExceptionOccurred(() -> {
+          int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
+          navigateRefresh();
+          int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
+          stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, 0);
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        StaleElementReferenceException.class, AssertionError.class);
+    takesScreenshot();
+  }
+
 
   @When("Operator get the count from the pending pickup tile: {string}")
   public void operator_get_the_count_from_the_pending_pickup_tile(String tileName) {
