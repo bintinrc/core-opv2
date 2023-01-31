@@ -61,6 +61,7 @@ Feature: Reservation Creation
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is null for waypointId "{KEY_WAYPOINT_ID}"
 
+@Debug
   Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
