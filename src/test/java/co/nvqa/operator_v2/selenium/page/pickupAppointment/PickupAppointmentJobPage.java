@@ -222,6 +222,7 @@ public class PickupAppointmentJobPage extends SimpleReactPage<PickupAppointmentJ
   }
 
   public void clickFailProceed() {
+    
     failProceed.click();
   }
 

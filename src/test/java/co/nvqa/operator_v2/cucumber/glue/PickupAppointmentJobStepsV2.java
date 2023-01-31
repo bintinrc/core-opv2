@@ -359,6 +359,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         case "Remove route":
           pickupAppointmentJobPage.bulkSelect.removeRoute.click();
           break;
+        case "Fail job":
+          pickupAppointmentJobPage.bulkSelect.failJob.click();
+          break;
       }
     });
   }
@@ -1054,6 +1057,59 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       }, 1000, 5);
 
     });
+  }
+
+  @When("Operator click select fail reason on bulk fail modal for jobId = {string}")
+  public void clickSelectFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickSelectFailReasonForJob(jobId);
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click on Submit button on bulk fail modal")
+  public void clickSubmitOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.submitButton.click();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click apply fail reason for all in bulk fail modal for jobId = {string}")
+  public void clickSelectApplyToAllFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickApplyFailReasonToAll(jobId);
+      });
+    }, 1000, 3);
+  }
+
+
+  @When("Operator check Error message is shown in fail modal for jobId = {string}")
+  public void clickCheckErrorMessageOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.checkCannotFailedErrorMessageForJob(jobId))
+            .as("check error message in bulk fail").isTrue();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator check Submit button disabled on bulk fail modal")
+  public void clickSubmitDisabledOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.submitButton.isEnabled())
+            .as("check Submit button disabled in bulk fail").isFalse();
+      });
+    }, 1000, 3);
   }
 
 

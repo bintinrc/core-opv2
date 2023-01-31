@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsRemoveRoute @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsRemoveRoute
 Feature: bulk remove route on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -94,7 +94,7 @@ Feature: bulk remove route on pickup jobs page
     Then Operator check 2 tags with name = "Ready for Routing"
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Disabled Bulk Update PA Job - Remove route - Ready for Routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
