@@ -27,7 +27,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -63,7 +63,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -108,7 +108,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -153,7 +153,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -198,7 +198,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -243,7 +243,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -279,7 +279,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -315,7 +315,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -360,7 +360,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -396,7 +396,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -432,7 +432,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -474,7 +474,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -516,7 +516,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -558,7 +558,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -600,7 +600,7 @@ Feature: Update MAWB
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page

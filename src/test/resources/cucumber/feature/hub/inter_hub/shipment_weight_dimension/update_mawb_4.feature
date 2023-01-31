@@ -10,7 +10,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with format 3 digits + <space> + 5 digits (uid:0eca8942-67d2-4dec-893a-b01011bcce9e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -27,7 +27,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -44,7 +44,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with format rlb + <space> + 5 digits lower-case (uid:043c913c-945d-42e7-bba2-5dd372e1e7af)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -61,7 +61,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -78,7 +78,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with format RLB + <space> + 5 digits upper-case (uid:8e074519-7d2e-4e68-a63e-e64b57604d98)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -95,7 +95,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -112,7 +112,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with format Rlb + <space> + 5 digits mix-case (uid:b4ef2231-ef90-4ba3-a7cc-eb4ed9832392)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -129,7 +129,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -146,7 +146,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with format 3 digits + <space> + 10 digits (uid:c49534fb-d995-41ac-94a6-4b44f23054df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -163,7 +163,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -180,7 +180,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with Format 3 digits + <space> + 8 digits (uid:57d90bfd-b7a5-479a-8ec1-05743cfaa09e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -197,7 +197,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -214,7 +214,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with Format 5 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -231,7 +231,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -248,7 +248,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with Format 6 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -265,7 +265,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -282,7 +282,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Update MAWB for PH with Format 9 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
-    Given API Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = {hub-id-ph-2} to hub id = {hub-id-ph-3}
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     And API Operator link mawb for following shipment ids
       | mawb                 | 123 12345         |
@@ -299,7 +299,7 @@ Feature: Update MAWB 4 - PH
       | numberOfShipments | 1            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 1 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click update MAWB button on Shipment Weight Dimension page
@@ -312,7 +312,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
 
