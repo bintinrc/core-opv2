@@ -168,17 +168,17 @@ public class RouteManifestSteps extends AbstractSteps {
     assertions.assertAll();
   }
 
-  @When("^Operator click view POA/POH button on Route Manifest page$")
+  @When("Operator click view POA/POH button on Route Manifest page")
   public void clickViewPoaPoh() {
     routeManifestPage.clickViewPoaPoH();
   }
 
-  @Then("^Operator verify POA/POH button is disabled on Route Manifest page$")
+  @Then("Operator verify POA/POH button is disabled on Route Manifest page")
   public void verifyViewPoaPohDisabled() {
     Assertions.assertThat(routeManifestPage.isViewPoaPohDisabled());
   }
 
-  @Then("^Operator verifies Proof of Arrival table for the row number \"(.+)\" on Route Manifest page:$")
+  @Then("Operator verifies Proof of Arrival table for the row number {string} on Route Manifest page:")
   public void verifyTableEntry(String row, Map<String, String> data) {
     data = resolveKeyValues(data);
     PoaInfo expected = new PoaInfo(data);
@@ -193,13 +193,13 @@ public class RouteManifestSteps extends AbstractSteps {
         page -> page.proofOfArrivalTable.verifyPoAInfo(expected, index));
   }
 
-  @When(("^Operator click View on Map$"))
+  @When("Operator click View on Map")
   public void clickViewOnMapButton() {
     routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfArrivalTable.clickViewOnMap());
   }
 
-  @Then("^Operator verifies Proof of Handover table for the row number \"(.+)\" on Route Manifest page:$")
+  @Then("Operator verifies Proof of Handover table for the row number {string} on Route Manifest page:")
   public void verifyPoHTableEntry(String row, Map<String, String> data) {
     data = resolveKeyValues(data);
     PohInfo expected = new PohInfo(data);
@@ -220,7 +220,7 @@ public class RouteManifestSteps extends AbstractSteps {
         page -> page.proofOfHandoverTable.verifyPoHInfo(expected, index));
   }
 
-  @When(("^Operator click View Photo$"))
+  @When("Operator click View Photo")
   public void clickViewPhotoButton() {
     routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfHandoverTable.clickViewPhoto());
