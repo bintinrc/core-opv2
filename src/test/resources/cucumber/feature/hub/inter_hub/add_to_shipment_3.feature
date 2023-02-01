@@ -24,10 +24,9 @@ Feature: Add To Shipment 3
       | failureReasonCodeId    | 9           |
       | failureReasonIndexMode | FIRST       |
     Then API Operator verify order info after pickup "PICKUP_FAILED"
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -45,10 +44,9 @@ Feature: Add To Shipment 3
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver pickup the created parcel successfully
     Then API Operator verify order info after pickup "PICKUP_SUCCESS"
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -62,10 +60,9 @@ Feature: Add To Shipment 3
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator start the route
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -84,10 +81,9 @@ Feature: Add To Shipment 3
     When API Driver get pickup/delivery waypoint of the created order
     When API Operator Van Inbound parcel
     When API Operator start the route
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
 
   @DeleteShipment @ForceSuccessOrder
@@ -102,6 +98,10 @@ Feature: Add To Shipment 3
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
     And Operator close the shipment which has been created
+    Then API Operator wait for following order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | CANCELLED |
+      | granularStatus | CANCELLED |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Staging Parcel to Shipment (uid:9ee96560-bccb-41de-8ab7-42b1aa800682)
@@ -109,11 +109,14 @@ Feature: Add To Shipment 3
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_DESTINATION_HUB}
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator close the shipment which has been created
+    Then API Operator wait for following order state:
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status         | STAGING |
+      | granularStatus | STAGING |
 
   @KillBrowser
   Scenario: Kill Browser
