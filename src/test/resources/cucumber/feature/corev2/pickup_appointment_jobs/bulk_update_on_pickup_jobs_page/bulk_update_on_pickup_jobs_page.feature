@@ -101,7 +101,7 @@ Feature: Pickup Appointment Job - Bulk update on pickup jobs page
       | Fail job     | disable |
 
   @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
-  Scenario:Disabled Bulk Update PA Job - Terminated status - Completed
+  Scenario:Disabled Bulk Update PA Job - Terminated status - Failed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |

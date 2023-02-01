@@ -534,12 +534,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public boolean verifyBulkSelectOption(String optionName, String status) {
       String actualStatus = findElementByXpath(f(BULK_UPDATE_ITEMS, optionName)).getAttribute(
           "aria-disabled");
-      if (status.trim().equalsIgnoreCase("disable")) {
-        status = "true";
-      } else {
-        status = "false";
-      }
-      return actualStatus.trim().equalsIgnoreCase(status.trim());
+      String expectedStatus = status.trim().equalsIgnoreCase("disable") ? "true" : "false";
+      return actualStatus.trim().equalsIgnoreCase(expectedStatus.trim());
     }
   }
 
