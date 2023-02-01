@@ -194,7 +194,7 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator verifies the pricing lever details in the database
 
 
-  @DeleteNewlyCreatedShipper @mad
+  @DeleteNewlyCreatedShipper
   Scenario: Upload Pricing Profiles with CSV - Corporate Shipper with Sub Shipper who Reference Parent's Pricing Profile - Success Create Pricing Profiles with All Pricing Levers (uid:cc54b789-a311-4c92-8616-12d3909c6971)
     Given API Operator create new 'corporate' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_CREATED_SHIPPER.id}"
