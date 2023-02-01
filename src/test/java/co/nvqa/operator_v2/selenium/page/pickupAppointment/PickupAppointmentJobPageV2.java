@@ -486,8 +486,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String ACTION_SELECTED = "Select row";
     public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//input[@data-testid = 'searchInput.%s']";
     public final String PICKUP_JOBS_COLUMN_EDIT_BUTTON = "//button[@data-testid = 'resultTable.editButton']";
-
     public final String PICKUP_JOB_ROW_TAGS = "//span[contains(@class,'ant-tag') and contains(text(),'%s')]";
+    public static final String BULK_UPDATE_ITEMS = "//div[contains(@class,'ant-dropdown') and not(contains(@class,'ant-dropdown-hidden'))]//span[text() = '%s']/ancestor::li";
 
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
@@ -529,6 +529,17 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void clickEditButton() {
       findElementBy(By.xpath(PICKUP_JOBS_COLUMN_EDIT_BUTTON)).click();
+    }
+
+    public boolean verifyBulkSelectOption(String optionName, String status) {
+      String actualStatus = findElementByXpath(f(BULK_UPDATE_ITEMS, optionName)).getAttribute(
+          "aria-disabled");
+      if (status.trim().equalsIgnoreCase("disable")) {
+        status = "true";
+      } else {
+        status = "false";
+      }
+      return actualStatus.trim().equalsIgnoreCase(status.trim());
     }
   }
 
