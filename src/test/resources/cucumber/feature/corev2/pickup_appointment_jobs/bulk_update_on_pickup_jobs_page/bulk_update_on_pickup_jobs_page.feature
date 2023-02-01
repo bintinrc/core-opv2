@@ -113,8 +113,8 @@ Feature: Pickup Appointment Job - Bulk update on pickup jobs page
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Control - Operator update pickup appointment job proof with data below:
-      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                         |
-      | pickupAppointmentProofRequest | {"failure_reason_code_id": 7,"failure_reason_id": 1472,"status": "failed","photo_urls": []} |
+      | jobId                         | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                                                                   |
+      | pickupAppointmentProofRequest | {"failure_reason_code_id": {failure-reason-code-id-1},"failure_reason_id": {failure-reason-id-1},"status": "failed","photo_urls": []} |
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
