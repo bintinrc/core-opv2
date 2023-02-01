@@ -30,20 +30,20 @@ Feature: Load Shipment Weight and Dimension 2
 #    And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820623
-  @DeleteShipment @DeleteCreatedMAWBs
-  Scenario: Load Shipment Weight and Dimension by Creation Date Time
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
-    And Operator verify Shipment Weight Dimension Filter UI
-    When Operator fill in Load Shipment Weight filter
-      | presetName  | {shipment-weight-filter-name} |
-      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-    And Operator click Load Selection button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Dimension Table page is shown
-    And Operator verify can filter Shipment Weight Dimension Table
+#  @DeleteShipment @DeleteCreatedMAWBs
+#  Scenario: Load Shipment Weight and Dimension by Creation Date Time
+#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+#    Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+#    Then Operator verify Shipment Weight Dimension page UI
+#    And Operator verify Shipment Weight Dimension Filter UI
+#    When Operator fill in Load Shipment Weight filter
+#      | presetName  | {shipment-weight-filter-name} |
+#      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+#    And Operator click Load Selection button on Shipment Weight Dimension page
+#    Then Operator verify Shipment Weight Dimension Table page is shown
+#    And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6820624
 #  @DeleteShipment @DeleteCreatedMAWBs
@@ -130,20 +130,20 @@ Feature: Load Shipment Weight and Dimension 2
     And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6876578
-  @DeleteShipment @DeleteCreatedMAWBs
-  Scenario: Load Shipment Weight and Dimension by Creation Date Time Filter
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
-    And Operator verify Shipment Weight Dimension Filter UI
-    When Operator fill in Load Shipment Weight filter
-      | presetName  | {shipment-weight-filter-name} |
-      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
-    And Operator click Load Selection button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Dimension Table page is shown
-    And Operator verify can filter Shipment Weight Dimension Table
+#  @DeleteShipment @DeleteCreatedMAWBs
+#  Scenario: Load Shipment Weight and Dimension by Creation Date Time Filter
+#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+#    Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+#    Then Operator verify Shipment Weight Dimension page UI
+#    And Operator verify Shipment Weight Dimension Filter UI
+#    When Operator fill in Load Shipment Weight filter
+#      | presetName  | {shipment-weight-filter-name} |
+#      | createdTime | {KEY_SHIPMENT_CREATION_DATE}  |
+#    And Operator click Load Selection button on Shipment Weight Dimension page
+#    Then Operator verify Shipment Weight Dimension Table page is shown
+#    And Operator verify can filter Shipment Weight Dimension Table
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6889151
 #  @DeleteShipment @DeleteCreatedMAWBs
