@@ -968,6 +968,49 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @Then("Operator verifies Bulk Update button is {string} on Pickup Jobs page")
+  public void operatorVerifiesBulkUpdateButtonStatus(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      switch (status) {
+        case "enable":
+          Assertions.assertThat(page.bulkSelect.bulkUpdateDropdown.getAttribute("disabled"))
+              .as("Button is enable").isEqualTo(null);
+          break;
+        case "disable":
+          Assertions.assertThat(page.bulkSelect.bulkUpdateDropdown.getAttribute("disabled"))
+              .as("Button is disable").isEqualTo("true");
+      }
+    });
+  }
+
+  @Then("Operator verifies the status of Bulk Update options below on Pickup Jobs page")
+  public void operatorVerifiesBulkUpdateOptionsStatus(Map<String, String> listOfOptions) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      if (listOfOptions.get("Route ID") != null) {
+        Assertions.assertThat(
+                page.bulkSelect.verifyBulkSelectOption("Route ID", listOfOptions.get("Route ID"))).
+            as("Route ID status is the same").isTrue();
+      }
+      if (listOfOptions.get("Success job") != null) {
+        Assertions.assertThat(
+                page.bulkSelect.verifyBulkSelectOption("Success job",
+                    listOfOptions.get("Success job"))).
+            as("Success job status is the same").isTrue();
+      }
+      if (listOfOptions.get("Remove route") != null) {
+        Assertions.assertThat(
+                page.bulkSelect.verifyBulkSelectOption("Remove route",
+                    listOfOptions.get("Remove route"))).
+            as("Remove route status is the same").isTrue();
+      }
+      if (listOfOptions.get("Fail job") != null) {
+        Assertions.assertThat(
+                page.bulkSelect.verifyBulkSelectOption("Fail job", listOfOptions.get("Fail job"))).
+            as("Fail job status is the same").isTrue();
+      }
+    });
+  }
+
   @When("Operator add route {string} to job {string} in bulk route edit Modal")
   public void addRouteToJobInBulkRouteEditModal(String route, String JobId) {
     pickupAppointmentJobPage.inFrame(page -> {
@@ -979,7 +1022,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           pickupAppointmentJobPage.editJobRouteModal.selectRouteForJob(routeName, jobId);
         });
       }, 1000, 5);
-
     });
   }
 
@@ -1030,6 +1072,4 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     });
   }
-
-
 }
