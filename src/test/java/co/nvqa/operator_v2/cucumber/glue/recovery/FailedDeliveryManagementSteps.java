@@ -27,7 +27,9 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - Wait until FDM Page loaded completely")
   public void doWaitUntilPageLoaded() {
-    failedDeliveryManagementReactPage.fdmHeader.waitUntilVisible(60);
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.fdmHeader.waitUntilVisible(60);
+    });
   }
 
   @When("Recovery User - Search failed orders by trackingId = {string}")
@@ -137,6 +139,28 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       for (int i = 0; i < actualFailedOrder.size(); i++) {
         expectedFailedOrder.get(i).compareWithActual(actualFailedOrder.get(i), "orderTags");
       }
+    });
+  }
+
+  @When("Recovery User - reschedule failed delivery order on next day")
+  public void doRescheduleFailedDeliveryOrderOnNextDay() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.fdmTable.clickActionButton(1, FailedDeliveryTable.ACTION_RESCHEDULE);
+    });
+  }
+
+  @Then("Recovery User - verifies that toast displayed with message below:")
+  public void doVerifiesToastDisplayed(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String message = dataTable.get("message");
+    String description = dataTable.get("description");
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.notifMessage.getText())
+            .as(f("Notification Message contains: %s", message)).isEqualTo(message);
+        Assertions.assertThat(page.notifDescription.getText())
+            .as(f("Notification Description contains %s", description)).isEqualTo(description);
+      }, 5);
     });
   }
 }

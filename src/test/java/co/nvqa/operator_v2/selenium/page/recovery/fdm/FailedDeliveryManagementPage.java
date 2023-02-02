@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
@@ -27,6 +28,12 @@ public class FailedDeliveryManagementPage extends
 
   @FindBy(css = "[data-testid='fdm.apply-action.download-csv-file']")
   public PageElement downloadCsvFileAction;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement notifMessage;
+
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement notifDescription;
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
@@ -58,6 +65,7 @@ public class FailedDeliveryManagementPage extends
     public PageElement showOnlySelected;
 
     public static final String ACTION_SELECT = "Select row";
+    public static final String ACTION_RESCHEDULE = "Reschedule next day";
 
     public final String XPATH_TRACKING_ID_FILTER_INPUT = "//input[@data-testid='virtual-table.tracking_id.header.filter']";
     public final String XPATH_SHIPPER_NAME_FILTER_INPUT = "//input[@data-testid='virtual-table.shipper_name.header.filter']";
@@ -67,31 +75,26 @@ public class FailedDeliveryManagementPage extends
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("trackingId", "//div[@role='gridcell'][@data-datakey='tracking_id']")
-          .put("type", "//div[@role='gridcell'][@data-datakey='type']")
-          .put("shipperName", "//div[@role='gridcell'][@data-datakey='shipper_name']")
-          .put("lastAttemptTime", "//div[@role='gridcell'][@data-datakey='lastAttemptTimeDisplay']")
-          .put("failureReasonComments",
-              "//div[@role='gridcell'][@data-datakey='failureReasonCommentsDisplay']")
-          .put("attemptCount", "//div[@role='gridcell'][@data-datakey='attempt_count']")
-          .put("invalidFailureCount",
-              "//div[@role='gridcell'][@data-datakey='invalidFailureCountDisplay']")
-          .put("validFailureCount",
-              "//div[@role='gridcell'][@data-datakey='validFailureCountDisplay']")
-          .put("failureReasonCodeDescription",
-              "//div[@role='gridcell'][@data-datakey='failureReasonCodeDescriptionsDisplay']")
-          .put("daysSinceLastAttempt",
-              "//div[@role='gridcell'][@data-datakey='daysSinceLastAttemptDisplay']")
-          .put("priorityLevel", "//div[@role='gridcell'][@data-datakey='priorityLevelDisplay']")
-          .put("lastScannedHubName",
-              "//div[@role='gridcell'][@data-datakey='lastScannedHubNameDisplay']")
-          .put("orderTags", "//div[@role='gridcell'][@data-datakey='tags']")
+          .put("trackingId", "tracking_id")
+          .put("type", "type")
+          .put("shipperName", "shipper_name")
+          .put("lastAttemptTime", "lastAttemptTimeDisplay")
+          .put("failureReasonComments", "failureReasonCommentsDisplay")
+          .put("attemptCount", "attempt_count")
+          .put("invalidFailureCount", "invalidFailureCountDisplay")
+          .put("validFailureCount", "validFailureCountDisplay")
+          .put("failureReasonCodeDescription", "failureReasonCodeDescriptionsDisplay")
+          .put("daysSinceLastAttempt", "daysSinceLastAttemptDisplay")
+          .put("priorityLevel", "priorityLevelDisplay")
+          .put("lastScannedHubName", "lastScannedHubNameDisplay")
+          .put("orderTags", "tags")
           .build()
       );
       setEntityClass(FailedDelivery.class);
       setActionButtonsLocators(ImmutableMap.of(
-          ACTION_SELECT,
-          "//input[@class='ant-checkbox-input']"));
+          ACTION_SELECT, "//input[@class='ant-checkbox-input']",
+          ACTION_RESCHEDULE, "//button[contains(@data-testid,'single-reschedule-icon')]"
+      ));
     }
 
     public void filterTableByTID(String columName, String value) {
@@ -107,6 +110,7 @@ public class FailedDeliveryManagementPage extends
       return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
           .collect(Collectors.toList());
     }
+
     private void filterTableByColumn(String xPath, String columName, String value) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         findElementBy(By.xpath(f(xPath, columName))).sendKeys(
@@ -125,5 +129,4 @@ public class FailedDeliveryManagementPage extends
         .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
   }
-
 }
