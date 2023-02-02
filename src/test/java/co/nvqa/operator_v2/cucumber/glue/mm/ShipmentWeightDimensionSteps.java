@@ -1166,14 +1166,22 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
         String emptyOriginSeaportErrorMessage = dataTable.get("emptyOriginSeaportErrorMessage");
         if (emptyOriginSeaportErrorMessage != null && !emptyOriginSeaportErrorMessage.isEmpty()) {
-          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty seahaul vendor error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message").isEqualTo(emptyOriginSeaportErrorMessage);
         }
 
         String emptyDestinationSeaportErrorMessage = dataTable.get("emptyDestinationSeaportErrorMessage");
         if (emptyDestinationSeaportErrorMessage != null && !emptyDestinationSeaportErrorMessage.isEmpty()) {
-          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Empty seahaul vendor error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Empty destination seaport error message is shown").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing empty destination seaport error message").isEqualTo(emptyDestinationSeaportErrorMessage);
+        }
+
+        String sameOriginDestinationSeaportErrorMessage = dataTable.get("sameOriginDestinationSeaportErrorMessage");
+        if (sameOriginDestinationSeaportErrorMessage != null && !sameOriginDestinationSeaportErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown on Origin Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message on Origin Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Same origin and destination seaport error message is shown on Destination Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing same origin and destination seaport error message on Destination Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
         }
         break;
     }
