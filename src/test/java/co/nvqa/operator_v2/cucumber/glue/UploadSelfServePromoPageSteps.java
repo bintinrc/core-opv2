@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.operator_v2.model.shipper.Pricing;
 import co.nvqa.operator_v2.selenium.page.UploadSelfServePromoPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
