@@ -164,16 +164,23 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @Then("Operator verify notification is displayed with message = {string} and description below:")
   public void verifyNotificationDisplayedWith(String notificationMessage,
       List<Map<String, String>> dataTable) {
+
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+
       pickupAppointmentJobPage.inFrame(page -> {
+        String pageNotificationMessage = pickupAppointmentJobPage.notificationModal.message.getAttribute(
+            "innerText");
+        String pageNotifcationDescription = pickupAppointmentJobPage.notificationModal.description.getAttribute(
+            "innerText");
         dataTable.forEach(entry -> {
           Map<String, String> data = new HashMap<>(entry);
           String message = resolveValue(notificationMessage);
           String description = resolveValue(data.get("description"));
           retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-            Assertions.assertThat(page.notificationModal.message.getText())
+
+            Assertions.assertThat(pageNotificationMessage)
                 .as(f("Notification Message contains: %s", message)).contains(message);
-            Assertions.assertThat(page.notificationModal.description.getText())
+            Assertions.assertThat(pageNotifcationDescription)
                 .as(f("Notification Description contains: %s", description)).contains(description);
           }, 1000, 3);
         });
@@ -345,6 +352,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           break;
         case "Assign job tag":
           pickupAppointmentJobPage.bulkSelect.assignJobTag.click();
+          break;
+        case "Route ID":
+          pickupAppointmentJobPage.bulkSelect.routeId.click();
           break;
       }
     });
@@ -998,8 +1008,68 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                 page.bulkSelect.verifyBulkSelectOption("Fail job", listOfOptions.get("Fail job"))).
             as("Fail job status is the same").isTrue();
       }
+    });
+  }
+
+  @When("Operator add route {string} to job {string} in bulk route edit Modal")
+  public void addRouteToJobInBulkRouteEditModal(String route, String JobId) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      String routeName = resolveValue(route);
+      String jobId = resolveValue(JobId);
+
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.inFrame(() -> {
+          pickupAppointmentJobPage.editJobRouteModal.selectRouteForJob(routeName, jobId);
+        });
+      }, 1000, 5);
+    });
+  }
+
+  @When("Operator click update route id button in bulk edit")
+  public void clickUpdateRouteId() {
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.editJobRouteModal.updateRouteId.click();
 
     });
   }
 
+  @When("Operator check {int} route with id = {string}")
+  public void checkNumberOfRouteWithId(Integer routeNumber, String id) {
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String routeId = resolveValue(id);
+        List<String> tagsListInTable = page.bulkSelect.getRouteListWithId(routeId);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("tag %s in table count is = %s", routeId, routeNumber)).hasSize(routeNumber);
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator check {int} driver with name = {string}")
+  public void checkNumberOfDriverWithName(Integer driverNumber, String name) {
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String driverName = resolveValue(name);
+        LOGGER.debug(driverName);
+        List<String> tagsListInTable = page.bulkSelect.getDriverListWithName(driverName);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("tag %s in table count is = %s", driverName, driverNumber)).hasSize(driverNumber);
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator click Apply to all button in bulk route edit Modal")
+  public void clickApplyToAllInBulkRouteEdit() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.editJobRouteModal.ApplyThisIdToAll.click();
+      }, 1000, 5);
+
+    });
+  }
 }

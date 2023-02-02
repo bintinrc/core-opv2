@@ -30,6 +30,12 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
   @FindBy(xpath = "//input[@type='radio' and @value='MAWB']")
   public CheckBox mawbBillingNumberRadio;
 
+  @FindBy(xpath = "//input[@type='radio' and @value='SWB']")
+  public CheckBox swbBillingNumberRadio;
+
+  @FindBy(xpath = "//input[@type='radio' and @value='BOTH']")
+  public CheckBox bothBillingNumberRadio;
+
   @FindBy(xpath = "//button[@data-testid='continue-update-billing']")
   public Button continueUpdateBillingBtn;
 
@@ -108,6 +114,18 @@ public class ShipmentWeightSumUpReportPage extends SimpleReactPage<ShipmentWeigh
 
     @FindBy(xpath = "//td[contains(@class,'ant-table-cell billing-number')]")
     public PageElement mawb;
+
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell billing-number')]")
+    public PageElement billingNumber;
+
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell vendor-name')]")
+    public PageElement vendor;
+
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell origin-port')]")
+    public PageElement originPort;
+
+    @FindBy(xpath = "//td[contains(@class,'ant-table-cell destination-port')]")
+    public PageElement destinationPort;
 
     @FindBy(xpath = "./td[contains(@class,'ant-table-cell comments')]")
     public PageElement comments;
