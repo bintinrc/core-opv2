@@ -32,7 +32,7 @@ Feature: Update SWB 2
       | destinationSeahaul | {local-seaport-2-code}      |
     And Operator clicks clear "Origin Seaport" button on "Update Seaway Bill" Shipment Weight Dimension page
     Then Operator verifies Update Billing Number "SWB" page UI has error
-      | emptyOriginSeaportErrorMessage | Please enter Origin Seaport |
+      | emptyOriginSeaportErrorMessage | Please enter Sea Haul Origin Port |
 
   @DeleteShipments
   Scenario: Update SWB without Download Sum Up Report with Empty Seahaul Destination Port
@@ -61,7 +61,7 @@ Feature: Update SWB 2
       | destinationSeahaul | {local-seaport-2-code}      |
     And Operator clicks clear "Destination Seaport" button on "Update Seaway Bill" Shipment Weight Dimension page
     Then Operator verifies Update Billing Number "SWB" page UI has error
-      | emptyDestinationSeaportErrorMessage | Please enter Destination Seaport |
+      | emptyDestinationSeaportErrorMessage | Please enter Sea Haul Destination Port |
 
   @DeleteShipments
   Scenario: Update SWB without Download Sum Up Report with existing SWB - Update Vendor
