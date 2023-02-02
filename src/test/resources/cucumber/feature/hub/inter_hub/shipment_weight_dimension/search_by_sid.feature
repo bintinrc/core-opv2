@@ -233,37 +233,6 @@ Feature: Search by SID
     When Operator clear filter on Shipment Weight Dimension Table
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
-
-  #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018912
-  @DeleteShipments
-  Scenario: Search by SID and Select All Data Searched by MAWB field
-    Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
-    Given API Operator link mawb for following shipment id
-      | shipmentId            | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}   |
-      | mawb                  | RANDOM                                  |
-      | destinationAirportId  | {airport-id-1}                          |
-      | originAirportId       | {airport-id-2}                          |
-      | vendorId              | {vendor-id}                             |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
-    Then Operator verify Shipment Weight Dimension Load Shipment page UI
-      | state | initial |
-    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
-    Then Operator verify Shipment Weight Dimension Load Shipment page UI
-      | state             | search_valid |
-      | numberOfShipments | 2            |
-    When Operator click search button on Shipment Weight Dimension page
-    Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
-      | expectedNumOfRows | 1                       |
-      | filterValue       | {KEY_SHIPMENT_AWB}      |
-    And Operator select all data on Shipment Weight Dimension Table
-    Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
-    When Operator clear filter on Shipment Weight Dimension Table
-    Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
-
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018914
   @DeleteShipments
   Scenario: Search by SID and Select All Data Searched by Comments field

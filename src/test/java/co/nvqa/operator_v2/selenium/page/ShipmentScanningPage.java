@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -230,6 +231,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(id = "toRemoveTrackingId")
   public TextBox removeTrackingIdField;
 
+  @FindBy(xpath = "//div[contains(@class, 'ant-space-item')][contains(text(), 'INVALID')]")
+  public PageElement invalidOrderScanned;
+
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
@@ -297,6 +301,22 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     boolean orderExist = orderWe != null;
     Assertions.assertThat(orderExist).as("order " + trackingId + " doesn't exist in shipment")
         .isTrue();
+  }
+
+  // to avoid popup alert so retry can run
+  public void checkAndRemoveScannedOrdersIfInvalid() {
+    if(invalidOrderScanned.isDisplayedFast())
+    {
+      List<WebElement> listOfScannedTrackingIdsAsListWes = findElementsBy(By.xpath("//td[contains(@class, 'tracking-id')]"));
+      if(listOfScannedTrackingIdsAsListWes.size()!=0)
+      {
+        for(WebElement we : listOfScannedTrackingIdsAsListWes){
+          removeTrackingIdField.sendKeys(we.getText());
+          removeTrackingIdField.clear();
+        }
+      }
+      throw new NvTestRuntimeException("One of the tracking ids invalid");
+    }
   }
 
   public void checkOrderNotInShipment(String trackingId) {
