@@ -161,4 +161,11 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     stationPendingPickupJobsPage.validateNoPendingPickupRecords();
     takesScreenshot();
   }
+
+  @When("Operator clicks on the sort icon in the Parcel to Pickup column")
+  public void operatorClicksOnTheSortIconInTheParcelToPickupColumn() {
+    stationPendingPickupJobsPage.clickSortParcelsToPick();
+    takesScreenshot();
+  }
+
 }
