@@ -72,6 +72,9 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Assign Tags')]")
   public EditJobTagModel editJobTagModel;
 
+  @FindBy(className = "ant-modal-wrap")
+  public BulkUpdateSuccessModal bulkUpdateSuccess;
+
   @FindBy(xpath = "//div[@class='ant-drawer-content']//h5[contains(text(),'Bulk update route ID')]//ancestor::div[@class='ant-drawer-content']")
   public EditJobRouteModal editJobRouteModal;
 
@@ -565,6 +568,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       String expectedStatus = status.trim().equalsIgnoreCase("disable") ? "true" : "false";
       return actualStatus.trim().equalsIgnoreCase(expectedStatus.trim());
     }
+
+    public void clickBulkUpdateOption(String optionName) {
+      waitUntilVisibilityOfElementLocated(f(BULK_UPDATE_ITEMS, optionName));
+      findElementByXpath(f(BULK_UPDATE_ITEMS, optionName)).click();
+    }
   }
 
   public void verifyBulkSelectResult() {
@@ -760,8 +768,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }, 1000, 3);
 
     }
-
-
   }
 
   public void setRouteOnEditPAJobPage(String routeId) {
@@ -797,5 +803,23 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     editPAJob.updateTags.waitUntilClickable();
   }
 
+  public static class BulkUpdateSuccessModal extends AntModal {
+
+    public BulkUpdateSuccessModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//button[.='Submit']")
+    public PageElement submitButton;
+
+    String SUCCESS_JOB_PAGE_ERROR_XPATH = "//tr[@data-row-key='%s']//following-sibling::tr[1]";
+
+    public String getErrorMessage(String jobId) {
+      waitUntilVisibilityOfElementLocated(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId));
+      String errorMessage = findElementByXpath(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId)).getText();
+      return errorMessage;
+    }
+  }
 
 }
