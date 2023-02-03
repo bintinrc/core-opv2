@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @runtest
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2
 Feature: Route Monitoring V2
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -656,7 +656,7 @@ Feature: Route Monitoring V2
     And Operator check there are 0 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows @runtestrsvn
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -717,7 +717,7 @@ Feature: Route Monitoring V2
       | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
       | tags         | -                                          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @runtestrsvn
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -798,7 +798,7 @@ Feature: Route Monitoring V2
       | driverName | {KEY_CREATED_DRIVER_INFO.getFullName} |
       | routeId    | {KEY_CREATED_ROUTE_ID}                |
 
-  @DeleteOrArchiveRoute @runtestrsvn
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Parcel for Each Route - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -818,7 +818,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 0                      |
 
-  @DeleteOrArchiveRoute @runtestrsvn
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -854,7 +854,7 @@ Feature: Route Monitoring V2
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | successCount | 1                      |
 
-  @DeleteOrArchiveRoute @runtestrsvn
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Failed Waypoint - Reservation - <name>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -885,7 +885,7 @@ Feature: Route Monitoring V2
       | Valid Fail   | 8                   | 1              | 0                | uid:795339f1-f3db-4417-9c90-5b712a22adf9 |
       | Invalid Fail | 9                   | 0              | 1                | uid:eef28170-195e-45a1-97d7-1e99970ad1eb |
 
-  @DeleteOrArchiveRoute @runtestrsvn
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -906,7 +906,7 @@ Feature: Route Monitoring V2
       | totalWaypoint | 1                      |
       | pendingCount  | 1                      |
 
-  @DeleteOrArchiveRoute @runtestrsvn
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending Reservation From Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
