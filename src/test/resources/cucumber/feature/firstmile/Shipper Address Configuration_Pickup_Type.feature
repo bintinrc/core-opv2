@@ -577,7 +577,7 @@ Feature: Shipper Address Configuration
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"60 SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"50.5","longitude":"50.5","milkrun_settings":[],"is_milk_run":false} |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"60 SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"1.23","longitude":"1.23","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -593,8 +593,10 @@ Feature: Shipper Address Configuration
     When API Shipper - Operator updates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                                                  |
       | withLatLong                 | YES                                                                                                                                                                                                                                                              |
-      | addressId                   | <search_value>                                                                                                                                                                                                                                                   |
-      | createShipperAddressRequest | {"id":"<search_value>", "name":"FirstMile55","contact":"09876576","email":"Station@gmail.com","address1":"<newAddress>","address2":"","latitude":"<newLatitude>","longitude":"<newLongitude>","milkrun_settings":[],"is_milk_run":false}   |
+      | addressID                   | <search_value>                                                                                                                                                                                                                                                   |
+      | newLatitude                 | <newLatitude>                                                                                                                                                                                                                                                    |
+      | newLongitude                | <newLongitude>                                                                                                                                                                                                                                                   |
+      | newAddress                  | <newAddress>                                                                                                                                                                                                                                                     |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -609,7 +611,7 @@ Feature: Shipper Address Configuration
 
     Examples:
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude | newZoneValue | newHubValue |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  AUTO-FM-ZONE      | AUTO-FM-VN       | 30 SenokoRd,Singapore  | 1.23        |  1.23        | Updated Name | G West      |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        | AUTO-FM-ZONE | AUTO-FM-VN  |
 
   Scenario Outline: View Updated Shipper Address Detail on Update Lat Long Page
     When Operator loads Shipper Address Configuration page
@@ -617,7 +619,7 @@ Feature: Shipper Address Configuration
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
       | noOfAddress                 | 1                                                                                                                                                                                                                                           |
       | withLatLong                 | YES                                                                                                                                                                                                                                         |
-      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"60 SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"50.5","longitude":"50.5","milkrun_settings":[],"is_milk_run":false} |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"60 SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"1.23","longitude":"1.23","milkrun_settings":[],"is_milk_run":false} |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -633,8 +635,10 @@ Feature: Shipper Address Configuration
     When API Shipper - Operator updates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                                                  |
       | withLatLong                 | YES                                                                                                                                                                                                                                                              |
-      | addressId                   | <search_value>                                                                                                                                                                                                                                                   |
-      | createShipperAddressRequest | {"id":"<search_value>", "name":"FirstMile55","contact":"09876576","email":"Station@gmail.com","address1":"<newAddress>","address2":"","latitude":"<newLatitude>","longitude":"<newLongitude>","milkrun_settings":[],"is_milk_run":false}   |
+      | addressID                   | <search_value>                                                                                                                                                                                                                                                   |
+      | newLatitude                 | <newLatitude>                                                                                                                                                                                                                                                    |
+      | newLongitude                | <newLongitude>                                                                                                                                                                                                                                                   |
+      | newAddress                  | <newAddress>                                                                                                                                                                                                                                                           |
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Update Lat Long" button
     Then Operator verifies page url ends with "lat-long"
@@ -644,13 +648,13 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
-    Then Operator verifies table is filtered "lat_long" based on input in "1.23,1.23" in shipper address page
+    Then Operator verifies table is filtered "lat_long" based on input in "50.5,50.5" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
     Then Operator verifies table is filtered "pickup_address" based on input in "<newAddress>, SG, 000000" in shipper address page
 
     Examples:
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  AUTO-FM-ZONE      | AUTO-FM-VN       | 30 SenokoRd,Singapore  | 1.23        |  1.23        |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
