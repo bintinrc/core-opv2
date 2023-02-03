@@ -205,7 +205,7 @@ Feature: Shipper Address Configuration
     Examples:
       | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
-
+@Debug
   Scenario Outline: Download CSV of Address Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -222,10 +222,10 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 120 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
     And Operator clicks on the Download Addresses button
+    Then Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_(current-date).csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
@@ -242,16 +242,15 @@ Feature: Shipper Address Configuration
 
   Scenario: Download CSV of Address Pickup Type Template
     When Operator loads Shipper Address Configuration page
-    When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
     And Operator chooses start and end date on Address Creation date using the following data:
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator clicks on the Download CSV Template button
+    Then Verify that csv file is downloaded with filename: "CSV Template_Pickup Address Pickup.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
@@ -480,7 +479,6 @@ Feature: Shipper Address Configuration
       | Shipper address id 13891071 does not exist |
       | Shipper address id 13913251 does not exist |
 
-
   Scenario: Unable to Bulk Configure Some Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -515,7 +513,6 @@ Feature: Shipper Address Configuration
       | Failure Reasons |
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Shipper address id 2001389 does not exist |
-
 
   Scenario: Unable to Configure Addresses Pickup Type with Non-existent Address ID
     When Operator loads Shipper Address Configuration page
@@ -570,7 +567,6 @@ Feature: Shipper Address Configuration
       | Pickup Type Hybrid       | Hybrid       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyo123            | DYOEDIT          |
       | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
       | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

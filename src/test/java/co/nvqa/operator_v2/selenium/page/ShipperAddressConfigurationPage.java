@@ -12,6 +12,8 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -329,4 +331,18 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     editPickUpTypeButton.click();
   }
 
+  public void verifyThatCsvFileIsDownloadedWithFilenameWithDate(String fileName) {
+    Date currentDate = new Date();
+    SimpleDateFormat dateFrom = new SimpleDateFormat("ddMMMYYY");
+    String formattedDate = dateFrom.format(currentDate);
+    String expectedFileName = fileName.replace("(current-date)",formattedDate);
+    String downloadedCsvFile = getLatestDownloadedFilename(
+        expectedFileName);
+  }
+
+  public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
+    String downloadedCsvFile = getLatestDownloadedFilename(
+        fileName);
+    Assertions.assertThat(fileName.equals(downloadedCsvFile));
+  }
 }

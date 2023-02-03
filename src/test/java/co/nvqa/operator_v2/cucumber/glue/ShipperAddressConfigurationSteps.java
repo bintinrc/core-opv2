@@ -273,6 +273,15 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Verify that csv file is downloaded with filename: {string}")
+  public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
+    for (String str :filename.split("_")) {
+      if (str.equals("(current-date).csv")){
+        shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilenameWithDate(filename);
+      }
+    }
+    shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
+  }
 }
 
 
