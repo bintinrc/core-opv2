@@ -258,6 +258,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public int getNumberFromPendingPickupTile(String tileName) {
     try {
+      pause8s();
       String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
       waitWhilePageIsLoading();
       if (pageFrame.size() > 0) {

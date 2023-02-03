@@ -40,6 +40,8 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_EXISTING_SHIPMENT_SWB;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_SHIPMENT_SWB;
 import static co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage.Column.SHIPMENT_ID;
 
 @ScenarioScoped
@@ -944,6 +946,275 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
     shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.click();
     pause2s();
+  }
+
+  @When("Operator click Update Billing Number {string} on Shipment Weight Dimension page")
+  public void operatorClickUpdateBillingNumberOnShipmentWeightDimenasionPage(String billingNumberType) {
+    shipmentWeightDimensionTablePage.updateBillingNumberButton.click();
+    shipmentWeightSumUpreport.selectBillingNumberTypeDialog.waitUntilVisible();
+    switch(billingNumberType) {
+      case "MAWB":
+        shipmentWeightSumUpreport.mawbBillingNumberRadio.check();
+        shipmentWeightSumUpreport.continueUpdateBillingBtn.click();
+        break;
+      case "SWB":
+        shipmentWeightSumUpreport.swbBillingNumberRadio.check();
+        shipmentWeightSumUpreport.continueUpdateBillingBtn.click();
+        break;
+      case "BOTH":
+        shipmentWeightSumUpreport.bothBillingNumberRadio.check();
+        shipmentWeightSumUpreport.continueUpdateBillingBtn.click();
+        break;
+    }
+
+  }
+
+  @Then("Operator verify Shipment Weight Update Billing Number {string} page UI")
+  public void operatorVerifyShipmentWeightUpdateBillingNumberPageUI(String billingNumberType) {
+    shipmentWeightDimensionUpdateMawbPage.waitUntilLoaded();
+    List<String> selectedShipmentIds = get(KEY_LIST_SELECTED_SHIPMENT_IDS, new ArrayList<>());
+    //verify the table
+    if (selectedShipmentIds.size()!=0) {
+      shipmentWeightDimensionUpdateMawbPage.shipmentWeightNvTable.rows.forEach( row -> {
+        Assertions.assertThat(selectedShipmentIds)
+                .as(f("Shipment id %s is selected from previous page", row.shipmentId.getText()))
+                .contains(row.shipmentId.getText());
+      });
+    }
+
+    switch (billingNumberType) {
+      //verify UI component
+      case "MAWB":
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.backButton.isDisplayed()).as("Back button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.isDisplayed()).as("Update button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbInput.isDisplayed()).as("MAWB input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.vendorSelect.isDisplayed()).as("Vendor input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.originAirportSelect.isDisplayed()).as("Origin Airport input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.destAirportSelect.isDisplayed()).as("Destination Airport input is displayed").isTrue();
+        break;
+      case "SWB":
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.backButton.isDisplayed()).as("Back button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.isDisplayed()).as("Update button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbInput.isDisplayed()).as("SWB input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.isDisplayed()).as("Seaport Vendor input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.originSeaportSelect.isDisplayed()).as("Origin Seaport input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.destinationSeaportSelect.isDisplayed()).as("Destination Seaport input is displayed").isTrue();
+        break;
+      case "BOTH":
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.backButton.isDisplayed()).as("Back button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.isDisplayed()).as("Update button is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbInput.isDisplayed()).as("MAWB input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.vendorSelect.isDisplayed()).as("Vendor input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.originAirportSelect.isDisplayed()).as("Origin Airport input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.destAirportSelect.isDisplayed()).as("Destination Airport input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbInput.isDisplayed()).as("SWB input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.isDisplayed()).as("Seaport Vendor input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.originSeaportSelect.isDisplayed()).as("Origin Seaport input is displayed").isTrue();
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.destinationSeaportSelect.isDisplayed()).as("Destination Seaport input is displayed").isTrue();
+        break;
+    }
+  }
+
+  @When("Operator update billing number {string} information on Shipment Weight Dimension page with following data:")
+  public void operatorUpdateBillingNumberInformationOnShipmentWeightDimensionPageWithFollowingData(String billingNumberType, Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    switch(billingNumberType) {
+      case "MAWB":
+        String mawb = dataTable.get("mawb");
+        if (mawb.equalsIgnoreCase("random")) {
+          mawb = "000-"+ RandomStringUtils.randomNumeric(8, 9);
+        } else if (mawb.equalsIgnoreCase("invalid")) {
+          mawb = "000-123456";
+        } else if (mawb.equalsIgnoreCase("alfabet")) {
+          mawb ="abcdefg?";
+        } else if (mawb.equalsIgnoreCase("empty")) {
+          mawb = "";
+        }
+        put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+
+        shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
+        shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
+        shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("origin"));
+        shipmentWeightDimensionUpdateMawbPage.destAirportSelect.selectValue(dataTable.get("destination"));
+        break;
+      case "SWB":
+        String swb = dataTable.get("swb");
+        if (swb.equalsIgnoreCase("random")) {
+          swb = RandomStringUtils.randomNumeric(6);
+        } else if (swb.equalsIgnoreCase("invalid")) {
+          swb = "00112233445566";
+        } else if (swb.equalsIgnoreCase("alfabet")) {
+          swb = "abcdef";
+        } else if (swb.equalsIgnoreCase("empty")) {
+          swb = "";
+        }
+        put(KEY_MM_SHIPMENT_SWB, swb);
+
+        shipmentWeightDimensionUpdateMawbPage.swbInput.sendKeys(swb);
+        shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.selectValue(dataTable.get("seahaulVendor"));
+        shipmentWeightDimensionUpdateMawbPage.originSeaportSelect.selectValue(dataTable.get("originSeahaul"));
+        shipmentWeightDimensionUpdateMawbPage.destinationSeaportSelect.selectValue(dataTable.get("destinationSeahaul"));
+        break;
+      case "BOTH":
+        mawb = dataTable.get("mawb");
+        if (mawb.equalsIgnoreCase("random")) {
+          mawb = "000-"+ RandomStringUtils.randomNumeric(8, 9);
+        } else if (mawb.equalsIgnoreCase("invalid")) {
+          mawb = "000-123456";
+        } else if (mawb.equalsIgnoreCase("alfabet")) {
+          mawb ="abcdefg?";
+        } else if (mawb.equalsIgnoreCase("empty")) {
+          mawb = "";
+        }
+        put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+        shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
+        shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
+        shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("origin"));
+        shipmentWeightDimensionUpdateMawbPage.destAirportSelect.selectValue(dataTable.get("destination"));
+
+        swb = dataTable.get("swb");
+        if (swb.equalsIgnoreCase("random")) {
+          swb = RandomStringUtils.randomNumeric(6);
+        } else if (swb.equalsIgnoreCase("invalid")) {
+          swb = "00112233445566";
+        } else if (swb.equalsIgnoreCase("alfabet")) {
+          swb = "abcdef";
+        } else if (swb.equalsIgnoreCase("empty")) {
+          swb = "";
+        }
+        put(KEY_MM_SHIPMENT_SWB, swb);
+        shipmentWeightDimensionUpdateMawbPage.swbInput.sendKeys(swb);
+        shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.selectValue(dataTable.get("seahaulVendor"));
+        shipmentWeightDimensionUpdateMawbPage.originSeaportSelect.selectValue(dataTable.get("originSeahaul"));
+        shipmentWeightDimensionUpdateMawbPage.destinationSeaportSelect.selectValue(dataTable.get("destinationSeahaul"));
+        break;
+    }
+  }
+
+  @And("Operator verify Update Billing Number {string} has updated with new value")
+  public void operatorVerifyUpdateBillingNumberHasUpdatedWithNewValue(String billingNumberType) {
+    switch(billingNumberType) {
+      case "SWB":
+        retryIfAssertionErrorOccurred(() -> {
+          String newSwb = get(KEY_MM_SHIPMENT_SWB);
+          shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+                  row -> {
+                    Assertions.assertThat(row.billingNumber.getText())
+                            .as("SWB is updated with new value")
+                            .isEqualTo(newSwb);
+                  }
+          );
+        }, "retrying the validation", 1000, 3);
+        break;
+      case "BOTH":
+        retryIfAssertionErrorOccurred(() -> {
+          String newMawbSwb = get(KEY_MM_SHIPMENT_SWB);
+          shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+                  row -> {
+                    Assertions.assertThat(row.billingNumber.getText())
+                            .as("MAWB and SWB is updated with new value")
+                            .isEqualTo(newMawbSwb);
+                  }
+          );
+        }, "retrying the validation", 1000, 3);
+        break;
+    }
+  }
+
+  @Given("Operator take note of the existing {string}")
+  public void operatorTakeNoteOfTheExisting(String billingNumberType) {
+    switch(billingNumberType) {
+      case "MAWB":
+        String mawb = get(KEY_SHIPMENT_AWB);
+        put(KEY_EXISTING_SHIPMENT_AWB, mawb);
+        put(KEY_SHIPMENT_AWB, null);
+        put(KEY_LIST_OF_CREATED_SHIPMENT_IDS, null);
+        break;
+      case "SWB":
+        String swb = get(KEY_MM_SHIPMENT_SWB);
+        put(KEY_MM_EXISTING_SHIPMENT_SWB, swb);
+        put(KEY_MM_SHIPMENT_SWB, null);
+        put(KEY_LIST_OF_CREATED_SHIPMENT_IDS, null);
+        break;
+    }
+  }
+
+  @Then("Operator verifies Update Billing Number {string} page UI has error")
+  public void operatorVerifiesUpdateBillingNumberPageUIHasError(String billingNumberType, Map<String,String> dataTable) {
+    switch (billingNumberType) {
+      case "MAWB":
+        String errorMessage = dataTable.get("airwayBillMessage");
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled")).as("Update mawb button is disabled").isNotNull();
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbErrorInfo.isDisplayed()).as("MAWB input has error message").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.mawbErrorInfo.getText()).as("Show correct error message").isEqualTo(errorMessage);
+        }
+        break;
+      case "SWB":
+        String swbErrorMessage = dataTable.get("seawayBillMessage");
+        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled")).as("Update button is disabled").isNotNull();
+        if (swbErrorMessage != null && !swbErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.isDisplayed()).as("SWB input has error message").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.getText()).as("Show correct error message").isEqualTo(swbErrorMessage);
+        }
+
+        String emptySeahaulVendorErrorMessage = dataTable.get("emptySeahaulVendorErrorMessage");
+        if (emptySeahaulVendorErrorMessage != null && !emptySeahaulVendorErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.isDisplayed()).as("Empty seahaul vendor error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.getText()).as("Showing empty seahaul vendor error message").isEqualTo(emptySeahaulVendorErrorMessage);
+        }
+
+        String emptyOriginSeaportErrorMessage = dataTable.get("emptyOriginSeaportErrorMessage");
+        if (emptyOriginSeaportErrorMessage != null && !emptyOriginSeaportErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message").isEqualTo(emptyOriginSeaportErrorMessage);
+        }
+
+        String emptyDestinationSeaportErrorMessage = dataTable.get("emptyDestinationSeaportErrorMessage");
+        if (emptyDestinationSeaportErrorMessage != null && !emptyDestinationSeaportErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Empty destination seaport error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing empty destination seaport error message").isEqualTo(emptyDestinationSeaportErrorMessage);
+        }
+
+        String sameOriginDestinationSeaportErrorMessage = dataTable.get("sameOriginDestinationSeaportErrorMessage");
+        if (sameOriginDestinationSeaportErrorMessage != null && !sameOriginDestinationSeaportErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown on Origin Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message on Origin Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Same origin and destination seaport error message is shown on Destination Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing same origin and destination seaport error message on Destination Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
+        }
+        break;
+    }
+  }
+
+  @And("Operator clicks clear {string} button on {string} Shipment Weight Dimension page")
+  public void operatorClicksClearButtonOnShipmentWeightDimensionPage(String inputField, String billingNumberType) {
+    switch (billingNumberType) {
+      case "Update Seaway Bill":
+        if(inputField.equalsIgnoreCase("Sea Haul Vendor")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearSeahaulVendorButton.click();
+        } else if(inputField.equalsIgnoreCase("Origin Seaport")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearOriginSeaportButton.click();
+        } else if(inputField.equalsIgnoreCase("Destination Seaport")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearDestinationSeaportButton.click();
+        }
+        break;
+      case "Update Airway Bill":
+        if(inputField.equalsIgnoreCase("Air Haul Vendor")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearAirhaulVendorButton.click();
+        } else if(inputField.equalsIgnoreCase("Origin Airport")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearOriginAirportButton.click();
+        } else if(inputField.equalsIgnoreCase("Destination Airport")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.clearDestinationAirportButton.click();
+        }
+          break;
+    }
   }
 }
 
