@@ -90,7 +90,7 @@ Feature: bulk route on pickup jobs page
     Then Operator check 2 driver with name = "{KEY_LIST_OF_CREATED_ROUTES[2].driver.firstName}"
     Then Operator check 2 tags with name = "Routed"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario:Bulk Update PA Job - Route ID - Update route In Progress
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
