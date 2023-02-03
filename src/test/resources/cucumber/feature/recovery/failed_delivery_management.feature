@@ -150,6 +150,72 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     |
       | Return       | Return     |
 
+  @RescheduleFailedDelivery
+  Scenario Outline:Operator - Reschedule Failed Delivery - Single Order - Latest Scan = Route Inbound Scan - <Dataset_Name>
+    Given API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                 |
+      | v4OrderRequest      | { "service_type":"<order_type>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver failed the delivery of the created parcel
+    When Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}             |
+      | fetchBy      | FETCH_BY_ROUTE_ID      |
+      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    And Operator click 'I have completed photo audit' button on Route Inbound page
+    And Operator scan a tracking ID of created order on Route Inbound page
+    Then Operator verify the Route Inbound Details is correct using data below:
+      | parcelProcessedScans       | 1 |
+      | parcelProcessedTotal       | 1 |
+      | failedDeliveriesValidScans | 1 |
+      | failedDeliveriesValidTotal | 1 |
+    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Recovery User - Wait until FDM Page loaded completely
+    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When Recovery User - reschedule failed delivery order on next day
+    Then Recovery User - verifies that toast displayed with message below:
+      | message     | Order Rescheduling Success       |
+      | description | Success to reschedule 1 order(s) |
+    And Operator waits for 5 seconds
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+
+    Examples:
+      | Dataset_Name | order_type |
+      | Normal       | Parcel     |
+      | Return       | Return     |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
