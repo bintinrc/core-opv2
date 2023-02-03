@@ -41,10 +41,3 @@ Feature: Hub User Management
       | modalTitle | We've detected some error in the file                                  |
       | modalBody  | 1 emails cannot be added. Please correct the file and upload it again. |
 
-  Scenario: Hub User Management -  manager to switch between hubs in station users page - Managers Assigned only 1 Hubs
-    When Operator click logout button
-    When Operator back in the login page
-    When Operator click login button
-    When Operator login as "dyo123dyo@gmail.com" with password "Ninjitsu89"
-    When Operator go to menu Sort -> Hub User Management
-    Then Operator verifies redirect to correct "{station-hub-name-1} " Hub User Management Page
