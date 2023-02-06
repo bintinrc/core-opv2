@@ -1123,7 +1123,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         }
         page.bulkUpdateSuccess.submitButton.click();
         page.bulkUpdateSuccess.submitButton.waitUntilInvisible();
-      }, 1000, 1);
+      }, 1000, 2);
 
     });
   }

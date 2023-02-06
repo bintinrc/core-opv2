@@ -824,6 +824,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     @FindAll(@FindBy(css = "[data-testid = 'successReason.photoSelect']"))
     public List<FileInput> proofUploadFiles;
+    
     String SUCCESS_JOB_PAGE_ERROR_XPATH = "//tr[@data-row-key='%s']//following-sibling::tr[1]";
 
     public String getErrorMessage(String jobId) {
