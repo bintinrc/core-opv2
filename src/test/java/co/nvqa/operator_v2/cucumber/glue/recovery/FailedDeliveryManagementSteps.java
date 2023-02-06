@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue.recovery;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage;
@@ -10,8 +9,6 @@ import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPa
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +209,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
         .collect(Collectors.toList());
 
     failedDeliveryManagementReactPage.inFrame(() -> {
-      failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds, rescheduleDate);
+      failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds,
+          rescheduleDate);
       failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
     });
   }
