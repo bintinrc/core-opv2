@@ -70,7 +70,7 @@ Feature: Failed Delivery Management Page - Action Feature
     When Recovery User - clicks "Show Only Selected" button on Failed Delivery Management page
     Then Recovery User - verify the number of selected Failed Delivery rows is "1"
 
-  @ActionFeature
+  @ActionFeature @ForceSuccessOrder
   Scenario: Operator - Download and Verify CSV File
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
@@ -97,7 +97,7 @@ Feature: Failed Delivery Management Page - Action Feature
     And Recovery User - Download CSV file of failed delivery order on Failed Delivery orders list
     And Recovery User - verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
 
-  @RescheduleFailedDelivery
+  @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Next Day - <Dataset_Name>
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -150,7 +150,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     |
       | Return       | Return     |
 
-  @RescheduleFailedDelivery
+  @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario Outline:Operator - Reschedule Failed Delivery - Single Order - Latest Scan = Route Inbound Scan - <Dataset_Name>
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -215,7 +215,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | Normal       | Parcel     |
       | Return       | Return     |
 
-  @RescheduleFailedDelivery
+  @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario Outline: Operator - Reschedule Failed Delivery - Single Order - on Specific Date - <Dataset_Name>
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                 |
@@ -243,6 +243,7 @@ Feature: Failed Delivery Management Page - Action Feature
     Then Recovery User - verifies that toast displayed with message below:
       | message     | Order Rescheduling Success       |
       | description | Success to reschedule 1 order(s) |
+    And Recovery User - verify CSV file downloaded after reschedule
     And Operator waits for 5 seconds
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
@@ -269,6 +270,85 @@ Feature: Failed Delivery Management Page - Action Feature
       | Dataset_Name | order_type |
       | Normal       | Parcel     |
       | Return       | Return     |
+
+  @RescheduleFailedDelivery @ForceSuccessOrder
+  Scenario: Operator - Reschedule Failed Delivery - Multiple Orders
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
+    And API Driver failed the delivery of multiple parcels
+    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Recovery User - Wait until FDM Page loaded completely
+    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Recovery User - selects 1 rows on Failed Delivery Management page
+    When Recovery User - Clear the TID filter
+    And Recovery User - Search failed orders by trackingId = "{KEY_LIST_OF_CREATED_ORDERS[2].trackingId}"
+    And Recovery User - selects 1 rows on Failed Delivery Management page
+    When Recovery User - Clear the TID filter
+    When Recovery User - clicks "Show Only Selected" button on Failed Delivery Management page
+    And Recovery User - Reschedule Selected failed delivery order on Failed Delivery orders list
+    And Recovery User - set reschedule date to "{gradle-next-2-day-yyyy-MM-dd}"
+    Then Recovery User - verifies that toast displayed with message below:
+      | message     | Order Rescheduling Success       |
+      | description | Success to reschedule 2 order(s) |
+    And Recovery User - verify CSV file downloaded after reschedule
+    And Operator waits for 5 seconds
+
+    #Verify first failed order
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[1].toName} |
+
+    #Verify Second failed order
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name | RESCHEDULE |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And Operator verify transaction on Edit order page using data below:
+      | type    | DELIVERY                              |
+      | status  | FAIL                                  |
+      | driver  | {ninja-driver-name}                   |
+      | routeId | {KEY_CREATED_ROUTE_ID}                |
+      | dnr     | NORMAL                                |
+      | name    | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
+    And Operator verify transaction on Edit order page using data below:
+      | type   | DELIVERY                              |
+      | status | PENDING                               |
+      | dnr    | NORMAL                                |
+      | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

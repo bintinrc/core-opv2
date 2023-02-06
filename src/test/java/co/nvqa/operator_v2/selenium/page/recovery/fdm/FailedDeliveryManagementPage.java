@@ -4,7 +4,9 @@ import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
@@ -45,6 +47,7 @@ public class FailedDeliveryManagementPage extends
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
+  public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv.csv";
 
   public FailedDeliveryTable fdmTable;
 
@@ -71,6 +74,9 @@ public class FailedDeliveryManagementPage extends
 
     @FindBy(css = "[data-testid='virtual-table.show-only-selected']")
     public PageElement showOnlySelected;
+
+    @FindBy(xpath = ".//span[@class='ant-input-suffix']")
+    public PageElement clearFilter;
 
     public static final String ACTION_SELECT = "Select row";
     public static final String ACTION_RESCHEDULE = "Reschedule next day";
@@ -113,6 +119,10 @@ public class FailedDeliveryManagementPage extends
       filterTableByColumn(XPATH_SHIPPER_NAME_FILTER_INPUT, columName, value);
     }
 
+    public void clearTIDFilter() {
+      clearFilter.click();
+    }
+
     public List<String> getFilteredValue() {
       final String FILTERED_TABLE_XPATH = "//div[contains(@class ,'BaseTable__row')]//div[@class='BaseTable__row-cell']";
       return findElementsByXpath(FILTERED_TABLE_XPATH).stream().map(WebElement::getText)
@@ -125,6 +135,7 @@ public class FailedDeliveryManagementPage extends
             value);
       }, 1000, 5);
     }
+
   }
 
   public void verifyBulkSelectResult() {

@@ -44,6 +44,13 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
         page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
   }
 
+  @When("Recovery User - Clear the TID filter")
+  public void doClearTIDFilter() {
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      page.fdmTable.clearTIDFilter();
+    });
+  }
+
   @Then("Recovery User - verify failed delivery table on FDM page:")
   public void doverifyFdmTable(Map<String, String> dataTable) {
     FailedDelivery expected = new FailedDelivery(resolveKeyValues(dataTable));
@@ -142,6 +149,15 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     });
   }
 
+  @Then("Recovery User - verify CSV file downloaded after reschedule")
+  public void verifyCsvFileDownloadedAfterReschedule() {
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      final String fileName = page.getLatestDownloadedFilename(
+          FailedDeliveryManagementPage.RESCHEDULE_CSV_FILENAME_PATTERN);
+      page.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
   @When("Recovery User - reschedule failed delivery order on next day")
   public void doRescheduleFailedDeliveryOrderOnNextDay() {
     failedDeliveryManagementReactPage.inFrame((page) -> {
@@ -173,7 +189,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   }
 
   @When("Recovery User - set reschedule date to {string}")
-  public void doSetRescheduleDate(String date){
+  public void doSetRescheduleDate(String date) {
     failedDeliveryManagementReactPage.inFrame((page) -> {
       page.rescheduleDialog.setRescheduleDate(resolveValue(date));
       page.rescheduleDialog.rescheduleButton.click();
