@@ -333,5 +333,5 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     String downloadedCsvFile = getLatestDownloadedFilename(
         fileName);
     Assertions.assertThat(fileName.equals(downloadedCsvFile));
-  }
+ }
 }
