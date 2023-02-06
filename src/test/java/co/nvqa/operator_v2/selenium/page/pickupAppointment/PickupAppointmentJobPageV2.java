@@ -86,6 +86,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   @FindBy(xpath = "//div[@class='ant-drawer-content']//h5[contains(text(),'Bulk update route ID')]//ancestor::div[@class='ant-drawer-content']")
   public EditJobRouteModal editJobRouteModal;
 
+  @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Bulk remove route')]")
+  public RemoveJobRouteModal removeJobRouteModal;
+
+
   @FindBy(xpath = "//button//span[@text =]")
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
@@ -503,6 +507,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Route ID')]")
     public PageElement routeId;
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]")
+    public PageElement removeRoute;
+
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]//ancestor::li[contains(@class,'ant-dropdown-menu-item')]")
+    public PageElement removeRouteMenuItem;
+
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
@@ -516,6 +526,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String BULK_UPDATE_ITEMS = "//div[contains(@class,'ant-dropdown') and not(contains(@class,'ant-dropdown-hidden'))]//span[text() = '%s']/ancestor::li";
     public final String PICKUP_JOB_ROW_ROUTE = "//a[@data-testid='navigatorLink' and contains(text(),'%s')]";
     public final String PICKUP_JOB_ROW_DRIVER = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+
+    public boolean removeRouteStatus() {
+      
+      return Boolean.parseBoolean(removeRouteMenuItem.getAttribute("aria-disabled"));
+
+    }
 
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
@@ -726,6 +742,19 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+
+  public static class RemoveJobRouteModal extends AntModal {
+
+    public RemoveJobRouteModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//span[text()='Submit']/parent::button")
+    public Button submitButton;
+
+
+  }
 
   public static class EditJobRouteModal extends AntModal {
 
