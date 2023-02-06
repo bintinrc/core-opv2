@@ -79,6 +79,9 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@data-testid='station-pending-pickup-jobs_table_empty-data']")
   private PageElement noPendingPickupRecords;
 
+  @FindBy(xpath = "//span[text()='Parcels to Pickup']/parent::div")
+  private PageElement sortParcelToPickup;
+
   public void switchToFrame() {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
@@ -181,5 +184,12 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     switchToFrame();
     Assertions.assertThat(noPendingPickupRecords.isDisplayed())
         .as("Validation for presence of No Pending pickups").isTrue();
+  }
+
+  public void clickSortParcelsToPick() {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    sortParcelToPickup.click();
   }
 }

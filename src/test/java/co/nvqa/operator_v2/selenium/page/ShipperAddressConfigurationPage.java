@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
   private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//input";
+  private static final String MODAL_TABLE_SEARCH_BY_TABLE_CHECKBOX = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//span[@role='button']";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
   public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
   public static final String COLUMN_NAME = "Suggested Address URL";
@@ -165,10 +166,14 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void filterValue(String filterName, String filterValue) {
-
     String stationNameSearchXpath = f(MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH, filterName);
+    String checkBoxXpath = f(MODAL_TABLE_SEARCH_BY_TABLE_CHECKBOX , filterName);
     WebElement searchBox = getWebDriver().findElement(By.xpath(stationNameSearchXpath));
+    WebElement checkBox = getWebDriver().findElement(By.xpath(checkBoxXpath));
     waitUntilVisibilityOfElementLocated(searchBox);
+    if(checkBox.isDisplayed()) {
+      checkBox.click();
+    }
     searchBox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
     searchBox.sendKeys(filterValue);
   }
@@ -236,7 +241,7 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void validateUploadSuccessMessageIsShown(String errorCount) {
-    pause1s();
+    waitUntilVisibilityOfElementLocated(getWebDriver().findElement(By.xpath(f(UPLOAD_SUCCESS_MESSAGE, errorCount))));
     String errorXpath = f(UPLOAD_SUCCESS_MESSAGE, errorCount);
     WebElement successMessage = getWebDriver().findElement(By.xpath(errorXpath));
     Assertions.assertThat(successMessage.isDisplayed()).as("Validation for Upload Success message")

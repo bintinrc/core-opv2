@@ -27,7 +27,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -35,7 +35,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
 #    https://studio.cucumber.io/projects/210778/test-plan/folders/2095313/scenarios/6905699
   @DeleteShipments
@@ -58,7 +58,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -66,7 +66,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
 #    https://studio.cucumber.io/projects/210778/test-plan/folders/2095313/scenarios/6905704
   @DeleteShipments
@@ -89,7 +89,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -99,7 +99,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
 #    https://studio.cucumber.io/projects/210778/test-plan/folders/2095313/scenarios/6905707
   @DeleteShipments
@@ -122,7 +122,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -132,7 +132,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
 #    https://studio.cucumber.io/projects/210778/test-plan/folders/2095313/scenarios/6905708
   @DeleteShipments
@@ -155,7 +155,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -165,7 +165,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
 #    https://studio.cucumber.io/projects/210778/test-plan/folders/2095313/scenarios/6905709
   @DeleteShipments
@@ -188,7 +188,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click sum up button on Shipment Weight Dimension page
@@ -198,7 +198,7 @@ Feature: Sum Up Report
     When Operator select all rows from the shipment sum up report table
     And Operator click on Download Full Report button on shipment sum up report table
     Then Operator verify the downloaded CSV Sum Up report file is contains the correct values
-      | header | "No","Origin Hub","Destination hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","Comments" |
+      | header | "No","Origin Hub","Destination Hub","Shipment ID","Weight (kg)","kgV","Length","Width","Height","No. of parcels","Status","MAWB","SWB","Air Haul Vendor","Sea Haul Vendor","Origin Airport","Origin Seaport","Destination Airport","Destination Seaport","Comments" |
 
   @DeleteShipments
   Scenario: Select Some SID from Shipment Weight Dimension table and Remove All SID of Sum Up Report
@@ -220,7 +220,7 @@ Feature: Sum Up Report
       | numberOfShipments | 5            |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator filter Shipment Weight Dimension Table by "mawb" column with first shipment value
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 5 |
     And Operator select 4 rows from the shipment weight table
     When Operator click sum up button on Shipment Weight Dimension page
