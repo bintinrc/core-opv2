@@ -13,9 +13,9 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
+import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
-import co.nvqa.operator_v2.selenium.page.ToastInfo;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -836,15 +836,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   }
 
   public void setProofUploadFile() {
-//    System.out.println("File path is:  " + FILEPATH);
-//    String fullPath = "D:\\test1.jpg";
     String FILENAME = RandomStringUtils.randomAlphanumeric(3, 8) + ".png";
     String fullPath = FILEPATH + FILENAME;
     createRandomImage(fullPath);
-//      proofUploadFiles.get(0).waitUntilVisible();
     bulkUpdateSuccess.proofUploadFiles.forEach(
         proofUploadFile -> proofUploadFile.setValue(fullPath));
-
   }
 
   private void createRandomImage(String fullPath) {
@@ -864,7 +860,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
         img.setRGB(x, y, p);
       }
     }
-
     try {
       f = new File(fullPath);
       ImageIO.write(img, "png", f);
