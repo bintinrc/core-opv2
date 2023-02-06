@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue.recovery;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPage;
@@ -9,8 +10,12 @@ import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPa
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 
 public class FailedDeliveryManagementSteps extends AbstractSteps {
@@ -90,6 +95,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.showOnlySelected.click();
           break;
+        case "CSV Reschedule":
+          page.csvReschedule.click();
       }
     });
   }
@@ -193,6 +200,20 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
     failedDeliveryManagementReactPage.inFrame((page) -> {
       page.rescheduleDialog.setRescheduleDate(resolveValue(date));
       page.rescheduleDialog.rescheduleButton.click();
+    });
+  }
+
+  @When("Recovery User - Reschedule failed orders with CSV")
+  public void doRescheduleByCSV(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String rescheduleDate = dataTable.get("reschedule_date");
+    List<String> trackingIds = Arrays.stream(dataTable.get("tracking_ids").split(","))
+        .map(String::trim)
+        .collect(Collectors.toList());
+
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds, rescheduleDate);
+      failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
     });
   }
 }

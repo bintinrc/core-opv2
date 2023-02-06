@@ -1,15 +1,19 @@
 package co.nvqa.operator_v2.selenium.page.recovery.fdm;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -45,11 +49,17 @@ public class FailedDeliveryManagementPage extends
   @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
   public RescheduleDialog rescheduleDialog;
 
+  @FindBy(xpath = "//button//span[contains(text(),'CSV Reschedule')]")
+  public PageElement csvReschedule;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title']")
+  public UploadCSVDialog uploadCSVDialog;
+
+  public FailedDeliveryTable fdmTable;
+
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
   public static final String RESCHEDULE_CSV_FILENAME_PATTERN = "delivery-reschedule.csv.csv";
-
-  public FailedDeliveryTable fdmTable;
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
@@ -169,4 +179,31 @@ public class FailedDeliveryManagementPage extends
       return this;
     }
   }
+
+  public static class UploadCSVDialog extends AntModal {
+
+    @FindBy(xpath = "//button//span[contains(text(),'Upload')]")
+    public Button upload;
+
+    public UploadCSVDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public void generateRescheduleCSV(List<String> trackingIds, String rescheduleDate) {
+      String csvContents = trackingIds.stream()
+          .map(trackingId -> trackingId + "," + rescheduleDate)
+          .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+
+      csvContents = "tracking_id,delivery_date" + System.lineSeparator() + csvContents;
+
+      File csvFile = createFile(
+          String.format("csv_reschedule_%s.csv", StandardTestUtils.generateDateUniqueString()),
+          csvContents);
+
+      WebElement upload = getWebDriver().findElement(
+          By.xpath("//div//p[contains(text(),'Drag and drop here')]"));
+      dragAndDrop(csvFile, upload);
+    }
+  }
+
 }
