@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
@@ -579,6 +581,16 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Port Name Filter appear in Port list table").isTrue();
     Assertions.assertThat(portCityFilter.isDisplayed())
         .as("Port City Filter appear in Port list table").isTrue();
+
+    // Goes right until the rest of the filter is displayed
+    while(!portLatitudeLongitudeFilter.isDisplayedFast()) {
+      LOGGER.info("Can't find latlong filter, going right...");
+      portCityFilter.click();
+      portCityFilter.sendKeys(Keys.TAB);
+      portRegionFilter.click();
+      portRegionFilter.sendKeys(Keys.TAB);
+    }
+
     Assertions.assertThat(portRegionFilter.isDisplayed())
         .as("Port Region Filter appear in Port list table").isTrue();
     Assertions.assertThat(portLatitudeLongitudeFilter.isDisplayed())
