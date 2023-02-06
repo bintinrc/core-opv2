@@ -205,7 +205,7 @@ Feature: Shipper Address Configuration
     Examples:
       | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
-@Debug
+
   Scenario Outline: Download CSV of Address Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -225,7 +225,7 @@ Feature: Shipper Address Configuration
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
     And Operator clicks on the Download Addresses button
-    Then Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_(current-date).csv"
+    Then Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_<date>.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
@@ -237,9 +237,10 @@ Feature: Shipper Address Configuration
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
 
     Examples:
-      | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
+      | search_field | search_value                                     | column_datakey     | pickupTypeSelect | date                           |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    | {date: 0 days next, ddMMMYYYY} |
 
+  @Debug
   Scenario: Download CSV of Address Pickup Type Template
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
@@ -452,7 +453,6 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
     Then Operator verifies table is filtered "zones" based on input in "-" in shipper address page
-
 
   Scenario: Unable to Bulk Configure All Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
