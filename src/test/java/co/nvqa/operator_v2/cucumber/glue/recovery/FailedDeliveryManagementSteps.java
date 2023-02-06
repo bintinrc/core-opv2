@@ -163,4 +163,20 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       }, 5);
     });
   }
+
+  @Then("Recovery User - Reschedule Selected failed delivery order on Failed Delivery orders list")
+  public void doRescheduleSelectedFailedDeliveryOrder() {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.applyAction.click();
+      failedDeliveryManagementReactPage.rescheduleSelected.click();
+    });
+  }
+
+  @When("Recovery User - set reschedule date to {string}")
+  public void doSetRescheduleDate(String date){
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rescheduleDialog.setRescheduleDate(resolveValue(date));
+      page.rescheduleDialog.rescheduleButton.click();
+    });
+  }
 }

@@ -4,14 +4,16 @@ import co.nvqa.operator_v2.model.FailedDelivery;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,21 +31,27 @@ public class FailedDeliveryManagementPage extends
   @FindBy(css = "[data-testid='fdm.apply-action.download-csv-file']")
   public PageElement downloadCsvFileAction;
 
+  @FindBy(css = "[data-testid='fdm.apply-action.reschedule-selected']")
+  public PageElement rescheduleSelected;
+
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement notifMessage;
 
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement notifDescription;
 
+  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  public RescheduleDialog rescheduleDialog;
+
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FDM_CSV_FILENAME_PATTERN = "failed-delivery-list.csv";
+
+  public FailedDeliveryTable fdmTable;
 
   public FailedDeliveryManagementPage(WebDriver webDriver) {
     super(webDriver);
     fdmTable = new FailedDeliveryTable(webDriver);
   }
-
-  public FailedDeliveryTable fdmTable;
 
   public static class FailedDeliveryTable extends AntTableV2<FailedDelivery> {
 
@@ -128,5 +136,26 @@ public class FailedDeliveryManagementPage extends
     Assertions.assertThat(ShowingResults).as("Number of selected rows are the same")
         .contains(numberOfSelectedRows);
     KEY_SELECTED_ROWS_COUNT = numberOfSelectedRows;
+  }
+
+  public static class RescheduleDialog extends AntModal {
+
+    @FindBy(css = "[data-testid='reschedule-date']")
+    public PageElement rescheduleDate;
+
+    @FindBy(xpath = "//div[@class='ant-row']//button[contains(@class,'nv-button-inner')]//span[contains(text(),'Reschedule')]")
+    public Button rescheduleButton;
+
+    public RescheduleDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public RescheduleDialog setRescheduleDate(String value) {
+      if (value != null) {
+        rescheduleDate.sendKeys(StringUtils.repeat(Keys.BACK_SPACE.toString(), 10));
+        rescheduleDate.sendKeys(value + Keys.ENTER);
+      }
+      return this;
+    }
   }
 }
