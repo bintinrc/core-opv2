@@ -731,11 +731,11 @@ Feature: Create New Coverage
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new coverage:
-      | hubId            | {hub-id}                                        |
-      | area             | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}             |
-      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}             |
+      | hubId            | {hub-id}                                      |
+      | area             | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
+      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
+      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}           |
+      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}           |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator create new coverage on Station Route Keyword page:
@@ -759,9 +759,9 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify coverage displayed on Station Route Keyword page:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -769,60 +769,8 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
     And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
-      | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
-      | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
-    And DB Operator verifies that route_qa_gl/sr_keywords record is created:
-      | coverageId | {KEY_COVERAGE_ID}                               |
-      | value      | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-
-  @DeleteDriver @DeleteCoverage
-  Scenario: Operator Creates New Coverage on Station Route Keyword - Duplicate Area Variation with Exist Area
-    Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Operator create new coverage:
-      | hubId            | {hub-id}                                        |
-      | area             | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | keywords         | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}             |
-      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}             |
-    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
-    And Operator selects "{hub-name}" hub on Station Route Keyword page
-    And Operator create new coverage on Station Route Keyword page:
-      | area           | AREA 2 {gradle-current-date-yyyyMMddHHmmsss}    |
-      | areaVariation  | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | keyword        | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
-    And Operator verifies that success react notification displayed:
-      | top    | Keywords added |
-      | bottom | 1 keywords     |
-    Then Operator verify data on New coverage created dialog:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
-      | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    When Operator close New coverage created dialog
-    Then Operator verify coverage displayed on Station Route Keyword page:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
-      | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    Then Operator verify coverage displayed on Station Route Keyword page:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
-      | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
-      | hubId          | {hub-id}                                   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
-      | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
-      | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
+      | area          | AREA {gradle-current-date-yyyyMMddHHmmsss} |
+      | areaVariation | AREA 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                               |

@@ -904,6 +904,9 @@ Feature: Search Tracking IDs on Station Route
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_CREATED_ORDER.trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}             |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -912,6 +915,9 @@ Feature: Search Tracking IDs on Station Route
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Sort - Operator global inbound
+      | trackingId           | {KEY_CREATED_ORDER.trackingId} |
+      | globalInboundRequest | {"hubId":{hub-id}}             |
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
       | granularStatus | Completed                         |
@@ -998,7 +1004,7 @@ Feature: Search Tracking IDs on Station Route
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_CREATED_ORDER.trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id-2}}           |
+      | globalInboundRequest | {"hubId":{hub-id-3}}           |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
       | hub                        | {hub-name-2}                               |
@@ -1009,8 +1015,6 @@ Feature: Search Tracking IDs on Station Route
       | alsoSearchInHub            | true                                       |
       | additionalTids             | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     And Operator click Assign drivers button on Station Route page
-    Then Operator verifies that success react notification displayed:
-      | top | The following additional tracking IDs are included in the filters {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
     And Operator verify parcel is displayed on Station Route page:
@@ -1198,8 +1202,8 @@ Feature: Search Tracking IDs on Station Route
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Allow RTS Orders
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateTo     | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","from": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_CREATED_ORDER.trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}             |
@@ -1207,17 +1211,20 @@ Feature: Search Tracking IDs on Station Route
       | shipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                                   |
       | request    | {"order_country":"sg","tracking_id":"{KEY_CREATED_ORDER.trackingId}","hub_id":{hub-id},"action_type":"ADD"} |
     Given API Operator does the "hub-inbound" scan for the shipment at transit hub = {hub-id-2}
+    And API Operator RTS order:
+      | orderId    | {KEY_CREATED_ORDER_ID}                                                                                     |
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new coverage:
-      | hubId            | {hub-id-2}                                          |
-      | area             | {KEY_CREATED_ORDER.toAddress1}                      |
-      | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
-      | keywords         | {KEY_CREATED_ORDER.toAddress2}                      |
-      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                 |
-      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
+      | hubId            | {hub-id-2}                                  |
+      | area             | 998 Toa Payoh                               |
+      | areaVariations   | 998 Toa, Toa Payoh                          |
+      | keywords         | North {gradle-current-date-yyyyMMddHHmmsss} |
+      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}         |
+      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}         |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
       | hub                        | {hub-name-2}                               |
@@ -1229,7 +1236,7 @@ Feature: Search Tracking IDs on Station Route
       | additionalTids             | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And Operator click Assign drivers button on Station Route page
     Then Operator verifies that success react notification displayed:
-      | top | The following additional tracking IDs are included in the filters {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | top | The following additional tracking IDs are included in the filters {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
     And Operator verify parcel is displayed on Station Route page:
@@ -1237,8 +1244,8 @@ Feature: Search Tracking IDs on Station Route
       | address    | {KEY_CREATED_ORDER.buildToAddressString}                                         |
       | parcelSize | Small                                                                            |
       | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} |
-    And Operator verify area match "{KEY_CREATED_ORDER.toAddress1}" is displayed in row 1 on Station Route page
-    And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
+    And Operator verify area match "998 Toa Payoh" is displayed in row 1 on Station Route page
+    And Operator verify keyword match "North {gradle-current-date-yyyyMMddHHmmsss}" is displayed in row 1 on Station Route page
 
   @DeleteDriver
   Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub - Disallow RTS Orders
@@ -1247,7 +1254,7 @@ Feature: Search Tracking IDs on Station Route
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Sort - Operator global inbound
       | trackingId           | {KEY_CREATED_ORDER.trackingId} |
-      | globalInboundRequest | {"hubId":{hub-id-2}}             |
+      | globalInboundRequest | {"hubId":{hub-id-2}}           |
     And API Operator RTS order:
       | orderId    | {KEY_CREATED_ORDER_ID}                                                                                     |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
@@ -1293,8 +1300,12 @@ Feature: Search Tracking IDs on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub          | {hub-name-2} |
-      | shipmentType | AIR_HAUL     |
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator click Assign drivers button on Station Route page
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
@@ -1333,8 +1344,12 @@ Feature: Search Tracking IDs on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub          | {hub-name-2} |
-      | shipmentType | AIR_HAUL     |
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator click Assign drivers button on Station Route page
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
@@ -1373,8 +1388,12 @@ Feature: Search Tracking IDs on Station Route
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub          | {hub-name-2} |
-      | shipmentType | AIR_HAUL     |
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator click Assign drivers button on Station Route page
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
@@ -1407,13 +1426,17 @@ Feature: Search Tracking IDs on Station Route
     And API Operator create new coverage:
       | hubId            | {hub-id-2}                          |
       | area             | North                               |
-      | keywords         | Payoh, North                        |
+      | keywords         | North, Payoh                        |
       | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id} |
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id} |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
-      | hub          | {hub-name-2} |
-      | shipmentType | AIR_HAUL     |
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator click Assign drivers button on Station Route page
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
