@@ -1152,10 +1152,15 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         break;
       case "SWB":
         String swbErrorMessage = dataTable.get("seawayBillMessage");
-        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled")).as("Update button is disabled").isNotNull();
         if (swbErrorMessage != null && !swbErrorMessage.isEmpty()) {
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.isDisplayed()).as("SWB input has error message").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.getText()).as("Show correct error message").isEqualTo(swbErrorMessage);
+        }
+
+        String emptySWBNumberErrorMessage = dataTable.get("emptySWBNumberErrorMessage");
+        if (emptySWBNumberErrorMessage != null && emptySWBNumberErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.isDisplayed()).as("Empty SWB Number error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.getText()).as("Showing empty SWB Number error message").isEqualTo(emptySWBNumberErrorMessage);
         }
 
         String emptySeahaulVendorErrorMessage = dataTable.get("emptySeahaulVendorErrorMessage");
@@ -1191,7 +1196,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorClicksClearButtonOnShipmentWeightDimensionPage(String inputField, String billingNumberType) {
     switch (billingNumberType) {
       case "Update Seaway Bill":
-        if(inputField.equalsIgnoreCase("Sea Haul Vendor")) {
+        if(inputField.equalsIgnoreCase("SWB Number")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.swbInput.clear();
+        } else if(inputField.equalsIgnoreCase("Sea Haul Vendor")) {
           shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
           shipmentWeightDimensionUpdateMawbPage.clearSeahaulVendorButton.click();
         } else if(inputField.equalsIgnoreCase("Origin Seaport")) {

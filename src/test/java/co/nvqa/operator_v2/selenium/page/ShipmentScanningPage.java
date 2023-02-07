@@ -418,9 +418,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
-    pause1s();
-    removeTrackingIdField.sendKeys(firstTrackingId);
-    pause1s();
+    removeTrackingIdField.pause3s();
+    removeTrackingIdField.sendKeysAndEnterNoXpath(firstTrackingId);
+    removeTrackingIdField.pause10s();
     String statusCardText = findElementByXpath(XPATH_STATUS_CARD_BOX).getText();
     Assertions.assertThat(statusCardText.toLowerCase()).as("Invalid contained").contains("invalid");
     Assertions.assertThat(statusCardText.toLowerCase()).as("Not in Shipment  contained")

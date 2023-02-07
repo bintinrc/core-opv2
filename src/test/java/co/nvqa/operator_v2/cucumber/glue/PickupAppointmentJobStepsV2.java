@@ -356,6 +356,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         case "Route ID":
           pickupAppointmentJobPage.bulkSelect.routeId.click();
           break;
+        case "Remove route":
+          pickupAppointmentJobPage.bulkSelect.removeRoute.click();
+          break;
       }
     });
   }
@@ -1070,6 +1073,92 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         pickupAppointmentJobPage.editJobRouteModal.ApplyThisIdToAll.click();
       }, 1000, 5);
 
+    });
+  }
+
+  @When("Operator click on submit button in bulk remove route modal")
+  public void clickSubminInBulkRemoveRoute() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.removeJobRouteModal.submitButton.click();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator check Remove route button is disabled on Pickup Jobs page")
+  public void clickBulkRemoveRouteButtonDisabled() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+
+        Assertions.assertThat(pickupAppointmentJobPage.bulkSelect.removeRouteStatus())
+            .as("Remove route button is disabled").isTrue();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator clicks option {string} of Bulk Update on Pickup Jobs page")
+  public void clickOptionOfBulkUpdate(String optionName) {
+    pickupAppointmentJobPage.inFrame(page ->
+        page.bulkSelect.clickBulkUpdateOption(optionName));
+  }
+
+  @Then("Operator verifies error message of {string} on Bulk Update Success Job page")
+  public void operatorVerifiesMessageOnSuccessJobPage(String jobIdAsText, String message) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String expectedMessage = resolveValue(message);
+        String jobId = resolveValue(jobIdAsText);
+        String actualMessage = pickupAppointmentJobPage.bulkUpdateSuccess.getErrorMessage(jobId);
+        Assertions.assertThat(actualMessage.trim()).as("Error message is the same")
+            .isEqualToIgnoringCase(expectedMessage.trim());
+      }, 1000, 2);
+
+    });
+  }
+
+  @Then("Operator verifies Submit button is {string} on Bulk Update Success Job page")
+  public void operatorVerifiesSubmitButtonStatus(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        switch (status) {
+          case "enable":
+            Assertions.assertThat(page.bulkUpdateSuccess.submitButton.getAttribute("disabled"))
+                .as("Button is enable").isEqualTo(null);
+            break;
+          case "disable":
+            Assertions.assertThat(page.bulkUpdateSuccess.submitButton.getAttribute("disabled"))
+                .as("Button is disable").isEqualTo("true");
+        }
+      }, 1000, 2);
+
+    });
+  }
+
+  @Given("Operator performs Success jobs action with data below:")
+  public void operatorPeformsBulkUpdateAction(Map<String, String> data) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        page.bulkUpdateSuccess.submitButton.waitUntilClickable();
+        if ((resolvedData.get("proofUpload") != null) && (resolvedData.get("proofUpload")
+            .equalsIgnoreCase("yes"))) {
+          page.setProofUploadFile();
+        }
+        page.bulkUpdateSuccess.submitButton.click();
+        page.bulkUpdateSuccess.submitButton.waitUntilInvisible();
+      }, 1000, 2);
+
+    });
+  }
+
+  @Then("Operator verifies bulk update success job successful message below on Pickup Jobs page:")
+  public void operatorVerifiesSuccessJobSuccessfulMessage(String expectedString) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      String expectedResult = resolveValue(expectedString);
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
     });
   }
 }
