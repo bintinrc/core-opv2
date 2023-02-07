@@ -62,7 +62,7 @@ public class StationCODReportPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[@role='table']//div[contains(@class,'base-row')]")
   private List<PageElement> results;
 
-  @FindBy(xpath = "//div[@class='nv-filter-container'][.//div[@*='ant-picker ant-picker-range']]")
+  @FindBy(xpath = "//div[@class='nv-filter-container']//div[@data-testid='station-cod-report_filter-date-box']")
   public AntIntervalCalendarPicker transactionEndDateFilter;
 
   @FindBy(id = "station-cod-report_details-button")

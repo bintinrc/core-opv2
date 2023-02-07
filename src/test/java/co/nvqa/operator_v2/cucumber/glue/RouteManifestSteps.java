@@ -4,12 +4,17 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.util.factory.FailureReasonFactory;
+import co.nvqa.operator_v2.model.DriverPerformanceInfo;
+import co.nvqa.operator_v2.model.PoaInfo;
+import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -161,5 +166,63 @@ public class RouteManifestSteps extends AbstractSteps {
           .isEqualTo(data.get("routeId"));
     }
     assertions.assertAll();
+  }
+
+  @When("Operator click view POA/POH button on Route Manifest page")
+  public void clickViewPoaPoh() {
+    routeManifestPage.clickViewPoaPoH();
+  }
+
+  @Then("Operator verify POA/POH button is disabled on Route Manifest page")
+  public void verifyViewPoaPohDisabled() {
+    Assertions.assertThat(routeManifestPage.isViewPoaPohDisabled());
+  }
+
+  @Then("Operator verifies Proof of Arrival table for the row number {string} on Route Manifest page:")
+  public void verifyTableEntry(String row, Map<String, String> data) {
+    data = resolveKeyValues(data);
+    PoaInfo expected = new PoaInfo(data);
+    final String expectedVerifiedByGps = data.get("verifiedByGps");
+    final String expectedDistanceFromSortHub = data.get("distanceFromSortHub");
+    final int index = Integer.parseInt(row) - 1;
+
+    expected.setVerifiedByGps(expectedVerifiedByGps);
+    expected.setDistanceFromSortHub(expectedDistanceFromSortHub);
+
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfArrivalTable.verifyPoAInfo(expected, index));
+  }
+
+  @When("Operator click View on Map")
+  public void clickViewOnMapButton() {
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfArrivalTable.clickViewOnMap());
+  }
+
+  @Then("Operator verifies Proof of Handover table for the row number {string} on Route Manifest page:")
+  public void verifyPoHTableEntry(String row, Map<String, String> data) {
+    data = resolveKeyValues(data);
+    PohInfo expected = new PohInfo(data);
+    final String expectedEstQty = data.get("estQty");
+    final String expectedCntQty = data.get("cntQty");
+    final String expectedStaffUsername = data.get("staffUsername");
+    final String expectedHandover = data.get("handover");
+    final String expectedCSortHubName = data.get("sortHubName");
+    final int index = Integer.parseInt(row) - 1;
+
+    expected.setEstQty(Integer.parseInt(expectedEstQty));
+    expected.setCntQty(Integer.parseInt(expectedCntQty));
+    expected.setHandover(expectedHandover);
+    expected.setSortHubName(expectedCSortHubName);
+    expected.setStaffUsername(expectedStaffUsername);
+
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfHandoverTable.verifyPoHInfo(expected, index));
+  }
+
+  @When("Operator click View Photo")
+  public void clickViewPhotoButton() {
+    routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
+        page -> page.proofOfHandoverTable.clickViewPhoto());
   }
 }

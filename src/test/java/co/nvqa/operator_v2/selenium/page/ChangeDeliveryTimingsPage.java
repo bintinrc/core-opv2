@@ -24,8 +24,14 @@ public class ChangeDeliveryTimingsPage extends SimpleReactPage<ChangeDeliveryTim
   @FindBy(css = ".error-box li")
   public PageElement errorMessage;
 
+  @FindBy(css = ".error-box li")
+  public List<PageElement> errorMessages;
+
   @FindBy(css = "[data-testid='upload-csv-button']")
   public Button uploadCsv;
+
+  @FindBy(css = "[data-testid='close-button']")
+  public Button close;
 
   @FindBy(css = "[data-testid='download-sample-excel-file-button']")
   public Button downloadSampleCsv;

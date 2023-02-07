@@ -258,13 +258,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public int getNumberFromPendingPickupTile(String tileName) {
     try {
+      pause8s();
       String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
       waitWhilePageIsLoading();
       if (pageFrame.size() > 0) {
         switchToStationHomeFrame();
       }
       waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
-      pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
       tileValue = tileValue.replace("%", "").trim();
@@ -276,6 +276,30 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
       return 0;
+    }
+  }
+
+  public String getTileValueAsStringFromPendingPickupTile(String tileName) {
+    String tileValue = null;
+    try {
+      String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
+      waitWhilePageIsLoading();
+      if (pageFrame.size() > 0) {
+        switchToStationHomeFrame();
+      }
+      waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+      pause5s();
+      WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+      tileValue = tile.getText().replace(",", "").trim();
+      tileValue = tileValue.replace("%", "").trim();
+      if (tileValue.contains(" ")) {
+        tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      }
+      LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
+      return tileValue;
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      return tileValue;
     }
   }
 
@@ -430,6 +454,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilPageLoaded();
       closeIfModalDisplay();
       int actual = getNumberFromTile(tileName);
+      return actual == expected;
+    });
+  }
+
+  public void waitUntilPendingPickupTileValueMatches(String tileName, int expected) {
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
+    wdWait.until(driver -> {
+      LOGGER.info("Refreshing the page to reload the tile value...");
+      driver.navigate().refresh();
+      waitUntilPageLoaded();
+      closeIfModalDisplay();
+      int actual = getNumberFromPendingPickupTile(tileName);
       return actual == expected;
     });
   }

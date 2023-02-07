@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -200,9 +201,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(name = "container.shipment-scanning.select-shipment")
   public NvApiTextButton selectShipmentButton;
 
-  @FindBy(name = "container.shipment-scanning.close-shipment")
-  public NvIconTextButton closeShipmentButton;
-
   @FindBy(css = "md-dialog")
   public CloseShipmentDialog closeShipmentDialog;
 
@@ -217,6 +215,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//button[.='Force Completion']")
   public Button forceCompleteButton;
+
+  @FindBy(xpath = "//input[starts-with(@id, 'shipment_id')]")
+  public TextBox shipmentIdField;
+
+  @FindBy(xpath = "//div[@data-testid='shipment-id-select']/div/span[2]")
+  public PageElement selectedShipmentId;
+
+  @FindBy(css = "[data-testid='close-shipment-buton']")
+  public Button closeShipmentButton;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']//button[.='Close Shipment']")
+  public PageElement closeShipmentButtonOnDialog;
+
+  @FindBy(id = "toRemoveTrackingId")
+  public TextBox removeTrackingIdField;
+
+  @FindBy(xpath = "//div[contains(@class, 'ant-space-item')][contains(text(), 'INVALID')]")
+  public PageElement invalidOrderScanned;
 
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
@@ -236,8 +252,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void selectShipmentId(Long shipmentId) {
-    sendKeysAndEnterById("shipment_id", shipmentId.toString());
-    pause50ms();
+    shipmentIdField.sendKeys(shipmentId.toString());
+    pause4s();
+    shipmentIdField.sendKeys(Keys.RETURN);
+  }
+
+  public void waitUntilShipmentIdFilled(Long shipmentId)
+  {
+    String shipmentIdValue = selectedShipmentId.getAttribute("title");
+    Assertions.assertThat(shipmentIdValue).as("Shipment id field is filled").isEqualTo(shipmentId.toString());
   }
 
   public void selectShipmentIdFast(String shipmentId) {
@@ -280,6 +303,22 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         .isTrue();
   }
 
+  // to avoid popup alert so retry can run
+  public void checkAndRemoveScannedOrdersIfInvalid() {
+    if(invalidOrderScanned.isDisplayedFast())
+    {
+      List<WebElement> listOfScannedTrackingIdsAsListWes = findElementsBy(By.xpath("//td[contains(@class, 'tracking-id')]"));
+      if(listOfScannedTrackingIdsAsListWes.size()!=0)
+      {
+        for(WebElement we : listOfScannedTrackingIdsAsListWes){
+          removeTrackingIdField.sendKeys(we.getText());
+          removeTrackingIdField.clear();
+        }
+      }
+      throw new NvTestRuntimeException("One of the tracking ids invalid");
+    }
+  }
+
   public void checkOrderNotInShipment(String trackingId) {
     retryIfAssertionErrorOccurred(() -> {
       try {
@@ -295,20 +334,21 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void closeShipment() {
-    pause300ms();
-    click("//button//span[.='Close Shipment']");
-    waitUntilVisibilityOfElementLocated(
-        "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
-    TestUtils.callJavaScriptExecutor("arguments[0].click();",
-        getWebDriver().findElement(
-            By.xpath("//div[@class='ant-modal-content']//button[.='Close Shipment']")),
-        getWebDriver());
-    String toastMessage = getAntTopText();
-    LOGGER.info(toastMessage);
-    Assertions.assertThat(toastMessage)
-        .as("Toast message not contains Shipment <SHIPMENT_ID> created")
-        .contains("Shipment", "closed");
-    waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pause2s();
+      closeShipmentButton.click();
+      waitUntilVisibilityOfElementLocated(
+          "//div[contains(@class,'ant-modal-wrap') and not(contains(@style, 'none'))]//div[contains(@class,'ant-modal-content')]");
+      TestUtils.callJavaScriptExecutor("arguments[0].click();",
+          closeShipmentButtonOnDialog.getWebElement(),
+          getWebDriver());
+      String toastMessage = getAntTopText();
+      LOGGER.info(toastMessage);
+      Assertions.assertThat(toastMessage)
+          .as("Toast message not contains Shipment <SHIPMENT_ID> created")
+          .contains("Shipment", "closed");
+      waitUntilInvisibilityOfElementLocated("//div[@class='ant-message-notice']");
+    }, getCurrentMethodName(), 500, 2);
   }
 
   public void closeShipmentWithData(String originHubName, String destinationHubName,
@@ -378,9 +418,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   }
 
   public void removeOrderFromShipmentWithErrorAlert(String firstTrackingId) {
-    pause1s();
-    sendKeysAndEnterById("toRemoveTrackingId", firstTrackingId);
-    pause1s();
+    removeTrackingIdField.pause3s();
+    removeTrackingIdField.sendKeysAndEnterNoXpath(firstTrackingId);
+    removeTrackingIdField.pause10s();
     String statusCardText = findElementByXpath(XPATH_STATUS_CARD_BOX).getText();
     Assertions.assertThat(statusCardText.toLowerCase()).as("Invalid contained").contains("invalid");
     Assertions.assertThat(statusCardText.toLowerCase()).as("Not in Shipment  contained")

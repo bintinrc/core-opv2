@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.StationPendingPickupJobsPage;
 import co.nvqa.operator_v2.selenium.page.StationPendingPickupJobsPage.PendingPickupJobs;
 import io.cucumber.datatable.DataTable;
@@ -11,6 +12,12 @@ import org.assertj.core.api.Assertions;
 import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
+import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.InvalidArgumentException;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,14 +47,49 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
     Map<String, String> filter = resolveKeyValues(filters.get(0));
     stationPendingPickupJobsPage.applyFiltersInPendingPickupTableAndValidateResultCount(filter, 0);
+    takesScreenshot();
   }
 
-  @And("Operator searches data in the pending pickup table by applying the following filters:")
-  public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters(
+  @SuppressWarnings("unchecked")
+  @And("Operator searches data in the pending pickup table by applying the following filters and expect one record:")
+  public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_one_record(
       DataTable searchParameters) {
-    List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
-    Map<String, String> filter = resolveKeyValues(filters.get(0));
-    stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+    retryIfExpectedExceptionOccurred(() -> {
+          List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+          Map<String, String> filter = resolveKeyValues(filters.get(0));
+          stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+          if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 1) {
+            getWebDriver().navigate().refresh();
+            throw new NvTestRuntimeException("One record is not displayed after filtering "
+                + "the table Pending Pickup table record" + filter);
+          }
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        NvTestRuntimeException.class);
+    takesScreenshot();
+  }
+
+  @SuppressWarnings("unchecked")
+  @And("Operator searches data in the pending pickup table by applying the following filters and expect zero record:")
+  public void operator_searches_data_in_the_pending_pickup_table_by_applying_the_following_filters_and_expect_zero_record(
+      DataTable searchParameters) {
+    retryIfExpectedExceptionOccurred(() -> {
+          List<Map<String, String>> filters = searchParameters.asMaps(String.class, String.class);
+          Map<String, String> filter = resolveKeyValues(filters.get(0));
+          stationPendingPickupJobsPage.applyFiltersInPendingPickupTable(filter);
+          if (stationPendingPickupJobsPage.noOfReultsInTable.size() != 0) {
+            getWebDriver().navigate().refresh();
+            throw new NvTestRuntimeException("Record are displayed after filtering "
+                + "the table Pending Pickup table record" + filter);
+          }
+        }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, InvalidElementStateException.class, InvalidArgumentException.class,
+        NvTestRuntimeException.class);
+    takesScreenshot();
   }
 
   @When("Operator clicks on the {string} button in the Pending pickup page")
@@ -98,8 +140,9 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   @Then("Operator verify value on pending pickup table for the {string} column is equal to {string}")
   public void operatorVerifyValueOnPendingPickupTableForTheColumnIsEqualTo(
       String columnName, String expectedValue) {
+    expectedValue = resolveValue(expectedValue);
     pause5s();
-    stationPendingPickupJobsPage.switchToNewWindow();
+    stationPendingPickupJobsPage.switchToFrame();
     PendingPickupJobs columnValue = PendingPickupJobs.valueOf(columnName);
     String actualColumnValue = stationPendingPickupJobsPage.getColumnValue(columnValue);
     Assert.assertEquals(f("expected Value is not matching for column : %s", columnName),
@@ -110,6 +153,19 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   @Then("Operator verifies that {string} action button is displayed")
   public void operatorVerifiesThatActionButtonIsDisplayed(String buttonText) {
     stationPendingPickupJobsPage.validateThePresenceOfButton(buttonText);
-
+    takesScreenshot();
   }
+
+  @Then("Operator verifies that No Pending Pickups message is displayed")
+  public void operatorVerifiesThatNoPendingPickupsMessageIsDisplayed() {
+    stationPendingPickupJobsPage.validateNoPendingPickupRecords();
+    takesScreenshot();
+  }
+
+  @When("Operator clicks on the sort icon in the Parcel to Pickup column")
+  public void operatorClicksOnTheSortIconInTheParcelToPickupColumn() {
+    stationPendingPickupJobsPage.clickSortParcelsToPick();
+    takesScreenshot();
+  }
+
 }

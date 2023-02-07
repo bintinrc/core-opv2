@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -48,6 +49,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
+    scrollIntoView(xpath);
     return getText(xpath);
   }
 
@@ -78,7 +80,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    click(xpath);
+    new CheckBox(getWebDriver(), xpath).check();
   }
 
   public boolean isRowSelected(int rowNumber) {
@@ -119,7 +121,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     }
     if (isElementExistWait0Second(xpath)) {
       AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
-      select.selectValueV2(columnId,value);
+      select.selectValueV2(columnId, value);
     } else {
       xpath = f(COLUMN_FILTER_LOCATOR_PATTERN_V2, columnLocators.get(columnId));
       if (StringUtils.isNotBlank(tableLocator)) {
@@ -131,6 +133,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     }
     return this;
   }
+
   public void clearColumnFilters() {
     getColumnLocators().values().forEach(value -> {
       String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, value);
@@ -187,8 +190,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   public void sortColumn(String columnId, boolean ascending) {
     String headerLocator = f("div[data-headerkey='%s'] > div > div",
         getColumnLocators().get(columnId));
-    String xpath = f(".//div[@data-headerkey='%s']//*[contains(@class, 'Sort%s')]",
-        getColumnLocators().get(columnId), ascending ? "Up" : "Down");
+    String xpath = f(".//div[@data-headerkey='%s']//*[contains(@data-testid, 'sort-%s')]",
+        getColumnLocators().get(columnId), ascending ? "up" : "down");
     Button button = new Button(getWebDriver(), findElementBy(By.cssSelector(headerLocator)));
     while (!isElementExistFast(xpath)) {
       button.click();

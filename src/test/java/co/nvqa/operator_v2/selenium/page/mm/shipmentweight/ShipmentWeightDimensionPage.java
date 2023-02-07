@@ -45,6 +45,9 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(css = "[data-testid='enter-new-filter-button']")
   public Button newFilterToggleButton;
 
+  @FindBy(css = "[data-testid='search-by-billing-number-button']")
+  public Button searchByBillinNumberButton;
+
   @FindBy(id = "search-by-sid_searchIds")
   public PageElement sidsTextArea;
 
@@ -149,7 +152,7 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
     sidsTextArea.sendKeys(shipmentId);
   }
 
-  public void fillLoadShipmentFilter(String filterName, String mawb, ZonedDateTime from,
+  public void fillLoadShipmentFilter(String filterName, ZonedDateTime from,
       ZonedDateTime to) {
     if (filterName != null) {
       presetFilterSelect.selectValue(filterName);
@@ -159,12 +162,6 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
       creationDateTimeRange.setDateRange(from, to);
     } else {
       creationDateTimeRange.clear();
-    }
-
-    if (mawb != null) {
-      mawbInput.sendKeys(mawb);
-    } else {
-      mawbInput.clear();
     }
   }
 
