@@ -6,19 +6,20 @@ sourceCompatibility = JavaVersion.VERSION_11
 
 project.ext {
     defaultScenarioManager = "co.nvqa.operator_v2.cucumber.glue.ScenarioManager"
-    cucumberGluePackage = ["co.nvqa.operator_v2.cucumber.glue",
-                           "classpath:co.nvqa.commons.cucumber.glue",
-                           "classpath:co.nvqa.common.cucumber.glue",
-                           "classpath:co.nvqa.common.ui.cucumber.glue.selenium",
-                           "classpath:co.nvqa.commonauth.cucumber.glue",
-                           "classpath:co.nvqa.common.ordercreate.cucumber.glue",
-                           "classpath:co.nvqa.common.corev2.cucumber.glue",
-                           "classpath:co.nvqa.common.core.cucumber.glue",
-                           "classpath:co.nvqa.common.dp.cucumber.glue",
-                           "classpath:co.nvqa.common.driver.cucumber.glue",
-                           "classpath:co.nvqa.common.shipper.cucumber.glue",
-                           "classpath:co.nvqa.common.mm.cucumber.glue",
-
+    cucumberGluePackage = [
+            "co.nvqa.operator_v2.cucumber.glue",
+            "classpath:co.nvqa.commons.cucumber.glue",
+            "classpath:co.nvqa.common.cucumber.glue",
+            "classpath:co.nvqa.common.ui.cucumber.glue.selenium",
+            "classpath:co.nvqa.common.ordercreate.cucumber.glue",
+            "classpath:co.nvqa.common.corev2.cucumber.glue",
+            "classpath:co.nvqa.common.core.cucumber.glue",
+            "classpath:co.nvqa.common.dp.cucumber.glue",
+            "classpath:co.nvqa.common.shipper.cucumber.glue",
+            "classpath:co.nvqa.common.driver.cucumber.glue",
+            "classpath:co.nvqa.common.mm.cucumber.glue",
+            "classpath:co.nvqa.commonauth.cucumber.glue",
+            "classpath:co.nvqa.commonsort.cucumber.glue"
     ]
 }
 
@@ -66,7 +67,7 @@ dependencies {
     implementation "co.nvqa:common-core:1.2.8-RC1"
     implementation "co.nvqa:common-dp:1.2.8"
     implementation "co.nvqa:common-auth:1.2.0"
-    implementation "co.nvqa:common-sort:1.2.2"
+    implementation "co.nvqa:common-sort:1.2.6"
     implementation "co.nvqa:commons:2.5.14"
     implementation "co.nvqa:common-shipper:1.2.3"
     implementation "co.nvqa:common-mm:1.2.3"
