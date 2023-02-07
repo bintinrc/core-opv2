@@ -35,10 +35,10 @@ public abstract class AntFilterNumberBox extends AntAbstractFilterBox {
   @FindBy(css = "div.ant-select")
   public AntSelect3 op;
 
-  @FindBy(xpath = "(.//input[@aria-valuemax])[1]")
+  @FindBy(xpath = "(.//input[contains(@class,'ant-input-number-input')])[1]")
   public ForceClearTextBox from;
 
-  @FindBy(xpath = "(.//input[@aria-valuemax])[2]")
+  @FindBy(xpath = "(.//input[contains(@class,'ant-input-number-input')])[2]")
   public ForceClearTextBox to;
 
   @Override

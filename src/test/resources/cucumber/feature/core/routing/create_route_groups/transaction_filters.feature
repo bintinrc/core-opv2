@@ -136,12 +136,11 @@ Feature: Create Route Groups - Transaction Filters
       | Transferred to 3PL                   | Parcel      | uid:e3b28ae3-5cc2-4a69-b5da-0c8a5f3c3a56 |
       | Van en-route to pickup               | Parcel      | uid:e5c5048d-2823-4521-a054-4b81033c1d72 |
 
-  Scenario: Operator Filter Order Zone on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Zone on Create Route Group - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
-      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | generateTo     | ZONE{zone-name-3}                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address":{"address1":"501 ORCHARD ROAD","address2":"WHEELOCK PLACE","country":"SG","postcode":"238880"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -308,7 +307,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Staging                                                  |
 
-  Scenario: Operator Filter Order Priority Level on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Priority Level on Create Route Groups - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -333,7 +332,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order Weight on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order Weight on Create Route Groups - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |

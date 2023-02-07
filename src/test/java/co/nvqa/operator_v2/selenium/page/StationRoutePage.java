@@ -5,7 +5,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -28,10 +28,10 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
   public AntSelect3 shipmentType;
 
   @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentDate']")
-  public AntDateRangePicker2 shipmentDate;
+  public AntDateTimeRangePicker shipmentDate;
 
   @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentCompletionTime']")
-  public AntDateRangePicker2 shipmentCompletionTime;
+  public AntDateTimeRangePicker shipmentCompletionTime;
 
   @FindBy(css = "[data-testid='station-route-testid.additional-tids.textarea']")
   public ForceClearTextBox additionalTids;
