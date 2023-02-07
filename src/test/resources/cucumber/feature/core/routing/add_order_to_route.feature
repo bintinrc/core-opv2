@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @AddOrderToRoute @RoutingModules @current
+@OperatorV2 @Core @Routing @RoutingJob3 @AddOrderToRoute @RoutingModules
 Feature: Add Order To Route
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -166,8 +166,8 @@ Feature: Add Order To Route
       | status | PENDING |
     And DB Operator verifies transaction route id is null
 
-  @DeleteOrArchiveRoute @routing-refactor @wip
-  Scenario: Add Delivery Routed Order to a New Route - New Route Date and Hub Same to Existing Route
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Non-ID Country
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -175,26 +175,22 @@ Feature: Add Order To Route
     And API Operator get order details
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    When Operator go to menu Routing -> Add Order to Route
-#    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[2]}" route id on Add Order to Route page
-#    And Operator set "Delivery" transaction type on Add Order to Route page
-#    And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
-#    Then Operator verifies that "Order {KEY_CREATED_ORDER_TRACKING_ID} added to route {KEY_CREATED_ROUTE_ID}" success toast message is displayed
-#    And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
-    And API Operator pulled out parcel "DELIVERY" from route
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Routing -> Add Order to Route
+    And Operator set "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" route id on Add Order to Route page
+    And Operator set "Delivery" transaction type on Add Order to Route page
+    And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
+    Then Operator verifies that error toast displayed:
+      | top    | Network Request Error                                                          |
+      | bottom | ^.*Error Code: 103093.*Error Message: Marketplace Sort order is not allowed!.* |
+    And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
       | name    | ADD TO ROUTE                      |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
-    And Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE                 |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | PENDING                           |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
@@ -208,7 +204,6 @@ Feature: Add Order To Route
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
