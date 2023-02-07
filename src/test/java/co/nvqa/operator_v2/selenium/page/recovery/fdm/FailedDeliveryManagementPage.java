@@ -181,6 +181,8 @@ public class FailedDeliveryManagementPage extends
     @FindBy(xpath = "//button//span[contains(text(),'Upload')]")
     public Button upload;
 
+    public final String XPATH_UPLOAD_CSV = "//div//p[contains(text(),'Drag and drop here')]";
+
     public UploadCSVDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -197,7 +199,7 @@ public class FailedDeliveryManagementPage extends
           csvContents);
 
       WebElement upload = getWebDriver().findElement(
-          By.xpath("//div//p[contains(text(),'Drag and drop here')]"));
+          By.xpath(XPATH_UPLOAD_CSV));
       dragAndDrop(csvFile, upload);
     }
   }

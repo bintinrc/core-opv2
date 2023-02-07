@@ -350,7 +350,7 @@ Feature: Failed Delivery Management Page - Action Feature
       | dnr    | NORMAL                                |
       | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
-  @RescheduleFailedDelivery @wip
+  @RescheduleFailedDelivery @ForceSuccessOrder
   Scenario: Operator - Reschedule Failed Delivery - Multiple Orders - by Upload CSV
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                |
