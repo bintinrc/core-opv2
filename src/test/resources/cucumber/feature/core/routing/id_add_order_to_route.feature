@@ -227,9 +227,9 @@ Feature: Add Order To Route
     And Operator set "Delivery" transaction type on Add Order to Route page
     And Operator enters "{KEY_CREATED_ORDER_TRACKING_ID}" tracking id on Add Order to Route page
     Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                                   |
-      | bottom | ^.*Error Code: 103088.*Error Message: Route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has the status ARCHIVED.* |
-    Then Operator verifies that "Route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has the status ARCHIVED" error toast message is displayed
+      | top    | Network Request Error                                                                                       |
+      | bottom | ^.*Error Code: 103088.*Error Message: Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED.* |
+    Then Operator verifies that "Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
