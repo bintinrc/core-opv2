@@ -74,13 +74,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        pause10s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
         shipmentScanningPage.switchTo();
+        shipmentScanningPage.pause10s();
         shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);

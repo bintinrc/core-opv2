@@ -356,6 +356,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         case "Route ID":
           pickupAppointmentJobPage.bulkSelect.routeId.click();
           break;
+        case "Remove route":
+          pickupAppointmentJobPage.bulkSelect.removeRoute.click();
+          break;
       }
     });
   }
@@ -1073,6 +1076,28 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
+  @When("Operator click on submit button in bulk remove route modal")
+  public void clickSubminInBulkRemoveRoute() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.removeJobRouteModal.submitButton.click();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator check Remove route button is disabled on Pickup Jobs page")
+  public void clickBulkRemoveRouteButtonDisabled() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+
+        Assertions.assertThat(pickupAppointmentJobPage.bulkSelect.removeRouteStatus())
+            .as("Remove route button is disabled").isTrue();
+      }, 1000, 5);
+
+    });
+  }
+
   @When("Operator clicks option {string} of Bulk Update on Pickup Jobs page")
   public void clickOptionOfBulkUpdate(String optionName) {
     pickupAppointmentJobPage.inFrame(page ->
@@ -1108,6 +1133,32 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         }
       }, 1000, 2);
 
+    });
+  }
+
+  @Given("Operator performs Success jobs action with data below:")
+  public void operatorPeformsBulkUpdateAction(Map<String, String> data) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        page.bulkUpdateSuccess.submitButton.waitUntilClickable();
+        if ((resolvedData.get("proofUpload") != null) && (resolvedData.get("proofUpload")
+            .equalsIgnoreCase("yes"))) {
+          page.setProofUploadFile();
+        }
+        page.bulkUpdateSuccess.submitButton.click();
+        page.bulkUpdateSuccess.submitButton.waitUntilInvisible();
+      }, 1000, 2);
+
+    });
+  }
+
+  @Then("Operator verifies bulk update success job successful message below on Pickup Jobs page:")
+  public void operatorVerifiesSuccessJobSuccessfulMessage(String expectedString) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      String expectedResult = resolveValue(expectedString);
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
     });
   }
 }
