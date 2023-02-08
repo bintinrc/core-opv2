@@ -94,6 +94,11 @@ public class LoginPage extends OperatorV2SimplePage {
     waitUntilPageLoaded();
   }
 
+  public void clickLoginButtonV2() {
+    click("//button[@aria-label='login.sign-in-with-google']");
+    waitUntilPageLoaded();
+  }
+
   public void enterCredential(String username, String password) {
     final StringBuilder googlePageUrlSb = new StringBuilder();
 

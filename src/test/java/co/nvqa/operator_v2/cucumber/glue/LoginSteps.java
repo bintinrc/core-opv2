@@ -47,6 +47,16 @@ public class LoginSteps extends AbstractSteps {
     mainPage.verifyTheMainPageIsLoaded();
   }
 
+  @Given("^Operator login without cookies with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+  public void loginToOperatorWithoutCookiesV2(String username, String password) {
+    loginPage.loadPage();
+
+    loginPage.clickLoginButtonV2();
+    loginPage.enterCredential(username, password);
+    //loginPage.checkForGoogleSimpleVerification("Singapore");
+    mainPage.verifyTheMainPageIsLoaded();
+  }
+
   @And("Operator login Operator portal with username = {string} and password = {string}")
   public void loginToOperatorV2WithoutURLValidation(String username, String password) {
     loginPage.loadPage();
@@ -112,6 +122,14 @@ public class LoginSteps extends AbstractSteps {
         TestConstants.NV_SYSTEM_ID = "ph";
         break;
     }
-    TestConstants.API_BASE_URL=TestConstants.API_BASE_URL.substring(0,TestConstants.API_BASE_URL.length()-2)+TestConstants.NV_SYSTEM_ID ;
+    TestConstants.API_BASE_URL =
+        TestConstants.API_BASE_URL.substring(0, TestConstants.API_BASE_URL.length() - 2)
+            + TestConstants.NV_SYSTEM_ID;
+  }
+
+  @Given("Operator login with client id = {string} and client secret = {string}")
+  public void operatorLoginWithClientIdAndClientSecret(String clientId, String clientSecret) {
+    loginPage.loadPage();
+    loginPage.forceLogin(TokenUtils.overrideOperatorAuthToken(clientId, clientSecret));
   }
 }
