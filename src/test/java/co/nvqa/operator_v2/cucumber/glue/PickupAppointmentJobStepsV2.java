@@ -358,6 +358,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
         case "Route ID":
           pickupAppointmentJobPage.bulkSelect.routeId.click();
           break;
+        case "Remove route":
+          pickupAppointmentJobPage.bulkSelect.removeRoute.click();
+          break;
       }
     });
   }
@@ -1070,6 +1073,28 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         pickupAppointmentJobPage.editJobRouteModal.ApplyThisIdToAll.click();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator click on submit button in bulk remove route modal")
+  public void clickSubminInBulkRemoveRoute() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.removeJobRouteModal.submitButton.click();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator check Remove route button is disabled on Pickup Jobs page")
+  public void clickBulkRemoveRouteButtonDisabled() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+
+        Assertions.assertThat(pickupAppointmentJobPage.bulkSelect.removeRouteStatus())
+            .as("Remove route button is disabled").isTrue();
       }, 1000, 5);
 
     });

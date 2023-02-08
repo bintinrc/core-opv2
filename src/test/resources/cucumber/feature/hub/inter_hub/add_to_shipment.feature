@@ -135,9 +135,9 @@ Feature: Add To Shipment
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And Operator go to menu Inter-Hub -> Add To Shipment
+    And Operator add to shipment in hub {hub-name} to hub id = {hub-name-2}
     And Operator removes the parcel from the shipment with error alert
     And Operator refresh page
     And Operator go to menu Inter-Hub -> Shipment Management
