@@ -130,6 +130,7 @@ public class LoginSteps extends AbstractSteps {
   @Given("Operator login with client id = {string} and client secret = {string}")
   public void operatorLoginWithClientIdAndClientSecret(String clientId, String clientSecret) {
     loginPage.loadPage();
-    loginPage.forceLogin(TokenUtils.overrideOperatorAuthToken(clientId, clientSecret));
+    TokenUtils.overrideOperatorAuthToken(clientId, clientSecret);
+    loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
   }
 }
