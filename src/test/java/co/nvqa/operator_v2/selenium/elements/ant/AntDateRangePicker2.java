@@ -60,6 +60,7 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   public void setFromDate(String from) {
     fromInput.click();
+    pause500ms();
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, from)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }
@@ -70,6 +71,7 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   public void setToDate(String to) {
     toInput.click();
+    pause500ms();
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, to)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }
