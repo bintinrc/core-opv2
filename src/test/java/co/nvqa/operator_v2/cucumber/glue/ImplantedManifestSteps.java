@@ -4,10 +4,10 @@ import co.nvqa.common.core.model.order.Order;
 import co.nvqa.commons.support.OrderHelper;
 import co.nvqa.operator_v2.selenium.page.ImplantedManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +142,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     barcode = resolveValue(barcode);
     implantedManifestPage.scanBarcodeInput.click();
     implantedManifestPage.scanBarcodeInput.setValue(barcode + Keys.ENTER);
-    pause1s();
+    pause10s();
   }
 
   @When("^Operator saves created orders Tracking IDs without prefix$")
@@ -162,7 +162,7 @@ public class ImplantedManifestSteps extends AbstractSteps {
     implantedManifestPage.createManifestDialog.waitUntilVisible();
     implantedManifestPage.createManifestDialog.reservationId.setValue(reservationId);
     implantedManifestPage.createManifestDialog.createManifestButton.click();
-    pause1s();
+    pause5s();
   }
 
   @When("^Operator adds country prefix on Implanted Manifest page$")

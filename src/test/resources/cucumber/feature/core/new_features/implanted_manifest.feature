@@ -264,6 +264,12 @@ Feature: Implanted Manifest
     And Operator verify order event on Edit order page using data below:
       | name    | DRIVER PICKUP SCAN     |
       | routeId | {KEY_CREATED_ROUTE_ID} |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                            |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+    And Operator verify order events on Edit order page using data below:
+      | tags         | name                    | description                                                                                                                                                                                                  |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
@@ -273,6 +279,9 @@ Feature: Implanted Manifest
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                            |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: UPDATE_PICKUP_POD |
+    And Operator verify order events on Edit order page using data below:
+      | tags         | name                    | description                                                                                                                                                                                                  |
+      | PICKUP, SCAN | IMPLANTED MANIFEST SCAN | Implanted Manifest User: AUTOMATION EDITED ({operator-portal-uid}) Driver ID: {ninja-driver-id} Route ID: {KEY_CREATED_ROUTE_ID} Waypoint ID: {KEY_WAYPOINT_ID} Reservation ID: {KEY_CREATED_RESERVATION_ID} |
     And DB Operator verifies inbound_scans record for all orders with type "1" and correct route_id
 
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page - Multiple TID (uid:027dfab6-19b3-4157-af2e-7e924ed45660)

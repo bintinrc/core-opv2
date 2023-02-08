@@ -14,7 +14,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | PLU          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -24,7 +24,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Verify the new port "Port Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | AAK |
+      | portCode | BNG |
     And Verify the new port "Port Test Airport has been updated" created success message
     And Verify the newly updated port values in table
 
@@ -37,7 +37,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | RQM          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -60,7 +60,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJ          |
+      | portCode  | AOZ          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -83,7 +83,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJ          |
+      | portCode  | MBN          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -106,7 +106,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJ          |
+      | portCode  | RCE          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -129,7 +129,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJ          |
+      | portCode  | OPP          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -152,7 +152,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | IWX          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -174,7 +174,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | ULO          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -196,7 +196,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | OSG          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -218,27 +218,27 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ              |
-      | portName  | AAJ Test Airport |
+      | portCode  | ZBS              |
+      | portName  | ZBS Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port AAJ Test Airport has been created" created success message
+    And Verify the new port "Port ZBS Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | AAK              |
-      | portName  | AAK Test Airport |
+      | portCode  | GQG              |
+      | portName  | GQG Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 36.9220427       |
       | longitude | -80.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port AAK Test Airport has been created" created success message
+    And Verify the new port "Port GQG Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | AAJ |
+      | portCode | ZBS |
     And Verify the error "Duplicate Airport code. Airport code AAJ is already exists" is displayed while creating new port
 
   @DeleteCreatedPorts
@@ -250,28 +250,28 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABJ              |
-      | portName  | ABJ Test Airport |
+      | portCode  | UQX              |
+      | portName  | UQX Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ABJ Test Airport has been created" created success message
+    And Verify the new port "Port UQX Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | ABK              |
-      | portName  | ABK Test Airport |
+      | portCode  | SQX              |
+      | portName  | SQX Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 36.9220427       |
       | longitude | -80.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ABK Test Airport has been created" created success message
+    And Verify the new port "Port SQX Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portName" for created Port
-      | portName | ABJ Test Airport |
-    And Verify the new port "Port ABJ Test Airport has been updated" created success message
+      | portName | UQX Test Airport |
+    And Verify the new port "Port UQX Test Airport has been updated" created success message
     And Verify the newly updated port values in table
 
   @DeleteCreatedPorts
@@ -283,18 +283,18 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABJ              |
-      | portName  | ABJ Test Airport |
+      | portCode  | JIQ              |
+      | portName  | JIQ Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ABJ Test Airport has been created" created success message
+    And Verify the new port "Port JIQ Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | ABJ |
-    And Verify the new port "Port ABJ Test Airport has been updated" created success message
+      | portCode | JIQ |
+    And Verify the new port "Port JIQ Test Airport has been updated" created success message
     And Verify the newly updated port values in table
 
   @DeleteCreatedPorts
@@ -306,14 +306,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJ              |
-      | portName  | ACJ Test Airport |
+      | portCode  | IUZ              |
+      | portName  | IUZ Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACJ Test Airport has been created" created success message
+    And Verify the new port "Port IUZ Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "latitude" for created Port
       | latitude | 91 |
@@ -328,14 +328,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJ              |
-      | portName  | ACJ Test Airport |
+      | portCode  | DZZ              |
+      | portName  | DZZ Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACJ Test Airport has been created" created success message
+    And Verify the new port "Port DZZ Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "longitude" for created Port
       | longitude | 181 |
@@ -350,14 +350,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJ              |
-      | portName  | ACJ Test Airport |
+      | portCode  | BKA              |
+      | portName  | BKA Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACJ Test Airport has been created" created success message
+    And Verify the new port "Port BKA Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Disable" button on panel on Port Trip Management page
@@ -373,14 +373,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJ              |
-      | portName  | ACJ Test Airport |
+      | portCode  | BQY              |
+      | portName  | BQY Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACJ Test Airport has been created" created success message
+    And Verify the new port "Port BQY Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Disable" button on panel on Port Trip Management page
@@ -399,14 +399,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACL              |
-      | portName  | ACL Test Airport |
+      | portCode  | ITG              |
+      | portName  | ITG Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACL Test Airport has been created" created success message
+    And Verify the new port "Port ITG Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Cancel" button on panel on Port Trip Management page
@@ -421,14 +421,14 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJ              |
-      | portName  | ACJ Test Airport |
+      | portCode  | XUB              |
+      | portName  | XUB Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ACJ Test Airport has been created" created success message
+    And Verify the new port "Port XUB Test Airport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Disable" button on panel on Port Trip Management page
@@ -446,7 +446,7 @@ Feature: Port Trip Management - Edit/Disable Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | MPH          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
