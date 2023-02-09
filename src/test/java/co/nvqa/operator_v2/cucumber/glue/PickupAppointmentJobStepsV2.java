@@ -182,7 +182,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                 .as(f("Notification Message contains: %s", message)).contains(message);
             Assertions.assertThat(pageNotifcationDescription)
                 .as(f("Notification Description contains: %s", description)).contains(description);
-          }, 1000, 3);
+          }, 1000, 10);
         });
       });
     }, 1000, 5);
@@ -293,6 +293,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.createOrEditJobPage.selectTagInJobTagsField(tag);
+        pause3s();
       });
     }, 1000, 5);
 
@@ -803,10 +804,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     String status = resolveValue(Status);
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.createOrEditJobPage
-              .isStarByJobIdDisplayed(jobId, status))
-          .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.createOrEditJobPage
+                .isStarByJobIdDisplayed(jobId, status))
+            .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      }, 1000, 5);
     });
+
   }
 
   @When("Operator check no tag = {string} is displayed on job")

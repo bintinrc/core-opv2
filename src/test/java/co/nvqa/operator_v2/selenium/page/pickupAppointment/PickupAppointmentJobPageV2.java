@@ -141,6 +141,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
+
+    @FindBy(xpath = "//label[@for='comments']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobComments;
+
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
 
@@ -281,6 +285,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
+
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -334,12 +339,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
+
+
+
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
     public void clearJobComments() {
-      commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobComments.click();
+      }, 1000, 5);
     }
 
     public void clickEditButton(String jobId) {
