@@ -563,6 +563,40 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verify that title of Bulk Route Assignment Side Panel is "0/100 RSVN selected"
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    And Operator assign Reservation to Route on Shipper Pickups page
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v4-name}                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_WAYPOINT_ID}                 |
+      | seqNo   | not null                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | status  | Routed                            |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_WAYPOINT_ID}                 |
+      | seqNo    | not null                          |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | status   | Routed                            |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_WAYPOINT_ID}                 |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

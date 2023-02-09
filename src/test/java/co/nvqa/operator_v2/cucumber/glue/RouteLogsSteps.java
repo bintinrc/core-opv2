@@ -533,6 +533,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        pause2s();
         Assertions.assertThat(routeLogsPage.routesTable.isEmpty())
             .as("Route " + routeId + " was deleted").isTrue();
       });
