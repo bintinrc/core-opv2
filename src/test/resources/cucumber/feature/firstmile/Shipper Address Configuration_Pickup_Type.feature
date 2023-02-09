@@ -5,7 +5,6 @@ Feature: Shipper Address Configuration
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   Scenario Outline: Filter Shipper Address by Multiple Pickup Type - Pickup Type Null
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -218,6 +217,7 @@ Feature: Shipper Address Configuration
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
     And Operator clicks on the Download Addresses button
+    And Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_<current_Date>.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
@@ -229,11 +229,10 @@ Feature: Shipper Address Configuration
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
 
     Examples:
-      | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
+      | search_field | search_value                                     | column_datakey     | pickupTypeSelect | current_Date                    |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    | {date: 0 days next, ddMMMYYYY}  |
 
   Scenario: Download CSV of Address Pickup Type Template
-    When Operator loads Shipper Address Configuration page
     When Operator loads Shipper Address Configuration page
     And Operator clicks on the "Configure Pickup Type" button
     Then Operator verifies page url ends with "pickup-type"
@@ -243,13 +242,12 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator clicks on the "Configure Pickup Type" button
     And Operator clicks on the Download CSV Template button
-    Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
+    And Verify that csv file is downloaded with filename: "CSV Template_Pickup Address Pickup Type.csv"
+    Then Operator verifies header names are available in the downloaded CSV file "CSV Template_Pickup Address Pickup Type"
       | Address ID     |
       | Pickup Address |
       | Shipper ID     |
       | Pickup Type    |
-      | Zones          |
-      | Hubs           |
 
   Scenario: Upload Addresses Pickup Type CSV by Browsing File
     When Operator loads Shipper Address Configuration page
