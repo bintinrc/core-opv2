@@ -34,13 +34,13 @@ public class NvDashboardSteps extends AbstractSteps {
     nvDashboardPage.selectMenuItem(item1, item2);
   }
 
-//  @Then("^Operator verify pickup addresses of the new Shipper on Dashboard site$")
-//  public void operatorVerifyPickupAddressesOfTheNewShipperOnDashboardSite() {
-//    Shipper shipper = get(KEY_CREATED_SHIPPER);
-//    if (shipper.getPickup() != null && CollectionUtils
-//        .isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
-//      shipper.getPickup().getReservationPickupAddresses()
-//          .forEach(nvDashboardPage::validatePickupAddressExists);
-//    }
-//  }
+  @Then("^Operator verify pickup addresses of the new Shipper on Dashboard site$")
+  public void operatorVerifyPickupAddressesOfTheNewShipperOnDashboardSite() {
+    Shipper shipper = get(KEY_CREATED_SHIPPER);
+    if (shipper.getPickup() != null && CollectionUtils
+        .isNotEmpty(shipper.getPickup().getReservationPickupAddresses())) {
+      shipper.getPickup().getReservationPickupAddresses()
+          .forEach(nvDashboardPage::validatePickupAddressExists);
+    }
+  }
 }
