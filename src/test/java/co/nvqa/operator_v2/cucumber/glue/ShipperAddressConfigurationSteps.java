@@ -276,8 +276,8 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Verify that csv file is downloaded with filename: {string}")
   public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
         shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
-    }
   }
+}
 
 
 
