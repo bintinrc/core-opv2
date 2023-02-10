@@ -46,17 +46,6 @@ public class LoginSteps extends AbstractSteps {
 
     mainPage.verifyTheMainPageIsLoaded();
   }
-
-  @Given("^Operator login without cookies with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
-  public void loginToOperatorWithoutCookiesV2(String username, String password) {
-    loginPage.loadPage();
-
-    loginPage.clickLoginButtonV2();
-    loginPage.enterCredential(username, password);
-    //loginPage.checkForGoogleSimpleVerification("Singapore");
-    mainPage.verifyTheMainPageIsLoaded();
-  }
-
   @And("Operator login Operator portal with username = {string} and password = {string}")
   public void loginToOperatorV2WithoutURLValidation(String username, String password) {
     loginPage.loadPage();
