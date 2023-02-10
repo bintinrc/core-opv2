@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateSWB7 @runthis
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentWeightDimension @UpdateSWB7
 Feature: Update SWB 7 - ID
 
   @LaunchBrowser @ShouldAlwaysRun
