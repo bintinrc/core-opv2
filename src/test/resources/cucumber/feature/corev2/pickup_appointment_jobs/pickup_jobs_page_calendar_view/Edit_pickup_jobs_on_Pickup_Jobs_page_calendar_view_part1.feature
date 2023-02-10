@@ -14,7 +14,8 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Operator start the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
@@ -38,7 +39,8 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Operator start the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
@@ -179,7 +181,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify Save button in disabled
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario: Edit pickup appointment job - jobs timeslot - ready for routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -218,8 +220,8 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                 |
-      | addPickupJobToRouteRequest | {"new_route_id":KEY_LIST_OF_CREATED_ROUTES[1].id,"overwrite":false} |
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
@@ -251,10 +253,11 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Operator start the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                 |
-      | addPickupJobToRouteRequest | {"new_route_id":KEY_LIST_OF_CREATED_ROUTES[1].id,"overwrite":false} |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{normal-shipper-pickup-appointment-1-id}" in Shipper ID or Name field

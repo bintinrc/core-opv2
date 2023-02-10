@@ -1,5 +1,5 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PAJobsUpdateTags
-Feature: update tags on pickup jobs page
+@OperatorV2 @CoreV2 @PickupAppointment @PickupJobsUpdateTags
+Feature: Update tags on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

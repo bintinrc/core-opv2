@@ -400,8 +400,8 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     And Operator select time slot from Select time range field below:
       | timeRange | Customised time range |
     And Operator select Ready by and Latest by in Pickup Job create:
-      | readyBy  | 23:00 |
-      | latestBy | 00:00 |
+      | readyBy  | 09:00 |
+      | latestBy | 23:00 |
     Then Operator verify Create button in enabled
     When Operator click Create button
     Then Operator verifies job created success following data below:
@@ -414,13 +414,13 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
     Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 0
 
-
+  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
   Scenario:Create new pickup jobs on Pickup Jobs page calendar view - premium shipper - multiple job in a day
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     Given Operator goes to Pickup Jobs Page
     And Operator click on Create or edit job button on this top right corner of the page
     And Operator select shipper id or name = "{premium-shipper-pickup-appointment-1-id}" in Shipper ID or Name field
