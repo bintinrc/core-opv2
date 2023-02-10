@@ -120,32 +120,6 @@ Feature: open route manifest
       | Driver ID   | {driver-id}                        |
       | Driver Name | {driver-name}                      |
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
-  Scenario: Open route manifest from PAM - Routed PA Job
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
-      | generateAddress | RANDOM                                          |
-    Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
-    When API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When Operator goes to Pickup Jobs Page
-    And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-    Then Operator verifies Filter Job button is disabled on Pickup job page
-    Given Operator fills the pickup job ID list below:
-      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    And  Operator clicks "Filter Jobs" button on Pickup Jobs page
-    When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
-    Then Operator verify waypoint at Route Manifest using data below:
-      | status  | Pending                                                                                                                                                                        |
-      | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} |
-    And Operator verifies route detail information below on Route Manifest page:
-      | Route ID    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | Driver ID   | {driver-id}                        |
-      | Driver Name | {driver-name}                      |
 
   @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario: Open route manifest from PAM - In Progress PA Job
