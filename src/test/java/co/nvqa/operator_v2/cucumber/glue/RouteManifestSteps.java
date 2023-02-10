@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.util.factory.FailureReasonFactory;
-import co.nvqa.operator_v2.model.DriverPerformanceInfo;
 import co.nvqa.operator_v2.model.PoaInfo;
 import co.nvqa.operator_v2.model.PohInfo;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
@@ -13,8 +12,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -224,5 +221,29 @@ public class RouteManifestSteps extends AbstractSteps {
   public void clickViewPhotoButton() {
     routeManifestPage.proofOfArrivalAndHandoverDialog.inFrame(
         page -> page.proofOfHandoverTable.clickViewPhoto());
+  }
+
+  @Then("Operator verifies route detail information below on Route Manifest page:")
+  public void operatorVerifiesRouteDetailInformation(Map<String, String> dataTable) {
+    Map<String, String> resolvedData = resolveKeyValues(dataTable);
+    routeManifestPage.waitUntilPageLoaded();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      if (resolvedData.get("Route ID") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Route ID")).
+            as("Route Id is the same").isEqualToIgnoringCase(resolvedData.get("Route ID"));
+      }
+      if (resolvedData.get("Driver ID") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver ID")).
+            as("Driver ID is the same").isEqualToIgnoringCase(resolvedData.get("Driver ID"));
+      }
+      if (resolvedData.get("Driver Name") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Driver Name")).
+            as("Driver Name is the same").isEqualToIgnoringCase(resolvedData.get("Driver Name"));
+      }
+      if (resolvedData.get("Date") != null) {
+        Assertions.assertThat(routeManifestPage.getRouteDetailItem("Date")).
+            as("Date is the same").isEqualToIgnoringCase(resolvedData.get("Date"));
+      }
+    }, 2000, 3);
   }
 }
