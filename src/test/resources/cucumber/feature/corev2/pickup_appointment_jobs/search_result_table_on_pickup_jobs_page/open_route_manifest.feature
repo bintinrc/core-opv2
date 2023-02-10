@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @OpenRouteManifest @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @OpenRouteManifest
 Feature: open route manifest
 
   @LaunchBrowser @ShouldAlwaysRun
