@@ -329,4 +329,9 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
     editPickUpTypeButton.click();
   }
 
+  public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
+    String downloadedCsvFile = getLatestDownloadedFilename(
+        fileName);
+    Assertions.assertThat(fileName.equals(downloadedCsvFile));
+ }
 }
