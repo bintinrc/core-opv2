@@ -88,7 +88,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Bulk remove route')]")
   public RemoveJobRouteModal removeJobRouteModal;
-
+  @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Fail job')]")
+  public BulkFailJobsModal bulkFailJobsModal;
 
   @FindBy(xpath = "//button//span[@text =]")
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
@@ -140,6 +141,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
+
+    @FindBy(xpath = "//label[@for='comments']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobComments;
+
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
 
@@ -280,6 +285,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
+
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -333,12 +339,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
+
+
+
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
     public void clearJobComments() {
-      commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobComments.click();
+      }, 1000, 5);
     }
 
     public void clickEditButton(String jobId) {
@@ -509,6 +521,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public PageElement routeId;
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]")
     public PageElement removeRoute;
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Fail job')]")
+    public PageElement failJob;
 
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]//ancestor::li[contains(@class,'ant-dropdown-menu-item')]")
     public PageElement removeRouteMenuItem;
@@ -530,7 +544,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String PICKUP_JOB_ROW_DRIVER = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
 
     public boolean removeRouteStatus() {
-      
+
       return Boolean.parseBoolean(removeRouteMenuItem.getAttribute("aria-disabled"));
 
     }
@@ -745,6 +759,35 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+
+  public static class BulkFailJobsModal extends AntModal {
+
+    public BulkFailJobsModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//span[text()='Submit']/parent::button")
+    public Button submitButton;
+
+    String JOB_FAIL_MENU_OPEN_BUTTON = "//tr[@data-row-key='%s']//*[@data-testid='bulkFailureReason.editButton']";
+    String JOB_FAIL_MENU_APPLY_ALL_BUTTON = "//tr[@data-row-key='%s']//a[contains(text(),'Apply this to all')]";
+
+    String JOB_FAIL_MENU_ERROR_MESSAGE = "//span[contains(text(),'Error: Job %s cannot be failed because it is not Routed')]";
+
+    public void clickSelectFailReasonForJob(String jobId) {
+      webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_OPEN_BUTTON, jobId))).click();
+    }
+
+    public void clickApplyFailReasonToAll(String jobId) {
+      webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_APPLY_ALL_BUTTON, jobId))).click();
+    }
+
+    public boolean checkCannotFailedErrorMessageForJob(String jobId) {
+      return webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_ERROR_MESSAGE, jobId))).isDisplayed();
+    }
+
+  }
 
   public static class RemoveJobRouteModal extends AntModal {
 

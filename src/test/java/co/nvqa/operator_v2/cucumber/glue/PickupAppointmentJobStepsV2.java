@@ -184,7 +184,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                 .as(f("Notification Message contains: %s", message)).contains(message);
             Assertions.assertThat(pageNotifcationDescription)
                 .as(f("Notification Description contains: %s", description)).contains(description);
-          }, 1000, 3);
+          }, 1000, 10);
         });
       });
     }, 1000, 5);
@@ -295,6 +295,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.createOrEditJobPage.selectTagInJobTagsField(tag);
+        pause3s();
       });
     }, 1000, 5);
 
@@ -360,6 +361,9 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           break;
         case "Remove route":
           pickupAppointmentJobPage.bulkSelect.removeRoute.click();
+          break;
+        case "Fail job":
+          pickupAppointmentJobPage.bulkSelect.failJob.click();
           break;
       }
     });
@@ -802,10 +806,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     String status = resolveValue(Status);
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.createOrEditJobPage
-              .isStarByJobIdDisplayed(jobId, status))
-          .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.createOrEditJobPage
+                .isStarByJobIdDisplayed(jobId, status))
+            .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      }, 1000, 5);
     });
+
   }
 
   @When("Operator check no tag = {string} is displayed on job")
@@ -1137,6 +1144,59 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     });
   }
+  @When("Operator click select fail reason on bulk fail modal for jobId = {string}")
+  public void clickSelectFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickSelectFailReasonForJob(jobId);
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click on Submit button on bulk fail modal")
+  public void clickSubmitOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.submitButton.click();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click apply fail reason for all in bulk fail modal for jobId = {string}")
+  public void clickSelectApplyToAllFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickApplyFailReasonToAll(jobId);
+      });
+    }, 1000, 3);
+  }
+
+
+  @When("Operator check Error message is shown in fail modal for jobId = {string}")
+  public void clickCheckErrorMessageOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.checkCannotFailedErrorMessageForJob(jobId))
+            .as("check error message in bulk fail").isTrue();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator check Submit button disabled on bulk fail modal")
+  public void clickSubmitDisabledOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.submitButton.isEnabled())
+            .as("check Submit button disabled in bulk fail").isFalse();
+      });
+    }, 1000, 3);
+  }
+
 
   @Given("Operator performs Success jobs action with data below:")
   public void operatorPeformsBulkUpdateAction(Map<String, String> data) {
