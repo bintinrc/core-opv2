@@ -151,6 +151,7 @@ Feature: Create pickup jobs from existing job
       | timeSlot  | {date: 3 days next, yyyy-MM-dd} - {date: 3 days next, yyyy-MM-dd} 09:00 - 12:00 |
       | pickupTag | DUPE1                                                                           |
 
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
