@@ -18,6 +18,11 @@ Feature: Hub User Management
     When Operator bulk upload hub user using a "hub_user_management_add_1_user.csv" CSV file
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully added 1 user(s) |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify hub user parameter:
+      | check    | Added               |
+      | username | {add-hub-user-name} |
 
   Scenario: Hub User Management - Bulk Assigns Hub User  - 2 User
     When Operator go to menu Sort -> Hub User Management
