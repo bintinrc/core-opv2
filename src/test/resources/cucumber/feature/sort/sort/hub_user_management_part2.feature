@@ -1,4 +1,4 @@
-@Sort @Sort @HubUserManagement
+@Sort @Sort @HubUserManagementPart2
 Feature: Hub User Management
 
   @LaunchBrowser @ShouldAlwaysRun
