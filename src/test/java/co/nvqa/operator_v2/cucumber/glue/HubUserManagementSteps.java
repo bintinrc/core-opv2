@@ -190,4 +190,11 @@ public class HubUserManagementSteps extends AbstractSteps {
         break;
     }
   }
+
+  @Then("Make sure it show error {string} contains no email")
+  public void makeSureItShowErrorContainsNoEmail(String csv) {
+    Assertions.assertThat(hubUserManagementPage.errorContainsNoEmail.getText())
+        .as("Error Message is True")
+        .isEqualToIgnoringCase("Error: " + csv + " contains no email");
+  }
 }

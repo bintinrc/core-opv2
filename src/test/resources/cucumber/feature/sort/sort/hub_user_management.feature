@@ -19,7 +19,6 @@ Feature: Hub User Management
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully added 1 user(s) |
 
-
   Scenario: Hub User Management - Bulk Assigns Hub User  - 2 User
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
@@ -31,9 +30,13 @@ Feature: Hub User Management
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
     When Operator bulk upload hub user using a "hub_user_management_add_empty_user.csv" CSV file
-    Then Operator verifies the error details in modal:
-      | modalTitle | We've detected some error in the file                                  |
-      | modalBody  | 1 emails cannot be added. Please correct the file and upload it again. |
+    Then Make sure it show error "hub_user_management_add_empty_user.csv" contains no email
+
+  Scenario: Hub User Management Bulk Assigns Hub User - Empty with Spaces CSV
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_add_empty_with_space_user.csv" CSV file
+    Then Make sure it show error "hub_user_management_add_empty_with_space_user.csv" contains no email
 
   Scenario: Hub User Management Bulk Assigns  Hub User - Partially Error CSV Valid and Invalid Email
     When Operator go to menu Sort -> Hub User Management

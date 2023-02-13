@@ -47,6 +47,9 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
   @FindBy(xpath = "//p[@class='error']/span[contains(text(),'exceeds the maximum size.')]")
   public PageElement errorExceedMaximumSize;
 
+  @FindBy(xpath = "//p[@class='error']/span[contains(text(),'contains no email')]")
+  public PageElement errorContainsNoEmail;
+
   @FindBy(css = "[data-testid='add-user-button']")
   public PageElement addUserButton;
 
