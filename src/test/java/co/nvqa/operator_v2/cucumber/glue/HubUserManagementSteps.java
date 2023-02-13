@@ -171,4 +171,23 @@ public class HubUserManagementSteps extends AbstractSteps {
       hubUserManagementPage.removeButton.click();
     }, 1000, 5);
   }
+
+  @Then("Operator verify hub user parameter:")
+  public void operatorVerifyHubUserParameter(Map<String, String> data) {
+    Map<String, String> userData = resolveKeyValues(data);
+    String username = String.format(hubUserManagementPage.XPATH_OF_USERNAME,
+        userData.get("username"));
+    switch (userData.get("check")) {
+      case "Added":
+        Assertions.assertThat(hubUserManagementPage.findElementByXpath(username).isDisplayed())
+            .as("User is Added")
+            .isTrue();
+        break;
+      case "Removed":
+        Assertions.assertThat(hubUserManagementPage.isElementExist(username))
+            .as("User is Removed")
+            .isFalse();
+        break;
+    }
+  }
 }

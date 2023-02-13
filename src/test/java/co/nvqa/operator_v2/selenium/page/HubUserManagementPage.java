@@ -16,7 +16,11 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
   }
 
   public String XPATH_OF_EDIT_BUTTON = "//button[@data-testid='view-users-navigation-button-%s']";
+
   public String XPATH_OF_REMOVE_USER_BUTTON = "//button[@data-testid='delete-button-%s']";
+
+  public String XPATH_OF_USERNAME = "//td[@class='name']//*[contains(text(),'%s')]";
+
   public String hubTitleXpath = "//span[@title='%s']";
 
   @FindBy(xpath = "//div[@data-testid='hub-selection-select']")
@@ -24,14 +28,19 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
 
   @FindBy(xpath = "//input[@accept='.csv']")
   public FileInput uploadCsvFileInput;
+
   @FindBy(xpath = "//span[@class='ant-upload-span']//span[@class='ant-upload-list-item-name']")
   public PageElement uploadCsvFileName;
+
   @FindBy(xpath = "//button/span[@data-testid='submit-button']")
   public PageElement submitCsvFile;
+
   @FindBy(xpath = "//button[@data-testid='bulk-assign-button']")
   public Button bulkAssignButton;
+
   @FindBy(xpath = "//div[contains(text(),'file')]")
   public PageElement errorTitle;
+
   @FindBy(xpath = "//div/p[contains(text(),'upload')]")
   public PageElement errorBody;
 

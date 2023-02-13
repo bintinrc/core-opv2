@@ -84,10 +84,14 @@ Feature: Hub User Management
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
     When Operator click add user button on Hub User Management Page
-    When Operator input "{add-hub-user-name}" user email
+    When Operator input "{add-hub-user-email}" user email
     Then Operator verifies that success react notification displayed in Hub User Management Page:
-      | top | Successfully added  |
-      | bot | {add-hub-user-name} |
+      | top | Successfully added {add-hub-user-email} |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify hub user parameter:
+      | check    | Added               |
+      | username | {add-hub-user-name} |
 
   Scenario: Hub User Management  Add Staff Hub User - User Not In AAA
     When Operator go to menu Sort -> Hub User Management
@@ -95,8 +99,8 @@ Feature: Hub User Management
     When Operator click add user button on Hub User Management Page
     When Operator input "{add-invalid-hub-user-name}" user email
     Then Operator verifies that error react notification displayed in Hub User Management Page:
-      | top | Failed to add user             |
-      | bot | User not found in our database |
+      | top    | Failed to add user             |
+      | bottom | User not found in our database |
 
   Scenario: Hub User Management - Add Staff for Hub User  - Empty Input
     When Operator go to menu Sort -> Hub User Management
@@ -111,8 +115,8 @@ Feature: Hub User Management
     When Operator click add user button on Hub User Management Page
     When Operator input "{add-hub-user-with-max-hub-name}" user email
     Then Operator verifies that error react notification displayed in Hub User Management Page:
-      | top | Failed to add user                        |
-      | bot | User should be mapped with 3 Hubs maximum |
+      | top    | Failed to add user                        |
+      | bottom | User should be mapped with 3 Hubs maximum |
 
   Scenario: Hub User Management - Remove Staff Hub User - Remove Staff
     When Operator go to menu Sort -> Hub User Management
@@ -121,4 +125,9 @@ Feature: Hub User Management
     When Operator click on remove button on remove user modal
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully removed {remove-hub-user-name} |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify hub user parameter:
+      | check    | Removed                |
+      | username | {remove-hub-user-name} |
 
