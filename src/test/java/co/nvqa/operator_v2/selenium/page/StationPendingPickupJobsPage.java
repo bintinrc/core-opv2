@@ -130,13 +130,13 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     waitWhilePageIsLoading();
     switchToFrame();
     if (buttonText.equalsIgnoreCase("Create Job")) {
-      createJobButton.get(0).click();
+      createJobButton.get(0).getWebElement().click();
     }
-    if (buttonText.equalsIgnoreCase("Asssign To Route")) {
-      assignToRouteButton.get(0).click();
+    if (buttonText.equalsIgnoreCase("Assign To Route")) {
+      assignToRouteButton.get(0).getWebElement().click();
     }
     if (buttonText.equalsIgnoreCase("Reassign To Route")) {
-      reAssignToRouteButton.get(0).click();
+      reAssignToRouteButton.get(0).getWebElement().click();
     }
   }
 
