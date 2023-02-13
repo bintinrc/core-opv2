@@ -85,10 +85,9 @@ Feature: Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
     When Operator click add user button on Hub User Management Page
     When Operator input "{add-hub-user-name}" user email
-    Then Operator verify success notification "Successfully added hubuser1@gmail.com"
     Then Operator verifies that success react notification displayed in Hub User Management Page:
-      | top | Successfully added |
-      | bot | hubuser1@gmail.com |
+      | top | Successfully added  |
+      | bot | {add-hub-user-name} |
 
   Scenario: Hub User Management  Add Staff Hub User - User Not In AAA
     When Operator go to menu Sort -> Hub User Management
