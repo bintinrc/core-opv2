@@ -9,14 +9,14 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
-public class HubUserManagementPage extends OperatorV2SimplePage {
+public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage> {
 
   public HubUserManagementPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public String XPATH_OF_EDIT_BUTTON = "//button[@data-testid='view-users-navigation-button-%s']";
-
+  public String XPATH_OF_REMOVE_USER_BUTTON = "//button[@data-testid='delete-button-%s']";
   public String hubTitleXpath = "//span[@title='%s']";
 
   @FindBy(xpath = "//div[@data-testid='hub-selection-select']")
@@ -34,6 +34,27 @@ public class HubUserManagementPage extends OperatorV2SimplePage {
   public PageElement errorTitle;
   @FindBy(xpath = "//div/p[contains(text(),'upload')]")
   public PageElement errorBody;
+
+  @FindBy(xpath = "//p[@class='error']/span[contains(text(),'exceeds the maximum size.')]")
+  public PageElement errorExceedMaximumSize;
+
+  @FindBy(css = "[data-testid='add-user-button']")
+  public PageElement addUserButton;
+
+  @FindBy(css = "[data-testid='email-input']")
+  public PageElement emailInput;
+
+  @FindBy(css = "[data-testid='ok-text']")
+  public PageElement addButton;
+
+  @FindBy(xpath = "//button[@disabled]/span[@data-testid='ok-text']")
+  public PageElement disabledAddButton;
+
+  @FindBy(css = "[data-testid='table-container use-fixed-scroll']")
+  public PageElement hubUserTable;
+
+  @FindBy(css = "[data-testid='remove-button']")
+  public PageElement removeButton;
 
   public void uploadCsvFile(File file) {
     uploadCsvFileInput.sendKeys(file.getAbsoluteFile());

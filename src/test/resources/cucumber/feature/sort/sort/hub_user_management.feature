@@ -16,13 +16,16 @@ Feature: Hub User Management
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
     When Operator bulk upload hub user using a "hub_user_management_add_1_user.csv" CSV file
-    Then Operator verify success notification "Successfully added 1 user(s)"
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully added 1 user(s) |
+
 
   Scenario: Hub User Management - Bulk Assigns Hub User  - 2 User
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
     When Operator bulk upload hub user using a "hub_user_management_add_2_user.csv" CSV file
-    Then Operator verify success notification "Successfully added 2 user(s)"
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully added 2 user(s) |
 
   Scenario: Hub User Management Bulk Assigns Hub User - Empty CSV
     When Operator go to menu Sort -> Hub User Management
@@ -40,4 +43,83 @@ Feature: Hub User Management
     Then Operator verifies the error details in modal:
       | modalTitle | We've detected some error in the file                                  |
       | modalBody  | 1 emails cannot be added. Please correct the file and upload it again. |
+
+  Scenario: Hub User Management - Bulk Assigns Hub User -  User already assigned to Maximum (3)Hubs
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_max_3_hub_user.csv" CSV file
+    Then Operator verifies the error details in modal:
+      | modalTitle | We've detected some error in the file                                  |
+      | modalBody  | 1 emails cannot be added. Please correct the file and upload it again. |
+
+  Scenario: Hub User Management- Bulk Assign Hub User - 20 User
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_add_20_user.csv" CSV file
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully added 20 user(s) |
+
+  Scenario: Hub User Management - Bulk Assigns Hub User - More than 20 User
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_add_more_than_20_user.csv" CSV file
+    Then Make sure it show error "hub_user_management_add_more_than_20_user.csv" exceeds the maximum size
+
+  Scenario: Hub User Management - Bulk Assigns UI/UX  Hub User - User already assigned to The Hub
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_user_already_assigned_to_hub.csv" CSV file
+    Then Operator verifies the error details in modal:
+      | modalTitle | We've detected some error in the file                                  |
+      | modalBody  | 1 emails cannot be added. Please correct the file and upload it again. |
+
+  Scenario: Hub User Management - Bulk Assigns  Hub User -  Duplicate User within the csv
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator bulk upload hub user using a "hub_user_management_duplicate_user.csv" CSV file
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully added 1 user(s) |
+
+  Scenario: Hub User Management - Add Staff Hub User
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator click add user button on Hub User Management Page
+    When Operator input "{add-hub-user-name}" user email
+    Then Operator verify success notification "Successfully added hubuser1@gmail.com"
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully added |
+      | bot | hubuser1@gmail.com |
+
+  Scenario: Hub User Management  Add Staff Hub User - User Not In AAA
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator click add user button on Hub User Management Page
+    When Operator input "{add-invalid-hub-user-name}" user email
+    Then Operator verifies that error react notification displayed in Hub User Management Page:
+      | top | Failed to add user             |
+      | bot | User not found in our database |
+
+  Scenario: Hub User Management - Add Staff for Hub User  - Empty Input
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator click add user button on Hub User Management Page
+    When Operator input "" user email
+    Then Make sure add button is disabled
+
+  Scenario: Hub User Management - Add Staff Hub User - User already has 3 hubs assigned
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator click add user button on Hub User Management Page
+    When Operator input "{add-hub-user-with-max-hub-name}" user email
+    Then Operator verifies that error react notification displayed in Hub User Management Page:
+      | top | Failed to add user                        |
+      | bot | User should be mapped with 3 Hubs maximum |
+
+  Scenario: Hub User Management - Remove Staff Hub User - Remove Staff
+    When Operator go to menu Sort -> Hub User Management
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    When Operator click remove button for "{remove-hub-user-id}" on Hub User Management Page
+    When Operator click on remove button on remove user modal
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully removed {remove-hub-user-name} |
 
