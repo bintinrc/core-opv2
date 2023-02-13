@@ -1049,6 +1049,30 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           swb = "KMmt" + RandomStringUtils.randomNumeric(3);
         } else if (swb.equalsIgnoreCase("kmmt-lower-random")) {
           swb = "kmmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("r11b-upper-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-mix-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-lower-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-upper-8-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-mix-8-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-lower-8-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-upper-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-mix-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-lower-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-upper-8-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-mix-8-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-lower-8-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(8);
         } else if (swb.equalsIgnoreCase("invalid")) {
           swb = "00112233445566";
         } else if (swb.equalsIgnoreCase("alfabet")) {
