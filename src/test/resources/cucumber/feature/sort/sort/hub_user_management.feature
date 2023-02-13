@@ -1,7 +1,7 @@
 @Sort @Sort @HubUserManagement
 Feature: Hub User Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @TAG
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -11,7 +11,7 @@ Feature: Hub User Management
     When Operator click select hub on Hub User Management Page
       | hubName | {station-hub-name-2} |
     Then Operator verifies redirect to correct "{station-hub-name-2} " Hub User Management Page
-
+@TAG
   Scenario: Hub User Management - Bulk Assigns Hub User  - 1 User
     When Operator go to menu Sort -> Hub User Management
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
