@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -99,22 +100,22 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div[contains(@class,'ant-col styled')]//following-sibling::div//div[@class='ant-select-selector']")
   public AntSelect2 hubs;
 
-  @FindBy(xpath = "//div[text()='Zones']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
+  @FindBy(xpath = "//div[text()='Zones']//parent::div[contains(@class,'ant-col styled')]//following-sibling::div//div[@class='ant-select-selector']")
   public AntSelect2 zones;
 
-  @FindBy(xpath = "//div[text()='Hubs']//parent::div/following-sibling::div//div[starts-with(@class,'VirtualSelect')]")
+  @FindBy(xpath = "//div[text()='Hubs']//parent::div[contains(@class,'ant-col styled')]//following-sibling::div//div[@class='ant-select-selector']")
   public List<PageElement> modalHubSelection;
 
-  @FindBy(xpath = "//div[contains(@class,'row-cell-text')]")
+  @FindBy(xpath = "//div[contains(@class,'ant-select-item ant-select-item-option')]")
   public PageElement hubDropdownValues;
 
   @FindBy(xpath = "//div[@data-headerkey='route_id']//input")
   public PageElement routeFilter;
 
-  @FindBy(xpath = "//span[text()='Load Selection']")
+  @FindBy(id = "station-route-monitoring_load-selection-button")
   public PageElement loadSelection;
 
   @FindBy(xpath = "//div[contains(text(),'Invalid Failed Reservations')]/ancestor::div[contains(@class,'ant-card-bordered')]//div[@class='ant-select-selector']")
@@ -167,6 +168,9 @@ public class StationRouteMonitoringPage extends OperatorV2SimplePage {
     hubs.enterSearchTerm(hubName);
     pause3s();
     hubDropdownValues.click();
+    webDriver.findElement(
+            By.cssSelector("input.ant-select-search__field,input.ant-select-selection-search-input"))
+        .sendKeys(Keys.TAB);
     clickLoadSelection();
   }
 
