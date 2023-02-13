@@ -1,5 +1,5 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PAJobsUpdateRoute
-Feature: update route on pickup jobs page
+@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobsUpdateRoute
+Feature: Update route on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -11,7 +11,7 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given Operator goes to Pickup Jobs Page
@@ -24,7 +24,7 @@ Feature: update route on pickup jobs page
     And Operator clicks update route button on Edit PA job page
     Then Operator verifies update route successful message below on Edit PA job page:
       | Route updated successfully\nJob {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTE_ID[1]}" on Edit PA job page
+    And Operator verifies current route is updated to "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Edit PA job page
     And Operator verifies PA job status is "Routed" on Edit PA job page
 
   @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
@@ -33,10 +33,11 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
@@ -56,7 +57,7 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
@@ -83,16 +84,18 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
@@ -112,13 +115,13 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
@@ -141,18 +144,20 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When API Operator archives routes:
+    When API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:
@@ -172,7 +177,7 @@ Feature: update route on pickup jobs page
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                           |
     Given API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{date: 3 days next, yyyy-MM-dd}T09:00:00+08:00", "latest":"{date: 3 days next, yyyy-MM-dd}T12:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{premium-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Premium"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-3-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-3-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     When API Core - Operator add pickup job to the route using data below:
@@ -185,7 +190,8 @@ Feature: update route on pickup jobs page
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     Given Operator clicks edit PA job on Pickup Jobs Page
     Then Operator verifies PA job status is "Routed" on Edit PA job page
-    When API Driver "{driver-id}" Starts the route
+    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
+    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Given Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
     Given Operator fills the pickup job ID list below:

@@ -24,7 +24,6 @@ Feature: Shipper Address Configuration
     Then Operator verifies table is filtered "lat_long" based on input in "1.288147,103.740233" in shipper address page
     Then Operator verifies that green check mark icon is not shown under the Lat Long
 
-
   Scenario: Filter Verified Shipper Address
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -98,7 +97,7 @@ Feature: Shipper Address Configuration
       | Search by Lat Long       | Lat Long       | 1.288147,103.740233                              | lat_long          |
       | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id |
 
-  Scenario: Download CSV of Shipper Address
+  Scenario Outline: Download CSV of Shipper Address
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
@@ -114,12 +113,17 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Download Addresses button
+    And Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_<current_date>.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
       | Shipper ID     |
       | Latitude       |
       | Longitude      |
+
+    Examples:
+     | current_date                     |
+     | {date: 0 days next, ddMMMYYYY}   |
 
   Scenario: Download CSV of Shipper Address Template
     When Operator loads Shipper Address Configuration page
@@ -133,13 +137,13 @@ Feature: Shipper Address Configuration
     And Operator clicks on the load selection button
     And Operator clicks on the "Update Addresses Lat Long" button
     And Operator clicks on the Download CSV Template button
+    And Verify that csv file is downloaded with filename: "CSV Template_Pickup Address Lat Long.csv"
     Then Operator verifies header names are available in the downloaded CSV file "CSV Template_Pickup Address Lat Long.csv"
       | Address ID     |
       | Pickup Address |
       | Shipper ID     |
       | Latitude       |
       | Longitude      |
-
 
   Scenario: Unable to Update Shipper Addresses with Invalid Shipper ID
     When Operator loads Shipper Address Configuration page
