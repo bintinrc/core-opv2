@@ -1041,6 +1041,14 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         String swb = dataTable.get("swb");
         if (swb.equalsIgnoreCase("random")) {
           swb = RandomStringUtils.randomNumeric(6);
+        } else if (swb.equalsIgnoreCase("random-5-digits")) {
+          swb = RandomStringUtils.randomNumeric(5);
+        } else if (swb.equalsIgnoreCase("kmmt-upper-random")) {
+          swb = "KMMT" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-mix-random")) {
+          swb = "KMmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-lower-random")) {
+          swb = "kmmt" + RandomStringUtils.randomNumeric(3);
         } else if (swb.equalsIgnoreCase("invalid")) {
           swb = "00112233445566";
         } else if (swb.equalsIgnoreCase("alfabet")) {

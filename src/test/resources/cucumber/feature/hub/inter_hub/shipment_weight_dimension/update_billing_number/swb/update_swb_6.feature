@@ -27,7 +27,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 12345                          |
+      | swb                | RANDOM-5-DIGITS                |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -39,7 +39,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 54321                          |
+      | swb                | RANDOM-5-DIGITS                |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -68,7 +68,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 123456                         |
+      | swb                | RANDOM                         |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -80,7 +80,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 654321                         |
+      | swb                | RANDOM                         |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -109,7 +109,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 123456                         |
+      | swb                | RANDOM                         |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -121,7 +121,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | KMMT001                        |
+      | swb                | KMMT-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -150,7 +150,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 123456                         |
+      | swb                | RANDOM                         |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -162,7 +162,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | KMmt021                        |
+      | swb                | KMMT-MIX-RANDOM                |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -191,7 +191,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | 123456                         |
+      | swb                | RANDOM                         |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
@@ -203,7 +203,7 @@ Feature: Update SWB 6 - PH
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | kmmt011                        |
+      | swb                | KMMT-LOWER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-ph} |
       | originSeahaul      | {local-seaport-1-code-ph}      |
       | destinationSeahaul | {local-seaport-2-code-ph}      |
