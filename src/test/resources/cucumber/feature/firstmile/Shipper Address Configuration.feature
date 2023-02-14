@@ -97,6 +97,7 @@ Feature: Shipper Address Configuration
       | Search by Lat Long       | Lat Long       | 1.288147,103.740233                              | lat_long          |
       | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id |
 
+  @HappyPath
   Scenario Outline: Download CSV of Shipper Address
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -287,7 +288,7 @@ Feature: Shipper Address Configuration
     And Operator drag and drop csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
-
+  @HappyPath
   Scenario: Success Bulk Update Shipper Addresses Lat Long
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:

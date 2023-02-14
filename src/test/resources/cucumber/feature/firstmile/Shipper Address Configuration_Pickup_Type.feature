@@ -502,7 +502,6 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 120 seconds
     And Operator clicks on the "Configure Pickup Type" button
     And Operator uploads csv file: "Unable to Bulk Configure All Addresses Pickup Type.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for error count "2" and total count "2"
@@ -532,7 +531,6 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 120 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
@@ -590,6 +588,7 @@ Feature: Shipper Address Configuration
       | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude | newZoneValue | newHubValue |
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        | AUTO-FM-ZONE | AUTO-FM-VN  |
 
+  @HappyPath
   Scenario Outline: View Updated Shipper Address Detail on Update Lat Long Page
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
