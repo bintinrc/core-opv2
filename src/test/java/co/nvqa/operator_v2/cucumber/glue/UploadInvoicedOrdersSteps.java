@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -9,10 +8,15 @@ import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadInvoicedOrdersSteps extends AbstractSteps {
 
   private UploadInvoicedOrdersPage uploadInvoicedOrdersPage;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(UploadInvoicedOrdersSteps.class);
+
 
   public UploadInvoicedOrdersSteps() {
   }
@@ -26,7 +30,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
   public void operatorUploadACSVFileWithBelowOrderIdsVerify(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
     File csvFile = StandardTestUtils.createFile("upload.csv", String.join("\n", trackingIds));
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadFile(csvFile);
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
     pause3s();
@@ -36,7 +40,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
   public void operatorUploadACSVFileWithBelowOrderIds(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
     File csvFile = StandardTestUtils.createFile("upload.csv", String.join("\n", trackingIds));
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadFile(csvFile);
     takesScreenshot();
   }
@@ -75,7 +79,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
       List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
     File csvFile = StandardTestUtils.createFile("uploadfile", String.join("\n", trackingIds));
-    NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
+    LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadFile(csvFile);
     uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
     takesScreenshot();
