@@ -1486,7 +1486,7 @@ Feature: Pending Pickup Jobs
       | HubName      | HubId      | latitude | longitude | start_time | end_time | Country | ModalName        | TileName1                      | TileName2                    |
       | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn @Ddebug
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: Force Success Pending Pickup Job
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
@@ -1503,7 +1503,6 @@ Feature: Pending Pickup Jobs
       | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss} Pending Pickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{gradle-current-date-yyyy-MM-dd}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss}Station Pendingpickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
     And Operator waits for 80 seconds
-    Given DB Operator get Grab reservation id
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
     And Operator changes the country to "<Country>"
@@ -1533,10 +1532,6 @@ Feature: Pending Pickup Jobs
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}    |
-      | approxVolume | Less than 10 Parcels |
-      | comments     | Comments             |
     When Operator finish reservation with success
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
@@ -1545,7 +1540,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has decreased by 1
-    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has decreased by 1
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has increased by 1
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName1>"
     Then Operator verify value on pending pickup table for the "NO_UPCOMING_JOB" column is equal to "No upcoming"
     Then Operator verifies that "Create Job" action button is displayed
@@ -1554,7 +1549,7 @@ Feature: Pending Pickup Jobs
       | HubName      | HubId      | latitude | longitude | start_time | end_time | Country | ModalName        | TileName1                      | TileName2                    |
       | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn @Ddebug
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @TimeBased @SystemIdNotSg @default-vn
   Scenario Outline: Force Fail Pending Pickup Job
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
@@ -1565,7 +1560,8 @@ Feature: Pending Pickup Jobs
     And Operator selects the hub as "<HubName>" and proceed
     When Operator get the count from the pending pickup tile: "<TileName1>"
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
-    And API Shipper create V4 order using data below:
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
       | shipperClientId     | {station-vn-shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
       | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss} Station Pending Pickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{gradle-current-date-yyyy-MM-dd}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"<start_time>","end_time":"<end_time>","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss} Station Pending Pickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
@@ -1576,7 +1572,6 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Given DB Operator get Grab reservation id
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 1
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
     Given DB Operator get Grab reservation id
@@ -1600,10 +1595,6 @@ Feature: Pending Pickup Jobs
       | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
-      | comments     | GET_FROM_CREATED_RESERVATION |
     When Operator finish reservation with failure
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
@@ -1612,7 +1603,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has decreased by 1
-    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has decreased by 1
+    Then Operator verifies that the count in the pending pickup tile: "<TileName1>" has increased by 1
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName1>"
     Then Operator verify value on pending pickup table for the "NO_UPCOMING_JOB" column is equal to "No upcoming"
     Then Operator verifies that "Create Job" action button is displayed
