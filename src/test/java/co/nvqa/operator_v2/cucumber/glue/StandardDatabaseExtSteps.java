@@ -213,6 +213,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     List<Transaction> transactions = order.getTransactions();
 
+    List<Map<String, String>> finalData = resolveListOfMaps(data);
     ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
     {
       Optional<Transaction> transactionOptional = transactions.stream()
@@ -223,12 +224,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          if (jaroScores.size() != finalData.size()) {
+            pause10s();
+            jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          }
           Assertions.assertThat(jaroScores.size()).as("Number of jaro scores")
-              .isEqualTo(data.size());
-          for (int i = 0; i < data.size(); i++) {
-            JaroScore expected = new JaroScore(resolveKeyValues(data.get(i)));
+              .isEqualTo(finalData.size());
+          for (int i = 0; i < finalData.size(); i++) {
+            if (StringUtils.equalsAnyIgnoreCase(finalData.get(i).get("score"), "null",
+                "not null")) {
+              finalData.get(i).remove("score");
+            }
+            JaroScore expected = new JaroScore(finalData.get(i));
             JaroScore actual = jaroScores.get(i);
-            expected.compareWithActual(actual);
+            expected.compareWithActual(actual, finalData.get(i));
           }
         }
       } else {

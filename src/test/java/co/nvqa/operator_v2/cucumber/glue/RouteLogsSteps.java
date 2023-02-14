@@ -10,7 +10,6 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
-import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -54,7 +53,6 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN
 public class RouteLogsSteps extends AbstractSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RouteLogsSteps.class);
-  private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
 
   private RouteLogsPage routeLogsPage;
 
@@ -913,6 +911,7 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
   public void loadWaypointsOfSelectedRoute() {
     routeLogsPage.inFrame(() -> {
+      put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       Long routeId = get(KEY_CREATED_ROUTE_ID);
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
@@ -923,7 +922,6 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @Then("Operator is redirected to this page {value}")
   public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl) {
-    redirectUrl = TestConstants.OPERATOR_PORTAL_BASE_URL + redirectUrl;
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading(redirectUrl);
   }
 
@@ -986,6 +984,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
     });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
+    pause2s();
     routeLogsPage.waitUntilPageLoaded();
     pause2s();
   }
