@@ -6,7 +6,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
+  Scenario: Operator Assign a Pending Reservation to a Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -31,7 +31,16 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 1                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
@@ -60,6 +69,14 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 3                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)

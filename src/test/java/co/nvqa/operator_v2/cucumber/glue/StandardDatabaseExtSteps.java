@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.hibernate.EventsDao;
-import co.nvqa.common.core.model.events.OrderEventEntity;
+import co.nvqa.common.core.model.persisted_class.events.OrderEvents;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
@@ -328,7 +328,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify order_events record for the created order for RTS:$")
   public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     List<String> orderEventsTypes = orderEvents.stream()
         .map(orderEvent -> String.valueOf(orderEvent.getType())).collect(
             Collectors.toList());
@@ -343,7 +343,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify the order_events record exists for the created order with type:$")
   public void operatorVerifyOrderEventExists(DataTable mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     List<Integer> types = mapOfData.asList(Integer.class);
     types.forEach(type ->
@@ -356,9 +356,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("^DB Operator verify the order_events record:$")
   public void operatorVerifyOrderEventExists(Map<String, String> data) {
-    OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(expected.getOrderId());
-    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
+    OrderEvents expected = new OrderEvents(resolveKeyValues(data));
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(expected.getOrderId());
+    OrderEvents.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -366,10 +366,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -400,10 +400,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -432,12 +432,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify (-?\\d+) order_events record for the created order:$")
   public void operatorVerifyOrderEventParams(int index, Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     if (index <= 0) {
       index = orderEvents.size() + index;
     }
-    OrderEventEntity theLastOrderEvent = orderEvents.get(index - 1);
+    OrderEvents theLastOrderEvent = orderEvents.get(index - 1);
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
@@ -451,7 +451,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     // order event is an async process, the order event may not created yet when accessing this step
     retryIfAssertionErrorOccurred(() -> {
       Long orderId = get(KEY_CREATED_ORDER_ID);
-      List<OrderEventEntity> orderEvents = eventsDao.getOrderEvents(orderId);
+      List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
       assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
       String value = mapOfData.get("type");
       orderEvents.stream()

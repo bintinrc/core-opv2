@@ -445,6 +445,15 @@ Feature: Van Inbound
       | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
       | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
       | hubName       | {hub-name}                       |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 4                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

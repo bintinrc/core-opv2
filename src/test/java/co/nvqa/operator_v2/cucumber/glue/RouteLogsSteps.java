@@ -1160,6 +1160,7 @@ public class RouteLogsSteps extends AbstractSteps {
     String hubName = mapOfData.get("hubName");
 
     routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(30);
       routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
       String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,

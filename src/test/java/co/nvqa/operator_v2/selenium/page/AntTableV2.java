@@ -49,8 +49,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     if (StringUtils.isNotBlank(tableLocator)) {
       xpath = tableLocator + xpath;
     }
-    scrollIntoView(xpath);
-    return getText(xpath);
+    if (isElementExistFast(xpath)) {
+      scrollIntoView(xpath);
+      return getText(xpath);
+    } else {
+      return null;
+    }
   }
 
   @Override
