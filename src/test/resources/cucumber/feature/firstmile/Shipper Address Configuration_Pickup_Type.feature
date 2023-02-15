@@ -198,6 +198,7 @@ Feature: Shipper Address Configuration
       | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
       | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
+  @HappyPath
   Scenario Outline: Download CSV of Address Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -368,7 +369,7 @@ Feature: Shipper Address Configuration
     And Operator uploads csv file: "Unable_to_Update_Addresses_Pickup_Type_with_Invalid_PickupType.csv" by browsing files in "Configure Address Pickup Type" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
-
+  @HappyPath
   Scenario: Success Bulk Configure Addresses Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -517,6 +518,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Shipper address id 13913251 does not exist |
 
+  @HappyPath
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -546,6 +548,7 @@ Feature: Shipper Address Configuration
       | Pickup Type FM Dedicated | FM Dedicated | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
       | Pickup Type Truck        | Truck        | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | zones          | Dyotest12         | JKB              |
 
+  @HappyPath
   Scenario Outline: View Updated Shipper Address Detail on Configure Pickup Type
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
