@@ -1904,7 +1904,7 @@ Feature: Pending Pickup Jobs
       | {hub-name-3} | {hub-id-3} | 2.22222  | 2.22222   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
   @ForceSuccessOrder @ForceSuccessReservationByApi @SystemIdNotSg @default-vn
-  Scenario Outline: Station Pending Pickup Pickup Job by Parcels to Pickup
+  Scenario Outline: Sort Pending Pickup Job by Parcels to Pickup
     Given DB Operator delete Station Pending Pickup records for the hub "<HubId>"
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
