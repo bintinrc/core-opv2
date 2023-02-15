@@ -23,6 +23,8 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   private static final String PENDING_PICKUP_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'ant-table-filter')][.//*[.='%s']]//input";
 
+  private static final String FILTER_BUTTON_XPATH = "//span[text()='%s']";
+
   public StationPendingPickupJobsPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -191,5 +193,13 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     pause5s();
     switchToFrame();
     sortParcelToPickup.click();
+  }
+
+  public void clickFilterButton(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String filterColumnXpath = f(FILTER_BUTTON_XPATH, buttonText);
+    getWebDriver().findElement(By.xpath(filterColumnXpath)).click();
   }
 }

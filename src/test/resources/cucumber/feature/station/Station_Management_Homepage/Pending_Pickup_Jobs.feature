@@ -64,7 +64,6 @@ Feature: Pending Pickup Jobs
     And API Operator calls pending pickup job trigger for station
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the tile:"<TileName>" is equal to "100"
 
     Examples:
@@ -304,6 +303,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -339,6 +339,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -373,6 +374,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -407,6 +409,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -441,6 +444,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -475,6 +479,7 @@ Feature: Pending Pickup Jobs
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     And Operator searches data in the pending pickup table by applying the following filters and expect one record:
       | <ColumnName>        |
       | <SearchValuePrefix> |
@@ -503,9 +508,9 @@ Feature: Pending Pickup Jobs
       | shipperClientSecret | {station-vn-shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","reference":{"merchant_order_number":"ship-123","merchant_order_metadata":{"delivery_verification_identity":null}},"from":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss} Station Pending Pickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"to":{"name":"TEST-NADIA-CUSTOMER","phone_number":"+6591434259","email":"nadia.dwijaatmaja@ninjavan.co","address":{"address1":"JalanBidakaraMentengDalamTebet","address2":"NVQA","country":"VN","postcode":"12870"}},"parcel_job":{"allow_doorstep_dropoff":true,"enforce_delivery_verification":false,"delivery_verification_mode":"OTP","is_pickup_required":true,"pickup_date":"{gradle-current-date-yyyy-MM-dd}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"<start_time>","end_time":"<end_time>","timezone":"Asia/Ho_Chi_Minh"},"pickup_instructions":"pickupinstruction","pickup_address":{"name":"TEST-NADIA-SHIPPER","phone_number":"+6591434259","address":{"address1":"{gradle-current-date-yyyyMMddHHmmsss} Station Pending Pickup","address2":"","country":"VN","postcode":"018981","latitude":"<latitude>","longitude":"<longitude>"}},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Ho_Chi_Minh"},"delivery_instructions":"deliveryinstruction","dimensions":{"weight":1,"width":10,"height":10,"length":10,"size":"S"},"pickup_approximate_volume":"LargerthanVanLoad","experimental_from_international":false,"experimental_to_international":false}} |
     And Operator waits for 80 seconds
+    And API Operator calls pending pickup job trigger for station
     And Operator changes the country to "<Country>"
     And Operator verify operating country is "<Country>"
-    And API Operator calls pending pickup job trigger for station
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 1
@@ -555,6 +560,7 @@ Feature: Pending Pickup Jobs
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has decreased by 1
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     Then Operator verify value on pending pickup table for the "DRIVER_NAME_ROUTE_ID" column is equal to "AUTO-STATION-DRIVER-VN"
     Then Operator verifies that "Reassign to Route" action button is displayed
 
@@ -588,7 +594,7 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 0
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" remains unchanged
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
     Then Operator verifies that url is redirected to "pickup-appointment" page on clicking the "Assign to Route" button
@@ -604,6 +610,7 @@ Feature: Pending Pickup Jobs
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has decreased by 1
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     Then Operator verify value on pending pickup table for the "DRIVER_NAME_ROUTE_ID" column is equal to "AUTO-STATION-DRIVER-VN"
     Then Operator verifies that "Reassign to Route" action button is displayed
 
@@ -640,6 +647,7 @@ Feature: Pending Pickup Jobs
     When Operator get the count from the pending pickup tile: "<TileName1>"
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    When operator click "Unrouted Jobs" filter button
     Then Operator verifies that url is redirected to "pickup-appointment" page on clicking the "Reassign to Route" button
     When API Operator unroute the reservation "{KEY_CREATED_RESERVATION_ID}"
     And API Operator calls pending pickup job trigger for station
@@ -725,7 +733,7 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 0
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" remains unchanged
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
     And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
     Then Operator verify value on pending pickup table for the "TOTAL_PARCEL_COUNT" column is equal to "Total: 1"
@@ -865,8 +873,8 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 0
-    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" remains unchanged
+    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName1>"
     Then Operator verify value on pending pickup table for the "TOTAL_PARCEL_COUNT" column is equal to "Total: 1"
     Then Operator verify value on pending pickup table for the "PARCEL_DUE_TODAY" column is equal to "Due Today: 0"
     Then Operator verify value on pending pickup table for the "NO_UPCOMING_JOB" column is equal to "No upcoming"
@@ -912,8 +920,8 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 0
-    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" remains unchanged
+    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName1>"
     Then Operator verify value on pending pickup table for the "TOTAL_PARCEL_COUNT" column is equal to "Total: 1"
     Then Operator verify value on pending pickup table for the "PARCEL_LATE" column is equal to "Late: 1"
     Then Operator verify value on pending pickup table for the "NO_UPCOMING_JOB" column is equal to "No upcoming"
@@ -948,8 +956,8 @@ Feature: Pending Pickup Jobs
     And Operator verify operating country is "<Country>"
     And Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
-    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" has increased by 0
-    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName2>"
+    Then Operator verifies that the count in the second in the pending pick up tile: "<TileName2>" remains unchanged
+    And Operator clicks on the hamburger button for the pending pickup tile: "<TileName1>"
     Then Operator verify value on pending pickup table for the "TOTAL_PARCEL_COUNT" column is equal to "Total: 1"
     Then Operator verify value on pending pickup table for the "PARCEL_LATE" column is equal to "Late: 1"
     Then Operator verify value on pending pickup table for the "NO_UPCOMING_JOB" column is equal to "No upcoming"
@@ -1124,14 +1132,10 @@ Feature: Pending Pickup Jobs
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
-      | waypointId | {KEY_WAYPOINT_ID}                                                                                       |
-      | jobType    | RESERVATION                                                                                             |
-      | jobMode    | PICK_UP                                                                                                 |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action":"FAIL","failure_reason_id":1}] |
-      | jobAction  | FAIL                                                                                                    |
-      | routes     | KEY_DRIVER_ROUTES                                                                                       |
+    And API Driver fail the waypoint "{KEY_WAYPOINT_ID}" in the reservation "{KEY_CREATED_RESERVATION_ID}"
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 11          |
+      | failureReasonIndexMode | FIRST       |
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
     And Operator changes the country to "<Country>"
@@ -1231,14 +1235,10 @@ Feature: Pending Pickup Jobs
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
-      | waypointId | {KEY_WAYPOINT_ID}                                                                                       |
-      | jobType    | RESERVATION                                                                                             |
-      | jobMode    | PICK_UP                                                                                                 |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action":"FAIL","failure_reason_id":1}] |
-      | jobAction  | FAIL                                                                                                    |
-      | routes     | KEY_DRIVER_ROUTES                                                                                       |
+    And API Driver fail the waypoint "{KEY_WAYPOINT_ID}" in the reservation "{KEY_CREATED_RESERVATION_ID}"
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 11          |
+      | failureReasonIndexMode | FIRST       |
     And API Operator calls pending pickup job trigger for station
     Given Operator loads Operator portal home page
     And Operator changes the country to "<Country>"

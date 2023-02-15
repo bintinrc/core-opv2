@@ -169,4 +169,8 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @When("operator click {string} filter button")
+  public void operatorClickFilterButton(String buttonText) {
+    stationPendingPickupJobsPage.clickFilterButton(buttonText);
+  }
 }
