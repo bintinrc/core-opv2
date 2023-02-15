@@ -21,9 +21,8 @@ Feature: Hub User Management
       | top | Successfully added 1 user(s) |
     When Operator refresh page
     When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
-    Then Operator verify hub user parameter:
-      | check    | Added               |
-      | username | {add-hub-user-name} |
+    Then Operator verify bulk hub "hub_user_management_add_1_user.csv" user is added
+    Then Operator remove all "hub_user_management_add_1_user.csv" added user
 
   Scenario: Hub User Management - Bulk Assigns Hub User  - 2 User
     When Operator refresh page
@@ -32,6 +31,10 @@ Feature: Hub User Management
     When Operator bulk upload hub user using a "hub_user_management_add_2_user.csv" CSV file
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully added 2 user(s) |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify bulk hub "hub_user_management_add_2_user.csv" user is added
+    Then Operator remove all "hub_user_management_add_2_user.csv" added user
 
   Scenario: Hub User Management Bulk Assigns Hub User - Empty CSV
     When Operator refresh page
@@ -73,6 +76,10 @@ Feature: Hub User Management
     When Operator bulk upload hub user using a "hub_user_management_add_20_user.csv" CSV file
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully added 20 user(s) |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify bulk hub "hub_user_management_add_20_user.csv" user is added
+    Then Operator remove all "hub_user_management_add_20_user.csv" added user
 
   Scenario: Hub User Management - Bulk Assigns Hub User - More than 20 User
     When Operator refresh page
@@ -97,6 +104,10 @@ Feature: Hub User Management
     When Operator bulk upload hub user using a "hub_user_management_duplicate_user.csv" CSV file
     Then Operator verifies that success react notification displayed in Hub User Management Page:
       | top | Successfully added 1 user(s) |
+    When Operator refresh page
+    When Operator click edit button "{station-hub-id-1}" on Hub User Management Page
+    Then Operator verify bulk hub "hub_user_management_duplicate_user.csv" user is added
+    Then Operator remove all "hub_user_management_duplicate_user.csv" added user
 
   Scenario: Hub User Management - Add Staff Hub User
     When Operator refresh page
@@ -153,4 +164,3 @@ Feature: Hub User Management
     Then Operator verify hub user parameter:
       | check    | Removed                |
       | username | {remove-hub-user-name} |
-
