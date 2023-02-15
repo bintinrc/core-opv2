@@ -83,7 +83,7 @@ Feature: Reservation Creation
       | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | HYBRID        |
 
   @HappyPath
-  Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured -FM Dedicated
+  Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured - FM Dedicated
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
@@ -97,11 +97,11 @@ Feature: Reservation Creation
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":<search_value>, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
-    Then DB Core - verifies that zone type is equal to "LAST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
+    Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
     Examples:
       | search_value                                  | pickupTypeAPI |
-      | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | FM Dedicated  |
+      | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | FM_DEDICATED  |
 
   @HappyPath
   Scenario Outline:: Create Reservation Given the Address Pickup Type is Configured - Truck
@@ -118,13 +118,13 @@ Feature: Reservation Creation
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":<search_value>, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
-    Then DB Core - verifies that zone type is equal to "LAST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
+    Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
     Examples:
       | search_value                                  | pickupTypeAPI |
       | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | Truck         |
 
-  @HappyPath
+  @HappyPath @Debug
     Scenario Outline: Create Reservation After Update Lat Long
      When Operator loads Shipper Address Configuration page
      When API Operator creates shipper address using below data:
@@ -159,10 +159,11 @@ Feature: Reservation Creation
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     Then Operator verifies table is filtered "lat_long" based on input in "50.5,50.5" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
+    And Operator waits for 30 seconds
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":<search_value>, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And  DB Core - get waypoint Id from reservation id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
-      Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
+    Then DB Core - verifies that zone type is equal to "FIRST_MILE" and zone id is not null for waypointId "{KEY_WAYPOINT_ID}"
 
       Examples:
         | search_value                                     |
