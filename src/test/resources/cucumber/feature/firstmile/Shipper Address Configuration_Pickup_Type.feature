@@ -541,7 +541,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
-    And Operator waits for 60 seconds
+    And Operator waits for 120 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     And Operator clicks on the edit pickup button
     And Operator selects the picktype "<pickUpType>" in the dropdown
