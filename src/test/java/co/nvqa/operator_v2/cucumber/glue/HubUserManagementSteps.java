@@ -2,10 +2,20 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.HubUserManagementPage;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+import com.opencsv.exceptions.CsvValidationException;
+import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
@@ -105,6 +115,7 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorInputUserEmail(String email) {
     hubUserManagementPage.emailInput.sendKeys((email));
     hubUserManagementPage.addButton.click();
+    put(KEY_OF_ADDED_USER, email);
   }
 
   @Then("Make sure add button is disabled")
@@ -196,5 +207,51 @@ public class HubUserManagementSteps extends AbstractSteps {
     Assertions.assertThat(hubUserManagementPage.errorContainsNoEmail.getText())
         .as("Error Message is True")
         .isEqualToIgnoringCase("Error: " + csv + " contains no email");
+  }
+
+  @Then("Operator verify bulk hub {string} user is added")
+  public void operatorVerifyBulkHubUserIsAdded(String fileName) {
+    final String csvFileName = "csv/" + fileName;
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File csvFile = new File(
+        Objects.requireNonNull(classLoader.getResource(csvFileName)).getFile());
+    List<String[]> addedUser;
+    try (CSVReader csvReader = new CSVReader(new FileReader(csvFile))) {
+      addedUser = csvReader.readAll();
+    } catch (IOException | CsvException e) {
+      throw new RuntimeException(e);
+    }
+    for (int i = 1; i < addedUser.size(); i++) {
+      String username = String.format(hubUserManagementPage.XPATH_OF_USERNAME,
+          Arrays.toString(addedUser.get(i)).replace("[", "").replace("]", "")
+              .replace("@gmail.com", ""));
+      Assertions.assertThat(
+              hubUserManagementPage.findElementByXpath(username).isDisplayed())
+          .as("User " + Arrays.toString(addedUser.get(i)) + " is Added")
+          .isTrue();
+    }
+  }
+
+  @Then("Operator remove all {string} added user")
+  public void operatorRemoveAllAddedUser(String fileName) {
+    final String csvFileName = "csv/" + fileName + "_id";
+    final ClassLoader classLoader = getClass().getClassLoader();
+    File csvFile = new File(
+        Objects.requireNonNull(classLoader.getResource(csvFileName)).getFile());
+    List<String[]> removeUser;
+    try (CSVReader csvReader = new CSVReader(new FileReader(csvFile))) {
+      removeUser = csvReader.readAll();
+    } catch (IOException | CsvException e) {
+      throw new RuntimeException(e);
+    }
+    for (int i = 1; i < removeUser.size(); i++) {
+      String editXpath = String.format(hubUserManagementPage.XPATH_OF_REMOVE_USER_BUTTON,
+          Arrays.toString(removeUser.get(i)).replace("[", "").replace("]", "")
+      );
+      if (hubUserManagementPage.isElementExist(editXpath)) {
+        hubUserManagementPage.findElementByXpath(editXpath).click();
+        operatorClickOnRemoveButtonOnRemoveUserModal();
+      }
+    }
   }
 }
