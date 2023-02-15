@@ -115,7 +115,6 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorInputUserEmail(String email) {
     hubUserManagementPage.emailInput.sendKeys((email));
     hubUserManagementPage.addButton.click();
-    put(KEY_OF_ADDED_USER, email);
   }
 
   @Then("Make sure add button is disabled")
