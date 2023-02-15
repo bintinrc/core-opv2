@@ -124,7 +124,7 @@ Feature: Reservation Creation
       | search_value                                  | pickupTypeAPI |
       | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} | Truck         |
 
-  @HappyPath @Debug
+  @HappyPath
     Scenario Outline: Create Reservation After Update Lat Long
      When Operator loads Shipper Address Configuration page
      When API Operator creates shipper address using below data:
