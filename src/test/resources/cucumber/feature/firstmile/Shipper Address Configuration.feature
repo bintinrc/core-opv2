@@ -450,6 +450,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 20 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
     Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
