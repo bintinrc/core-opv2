@@ -2,14 +2,23 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.commons.util.CsvUtils;
+import co.nvqa.operator_v2.model.UploadPaymentsErrorCSV;
 import co.nvqa.operator_v2.selenium.page.UploadPaymentsPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,19 +61,47 @@ public class UploadPaymentsSteps extends AbstractSteps {
 
   @Then("Operator verifies csv file is not successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsNotSuccessfullyUploadedOnTheUploadPaymentsPage() {
-    String actualErrorMsg = uploadPaymentsPage.getToastTopText();
+    String actualErrorMsg = uploadPaymentsPage.getAntTopTextV2();
     String expectedToastText = CSV_FILENAME_PATTERN
-        + " file upload failed. Please refer to the auto-downloaded error csv file.";
-    Assertions.assertThat(actualErrorMsg).as("Check error message").isEqualTo(expectedToastText);
+        + " file upload failed.";
+    String actualErrorDescription = uploadPaymentsPage.getAntDescription();
+    String expectedErrorDescription = "Please refer to the auto-downloaded error csv file.";
+    Assertions.assertThat(actualErrorMsg).as("Error message is correct")
+        .isEqualTo(expectedToastText);
+    Assertions.assertThat(actualErrorDescription).as("Error description is correct")
+        .isEqualTo(expectedErrorDescription);
   }
 
   @Then("Operator verify Download Error Upload Payment CSV file on Upload Payments Page is downloaded successfully with below data:")
   public void operatorVerifyDownloadErrorUPPCSVFileOnUploadSelfServePromoPageIsDownloadedSuccessfullyWithBelowData(
-      DataTable dt) {
-    List<List<String>> rows = resolveListOfLists(dt.asLists());
-    String sb = rows.stream().map(row -> String.join(",", row)).collect(Collectors.joining("\n"));
-
-    uploadPaymentsPage.verifyDownloadErrorsCsvFileDownloadedSuccessfully(sb,
-        UPLOAD_PAYMENT_ERROR_CSV_FILENAME_PATTERN);
+      Map<String, String> dataTableAsMap) {
+    dataTableAsMap = resolveKeyValues(dataTableAsMap);
+    String pathname =
+        StandardTestConstants.TEMP_DIR + uploadPaymentsPage.getLatestDownloadedFilename(
+            UPLOAD_PAYMENT_ERROR_CSV_FILENAME_PATTERN);
+    File file = new File(pathname);
+    UploadPaymentsErrorCSV entry = null;
+    try {
+      BufferedReader br = new BufferedReader(
+          new InputStreamReader(new FileInputStream(file)));
+      entry = CsvUtils.convertToObjectsWithFieldAsNull(
+          br, UploadPaymentsErrorCSV.class).get(0);
+    } catch (IOException ex) {
+      LOGGER.debug("File '{}' failed to read. Cause: {}.", file.getAbsolutePath(),
+          ex.getMessage());
+    }
+    SoftAssertions softAssertions = new SoftAssertions();
+    if (dataTableAsMap.containsKey("batch_id")) {
+      softAssertions.assertThat(Objects.requireNonNull(entry).getBatchId())
+          .as("batch_id column is correct").isEqualTo(dataTableAsMap.get("batch_id"));
+    }
+    if (dataTableAsMap.containsKey("shipper_id")) {
+      softAssertions.assertThat(Objects.requireNonNull(entry).getShipperId())
+          .as("shipper_id column is correct").isEqualTo(dataTableAsMap.get("shipper_id"));
+    }
+    if (dataTableAsMap.containsKey("message")) {
+      softAssertions.assertThat(Objects.requireNonNull(entry).getMessage())
+          .as("message column is correct").isEqualTo(dataTableAsMap.get("message"));
+    }
   }
 }
