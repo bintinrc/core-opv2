@@ -236,6 +236,19 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
   }
 
+  @Then("Operator release Draft Script")
+  public void operatorReleaseDraft() {
+    pricingScriptsV2Page.releaseScript();
+  }
+
+  @Then("Operator clicks validate and verify warning message {string}")
+  public void operatorValidateAndVerifyErrors(String warningMessage) {
+    SoftAssertions softAssertions = new SoftAssertions();
+    Script script = get(KEY_CREATED_PRICING_SCRIPT);
+    softAssertions.assertThat(warningMessage).as("Error text is correct")
+        .contains(pricingScriptsV2Page.validateDraftAndReturnWarnings(script));
+  }
+
   @When("Operator validate and release Draft Script using this data below:")
   public void operatorValidateAndReleaseDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {

@@ -34,6 +34,26 @@ Feature: Pricing Scripts V2
     And Operator verify Draft Script data is correct
 
   @DeletePricingScript
+  Scenario: Create Draft Script with Legacy Params
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 1;var result = {};result.delivery_fee = price * params.width * params.length * params.height * params.shipper_provided_length * params.shipper_provided_width * params.shipper_provided_height * params.shipper_provided_weight;return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator clicks validate and verify warning message "The script contains legacy params.You can continue to release the script, but pricing will be affected for shippers who are attached to this script, and is using new billing weight logics.Legacy params include the followings:- shipper_provided_length- shipper_provided_width- shipper_provided_height- shipper_provided_weight- length- width- height"
+
+  @DeletePricingScript
+  Scenario: Create Draft Script with Legacy Params
+    Given Operator go to menu Shipper -> Pricing Scripts V2
+    When Operator create new Draft Script using data below:
+      | source | function calculatePricing(params) {var price = 1;var result = {};result.delivery_fee = price * params.width * params.length * params.height * params.shipper_provided_length * params.shipper_provided_width * params.shipper_provided_height * params.shipper_provided_weight;return result;} |
+    Then Operator verify the new Script is created successfully on Drafts
+    And Operator clicks validate and verify warning message "The script contains legacy params.You can continue to release the script, but pricing will be affected for shippers who are attached to this script, and is using new billing weight logics.Legacy params include the followings:- shipper_provided_length- shipper_provided_width- shipper_provided_height- shipper_provided_weight- length- width- height"
+    Then Operator release Draft Script
+    And Operator verify the script is saved successfully
+    Then DB Operator gets the pricing script details
+    And Operator verify Active Script data is correct
+
+  @DeletePricingScript
   Scenario Outline: Create and Check Script with from_l1, from_l2, from_l3, to_l1, to_l2, to_l3 - <dataset_name>(<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

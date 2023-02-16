@@ -27,7 +27,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -39,7 +39,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B1234567                    |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -68,7 +68,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -80,7 +80,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14b1234567                    |
+      | swb                | K14B-MIX-RANDOM                |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -109,7 +109,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -121,7 +121,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | k14b1234567                    |
+      | swb                | K14B-LOWER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -150,7 +150,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -162,7 +162,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | K14B-UPPER-8-RANDOM            |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -191,7 +191,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -203,7 +203,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14b12345678                   |
+      | swb                | K14B-MIX-8-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -232,7 +232,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -244,7 +244,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | k14b12345678                   |
+      | swb                | K14B-LOWER-8-RANDOM            |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -273,7 +273,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -285,7 +285,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B1234567                    |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -314,7 +314,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -326,7 +326,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11b1234567                    |
+      | swb                | R11B-MIX-RANDOM                |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -355,7 +355,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | K14B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -367,7 +367,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | r11b1234567                    |
+      | swb                | R11B-LOWER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -396,7 +396,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -408,7 +408,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11B12345678                   |
+      | swb                | R11B-UPPER-8-RANDOM            |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -437,7 +437,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -449,7 +449,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | R11b12345678                   |
+      | swb                | R11B-MIX-8-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -478,7 +478,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | K14B12345678                   |
+      | swb                | R11B-UPPER-RANDOM              |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
@@ -490,7 +490,7 @@ Feature: Update SWB 5 - MY
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | r11b12345678                   |
+      | swb                | R11B-LOWER-8-RANDOM            |
       | seahaulVendor      | {local-seahaul-vendor-name-my} |
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |

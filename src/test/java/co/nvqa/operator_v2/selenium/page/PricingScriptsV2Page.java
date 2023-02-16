@@ -180,6 +180,17 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
   }
 
+  public String validateDraftAndReturnWarnings(Script script) {
+    goToEditDraftScript(script);
+    return pricingScriptsV2CreateEditDraftPage.validateDraftAndReturnWarnings(script);
+  }
+
+  public void releaseScript() {
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByNameAndWaitUntilDone(
+        "Release Script");
+    waitUntilInvisibilityOfToast("Your script has been successfully released.");
+  }
+
   public void goToEditDraftScript(Script script) {
     clickTabItem(TAB_DRAFTS);
     searchTableDraftsByScriptName(script.getName());
