@@ -267,7 +267,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
@@ -288,7 +287,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
@@ -307,7 +305,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
@@ -328,7 +325,6 @@ public class StationManagementHomeSteps extends AbstractSteps {
           int beforeOrder = get(KEY_NUMBER_OF_ADDRESS_IN_PENDING_PICKUP2);
           navigateRefresh();
           int afterOrder = stationManagementHomePage.getNumberFromPendingPickupTile(tileName);
-          stationManagementHomePage.closeIfModalDisplay();
           stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, finalTotOrder);
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 10,
         NoSuchElementException.class, NoSuchWindowException.class,
@@ -401,11 +397,11 @@ public class StationManagementHomeSteps extends AbstractSteps {
   }
 
   @SuppressWarnings("unchecked")
-  @When("Operator clicks on the hamburger button for the tile: {string}")
-  public void operator_clicks_hamburger_button_for_the_tile(String tileName) {
+  @When("Operator clicks on the hamburger button for the pending pickup tile: {string}")
+  public void operator_clicks_hamburger_button_for_the_pending_pickup_tile(String tileName) {
     retryIfExpectedExceptionOccurred(() -> {
           String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-          stationManagementHomePage.clickHamburgerIcon(tileName);
+          stationManagementHomePage.clickPendingPickupHamburgerIcon(tileName);
           ;
         }, null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
         NoSuchElementException.class, NoSuchWindowException.class,
