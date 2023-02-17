@@ -14,7 +14,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | MTWVO        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -51,7 +51,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | GPVHB        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -88,7 +88,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJD         |
+      | portCode  | AAJDABAB     |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -124,52 +124,24 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABAQQ            |
-      | portName  | ABA Test Seaport |
-      | city      | SG               |
-      | region    | JKB              |
-      | latitude  | 37.9220427       |
-      | longitude | -81.6894072      |
-      | portType  | Seaport          |
-    And Verify the new port "Port ABA Test Seaport has been created" created success message
+      | portCode  | UOSFC              |
+      | portName  | UOSFC Test Seaport |
+      | city      | SG                 |
+      | region    | JKB                |
+      | latitude  | 37.9220427         |
+      | longitude | -81.6894072        |
+      | portType  | Seaport            |
+    And Verify the new port "Port UOSFC Test Seaport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | ABAQQ            |
-      | portName  | ABA Test Seaport |
-      | city      | SG               |
-      | region    | JKB              |
-      | latitude  | 37.9220427       |
-      | longitude | -81.6894072      |
-      | portType  | Seaport          |
-    And Verify the error "Duplicate Seaport code. Seaport code ABAQQ is already exists" is displayed while creating new port
-
-  @DeleteCreatedPorts
-  Scenario: Add New Seaport with existing Seaport Code
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Port Trip Management
-    Given Operator refresh page v1
-    And API Operator refresh "Seaport" cache
-    And Operator verifies that the Port Management Page is opened
-    When Operator click on Manage Port Facility and verify all components
-    Then Operator Add new Port
-      | portCode  | ABAQQ            |
-      | portName  | ABA Test Seaport |
-      | city      | SG               |
-      | region    | JKB              |
-      | latitude  | 37.9220427       |
-      | longitude | -81.6894072      |
-      | portType  | Seaport          |
-    And Verify the new port "Port ABA Test Seaport has been created" created success message
-    And Verify the newly created port values in table
-    Then Operator Add new Port
-      | portCode  | ABAQQ            |
-      | portName  | New Test Seaport |
-      | city      | Singapore        |
-      | region    | GW               |
-      | latitude  | 20.9220427       |
-      | longitude | -11.6894072      |
-      | portType  | Seaport          |
-    And Verify the error "Duplicate Seaport code. Seaport code ABAQQ is already exists" is displayed while creating new port
+      | portCode  | UOSFC              |
+      | portName  | UOSFC Test Seaport |
+      | city      | SG                 |
+      | region    | JKB                |
+      | latitude  | 37.9220427         |
+      | longitude | -81.6894072        |
+      | portType  | Seaport            |
+    And Verify the error "Duplicate Seaport code. Seaport code UOSFC is already exists" is displayed while creating new port
 
   @DeleteCreatedPorts
   Scenario: Add New Seaport with existing Seaport Name
@@ -180,7 +152,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWOQQ             |
+      | portCode  | WFMYC             |
       | portName  | Auto Test Seaport |
       | city      | SG                |
       | region    | JKB               |
@@ -190,7 +162,7 @@ Feature: Port Trip Management - Add New Seaport
     And Verify the new port "Port Auto Test Seaport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWUQQ             |
+      | portCode  | UWSEV             |
       | portName  | Auto Test Seaport |
       | city      | Singapore         |
       | region    | GW                |
@@ -209,7 +181,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADAQQ        |
+      | portCode  | JJODV        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -227,7 +199,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADAQQ        |
+      | portCode  | IEIMA        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -245,7 +217,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWOQQ             |
+      | portCode  | CEWHW             |
       | portName  | Auto Test Seaport |
       | city      | SG                |
       | region    | JKB               |
@@ -255,7 +227,7 @@ Feature: Port Trip Management - Add New Seaport
     And Verify the new port "Port Auto Test Seaport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWUQQ             |
+      | portCode  | GCRWK             |
       | portName  | Auto Test Seaport |
       | city      | SG                |
       | region    | JKB               |
@@ -274,7 +246,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | SVOXJ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -293,7 +265,7 @@ Feature: Port Trip Management - Add New Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | NMFJL        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |

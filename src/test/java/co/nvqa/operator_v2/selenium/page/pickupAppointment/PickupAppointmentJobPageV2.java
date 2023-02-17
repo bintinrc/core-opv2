@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page.pickupAppointment;
 import co.nvqa.operator_v2.model.CoreV2PickupJobsParams;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -12,16 +13,23 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.AntTableV2;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
-import com.google.common.collect.ImmutableMap;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
+import co.nvqa.operator_v2.util.TestConstants;
+import com.google.common.collect.ImmutableMap;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -72,8 +80,16 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Assign Tags')]")
   public EditJobTagModel editJobTagModel;
 
+  @FindBy(className = "ant-modal-wrap")
+  public BulkUpdateSuccessModal bulkUpdateSuccess;
+
   @FindBy(xpath = "//div[@class='ant-drawer-content']//h5[contains(text(),'Bulk update route ID')]//ancestor::div[@class='ant-drawer-content']")
   public EditJobRouteModal editJobRouteModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Bulk remove route')]")
+  public RemoveJobRouteModal removeJobRouteModal;
+  @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-modal-title'][contains(text(),'Fail job')]")
+  public BulkFailJobsModal bulkFailJobsModal;
 
   @FindBy(xpath = "//button//span[@text =]")
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
@@ -82,6 +98,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
 
   public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
+  private static final String FILEPATH = TestConstants.TEMP_DIR;
 
   public boolean isToastContainerDisplayed() {
     try {
@@ -124,6 +141,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
+
+    @FindBy(xpath = "//label[@for='comments']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobComments;
+
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
 
@@ -264,6 +285,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
+
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -317,12 +339,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
+
+
+
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
     public void clearJobComments() {
-      commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobComments.click();
+      }, 1000, 5);
     }
 
     public void clickEditButton(String jobId) {
@@ -491,9 +519,19 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Route ID')]")
     public PageElement routeId;
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]")
+    public PageElement removeRoute;
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Fail job')]")
+    public PageElement failJob;
+
+    @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]//ancestor::li[contains(@class,'ant-dropdown-menu-item')]")
+    public PageElement removeRouteMenuItem;
+
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ROUTE = "routeid";
+    public static final int COLUMN_ROUTE_POS = 7;
 
     public static final String ACTION_EDIT = "Edit Job";
     public static final String ACTION_DETAILS = "view Job";
@@ -505,6 +543,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String PICKUP_JOB_ROW_ROUTE = "//a[@data-testid='navigatorLink' and contains(text(),'%s')]";
     public final String PICKUP_JOB_ROW_DRIVER = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
 
+    public boolean removeRouteStatus() {
+
+      return Boolean.parseBoolean(removeRouteMenuItem.getAttribute("aria-disabled"));
+
+    }
+
     public BulkSelectTable(WebDriver webDriver) {
       super(webDriver);
       PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
@@ -512,6 +556,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           .put(COLUMN_TAGS, "tagNames")
           .put(COLUMN_STATUS, "status")
           .put(COLUMN_ID, "pickupAppointmentJobId")
+          .put(COLUMN_ROUTE, "routeId")
           .build()
       );
       setEntityClass(CoreV2PickupJobsParams.class);
@@ -564,6 +609,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           "aria-disabled");
       String expectedStatus = status.trim().equalsIgnoreCase("disable") ? "true" : "false";
       return actualStatus.trim().equalsIgnoreCase(expectedStatus.trim());
+    }
+
+    public void clickBulkUpdateOption(String optionName) {
+      waitUntilVisibilityOfElementLocated(f(BULK_UPDATE_ITEMS, optionName));
+      findElementByXpath(f(BULK_UPDATE_ITEMS, optionName)).click();
     }
   }
 
@@ -710,6 +760,48 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   }
 
 
+  public static class BulkFailJobsModal extends AntModal {
+
+    public BulkFailJobsModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//span[text()='Submit']/parent::button")
+    public Button submitButton;
+
+    String JOB_FAIL_MENU_OPEN_BUTTON = "//tr[@data-row-key='%s']//*[@data-testid='bulkFailureReason.editButton']";
+    String JOB_FAIL_MENU_APPLY_ALL_BUTTON = "//tr[@data-row-key='%s']//a[contains(text(),'Apply this to all')]";
+
+    String JOB_FAIL_MENU_ERROR_MESSAGE = "//span[contains(text(),'Error: Job %s cannot be failed because it is not Routed')]";
+
+    public void clickSelectFailReasonForJob(String jobId) {
+      webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_OPEN_BUTTON, jobId))).click();
+    }
+
+    public void clickApplyFailReasonToAll(String jobId) {
+      webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_APPLY_ALL_BUTTON, jobId))).click();
+    }
+
+    public boolean checkCannotFailedErrorMessageForJob(String jobId) {
+      return webDriver.findElement(By.xpath(f(JOB_FAIL_MENU_ERROR_MESSAGE, jobId))).isDisplayed();
+    }
+
+  }
+
+  public static class RemoveJobRouteModal extends AntModal {
+
+    public RemoveJobRouteModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//span[text()='Submit']/parent::button")
+    public Button submitButton;
+
+
+  }
+
   public static class EditJobRouteModal extends AntModal {
 
     public EditJobRouteModal(WebDriver webDriver, WebElement webElement) {
@@ -760,8 +852,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }, 1000, 3);
 
     }
-
-
   }
 
   public void setRouteOnEditPAJobPage(String routeId) {
@@ -797,5 +887,61 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     editPAJob.updateTags.waitUntilClickable();
   }
 
+  public static class BulkUpdateSuccessModal extends AntModal {
+
+    public BulkUpdateSuccessModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    @FindBy(xpath = "//button[.='Submit']")
+    public PageElement submitButton;
+
+    @FindAll(@FindBy(css = "[data-testid = 'successReason.photoSelect']"))
+    public List<FileInput> proofUploadFiles;
+
+    String SUCCESS_JOB_PAGE_ERROR_XPATH = "//tr[@data-row-key='%s']//following-sibling::tr[1]";
+
+    public String getErrorMessage(String jobId) {
+      waitUntilVisibilityOfElementLocated(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId));
+      String errorMessage = findElementByXpath(f(SUCCESS_JOB_PAGE_ERROR_XPATH, jobId)).getText();
+      return errorMessage;
+    }
+
+
+  }
+
+  public void setProofUploadFile() {
+    String FILENAME = RandomStringUtils.randomAlphanumeric(3, 8) + ".png";
+    String fullPath = FILEPATH + FILENAME;
+    createRandomImage(fullPath);
+    bulkUpdateSuccess.proofUploadFiles.forEach(
+        proofUploadFile -> proofUploadFile.setValue(fullPath));
+  }
+
+  private void createRandomImage(String fullPath) {
+    int width = 640, height = 320;
+    BufferedImage img = null;
+    img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    File f = null;
+
+    // create random values pixel by pixel
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        int a = (int) (Math.random() * 256);
+        int r = (int) (Math.random() * 256);
+        int g = (int) (Math.random() * 256);
+        int b = (int) (Math.random() * 256);
+        int p = (a << 24) | (r << 16) | (g << 8) | b;
+        img.setRGB(x, y, p);
+      }
+    }
+    try {
+      f = new File(fullPath);
+      ImageIO.write(img, "png", f);
+    } catch (IOException e) {
+      LOGGER.warn("Can not create random image file: {}", e);
+    }
+  }
 
 }

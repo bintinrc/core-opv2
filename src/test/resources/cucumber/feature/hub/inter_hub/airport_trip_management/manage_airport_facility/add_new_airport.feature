@@ -14,7 +14,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | SDI          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -33,24 +33,24 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABA              |
-      | portName  | ABA Test Airport |
+      | portCode  | XJT              |
+      | portName  | XJT Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port ABA Test Airport has been created" created success message
+    And Verify the new port "Port XJT Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | ABA              |
+      | portCode  | XJT              |
       | portName  | New Test Airport |
       | city      | Singapore        |
       | region    | GW               |
       | latitude  | 20.9220427       |
       | longitude | -11.6894072      |
       | portType  | Airport          |
-    And Verify the error "Duplicate Airport code. Airport code ABA is already exists" is displayed while creating new port
+    And Verify the error "Duplicate Airport code. Airport code XJT is already exists" is displayed while creating new port
 
   @DeleteCreatedPorts
   Scenario: Add New Airport with existing Airport Name
@@ -61,7 +61,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO               |
+      | portCode  | OZZ               |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -71,7 +71,7 @@ Feature: Port Trip Management - Add New Airport
     And Verify the new port "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWU               |
+      | portCode  | LFH               |
       | portName  | Auto Test Airport |
       | city      | Singapore         |
       | region    | GW                |
@@ -90,7 +90,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADA          |
+      | portCode  | APF          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -108,7 +108,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ADA          |
+      | portCode  | FEA          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -126,24 +126,24 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO              |
-      | portName  | OWO Test Airport |
+      | portCode  | LLB              |
+      | portName  | LLB Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the new port "Port OWO Test Airport has been created" created success message
+    And Verify the new port "Port LLB Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | OWO              |
-      | portName  | OWO Test Airport |
+      | portCode  | LLB              |
+      | portName  | LLB Test Airport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Airport          |
-    And Verify the error "Duplicate Airport code. Airport code OWO is already exists" is displayed while creating new port
+    And Verify the error "Duplicate Airport code. Airport code LLB is already exists" is displayed while creating new port
 
   @DeleteCreatedPorts
   Scenario: Add New Airport with existing Airport Details exclude Airport Code
@@ -154,7 +154,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | OWO               |
+      | portCode  | GHG               |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -164,7 +164,7 @@ Feature: Port Trip Management - Add New Airport
     And Verify the new port "Port Auto Test Airport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | UWU               |
+      | portCode  | QEL               |
       | portName  | Auto Test Airport |
       | city      | SG                |
       | region    | JKB               |
@@ -219,7 +219,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | RPP          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |
@@ -238,7 +238,7 @@ Feature: Port Trip Management - Add New Airport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJ          |
+      | portCode  | YHP          |
       | portName  | Test Airport |
       | city      | SG           |
       | region    | JKB          |

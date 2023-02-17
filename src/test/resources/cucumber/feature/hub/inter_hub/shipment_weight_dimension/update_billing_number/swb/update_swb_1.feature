@@ -74,7 +74,7 @@ Feature: Update SWB 1
     And Operator verify Update Billing Number "SWB" has updated with new value
 
   @DeleteShipments
-  Scenario: Update SWB without Download Sum Up Report  - Create SWB Number with New SWB Number, existing Vendor, Origin Seaport, and Dest Seaport
+  Scenario: Update SWB without Download Sum Up Report  - Create SWB Number with existing SWB Number and new Vendor, Origin Seaport, and Dest Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -107,10 +107,10 @@ Feature: Update SWB 1
     When Operator click Update Billing Number "SWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
-      | swb                | {KEY_MM_EXISTING_SHIPMENT_SWB} |
-      | seahaulVendor      | {local-seahaul-vendor-2-name}  |
-      | originSeahaul      | {local-seaport-2-code}         |
-      | destinationSeahaul | {local-seaport-1-code}         |
+      | swb                | RANDOM                      |
+      | seahaulVendor      | {local-seahaul-vendor-name} |
+      | originSeahaul      | {local-seaport-1-code}      |
+      | destinationSeahaul | {local-seaport-2-code}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value
 
@@ -149,9 +149,9 @@ Feature: Update SWB 1
     Then Operator verify Shipment Weight Update Billing Number "SWB" page UI
     When Operator update billing number "SWB" information on Shipment Weight Dimension page with following data:
       | swb                | {KEY_MM_EXISTING_SHIPMENT_SWB} |
-      | seahaulVendor      | {local-seahaul-vendor-2-name}  |
-      | originSeahaul      | {local-seaport-1-code}         |
-      | destinationSeahaul | {local-seaport-2-code}         |
+      | seahaulVendor      | {local-seahaul-vendor-name} |
+      | originSeahaul      | {local-seaport-1-code}      |
+      | destinationSeahaul | {local-seaport-2-code}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value
 

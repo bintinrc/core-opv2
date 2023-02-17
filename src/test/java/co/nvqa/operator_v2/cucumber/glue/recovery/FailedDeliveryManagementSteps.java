@@ -9,8 +9,10 @@ import co.nvqa.operator_v2.selenium.page.recovery.fdm.FailedDeliveryManagementPa
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 
 public class FailedDeliveryManagementSteps extends AbstractSteps {
@@ -27,7 +29,9 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
 
   @When("Recovery User - Wait until FDM Page loaded completely")
   public void doWaitUntilPageLoaded() {
-    failedDeliveryManagementReactPage.fdmHeader.waitUntilVisible(60);
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.fdmHeader.waitUntilVisible(60);
+    });
   }
 
   @When("Recovery User - Search failed orders by trackingId = {string}")
@@ -40,6 +44,13 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
   public void doFilterByShipperId(String shipperName) {
     failedDeliveryManagementReactPage.inFrame(
         page -> page.fdmTable.filterTableByShipperName("shipperName", resolveValue(shipperName)));
+  }
+
+  @When("Recovery User - Clear the TID filter")
+  public void doClearTIDFilter() {
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      page.fdmTable.clearTIDFilter();
+    });
   }
 
   @Then("Recovery User - verify failed delivery table on FDM page:")
@@ -81,6 +92,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
           page.fdmTable.bulkSelectDropdown.click();
           page.fdmTable.showOnlySelected.click();
           break;
+        case "CSV Reschedule":
+          page.csvReschedule.click();
       }
     });
   }
@@ -137,6 +150,68 @@ public class FailedDeliveryManagementSteps extends AbstractSteps {
       for (int i = 0; i < actualFailedOrder.size(); i++) {
         expectedFailedOrder.get(i).compareWithActual(actualFailedOrder.get(i), "orderTags");
       }
+    });
+  }
+
+  @Then("Recovery User - verify CSV file downloaded after reschedule")
+  public void verifyCsvFileDownloadedAfterReschedule() {
+    failedDeliveryManagementReactPage.inFrame(page -> {
+      final String fileName = page.getLatestDownloadedFilename(
+          FailedDeliveryManagementPage.RESCHEDULE_CSV_FILENAME_PATTERN);
+      page.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+  @When("Recovery User - reschedule failed delivery order on next day")
+  public void doRescheduleFailedDeliveryOrderOnNextDay() {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.fdmTable.clickActionButton(1, FailedDeliveryTable.ACTION_RESCHEDULE);
+    });
+  }
+
+  @Then("Recovery User - verifies that toast displayed with message below:")
+  public void doVerifiesToastDisplayed(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String message = dataTable.get("message");
+    String description = dataTable.get("description");
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.notifMessage.getText())
+            .as(f("Notification Message contains: %s", message)).isEqualTo(message);
+        Assertions.assertThat(page.notifDescription.getText())
+            .as(f("Notification Description contains %s", description)).isEqualTo(description);
+      }, 5);
+    });
+  }
+
+  @Then("Recovery User - Reschedule Selected failed delivery order on Failed Delivery orders list")
+  public void doRescheduleSelectedFailedDeliveryOrder() {
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.applyAction.click();
+      failedDeliveryManagementReactPage.rescheduleSelected.click();
+    });
+  }
+
+  @When("Recovery User - set reschedule date to {string}")
+  public void doSetRescheduleDate(String date) {
+    failedDeliveryManagementReactPage.inFrame((page) -> {
+      page.rescheduleDialog.setRescheduleDate(resolveValue(date));
+      page.rescheduleDialog.rescheduleButton.click();
+    });
+  }
+
+  @When("Recovery User - Reschedule failed orders with CSV")
+  public void doRescheduleByCSV(Map<String, String> dataTable) {
+    dataTable = resolveKeyValues(dataTable);
+    String rescheduleDate = dataTable.get("reschedule_date");
+    List<String> trackingIds = Arrays.stream(dataTable.get("tracking_ids").split(","))
+        .map(String::trim)
+        .collect(Collectors.toList());
+
+    failedDeliveryManagementReactPage.inFrame(() -> {
+      failedDeliveryManagementReactPage.uploadCSVDialog.generateRescheduleCSV(trackingIds,
+          rescheduleDate);
+      failedDeliveryManagementReactPage.uploadCSVDialog.upload.click();
     });
   }
 }

@@ -1041,6 +1041,38 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         String swb = dataTable.get("swb");
         if (swb.equalsIgnoreCase("random")) {
           swb = RandomStringUtils.randomNumeric(6);
+        } else if (swb.equalsIgnoreCase("random-5-digits")) {
+          swb = RandomStringUtils.randomNumeric(5);
+        } else if (swb.equalsIgnoreCase("kmmt-upper-random")) {
+          swb = "KMMT" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-mix-random")) {
+          swb = "KMmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-lower-random")) {
+          swb = "kmmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("r11b-upper-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-mix-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-lower-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-upper-8-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-mix-8-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-lower-8-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-upper-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-mix-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-lower-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-upper-8-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-mix-8-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-lower-8-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(8);
         } else if (swb.equalsIgnoreCase("invalid")) {
           swb = "00112233445566";
         } else if (swb.equalsIgnoreCase("alfabet")) {
@@ -1152,10 +1184,15 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         break;
       case "SWB":
         String swbErrorMessage = dataTable.get("seawayBillMessage");
-        Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.updateMawbBtn.getAttribute("disabled")).as("Update button is disabled").isNotNull();
         if (swbErrorMessage != null && !swbErrorMessage.isEmpty()) {
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.isDisplayed()).as("SWB input has error message").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.swbErrorInfo.getText()).as("Show correct error message").isEqualTo(swbErrorMessage);
+        }
+
+        String emptySWBNumberErrorMessage = dataTable.get("emptySWBNumberErrorMessage");
+        if (emptySWBNumberErrorMessage != null && emptySWBNumberErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.isDisplayed()).as("Empty SWB Number error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptySeaportVendorErrorInfo.getText()).as("Showing empty SWB Number error message").isEqualTo(emptySWBNumberErrorMessage);
         }
 
         String emptySeahaulVendorErrorMessage = dataTable.get("emptySeahaulVendorErrorMessage");
@@ -1166,14 +1203,22 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
 
         String emptyOriginSeaportErrorMessage = dataTable.get("emptyOriginSeaportErrorMessage");
         if (emptyOriginSeaportErrorMessage != null && !emptyOriginSeaportErrorMessage.isEmpty()) {
-          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty seahaul vendor error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message").isEqualTo(emptyOriginSeaportErrorMessage);
         }
 
         String emptyDestinationSeaportErrorMessage = dataTable.get("emptyDestinationSeaportErrorMessage");
         if (emptyDestinationSeaportErrorMessage != null && !emptyDestinationSeaportErrorMessage.isEmpty()) {
-          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Empty seahaul vendor error message is shown").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Empty destination seaport error message is shown").isTrue();
           Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing empty destination seaport error message").isEqualTo(emptyDestinationSeaportErrorMessage);
+        }
+
+        String sameOriginDestinationSeaportErrorMessage = dataTable.get("sameOriginDestinationSeaportErrorMessage");
+        if (sameOriginDestinationSeaportErrorMessage != null && !sameOriginDestinationSeaportErrorMessage.isEmpty()) {
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.isDisplayed()).as("Empty origin seaport error message is shown on Origin Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyOriginSeaportErrorInfo.getText()).as("Showing empty origin seaport error message on Origin Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.isDisplayed()).as("Same origin and destination seaport error message is shown on Destination Seaport field").isTrue();
+          Assertions.assertThat(shipmentWeightDimensionUpdateMawbPage.emptyDestinationSeaportErrorInfo.getText()).as("Showing same origin and destination seaport error message on Destination Seaport field").isEqualTo(sameOriginDestinationSeaportErrorMessage);
         }
         break;
     }
@@ -1183,7 +1228,10 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorClicksClearButtonOnShipmentWeightDimensionPage(String inputField, String billingNumberType) {
     switch (billingNumberType) {
       case "Update Seaway Bill":
-        if(inputField.equalsIgnoreCase("Sea Haul Vendor")) {
+        if(inputField.equalsIgnoreCase("SWB Number")) {
+          shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
+          shipmentWeightDimensionUpdateMawbPage.swbInput.clear();
+        } else if(inputField.equalsIgnoreCase("Sea Haul Vendor")) {
           shipmentWeightDimensionUpdateMawbPage.hoverUpdateBillNumberField(inputField);
           shipmentWeightDimensionUpdateMawbPage.clearSeahaulVendorButton.click();
         } else if(inputField.equalsIgnoreCase("Origin Seaport")) {

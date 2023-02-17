@@ -14,7 +14,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | PLUQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -37,7 +37,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | BNGQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -47,7 +47,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Verify the new port "Port Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | AAKQQ |
+      | portCode | RQMQQ |
     And Verify the new port "Port Test Seaport has been updated" created success message
 
   @DeleteCreatedPorts
@@ -59,7 +59,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | AOZQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -82,7 +82,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | MBNQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -105,7 +105,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJQQ        |
+      | portCode  | RCEQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -128,7 +128,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJQQ        |
+      | portCode  | OPPQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -151,7 +151,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJQQ        |
+      | portCode  | IWXQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -174,7 +174,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | BAJQQ        |
+      | portCode  | ULOQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -197,7 +197,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | OSGQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -219,7 +219,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | ZBSQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -241,7 +241,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | GQGQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -263,28 +263,28 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ            |
-      | portName  | AAJ Test Seaport |
+      | portCode  | UQXQQ            |
+      | portName  | UQXQQ Test Seaport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 37.9220427       |
       | longitude | -81.6894072      |
       | portType  | Seaport          |
-    And Verify the new port "Port AAJ Test Seaport has been created" created success message
+    And Verify the new port "Port UQXQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | AAKQQ            |
-      | portName  | AAK Test Seaport |
+      | portCode  | SQXQQ            |
+      | portName  | SQXQQ Test Seaport |
       | city      | SG               |
       | region    | JKB              |
       | latitude  | 36.9220427       |
       | longitude | -80.6894072      |
       | portType  | Seaport          |
-    And Verify the new port "Port AAK Test Seaport has been created" created success message
+    And Verify the new port "Port SQXQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | AAJQQ |
-    And Verify the error "Duplicate Seaport code. Seaport code AAJQQ is already exists" is displayed while creating new port
+      | portCode | UQXQQ |
+    And Verify the error "Duplicate Seaport code. Seaport code UQXQQ is already exists" is displayed while creating new port
 
   @DeleteCreatedPorts
   Scenario: Edit Full Seaport Name with existing Seaport Name
@@ -295,28 +295,28 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABJQQ              |
-      | portName  | ABJQQ Test Seaport |
+      | portCode  | JIQQQ              |
+      | portName  | JIQQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ABJ Test Seaport has been created" created success message
+    And Verify the new port "Port JIQQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     Then Operator Add new Port
-      | portCode  | ABKQQ              |
-      | portName  | ABKQQ Test Seaport |
+      | portCode  | IUZQQ              |
+      | portName  | IUZQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 36.9220427         |
       | longitude | -80.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ABKQQ Test Seaport has been created" created success message
+    And Verify the new port "Port IUZQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portName" for created Port
-      | portName | ABJQQ Test Seaport |
-    And Verify the new port "Port ABJQQ Test Seaport has been updated" created success message
+      | portName | JIQQQ Test Seaport |
+    And Verify the new port "Port JIQQQ Test Seaport has been updated" created success message
     And Verify the newly updated port values in table
 
   @DeleteCreatedPorts
@@ -328,18 +328,18 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ABJQQ              |
-      | portName  | ABJQQ Test Seaport |
+      | portCode  | DZZQQ              |
+      | portName  | DZZQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ABJQQ Test Seaport has been created" created success message
+    And Verify the new port "Port DZZQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "portCode" for created Port
-      | portCode | ABJQQ |
-    And Verify the new port "Port ABJQQ Test Seaport has been updated" created success message
+      | portCode | DZZQQ |
+    And Verify the new port "Port DZZQQ Test Seaport has been updated" created success message
     And Verify the newly updated port values in table
 
   @DeleteCreatedPorts
@@ -351,14 +351,14 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJQQ              |
-      | portName  | ACJQQ Test Seaport |
+      | portCode  | BKAQQ              |
+      | portName  | BKAQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ACJQQ Test Seaport has been created" created success message
+    And Verify the new port "Port BKAQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "latitude" for created Port
       | latitude | 91 |
@@ -373,14 +373,14 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJQQ              |
-      | portName  | ACJQQ Test Seaport |
+      | portCode  | BQYQQ              |
+      | portName  | BQYQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ACJQQ Test Seaport has been created" created success message
+    And Verify the new port "Port BQYQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Edit the "longitude" for created Port
       | longitude | 181 |
@@ -395,14 +395,14 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJQQ              |
-      | portName  | ACJQQ Test Seaport |
+      | portCode  | ITGQQ              |
+      | portName  | ITGQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ACJQQ Test Seaport has been created" created success message
+    And Verify the new port "Port ITGQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Disable" button on panel on Port Trip Management page
@@ -418,8 +418,8 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJQQ              |
-      | portName  | ACJQQ Test Seaport |
+      | portCode  | XUBQQ              |
+      | portName  | XUBQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
@@ -444,14 +444,14 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACLQQ              |
-      | portName  | ACLQQ Test Seaport |
+      | portCode  | MPHQQ              |
+      | portName  | MPHQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ACLQQ Test Seaport has been created" created success message
+    And Verify the new port "Port MPHQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Cancel" button on panel on Port Trip Management page
@@ -466,14 +466,14 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | ACJQQ              |
-      | portName  | ACJQQ Test Seaport |
+      | portCode  | KRGQQ              |
+      | portName  | KRGQQ Test Seaport |
       | city      | SG                 |
       | region    | JKB                |
       | latitude  | 37.9220427         |
       | longitude | -81.6894072        |
       | portType  | Seaport            |
-    And Verify the new port "Port ACJQQ Test Seaport has been created" created success message
+    And Verify the new port "Port KRGQQ Test Seaport has been created" created success message
     And Verify the newly created port values in table
     And Operator click on Disable button for the created Port in table
     And Click on "Disable" button on panel on Port Trip Management page
@@ -491,7 +491,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | OOAQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -512,7 +512,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | MTMQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -521,8 +521,8 @@ Feature: Port Trip Management - Edit/Disable Seaport
       | portType  | Seaport      |
     And Verify the new port "Port Test Seaport has been created" created success message
     And Verify the newly created port values in table
-    And Edit the "portCode" for created Port
-      | portCode | AAKQQ |
+    And Edit the "latitude" for created Port
+      | latitude | 90 |
     And Verify the new port "Port Test Seaport has been updated" created success message
     And Verify the newly updated port values in table
 
@@ -535,7 +535,7 @@ Feature: Port Trip Management - Edit/Disable Seaport
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
     Then Operator Add new Port
-      | portCode  | AAJQQ        |
+      | portCode  | NNMQQ        |
       | portName  | Test Seaport |
       | city      | SG           |
       | region    | JKB          |
@@ -544,8 +544,8 @@ Feature: Port Trip Management - Edit/Disable Seaport
       | portType  | Seaport      |
     And Verify the new port "Port Test Seaport has been created" created success message
     And Verify the newly created port values in table
-    And Edit the "portCode" for created Port
-      | portCode | AAKQQ |
+    And Edit the "longitude" for created Port
+      | longitude | 180 |
     And Verify the new port "Port Test Seaport has been updated" created success message
     And Verify the newly updated port values in table
 

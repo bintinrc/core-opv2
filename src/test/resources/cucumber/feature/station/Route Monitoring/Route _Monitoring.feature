@@ -271,7 +271,7 @@ Feature: Route Monitoring V2
     And API Driver get pickup/delivery waypoint of the created order
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-      | Failure Reason | No parcels to pick up at all - ODP |
+      | Failure Reason | Can't Make It - Pick Waypoint |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -297,7 +297,8 @@ Feature: Route Monitoring V2
     And API Driver get pickup/delivery waypoint of the created order
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -328,7 +329,7 @@ Feature: Route Monitoring V2
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
-      | Failure Reason | No parcels to pick up at all - ODP |
+      | Failure Reason | Can't Make It - Pick Waypoint |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -360,7 +361,8 @@ Feature: Route Monitoring V2
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -424,7 +426,8 @@ Feature: Route Monitoring V2
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
-      | Failure Reason | Cannot Make It (CMI) - Hyperlocal |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -471,9 +474,11 @@ Feature: Route Monitoring V2
     And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -513,9 +518,11 @@ Feature: Route Monitoring V2
     And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -806,10 +813,12 @@ Feature: Route Monitoring V2
       | shipperName | {shipper-v4-legacy-id}           |
       | status      | ROUTED                           |
     And Operator fails reservation with failure Reason for the ReservationID "{KEY_CREATED_RESERVATION_ID}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}"
-      | Failure Reason | Cannot Make It (CMI) - ODP |
+      | Failure Reason          | I didn't attempt the pick up - Normal |
+      | Failure Reason Detail 1 | Cannot Make It (CMI) - Normal         |
     And Operator fail waypoint from Route Manifest page with following details in the row "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}"
       | Failure Reason          | I didn't attempt the delivery - Ninja Point Waypoint |
       | Failure Reason Detail 1 | Cannot Make It (CMI) - Ninja Point Waypoint          |
@@ -1091,12 +1100,12 @@ Feature: Route Monitoring V2
   Scenario Outline: View Pickup Appointment Job in Route Monitoring - Add Multiple PA Jobs to Route
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1119,12 +1128,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data and Checks Total Pending Waypoint - Remove Pending PA Job From Route
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1140,7 +1149,7 @@ Feature: Route Monitoring V2
     Then Operator verify value on Station Route Monitoring page for the "LATE_WAYPOINTS" column is equal to 0
     And API Operator removes Pickup Appointment job to Route
       | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID} |
+      | route_Id | {KEY_CREATED_ROUTE_ID}              |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1162,12 +1171,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Show Updated Route Id & Driver Name of Routed PA Job in Route Monitoring
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1186,9 +1195,9 @@ Feature: Route Monitoring V2
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by Automation Test for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":<HubId>,"hub":"<HubName>","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{KEY_CREATED_DRIVER_ID} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID} |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_OLD_ROUTE_ID}" in the Route filter
@@ -1225,12 +1234,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Total Success Waypoint - PA Job
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator success Pickup Appointment job
       | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     When Operator loads Operator portal Station Route Monitoring page
@@ -1255,12 +1264,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Invalid Failed PA Job
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator fails Pickup Appointment job
       | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
       | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
@@ -1286,12 +1295,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator fails Pickup Appointment job
       | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                        |
       | requestBody | {"status":"failed","failure_reason_id":1476,"failure_reason_code_id":1476,"photo_urls":[]} |
@@ -1317,12 +1326,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Valid Failed PA Job
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator fails Pickup Appointment job
       | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
       | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
@@ -1345,7 +1354,7 @@ Feature: Route Monitoring V2
       | INVALID_FAILED_PICKUPS      | 0 |
       | INVALID_FAILED_RESERVATIONS | 1 |
     When Operator Filters the records in the "Invalid Failed Reservations" by applying the following filters:
-      | Reservation ID      | Pickup Name | Contact   |
+      | Reservation ID                      | Pickup Name | Contact   |
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | <Name>      | <Contact> |
     And Operator selects the timeslot "9am - 6pm" in the table
     Then Operator verify value in the "Invalid Failed Reservations" table for the "RESERVATION_ID" column value is equal to "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
@@ -1363,12 +1372,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Pending & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1391,12 +1400,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator success Pickup Appointment job
       | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     When Operator loads Operator portal Station Route Monitoring page
@@ -1421,12 +1430,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Late PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator fails Pickup Appointment job
       | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
       | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |
@@ -1452,12 +1461,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Success & Early PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator success Pickup Appointment job
       | pa_Id | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     When Operator loads Operator portal Station Route Monitoring page
@@ -1482,12 +1491,12 @@ Feature: Route Monitoring V2
   Scenario Outline: Operator Filter Route Monitoring Data And Checks Failed & Early PA Job Waypoint
     Given Operator loads Operator portal home page
     When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1275084}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
+      | createPickupJobRequest | { "shipperId":{PA_shipper-v4-id}, "from":{ "addressId":1528009}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{gradle-current-date-yyyy-MM-dd}T09:00:00+08:00","latest":"{gradle-current-date-yyyy-MM-dd}T18:00:00+08:00"}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator assigns Pickup Appointment job to Route
-      | pa_Id    | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-      | route_Id | {KEY_CREATED_ROUTE_ID}              |
+    Given API Core - Operator add pickup job to the route using data below:
+      | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                      |
+      | addPickupJobToRouteRequest | {"new_route_id":{KEY_CREATED_ROUTE_ID},"overwrite":true} |
     And API Operator fails Pickup Appointment job
       | pa_Id       | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                                   |
       | requestBody | {"status":"failed","failure_reason_id":63,"failure_reason_code_id":9,"photo_urls":[]} |

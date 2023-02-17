@@ -20,7 +20,7 @@ Feature: Shipper Address Verification
       | Firstmile | 1234567890 | TestSG, Test Street | SG      | 994289   |
 
 
-  @ForceSuccessOrder @SystemIdNotSg @default-id
+  @ForceSuccessOrder @SystemIdNotSg @default-id @HappyPath
   Scenario Outline: [ID, MY, TH, PH, VN] New Shipper Address Without Lat Long is Created After Order Creation
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -33,7 +33,7 @@ Feature: Shipper Address Verification
       | name      | contact    | Address1             | country | postcode |
       | Firstmile | 1234567890 | Test ID, Test Street | ID      | 99443    |
 
-  @ForceSuccessOrder @SystemIdNotSg @default-id
+  @ForceSuccessOrder @SystemIdNotSg @default-id @HappyPath
   Scenario Outline: [ID, MY, TH, PH, VN] Lat Long of Existing Shipper Address is Updated After Order Creation
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -101,7 +101,7 @@ Feature: Shipper Address Verification
       | Firstmile | 1234567890 | Test SG, Test Street | SG      | 994289   | 1.123    | 1.123     | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |
 
 
-  @ForceSuccessOrder @SystemIdNotSg @default-id
+  @ForceSuccessOrder @SystemIdNotSg @default-id @HappyPath
   Scenario Outline: [ID, MY, TH, PH, VN] Lat Long of Unverified Shipper Address is Added After Order Creation
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -115,12 +115,11 @@ Feature: Shipper Address Verification
     Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "1"
     Then DB Shipper - verifies that Latitude "<latitude>" and Longitude "<longitude>" is equal to the expected value for shipperID "{shipper-v4-id}"
 
-
     Examples:
       | name      | contact    | Address1             | country | postcode | latitude | longitude |
       | Firstmile | 1234567890 | Test ID, Test Street | ID      | 99443    | 1.123    | 1.123     |
 
-  @ForceSuccessOrder @SystemIdNotSg @default-id
+  @ForceSuccessOrder @SystemIdNotSg @default-id @HappyPath
   Scenario Outline: [ID, MY, TH, PH, VN] New Shipper Address without Lat Long is Created from OPV2
     Given Operator loads Operator portal home page
     And DB Operator delete shipper address for the shipperId "{shipper-v4-id}"
@@ -131,7 +130,6 @@ Feature: Shipper Address Verification
       | createShipperAddressRequest | {"name":"<name>","contact":"<contact>","email":"FirstMile@ninjavan.co","address1":"<Address1>","address2":"","country":"<country>","postcode":"<postcode>","milkrun_settings":[],"is_milk_run":false} |
     Then DB Shipper - verifies the verified status for shipperId "{shipper-v4-id}" is equal to "0"
     Then DB Shipper - verifies that latlong value is assigned in shipper address table for shipperID "{shipper-v4-id}"
-
 
     Examples:
       | name      | contact    | Address1             | country | postcode |

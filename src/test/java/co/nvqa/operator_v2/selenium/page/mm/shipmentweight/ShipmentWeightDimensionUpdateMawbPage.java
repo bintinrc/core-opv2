@@ -90,32 +90,34 @@ public class ShipmentWeightDimensionUpdateMawbPage  extends SimpleReactPage<Ship
   @FindBy(css = ".ant-modal-confirm")
   public AntConfirmModal confirmSameMawbDialog;
 
-  private static final String SEAHAUL_VENDOR_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_seahaul_vendor_id']]";
-  private static final String ORIGIN_SEAPORT_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_origin_seaport_id']]";
-  private static final String DESTINATION_SEAPORT_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_destination_seaport_id']]";
-  private static final String AIRHAUL_VENDOR_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_airhaul_vendor_id']]";
-  private static final String ORIGIN_AIRPORT_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_origin_airport_id']]";
-  private static final String DESTINATION_AIRPORT_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='UpdateBillNumberForm_destination_airport_id']]";
+  private static final String UPDATE_BILL_NUMBER_INPUT_FIELD = ".//input[@data-testid='%s']";
+  private static final String UPDATE_BILL_NUMBER_DROPDOWN_FIELD = "//div[contains(@class, ' ant-select')][.//input[@id='%s']]";
 
   public void hoverUpdateBillNumberField(String billNumberField) {
     switch (billNumberField) {
+      case "SWB Number":
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_INPUT_FIELD, "seaway-bill-number"));
+        break;
       case "Sea Haul Vendor":
-        moveToElementWithXpath(SEAHAUL_VENDOR_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_DROPDOWN_FIELD, "UpdateBillNumberForm_seahaul_vendor_id"));
         break;
       case "Origin Seaport":
-        moveToElementWithXpath(ORIGIN_SEAPORT_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_DROPDOWN_FIELD, "UpdateBillNumberForm_origin_seaport_id"));
         break;
       case "Destination Seaport":
-        moveToElementWithXpath(DESTINATION_SEAPORT_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_DROPDOWN_FIELD, "UpdateBillNumberForm_destination_seaport_id"));
+        break;
+      case "MAWB Number":
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_INPUT_FIELD, "airway-bill-number"));
         break;
       case "Air Haul Vendor":
-        moveToElementWithXpath(AIRHAUL_VENDOR_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_DROPDOWN_FIELD, "UpdateBillNumberForm_airhaul_vendor_id"));
         break;
       case "Origin Airport":
-        moveToElementWithXpath(ORIGIN_AIRPORT_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_DROPDOWN_FIELD, "UpdateBillNumberForm_origin_airport_id"));
         break;
       case "Destination Airport":
-        moveToElementWithXpath(DESTINATION_AIRPORT_FIELD);
+        moveToElementWithXpath(f(UPDATE_BILL_NUMBER_INPUT_FIELD, "UpdateBillNumberForm_destination_airport_id"));
         break;
     }
   }

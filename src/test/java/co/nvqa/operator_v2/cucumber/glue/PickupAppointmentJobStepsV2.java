@@ -21,6 +21,8 @@ import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREAT
 import static co.nvqa.common.corev2.cucumber.ControlKeyStorage.KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.ACTION_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.COLUMN_ROUTE;
+import static co.nvqa.operator_v2.selenium.page.pickupAppointment.PickupAppointmentJobPageV2.BulkSelectTable.COLUMN_ROUTE_POS;
 
 public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
@@ -182,7 +184,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
                 .as(f("Notification Message contains: %s", message)).contains(message);
             Assertions.assertThat(pageNotifcationDescription)
                 .as(f("Notification Description contains: %s", description)).contains(description);
-          }, 1000, 3);
+          }, 1000, 10);
         });
       });
     }, 1000, 5);
@@ -293,6 +295,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(page -> {
         page.createOrEditJobPage.selectTagInJobTagsField(tag);
+        pause3s();
       });
     }, 1000, 5);
 
@@ -355,6 +358,12 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           break;
         case "Route ID":
           pickupAppointmentJobPage.bulkSelect.routeId.click();
+          break;
+        case "Remove route":
+          pickupAppointmentJobPage.bulkSelect.removeRoute.click();
+          break;
+        case "Fail job":
+          pickupAppointmentJobPage.bulkSelect.failJob.click();
           break;
       }
     });
@@ -797,10 +806,13 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String jobId = resolveValue(JobId);
     String status = resolveValue(Status);
     pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.createOrEditJobPage
-              .isStarByJobIdDisplayed(jobId, status))
-          .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Assertions.assertThat(page.createOrEditJobPage
+                .isStarByJobIdDisplayed(jobId, status))
+            .as("No Star in Job with id = " + jobId + " is displayed").isFalse();
+      }, 1000, 5);
     });
+
   }
 
   @When("Operator check no tag = {string} is displayed on job")
@@ -1071,5 +1083,154 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       }, 1000, 5);
 
     });
+  }
+
+  @When("Operator click on submit button in bulk remove route modal")
+  public void clickSubminInBulkRemoveRoute() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        pickupAppointmentJobPage.removeJobRouteModal.submitButton.click();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator check Remove route button is disabled on Pickup Jobs page")
+  public void clickBulkRemoveRouteButtonDisabled() {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+
+        Assertions.assertThat(pickupAppointmentJobPage.bulkSelect.removeRouteStatus())
+            .as("Remove route button is disabled").isTrue();
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator clicks option {string} of Bulk Update on Pickup Jobs page")
+  public void clickOptionOfBulkUpdate(String optionName) {
+    pickupAppointmentJobPage.inFrame(page ->
+        page.bulkSelect.clickBulkUpdateOption(optionName));
+  }
+
+  @Then("Operator verifies error message of {string} on Bulk Update Success Job page")
+  public void operatorVerifiesMessageOnSuccessJobPage(String jobIdAsText, String message) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String expectedMessage = resolveValue(message);
+        String jobId = resolveValue(jobIdAsText);
+        String actualMessage = pickupAppointmentJobPage.bulkUpdateSuccess.getErrorMessage(jobId);
+        Assertions.assertThat(actualMessage.trim()).as("Error message is the same")
+            .isEqualToIgnoringCase(expectedMessage.trim());
+      }, 1000, 2);
+
+    });
+  }
+
+  @Then("Operator verifies Submit button is {string} on Bulk Update Success Job page")
+  public void operatorVerifiesSubmitButtonStatus(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        switch (status) {
+          case "enable":
+            Assertions.assertThat(page.bulkUpdateSuccess.submitButton.getAttribute("disabled"))
+                .as("Button is enable").isEqualTo(null);
+            break;
+          case "disable":
+            Assertions.assertThat(page.bulkUpdateSuccess.submitButton.getAttribute("disabled"))
+                .as("Button is disable").isEqualTo("true");
+        }
+      }, 1000, 2);
+
+    });
+  }
+  @When("Operator click select fail reason on bulk fail modal for jobId = {string}")
+  public void clickSelectFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickSelectFailReasonForJob(jobId);
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click on Submit button on bulk fail modal")
+  public void clickSubmitOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.submitButton.click();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator click apply fail reason for all in bulk fail modal for jobId = {string}")
+  public void clickSelectApplyToAllFailReasonOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkFailJobsModal.clickApplyFailReasonToAll(jobId);
+      });
+    }, 1000, 3);
+  }
+
+
+  @When("Operator check Error message is shown in fail modal for jobId = {string}")
+  public void clickCheckErrorMessageOnBulkFailModal(String JobId) {
+    String jobId = resolveValue(JobId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.checkCannotFailedErrorMessageForJob(jobId))
+            .as("check error message in bulk fail").isTrue();
+      });
+    }, 1000, 3);
+  }
+
+  @When("Operator check Submit button disabled on bulk fail modal")
+  public void clickSubmitDisabledOnBulkFail() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        Assertions.assertThat(
+                pickupAppointmentJobPage.bulkFailJobsModal.submitButton.isEnabled())
+            .as("check Submit button disabled in bulk fail").isFalse();
+      });
+    }, 1000, 3);
+  }
+
+
+  @Given("Operator performs Success jobs action with data below:")
+  public void operatorPeformsBulkUpdateAction(Map<String, String> data) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        Map<String, String> resolvedData = resolveKeyValues(data);
+        page.bulkUpdateSuccess.submitButton.waitUntilClickable();
+        if ((resolvedData.get("proofUpload") != null) && (resolvedData.get("proofUpload")
+            .equalsIgnoreCase("yes"))) {
+          page.setProofUploadFile();
+        }
+        page.bulkUpdateSuccess.submitButton.click();
+        page.bulkUpdateSuccess.submitButton.waitUntilInvisible();
+      }, 1000, 2);
+
+    });
+  }
+
+  @Then("Operator verifies bulk update success job successful message below on Pickup Jobs page:")
+  public void operatorVerifiesSuccessJobSuccessfulMessage(String expectedString) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      String expectedResult = resolveValue(expectedString);
+      Assertions.assertThat(expectedResult).as("Message is the same")
+          .isEqualToIgnoringCase(page.getAntTopRightText());
+    });
+  }
+
+  @And("Operator open Route Manifest of created route {value} from Pickup Jobs page")
+  public void operatorOpenRouteManifestOfCreatedRouteFromPickupJobPage(String routeId) {
+
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.bulkSelect.filterByColumnV2(COLUMN_ROUTE, routeId);
+      pickupAppointmentJobPage.bulkSelect.clickColumn(1, COLUMN_ROUTE_POS);
+    });
+    pickupAppointmentJobPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
   }
 }

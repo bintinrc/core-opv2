@@ -87,15 +87,29 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @Then("Operator filter the column {string} with {string}")
   public void operator_Searches_By(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
-    shipperAddressConfigurationPage.filterBy(filterBy, filterValue);
+    String finalFilterValue = filterValue;
+    retryIfExpectedExceptionOccurred(
+        () -> shipperAddressConfigurationPage.filterBy(filterBy, finalFilterValue),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, StaleElementReferenceException.class,
+        InvalidElementStateException.class, InvalidArgumentException.class);
     takesScreenshot();
   }
 
   @Then("Operator verifies table is filtered {string} based on input in {string} in shipper address page")
-  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddresPage(String filterBy,
+  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy,
       String filterValue) {
     filterValue = resolveValue(filterValue);
-    shipperAddressConfigurationPage.validateFilter(filterBy, filterValue);
+    String finalFilterValue = filterValue;
+    retryIfExpectedExceptionOccurred(
+        () -> shipperAddressConfigurationPage.validateFilter(filterBy, finalFilterValue),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, StaleElementReferenceException.class,
+        InvalidElementStateException.class, InvalidArgumentException.class);
     takesScreenshot();
   }
 
@@ -113,9 +127,14 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @And("Operator clicks on the Download Addresses button")
   public void operatorClicksOnTheDownloadAddressesButton() {
-    shipperAddressConfigurationPage.clickDownloadAddress();
+    retryIfExpectedExceptionOccurred(
+        () -> shipperAddressConfigurationPage.clickDownloadAddress(),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, StaleElementReferenceException.class,
+        InvalidElementStateException.class, InvalidArgumentException.class);
     takesScreenshot();
-
   }
 
   @And("Operator clicks on the edit pickup button")
@@ -273,6 +292,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
+  @Then("Verify that csv file is downloaded with filename: {string}")
+  public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
+        shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
+  }
 }
 
 

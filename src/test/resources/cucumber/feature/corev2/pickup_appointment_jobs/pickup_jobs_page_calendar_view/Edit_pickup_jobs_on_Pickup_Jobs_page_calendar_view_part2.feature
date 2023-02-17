@@ -133,7 +133,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 2
       | {gradle-next-1-day-yyyy-MM-dd} |
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" and tag = "PRIOR" length = 0 in pickup_appointment_jobs_pickup_tags
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario: Edit pickup appointment job - jobs timeslot - ready for routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
