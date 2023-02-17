@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @UpdatePAJobsFromDriverApp @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @UpdatePAJobsFromDriverApp
 Feature: update pickup jobs from driver apps
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -83,7 +83,7 @@ Feature: update pickup jobs from driver apps
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
 
-  @DeleteShipperAddressCommonV2
+  @DeleteShipperAddressCommonV2   @deletePickupJob
   Scenario: Fail pickup jobs on Driver Apps - PA Job
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -161,56 +161,3 @@ Feature: update pickup jobs from driver apps
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}" status = "FAILED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}" has proof in proof_jobs table
 
-  @DeleteShipperAddressCommonV2 @RT
-  Scenario: Partial success pickup jobs on Driver Apps
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
-      | generateAddress | RANDOM                                          |
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                  |
-      | shipperClientId     | {normal-shipper-pickup-appointment-1-client-id}                                                                                                                                                                                                                                                                                                                                                    |
-      | shipperClientSecret | {normal-shipper-pickup-appointment-1-client-secret}                                                                                                                                                                                                                                                                                                                                                |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                             |
-      | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{"pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "is_pickup_required":true, "pickup_date":"{gradle-next-3-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-3-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When DB Control - get pickup appointment job id from order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
-    When API Core - Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
-    And DB Core - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
-    When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    When API Core - Operator add pickup job to the route using data below:
-      | jobId                      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}                                   |
-      | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
-#    And API Driver - Driver read routes:
-#      | driverId        | {driver-id}                        |
-#      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-#    When shipper print id "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}"
-#    When shipper print id "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-#    And API Driver - Driver submit POD:
-#      | failureReasonId | 1472                                                                                                  |
-#      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                    |
-#      | waypointId      | {KEY_WAYPOINT_ID}                                                                                     |
-#      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"FAIL","failure_reason_id":1472}] |
-#      | routes          | KEY_DRIVER_ROUTES                                                                                     |
-#      | jobType         | PICKUP_APPOINTMENT                                                                                    |
-#      | jobAction       | FAIL                                                                                                  |
-#      | jobMode         | PICK_UP                                                                                               |
-#    And API Driver - Driver submit POD:
-#      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
-#      | waypointId | {KEY_WAYPOINT_ID}                                                                |
-#      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
-#      | routes     | KEY_DRIVER_ROUTES                                                                |
-#      | jobType    | PICKUP_APPOINTMENT                                                               |
-#      | jobAction  | SUCCESS                                                                          |
-#      | jobMode    | PICK_UP                                                                          |
-#    When Operator goes to Pickup Jobs Page
-#    And  Operator clicks "Filter by job ID" button on Pickup Jobs page
-#    Then Operator verifies Filter Job button is disabled on Pickup job page
-#    Given Operator fills the pickup job ID list below:
-#      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]} |
-#    And  Operator clicks "Filter Jobs" button on Pickup Jobs page
-#    When Operator click edit icon for Pickup job row
-#    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}" status = "COMPLETED" ,in pickup_appointment_jobs table
-#    Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}" has proof in proof_jobs table
