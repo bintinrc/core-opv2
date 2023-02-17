@@ -13,7 +13,6 @@ Feature: update pickup jobs from driver apps
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest      | {"service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{gradle-next-3-day-yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{gradle-next-3-day-yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When DB Control - get pickup appointment job id from order id "{KEY_CREATED_ORDER_ID}"
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
@@ -22,7 +21,6 @@ Feature: update pickup jobs from driver apps
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
     And API Driver - Driver read routes:
       | driverId        | {driver-id}                        |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -54,7 +52,6 @@ Feature: update pickup jobs from driver apps
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
     And DB Core - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     When API Core - Operator add pickup job to the route using data below:
@@ -92,7 +89,6 @@ Feature: update pickup jobs from driver apps
       | createPickupJobRequest | { "shipperId":{normal-shipper-pickup-appointment-1-global-id}, "from":{ "addressId":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{ "ready":"{gradle-next-1-day-yyyy-MM-dd}T09:00:00+08:00", "latest":"{gradle-next-1-day-yyyy-MM-dd}T12:00:00+08:00"}} |
     When API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
     And DB Core - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     When API Core - Operator add pickup job to the route using data below:
@@ -138,7 +134,6 @@ Feature: update pickup jobs from driver apps
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOB_IDS[1]}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
-    When shipper print id "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}"
     And API Driver - Driver read routes:
       | driverId        | {driver-id}                        |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |

@@ -1112,9 +1112,5 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     }, 1000, 3);
   }
 
-  @When("shipper print id {string}")
-  public void testPrintId(String id) {
-    LOGGER.debug(resolveValue(id));
-  }
 
 }
