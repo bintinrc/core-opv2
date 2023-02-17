@@ -5,7 +5,9 @@ import co.nvqa.operator_v2.selenium.page.StationRoutePage.Parcel;
 import co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -79,6 +81,14 @@ public class StationRouteSteps extends AbstractSteps {
     page.inFrame(() -> page.assignDrivers.click());
   }
 
+  @When("Operator click Download CSV button on Station Route page")
+  public void clickDownloadsCsv() {
+    page.inFrame(() -> {
+      page.downloadCsv.click();
+      page.waitUntilVisibilityOfNotification("CSV downloaded!");
+    });
+  }
+
   @When("Operator verify statistics on Station Route page")
   public void verifyStatistics() {
     page.inFrame(() -> {
@@ -103,6 +113,18 @@ public class StationRouteSteps extends AbstractSteps {
           .withFailMessage("Average parcels per driver")
           .isTrue();
       assertions.assertAll();
+    });
+  }
+
+  @When("Operator verify downloaded CSV on Station Route page:")
+  public void verifyDownloadedCsv(List<Map<String, String>> data) {
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      String fileName = "station-route-orders.csv";
+      String expected = resolveListOfMaps(data).stream()
+          .map(row -> "\"\"," + row.get("trackingId") + "," + row.get("address"))
+          .collect(Collectors.joining("\n"));
+      page.verifyFileDownloadedSuccessfully(fileName, expected);
     });
   }
 
@@ -144,6 +166,7 @@ public class StationRouteSteps extends AbstractSteps {
   }
 
   @When("Operator verify area match {value} is displayed in row {int} on Station Route page")
+  @When("Operator verify area match {value} is displayed on {int} position on Station Route page")
   public void verifyAreaMatch(String value, int index) {
     page.inFrame(() -> {
       Assertions.assertThat(page.areaMatch)
@@ -157,11 +180,9 @@ public class StationRouteSteps extends AbstractSteps {
 
   @When("Operator verify area match is not displayed on Station Route page")
   public void verifyNoAreaMatch() {
-    page.inFrame(() -> {
-      Assertions.assertThat(page.areaMatch)
-          .as("Area match list")
-          .isEmpty();
-    });
+    page.inFrame(() -> Assertions.assertThat(page.areaMatch)
+        .as("Area match list")
+        .isEmpty());
   }
 
   @When("Operator verify keyword match {value} is displayed in row {int} on Station Route page")

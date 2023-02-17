@@ -101,6 +101,7 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   @Then("Operator verifies that url is redirected to {string} page on clicking the {string} button")
   public void operatorVerifiesThatUrlIsRedirectedToPickupAppointmentPageOnclickingTheButton(
       String expectedURL, String buttonText) {
+    pause8s();
     String windowHandle = getWebDriver().getWindowHandle();
     stationPendingPickupJobsPage.clickButton(buttonText);
     stationPendingPickupJobsPage.verifyCurrentPageURL(expectedURL);
@@ -160,5 +161,16 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   public void operatorVerifiesThatNoPendingPickupsMessageIsDisplayed() {
     stationPendingPickupJobsPage.validateNoPendingPickupRecords();
     takesScreenshot();
+  }
+
+  @When("Operator clicks on the sort icon in the Parcel to Pickup column")
+  public void operatorClicksOnTheSortIconInTheParcelToPickupColumn() {
+    stationPendingPickupJobsPage.clickSortParcelsToPick();
+    takesScreenshot();
+  }
+
+  @When("operator click {string} filter button")
+  public void operatorClickFilterButton(String buttonText) {
+    stationPendingPickupJobsPage.clickFilterButton(buttonText);
   }
 }

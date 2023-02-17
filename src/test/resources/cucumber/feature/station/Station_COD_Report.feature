@@ -627,6 +627,7 @@ Feature: Station COD Report
       | firstName | AUTO-DRIVER-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that success react notification displayed:
       | top | Driver Updated |
+    And API Operator clears incoming shipment cache
     And Operator go to menu Station Management Tool -> Station COD Report
     And Operator chooses start and end date on transaction end date using the following data:
       | transactionEndDateFrom | {gradle-previous-1-day-dd/MM/yyyy} |
