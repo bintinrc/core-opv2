@@ -53,13 +53,14 @@ public class UploadPaymentsSteps extends AbstractSteps {
 
   @Then("Operator verifies csv file is successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsSuccessfullyUploadedOnTheUploadPaymentsPage() {
-    Assertions.assertThat(uploadPaymentsPage.getUploadedFileName())
-        .as("Uploaded file name is correct").isEqualTo(CSV_FILENAME_PATTERN);
-    Assertions.assertThat(uploadPaymentsPage.getUploadStatusMessage())
-        .as("Uploaded file name is correct").contains("uploaded successfully.");
+    Assertions.assertThat(uploadPaymentsPage.getAntTopTextV2())
+        .as("Uploaded file name is correct")
+        .isEqualTo("Uploaded successfully - " + CSV_FILENAME_PATTERN);
+    Assertions.assertThat(uploadPaymentsPage.getAntDescription())
+        .as("Uploaded file name is correct").contains("The transactions are being processed.");
   }
 
-  @Then("Operator verifies csv file is not successfully uploaded on the Upload Payments page")
+  @Then("Operator - verifies csv file is not successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsNotSuccessfullyUploadedOnTheUploadPaymentsPage() {
     String actualErrorMsg = uploadPaymentsPage.getAntTopTextV2();
     String expectedToastText = CSV_FILENAME_PATTERN
@@ -72,8 +73,8 @@ public class UploadPaymentsSteps extends AbstractSteps {
         .isEqualTo(expectedErrorDescription);
   }
 
-  @Then("Operator verify Download Error Upload Payment CSV file on Upload Payments Page is downloaded successfully with below data:")
-  public void operatorVerifyDownloadErrorUPPCSVFileOnUploadSelfServePromoPageIsDownloadedSuccessfullyWithBelowData(
+  @Then("Operator - verify Error Upload Payment CSV file is downloaded successfully on Upload Payments Page with below data:")
+  public void operatorVerifyErrorUPPCSVFileIsDownloadedSuccessfullyOnUploadSelfServePromoPageWithBelowData(
       Map<String, String> dataTableAsMap) {
     dataTableAsMap = resolveKeyValues(dataTableAsMap);
     String pathname =
