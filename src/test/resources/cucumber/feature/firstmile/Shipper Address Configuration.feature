@@ -20,6 +20,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 60 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "1.288147,103.740233" in shipper address page
     Then Operator verifies that green check mark icon is not shown under the Lat Long
@@ -39,6 +40,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 60 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "28.640084,77.791013" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
@@ -64,6 +66,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 60 seconds
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]}"
     Then Operator verifies table is filtered "lat_long" based on input in "1.288147,103.740233" in shipper address page
     Then Operator verifies that green check mark icon is not shown under the Lat Long
@@ -87,6 +90,7 @@ Feature: Shipper Address Configuration
       | From | {gradle-previous-1-day-dd/MM/yyyy} |
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
+    And Operator waits for 60 seconds
     And Operator filter the column "<search_field>" with "<search_value>"
     Then Operator verifies table is filtered "<column_datakey>" based on input in "<search_value>" in shipper address page
 
@@ -97,6 +101,7 @@ Feature: Shipper Address Configuration
       | Search by Lat Long       | Lat Long       | 1.288147,103.740233                              | lat_long          |
       | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id |
 
+  @HappyPath
   Scenario Outline: Download CSV of Shipper Address
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -287,7 +292,7 @@ Feature: Shipper Address Configuration
     And Operator drag and drop csv file: "Unable_to_Update_Shipper_Address_with_Invalid_Input.csv" in "Update Addresses Lat Long" upload window
     Then Operator verifies upload error message is displayed for invalid file
 
-
+  @HappyPath
   Scenario: Success Bulk Update Shipper Addresses Lat Long
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -433,6 +438,51 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Lat Long Failure Reasons"
       | Address id #991119 Not Found |
       | Address id #881118 Not Found |
+
+  @HappyPath
+  Scenario Outline: View Updated Shipper Address Detail on Update Lat Long Page
+    When Operator loads Shipper Address Configuration page
+    When API Operator creates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                             |
+      | noOfAddress                 | 1                                                                                                                                                                                                                                           |
+      | withLatLong                 | YES                                                                                                                                                                                                                                         |
+      | createShipperAddressRequest | {"name":"Station","contact":"09876576","email":"Station@gmail.com","address1":"60 SenokoRd,Singapore","address2":"","country":"SG","postcode":"000000","latitude":"1.23","longitude":"1.23","milkrun_settings":[],"is_milk_run":false} |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Configure Pickup Type" button
+    Then Operator verifies page url ends with "pickup-type"
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator waits for 20 seconds
+    And Operator filter the column "<search_field>" with "<search_value>"
+    Then Operator verifies table is filtered "zones" based on input in "<expectedZoneValue>" in shipper address page
+    Then Operator verifies table is filtered "hubs" based on input in "<expectedHubValue>" in shipper address page
+    Then Operator verifies table is filtered "pickup_address" based on input in "60 SenokoRd,Singapore, SG, 000000" in shipper address page
+    When Operator loads Shipper Address Configuration page
+    When API Shipper - Operator updates shipper address using below data:
+      | shipperID                   | {shipper-v4-id}                                                                                                                                                                                                                                                  |
+      | withLatLong                 | YES                                                                                                                                                                                                                                                              |
+      | addressID                   | <search_value>                                                                                                                                                                                                                                                   |
+      | newLatitude                 | <newLatitude>                                                                                                                                                                                                                                                    |
+      | newLongitude                | <newLongitude>                                                                                                                                                                                                                                                   |
+      | newAddress                  | <newAddress>                                                                                                                                                                                                                                                           |
+    When Operator loads Shipper Address Configuration page
+    And Operator clicks on the "Update Lat Long" button
+    Then Operator verifies page url ends with "lat-long"
+    And Operator selects "Verified" in the Address Status dropdown
+    And Operator chooses start and end date on Address Creation date using the following data:
+      | From | {gradle-previous-1-day-dd/MM/yyyy} |
+      | To   | {gradle-next-1-day-dd/MM/yyyy}     |
+    And Operator clicks on the load selection button
+    And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]}"
+    Then Operator verifies table is filtered "lat_long" based on input in "50.5,50.5" in shipper address page
+    Then Operator verifies that green check mark icon is shown under the Lat Long
+    Then Operator verifies table is filtered "pickup_address" based on input in "<newAddress>, SG, 000000" in shipper address page
+
+    Examples:
+      | search_field | search_value                                  |  expectedZoneValue | expectedHubValue | newAddress             | newLatitude | newLongitude |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITH_LATLONG[1]} |  Updated Name      | G West           | 30 SenokoRd,Singapore  | 50.5        |  50.5        |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

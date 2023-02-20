@@ -329,6 +329,15 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage {
     validateDraft();
   }
 
+  public String validateDraftAndReturnWarnings(Script script) {
+    waitUntilPageLoaded(buildScriptUrl(script));
+    waitUntilVisibilityOfElementLocated(
+        "//p[text()='No errors found. You may proceed to verify or save the draft.']");
+    clickNvIconTextButtonByName("Verify Draft");
+    clickNvIconTextButtonByName("container.pricing-scripts.validate");
+    return getText("//div[@type='error']").replace("\n", "");
+  }
+
   public void cancelEditDraft() {
     clickNvIconTextButtonByName("commons.cancel");
   }
