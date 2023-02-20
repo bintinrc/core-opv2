@@ -26,8 +26,8 @@ Feature: COD
     Given API Operator create new 'normal' shipper
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | 300            | 4           | 20                   | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | 300            | 4           | 20                   | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "Validate file successfully" in Upload Self Serve Promo Page
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
@@ -44,8 +44,8 @@ Feature: COD
     Given API Operator create new 'normal' shipper
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | -3             | 4           | 20                   | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | -3             | 4           | 20                   | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "Validate file successfully" in Upload Self Serve Promo Page
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
@@ -62,8 +62,8 @@ Feature: COD
     Given API Operator create new 'normal' shipper
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | 3              | -4          | 20                   | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | FLAT          | 100 | surcharge | 3              | -4          | 20                   | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "Validate file successfully" in Upload Self Serve Promo Page
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
