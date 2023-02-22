@@ -211,7 +211,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
     Zone zone = new Zone();
     zone.setName("FMZONE-" + uniqueCode);
-    zone.setShortName("FMZ-" + uniqueCode);
+    zone.setShortName("FMZONE-" + uniqueCode);
     zone.setHubName(hubName);
     zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
     zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
@@ -243,7 +243,6 @@ public class FirstMileZonesSteps extends AbstractSteps {
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_NAME, resolveValue(zoneName));
       firstMileZonesPage.zonesTable.selectRow(1);
       firstMileZonesPage.viewSelectedPolygons.click();
-      firstMileZonesPage.waitUntilPageLoaded();
     });
   }
 

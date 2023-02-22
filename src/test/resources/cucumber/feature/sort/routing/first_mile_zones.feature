@@ -113,7 +113,7 @@ Feature: Fist Mile Zones
     And Operator click Set Coordinates in First Mile Zones drawing page
       | latitude  | {zone-latitude-3}  |
       | longitude | {zone-longitude-3} |
-    When Operator refresh page
+    When Operator go to menu "Routing" -> "First Mile Zones"
     Then Operator verifies first mile zone details on First Mile Zones page:
       | shortName   | {KEY_CREATED_ZONE.shortName}   |
       | name        | {KEY_CREATED_ZONE.name}        |
