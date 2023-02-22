@@ -47,6 +47,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @When("Operator creates first mile zone using {string} hub")
   public void operatorCreatesFirstMileZoneUsingHub(String hubName) {
+    firstMileZonesPage.waitUntilPageLoaded();
     operatorCreateFirstMileZone(hubName);
   }
 
