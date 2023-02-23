@@ -32,8 +32,15 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     File csvFile = StandardTestUtils.createFile("upload.csv", String.join("\n", trackingIds));
     LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadFile(csvFile);
-    uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
+    verifySuccessMsg();
     pause3s();
+  }
+
+  private void verifySuccessMsg() {
+    String actualMsg = uploadInvoicedOrdersPage.getPopUpMsgDescription();
+    Assertions.assertThat(actualMsg).as("Success notification message displayed")
+        .isEqualTo(
+            "Your upload is being processed. An email alert will be sent upon completion. Thank you!");
   }
 
   @And("Operator upload a CSV file with below order ids")
@@ -50,8 +57,8 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     String pdfFileName = "invalid-upload.pdf";
     File pdfFile = StandardTestUtils.createFile(pdfFileName, "TEST");
     uploadInvoicedOrdersPage.browseFilesInput.sendKeys(pdfFile);
-    String actualErrorMsg = uploadInvoicedOrdersPage.getErrorMsg();
-    String actualErrorDescription = uploadInvoicedOrdersPage.getErrorMsgDescription();
+    String actualErrorMsg = uploadInvoicedOrdersPage.getPopUpMsg();
+    String actualErrorDescription = uploadInvoicedOrdersPage.getPopUpMsgDescription();
     Assertions.assertThat(actualErrorMsg).as("Error message title is correct")
         .isEqualTo("Error uploading file");
     Assertions.assertThat(actualErrorDescription).as("Error message description is correct")
@@ -64,8 +71,8 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     String csvFileName = "upload.csv";
     File csvFile = StandardTestUtils.createFile(csvFileName, "TEST1 , TEST2");
     uploadInvoicedOrdersPage.uploadFile(csvFile);
-    String actualErrorMsg = uploadInvoicedOrdersPage.getErrorMsg();
-    String actualErrorDescription = uploadInvoicedOrdersPage.getErrorMsgDescription();
+    String actualErrorMsg = uploadInvoicedOrdersPage.getPopUpMsg();
+    String actualErrorDescription = uploadInvoicedOrdersPage.getPopUpMsgDescription();
     Assertions.assertThat(actualErrorMsg).as("Error message title is correct")
         .isEqualTo("Error uploading file");
     Assertions.assertThat(actualErrorDescription).as("Error message description is correct")
@@ -81,7 +88,7 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     File csvFile = StandardTestUtils.createFile("uploadfile", String.join("\n", trackingIds));
     LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
     uploadInvoicedOrdersPage.uploadFile(csvFile);
-    uploadInvoicedOrdersPage.verifySuccessMsgIsDisplayed();
+    verifySuccessMsg();
     takesScreenshot();
   }
 
