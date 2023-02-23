@@ -28,7 +28,6 @@ Feature: Upload Invoiced Orders
     Then Operator verifies below tracking ID(s) and creation time is displayed
       | {KEY_CREATED_ORDER_TRACKING_ID} |
 
-  @nad
   Scenario: Search by Uploading CSV which contains non-invoiced orders (uid:22a4abe1-b971-4f06-b2a6-d82d92c16169)
     #pre-condition: Order is already in invoiced_orders
     Given API Shipper create V4 order using data below:
