@@ -6,7 +6,7 @@ Feature: Ageing Parcels In Hub
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  @ForceSuccessOrder
+  @ForceSuccessOrder @Happypath
   Scenario Outline: View Ageing Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
