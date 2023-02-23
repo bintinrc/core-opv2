@@ -6,7 +6,7 @@ Feature: Ageing Parcels In Hub
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: View Ageing Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -44,7 +44,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: View Priority Ageing Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -73,7 +73,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: Can Not View Parcel Inbounded Less than 3 Days
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
