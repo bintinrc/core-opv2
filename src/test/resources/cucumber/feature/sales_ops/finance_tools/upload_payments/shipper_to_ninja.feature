@@ -28,7 +28,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is added to billing_qa_gl.priced_orders
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value |
@@ -78,7 +78,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount>,0.0 |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.23   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper with smaller amount of "Ready" ledger balance - CSV Has Netsuite ID And Payee Info (uid:85cdeeea-65fb-4558-a999-a74e3eedf638)
@@ -103,7 +103,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is added to billing_qa_gl.priced_orders
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value |
@@ -143,19 +143,19 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | column         | expected_value         |
       | origin_balance | <amount>               |
       | total_remitted | 5.00                   |
-      | balance        | 2.23                   |
+      | balance        | 2.38                   |
       | status         | In Progress            |
       | status_logs    | Open,Ready,In Progress |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>      |
-      | overall_balance | 2.23          |
-      | logs            | <amount>,2.23 |
+      | overall_balance | 2.38          |
+      | logs            | <amount>,2.38 |
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is not in billing_qa_gl.invoiced_orders table
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is not in billing_qa_gl.invoiced_orders table
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | payee_name       | payee_account_number                                       | payee_bank | transaction_no
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.23   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 1 Shipper - Payment via CSV Upload from Shipper Remit with bigger amount of "Ready" ledger balance - CSV Has Netsuite ID, Payer And Payee Info (uid:04036c7b-d541-4223-92aa-d222da2d5932)
@@ -180,7 +180,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is added to billing_qa_gl.priced_orders
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is added to billing_qa_gl.priced_orders
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value |
@@ -219,20 +219,20 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
       | origin_balance | <amount>             |
-      | total_remitted | 7.23                 |
+      | total_remitted | 7.38                 |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
     And DB Operator gets shipper account details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.shipper_accounts table
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source>       |
-      | overall_balance | -2.77          |
-      | logs            | <amount>,-2.77 |
+      | overall_balance | -2.62          |
+      | logs            | <amount>,-2.62 |
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" is not in billing_qa_gl.invoiced_orders table
     Then DB Operator verifies order id "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" is not in billing_qa_gl.invoiced_orders table
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.23   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 7.38   | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
 
   @DeleteNewlyCreatedShipper
   Scenario Outline: 1 Account ID linked to 3 Shippers - "Ready" ledger is exists for each shipper - Payment via CSV Upload from Shipper is enough to offset balance of all shippers (uid:8298abe9-6199-42cf-9d1d-86c7203b2faf)
@@ -287,7 +287,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then Operator waits for 1 seconds
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     # Create Payment
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
@@ -302,7 +302,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | system_id         | {KEY_COUNTRY}                                                                              |
       | shipper_id        | {KEY_LIST_OF_CREATED_SHIPPERS[1].id}                                                       |
       | parent_shipper_id | null                                                                                       |
-      | amount            | 4.15                                                                                       |
+      | amount            | 4.23                                                                                       |
       | type              | <type>                                                                                     |
       | subtype           | Split                                                                                      |
       | payment_method    | <payment_method>                                                                           |
@@ -313,8 +313,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator gets ledger details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[1].id}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
-      | origin_balance | 4.15                 |
-      | total_remitted | 4.15                 |
+      | origin_balance | 4.23                 |
+      | total_remitted | 4.23                 |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
@@ -322,7 +322,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source> |
       | overall_balance | 0.0      |
-      | logs            | 4.15,0.0 |
+      | logs            | 4.23,0.0 |
     # Verify shipper 2
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
@@ -330,7 +330,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | system_id         | {KEY_COUNTRY}                                                                              |
       | shipper_id        | {KEY_LIST_OF_CREATED_SHIPPERS[2].id}                                                       |
       | parent_shipper_id | null                                                                                       |
-      | amount            | 4.15                                                                                       |
+      | amount            | 4.23                                                                                       |
       | type              | <type>                                                                                     |
       | subtype           | Split                                                                                      |
       | payment_method    | <payment_method>                                                                           |
@@ -341,8 +341,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator gets ledger details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[2].id}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
-      | origin_balance | 4.15                 |
-      | total_remitted | 4.15                 |
+      | origin_balance | 4.23                 |
+      | total_remitted | 4.23                 |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
@@ -350,7 +350,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source> |
       | overall_balance | 0.0      |
-      | logs            | 4.15,0.0 |
+      | logs            | 4.23,0.0 |
    # Verify shipper 3
     Then DB Operator gets payment details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.transactions table
     Then Operator verifies below details in billing_qa_gl.transactions table
@@ -358,7 +358,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | system_id         | {KEY_COUNTRY}                                                                              |
       | shipper_id        | {KEY_LIST_OF_CREATED_SHIPPERS[3].id}                                                       |
       | parent_shipper_id | null                                                                                       |
-      | amount            | 4.15                                                                                       |
+      | amount            | 4.23                                                                                       |
       | type              | <type>                                                                                     |
       | subtype           | Split                                                                                      |
       | payment_method    | <payment_method>                                                                           |
@@ -369,8 +369,8 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then DB Operator gets ledger details for shipper "{KEY_LIST_OF_CREATED_SHIPPERS[3].id}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
       | column         | expected_value       |
-      | origin_balance | 4.15                 |
-      | total_remitted | 4.15                 |
+      | origin_balance | 4.23                 |
+      | total_remitted | 4.23                 |
       | balance        | 0.00                 |
       | status         | Completed            |
       | status_logs    | Open,Ready,Completed |
@@ -378,7 +378,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     And Operator verifies below details in billing_qa_gl.shipper_accounts table
       | source          | <source> |
       | overall_balance | 0.0      |
-      | logs            | 4.15,0.0 |
+      | logs            | 4.23,0.0 |
     Examples:
       | source   | account_id                                       | amount | type  | payment_method | transaction_no                                             | payee_name       | payee_account_number                                       | payee_bank |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 12.45  | DEBIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
@@ -421,7 +421,7 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
     Then Operator waits for 2 seconds
     # Trigger scheduler to create 'Ready' ledger
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 7 seconds
+    Then Operator waits for 10 seconds
     #Shipper 3
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
@@ -493,4 +493,4 @@ Feature: Upload CSV Payment From Shipper To Ninja Van (Debit)
       | logs            | <amount_2> |
     Examples:
       | source   | account_id                                       | account_id_2                                       | amount | amount_2 | type  | type_2 | payment_method | transaction_no                                             | transaction_no_2                                             | payee_name       | payee_account_number                                       | payee_bank |
-      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 4.14   | 12.45    | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
+      | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | QA-SO-AUTO-2-{gradle-current-date-yyyyMMddHHmmsss} | 4.23   | 12.45    | DEBIT | CREDIT | Banking        | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-2-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-AUTO-Payee | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} | QA-SO-Bank |
