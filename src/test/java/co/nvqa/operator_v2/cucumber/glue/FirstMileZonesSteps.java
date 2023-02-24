@@ -47,6 +47,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @When("Operator creates first mile zone using {string} hub")
   public void operatorCreatesFirstMileZoneUsingHub(String hubName) {
+    firstMileZonesPage.waitUntilPageLoaded();
     operatorCreateFirstMileZone(hubName);
   }
 
@@ -57,7 +58,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
       page.addFmZone.click();
       page.addFmZoneDialog.waitUntilVisible();
       page.addFmZoneDialog.name.setValue("FMZONE");
-      page.addFmZoneDialog.shortName.setValue("FMZONE");
+      page.addFmZoneDialog.shortName.setValue("FMZ");
       page.addFmZoneDialog.latitude.setValue("11");
       page.addFmZoneDialog.longitude.setValue("12");
     });
@@ -65,22 +66,26 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @Then("^Operator verifies Submit Button in First Mile Zone add dialog is Disabled$")
   public void verifiesAddSubmitButtonDisabled() {
-    firstMileZonesPage.inFrame(page -> Assertions.assertThat(page.addFmZoneDialog.submit.isEnabled()).as("Submit button is disabled")
-        .isFalse());
+    firstMileZonesPage.inFrame(
+        page -> Assertions.assertThat(page.addFmZoneDialog.submit.isEnabled())
+            .as("Submit button is disabled")
+            .isFalse());
   }
 
   @Then("^Operator verifies Submit Button in First Mile Zone edit dialog is Disabled$")
   public void verifiesEditSubmitButtonDisabled() {
-    firstMileZonesPage.inFrame(page -> Assertions.assertThat(page.editFmZoneDialog.update.isEnabled())
-        .as("Submit button is disabled")
-        .isFalse());
+    firstMileZonesPage.inFrame(
+        page -> Assertions.assertThat(page.editFmZoneDialog.update.isEnabled())
+            .as("Submit button is disabled")
+            .isFalse());
   }
 
   @Then("Operator verifies first mile zone details on First Mile Zones page:")
   public void operatorVerifiesFirstMileZoneDetails(Map<String, String> data) {
     Zone expected = new Zone(resolveKeyValues(data));
+    firstMileZonesPage.waitWhilePageIsLoading();
     firstMileZonesPage.inFrame(page -> {
-      firstMileZonesPage.findZone(expected.getName());
+      firstMileZonesPage.findZone(expected.getShortName());
       Zone actual = firstMileZonesPage.zonesTable.readEntity(1);
       if (StringUtils.equals(expected.getName(), actual.getName())) {
         put(KEY_CREATED_ZONE_ID, actual.getId());
@@ -95,7 +100,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
     Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getName());
+      firstMileZonesPage.findZone(zone.getShortName());
       firstMileZonesPage.zonesTable.clickActionButton(1, ACTION_DELETE);
       firstMileZonesPage.confirmDeleteDialog.waitUntilVisible();
       firstMileZonesPage.confirmDeleteDialog.confirm.click();
@@ -143,7 +148,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getName());
+      firstMileZonesPage.findZone(zone.getShortName());
       firstMileZonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       firstMileZonesPage.editFmZoneDialog.waitUntilVisible();
       firstMileZonesPage.editFmZoneDialog.name.setValue(zoneEdited.getName());
@@ -163,8 +168,8 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getName());
-      firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
+      firstMileZonesPage.findZone(zone.getShortName());
+      firstMileZonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       firstMileZonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
       List<String> values = firstMileZonesPage.zonesTable.readColumn(COLUMN_ID);
@@ -236,18 +241,18 @@ public class FirstMileZonesSteps extends AbstractSteps {
   }
 
   @And("Operator click View Selected Polygons for First Mile Zones name {string}")
-  public void operatorClickViewSelectedPolygonsForFirstMileZonesName(String zoneName) {
+  public void operatorClickViewSelectedPolygonsForFirstMileZonesName(String zoneShortName) {
     firstMileZonesPage.waitUntilLoaded();
     firstMileZonesPage.inFrame(page -> {
-      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_NAME, resolveValue(zoneName));
+      firstMileZonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
       firstMileZonesPage.zonesTable.selectRow(1);
       firstMileZonesPage.viewSelectedPolygons.click();
-      firstMileZonesPage.waitUntilPageLoaded();
     });
   }
 
   @And("Operator click Zones in First Mile Zones drawing page")
   public void operatorClickZonesInFirstMileZonesDrawingPage() {
+    zonesSelectedPolygonsPage.waitUntilPageLoaded();
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesPanel.zones.get(0).click());
   }
@@ -268,8 +273,10 @@ public class FirstMileZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.clear();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.setValue(longitude);
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
     zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    pause3s();
   }
 
   @When("Operator clicks Bulk Edit Polygons button in First Mile Zones Page")
