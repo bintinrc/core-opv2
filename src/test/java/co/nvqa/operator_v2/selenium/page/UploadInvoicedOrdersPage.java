@@ -14,12 +14,19 @@ public class UploadInvoicedOrdersPage extends SimpleReactPage<UploadInvoicedOrde
 
   @FindBy(css = "[data-testid='invoiced-orders-download-sample-csv-button']")
   public PageElement downloadSampleCsvButton;
+
   @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
   public PageElement antNotificationMessage;
+
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement antNotificationMessageDescription;
+
   @FindBy(xpath = "//iframe[contains(@src,'upload-invoiced-orders')]")
   private PageElement pageFrame;
+
+  @FindBy(xpath = "//span[contains(@class,'ant-spin-dot-spin')]")
+  public PageElement antDotSpinner;
+
 
   public UploadInvoicedOrdersPage(WebDriver webDriver) {
     super(webDriver);
@@ -33,22 +40,16 @@ public class UploadInvoicedOrdersPage extends SimpleReactPage<UploadInvoicedOrde
     browseFilesInput.sendKeys(file.getAbsolutePath());
   }
 
-  public String getErrorMsg() {
-    return antNotificationMessage.getText();
+  public String getPopUpMsg() {
+    return getAntTopRightText();
   }
 
-  public String getErrorMsgDescription() {
-    return antNotificationMessageDescription.getText();
+  public String getPopUpMsgDescription() {
+    return getAntDescription();
   }
 
   public void clickDownloadCsvButton() {
     downloadSampleCsvButton.click();
-  }
-
-
-  public void verifySuccessMsgIsDisplayed() {
-    assertTrue("Success message is not displayed", isElementVisible(
-        "//p[text()='Your upload is being processed. An email alert will be sent upon completion. Thank you!']"));
   }
 
   public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {

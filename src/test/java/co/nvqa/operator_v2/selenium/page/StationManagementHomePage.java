@@ -42,6 +42,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String PENDING_PICKUP_TILE_VALUE_XPATH = "//*[.='%s']/following-sibling::*";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
+  private static final String PENDING_PICKUP_TILE_HAMBURGER_XPATH = "//span[text()='%s']//parent::div//following-sibling::div//*[local-name()='svg']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//div[contains(@class,'FilterSelect')]";
@@ -340,6 +341,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void clickHamburgerIcon(String tileName) {
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName, tileName);
+    WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
+    scrollIntoView(hamburger);
+    hamburger.click();
+  }
+
+  public void clickPendingPickupHamburgerIcon(String tileName) {
+    String hamburgerXpath = f(PENDING_PICKUP_TILE_HAMBURGER_XPATH, tileName);
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
     scrollIntoView(hamburger);
     hamburger.click();

@@ -22,8 +22,8 @@ Feature: Self-Serve Pricing Profile Creation Page
   Scenario: Upload Pricing Profiles with CSV - With Some Mandatory Fields Not Exist (uid:4354172a-4215-417f-9f41-715ee6102831)
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page contains "Missing header fields"
@@ -40,8 +40,8 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator waits for 1 seconds
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "Validate file successfully" in Upload Self Serve Promo Page
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
@@ -55,8 +55,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date                 | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-current-date-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 0 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     Then Operator verifies toast message "File is invalid" in Upload Self Serve Promo Page
     Then Operator clicks Download Errors CSV on Upload Self Serve Promo Page
     Then Operator verify Download Errors CSV file on Upload Self Serve Promo Page is downloaded successfully with below data:
@@ -70,9 +70,9 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 2.00                 | flat          | 200 | surcharge | 2              | 2           | 2                    | 2                 | 2                   | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 2.00                 | flat          | 200 | surcharge | 2              | 2           | 2                    | 2                 | 2                   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -86,8 +86,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -102,8 +102,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id              | global_id        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+      | shipper_id              | global_id        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LEGACY_SHIPPER_ID} | {KEY_SHIPPER_ID} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_SHIPPER_ID}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -121,9 +121,9 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator waits for 1 seconds
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator uploads csv file with below data:
-      | shipper_id                                 | global_id                            | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId} | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
-      | {KEY_LIST_OF_CREATED_SHIPPERS[2].legacyId} | {KEY_LIST_OF_CREATED_SHIPPERS[2].id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 20.00                | flat          | 50  | surcharge | 200            | 2           | 2                    | 2                 | 2                   | LEGACY               |
+      | shipper_id                                 | global_id                            | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts | rts_type  | cod_percentage | cod_min_fee | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[1].legacyId} | {KEY_LIST_OF_CREATED_SHIPPERS[1].id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | 100 | surcharge | 3              | 4           | 1.5                  | 20                | 10                  | LEGACY               |
+      | {KEY_LIST_OF_CREATED_SHIPPERS[2].legacyId} | {KEY_LIST_OF_CREATED_SHIPPERS[2].id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 20.00                | flat          | 50  | surcharge | 200            | 2           | 2                    | 2                 | 2                   | LEGACY               |
     Then Operator clicks submit button on the Upload Self Serve Promo Page
     Then Operator verifies that error toast is displayed on Upload Self Serve Promo Page:
       | top    | Network Request Error                                |
@@ -147,8 +147,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25,"rts_charge":-2,"billing_weight_logic" : "SHIPPER_GROSS_WEIGHT"}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id                             | global_id                        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+      | shipper_id                             | global_id                        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_MARKETPLACE_SUB_SHIPPER.id}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -165,8 +165,8 @@ Feature: Self-Serve Pricing Profile Creation Page
     Given API operator create new marketplace seller for marketplace id "{KEY_SHIPPER_ID}"
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id                             | global_id                        | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+      | shipper_id                             | global_id                        | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_MARKETPLACE_SUB_SHIPPER.legacyId} | {KEY_MARKETPLACE_SUB_SHIPPER.id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_MARKETPLACE_SUB_SHIPPER.id}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -185,8 +185,8 @@ Feature: Self-Serve Pricing Profile Creation Page
       | {"effective_date":"{gradle-next-0-day-yyyy-MM-dd}T00:00:00Z","pricing_script_id": {pricing-script-id-all},"pricing_levers": {"cod_min_fee": 20,"cod_percentage": 0.8,"insurance_min_fee": 2,"insurance_percentage": 0.6,"insurance_threshold": 25,"rts_charge":-2,"billing_weight_logic" : "SHIPPER_GROSS_WEIGHT"}} |
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id                      | global_id                 | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+      | shipper_id                      | global_id                 | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_CORPORATE_BRANCH.id}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct
@@ -205,8 +205,8 @@ Feature: Self-Serve Pricing Profile Creation Page
     And Operator waits for 1 seconds
     Given Operator clicks Upload Pricing Profile with CSV button on the Upload Self Serve Promo Page
     And Operator successfully uploads csv file with below data:
-      | shipper_id                      | global_id                 | pricing_script_id       | effective_date               | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
-      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {gradle-next-1-day-d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
+      | shipper_id                      | global_id                 | pricing_script_id       | effective_date                | salesperson_discount | discount_type | rts               | rts_type  | cod_percentage    | cod_min_fee       | insurance_percentage | insurance_min_fee | insurance_threshold | billing_weight_logic |
+      | {KEY_CORPORATE_BRANCH.legacyId} | {KEY_CORPORATE_BRANCH.id} | {pricing-script-id-all} | {date: 1 days next, d/M/yyyy} | 10.00                | flat          | [country default] | surcharge | [country default] | [country default] | [country default]    | [country default] | [country default]   | LEGACY               |
     Then DB Operator verifies new pricing profile is added to script_engine_qa_gl.pricing_profiles table for shipper "{KEY_CORPORATE_BRANCH.id}"
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details in CSV are correct

@@ -28,4 +28,10 @@ public class UploadPaymentsPage extends SimpleReactPage {
   public String getUploadStatusMessage() {
     return getAntTopText();
   }
+
+  public void verifyDownloadErrorsCsvFileDownloadedSuccessfully(String expectedBody,
+      String filename) {
+    verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(filename),
+        expectedBody);
+  }
 }
