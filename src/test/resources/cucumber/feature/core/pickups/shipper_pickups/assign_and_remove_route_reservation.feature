@@ -6,7 +6,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
+  Scenario: Operator Assign a Pending Reservation to a Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -31,7 +31,16 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 1                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
@@ -60,6 +69,14 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And DB Operator verifies waypoints.route_id & seq_no is NULL
     And DB Operator verifies route_waypoint is hard-deleted
     And DB Operator verifies route_monitoring_data is hard-deleted
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 3                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
   Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
@@ -562,6 +579,40 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Then Operator verify that Bulk Route Assignment Side Panel is shown on Shipper Pickups page
     And Operator verify that title of Bulk Route Assignment Side Panel is "0/100 RSVN selected"
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
+
+  @DeleteOrArchiveRoute @routing-refactor
+  Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator search reservations on Shipper Pickups page:
+      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+    And Operator assign Reservation to Route on Shipper Pickups page
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v4-name}                 |
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_WAYPOINT_ID}                 |
+      | seqNo   | not null                          |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | status  | Routed                            |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_WAYPOINT_ID}                 |
+      | seqNo    | not null                          |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+      | status   | Routed                            |
+    And DB Core - verify route_monitoring_data record:
+      | waypointId | {KEY_WAYPOINT_ID}                 |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

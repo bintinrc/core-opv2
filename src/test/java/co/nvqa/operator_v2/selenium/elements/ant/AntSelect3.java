@@ -78,6 +78,7 @@ public class AntSelect3 extends PageElement {
   }
 
   public void selectValues(Iterable<String> values) {
+    clearValue();
     values.forEach(v -> {
       enterSearchTerm(v);
       clickMenuItem(v);

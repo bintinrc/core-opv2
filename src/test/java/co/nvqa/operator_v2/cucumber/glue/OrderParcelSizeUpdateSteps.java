@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.OrderParcelSizeUpdatePage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.io.File;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @ScenarioScoped
 public class OrderParcelSizeUpdateSteps extends AbstractSteps {
 
-  private OrderParcelSizeUpdatePage orderParcelSizeUpdatePage;
+  private OrderParcelSizeUpdatePage page;
 
   public static final String KEY_ORDERS_SIZE = "KEY_ORDERS_SIZE";
 
@@ -22,20 +22,22 @@ public class OrderParcelSizeUpdateSteps extends AbstractSteps {
 
   @Override
   public void init() {
-    orderParcelSizeUpdatePage = new OrderParcelSizeUpdatePage(getWebDriver());
+    page = new OrderParcelSizeUpdatePage(getWebDriver());
   }
 
   @When("^Operator download sample CSV file for 'Find Orders with CSV' on Order Parcel Size Update page$")
   public void operatorDownloadSampleCsvFileForFindOrdersWithCsv() {
-    orderParcelSizeUpdatePage.findOrdersWithCsv.click();
-    orderParcelSizeUpdatePage.findOrdersWithCsvDialog.waitUntilVisible();
-    orderParcelSizeUpdatePage.findOrdersWithCsvDialog.downloadSample.click();
-    orderParcelSizeUpdatePage.findOrdersWithCsvDialog.cancel.click();
+    page.inFrame(() -> {
+      page.findOrdersWithCsv.click();
+      page.findOrdersWithCsvDialog.waitUntilVisible();
+      page.findOrdersWithCsvDialog.downloadSample.click();
+      page.findOrdersWithCsvDialog.cancel.click();
+    });
   }
 
   @Then("^sample CSV file for 'Find Orders with CSV' on Order Parcel Size Update page is downloaded successfully$")
   public void operatorVerifySampleCsvFileForFindOrdersWithCsvIsDownloadedSuccessfully() {
-    orderParcelSizeUpdatePage.verifyFileDownloadedSuccessfully("find-orders-with-csv.csv",
+    page.verifyFileDownloadedSuccessfully("parcel-size-update.csv.csv",
         "NVSGNINJA000000001,SMALL\n"
             + "NVSGNINJA000000002,MEDIUM\n"
             + "NVSGNINJA000000003,LARGE\n"
@@ -46,20 +48,22 @@ public class OrderParcelSizeUpdateSteps extends AbstractSteps {
 
   @When("^Operator upload Multiple Order Parcel Size update CSV on Order Parcel Size Update page$")
   public void multiOrderParcelSizeUpdateUploadCsvFile(List<String> listSize) {
-    List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+    List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
 
     if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty()) {
       throw new RuntimeException("List of created Tracking ID should not be null or empty.");
     }
     put(KEY_ORDERS_SIZE, listSize);
-    orderParcelSizeUpdatePage.findOrdersWithCsv.click();
-    File createOrderUpdateCsv = orderParcelSizeUpdatePage
-        .buildMultiCreateOrderUpdateCsv(listOfCreatedTrackingId, listSize);
-    orderParcelSizeUpdatePage.findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
+    page.inFrame(() -> {
+      page.findOrdersWithCsv.click();
+      File createOrderUpdateCsv = page
+          .buildMultiCreateOrderUpdateCsv(listOfCreatedTrackingId, listSize);
+      page.findOrdersWithCsvDialog.uploadFile(createOrderUpdateCsv);
+    });
   }
 
   @When("^Operator clicks Upload button on Order Parcel Size Update page$")
   public void clickUploadButton() {
-    orderParcelSizeUpdatePage.upload.click();
+    page.inFrame(() -> page.upload.click());
   }
 }

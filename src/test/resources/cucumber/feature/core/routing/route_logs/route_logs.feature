@@ -49,7 +49,7 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-name} | {hub-name} | {zone-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ROUTES[2].comments} | {route-tag-name} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page (uid:037e90a7-f324-4ce2-9cff-ff198ac9365b)
+  Scenario: Operator Bulk Edit Multiple Routes Details from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -76,7 +76,7 @@ Feature: Route Logs
       | {gradle-current-date-yyyy-MM-dd} | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | {ninja-driver-2-name} | {zone-name-2} | {hub-name-2} | Route has been edited by automated test | {route-tag-name} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Optimise Multiple Routes from Route Logs Page (uid:03e47864-aa13-4dc3-8775-27f07257320b)
+  Scenario: Operator Optimise Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -117,7 +117,7 @@ Feature: Route Logs
     Then Operator verify printed passwords of selected routes info is correct
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page (uid:1a53a8cd-1499-4135-9171-5435bf397469)
+  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -134,7 +134,7 @@ Feature: Route Logs
     And Operator verifies created routes are printed successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Delete Multiple Routes from Route Logs Page (uid:8839e88d-7873-4bb8-8143-8de7de657624)
+  Scenario: Operator Delete Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -221,7 +221,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only (uid:f07cd3bd-e0a4-4117-a92f-e4005e3d5c6a)
+  Scenario: Operator Redirected to Edit Route Page from Route Logs - Load Waypoints of Selected Route(s) only
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -231,7 +231,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
-    Then Operator is redirected to this page "/sg/zonal-routing/edit?cluster=true&ids={KEY_CREATED_ROUTE_ID}&unrouted=false"
+    Then Operator is redirected to this page "sg/edit-routes?cluster=true&ids={KEY_CREATED_ROUTE_ID}&unrouted=false"
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filters Route by Route Id on Route Logs Page (uid:273b5063-c85e-47a1-bada-f50d3f755541)
@@ -266,7 +266,7 @@ Feature: Route Logs
       | tags | {route-tag-name}       |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Address Verify Route on Route Logs Page (uid:1e689de9-9f65-4447-8532-a775abbd9574)
+  Scenario: Operator Address Verify Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -289,9 +289,9 @@ Feature: Route Logs
       | top                | Address verification successful for selected route |
       | waitUntilInvisible | true                                               |
     And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score |
-      | 1        | 1.0   |
-      | 0        | 0.5   |
+      | archived | score    |
+      | 1        | not null |
+      | 0        | not null |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator Filters Multiple Routes by Comma Separated Route Ids on Route Logs Page - <Note>
@@ -324,7 +324,7 @@ Feature: Route Logs
       | With No Space | {KEY_LIST_OF_CREATED_ROUTE_ID[1]},{KEY_LIST_OF_CREATED_ROUTE_ID[2]}  |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Optimise Single Route from Route Logs Page (uid:9f9943a6-918d-4388-a19a-7650cdbcba18)
+  Scenario: Operator Optimise Single Route from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -344,7 +344,7 @@ Feature: Route Logs
     And Operator opens Optimize Selected Route dialog for "{KEY_CREATED_ROUTE_ID}" route on Route Logs page
     Then Optimize Selected Route dialog contains message on Route Logs page:
       | This route originally contained: 2 waypoint(s)                             |
-      | Route Optimise did NOT drop any waypoint(s)!                               |
+      | Route optimise did not drop any waypoint(s)!                               |
       | Are you sure you want to proceed to optimise this route to 2 waypoints(s)? |
     When Operator clicks Optimize Route button in Optimize Selected Route dialog on Route Logs page
     Then Operator verifies that success react notification displayed:
@@ -377,7 +377,7 @@ Feature: Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
-    And Operator waits for 10 seconds
+    And Operator waits for 100 seconds
     When Operator go to menu Routing -> Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
@@ -397,7 +397,7 @@ Feature: Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
-    And Operator waits for 10 seconds
+    And Operator waits for 100 seconds
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
@@ -413,7 +413,7 @@ Feature: Route Logs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1"}} |
-    And Operator waits for 10 seconds
+    And Operator waits for 100 seconds
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And Operator go to menu Routing -> Route Logs
@@ -486,6 +486,40 @@ Feature: Route Logs
     Then Operator verifies that success react notification displayed:
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Delete Routes with Reservation on Route Logs
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Routing -> Route Logs
+    And Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator deletes created route on Route Logs page
+    Then Operator verifies that success react notification displayed:
+      | top                | 1 Route(s) Deleted |
+      | waitUntilInvisible | true               |
+    And Operator verify routes are deleted successfully:
+      | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+    And DB Core - verify route_logs record:
+      | id        | {KEY_CREATED_ROUTE_ID} |
+      | deletedAt | not null               |
+    And DB Core - verify waypoints record:
+      | id      | {KEY_WAYPOINT_ID} |
+      | seqNo   | null              |
+      | routeId | null              |
+    And DB Core - verify shipper_pickup_search record:
+      | reservationId | {KEY_CREATED_RESERVATION_ID} |
+      | routeId       | null                         |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -88,7 +88,7 @@ Feature: Route Logs - Archive & Unarchive
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator select "Unarchive Selected" for given routes on Route Logs page:
+    And Operator select "Unarchive selected" for given routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Then Operator verify "Unarchive" process data in Selection Error dialog on Route Logs page:
       | routeId                           | reason                   |
@@ -110,7 +110,7 @@ Feature: Route Logs - Archive & Unarchive
       | routeDateFrom | YESTERDAY  |
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
-    And Operator select "Unarchive Selected" for given routes on Route Logs page:
+    And Operator select "Unarchive selected" for given routes on Route Logs page:
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verify "Unarchive" process data in Selection Error dialog on Route Logs page:

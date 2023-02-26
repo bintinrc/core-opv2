@@ -2,10 +2,9 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.FileInput;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,36 +20,36 @@ import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 /**
  * @author Sergey Mishanin
  */
-public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
+public class OrderParcelSizeUpdatePage extends SimpleReactPage<OrderParcelSizeUpdatePage> {
 
-  @FindBy(name = "container.order-parcel-size-update.find-orders-with-csv")
-  public NvIconTextButton findOrdersWithCsv;
+  @FindBy(css = "[data-testid='upload-csv-button']")
+  public Button findOrdersWithCsv;
 
-  @FindBy(name = "container.order-parcel-size-update.upload-selected")
-  public NvIconTextButton upload;
+  @FindBy(css = "[data-testid='upload-button']")
+  public Button upload;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
 
   public OrderParcelSizeUpdatePage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public static class FindOrdersWithCsvDialog extends MdDialog {
+  public static class FindOrdersWithCsvDialog extends AntModal {
 
-    @FindBy(css = "[label='Select File']")
-    public NvButtonFilePicker chooseButton;
+    @FindBy(css = "[data-testid='upload-dragger']")
+    public FileInput chooseButton;
 
-    @FindBy(name = "commons.upload")
-    public NvApiTextButton upload;
+    @FindBy(css = "[data-testid='upload-button']")
+    public Button upload;
 
-    @FindBy(name = "commons.cancel")
-    public NvIconTextButton cancel;
+    @FindBy(css = "[data-testid='cancel-button']")
+    public Button cancel;
 
-    @FindBy(name = "commons.edit")
-    public NvIconTextButton edit;
+    @FindBy(css = ".ant-upload-list-item-name")
+    public PageElement uploadedItem;
 
-    @FindBy(xpath = ".//a[text()='here']")
+    @FindBy(css = "[data-testid='download-sample-file-button']")
     public Button downloadSample;
 
     public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement) {
@@ -60,8 +59,8 @@ public class OrderParcelSizeUpdatePage extends OperatorV2SimplePage {
     public void uploadFile(File file) {
       waitUntilVisible();
       chooseButton.setValue(file);
-      edit.waitUntilVisible();
-      upload.clickAndWaitUntilDone();
+      uploadedItem.waitUntilVisible();
+      upload.click();
     }
   }
 
