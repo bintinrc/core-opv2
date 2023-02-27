@@ -426,6 +426,32 @@ Feature: Van Inbound
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
       | parcelGranularStatus | Van en-route to pickup          |
 
+  @DeleteOrArchiveRoute
+  Scenario: Publish Reservation Event on Start Route
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator verifies the route is started on clicking route start button
+    And Operator verifies that van inbound page is displayed after clicking back to route input screen
+    And Operator go to menu Routing -> Route Logs
+    Then Operator verify the route is started after van inbounding using data below:
+      | routeDateFrom | {gradle-current-date-yyyy-MM-dd} |
+      | routeDateTo   | {gradle-current-date-yyyy-MM-dd} |
+      | hubName       | {hub-name}                       |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 419                                 |
+      | type       | 4                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

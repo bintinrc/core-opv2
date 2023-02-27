@@ -1,16 +1,28 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.page.StationRoutePage;
 import co.nvqa.operator_v2.selenium.page.StationRoutePage.Parcel;
 import co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable;
+import co.nvqa.operator_v2.util.TestUtils;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.When;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * @author Sergey Mishanin
@@ -18,6 +30,7 @@ import org.assertj.core.api.SoftAssertions;
 @ScenarioScoped
 public class StationRouteSteps extends AbstractSteps {
 
+  public static final String STATION_ROUTE_ORDERS_CSV = "station-route-orders.csv";
   private StationRoutePage page;
 
   public StationRouteSteps() {
@@ -78,7 +91,153 @@ public class StationRouteSteps extends AbstractSteps {
 
   @When("Operator click Assign drivers button on Station Route page")
   public void clickAssignDrivers() {
-    page.inFrame(() -> page.assignDrivers.click());
+    page.inFrame(() -> {
+      if (page.assignDrivers.waitUntilVisible(1)) {
+        page.assignDrivers.click();
+      } else {
+        page.assignDriversUpload.click();
+      }
+    });
+  }
+
+  @When("Operator verify Assign Drivers button is disabled on Station Route page")
+  public void checkAssignDriversIsDisabled() {
+    page.inFrame(() -> {
+      Button button = page.assignDrivers.waitUntilVisible(1) ?
+          page.assignDrivers :
+          page.assignDriversUpload;
+      Assertions.assertThat(button.isEnabled())
+          .withFailMessage("Assign Drivers button is enabled")
+          .isFalse();
+    });
+  }
+
+  @When("Operator open Upload CSV tab on Station Route page")
+  public void openUploadCsv() {
+    page.inFrame(() -> {
+      page.waitUntilLoaded(2, 30);
+      page.uploadCsv.click();
+    });
+  }
+
+  @When("Operator selects {value} hub on Station Route page")
+  public void selectHub(String hubName) {
+    page.inFrame(() -> {
+      if (page.hub.waitUntilVisible(1)) {
+        page.hub.selectValue(hubName);
+      } else {
+        page.hubUpload.selectValue(hubName);
+      }
+    });
+  }
+
+  @When("Operator cannot select {value} hub on Station Route page")
+  public void cannotSelectHub(String hubName) {
+    page.inFrame(() -> {
+      AntSelect3 hub = page.hub.waitUntilVisible(1) ?
+          page.hub : page.hubUpload;
+      Assertions.assertThatThrownBy(() -> hub.selectValue(hubName))
+          .withFailMessage("Can select %s hub", hubName)
+          .isInstanceOf(NoSuchElementException.class);
+    });
+  }
+
+  @When("Operator upload CSV file on Station Route page:")
+  public void uploadCsv(List<Map<String, String>> data) {
+    page.inFrame(() -> {
+      String content = resolveListOfMaps(data).stream()
+          .map(r -> StringUtils.trimToEmpty(r.get("driverId")) + "," + StringUtils.trimToEmpty(
+              r.get("trackingId")))
+          .collect(Collectors.joining("\n"));
+      File file = TestUtils.createFileOnTempFolder(
+          String.format("station_route_%s.csv", page.generateDateUniqueString()));
+      try {
+        FileUtils.write(file, content, StandardCharsets.UTF_8);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      page.uploadFile.setValue(file);
+    });
+  }
+
+  @When("Operator upload CSV file with more then 10000 rows on Station Route page")
+  public void uploaBigCsv() {
+    page.inFrame(() -> {
+
+      StringBuilder content = new StringBuilder();
+      for (int i = 0; i <= 10_000; i++) {
+        content.append("NVSGCOPV2").append(RandomStringUtils.randomAlphanumeric(9).toUpperCase(
+            Locale.ROOT)).append(",").append(RandomStringUtils.randomNumeric(8)).append("\n");
+      }
+      File file = TestUtils.createFileOnTempFolder(
+          String.format("station_route_%s.csv", page.generateDateUniqueString()));
+      try {
+        FileUtils.write(file, content, StandardCharsets.UTF_8);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      page.uploadFile.setValue(file);
+    });
+  }
+
+  @When("Operator upload downloaded CSV file on Station Route page")
+  public void uploadDownloadedCsv() {
+    page.inFrame(() -> {
+      String pathname = StandardTestConstants.TEMP_DIR + STATION_ROUTE_ORDERS_CSV;
+      page.uploadFile.setValue(pathname);
+    });
+  }
+
+  @When("Operator verify Tracking IDs in Invalid Input dialog on Station Route page:")
+  public void verifyTrackingIds(List<String> data) {
+    page.inFrame(() -> {
+      page.invalidInputDialog.waitUntilVisible();
+      List<String> actual = page.invalidInputDialog.trackingIds.stream()
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of invalid tracking ids")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(data));
+    });
+  }
+
+  @When("Operator verify Tracking IDs are not displayed in Invalid Input dialog on Station Route page")
+  public void verifyTrackingIds() {
+    page.inFrame(() -> {
+      page.invalidInputDialog.waitUntilVisible();
+      Assertions.assertThat(page.invalidInputDialog.trackingIds)
+          .as("List of invalid tracking ids")
+          .isEmpty();
+    });
+  }
+
+  @When("Operator verify Driver IDs are not displayed in Invalid Input dialog on Station Route page")
+  public void verifyDriverIds() {
+    page.inFrame(() -> {
+      page.invalidInputDialog.waitUntilVisible();
+      Assertions.assertThat(page.invalidInputDialog.drivers)
+          .as("List of invalid driver ids")
+          .isEmpty();
+    });
+  }
+
+  @When("Operator click Cancel button in Invalid Input dialog on Station Route page")
+  public void clickCancel() {
+    page.inFrame(() -> {
+      page.invalidInputDialog.waitUntilVisible();
+      page.invalidInputDialog.cancel.click();
+    });
+  }
+
+  @When("Operator verify Driver IDs in Invalid Input dialog on Station Route page:")
+  public void verifyDriverIds(List<String> data) {
+    page.inFrame(() -> {
+      page.invalidInputDialog.waitUntilVisible();
+      List<String> actual = page.invalidInputDialog.drivers.stream()
+          .map(PageElement::getNormalizedText).collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of invalid driver ids")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(data));
+    });
   }
 
   @When("Operator click Download CSV button on Station Route page")
@@ -120,11 +279,10 @@ public class StationRouteSteps extends AbstractSteps {
   public void verifyDownloadedCsv(List<Map<String, String>> data) {
     page.inFrame(() -> {
       page.waitUntilLoaded();
-      String fileName = "station-route-orders.csv";
       String expected = resolveListOfMaps(data).stream()
           .map(row -> "\"\"," + row.get("trackingId") + "," + row.get("address"))
           .collect(Collectors.joining("\n"));
-      page.verifyFileDownloadedSuccessfully(fileName, expected);
+      page.verifyFileDownloadedSuccessfully(STATION_ROUTE_ORDERS_CSV, expected);
     });
   }
 
@@ -152,6 +310,34 @@ public class StationRouteSteps extends AbstractSteps {
           .isFalse();
       Parcel actual = page.parcelsTable.readEntity(1);
       expected.compareWithActual(actual);
+    });
+  }
+
+  @When("Operator verify exactly parcels are displayed on Upload CSV tab on Station Route page:")
+  public void verifyExactlyUploadedParcels(List<Map<String, String>> data) {
+    List<Parcel> expected = data.stream()
+        .map(r -> new Parcel(resolveKeyValues(r)))
+        .collect(Collectors.toList());
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      List<Parcel> actual = page.uploadedParcelsTable.readAllEntities();
+      Assertions.assertThat(actual)
+          .as("Uploaded parcels")
+          .containsExactlyInAnyOrderElementsOf(expected);
+    });
+  }
+
+  @When("Operator verify parcels are displayed on Upload CSV tab on Station Route page:")
+  public void verifyUploadedParcels(List<Map<String, String>> data) {
+    List<Parcel> expected = data.stream()
+        .map(r -> new Parcel(resolveKeyValues(r)))
+        .collect(Collectors.toList());
+    page.inFrame(() -> {
+      page.waitUntilLoaded();
+      List<Parcel> actual = page.uploadedParcelsTable.readAllEntities();
+      Assertions.assertThat(actual)
+          .as("Uploaded parcels")
+          .containsAll(expected);
     });
   }
 

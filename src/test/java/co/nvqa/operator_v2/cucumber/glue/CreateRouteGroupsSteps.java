@@ -1202,14 +1202,10 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         value = finalData.get("etaDateTimeFrom");
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.setFromDate(value);
-          createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.selectFromHours("00");
-          createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.selectFromMinutes("00");
         }
         value = finalData.get("etaDateTimeTo");
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.setToDate(value);
-          createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.selectToHours("00");
-          createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.selectToMinutes("00");
         }
       } else if (createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.isDisplayedFast()) {
         createRouteGroupsPage.shipmentFiltersForm.etaDateTimeFilter.removeFilter();
@@ -1268,19 +1264,11 @@ public class CreateRouteGroupsSteps extends AbstractSteps {
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.setFromDate(
               value);
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectFromHours(
-              "00");
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectFromMinutes(
-              "00");
         }
         value = finalData.get("shipmentCompletionDateTimeTo");
         if (StringUtils.isNotBlank(value)) {
           createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.setToDate(
               value);
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectToHours(
-              "00");
-          createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.selectToMinutes(
-              "00");
         }
       } else if (createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.isDisplayedFast()) {
         createRouteGroupsPage.shipmentFiltersForm.shipmentCompletionDateTimeFilter.removeFilter();

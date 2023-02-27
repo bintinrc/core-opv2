@@ -89,13 +89,14 @@ public class RouteGroupManagementPage extends SimpleReactPage<RouteGroupManageme
     public static class JobDetailsTable extends AntTableV2<RouteGroupJobDetails> {
 
       public static final String COLUMN_TRACKING_ID = "trackingId";
+      public static final String COLUMN_ID = "id";
       public static final String COLUMN_TYPE = "type";
 
       public JobDetailsTable(WebDriver webDriver) {
         super(webDriver);
         setColumnLocators(ImmutableMap.<String, String>builder()
             .put("sn", "__index__")
-            .put("id", "id")
+            .put(COLUMN_ID, "id")
             .put("orderId", "orderId")
             .put(COLUMN_TRACKING_ID, "trackingId")
             .put(COLUMN_TYPE, "type")

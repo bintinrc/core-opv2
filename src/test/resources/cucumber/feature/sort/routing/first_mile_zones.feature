@@ -107,7 +107,7 @@ Feature: Fist Mile Zones
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu "Routing" -> "First Mile Zones"
     When Operator creates first mile zone using "{hub-name}" hub
-    And Operator click View Selected Polygons for First Mile Zones name "{KEY_CREATED_ZONE.name}"
+    And Operator click View Selected Polygons for First Mile Zones name "{KEY_CREATED_ZONE.shortName}"
     And Operator click Zones in First Mile Zones drawing page
     And Operator click Create Polygon in First Mile Zones drawing page
     And Operator click Set Coordinates in First Mile Zones drawing page
