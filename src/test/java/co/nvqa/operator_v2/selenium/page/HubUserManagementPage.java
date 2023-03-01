@@ -17,9 +17,13 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
 
   public String XPATH_OF_EDIT_BUTTON = "//button[@data-testid='view-users-navigation-button-%s']";
 
+  public String XPATH_OF_EDIT_USER_BUTTON = "//button[@data-testid='edit-button-%s']";
+
   public String XPATH_OF_REMOVE_USER_BUTTON = "//button[@data-testid='delete-button-%s']";
 
   public String XPATH_OF_USERNAME = "//td[@class='name']//*[contains(text(),'%s')]";
+
+  public String XPATH_OF_HUB_SELECTED_HUB = "//span[@title='%s']";
 
   public String hubTitleXpath = "//span[@title='%s']";
 
@@ -31,6 +35,18 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
 
   @FindBy(xpath = "//span[@class='ant-upload-span']//span[@class='ant-upload-list-item-name']")
   public PageElement uploadCsvFileName;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title'][text()='Add a new user?']")
+  public PageElement addNewUserModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title'][text()='Add User']")
+  public PageElement addUserModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title'][text()='Edit user']")
+  public PageElement editUserModal;
+
+  @FindBy(xpath = "//input[@class='ant-input']")
+  public PageElement searchHub;
 
   @FindBy(xpath = "//button/span[@data-testid='submit-button']")
   public PageElement submitCsvFile;
@@ -56,17 +72,35 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
   @FindBy(css = "[data-testid='email-input']")
   public PageElement emailInput;
 
+  @FindBy(css = "[id='role']")
+  public PageElement roleSelection;
+
   @FindBy(css = "[data-testid='ok-text']")
   public PageElement addButton;
+
+  @FindBy(xpath = "//button[@data-testid='edit-user-button']")
+  public PageElement editUserButton;
+
+  @FindBy(css = "[data-testid='username-or-email-input']")
+  public PageElement usernameOrEmailInput;
 
   @FindBy(xpath = "//button[@disabled]/span[@data-testid='ok-text']")
   public PageElement disabledAddButton;
 
-  @FindBy(css = "[data-testid='table-container use-fixed-scroll']")
-  public PageElement hubUserTable;
-
   @FindBy(css = "[data-testid='remove-button']")
   public PageElement removeButton;
+
+  @FindBy(css = "[data-testid='search-button']")
+  public PageElement searchButton;
+
+  @FindBy(css = "[data-testid='selected-hub-1-selection']")
+  public AntSelect selectHub1;
+
+  @FindBy(css = "[data-testid='selected-hub-2-selection']")
+  public AntSelect selectHub2;
+
+  @FindBy(css = "[data-testid='selected-hub-3-selection']")
+  public AntSelect selectHub3;
 
   public void uploadCsvFile(File file) {
     uploadCsvFileInput.sendKeys(file.getAbsoluteFile());
