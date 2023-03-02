@@ -519,6 +519,14 @@ Feature: Route Logs
     And DB Core - verify shipper_pickup_search record:
       | reservationId | {KEY_CREATED_RESERVATION_ID} |
       | routeId       | null                         |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
+      | userId     | 397                                 |
+      | userName   | AUTOMATION EDITED                   |
+      | userEmail  | qa@ninjavan.co                      |
+      | type       | 3                                   |
+      | pickupType | 1                                   |
+      | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
 
 
   @KillBrowser @ShouldAlwaysRun
