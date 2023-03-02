@@ -37,7 +37,7 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   public AddShipperSupportAgentModal addShipperSupportAgentModal;
 
   @FindBy(xpath = "//input[@placeholder='Search by name or email']")
-  public TextBox searchInputFields;
+  public ForceClearTextBox searchInputFields;
 
   @FindBy(css = "tbody > tr.ant-table-row")
   public List<AgentRow> agents;
@@ -52,12 +52,10 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @Override
   public void waitUntilLoaded() {
     waitUntilVisibilityOfElementLocated(customerSupportTab.getWebElement());
-    waitUntilVisibilityOfElementLocated(addShipperSupportAgentModal.getWebElement());
   }
 
   public void createLiveChatAgent(String fullName, String email) {
     addNewAgentButton.click();
-    pause10s();
     waitUntilVisibilityOfElementLocated(addShipperSupportAgentModal.getWebElement());
     AGENT_NAME = fullName;
     fillAndSaveLiveChatAgentDetails(fullName, email);
@@ -66,9 +64,9 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 
 
   private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
-    // addShipperSupportAgentModal.waitUntilVisible();
+    addShipperSupportAgentModal.waitUntilVisible();
     addShipperSupportAgentModal.fillAndSaveLiveChatAgentDetails(fullName, email);
-//    addShipperSupportAgentModal.waitUntilInvisible();
+    addShipperSupportAgentModal.waitUntilInvisible();
   }
 
   //  private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
@@ -89,10 +87,10 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   public void verifyLiveAgentAddedSuccessfully() {
     waitUntilLoaded();
     searchInputFields.setValue(AGENT_NAME);
-    /*sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), this.AGENT_NAME);
+    //sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), this.AGENT_NAME);
     String addedAgentRowXpath = f("//td[text()='%s']", this.AGENT_NAME);
     String actualName = getText(addedAgentRowXpath);
-    Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present").isTrue();*/
+    Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present").isTrue();
   }
 
   public void updateLiveChatAgent(String fullName, String email) {

@@ -6,16 +6,16 @@ Feature: OPv2 - Live Agent Overview
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
- # @ui
-  #Scenario: Add Live Agent to List of Admin
-   # Given Operator go to menu Customer Experience -> Live Chat Admin Dashboard
-    #Then Create live agent with email and username
-    #And Verify agent added successfully
+  @ui
+  Scenario: Add Live Agent to List of Admin
+    Given Operator go to menu Customer Experience -> Live Chat Admin Dashboard
+    Then Create live agent with email and username
+    And Verify agent added successfully
 
   @ui
-  Scenario: Update Live Agent to List of Admin
-    Given Operator go to menu Customer Experience -> Live Chat Admin Dashboard
-    Then Update live agent with email and username
+  #Scenario: Update Live Agent to List of Admin
+   # Given Operator go to menu Customer Experience -> Live Chat Admin Dashboard
+    #Then Update live agent with email and username
 #    Then Verify agent added successfully
 #
 #  @LaunchBrowser @KillBrowser @ui
