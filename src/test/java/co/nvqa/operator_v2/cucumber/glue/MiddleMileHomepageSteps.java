@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.mm.model.persisted_class.HubShipmentSummary;
+import co.nvqa.common.mm.model.persisted_class.HubShipmentSummaries;
 import co.nvqa.operator_v2.selenium.page.MiddleMileHomepagePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -63,8 +63,8 @@ public class MiddleMileHomepageSteps extends AbstractSteps {
 
     @Then("Operator verifies total shipment count in Shipments in My Hub section is correct")
     public void operatorVerifiesTotalShipmentCountInShipmentsInMyHubSectionIsCorrect() {
-        List<HubShipmentSummary> hubShipmentSummaries = getList(KEY_LIST_OF_HUB_SHIPMENTS_SUMMARIES, HubShipmentSummary.class);
-        long shipmentsTotal = hubShipmentSummaries.stream().map(HubShipmentSummary::getShipmentsCount).reduce(
+        List<HubShipmentSummaries> hubShipmentSummaries = getList(KEY_LIST_OF_HUB_SHIPMENTS_SUMMARIES, HubShipmentSummaries.class);
+        long shipmentsTotal = hubShipmentSummaries.stream().map(HubShipmentSummaries::getShipmentsCount).reduce(
             Long::sum).get();
 
         middleMileHomepagePage.verifyShipmentTotal(shipmentsTotal);
@@ -73,7 +73,7 @@ public class MiddleMileHomepageSteps extends AbstractSteps {
     @Then("Operator verifies can sort data in Middle Mile Homepage by column {string}")
     public void operatorVerifiesCanSortDataInMiddleMileHomepageByColumn(String column) {
         middleMileHomepagePage.switchTo();
-        List<HubShipmentSummary> orderedHubShipmentSummaries = get(KEY_LIST_OF_ORDERED_HUB_SHIPMENTS_SUMMARIES);
+        List<HubShipmentSummaries> orderedHubShipmentSummaries = get(KEY_LIST_OF_ORDERED_HUB_SHIPMENTS_SUMMARIES);
 
         middleMileHomepagePage.verifySortedDataByColumn(column, orderedHubShipmentSummaries);
     }

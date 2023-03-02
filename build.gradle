@@ -71,6 +71,6 @@ dependencies {
     implementation "co.nvqa:common-sort:1.2.7"
     implementation "co.nvqa:commons:2.5.14"
     implementation "co.nvqa:common-shipper:1.2.5"
-    implementation "co.nvqa:common-mm:1.2.3"
+    implementation "co.nvqa:common-mm:1.2.5"
     implementation "co.nvqa:common-pricing:1.2.8"
 }
