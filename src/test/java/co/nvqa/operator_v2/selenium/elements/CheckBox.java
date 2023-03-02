@@ -24,7 +24,7 @@ public class CheckBox extends PageElement {
   }
 
   public boolean isChecked() {
-    return webElement.isSelected();
+    return getWebElement().isSelected();
   }
 
   public void check() {

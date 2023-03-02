@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.hibernate.EventsDao;
+import co.nvqa.common.core.model.persisted_class.events.OrderEvents;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
@@ -23,7 +25,6 @@ import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.MovementEventEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
-import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.ReserveTrackingIdEntity;
 import co.nvqa.commons.model.entity.RouteMonitoringDataEntity;
 import co.nvqa.commons.model.entity.RouteWaypointEntity;
@@ -59,6 +60,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -94,6 +96,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   public StandardDatabaseExtSteps() {
   }
+
+  @Inject
+  private EventsDao eventsDao;
 
   @Override
   public void init() {
@@ -208,6 +213,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     List<Transaction> transactions = order.getTransactions();
 
+    List<Map<String, String>> finalData = resolveListOfMaps(data);
     ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
     {
       Optional<Transaction> transactionOptional = transactions.stream()
@@ -218,12 +224,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          if (jaroScores.size() != finalData.size()) {
+            pause10s();
+            jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          }
           Assertions.assertThat(jaroScores.size()).as("Number of jaro scores")
-              .isEqualTo(data.size());
-          for (int i = 0; i < data.size(); i++) {
-            JaroScore expected = new JaroScore(resolveKeyValues(data.get(i)));
+              .isEqualTo(finalData.size());
+          for (int i = 0; i < finalData.size(); i++) {
+            if (StringUtils.equalsAnyIgnoreCase(finalData.get(i).get("score"), "null",
+                "not null")) {
+              finalData.get(i).remove("score");
+            }
+            JaroScore expected = new JaroScore(finalData.get(i));
             JaroScore actual = jaroScores.get(i);
-            expected.compareWithActual(actual);
+            expected.compareWithActual(actual, finalData.get(i));
           }
         }
       } else {
@@ -323,7 +337,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify order_events record for the created order for RTS:$")
   public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     List<String> orderEventsTypes = orderEvents.stream()
         .map(orderEvent -> String.valueOf(orderEvent.getType())).collect(
             Collectors.toList());
@@ -338,7 +352,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify the order_events record exists for the created order with type:$")
   public void operatorVerifyOrderEventExists(DataTable mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     List<Integer> types = mapOfData.asList(Integer.class);
     types.forEach(type ->
@@ -351,9 +365,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("^DB Operator verify the order_events record:$")
   public void operatorVerifyOrderEventExists(Map<String, String> data) {
-    OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
-    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
+    OrderEvents expected = new OrderEvents(resolveKeyValues(data));
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(expected.getOrderId());
+    OrderEvents.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -361,10 +375,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -395,10 +409,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -427,12 +441,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify (-?\\d+) order_events record for the created order:$")
   public void operatorVerifyOrderEventParams(int index, Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     if (index <= 0) {
       index = orderEvents.size() + index;
     }
-    OrderEventEntity theLastOrderEvent = orderEvents.get(index - 1);
+    OrderEvents theLastOrderEvent = orderEvents.get(index - 1);
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
@@ -446,7 +460,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     // order event is an async process, the order event may not created yet when accessing this step
     retryIfAssertionErrorOccurred(() -> {
       Long orderId = get(KEY_CREATED_ORDER_ID);
-      List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+      List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
       assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
       String value = mapOfData.get("type");
       orderEvents.stream()
@@ -672,7 +686,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     long waypointId = Long.parseLong(data.get("waypointId"));
     long routeId = Long.parseLong(data.get("routeId"));
 
-    RouteMonitoringDataEntity result = this.getCoreJdbc().getRouteMonitoringDataEntity(waypointId, routeId);
+    RouteMonitoringDataEntity result = this.getCoreJdbc()
+        .getRouteMonitoringDataEntity(waypointId, routeId);
     Assertions.assertThat(result)
         .as("route_monitoring_data record for waypointId %s and routeId %s", waypointId, routeId)
         .isNotNull();

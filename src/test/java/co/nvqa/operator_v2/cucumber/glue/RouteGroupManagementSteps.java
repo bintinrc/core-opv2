@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.commons.model.core.RouteGroup;
 import co.nvqa.operator_v2.model.RouteGroupInfo;
 import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 
+import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TRACKING_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TYPE;
 import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.RouteGroupsTable.ACTION_DELETE;
@@ -156,7 +157,7 @@ public class RouteGroupManagementSteps extends AbstractSteps {
   }
 
   @Then("^Operator delete delivery transaction from route group:$")
-  public void deleteTransactionFromRouteGroup(Map<String, String> data) {
+  public void deleteDeliveryTransactionFromRouteGroup(Map<String, String> data) {
     data = resolveKeyValues(data);
     String name = data.get("name");
     String trackingId = data.get("trackingId");
@@ -177,6 +178,54 @@ public class RouteGroupManagementSteps extends AbstractSteps {
           .as("Jobs table is empty")
           .isTrue();
       page.editRouteGroupDialog.saveChanges.click();
+    });
+  }
+
+  @Then("^Operator delete transaction from route group:$")
+  public void deleteTransactionFromRouteGroup(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String name = data.get("name");
+    String id = data.get("id");
+    routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.routeGroupsTable.filterByColumn(COLUMN_NAME, name);
+      Assertions.assertThat(page.routeGroupsTable.isEmpty())
+          .as("Route Groups table is empty")
+          .isFalse();
+      page.routeGroupsTable.clickActionButton(1, ACTION_EDIT);
+      page.editRouteGroupDialog.waitUntilVisible();
+      page.editRouteGroupDialog.jobDetailsTable
+          .filterByColumn(COLUMN_ID, id)
+          .selectRow(1);
+      page.editRouteGroupDialog.removeSelected.click();
+      Assertions.assertThat(page.editRouteGroupDialog.jobDetailsTable.isEmpty())
+          .as("Jobs table is empty")
+          .isTrue();
+      page.editRouteGroupDialog.saveChanges.click();
+    });
+  }
+
+  @Then("Operator open Edit Rout Group dialog for {value} route group")
+  public void deleteTransactionFromRouteGroup(String name) {
+    routeGroupManagementPage.inFrame(page -> {
+      page.waitUntilLoaded();
+      page.routeGroupsTable.filterByColumn(COLUMN_NAME, name);
+      Assertions.assertThat(page.routeGroupsTable.isEmpty())
+          .as("Route Groups table is empty")
+          .isFalse();
+      page.routeGroupsTable.clickActionButton(1, ACTION_EDIT);
+      page.editRouteGroupDialog.waitUntilVisible();
+    });
+  }
+
+  @Then("Operator verify there is no {value} transaction in Edit Rout Group dialog")
+  public void verifyNoTransaction(String id) {
+    routeGroupManagementPage.inFrame(page -> {
+      page.editRouteGroupDialog.waitUntilVisible();
+      page.editRouteGroupDialog.jobDetailsTable.filterByColumn(COLUMN_ID, id);
+      Assertions.assertThat(page.editRouteGroupDialog.jobDetailsTable.isEmpty())
+          .withFailMessage("Transaction %s is displayed in Edit Rout Group dialog", id)
+          .isTrue();
     });
   }
 
