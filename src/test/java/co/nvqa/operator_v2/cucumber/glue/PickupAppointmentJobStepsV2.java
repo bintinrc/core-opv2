@@ -1144,6 +1144,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     });
   }
+
   @When("Operator click select fail reason on bulk fail modal for jobId = {string}")
   public void clickSelectFailReasonOnBulkFailModal(String JobId) {
     String jobId = resolveValue(JobId);
@@ -1233,4 +1234,98 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
     pickupAppointmentJobPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
   }
+
+  @When("Operator click on Create Modify preset button in pickup appointment")
+  public void operatorClickCreateModifyPresetInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.createOrModifyPresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator click on Save as Preset button in pickup appointment")
+  public void operatorClickSaveAsPresetInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.saveAsPresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator fill Preset name in pickup appointment with = {string}")
+  public void operatorFillPresetNameInPAM(String name) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.presetModal.fillPresetName(resolveValue(name));
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator click save in Preset modal in pickup appointment")
+  public void operatorClickSaveInPresetModalInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.presetModal.savePresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
+
+
+  @When("Operator select Preset with name = {string} in pickup appointment")
+  public void operatorSelectPresetInPAM(String name) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.presetFilters.click();
+        pickupAppointmentJobPage.choosePresetByName(name);
+      });
+    }, 5000, 5);
+
+  }
+
+  @When("Operator click on Update current Preset button in pickup appointment")
+  public void operatorClickUpdateCurrentPresetInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.updateCurrentPresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator verify Preset with name = {string} is not in pickup appointment")
+  public void operatorVerifyPresetNotInPAM(String name) {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.presetFilters.click();
+        pickupAppointmentJobPage.verifyPresetByNameNotInList(name);
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator click on Delete Preset Preset button in pickup appointment")
+  public void operatorClickDeletePresetInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.deletePresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
+
+  @When("Operator click on Save as New Preset Preset button in pickup appointment")
+  public void operatorClickSaveAsNewPresetInPAM() {
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.saveAsNewPresetButton.click();
+      });
+    }, 1000, 3);
+
+  }
 }
+
