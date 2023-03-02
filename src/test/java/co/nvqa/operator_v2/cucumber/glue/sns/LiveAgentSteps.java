@@ -20,7 +20,7 @@ public class LiveAgentSteps extends AbstractSteps {
   public void createLiveAgentWithEmailAndUsername() {
     String randomString = RandomUtil.randomString(5);
     String fullName = "testing user " + randomString;
-    String email = "testinguser" + randomString + "@gmail.com";
+    String email = "testuser" + randomString + "@gmail.com";
     page.inFrame(() -> {
       page.createLiveChatAgent(fullName, email);
     });
@@ -28,7 +28,6 @@ public class LiveAgentSteps extends AbstractSteps {
 
   @Then("Verify agent added successfully")
   public void verifyAgentAddedSuccessfully() {
-    // Write code here that turns the phrase above into concrete actions
-    throw new io.cucumber.java.PendingException();
+    page.verifyLiveAgentAddedSuccessfully();
   }
 }

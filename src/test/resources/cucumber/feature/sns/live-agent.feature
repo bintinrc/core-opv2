@@ -10,7 +10,7 @@ Feature: OPv2 - Live Agent Overview
   Scenario: Add Live Agent to List of Admin
     Given Operator go to menu Customer Experience -> Live Chat Admin Dashboard
     Then Create live agent with email and username
-    Then Verify agent added successfully
+    And Verify agent added successfully
 
 #  @LaunchBrowser @KillBrowser @ui
 #  Scenario: Update Live Agent to List of Admin

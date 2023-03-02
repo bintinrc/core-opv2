@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.List;
 import java.util.Objects;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,6 +33,12 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @FindBy(xpath = "//div[@class='ant-modal-wrap' and not(@style='display: none;')]")
   public AddShipperSupportAgentModal addShipperSupportAgentModal;
 
+  @FindBy(xpath = "//input[@placeholder='Search by name or email']")
+  public TextBox searchInputFields;
+
+  @FindBy(css = "tbody > tr.ant-table-row")
+  public List<AgentRow> agents;
+
   public LiveChatAdminDashboardPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -44,7 +51,9 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 
   public void createLiveChatAgent(String fullName, String email) {
     addNewAgentButton.click();
+    pause10s();
     waitUntilVisibilityOfElementLocated(addShipperSupportAgentModal.getWebElement());
+    AGENT_NAME = fullName;
     fillAndSaveLiveChatAgentDetails(fullName, email);
     addShipperSupportAgentModal.waitUntilInvisible();
   }
@@ -55,7 +64,8 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
     addShipperSupportAgentModal.fillAndSaveLiveChatAgentDetails(fullName, email);
     addShipperSupportAgentModal.waitUntilInvisible();
   }
-//  private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
+
+  //  private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
 //    if (Objects.nonNull(fullName)) {
 //      WebElement fullNameElement = findElementByXpath("(//div[@class='ant-modal-wrap' and not(@style='display: none;')]//*[text()='Full name']//parent::div//following::div/input)[1]");
 //      clearWebField(fullNameElement);
@@ -70,8 +80,17 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 //
 //    simpleClick("//div[@class='ant-modal-wrap' and not(@style='display: none;')]//*[text()='OK']//parent::button");
 //  }
+  public void verifyLiveAgentAddedSuccessfully() {
+    waitUntilLoaded();
+    searchInputFields.sendKeys(AGENT_NAME);
+    /*sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), this.AGENT_NAME);
+    String addedAgentRowXpath = f("//td[text()='%s']", this.AGENT_NAME);
+    String actualName = getText(addedAgentRowXpath);
+    Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present").isTrue();*/
+  }
 
   public static class AddShipperSupportAgentModal extends AntModal {
+
     @FindBy(xpath = ".//div[./div/label[.='Full name']]//input")
     public TextBox fullNameTextInput;
 
@@ -84,16 +103,27 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 
     @FindBy(xpath = ".//button[.='Cancel']")
     public Button cancelButton;
+
     public AddShipperSupportAgentModal(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
       PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public void fillAndSaveLiveChatAgentDetails(String name, String  email) {
+    public void fillAndSaveLiveChatAgentDetails(String name, String email) {
       fullNameTextInput.setValue(name);
       emailTextInput.setValue(email);
       okButton.click();
     }
 
+  }
+
+  public static class AgentRow extends AntModal {
+
+    @FindBy(xpath = "//td[text()='%s']")
+    public PageElement addedAgentRow;
+
+    public AgentRow(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
   }
 }
