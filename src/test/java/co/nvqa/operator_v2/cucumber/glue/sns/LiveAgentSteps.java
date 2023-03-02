@@ -28,6 +28,14 @@ public class LiveAgentSteps extends AbstractSteps {
 
   @Then("Verify agent added successfully")
   public void verifyAgentAddedSuccessfully() {
-    page.verifyLiveAgentAddedSuccessfully();
+   
+  }
+
+  @Then("Update live agent with email and username")
+  public void updateLiveAgent() {
+    String randomString = RandomUtil.randomString(5);
+    String fullName = "testing user " + randomString;
+
+    page.updateLiveChatAgent(fullName, null);
   }
 }

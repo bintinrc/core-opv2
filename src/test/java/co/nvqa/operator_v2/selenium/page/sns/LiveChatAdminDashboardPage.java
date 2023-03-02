@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page.sns;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
@@ -9,10 +10,12 @@ import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDashboardPage> {
 
@@ -39,6 +42,9 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @FindBy(css = "tbody > tr.ant-table-row")
   public List<AgentRow> agents;
 
+  @FindBy(xpath = "//td/div/div[1]/button[@class='ant-btn ant-btn-icon-only']")
+  public List<Button> updateBtns;
+
   public LiveChatAdminDashboardPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -60,9 +66,9 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 
 
   private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
-    addShipperSupportAgentModal.waitUntilVisible();
+    // addShipperSupportAgentModal.waitUntilVisible();
     addShipperSupportAgentModal.fillAndSaveLiveChatAgentDetails(fullName, email);
-    addShipperSupportAgentModal.waitUntilInvisible();
+//    addShipperSupportAgentModal.waitUntilInvisible();
   }
 
   //  private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
@@ -82,20 +88,38 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
 //  }
   public void verifyLiveAgentAddedSuccessfully() {
     waitUntilLoaded();
-    searchInputFields.sendKeys(AGENT_NAME);
+    searchInputFields.setValue(AGENT_NAME);
     /*sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), this.AGENT_NAME);
     String addedAgentRowXpath = f("//td[text()='%s']", this.AGENT_NAME);
     String actualName = getText(addedAgentRowXpath);
     Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present").isTrue();*/
   }
 
+  public void updateLiveChatAgent(String fullName, String email) {
+    pause5s();
+    switchToFrame("//iframe");
+    //  List<WebElement> searchInputFields = findElementsByXpath("//input[@placeholder='Search by name or email']");
+    // clearWebField(searchInputFields.get(elementIndexForLiveAgentPage));
+    //sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), "testinguser");
+    searchInputFields.setValue("testinguser");
+    // click update button
+    // List<WebElement> updateButtons = findElementsByXpath(
+    //   "//td/div/div[1]/button[@class='ant-btn ant-btn-icon-only']");
+    int updateButtonIndexToClick =
+        elementIndexForLiveAgentPage == 0 ? 0 : (updateBtns.size() - 1);
+    updateBtns.get(updateButtonIndexToClick).click();
+    this.AGENT_NAME = Objects.nonNull(fullName) ? fullName : email;
+    fillAndSaveLiveChatAgentDetails(fullName, email);
+  }
+
+
   public static class AddShipperSupportAgentModal extends AntModal {
 
     @FindBy(xpath = ".//div[./div/label[.='Full name']]//input")
-    public TextBox fullNameTextInput;
+    public ForceClearTextBox fullNameTextInput;
 
     @FindBy(xpath = ".//div[./div/label[.='Email']]//input")
-    public TextBox emailTextInput;
+    public ForceClearTextBox emailTextInput;
 
     @FindBy(xpath = ".//button[.='OK']")
     public Button okButton;
