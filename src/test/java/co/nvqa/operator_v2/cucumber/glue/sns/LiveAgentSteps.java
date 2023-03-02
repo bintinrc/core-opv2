@@ -28,6 +28,8 @@ public class LiveAgentSteps extends AbstractSteps {
 
   @Then("Verify agent added successfully")
   public void verifyAgentAddedSuccessfully() {
-    page.verifyLiveAgentAddedSuccessfully();
+    page.inFrame(() -> {
+      page.verifyLiveAgentAddedSuccessfully();
+    });
   }
 }

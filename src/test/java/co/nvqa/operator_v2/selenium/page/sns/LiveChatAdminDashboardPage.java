@@ -46,7 +46,6 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @Override
   public void waitUntilLoaded() {
     waitUntilVisibilityOfElementLocated(customerSupportTab.getWebElement());
-    waitUntilVisibilityOfElementLocated(addShipperSupportAgentModal.getWebElement());
   }
 
   public void createLiveChatAgent(String fullName, String email) {
