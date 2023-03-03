@@ -338,8 +338,8 @@ Feature: Financial Batch Report
       | codAmount        | -5.00                                         |
       | insuredAmount    | 5.00                                          |
       | codFee           | 0.05                                          |
-      | insuredFee       | 0.1                                           |
-      | deliveryFee      | 8.5                                           |
+      | insuredFee       | 0.10                                          |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
       | totalTax         | 0.69                                          |
       | totalWithTax     | 9.39                                          |
@@ -408,7 +408,7 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.00                                          |
-      | deliveryFee      | 8.5                                           |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
       | totalTax         | 0.68                                          |
       | totalWithTax     | 9.23                                          |
@@ -467,7 +467,7 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
       | insuredFee       | 0.00                                          |
-      | deliveryFee      | 8.5                                           |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
       | totalTax         | 0.68                                          |
       | totalWithTax     | 9.23                                          |
@@ -514,7 +514,7 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.00                                          |
       | insuredFee       | 0.00                                          |
-      | deliveryFee      | 8.5                                           |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
       | totalTax         | 0.68                                          |
       | totalWithTax     | 9.18                                          |
@@ -561,7 +561,7 @@ Feature: Financial Batch Report
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.00                                          |
       | insuredFee       | 0.00                                          |
-      | deliveryFee      | 8.5                                           |
+      | deliveryFee      | 8.50                                          |
       | rtsFee           | 0.00                                          |
       | totalTax         | 0.68                                          |
       | totalWithTax     | 9.18                                          |
