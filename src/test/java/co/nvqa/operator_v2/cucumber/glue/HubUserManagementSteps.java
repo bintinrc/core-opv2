@@ -37,6 +37,7 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorClickEditButtonOnHubUserManagementPage(String hubId) {
     String editXpath = String.format(hubUserManagementPage.XPATH_OF_EDIT_BUTTON, hubId);
     hubUserManagementPage.waitUntilPageLoaded();
+      hubUserManagementPage.switchTo();
     hubUserManagementPage.findElementByXpath(editXpath).click();
     hubUserManagementPage.waitUntilPageLoaded();
   }
@@ -68,6 +69,7 @@ public class HubUserManagementSteps extends AbstractSteps {
 
   @When("Operator bulk upload hub user using a {string} CSV file")
   public void operatorBulkUploadHubUserUsingACSVFile(String fileName) {
+    hubUserManagementPage.pause5s();
     final String csvFileName = "csv/" + fileName;
     final ClassLoader classLoader = getClass().getClassLoader();
     File csvFile = new File(
@@ -85,7 +87,6 @@ public class HubUserManagementSteps extends AbstractSteps {
     String modalTitle = data.get("modalTitle");
     String modalBody = data.get("modalBody");
     pause3s();
-    hubUserManagementPage.switchTo();
     Assertions.assertThat(hubUserManagementPage.errorTitle.getText()).as("Modal Title is True")
         .isEqualToIgnoringCase(modalTitle);
     Assertions.assertThat(hubUserManagementPage.errorBody.getText()).as("Modal Body is True")
