@@ -51,7 +51,7 @@ Feature: Upload CSV on Station Route
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                              |
       | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG |
       | parcelSize | Small                                                                                                   |
-      | driverId   | Unassigned                                                                                              |
+      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                        |
 
   @DeleteDriver
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Valid Hub
