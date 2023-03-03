@@ -1,16 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.mm.model.persisted_class.HubShipmentSummary;
+import co.nvqa.common.mm.model.persisted_class.HubShipmentSummaries;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import java.util.List;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,7 +115,7 @@ public class MiddleMileHomepagePage extends OperatorV2SimplePage {
         .isEqualTo(dbShipmentsTotal);
   }
 
-  public void verifySortedDataByColumn(String column, List<HubShipmentSummary> orderedHubShipmentSummaries) {
+  public void verifySortedDataByColumn(String column, List<HubShipmentSummaries> orderedHubShipmentSummaries) {
     String resolvedColumn;
     switch (column) {
       case "shipments_24h_48h_count" :
