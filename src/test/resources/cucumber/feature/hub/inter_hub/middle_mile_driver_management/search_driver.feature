@@ -10,37 +10,27 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id-2},"hub":"{hub-name-2}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page on "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?showall=true"
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriver
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
-    Given API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
     Given API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{KEY_CREATED_HUB.id},"hub":"{KEY_CREATED_HUB.name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator get info of hub details string id "{KEY_CREATED_HUB.id}"
-    Given API Driver get all middle mile driver using hub filter with value "{KEY_CREATED_HUB.id}"
+    Given API MM - Operator gets all Middle Mile Drivers with Hub Id "{hub-id}"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
-      | url | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?hubIds=<id> |
-      | Hub | {KEY_HUB_INFO.name}                                                    |
+      | url | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?hubIds={hub-id} |
+      | Hub | {hub-name}                                                    |
 
   @DeleteDriver
   Scenario: Load Driver by Filter - Employment Status Active (uid:9d52e56e-6edf-437b-ac09-5e9ef38cf683)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active |
@@ -52,7 +42,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
     And API Operator deactivate "employment status" for driver "{KEY_CREATED_DRIVER_ID}"
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive |
@@ -63,7 +53,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url            | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?licenseStatus=active |
@@ -75,7 +65,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator deactivate "license status" for driver "{KEY_CREATED_DRIVER_ID}"
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url            | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?licenseStatus=inactive |
@@ -88,7 +78,7 @@ Feature: Middle Mile Driver Management - Search Driver
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
     And API Operator deactivate "license status" for driver "{KEY_CREATED_DRIVER_ID}"
     And API Operator deactivate "employment status" for driver "{KEY_CREATED_DRIVER_ID}"
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive&licenseStatus=inactive |
@@ -100,7 +90,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active&licenseStatus=active |
