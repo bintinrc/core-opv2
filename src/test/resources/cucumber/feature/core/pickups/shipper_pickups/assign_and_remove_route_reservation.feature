@@ -45,7 +45,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
+  Scenario: Operator Removes Reservation from Route on Edit Route Details
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -79,7 +79,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | data       | {"route_id":{KEY_CREATED_ROUTE_ID}} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
-  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
+  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -111,7 +111,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
-  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations (uid:e1d9c28e-57d9-48c5-b43d-752165695637)
+  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -145,7 +145,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Single Reservation (uid:cce1d21c-a238-4a46-b622-dcc8820f8ce1)
+  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Single Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -200,7 +200,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
-  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, Suggested Route Found (uid:b4da89d4-6041-4649-9b00-89b54671bcac)
+  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, Suggested Route Found
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -234,7 +234,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
-  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, No Suggested Route Found (uid:f59fc4ef-b127-4fc6-8eac-4f5a53bbf2cf)
+  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Single Reservation, No Suggested Route Found
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
       | name        | GENERATED                          |
@@ -265,7 +265,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verifies no route suggested for selected reservations
 
   @DeleteOrArchiveRoute @DeleteRouteTags @SuggestRoute
-  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, No Suggested Route Found (uid:4911902f-a1a4-4b4a-9a5b-6705728fcfb6)
+  Scenario: Operator Bulk Suggest Route for Reservation on Shipper Pickup Page - Multiple Reservations, No Suggested Route Found
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
       | name        | GENERATED                          |
@@ -299,7 +299,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verifies no route suggested for selected reservations
 
   @DeleteOrArchiveRoute @SuggestRoute
-  Scenario: Operator Failed to Bulk Suggest Route - Routed Reservation (uid:ffa0334b-b5af-4d1f-a0b9-6a0529090828)
+  Scenario: Operator Failed to Bulk Suggest Route - Routed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -319,7 +319,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
   @DeleteOrArchiveRoute @SuggestRoute
-  Scenario: Operator Failed to Bulk Suggest Route - Success Reservation (uid:0d89c71c-51e5-4519-93f5-16f0fd81922c)
+  Scenario: Operator Failed to Bulk Suggest Route - Success Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -355,7 +355,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
   @DeleteOrArchiveRoute @SuggestRoute
-  Scenario: Operator Failed to Bulk Suggest Route - Failed Reservation (uid:252dbcbb-832f-4a82-89b0-4ffed96b83d2)
+  Scenario: Operator Failed to Bulk Suggest Route - Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -388,7 +388,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations (uid:b4d16fb8-edb0-4dca-b31d-416e58232e45)
+  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -414,7 +414,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | {KEY_LIST_OF_CREATED_RESERVATIONS[2].id} | null    | null       |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Single Reservation (uid:4726c81c-43f9-4ac4-a10b-d1778d2c4cdf)
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Single Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -446,7 +446,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | driverName   | {ninja-driver-name}          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations (uid:644c21ea-190c-4475-b846-3eda37ad0066)
+  Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -483,7 +483,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | driverName  | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Routed Reservation (uid:032a6e28-2a95-4fe8-89bb-381f3505e86f)
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Routed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -506,7 +506,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Failed Reservation (uid:0ebc72de-06b0-4e64-a561-0aa853522ddf)
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Failed Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -542,7 +542,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Success Reservation (uid:886f246b-547d-4137-b07f-f908264ff835)
+  Scenario: Operator Not Allowed to Bulk Assign Route on Shipper Pickup Page - Success Reservation
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -581,7 +581,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator verify that reservation checkbox is not selected on Shipper Pickups page
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator Removes Reservation from Route on Edit Route Details (uid:b79d861a-625d-4273-a405-d2a08e68859b)
+  Scenario: Operator Update Routed Reservation from Route A to Route B in Shipper Pickup Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -613,6 +613,22 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And DB Core - verify route_monitoring_data record:
       | waypointId | {KEY_WAYPOINT_ID}                 |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}        |
+      | userId     | 397                                             |
+      | userName   | AUTOMATION EDITED                               |
+      | userEmail  | qa@ninjavan.co                                  |
+      | type       | 1                                               |
+      | pickupType | 1                                               |
+      | data       | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}} |
+    And DB Events - verify pickup_events record:
+      | pickupId   | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}                                                          |
+      | userId     | 397                                                                                               |
+      | userName   | AUTOMATION EDITED                                                                                 |
+      | userEmail  | qa@ninjavan.co                                                                                    |
+      | type       | 2                                                                                                 |
+      | pickupType | 1                                                                                                 |
+      | data       | {"old_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

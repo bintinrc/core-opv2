@@ -32,7 +32,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
     And Operator go to menu Finance Tools -> Upload Payments
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     When Operator upload CSV on Upload Payments page using data below:
       | shipper_id              | batch_id                            | transaction_event | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
       | {KEY_LEGACY_SHIPPER_ID} | {KEY_FINANCIAL_BATCH_LEDGERS[1].id} | <event>           | {gradle-current-date-yyyy-MM-dd} | <amount> | <transaction_no>   | <type>           | <payment_method> | <payee_name> | <payee_account_number> | <payee_bank> |
@@ -72,7 +72,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | column | expected_value |
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | shipper_id              | batch_id                            | transaction_event | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
@@ -113,7 +113,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | column | expected_value |
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | shipper_id              | batch_id                            | transaction_event | remittance_date                  | amount   | transaction_number | transaction_type | payment_method   | payee_name   | payee_account_number   | payee_bank   |
@@ -159,7 +159,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | column | expected_value |
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | shipper_id              | batch_id                            | transaction_event | remittance_date                  | amount   | transaction_number | transaction_type   | payment_method   | payee_name   | payee_account_number   | payee_bank   |
@@ -224,7 +224,7 @@ Feature: Upload CSV Payment From Ninja Van To Shipper (Credit) - Gross COD Remit
       | column | expected_value |
       | status | Open           |
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 10 seconds
     And Operator go to menu Finance Tools -> Upload Payments
     When Operator upload CSV on Upload Payments page using data below:
       | shipper_id              | batch_id                            | transaction_event | remittance_date                  | amount   | transaction_number | transaction_type   | payment_method   | payee_name   | payee_account_number   | payee_bank   |
