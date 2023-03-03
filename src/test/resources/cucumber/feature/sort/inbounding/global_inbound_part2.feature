@@ -64,7 +64,7 @@ Feature: Global Inbound
       | failure_reason_code_id = 5 | uid:93e4b151-b514-4f4d-8580-bc92f1120319 | 13                  | #90EE90   | failure_reason_code_id = 5 |
       | failure_reason_code_id = 6 | uid:6f91726d-ba39-462b-ac0e-e7533d00bd5e | 6                   | #9999FF   | failure_reason_code_id = 6 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound showing weight discrepancy alert - weight tolerance is not set, lower weight (uid:272f52ce-9443-4510-a7fd-10ff40c28c4c)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -83,7 +83,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound showing weight discrepancy alert - weight tolerance is set, higher weight (uid:6fd8c798-b6b4-4920-bbc8-891bd6355eae)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -105,7 +105,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, lower weight (uid:ccae0c7e-cee9-45e4-adfe-024b8334e6a6)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -314,7 +314,7 @@ Feature: Global Inbound
     And DB Operator gets all details for ninja collect confirmed status
     And Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound Parcel with Order Tags (uid:3f95f6e9-4e6a-4599-b438-7b1b74330c33)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -350,7 +350,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound On Hold Order - Resolve PENDING MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
