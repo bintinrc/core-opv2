@@ -127,7 +127,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
       searchTableActiveScriptsByScriptName(scriptName);
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
-        fail("Data still not loaded");
+        searchTableActiveScriptsByScriptName(scriptName);
+        if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+          fail("Data still not loaded");
+        }
       }
     }, String.format("Active script found "));
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
