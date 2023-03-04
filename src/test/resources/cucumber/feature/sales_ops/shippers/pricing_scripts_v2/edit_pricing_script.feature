@@ -26,13 +26,13 @@ Feature: Edit Pricing Script
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 16.692 |
-      | gst          | 1.092  |
-      | deliveryFee  | 15.6   |
-      | insuranceFee | 0      |
-      | codFee       | 0      |
-      | handlingFee  | 0      |
-      | comments     | OK     |
+      | grandTotal   | 7.128 |
+      | gst          | 0.528 |
+      | deliveryFee  | 6.6   |
+      | insuranceFee | 0     |
+      | codFee       | 0     |
+      | handlingFee  | 0     |
+      | comments     | OK    |
     And Operator close page
     Then Operator verify the script is saved successfully
 
@@ -58,8 +58,8 @@ Feature: Edit Pricing Script
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 42.8 |
-      | gst          | 2.8  |
+      | grandTotal   | 43.2 |
+      | gst          | 3.2  |
       | deliveryFee  | 40   |
       | insuranceFee | 0    |
       | codFee       | 0    |
@@ -101,8 +101,8 @@ Feature: Edit Pricing Script
     Then Operator verify the script is saved successfully
     Examples:
       | dataset_name | Condition   | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
-      | RTS = True   | RTS = True  | Yes    | 2.14       | 0.14 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
-      | RTS = False  | RTS = False | No     | 2.14       | 0.14 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
+      | RTS = True   | RTS = True  | Yes    | 5.4        | 0.4  | 5           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
+      | RTS = False  | RTS = False | No     | 2.16       | 0.16 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
 
   @DeletePricingScript @HappyPath
   Scenario: Edit Active Script - No Syntax Error (uid:5256ee16-eda2-4963-a7c9-a129845f6b3d)
