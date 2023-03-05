@@ -38,13 +38,8 @@ public class FinancialBatchReportsPage extends SimpleReactPage<FinancialBatchRep
   @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']")
   public PageElement toastErrorBottomText;
 
-  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
-  public PageElement antNotificationMessage;
-
-
   private static final String XPATH_ERROR = "//p[text()='%s']";
   private static final String XPATH_EMAIL_ADDRESS_TXT_BOX = "//span[text()='Enter Email Addresses']//preceding-sibling::div/div/div/input";
-
 
   public FinancialBatchReportsPage(WebDriver webDriver) {
     super(webDriver);
