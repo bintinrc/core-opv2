@@ -148,8 +148,6 @@ Feature: Create New Routes on Station Route
       | usePreferredZone | true                                                |
       | hub              | {hub-name-2}                                        |
       | comments         | Created by TA {gradle-current-date-yyyyMMddHHmmsss} |
-    Then Operator verify Create new routes form on Station Route page:
-      | zone | Zone |
     And Operator click Create routes button on Station Route page
     Then Operator verifies that success react notification displayed:
       | top    | 1 Routes created            |

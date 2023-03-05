@@ -1637,7 +1637,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "Payoh" is displayed in row 5 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address [ A B C ] [ G H I ] Match To Overlapping Single Coverage - Area [ A B C ], Area Variation [ G H I ], Keyword [ A B C ]  [ D E F ] - Have > 2 Occurrence
+  Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ D E F ] - Have > 2 Occurrence
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -1694,7 +1694,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "North" is displayed in row 4 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To  Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] [ G H I ] - Have > 2 Occurrence
+  Scenario: Operator Search Tracking IDs With Address [ A B C ] [ D E F ] Match To Overlapping Multiple Coverages - Coverage 1: Area [ A B C ], Empty Area Variation, Keyword [ A B C ] & Coverage 2: Area [ A B C ], Empty Area Variation, Keyword [ G H I ] - Have > 2 Occurrence
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
