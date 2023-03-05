@@ -138,6 +138,7 @@ Feature: Financial Batch Report
       | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
 
+
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - All Shippers (uid:39f855b2-3ac3-4bb3-9647-c00030c27eba)
     Given Operator go to menu Finance Tools -> Financial Batch Report
     When Operator generates success financial batch report using data below:
