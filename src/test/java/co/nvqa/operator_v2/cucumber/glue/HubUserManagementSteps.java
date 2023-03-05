@@ -4,15 +4,11 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.HubUserManagementPage;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvValidationException;
-import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +37,7 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorClickEditButtonOnHubUserManagementPage(String hubId) {
     String editXpath = String.format(hubUserManagementPage.XPATH_OF_EDIT_BUTTON, hubId);
     hubUserManagementPage.waitUntilPageLoaded();
-    hubUserManagementPage.switchTo();
+      hubUserManagementPage.switchTo();
     hubUserManagementPage.findElementByXpath(editXpath).click();
     hubUserManagementPage.waitUntilPageLoaded();
   }
@@ -73,6 +69,7 @@ public class HubUserManagementSteps extends AbstractSteps {
 
   @When("Operator bulk upload hub user using a {string} CSV file")
   public void operatorBulkUploadHubUserUsingACSVFile(String fileName) {
+    hubUserManagementPage.pause5s();
     final String csvFileName = "csv/" + fileName;
     final ClassLoader classLoader = getClass().getClassLoader();
     File csvFile = new File(
@@ -90,7 +87,6 @@ public class HubUserManagementSteps extends AbstractSteps {
     String modalTitle = data.get("modalTitle");
     String modalBody = data.get("modalBody");
     pause3s();
-    hubUserManagementPage.switchTo();
     Assertions.assertThat(hubUserManagementPage.errorTitle.getText()).as("Modal Title is True")
         .isEqualToIgnoringCase(modalTitle);
     Assertions.assertThat(hubUserManagementPage.errorBody.getText()).as("Modal Body is True")
@@ -252,5 +248,104 @@ public class HubUserManagementSteps extends AbstractSteps {
         operatorClickOnRemoveButtonOnRemoveUserModal();
       }
     }
+  }
+
+  @When("Hub User admin click edit user button")
+  public void hubUserAdminClickEditUserButton() {
+    hubUserManagementPage.waitUntilPageLoaded();
+    pause5s();
+    hubUserManagementPage.switchTo();
+    try {
+      hubUserManagementPage.editUserButton.click();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  @When("Hub User search {string} hub user email")
+  public void hubUserSearchHubUserEmail(String hubUserEmail) {
+    hubUserManagementPage.usernameOrEmailInput.sendKeys(hubUserEmail);
+    hubUserManagementPage.searchButton.click();
+  }
+
+
+  @Then("Make sure user assigned to correct hub")
+  public void makeSureUserAssignedToCorrectHub(Map<String, String> data) {
+    Map<String, String> hubData = resolveKeyValues(data);
+    String hub1 = String.format(hubUserManagementPage.XPATH_OF_HUB_SELECTED_HUB,
+        hubData.get("hub1"));
+    String hub2 = String.format(hubUserManagementPage.XPATH_OF_HUB_SELECTED_HUB,
+        hubData.get("hub2"));
+    String hub3 = String.format(hubUserManagementPage.XPATH_OF_HUB_SELECTED_HUB,
+        hubData.get("hub3"));
+    Assertions.assertThat(hubUserManagementPage.isElementExist(hub1))
+        .as("Selected Hub 1 is " + hubData.get("hub1")).isTrue();
+    Assertions.assertThat(hubUserManagementPage.isElementExist(hub2))
+        .as("Selected Hub 2 is " + hubData.get("hub2")).isTrue();
+    Assertions.assertThat(hubUserManagementPage.isElementExist(hub3))
+        .as("Selected Hub 3 is " + hubData.get("hub3")).isTrue();
+  }
+
+  @When("Hub User assigned hub to user with following hub:")
+  public void hubUserAssignedHubToUserWithFollowingHub(Map<String, String> data) {
+    Map<String, String> hubData = resolveKeyValues(data);
+    hubUserManagementPage.selectHub1.click();
+    hubUserManagementPage.selectHub1.selectValue(hubData.get("hub1"));
+    hubUserManagementPage.selectHub2.click();
+    hubUserManagementPage.selectHub2.selectValue(hubData.get("hub2"));
+    hubUserManagementPage.selectHub3.click();
+    hubUserManagementPage.selectHub3.selectValue(hubData.get("hub3"));
+    hubUserManagementPage.addButton.click();
+  }
+
+
+  @Then("Operator verifies {string} user modal for Station Admin flow is shown")
+  public void operatorVerifiesUserModalForStationAdminFlowIsShown(String action) {
+    pause3s();
+    switch (action) {
+      case "add":
+        Assertions.assertThat(hubUserManagementPage.addUserModal.getText())
+            .as("Modal Title is " + hubUserManagementPage.addUserModal.getText())
+            .isEqualTo("Add User");
+        Assertions.assertThat(hubUserManagementPage.emailInput.isEnabled())
+            .as("Email Input is Enabled")
+            .isTrue();
+        break;
+      case "edit":
+        Assertions.assertThat(hubUserManagementPage.editUserModal.getText())
+            .as("Modal Title is " + hubUserManagementPage.editUserModal.getText())
+            .isEqualTo("Edit user");
+        Assertions.assertThat(hubUserManagementPage.emailInput.isEnabled())
+            .as("Email Input is Disabled")
+            .isFalse();
+        break;
+    }
+    Assertions.assertThat(hubUserManagementPage.roleSelection.isEnabled())
+        .as("Role Selection is Disabled")
+        .isFalse();
+  }
+
+  @When("Operator click edit view user {string} navigation button on Hub User Management Page")
+  public void operatorClickEditViewUserNavigationButtonOnHubUserManagementPage(String userId) {
+    String editXpath = String.format(hubUserManagementPage.XPATH_OF_EDIT_USER_BUTTON, userId);
+    hubUserManagementPage.waitUntilPageLoaded();
+    hubUserManagementPage.findElementByXpath(editXpath).click();
+    hubUserManagementPage.waitUntilPageLoaded();
+  }
+
+
+  @Then("Operator verifies Add a new user? modal is shown")
+  public void operatorVerifiesAddANewUserModalIsShown() {
+    pause3s();
+    Assertions.assertThat(hubUserManagementPage.addNewUserModal.getText())
+        .as("Modal Title is " + hubUserManagementPage.addNewUserModal.getText())
+        .isEqualTo("Add a new user?");
+  }
+
+  @When("Operator search {string} hub name")
+  public void operatorSearchHubName(String hubName) {
+    hubUserManagementPage.switchTo();
+    hubUserManagementPage.searchHub.sendKeys(hubName);
   }
 }
