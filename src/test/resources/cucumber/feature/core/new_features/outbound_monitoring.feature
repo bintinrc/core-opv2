@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring @NewFeatures1
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring @NewFeatures1 @current
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -798,9 +798,8 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed          | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Pending Reschedule | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page -  Pending State & Non-Pending State Delivery (uid:bd01f24e-18ad-45e4-8f33-46ab5acb7324)
-    Given Operator go to menu Utilities -> QRCode Printing
+  @CloseNewWindows @DeleteOrArchiveRoute @wip
+  Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Pending State & Non-Pending State Delivery (uid:bd01f24e-18ad-45e4-8f33-46ab5acb7324)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -815,6 +814,7 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
