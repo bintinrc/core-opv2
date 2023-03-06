@@ -32,7 +32,7 @@ Feature: Global Inbound
       | Normal order | Parcel  | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 | Normal order |
       | Return order | Return  | uid:2785626f-4012-4a4a-a722-00661a8b4261 | Return order |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario Outline: Inbound parcel with changes in size - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -65,7 +65,7 @@ Feature: Global Inbound
       | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 | L            |
       | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 | XL           |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound parcel with changes in weight - Inbound in SG (uid:60912e81-74bf-4d06-a823-909a40c6b9ce)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -117,7 +117,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Global inbounds override dimension (uid:8238be24-a3aa-438b-8403-1f8765373477)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -141,7 +141,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Global inbounds override size, weight and dimension (uid:a43d0021-86c6-45e7-a375-7c2249ec9183)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -196,7 +196,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -219,7 +219,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -241,7 +241,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed Order (uid:9316f5f0-1423-47eb-890d-3916654f545b)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -259,7 +259,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Cancelled Order (uid:de8f3cf0-9aee-4c53-aa7f-9b25f8bf3249)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:

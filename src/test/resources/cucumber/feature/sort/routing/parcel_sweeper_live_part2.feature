@@ -165,7 +165,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Parcel Sweeper Live - Show Order Tag (uid:ac4b8acf-d97f-409a-9271-ec4a062e2540)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
