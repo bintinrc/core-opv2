@@ -7,6 +7,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1368,6 +1370,45 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void searchForaddressNameInPickupTable(String addressName) {
     pickupAppointmentJobPage.inFrame(page -> {
       page.bulkSelect.filterTableUsing("pickupAddress", resolveValue(addressName));
+    });
+  }
+
+  @When("Operator search for ready time = {string} in pickup jobs table")
+  public void searchForReadyTimeInPickupTable(String addressName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupReadyDatetimeStr", resolveValue(addressName));
+    });
+  }
+
+  @When("Operator search for latest time = {string} in pickup jobs table")
+  public void searchForLatestTimeInPickupTable(String addressName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupLatestDatetimeStr", resolveValue(addressName));
+    });
+  }
+
+  @When("Operator pare date time to string {string}")
+  public void parseDateTimeToString(String date) {
+    String dateToParse = resolveValue(date);
+    LocalDateTime dateTime = LocalDateTime.parse(dateToParse,
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String formattedDateTime = dateTime.format(dateTimeFormatter);
+    LOGGER.debug(formattedDateTime);
+    putInList("KEY_FORMATTED_DATE_TIME", formattedDateTime);
+  }
+
+  @When("Operator search for create time = {string} in pickup jobs table")
+  public void searchForCreateTimeInPickupTable(String addressName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("jobCreationTimeStr", resolveValue(addressName));
+    });
+  }
+
+  @When("Operator search for approx vol = {string} in pickup jobs table")
+  public void searchForApproxValInPickupTable(String addressName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupApproxVolume", resolveValue(addressName));
     });
   }
 }
