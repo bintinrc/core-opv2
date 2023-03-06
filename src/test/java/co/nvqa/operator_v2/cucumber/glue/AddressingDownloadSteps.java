@@ -214,8 +214,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDERS) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
+    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
       for (Order order : orders) {
         addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
         addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());

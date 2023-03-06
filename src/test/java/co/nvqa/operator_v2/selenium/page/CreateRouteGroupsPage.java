@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntAbstractFilterBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker2;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDecimalFilterNumberBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterFreeTextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntFilterSelect3;
@@ -21,7 +22,6 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTimeBox;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -197,6 +197,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public static final String MD_VIRTUAL_REPEAT = "trvn in getTableData()";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_TRACKING_ID = "trackingId";
+    public static final String COLUMN_ORDER_ID = "orderId";
     public static final String COLUMN_TYPE = "type";
 
     public TxnRsvnTable(WebDriver webDriver) {
@@ -204,7 +205,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put("sequence", "__index__")
           .put(COLUMN_ID, "id")
-          .put("orderId", "orderId")
+          .put(COLUMN_ORDER_ID, "orderId")
           .put("waypointId", "waypointId")
           .put(COLUMN_TRACKING_ID, "trackingId")
           .put(COLUMN_TYPE, "type")
@@ -257,7 +258,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntDateRangePicker2 endDateTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Creation Time')]]")
-    public AntDateRangePicker2 creationTimeFilter;
+    public AntDateTimeRangePicker creationTimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipper')]]")
     public AntFilterSelect3 shipperFilter;
@@ -284,10 +285,10 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntFilterSelect3 hubInboundUserFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Hub Inbound Datetime')]]")
-    public AntDateRangePicker2 hubInboundDatetimeFilter;
+    public AntDateTimeRangePicker hubInboundDatetimeFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Original Transaction End Time')]]")
-    public AntDateRangePicker2 originalTransactionEndTimeFilter;
+    public AntDateTimeRangePicker originalTransactionEndTimeFilter;
 
     public void addFilter(String filterName) {
       addFilter.selectValue(filterName);
@@ -389,7 +390,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntSwitch includeShipments;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Shipment Date')]]")
-    public AntDateRangePicker2 shipmentDateFilter;
+    public AntDateTimeRangePicker shipmentDateFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'ETA (Date Time)')]]")
     public AntDateRangePicker2 etaDateTimeFilter;
@@ -416,7 +417,7 @@ public class CreateRouteGroupsPage extends SimpleReactPage<CreateRouteGroupsPage
     public AntFilterSelect3 startHubFilter;
 
     @FindBy(xpath = ".//div[contains(@class,'FilterContainer')][.//div[contains(.,'Transit Date Time')]]")
-    public AntDateRangePicker2 transitDateTimeFilter;
+    public AntDateTimeRangePicker transitDateTimeFilter;
 
     public ShipmentFiltersForm(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);

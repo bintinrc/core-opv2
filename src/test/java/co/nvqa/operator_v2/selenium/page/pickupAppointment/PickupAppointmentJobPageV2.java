@@ -141,6 +141,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     private PageElement latestByField;
     @FindBy(css = "#comments")
     public PageElement commentsInput;
+
+    @FindBy(xpath = "//label[@for='comments']/following::span[@aria-label='close-circle']")
+    public PageElement clearJobComments;
+
     @FindBy(xpath = "//label[@for='tags']/following::span[@aria-label='close-circle']")
     public PageElement clearJobTags;
 
@@ -281,6 +285,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
+
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -334,12 +339,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
       }
     }
 
+
+
+
     public void addJobComments(String comment) {
       commentsInput.sendKeys(comment);
     }
 
     public void clearJobComments() {
-      commentsInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        clearJobComments.click();
+      }, 1000, 5);
     }
 
     public void clickEditButton(String jobId) {
@@ -519,6 +530,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_ROUTE = "routeid";
+    public static final int COLUMN_ROUTE_POS = 7;
 
     public static final String ACTION_EDIT = "Edit Job";
     public static final String ACTION_DETAILS = "view Job";
@@ -543,6 +556,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           .put(COLUMN_TAGS, "tagNames")
           .put(COLUMN_STATUS, "status")
           .put(COLUMN_ID, "pickupAppointmentJobId")
+          .put(COLUMN_ROUTE, "routeId")
           .build()
       );
       setEntityClass(CoreV2PickupJobsParams.class);
@@ -885,7 +899,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     @FindAll(@FindBy(css = "[data-testid = 'successReason.photoSelect']"))
     public List<FileInput> proofUploadFiles;
-    
+
     String SUCCESS_JOB_PAGE_ERROR_XPATH = "//tr[@data-row-key='%s']//following-sibling::tr[1]";
 
     public String getErrorMessage(String jobId) {

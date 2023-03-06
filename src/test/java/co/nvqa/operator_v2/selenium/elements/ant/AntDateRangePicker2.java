@@ -20,8 +20,6 @@ import org.openqa.selenium.support.PageFactory;
 public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   private static final String BY_TITLE_LOCATOR = "div.ant-picker-dropdown:not(.ant-picker-dropdown-hidden) table.ant-picker-content td[title='%s']";
-  private static final String HOURS_LOCATOR = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[1]/li[.='%s']";
-  private static final String MINUTES_LOCATOR = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//ul[2]/li[.='%s']";
 
   public AntDateRangePicker2(WebDriver webDriver, SearchContext searchContext,
       WebElement webElement) {
@@ -36,16 +34,9 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[1]//input")
   public TextBox fromInput;
+
   @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[2]//input")
-  public TextBox fromHoursInput;
-
-  @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[3]//input")
   public TextBox toInput;
-  @FindBy(xpath = "(.//div[contains(@class,'ant-picker-input')])[4]//input")
-  public TextBox toHoursInput;
-
-  @FindBy(xpath = "//div[contains(@class,'ant-picker-dropdown')][not(contains(@class,'ant-picker-dropdown-hidden'))]//button[.='Ok']")
-  public Button ok;
 
   public void setDateRange(String from, String to) {
     fromInput.click();
@@ -60,7 +51,6 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   public void setFromDate(String from) {
     fromInput.click();
-    pause500ms();
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, from)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }
@@ -71,7 +61,6 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
 
   public void setToDate(String to) {
     toInput.click();
-    pause500ms();
     new Button(webDriver, webDriver.findElement(By.cssSelector(f(BY_TITLE_LOCATOR, to)))).click();
     new Actions(webDriver).sendKeys(Keys.ESCAPE);
   }
@@ -88,48 +77,6 @@ public class AntDateRangePicker2 extends AntAbstractFilterBox {
     toInput.forceClear();
     toInput.sendKeys(to);
     toInput.sendKeys(Keys.ENTER);
-  }
-
-  public void selectFromHours(String value) {
-    fromHoursInput.click();
-    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, value))));
-    button.scrollIntoView();
-    button.jsClick();
-    ok.click();
-  }
-
-  public void selectFromHours(long value) {
-    selectFromHours(String.format("%02d", value));
-  }
-
-  public void selectFromMinutes(String value) {
-    fromHoursInput.click();
-    Button button = new Button(webDriver,
-        webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, value))));
-    button.scrollIntoView();
-    button.jsClick();
-    ok.click();
-  }
-
-  public void selectToHours(String value) {
-    toHoursInput.click();
-    Button button = new Button(webDriver, webDriver.findElement(By.xpath(f(HOURS_LOCATOR, value))));
-    button.scrollIntoView();
-    button.jsClick();
-    ok.click();
-  }
-
-  public void selectToHours(long value) {
-    selectToHours(String.format("%02d", value));
-  }
-
-  public void selectToMinutes(String value) {
-    toHoursInput.click();
-    Button button = new Button(webDriver,
-        webDriver.findElement(By.xpath(f(MINUTES_LOCATOR, value))));
-    button.scrollIntoView();
-    button.jsClick();
-    ok.click();
   }
 
   @Override

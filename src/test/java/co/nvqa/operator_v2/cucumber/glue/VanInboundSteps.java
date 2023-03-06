@@ -178,7 +178,7 @@ public class VanInboundSteps extends AbstractSteps {
   @Then("Operator verifies the route is started on clicking route start button")
   public void operator_verifies_the_route_is_started_on_clicking_route_start_button() {
     vanInboundPage.waitUntilPageLoaded(60);
-    pause3s();
+    pause5s();
     vanInboundPage.routeStart.click();
     vanInboundPage.waitUntilPageLoaded();
     Assert.assertTrue("Assert that the route is started modal has been displayed!",

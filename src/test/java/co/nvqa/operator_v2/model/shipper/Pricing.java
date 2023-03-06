@@ -1,19 +1,18 @@
 package co.nvqa.operator_v2.model.shipper;
 
 import co.nvqa.common.model.DataEntity;
+import co.nvqa.common.utils.DateUtil;
 import co.nvqa.commons.model.shipper.v2.ShipperSettings;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -51,6 +50,7 @@ public class Pricing extends DataEntity<Pricing> implements ShipperSettings, Ser
   private String type;
 
   @JsonAlias("effective_date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d/M/yyyy")
   private Date effectiveDate;
 
   private Date contractEndDate;
@@ -113,10 +113,14 @@ public class Pricing extends DataEntity<Pricing> implements ShipperSettings, Ser
   }
 
   public void setEffectiveDate(String effectiveDate) {
-    SimpleDateFormat YYYY_MM_DD_SDF = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat D_MM_YYYY = new SimpleDateFormat("d/MM/yyyy");
 
     try {
-      setEffectiveDate(YYYY_MM_DD_SDF.parse(effectiveDate));
+      String date_format_yyyy_MM_dd = DateUtil.getUTCDateTime(
+          YYYY_MM_DD.format(D_MM_YYYY.parse(effectiveDate)).concat(" 00:00:00"));
+      String date_format_d_MM_yyy = D_MM_YYYY.format(YYYY_MM_DD.parse(date_format_yyyy_MM_dd));
+      setEffectiveDate(D_MM_YYYY.parse(date_format_d_MM_yyy));
     } catch (ParseException e) {
       throw new NvTestRuntimeException("Parse error here :" + e.getMessage());
     }

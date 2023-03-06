@@ -1041,6 +1041,38 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         String swb = dataTable.get("swb");
         if (swb.equalsIgnoreCase("random")) {
           swb = RandomStringUtils.randomNumeric(6);
+        } else if (swb.equalsIgnoreCase("random-5-digits")) {
+          swb = RandomStringUtils.randomNumeric(5);
+        } else if (swb.equalsIgnoreCase("kmmt-upper-random")) {
+          swb = "KMMT" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-mix-random")) {
+          swb = "KMmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("kmmt-lower-random")) {
+          swb = "kmmt" + RandomStringUtils.randomNumeric(3);
+        } else if (swb.equalsIgnoreCase("r11b-upper-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-mix-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-lower-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("r11b-upper-8-random")) {
+          swb = "R11B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-mix-8-random")) {
+          swb = "R11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("r11b-lower-8-random")) {
+          swb = "r11b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-upper-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-mix-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-lower-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(7);
+        } else if (swb.equalsIgnoreCase("k14b-upper-8-random")) {
+          swb = "K14B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-mix-8-random")) {
+          swb = "K14b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k14b-lower-8-random")) {
+          swb = "k14b" + RandomStringUtils.randomNumeric(8);
         } else if (swb.equalsIgnoreCase("invalid")) {
           swb = "00112233445566";
         } else if (swb.equalsIgnoreCase("alfabet")) {
@@ -1068,9 +1100,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         }
         put(KEY_SHIPMENT_UPDATED_AWB, mawb);
         shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
-        shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
-        shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("origin"));
-        shipmentWeightDimensionUpdateMawbPage.destAirportSelect.selectValue(dataTable.get("destination"));
+        shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("airhaulVendor"));
+        shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("originAirhaul"));
+        shipmentWeightDimensionUpdateMawbPage.destAirportSelect.selectValue(dataTable.get("destinationAirhaul"));
 
         swb = dataTable.get("swb");
         if (swb.equalsIgnoreCase("random")) {
@@ -1094,6 +1126,17 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   @And("Operator verify Update Billing Number {string} has updated with new value")
   public void operatorVerifyUpdateBillingNumberHasUpdatedWithNewValue(String billingNumberType) {
     switch(billingNumberType) {
+      case "MAWB":
+        retryIfAssertionErrorOccurred(() -> {
+          String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+          shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
+                  row -> {
+                    Assertions.assertThat(row.mawb.getText())
+                            .as("MAWB is updated with new value")
+                            .isEqualTo(newMawb);
+                  }
+          );
+        }, "retrying the validation", 1000, 3);
       case "SWB":
         retryIfAssertionErrorOccurred(() -> {
           String newSwb = get(KEY_MM_SHIPMENT_SWB);
@@ -1101,19 +1144,21 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
                   row -> {
                     Assertions.assertThat(row.billingNumber.getText())
                             .as("SWB is updated with new value")
-                            .isEqualTo(newSwb);
+                            .contains(newSwb);
                   }
           );
         }, "retrying the validation", 1000, 3);
         break;
       case "BOTH":
         retryIfAssertionErrorOccurred(() -> {
-          String newMawbSwb = get(KEY_MM_SHIPMENT_SWB);
+          String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+          String newSwb = get(KEY_MM_SHIPMENT_SWB);
+          String mawbSwb = newMawb + ", " + newSwb;
           shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
                   row -> {
                     Assertions.assertThat(row.billingNumber.getText())
                             .as("MAWB and SWB is updated with new value")
-                            .isEqualTo(newMawbSwb);
+                            .isEqualTo(mawbSwb);
                   }
           );
         }, "retrying the validation", 1000, 3);

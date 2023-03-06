@@ -20,6 +20,7 @@ public class CoreV2PickupJobsParams extends DataEntity<CoreV2PickupJobsParams> {
   private String shipperName;
   private String pickupAddress;
   private String tags;
+  private String routeId;
 
   public CoreV2PickupJobsParams() {
   }

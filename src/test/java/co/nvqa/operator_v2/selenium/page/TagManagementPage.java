@@ -14,7 +14,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
 
-  @FindBy(xpath = "//button[.='Create Tag']")
+  @FindBy(xpath = "//button[.='Create tag']")
   public Button createTag;
 
   @FindBy(css = ".ant-modal")
@@ -35,7 +35,7 @@ public class TagManagementPage extends SimpleReactPage<TagManagementPage> {
     @FindBy(xpath = ".//span[./input[@placeholder='Description']]")
     public AntTextBox description;
 
-    @FindBy(xpath = ".//button[.='Create Tag']")
+    @FindBy(xpath = ".//button[.='Create tag']")
     public Button submit;
 
     @FindBy(xpath = ".//button[.='Submit Changes']")

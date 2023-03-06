@@ -127,7 +127,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
       searchTableActiveScriptsByScriptName(scriptName);
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
-        fail("Data still not loaded");
+        searchTableActiveScriptsByScriptName(scriptName);
+        if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+          fail("Data still not loaded");
+        }
       }
     }, String.format("Active script found "));
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
@@ -177,6 +180,17 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void validateDraftAndReleaseScript(Script script) {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script);
+    waitUntilInvisibilityOfToast("Your script has been successfully released.");
+  }
+
+  public String validateDraftAndReturnWarnings(Script script) {
+    goToEditDraftScript(script);
+    return pricingScriptsV2CreateEditDraftPage.validateDraftAndReturnWarnings(script);
+  }
+
+  public void releaseScript() {
+    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByNameAndWaitUntilDone(
+        "Release Script");
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
   }
 

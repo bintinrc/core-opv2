@@ -1,11 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.common.utils.factory.address.AddressFactory;
 import co.nvqa.common.model.address.Address;
 import co.nvqa.common.model.address.MilkrunSettings;
-import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.common.model.others.LatLong;
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.utils.factory.address.AddressFactory;
+import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.commons.model.pricing.PricingLevers;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
@@ -26,7 +27,6 @@ import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1918,8 +1917,8 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
     Pricing pricingProfile =
-        Objects.isNull(get(KEY_PRICING_PROFILE)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
-            : get(KEY_PRICING_PROFILE);
+        Objects.isNull(get(KEY_PRICING_PROFILE_DETAILS)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
+            : get(KEY_PRICING_PROFILE_DETAILS);
 
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
     if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {

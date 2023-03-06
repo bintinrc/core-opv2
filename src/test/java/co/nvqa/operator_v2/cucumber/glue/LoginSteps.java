@@ -46,7 +46,6 @@ public class LoginSteps extends AbstractSteps {
 
     mainPage.verifyTheMainPageIsLoaded();
   }
-
   @And("Operator login Operator portal with username = {string} and password = {string}")
   public void loginToOperatorV2WithoutURLValidation(String username, String password) {
     loginPage.loadPage();
@@ -112,6 +111,15 @@ public class LoginSteps extends AbstractSteps {
         TestConstants.NV_SYSTEM_ID = "ph";
         break;
     }
-    TestConstants.API_BASE_URL=TestConstants.API_BASE_URL.substring(0,TestConstants.API_BASE_URL.length()-2)+TestConstants.NV_SYSTEM_ID ;
+    TestConstants.API_BASE_URL =
+        TestConstants.API_BASE_URL.substring(0, TestConstants.API_BASE_URL.length() - 2)
+            + TestConstants.NV_SYSTEM_ID;
+  }
+
+  @Given("Operator login with client id = {string} and client secret = {string}")
+  public void operatorLoginWithClientIdAndClientSecret(String clientId, String clientSecret) {
+    loginPage.loadPage();
+    TokenUtils.overrideOperatorAuthToken(clientId, clientSecret);
+    loginPage.forceLogin(TokenUtils.getOperatorAuthToken());
   }
 }
