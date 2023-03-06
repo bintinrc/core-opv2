@@ -41,6 +41,7 @@ public class DpTaggingSteps extends AbstractSteps {
     List<DpTagging> listOfDpTagging = new ArrayList<>();
     listOfDpTagging.add(dpTagging);
 
+    dpTaggingPage.switchToIframe();
     dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
     dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
     dpTaggingPage.selectDateToNextDay();
