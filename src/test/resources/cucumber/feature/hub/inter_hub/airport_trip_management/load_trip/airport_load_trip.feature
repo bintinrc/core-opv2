@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AirportLoadTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @PortLoadTrip
 Feature: Airport Trip Management - Load Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -7,89 +7,89 @@ Feature: Airport Trip Management - Load Trip
 
   Scenario: Load Air Haul Trip by Departure Date
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm} |
       | originOrDestination | -                                     |
 
   Scenario: Load Air Haul Trip by Departure Date and Origin Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-    When Operator fill the Origin Or Destination for Airport Management
+    When Operator fill the Origin Or Destination for Port Management
       | originOrDestination | ABC (Airport);123 (Airport) |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm} |
       | originOrDestination | ABC (Airport), 123 (Airport)          |
 
   Scenario: Load Air Haul Trip by Departure Date and Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-    When Operator fill the Origin Or Destination for Airport Management
+    When Operator fill the Origin Or Destination for Port Management
       | originOrDestination | CDG (Airport);ERC (Airport) |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm} |
       | originOrDestination | CDG (Airport), ERC (Airport)          |
 
   Scenario: Load Air Haul Trip by Departure Date, Origin and Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-    When Operator fill the Origin Or Destination for Airport Management
+    When Operator fill the Origin Or Destination for Port Management
       | originOrDestination | ABC (Airport);CDG (Airport);ERC (Airport) |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}        |
       | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}       |
       | originOrDestination | ABC (Airport), CDG (Airport), ERC (Airport) |
 
   Scenario: Load Air Haul Trip by Departure Date and 4 Origin/Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-    When Operator fill the Origin Or Destination for Airport Management
+    When Operator fill the Origin Or Destination for Port Management
       | originOrDestination | ABC (Airport);123 (Airport);CDG (Airport);ERC (Airport) |
-    And Verify operator cannot fill more than 4 Origin Or Destination for Airport Management
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Verify operator cannot fill more than 4 Origin Or Destination for Port Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}                       |
       | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                      |
       | originOrDestination | ABC (Airport), 123 (Airport), CDG (Airport), ERC (Airport) |
 
   Scenario: Load Air Haul Trip by 1 month range Departure Date
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}   |
       | endDate   | {date: 28 days next, yyyy-MM-dd-HH-mm} |
-    When Operator fill the Origin Or Destination for Airport Management
+    When Operator fill the Origin Or Destination for Port Management
       | originOrDestination | ABC (Airport);123 (Airport);CDG (Airport);ERC (Airport) |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}                       |
       | endDate             | {date: 28 days next, yyyy-MM-dd-HH-mm}                     |
       | originOrDestination | ABC (Airport), 123 (Airport), CDG (Airport), ERC (Airport) |

@@ -8,15 +8,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field ID
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -26,15 +20,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field Port Code
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -44,15 +32,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field Port Type
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -62,15 +44,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field Full Port Name
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -80,15 +56,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field City
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -98,15 +68,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field Region
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
@@ -116,15 +80,9 @@ Feature: Port Trip Management - Manage Seaport Facility - Search Seaport
   @DeleteCreatedPorts
   Scenario: Search Seaport on Search Field Latitude, Longitude
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new port using data below:
-      | system_id | SG        |
-      | portCode  | GENERATED |
-      | portName  | GENERATED |
-      | city      | GENERATED |
-      | latitude  | GENERATED |
-      | longitude | GENERATED |
-      | portType  | Seaport   |
-    And API Operator refresh "Seaport" cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Seaport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Seaport" cache
     Given Operator go to menu Inter-Hub -> Port Trip Management
     And Operator verifies that the Port Management Page is opened
     When Operator click on Manage Port Facility and verify all components
