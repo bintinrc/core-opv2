@@ -26,6 +26,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
   private final String KEY_BARANGAY = "barangay";
   private final String KEY_MUNICIPALITY = "municipality";
   private final String KEY_POSTCODE = "postcode";
+  private final String KEY_DISTRICT = "district";
+  private final String KEY_SUBDISTRICT = "subdistrict";
   private final String KEY_HUB = "hub";
   private final String KEY_ZONE = "zone";
   private final String KEY_LATITUDE = "latitude";
@@ -67,6 +69,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String kecamatan = data.get(KEY_KECAMATAN);
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
+    String district = data.get(KEY_DISTRICT);
+    String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
     Addressing addressing = new Addressing();
@@ -106,6 +110,14 @@ public class AddressDatasourceSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(barangay)) {
       addressDatasourcePage.barangay.setValue(barangay);
       addressing.setDistrict(barangay);
+    }
+    if (StringUtils.isNotBlank(district)) {
+      addressDatasourcePage.municipality.setValue(district);
+      addressing.setDistrict(district);
+    }
+    if (StringUtils.isNotBlank(subdistrict)) {
+      addressDatasourcePage.barangay.setValue(subdistrict);
+      addressing.setSubdistrict(subdistrict);
     }
     if (StringUtils.isNotBlank(postcode)) {
       addressDatasourcePage.postcode.setValue(postcode);
@@ -173,6 +185,16 @@ public class AddressDatasourceSteps extends AbstractSteps {
       Assertions.assertThat(addressDatasourcePage.barangayAddRow.getText())
           .as("Barangay")
           .isEqualToIgnoringCase(data.get(KEY_BARANGAY));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.districtAddRow.getText())
+          .as("District")
+          .isEqualToIgnoringCase(data.get(KEY_DISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.subdistrictAddRow.getText())
+          .as("Subdistrict")
+          .isEqualToIgnoringCase(data.get(KEY_SUBDISTRICT));
     }
     if (StringUtils.isNotBlank(data.get(KEY_HUB))) {
       Assertions.assertThat(addressDatasourcePage.hubAddRow.getText())
@@ -244,6 +266,16 @@ public class AddressDatasourceSteps extends AbstractSteps {
           .as("Created Barangay " + addressDatasourcePage.createdBarangay.getText())
           .isEqualToIgnoringCase(data.get(KEY_BARANGAY));
     }
+    if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.createdKota.getText())
+          .as("Created District " + addressDatasourcePage.createdKota.getText())
+          .isEqualToIgnoringCase(data.get(KEY_DISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.createdKecamatan.getText())
+          .as("Created subdistrict " + addressDatasourcePage.createdKecamatan.getText())
+          .isEqualToIgnoringCase(data.get(KEY_SUBDISTRICT));
+    }
     if (StringUtils.isNotBlank(data.get(KEY_POSTCODE))) {
       Assertions.assertThat(addressDatasourcePage.createdPostcode.getText())
           .as("Created Postcode " + addressDatasourcePage.createdPostcode.getText())
@@ -289,6 +321,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String expectedL1 = data.get("l1");
     String expectedL2 = data.get("l2");
     String expectedL3 = data.get("l3");
+    String expectedL4 = data.get("l4");
 
     if (StringUtils.isNotBlank(expectedL1) && expectedL1.equals("province")) {
       Assertions.assertThat(addressDatasourcePage.provinceTextField.getText())
@@ -300,16 +333,22 @@ public class AddressDatasourceSteps extends AbstractSteps {
           .isEqualToIgnoringCase(expectedL1);
     }
     if (StringUtils.isNotBlank(expectedL2) && (expectedL2.equals("Kota/Kabupaten")
-        || expectedL2.equals("Municipality"))) {
+        || expectedL2.equals("Municipality") || expectedL2.equals("District"))) {
       Assertions.assertThat(addressDatasourcePage.cityTextField.getText())
           .as("L2 text field" + addressDatasourcePage.cityTextField.getText())
           .isEqualToIgnoringCase(expectedL2);
     }
     if (StringUtils.isNotBlank(expectedL3) && (expectedL3.equals("Kecamatan") || expectedL3
-        .equals("Barangay"))) {
+        .equals("Barangay") || expectedL3.equals(""
+        + ""))) {
       Assertions.assertThat(addressDatasourcePage.districtTextField.getText())
           .as("L3 text field" + addressDatasourcePage.districtTextField.getText())
           .isEqualToIgnoringCase(expectedL3);
+    }
+    if (StringUtils.isNotBlank(expectedL4) && (expectedL4.equals("Postcode"))) {
+      Assertions.assertThat(addressDatasourcePage.postcodeTextField.getText())
+          .as("L4 text field" + addressDatasourcePage.postcodeTextField.getText())
+          .isEqualToIgnoringCase(expectedL4);
     }
   }
 
@@ -341,6 +380,12 @@ public class AddressDatasourceSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(data.get(KEY_BARANGAY))) {
       addressDatasourcePage.barangayTextBox.sendKeys(data.get(KEY_BARANGAY));
     }
+    if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
+      addressDatasourcePage.districtTextBox.sendKeys(data.get(KEY_DISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
+      addressDatasourcePage.subdistrictTextBox.sendKeys(data.get(KEY_SUBDISTRICT));
+    }
     if (StringUtils.isNotBlank(data.get(KEY_POSTCODE))) {
       addressDatasourcePage.postcodeTextBox.waitUntilVisible();
       addressDatasourcePage.postcodeTextBox.sendKeys(data.get(KEY_POSTCODE));
@@ -371,7 +416,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
 
   @Then("^Operator verifies no result found on Address Datasource page$")
   public void operatorVerifiesNoResult() {
-   Assertions.assertThat(        addressDatasourcePage.noResultsFound.isDisplayed()).as("No result found on Address Datasource page Displayed!").isTrue();
+    Assertions.assertThat(addressDatasourcePage.noResultsFound.isDisplayed())
+        .as("No result found on Address Datasource page Displayed!").isTrue();
   }
 
   @When("Operator clicks on Edit Button on Address Datasource Page")
@@ -391,6 +437,8 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String kecamatan = data.get(KEY_KECAMATAN);
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
+    String district = data.get(KEY_DISTRICT);
+    String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
     Addressing addressing = new Addressing();
@@ -448,6 +496,24 @@ public class AddressDatasourceSteps extends AbstractSteps {
         addressDatasourcePage.municipality.sendKeys(municipality);
       }
       addressing.setDistrict(municipality);
+    }
+    if (StringUtils.isNotBlank(subdistrict)) {
+      if (subdistrict.contains("EMPTY")) {
+        addressDatasourcePage.barangay.forceClear();
+      } else {
+        addressDatasourcePage.barangay.forceClear();
+        addressDatasourcePage.barangay.sendKeys(subdistrict);
+      }
+      addressing.setDistrict(subdistrict);
+    }
+    if (StringUtils.isNotBlank(district)) {
+      if (district.contains("EMPTY")) {
+        addressDatasourcePage.municipality.forceClear();
+      } else {
+        addressDatasourcePage.municipality.forceClear();
+        addressDatasourcePage.municipality.sendKeys(district);
+      }
+      addressing.setDistrict(district);
     }
     if (StringUtils.isNotBlank(postcode)) {
       if (postcode.contains("EMPTY")) {
@@ -531,6 +597,16 @@ public class AddressDatasourceSteps extends AbstractSteps {
       Assertions.assertThat(addressDatasourcePage.kecamatan.getValue())
           .as("kecamatan")
           .isEqualToIgnoringCase(data.get(KEY_KECAMATAN));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_DISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.kota.getValue())
+          .as("District")
+          .isEqualToIgnoringCase(data.get(KEY_DISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_SUBDISTRICT))) {
+      Assertions.assertThat(addressDatasourcePage.kecamatan.getValue())
+          .as("Subdistrict")
+          .isEqualToIgnoringCase(data.get(KEY_SUBDISTRICT));
     }
     if (StringUtils.isNotBlank(data.get(KEY_MUNICIPALITY))) {
       Assertions.assertThat(addressDatasourcePage.municipality.getValue())

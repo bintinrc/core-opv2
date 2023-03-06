@@ -37,6 +37,9 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorClickEditButtonOnHubUserManagementPage(String hubId) {
     String editXpath = String.format(hubUserManagementPage.XPATH_OF_EDIT_BUTTON, hubId);
     hubUserManagementPage.waitUntilPageLoaded();
+    if (hubUserManagementPage.isElementExist(hubUserManagementPage.XPATH_OF_IFRAME)) {
+      hubUserManagementPage.switchTo();
+    }
     hubUserManagementPage.findElementByXpath(editXpath).click();
     hubUserManagementPage.waitUntilPageLoaded();
   }
@@ -68,6 +71,7 @@ public class HubUserManagementSteps extends AbstractSteps {
 
   @When("Operator bulk upload hub user using a {string} CSV file")
   public void operatorBulkUploadHubUserUsingACSVFile(String fileName) {
+    hubUserManagementPage.pause5s();
     final String csvFileName = "csv/" + fileName;
     final ClassLoader classLoader = getClass().getClassLoader();
     File csvFile = new File(
@@ -85,7 +89,6 @@ public class HubUserManagementSteps extends AbstractSteps {
     String modalTitle = data.get("modalTitle");
     String modalBody = data.get("modalBody");
     pause3s();
-    hubUserManagementPage.switchTo();
     Assertions.assertThat(hubUserManagementPage.errorTitle.getText()).as("Modal Title is True")
         .isEqualToIgnoringCase(modalTitle);
     Assertions.assertThat(hubUserManagementPage.errorBody.getText()).as("Modal Body is True")
@@ -319,6 +322,11 @@ public class HubUserManagementSteps extends AbstractSteps {
             .as("Email Input is Disabled")
             .isFalse();
         break;
+      case "remove":
+        Assertions.assertThat(hubUserManagementPage.removeUserModal.getText())
+            .as("Modal Title is " + hubUserManagementPage.removeUserModal.getText())
+            .isEqualTo("Remove User");
+        break;
     }
     Assertions.assertThat(hubUserManagementPage.roleSelection.isEnabled())
         .as("Role Selection is Disabled")
@@ -346,5 +354,39 @@ public class HubUserManagementSteps extends AbstractSteps {
   public void operatorSearchHubName(String hubName) {
     hubUserManagementPage.switchTo();
     hubUserManagementPage.searchHub.sendKeys(hubName);
+  }
+
+  @Then("Operator verifies remove user button is not exist")
+  public void operatorVerifiesRemoveUserButtonIsNotExist() {
+    Assertions.assertThat(hubUserManagementPage.removeButton.isDisplayed())
+        .as("Remove Button is not displayed").isFalse();
+  }
+
+  @When("Operator click delete user {string} button on Hub User Management Page")
+  public void operatorClickDeleteUserButtonOnHubUserManagementPage(String userId) {
+    String deleteXpath = String.format(hubUserManagementPage.XPATH_OF_REMOVE_USER_BUTTON, userId);
+    hubUserManagementPage.waitUntilPageLoaded();
+    hubUserManagementPage.findElementByXpath(deleteXpath).click();
+    hubUserManagementPage.waitUntilPageLoaded();
+  }
+
+  @Then("Operator verifies delete user button is not exist")
+  public void operatorVerifiesDeleteUserButtonIsNotExist() {
+    hubUserManagementPage.deleteButtonContainer.isEmptyOrNullString();
+  }
+
+  @When("Operator search {string} username with {string} role")
+  public void operatorSearchUsernameWithRole(String username, String role) {
+    hubUserManagementPage.usernameInput.sendKeys(username);
+    Assertions.assertThat(hubUserManagementPage.usernameHighlight.getText())
+        .as(username + " is highlighted").isEqualTo(username);
+    hubUserManagementPage.roleInput.sendKeys(role);
+    Assertions.assertThat(hubUserManagementPage.roleHighlight.getText())
+        .as(role + " is highlighted").isEqualTo(role);
+  }
+
+  @When("Operator click on remove user button on user modal")
+  public void operatorClickOnRemoveUserButtonOnUserModal() {
+    hubUserManagementPage.removeUserButton.click();
   }
 }

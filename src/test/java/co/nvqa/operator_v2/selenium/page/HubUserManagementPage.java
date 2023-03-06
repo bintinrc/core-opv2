@@ -27,11 +27,29 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
 
   public String hubTitleXpath = "//span[@title='%s']";
 
+  public String XPATH_OF_IFRAME = "//iframe";
+
   @FindBy(xpath = "//div[@data-testid='hub-selection-select']")
   public AntSelect selectHub;
 
+  @FindBy(xpath = "//span[@class='delete-button-container']")
+  public PageElement deleteButtonContainer;
+
   @FindBy(xpath = "//input[@accept='.csv']")
   public FileInput uploadCsvFileInput;
+
+  @FindBy(xpath = "//th[contains(@class,'name')]//input")
+  public PageElement usernameInput;
+
+  @FindBy(xpath = "//td[contains(@class,'name')]//mark")
+  public PageElement usernameHighlight;
+
+  @FindBy(xpath = "//td[contains(@class,'role')]//mark")
+  public PageElement roleHighlight;
+
+  @FindBy(xpath = "//th[contains(@class,'role')]//input")
+  public PageElement roleInput;
+
 
   @FindBy(xpath = "//span[@class='ant-upload-span']//span[@class='ant-upload-list-item-name']")
   public PageElement uploadCsvFileName;
@@ -44,6 +62,12 @@ public class HubUserManagementPage extends SimpleReactPage<HubUserManagementPage
 
   @FindBy(xpath = "//div[@class='ant-modal-title'][text()='Edit user']")
   public PageElement editUserModal;
+
+  @FindBy(xpath = "//div[@class='ant-modal-title'][text()='Remove User']")
+  public PageElement removeUserModal;
+
+  @FindBy(css = "[data-testid='remove-user-button']")
+  public PageElement removeUserButton;
 
   @FindBy(xpath = "//input[@class='ant-input']")
   public PageElement searchHub;
