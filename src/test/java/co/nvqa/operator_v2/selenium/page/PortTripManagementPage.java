@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AssignDriversToTripModal;
-import co.nvqa.operator_v2.selenium.page.AirportTripManagementPage.AssignMawbModal;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.text.Format;
@@ -52,7 +51,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   public PortTripManagementPage(WebDriver webDriver) {
     super(webDriver);
     portTable = new PortTripManagementPage.PortTable(webDriver);
-//        assignMawbModal = new AssignMawbModal(webDriver);
+    assignMawbModal = new AssignMawbModal(webDriver);
   }
 
   private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -2115,43 +2114,44 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     }
   }
 
-//    public static class AssignMawbModal {
-//        public AssignMawbModal(WebDriver webDriver) {
-//            super();
-//            PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
-//        }
-//
-//        public static final String MAWB_CHECKBOX_XPATH = "//td[text()='%s']//preceding-sibling::td[contains(@class,'ant-table-selection-column')]//input[@class='ant-checkbox-input']";
-//        public static final String mawbSelectedMessage = "//div[text()='Selected %s MAWB, %s Booked Pcs, %s Booked Weight, %s Book Volume']";
-//
-//        @FindBy(xpath = "//span[text()='Flight Trip Origin - Destination Airport']/ancestor::div[@class='ant-col']")
-//        public PageElement flightTripAirports;
-//
-//        @FindBy(xpath = "//label[text()='MAWB Origin - Destination Airport']//ancestor::div[@class = 'ant-row ant-form-item']//input")
-//        public PageElement mawbAirports;
-//
-//        @FindBy(xpath = "//strong[text()= 'Search Unassigned MAWB to Assign to Flight Trip']")
-//        public PageElement searchUnassignedMawb;
-//
-//        @FindBy(id = "vendor")
-//        public PageElement mawbVendor;
-//
-//        @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
-//        public PageElement expectedDuration;
-//
-//        @FindBy(css = "[data-testid = 'assign-to-trip-button']")
-//        public Button assignToTrip;
-//
-//        @FindBy(xpath = "//div[@class='ant-typography ant-typography-danger']")
-//        public Button warningMessage;
-//
-//        @FindBy(css = "[data-testid = 'find-mawb-button']")
-//        public Button findMAWB;
-//
-//    }
+  public static class AssignMawbModal {
+
+    public AssignMawbModal(WebDriver webDriver) {
+      super();
+      PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
+    }
+
+    public static final String MAWB_CHECKBOX_XPATH = "//td[text()='%s']//preceding-sibling::td[contains(@class,'ant-table-selection-column')]//input[@class='ant-checkbox-input']";
+    public static final String mawbSelectedMessage = "//div[text()='Selected %s MAWB, %s Booked Pcs, %s Booked Weight, %s Book Volume']";
+
+    @FindBy(xpath = "//span[text()='Flight Trip Origin - Destination Airport']/ancestor::div[@class='ant-col']")
+    public PageElement flightTripAirports;
+
+    @FindBy(xpath = "//label[text()='MAWB Origin - Destination Airport']//ancestor::div[@class = 'ant-row ant-form-item']//input")
+    public PageElement mawbAirports;
+
+    @FindBy(xpath = "//strong[text()= 'Search Unassigned MAWB to Assign to Flight Trip']")
+    public PageElement searchUnassignedMawb;
+
+    @FindBy(id = "vendor")
+    public PageElement mawbVendor;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[text()='Expected Duration']/ancestor::div[contains(@class,'ant-col')]")
+    public PageElement expectedDuration;
+
+    @FindBy(css = "[data-testid = 'assign-to-trip-button']")
+    public Button assignToTrip;
+
+    @FindBy(xpath = "//div[@class='ant-typography ant-typography-danger']")
+    public Button warningMessage;
+
+    @FindBy(css = "[data-testid = 'find-mawb-button']")
+    public Button findMAWB;
+
+  }
 
   public void verifyAssignedMawbPage() {
-    backButton.waitUntilVisible();
+    assignMawbModal.flightTripAirports.waitUntilVisible();
     Assertions.assertThat(assignMawbModal.flightTripAirports.isDisplayed())
         .as("Flight Trip Origin - Destination Airport is display").isTrue();
     Assertions.assertThat(assignMawbModal.mawbAirports.isDisplayed())
