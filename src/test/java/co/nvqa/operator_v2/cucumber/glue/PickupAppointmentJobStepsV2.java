@@ -339,6 +339,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
           pickupAppointmentJobPage.bulkSelect.bulkUpdateDropdown.waitUntilClickable();
           break;
         case "Filter by job ID":
+          pickupAppointmentJobPage.bulkSelect.filterByJobId.waitUntilVisible();
           pickupAppointmentJobPage.bulkSelect.filterByJobId.click();
           pickupAppointmentJobPage.filterJobByIDModal.close.waitUntilVisible();
           break;
@@ -1067,7 +1068,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         String driverName = resolveValue(name);
         LOGGER.debug(driverName);
-        List<String> tagsListInTable = page.bulkSelect.getDriverListWithName(driverName);
+        List<String> tagsListInTable = page.bulkSelect.getColListByValue(driverName);
         Assertions.assertThat(tagsListInTable)
             .as(f("tag %s in table count is = %s", driverName, driverNumber)).hasSize(driverNumber);
       }, 1000, 5);
@@ -1326,6 +1327,48 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       });
     }, 1000, 3);
 
+  }
+
+  @When("Operator check {int} Column with value = {string} in PAM search table")
+  public void checkNumberOfColumnWithValueInPAMSearchTable(Integer countOfCol, String value) {
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String colValue = resolveValue(value);
+        List<String> tagsListInTable = page.bulkSelect.getColListByValue(colValue);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("Column %s in table count is = %s", colValue, countOfCol)).hasSize(countOfCol);
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator search for job id = {string} in pickup jobs table")
+  public void searchForjobIdInPickupTable(String jobId) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupAppointmentJobId", resolveValue(jobId));
+    });
+  }
+
+  @When("Operator search for shipper id = {string} in pickup jobs table")
+  public void searchForshipperIdInPickupTable(String shipperId) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("legacyShipperId", resolveValue(shipperId));
+    });
+  }
+
+  @When("Operator search for shipper name = {string} in pickup jobs table")
+  public void searchForshipperNameInPickupTable(String shipperName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("shipperInfo", resolveValue(shipperName));
+    });
+  }
+
+  @When("Operator search for address name = {string} in pickup jobs table")
+  public void searchForaddressNameInPickupTable(String addressName) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupAddress", resolveValue(addressName));
+    });
   }
 }
 

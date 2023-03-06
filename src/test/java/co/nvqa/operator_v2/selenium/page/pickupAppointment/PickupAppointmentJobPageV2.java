@@ -618,7 +618,7 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String PICKUP_JOB_ROW_TAGS = "//span[contains(@class,'ant-tag') and contains(text(),'%s')]";
     public static final String BULK_UPDATE_ITEMS = "//div[contains(@class,'ant-dropdown') and not(contains(@class,'ant-dropdown-hidden'))]//span[text() = '%s']/ancestor::li";
     public final String PICKUP_JOB_ROW_ROUTE = "//a[@data-testid='navigatorLink' and contains(text(),'%s')]";
-    public final String PICKUP_JOB_ROW_DRIVER = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
 
     public boolean removeRouteStatus() {
 
@@ -658,8 +658,8 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           .collect(Collectors.toList());
     }
 
-    public List<String> getDriverListWithName(String name) {
-      return findElementsByXpath(f(PICKUP_JOB_ROW_DRIVER, name)).stream()
+    public List<String> getColListByValue(String value) {
+      return findElementsByXpath(f(PICKUP_JOB_ROW_COL, value)).stream()
           .map(WebElement::getText)
           .collect(Collectors.toList());
     }
