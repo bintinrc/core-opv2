@@ -386,10 +386,6 @@ Feature: Route Manifest
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success pickup waypoint with COD collection from Route Manifest page:
       | trackingId                      | collected |
@@ -420,10 +416,6 @@ Feature: Route Manifest
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success pickup waypoint with COD collection from Route Manifest page:
       | trackingId                      | collected |
@@ -458,13 +450,11 @@ Feature: Route Manifest
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new COD for created order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success delivery waypoint with COD collection from Route Manifest page:
       | trackingId                      | collected |
@@ -503,13 +493,11 @@ Feature: Route Manifest
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new COD for created order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
     And Operator success delivery waypoint with COD collection from Route Manifest page:
       | trackingId                      | collected |
@@ -555,12 +543,8 @@ Feature: Route Manifest
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator get order details
-    Given API Driver collect all his routes
-    Given API Driver get pickup/delivery waypoint of the created order
-    Given API Operator Van Inbound parcel
-    Given API Operator start the route
     When Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
-    And Operator success pickup waypoint with COD collection from Route Manifest page:
+    And Operator success delivery waypoint with COD collection from Route Manifest page:
       | trackingId                      | collected |
       | {KEY_CREATED_ORDER_TRACKING_ID} | true      |
     And Operator refresh page
