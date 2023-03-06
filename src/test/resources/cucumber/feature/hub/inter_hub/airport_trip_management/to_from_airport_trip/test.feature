@@ -1,3 +1,4 @@
+@runAll
 Feature: Test
 
   @exclude
@@ -35,3 +36,7 @@ Feature: Test
   Scenario: Cleanup Unused Ports
     * Util MM - Clean up unused "airport" data
     * Util MM - Clean up unused "seaport" data
+
+  @exclude @DeleteCreatedShipments
+  Scenario: Create Shipment
+    When API Operator create multiple 4 new shipment with type "LAND_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
