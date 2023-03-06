@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Edit Flight Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: Edit Flight Trip - Comments
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -48,7 +48,7 @@ Feature: Airport Trip Management - Edit Flight Trip
       | tripID  | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | comment | API automation update                      |
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: Edit Flight Trip - Flight Number
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

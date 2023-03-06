@@ -5,7 +5,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: View Pending Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -37,7 +37,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "PENDING" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: View Transit Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -70,7 +70,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "TRANSIT" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: View Arrive Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -104,7 +104,7 @@ Feature: Airport Trip Management - View Trip Flight Trip Details
     Then Operator verifies trip status is "COMPLETED" on Port Trip details page
     And Operator verifies the element of "Trip Events" tab on Port Trip details page are correct
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: View Cancel Flight Trip Details - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

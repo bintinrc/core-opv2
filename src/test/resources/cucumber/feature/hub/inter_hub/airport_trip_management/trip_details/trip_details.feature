@@ -153,7 +153,7 @@ Feature: Airport Trip Management - Trip Details
       | tripType | ToFrom Airport Trip            |
     And Operator verifies the element of "Shipments" tab on Port Trip details page are correct
 
-  @CancelTrip @DeleteCreatedPorts
+  @CancelTrip @DeleteCreatedPorts @hp
   Scenario: Trip Details Flight Trip - Trip Events
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
