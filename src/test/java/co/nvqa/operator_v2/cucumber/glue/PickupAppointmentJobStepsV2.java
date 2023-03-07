@@ -1411,5 +1411,14 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       page.bulkSelect.filterTableUsing("pickupApproxVolume", resolveValue(addressName));
     });
   }
+
+  @When("Operator search for comment = {string} in pickup jobs table")
+  public void searchForCommentPickupTable(String comment) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("pickupInstructions", resolveValue(comment));
+    });
+  }
+
+
 }
 

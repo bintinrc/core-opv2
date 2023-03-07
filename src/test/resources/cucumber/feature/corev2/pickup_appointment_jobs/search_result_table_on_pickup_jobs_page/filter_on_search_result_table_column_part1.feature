@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @tableFiltersPAMJobsSearch @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @tableFiltersPAMJobsSearchPart1
 Feature: filter on search result table column
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -205,7 +205,7 @@ Feature: filter on search result table column
     When Operator check 0 Column with value = "{gradle-current-date-yyyy-MM-dd}" in PAM search table
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2
   Scenario:Filter table column - by Approx vol
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
