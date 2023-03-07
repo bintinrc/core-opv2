@@ -18,7 +18,6 @@ Feature: Airport Trip Management - Search Airport Trip 2
     And Operator search the "Destination Facility" column with invalid data "INVALID" on Port Trip Management page
     And Operator verifies that no data appear on Port Trips page
 
-  @hp
   Scenario: No Data Shown when Search by Search by Trip ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management

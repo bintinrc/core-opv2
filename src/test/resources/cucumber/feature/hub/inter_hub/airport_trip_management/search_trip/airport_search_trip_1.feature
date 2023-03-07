@@ -29,7 +29,7 @@ Feature: Airport Trip Management - Search Airport Trip 1
     And Operator search the "Destination Facility" column on Port Trip Management page
     And Verify only filtered results are displayed on Port Trip Management page
 
-  @CancelTrip @hp
+  @CancelTrip
   Scenario: Search by Trip Id
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API MM - Operator refreshes "Airport" cache
