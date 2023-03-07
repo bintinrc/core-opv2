@@ -148,7 +148,7 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -184,7 +184,7 @@ Feature: Outbound Monitoring
 #    And DB Operator verifies transaction route id is null
 #    And DB Operator verifies waypoint status is "PENDING"
 #    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
+#
 #    And DB Operator verifies route_monitoring_data is hard-deleted
 #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
 #    Then Operator verify order event on Edit order page using data below:
@@ -568,7 +568,7 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -612,7 +612,7 @@ Feature: Outbound Monitoring
 #    And DB Operator verifies transaction route id is null
 #    And DB Operator verifies waypoint status is "PENDING"
 #    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
+#
 #    And DB Operator verifies route_monitoring_data is hard-deleted
 #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
 #    Then Operator verify order event on Edit order page using data below:
@@ -734,8 +734,6 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And DB Operator verifies route_monitoring_data is hard-deleted:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
@@ -748,8 +746,6 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     And DB Operator verifies route_monitoring_data is hard-deleted:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
@@ -852,8 +848,6 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And DB Operator verifies route_monitoring_data is hard-deleted:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
@@ -901,8 +895,6 @@ Feature: Outbound Monitoring
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted:
-      | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     And DB Operator verifies route_monitoring_data is hard-deleted:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
