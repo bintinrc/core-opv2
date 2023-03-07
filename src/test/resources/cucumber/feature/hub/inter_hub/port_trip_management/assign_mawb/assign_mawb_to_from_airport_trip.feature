@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @AirportTripManagement @AssignMAWBToFromAirportTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @AssignMAWBToFromAirportTrip
 Feature: Airport Trip Management - Assign MAWB Trip To/from Airport
 
   @LaunchBrowser @ShouldAlwaysRun

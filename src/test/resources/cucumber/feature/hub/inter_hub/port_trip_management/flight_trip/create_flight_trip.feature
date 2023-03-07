@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @CreateFlightTrip @wip
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @CreateFlightTrip
 Feature: Airport Trip Management - Create Flight Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -41,7 +41,7 @@ Feature: Airport Trip Management - Create Flight Trip
       | comments             | Created by Automation                      |
     And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) to {KEY_MM_LIST_OF_CREATED_PORTS[2].portCode} (Airport) is created. View Details" created success message on Port Trip Management page
 
-  @DeleteCreatedPorts @wip
+  @DeleteCreatedPorts
   Scenario: Create Flight Trip with disabled Airport
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
