@@ -6,7 +6,7 @@ Feature: Update MAWB 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 4 lower-case (uid:815a7993-d280-4b50-8085-0199c855cebc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -41,7 +41,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 4 upper-case (uid:35ede1dd-60d5-41da-9cec-ab2fb4239870)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -76,7 +76,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 4 mix-case (uid:84b0de9c-c3cf-43a1-a1d2-89823aa9ed2c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -111,7 +111,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 5 lower-case (uid:aa908859-d477-435f-b364-78ccf815bf9a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -146,7 +146,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 5 upper-case (uid:cb4ba85d-8fa9-48d1-8a29-6fbf1e64c9c1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -181,7 +181,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 5 mix-case (uid:69ba1f69-2da6-4fb1-922a-b3f5abf118e5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -216,7 +216,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 6 lower-case (uid:070d8bd3-fccd-45da-a606-e321fec8a07c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -251,7 +251,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 6 upper-case (uid:f84f2939-653d-45fd-817e-e12de2fdc880)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -286,7 +286,7 @@ Feature: Update MAWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 6 mix-case (uid:b70b79b8-e9a1-4ecb-8bc2-8b4032e05aa3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
