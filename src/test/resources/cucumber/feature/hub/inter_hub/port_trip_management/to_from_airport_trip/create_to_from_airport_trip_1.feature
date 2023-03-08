@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @AirportTrip1
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @CreateToFromAirportTrip1
 Feature: Airport Trip Management - Create To From Airport Trip 1
 
   @LaunchBrowser @ShouldAlwaysRun
