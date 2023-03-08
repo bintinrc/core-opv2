@@ -222,9 +222,9 @@ public class SortBeltPresetSteps extends AbstractSteps {
         .as("Edit button is displayed")
         .isTrue();
 
-    Assertions.assertThat(sortBeltPresetDetailPage.presetTitle.getText().contains(sb.getName()))
+    Assertions.assertThat(sortBeltPresetDetailPage.presetTitle.getText())
         .as("Preset title contains the correct string: " + sb.getName())
-        .isTrue();
+        .isEqualTo("Preset: "+sb.getName());
 
     Assertions.assertThat(
             sortBeltPresetDetailPage.description.getText().contains(sb.getDescription()))
