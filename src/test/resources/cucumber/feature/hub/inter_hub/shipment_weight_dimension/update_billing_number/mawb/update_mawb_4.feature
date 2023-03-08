@@ -6,7 +6,7 @@ Feature: Update MAWB 4 - PH
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with format 3 digits + <space> + 5 digits (uid:0eca8942-67d2-4dec-893a-b01011bcce9e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -40,7 +40,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with format rlb + <space> + 5 digits lower-case (uid:043c913c-945d-42e7-bba2-5dd372e1e7af)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -74,7 +74,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with format RLB + <space> + 5 digits upper-case (uid:8e074519-7d2e-4e68-a63e-e64b57604d98)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -108,7 +108,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with format Rlb + <space> + 5 digits mix-case (uid:b4ef2231-ef90-4ba3-a7cc-eb4ed9832392)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -142,7 +142,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with format 3 digits + <space> + 10 digits (uid:c49534fb-d995-41ac-94a6-4b44f23054df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -176,7 +176,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with Format 3 digits + <space> + 8 digits (uid:57d90bfd-b7a5-479a-8ec1-05743cfaa09e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -210,7 +210,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with Format 5 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -244,7 +244,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with Format 6 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -278,7 +278,7 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for PH with Format 9 digits
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"

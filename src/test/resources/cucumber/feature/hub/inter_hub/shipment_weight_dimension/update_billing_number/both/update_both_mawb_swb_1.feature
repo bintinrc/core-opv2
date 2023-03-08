@@ -36,7 +36,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-2-code}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
@@ -64,8 +64,7 @@ Feature: Update Both MAWB & SWB 1
       | originSeahaul      | {local-seaport-1-code}      |
       | destinationSeahaul | {local-seaport-2-code}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
-    Given Operator take note of the existing "SWB"
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -80,7 +79,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
@@ -108,8 +107,7 @@ Feature: Update Both MAWB & SWB 1
       | origin      | {other-airport-name-1} |
       | destination | {other-airport-name-2} |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "MAWB" has updated with new value
-    Given Operator take note of the existing mawb
+    And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -124,7 +122,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create Existing MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
@@ -157,9 +155,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-2-code}      |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
-    Given Operator take note of the existing mawb
-    Given Operator take note of the existing "SWB"
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -174,7 +170,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Vendor
@@ -203,8 +199,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationAirhaul | {local-airport-2-code} |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "MAWB" has updated with new value
-    Given Operator take note of the existing mawb
+    And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -219,7 +214,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Origin Port
@@ -248,8 +243,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationAirhaul | {local-airport-2-code} |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "MAWB" has updated with new value
-    Given Operator take note of the existing mawb
+    And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -264,7 +258,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Destination Port
@@ -286,15 +280,14 @@ Feature: Update Both MAWB & SWB 1
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "MAWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "MAWB" page UI
-    When Operator update billing number "BOTH" information on Shipment Weight Dimension page with following data:
-      | mawb               | RANDOM                 |
-      | airhaulVendor      | {local-vendor-name}    |
-      | originAirhaul      | {local-airport-1-code} |
-      | destinationAirhaul | {local-airport-2-code} |
+    When Operator update billing number "MAWB" information on Shipment Weight Dimension page with following data:
+      | mawb        | RANDOM                 |
+      | vendor      | {local-vendor-name}    |
+      | origin      | {local-airport-1-code} |
+      | destination | {local-airport-2-code} |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "MAWB" has updated with new value
-    Given Operator take note of the existing mawb
+    And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
     And Operator select all data on Shipment Weight Dimension Table
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
@@ -309,7 +302,7 @@ Feature: Update Both MAWB & SWB 1
       | destinationSeahaul | {local-seaport-1-code}        |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
-    And Operator verify Update Billing Number "BOTH" has updated with new value
+    And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
