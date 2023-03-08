@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage;
 import co.nvqa.operator_v2.selenium.page.StationRouteKeywordPage.Coverage;
@@ -114,20 +115,45 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       page.waitUntilLoaded(2);
       page.transferDuplicateKeywordsDialog.waitUntilVisible();
       if (finalData.containsKey("area")) {
-        assertions.assertThat(page.transferDuplicateKeywordsDialog.area.getText()).as("Area")
-            .isEqualToIgnoringCase(finalData.get("area"));
+        String value = finalData.get("area");
+        if (value != null) {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.area.getText()).as("Area")
+              .isEqualToIgnoringCase(finalData.get("area"));
+        } else {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.area.isDisplayed())
+              .withFailMessage("Area is displayed").isFalse();
+        }
       }
       if (finalData.containsKey("primaryDriver")) {
-        assertions.assertThat(page.transferDuplicateKeywordsDialog.primaryDriver.getText())
-            .as("Primary Driver").isEqualTo(finalData.get("primaryDriver"));
+        String value = finalData.get("primaryDriver");
+        if (value != null) {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.primaryDriver.getText())
+              .as("Primary Driver").isEqualTo(finalData.get("primaryDriver"));
+        } else {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.primaryDriver.isDisplayed())
+              .withFailMessage("Primary Driver is displayed").isFalse();
+        }
       }
       if (finalData.containsKey("fallbackDriver")) {
-        assertions.assertThat(page.transferDuplicateKeywordsDialog.fallbackDriver.getText())
-            .as("Fallback Driver").isEqualTo(finalData.get("fallbackDriver"));
+        String value = finalData.get("fallbackDriver");
+        if (value != null) {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.fallbackDriver.getText())
+              .as("Fallback Driver").isEqualTo(finalData.get("fallbackDriver"));
+        } else {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.fallbackDriver.isDisplayed())
+              .withFailMessage("Fallback Driver is displayed").isFalse();
+        }
       }
       if (finalData.containsKey("keyword")) {
-        assertions.assertThat(page.transferDuplicateKeywordsDialog.keyword.getText()).as("Keyword")
-            .isEqualToIgnoringCase(finalData.get("keyword"));
+        String value = finalData.get("keyword");
+        if (value != null) {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.keyword.getText())
+              .as("Keyword")
+              .isEqualToIgnoringCase(finalData.get("keyword"));
+        } else {
+          assertions.assertThat(page.transferDuplicateKeywordsDialog.keyword.isDisplayed())
+              .withFailMessage("Keyword is displayed").isFalse();
+        }
       }
     });
     assertions.assertAll();
@@ -158,8 +184,7 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       Assertions.assertThat(page.areasTable.getRowsCount())
           .withFailMessage("Coverage is not displayed: " + expected).isPositive();
       List<Coverage> actual = page.areasTable.readAllEntities();
-      actual.stream().filter(expected::matchedTo).findFirst()
-          .orElseThrow(() -> new AssertionFailure("Coverage was not found: " + expected));
+      DataEntity.assertListContains(actual, expected, "List of coverages");
     });
   }
 
