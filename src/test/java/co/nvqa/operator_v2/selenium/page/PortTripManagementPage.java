@@ -626,6 +626,24 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     verifyPortFacilitiesTable();
   }
 
+  private void goesHorizontalByTab(PageElement filter, boolean isToTheRight) {
+    final List<PageElement> columnFilters = Arrays.asList(portIdFilter, portCodeFilter,
+        portTypeFilter, portNameFilter, portCityFilter, portRegionFilter,
+        portLatitudeLongitudeFilter);
+    int currentIndex = 4;
+    while (!filter.isDisplayedFast()) {
+      LOGGER.info("Can't find filter, going {}...", isToTheRight ? "right" : "left");
+      columnFilters.get(currentIndex).click();
+      columnFilters.get(currentIndex)
+          .sendKeys(isToTheRight ? Keys.TAB : Keys.chord(Keys.LEFT_SHIFT, Keys.TAB));
+      if (isToTheRight) {
+        currentIndex++;
+      } else {
+        currentIndex--;
+      }
+    }
+  }
+
   public void verifyPortFacilitiesTable() {
     Assertions.assertThat(portIdFilter.isDisplayed())
         .as("Port Id Filter appear in Port list table").isTrue();
@@ -637,13 +655,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Port City Filter appear in Port list table").isTrue();
 
     // Goes right until the rest of the filter is displayed
-    while(!portLatitudeLongitudeFilter.isDisplayedFast()) {
-      LOGGER.info("Can't find latlong filter, going right...");
-      portCityFilter.click();
-      portCityFilter.sendKeys(Keys.TAB);
-      portRegionFilter.click();
-      portRegionFilter.sendKeys(Keys.TAB);
-    }
+    goesHorizontalByTab(portLatitudeLongitudeFilter, true);
 
     Assertions.assertThat(portRegionFilter.isDisplayed())
         .as("Port Region Filter appear in Port list table").isTrue();
@@ -655,6 +667,8 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Edit Port button appear in Port list table").isTrue();
     Assertions.assertThat(disablePortButton.isDisplayed())
         .as("Disable Port button appear in Port list table").isTrue();
+
+    goesHorizontalByTab(portIdFilter, false);
   }
 
   public void createNewPort(Map<String, String> map) {
@@ -744,6 +758,7 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void searchPort(PageElement filter, String value) {
+    goesHorizontalByTab(filter, true);
     clearWebField(filter.getWebElement());
     filter.sendKeys(value);
     pause500ms();
