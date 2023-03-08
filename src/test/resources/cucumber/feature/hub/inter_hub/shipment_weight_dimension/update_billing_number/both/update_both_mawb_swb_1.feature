@@ -5,7 +5,7 @@ Feature: Update Both MAWB & SWB 1
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & New SWB Number with new Vendor, Origin port, and Dest port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -38,7 +38,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -81,7 +81,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -124,7 +124,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create Existing MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -172,7 +172,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Vendor
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -216,7 +216,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Origin Port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -260,7 +260,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Existing MAWB & New SWB Number - Update Airhaul Destination Port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
