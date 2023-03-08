@@ -26,12 +26,12 @@ Feature: Airport Trip Management - Load Trip
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | ABC (Airport);123 (Airport) |
+      | originOrDestination | {local-airport-1-code} (Airport);{local-airport-2-code} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
-      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-      | originOrDestination | ABC (Airport), 123 (Airport)          |
+      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                              |
+      | originOrDestination | {local-airport-1-code} (Airport), {local-airport-2-code} (Airport) |
 
   Scenario: Load Air Haul Trip by Departure Date and Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -41,12 +41,12 @@ Feature: Airport Trip Management - Load Trip
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | CDG (Airport);ERC (Airport) |
+      | originOrDestination | {local-airport-1-code} (Airport);{local-airport-2-code} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
-      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm} |
-      | originOrDestination | CDG (Airport), ERC (Airport)          |
+      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                              |
+      | originOrDestination | {local-airport-1-code} (Airport), {local-airport-2-code} (Airport) |
 
   Scenario: Load Air Haul Trip by Departure Date, Origin and Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -56,12 +56,12 @@ Feature: Airport Trip Management - Load Trip
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | ABC (Airport);CDG (Airport);ERC (Airport) |
+      | originOrDestination | {local-airport-1-code} (Airport);{local-airport-2-code} (Airport);{local-airport-3-code} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}        |
-      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}       |
-      | originOrDestination | ABC (Airport), CDG (Airport), ERC (Airport) |
+      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                                                                |
+      | originOrDestination | {local-airport-1-code} (Airport), {local-airport-2-code} (Airport), {local-airport-3-code} (Airport) |
 
   Scenario: Load Air Haul Trip by Departure Date and 4 Origin/Destination Facilities
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -71,13 +71,13 @@ Feature: Airport Trip Management - Load Trip
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}  |
       | endDate   | {date: 1 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | ABC (Airport);123 (Airport);CDG (Airport);ERC (Airport) |
+      | originOrDestination | {local-airport-1-code} (Airport);{local-airport-2-code} (Airport);{local-airport-3-code} (Airport);{local-disabled-airport-code} (Airport) |
     And Verify operator cannot fill more than 4 Origin Or Destination for Port Management
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}                       |
-      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                      |
-      | originOrDestination | ABC (Airport), 123 (Airport), CDG (Airport), ERC (Airport) |
+      | endDate             | {date: 1 days next, yyyy-MM-dd-HH-mm}                                                                                                         |
+      | originOrDestination | {local-airport-1-code} (Airport), {local-airport-2-code} (Airport), {local-airport-3-code} (Airport), {local-disabled-airport-code} (Airport) |
 
   Scenario: Load Air Haul Trip by 1 month range Departure Date
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -87,14 +87,14 @@ Feature: Airport Trip Management - Load Trip
       | startDate | {date: 1 days ago, yyyy-MM-dd-HH-mm}   |
       | endDate   | {date: 28 days next, yyyy-MM-dd-HH-mm} |
     When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | ABC (Airport);123 (Airport);CDG (Airport);ERC (Airport) |
+      | originOrDestination | {local-airport-1-code} (Airport);{local-airport-2-code} (Airport);{local-airport-3-code} (Airport);{local-disabled-airport-code} (Airport) |
     And Operator click on 'Load Trips' on Port Management
     Then Verify the parameters of loaded trips in Port Management
       | startDate           | {date: 1 days ago, yyyy-MM-dd-HH-mm}                       |
-      | endDate             | {date: 28 days next, yyyy-MM-dd-HH-mm}                     |
-      | originOrDestination | ABC (Airport), 123 (Airport), CDG (Airport), ERC (Airport) |
+      | endDate             | {date: 28 days next, yyyy-MM-dd-HH-mm}                                                                                                        |
+      | originOrDestination | {local-airport-1-code} (Airport), {local-airport-2-code} (Airport), {local-airport-3-code} (Airport), {local-disabled-airport-code} (Airport) |
 
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
