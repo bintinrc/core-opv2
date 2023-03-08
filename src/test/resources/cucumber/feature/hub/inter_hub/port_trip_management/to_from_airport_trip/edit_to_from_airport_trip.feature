@@ -29,7 +29,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator edit data on Edit Trip Port Trip Management page:
@@ -74,7 +74,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator edit data on Edit Trip Port Trip Management page:
@@ -119,7 +119,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator edit data on Edit Trip Port Trip Management page:
@@ -164,7 +164,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator edit data on Edit Trip Port Trip Management page:
@@ -209,7 +209,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator edit data on Edit Trip Port Trip Management page:
@@ -254,7 +254,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip page
@@ -300,7 +300,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
@@ -346,7 +346,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator verify "expired" license driver "{expired-driver-username}" is not displayed on Create Airport Trip page
@@ -392,7 +392,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    When Operator open edit airport trip Port Trip Management page with data below:
+    When Operator open edit airport trip on Port Trip Management page with data below:
       | tripID   | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} |
       | tripType | ToFrom Airport Trip                        |
     And Operator verify "expired" license driver "{inactive-driver-username}" is not displayed on Create Airport Trip page
