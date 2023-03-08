@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @PortSearchTrip1
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @AirportSearchTrip1
 Feature: Airport Trip Management - Search Airport Trip 1
 
   @LaunchBrowser @ShouldAlwaysRun
