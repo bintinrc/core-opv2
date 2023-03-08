@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @CompleteToFromPortTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @PortTripManagement @CompleteToFromAirportTrip
 Feature: Airport Trip Management - Complete To From Airport Trip
 
   @LaunchBrowser @ShouldAlwaysRun
