@@ -4,7 +4,16 @@ import co.nvqa.common.utils.RandomUtil;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.selenium.page.sns.LiveChatAdminDashboardPage;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.api.Assertions;
+import org.openqa.selenium.WebElement;
 
 @ScenarioScoped
 public class LiveAgentSteps extends AbstractSteps {
@@ -37,7 +46,96 @@ public class LiveAgentSteps extends AbstractSteps {
   public void updateLiveAgent() {
     String randomString = RandomUtil.randomString(5);
     String fullName = "testing user " + randomString;
+    page.inFrame(() -> {
+      page.updateLiveChatAgent(fullName, null);
+    });
+  }
 
-    page.updateLiveChatAgent(fullName, null);
+  @Then("Delete live agent")
+  public void deleteLiveAgent() {
+    page.inFrame(() -> {
+      page.deleteCreatedLiveChatAgent();
+    });
+  }
+
+  @Then("Verify agent deleted successfully")
+  public void verifyAgentDeletedSuccessfully() {
+    page.inFrame(() -> {
+      page.verifyLiveAgentDeletedSuccessfully();
+    });
+  }
+
+  @Then("Verify agent list is visible")
+  public void verifyAgentListIsVisible() {
+    page.inFrame(() -> {
+      page.agents.get(0).verifyAgentListIsVisible();
+    });
+  }
+
+  @When("Open holidays popup")
+  public void openHolidaysPopup() {
+    page.inFrame(() -> {
+      page.update.waitUntilVisible();
+      page.update.click();
+    });
+  }
+
+  @Then("Verify operating hour modal")
+  public void verifyOperatingHourModal() {
+    pause5s();
+    page.inFrame(() -> {
+      page.operatingHourModal.verifyOperatingHourModal();
+    });
+  }
+
+  @When("Save operating hour modal and verify modal closes")
+  public void saveOperatingHourModal(Map<String, String> data) {
+    page.inFrame(() -> {
+      pause5s();
+      page.operatingHourModal.save.click();
+      // page.operatingHourModal.notification.message.waitUntilVisible();
+      String header = page.notification.message.getAttribute("innerText");
+      Assertions.assertThat(header)
+          .as("show correct header message :" + data.get("top"))
+          .isEqualTo(data.get("top"));
+    });
+  }
+
+  @And("Goto {string} section")
+  public void gotoSection(String sectionName) {
+    page.inFrame(() -> {
+      page.shipperSupportTab.waitUntilVisible();
+      page.elementIndexForLiveAgentPage = sectionName.contains("Customer") ? 0 : 1;
+      page.shipperSupportTab.click();
+    });
+  }
+
+  @Then("Delete live agent with name {string}")
+  public void deleteLiveAgentWithName(String fullName) {
+    page.inFrame(() -> {
+      page.deleteLiveChatAgentWithName(fullName);
+    });
+  }
+
+  @Then("Verify agent deleted successfully with name {string}")
+  public void verifyAgentDeletedSuccessfully(String fullName) {
+    page.inFrame(() -> {
+      page.verifyLiveAgentDeletedSuccessfullyWithName(fullName);
+    });
+  }
+
+  @Then("Create live agent with email and username with below data:")
+  public void createLiveAgent(Map<String, String> mapOfData) {
+    String randomString = RandomUtil.randomString(5);
+    String fullName = Objects.isNull(mapOfData.get("fullName")) ? ("testing user " + randomString)
+        : mapOfData.get("fullName");
+    String email =
+        Objects.isNull(mapOfData.get("email")) ? ("testinguser" + randomString + "@gmail.com")
+            : mapOfData.get("email");
+    ;
+    page.inFrame(() -> {
+      page.createLiveChatAgent(fullName, email);
+    });
   }
 }
+

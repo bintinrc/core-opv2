@@ -1,24 +1,22 @@
 package co.nvqa.operator_v2.selenium.page.sns;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDashboardPage> {
-
 
   public static String AGENT_NAME;
   // 0 for customer and 1 for shipper
@@ -30,7 +28,7 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @FindBy(xpath = "//div[.='Customer support']")
   public PageElement customerSupportTab;
 
-  @FindBy(xpath = "//div[.='Shipper support']")
+  @FindBy(xpath = "//div[@role='tab'][text()='Shipper support']")
   public PageElement shipperSupportTab;
 
   @FindBy(xpath = "//div[@class='ant-modal-wrap' and not(@style='display: none;')]")
@@ -39,11 +37,26 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
   @FindBy(xpath = "//input[@placeholder='Search by name or email']")
   public ForceClearTextBox searchInputFields;
 
+  @FindBy(xpath = "//*[@id='rc-tabs-0-panel-2']//input[@placeholder='Search by name or email']")
+  public ForceClearTextBox searchShipperSupport;
+
   @FindBy(css = "tbody > tr.ant-table-row")
   public List<AgentRow> agents;
 
-  @FindBy(xpath = "//td/div/div[1]/button[@class='ant-btn ant-btn-icon-only']")
-  public List<Button> updateBtns;
+  @FindBy(xpath = "//div[@class='ant-modal-wrap' and not(@style='display: none;')]")
+  public DeleteDialog deleteDialog;
+
+  @FindBy(xpath = "//table//div[text()='No Data']")
+  public PageElement noDataMessage;
+
+  @FindBy(xpath = "//span[text()='Update']")
+  public PageElement update;
+
+  @FindBy(xpath = "//div[@class='ant-modal-mask'and not(@style='display: none;')]")
+  public OperatingHourModal operatingHourModal;
+
+  @FindBy(css = ".ant-notification")
+  public AntNotification notification;
 
   public LiveChatAdminDashboardPage(WebDriver webDriver) {
     super(webDriver);
@@ -58,56 +71,77 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
     addNewAgentButton.click();
     waitUntilVisibilityOfElementLocated(addShipperSupportAgentModal.getWebElement());
     AGENT_NAME = fullName;
+    waitUntilLoaded();
     fillAndSaveLiveChatAgentDetails(fullName, email);
     addShipperSupportAgentModal.waitUntilInvisible();
   }
 
-
   private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
-    addShipperSupportAgentModal.waitUntilVisible();
     addShipperSupportAgentModal.fillAndSaveLiveChatAgentDetails(fullName, email);
-    addShipperSupportAgentModal.waitUntilInvisible();
   }
 
-  //  private void fillAndSaveLiveChatAgentDetails(String fullName, String email) {
-//    if (Objects.nonNull(fullName)) {
-//      WebElement fullNameElement = findElementByXpath("(//div[@class='ant-modal-wrap' and not(@style='display: none;')]//*[text()='Full name']//parent::div//following::div/input)[1]");
-//      clearWebField(fullNameElement);
-//      sendKeys(fullNameElement, fullName);
-//    }
-//
-//    if (Objects.nonNull(email)) {
-//      WebElement emailElement = findElementByXpath("(//div[@class='ant-modal-wrap' and not(@style='display: none;')]//*[text()='Email']//parent::div//following::div/input)[1]");
-//      clearWebField(emailElement);
-//      sendKeys(emailElement, email);
-//    }
-//
-//    simpleClick("//div[@class='ant-modal-wrap' and not(@style='display: none;')]//*[text()='OK']//parent::button");
-//  }
   public void verifyLiveAgentAddedSuccessfully() {
-    waitUntilLoaded();
-    searchInputFields.setValue(AGENT_NAME);
-    //sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), this.AGENT_NAME);
+    if (this.elementIndexForLiveAgentPage == 0) {
+      searchInputFields.setValue(AGENT_NAME);
+    } else {
+      searchShipperSupport.setValue(AGENT_NAME);
+    }
     String addedAgentRowXpath = f("//td[text()='%s']", this.AGENT_NAME);
     String actualName = getText(addedAgentRowXpath);
-    Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present").isTrue();
+    Assertions.assertThat(actualName.equalsIgnoreCase(this.AGENT_NAME)).as("Full name is present")
+        .isTrue();
   }
 
   public void updateLiveChatAgent(String fullName, String email) {
     pause5s();
-    switchToFrame("//iframe");
-    //  List<WebElement> searchInputFields = findElementsByXpath("//input[@placeholder='Search by name or email']");
-    // clearWebField(searchInputFields.get(elementIndexForLiveAgentPage));
-    //sendKeys(searchInputFields.get(elementIndexForLiveAgentPage), "testinguser");
     searchInputFields.setValue("testinguser");
     // click update button
-    // List<WebElement> updateButtons = findElementsByXpath(
-    //   "//td/div/div[1]/button[@class='ant-btn ant-btn-icon-only']");
+    pause3s();
     int updateButtonIndexToClick =
-        elementIndexForLiveAgentPage == 0 ? 0 : (updateBtns.size() - 1);
-    updateBtns.get(updateButtonIndexToClick).click();
+        elementIndexForLiveAgentPage == 0 ? 0
+            : (agents.get(elementIndexForLiveAgentPage).updateButtons.size() - 1);
+    agents.get(elementIndexForLiveAgentPage).updateButtons.get(updateButtonIndexToClick).click();
     this.AGENT_NAME = Objects.nonNull(fullName) ? fullName : email;
     fillAndSaveLiveChatAgentDetails(fullName, email);
+  }
+
+  public void deleteCreatedLiveChatAgent() {
+    pause5s();
+    if (Objects.isNull(this.AGENT_NAME)) {
+      this.AGENT_NAME = "testinguser";
+    }
+    searchInputFields.setValue(this.AGENT_NAME);
+
+    pause1s();
+    agents.get(elementIndexForLiveAgentPage).deleteButtons.get(
+        agents.get(elementIndexForLiveAgentPage).deleteButtons.size() - 1).click();
+    pause2s();
+    deleteDialog.verifyDeleteDialogBox("customer");
+  }
+
+  public void verifyLiveAgentDeletedSuccessfully() {
+    searchInputFields.setValue(this.AGENT_NAME);
+    Assertions.assertThat(noDataMessage.getText().equalsIgnoreCase("No Data"))
+        .as("Live agent is deleted")
+        .isTrue();
+  }
+
+  public void deleteLiveChatAgentWithName(String fullName) {
+    searchShipperSupport.waitUntilVisible();
+    searchShipperSupport.setValue(fullName);
+    pause1s();
+    this.AGENT_NAME = fullName;
+    agents.get(elementIndexForLiveAgentPage).deleteButtons.get(
+        agents.get(elementIndexForLiveAgentPage).deleteButtons.size() - 1).click();
+    pause2s();
+    deleteDialog.verifyDeleteDialogBox("shipper");
+  }
+
+  public void verifyLiveAgentDeletedSuccessfullyWithName(String fullName) {
+    searchShipperSupport.setValue(fullName);
+    Assertions.assertThat(noDataMessage.getText().equalsIgnoreCase("No Data"))
+        .as("Live agent is deleted")
+        .isTrue();
   }
 
 
@@ -144,8 +178,114 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
     @FindBy(xpath = "//td[text()='%s']")
     public PageElement addedAgentRow;
 
+    @FindBy(xpath = "//td/div/div[1]/button[@class='ant-btn ant-btn-icon-only']")
+    public List<Button> updateButtons;
+
+    @FindBy(xpath = "//td/div/div[2]/button[@class='ant-btn ant-btn-icon-only']")
+    public List<Button> deleteButtons;
+
+    @FindBy(xpath = "//tr[contains(@class, 'ant-table-row')]")
+    public List<PageElement> tableRows;
+
+    public void verifyAgentListIsVisible() {
+      pause5s();
+      Assertions.assertThat(tableRows.size() > 0).as("Live agent list is visible").isTrue();
+    }
+
     public AgentRow(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
+    }
+  }
+
+  public static class DeleteDialog extends AntModal {
+
+    @FindBy(xpath = "//div[@class='ant-modal-header']/div[@class='ant-modal-title' and contains(., 'Delete')]")
+    public PageElement title;
+
+    @FindBy(css = "div.ant-modal-body >p")
+    public PageElement description;
+
+    @FindBy(xpath = "//*[contains(text(), 'Delete')]//ancestor::div[@class='ant-modal-content']//*[text()='OK']//parent::button")
+    public Button okButton;
+
+    public DeleteDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public void verifyDeleteDialogBox(String supportType) {
+      pause5s();
+      Assertions.assertThat(title.getAttribute("innerText")).as("delete dialog title")
+          .isEqualTo("Delete a " + supportType + " support agent");
+      pause3s();
+      Assertions.assertThat(description.getAttribute("innerText")).as("delete dialog description")
+          .contains("Warning: you will permanently delete " + AGENT_NAME);
+      pause2s();
+      okButton.click();
+    }
+  }
+
+  public static class OperatingHourModal extends AntModal {
+
+    @FindBy(xpath = "//div[@id='rcDialogTitle0']")
+    public PageElement modalHeading;
+
+    @FindBy(xpath = "//div[@class='ant-modal-body']//input[@type='checkbox']")
+    public List<CheckBox> checkboxes;
+
+    @FindBy(xpath = "//div[@class='ant-modal-body']//input[@placeholder='Select time']")
+    public List<PageElement> timeInputBox;
+
+    @FindBy(xpath = "//div[@class='ant-space-item']//input[@placeholder='Select date']")
+    public PageElement selectDate;
+
+    @FindBy(xpath = "//td[contains(@class, 'ant-picker-cell-today')]")
+    public PageElement selectHoliday;
+
+    @FindBy(xpath = "//div[text()='Holiday Added']")
+    public PageElement notificationMessage;
+
+    @FindBy(xpath = "//span[text()='Add Holiday']")
+    public PageElement addHoliday;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='ant-card-body']")
+    public PageElement holidayDatesSection;
+
+    @FindBy(xpath = "//div[@class='ant-modal-body']//input[@placeholder='Select date']")
+    public PageElement selectedDate;
+
+    @FindBy(xpath = "//span[text()='Save']")
+    public Button save;
+
+    public String removeSpecificDate = "//*[contains(text(), '%s')]//*[contains(@class, 'anticon-close')]";
+
+    public OperatingHourModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+
+    public void verifyOperatingHourModal() {
+      pause2s();
+      selectDate.click();
+      pause2s();
+      selectHoliday.click();
+      addHoliday.click();
+      pause2s();
+      Assertions.assertThat(notificationMessage.isDisplayed())
+          .as("'Holiday Added' popup is visible");
+      pause2s();
+      Assertions.assertThat(
+              modalHeading.getText().equalsIgnoreCase("Update live chat operating hours and holidays"))
+          .as("Modal heading is correct").isTrue();
+      Assertions.assertThat(checkboxes.size() == 7).as("Checkboxes are present for all days")
+          .isTrue();
+      Assertions.assertThat(timeInputBox.size() == 14)
+          .as("Each day has 'from' and 'to' time dropdown").isTrue();
+      pause2s();
+      Assertions.assertThat(holidayDatesSection.getAttribute("innerText")
+              .contains(selectedDate.getAttribute("value")))
+          .as("Selected date is added in list of holidays").isTrue();
+      pause1s();
+      click(f(removeSpecificDate,
+          selectedDate.getAttribute("value")));
     }
   }
 }
