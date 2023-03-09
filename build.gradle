@@ -63,7 +63,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     implementation "co.nvqa:common-base:1.2.4"
-    implementation "co.nvqa:common-ui:1.2.1"
+    implementation "co.nvqa:common-ui:1.2.3"
     implementation "co.nvqa:common-ordercreate:1.2.3"
     implementation "co.nvqa:common-driver:1.2.3"
     implementation "co.nvqa:common-corev2:1.2.6"
