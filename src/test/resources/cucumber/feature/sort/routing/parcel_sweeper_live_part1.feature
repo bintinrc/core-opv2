@@ -23,7 +23,7 @@ Feature: Parcel Sweeper Live
       | hubName | -       |
       | color   | #e86161 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Parcel Sweeper Live - Pending Pickup (uid:2c161a4a-6452-4c70-8fb1-1bfc8f059ba3)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Parcel Sweeper Live
@@ -92,7 +92,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Van en-route to pickup" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt unrouted (uid:27d72aac-23ad-4111-8b9f-e2a10c727f62)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -132,7 +132,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date = today (uid:ca0f7cf5-13ac-4265-934d-052136902ec7)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -182,7 +182,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date = today (uid:2cc6f8a6-d783-46dd-8408-19f2de63dadd)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -227,7 +227,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date is NOT today (uid:a7076aa8-6f42-4255-b5ac-1cc0aa79e3dd)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -268,7 +268,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date is NOT today (uid:6ef626ff-51d4-456d-9fb3-b0de0714dae1)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -357,7 +357,7 @@ Feature: Parcel Sweeper Live
       | Late Priority (2 - 90) | uid:5c2ba0db-4564-472d-b665-e6a394b0ecee | 50            | #e29d4a                 | Late Priority (2 - 90) |
       | Urgent Priority (91++) | uid:f357f17a-ac88-416f-80c3-e50484c41f4b | 100           | #c65d44                 | Urgent Priority (91++) |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Parcel Sweeper Live - RTS Order (uid:b2541a22-8243-41bf-8210-b558c83fb4be)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -401,7 +401,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - On Hold Order - NON-MISSING TICKET (uid:481ea9da-b9bd-4718-a73d-04fcd515f80a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -468,7 +468,7 @@ Feature: Parcel Sweeper Live
     And DB Operator verify ticket status
       | status | 1 |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @happy-path
   Scenario: Parcel Sweeper Live - On Hold Order - Resolve PENDING MISSING Ticket (uid:85edd7d1-f479-471a-bd26-563d387ca91e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

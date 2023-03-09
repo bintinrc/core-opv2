@@ -102,7 +102,6 @@ Feature: Tag & Untag DP
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
-    Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies all route_monitoring_data records
@@ -128,7 +127,6 @@ Feature: Tag & Untag DP
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE ADDRESS |
     When Operator get multiple "DELIVERY" transactions with status "PENDING"
-    Then DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
 

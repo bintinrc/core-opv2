@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.common.mm.model.persisted_class.HubShipmentSummary;
+import co.nvqa.common.mm.model.persisted_class.HubShipmentSummaries;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -116,7 +116,7 @@ public class MiddleMileHomepagePage extends OperatorV2SimplePage {
         .isEqualTo(dbShipmentsTotal);
   }
 
-  public void verifySortedDataByColumn(String column, List<HubShipmentSummary> orderedHubShipmentSummaries) {
+  public void verifySortedDataByColumn(String column, List<HubShipmentSummaries> orderedHubShipmentSummaries) {
     String resolvedColumn;
     switch (column) {
       case "shipments_24h_48h_count" :

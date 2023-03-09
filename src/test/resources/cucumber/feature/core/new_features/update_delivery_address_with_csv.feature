@@ -148,8 +148,8 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | toAddressLatitude | toAddressLongitude | toPhoneNumber | toAddressAddress2 |
       | {KEY_CREATED_ORDER_TRACKING_ID} | empty             | 1.2860-17          | empty         | empty             |
     Then Operator verify validation statuses on Update Delivery Address with CSV page:
-      | trackingId                      | status                                                                                                                                         |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.phone_number, to.address.address2, Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
+      | trackingId                      | status                                                                                                                                                |
+      | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.phone_number, to.address.address2, Invalid entry '1.2860-17' for to.address.longitude, Invalid entry '' for to.address.latitude |
 
   Scenario Outline: Bulk Update Order Delivery Address with CSV - Fail to Update Lat Long - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
@@ -164,11 +164,11 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status   |
       | {KEY_CREATED_ORDER_TRACKING_ID} | <status> |
     Examples:
-      | Note                | lat          | long          | status                                                                                |
-      | Lat Long Has String | 1.317219a344 | 103.925993?32 | Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
-      | Lat Long Has Dash   | -            | -             | Invalid entry {x} for to.address.longitude, Invalid entry {x} for to.address.latitude |
-      | Lat Is Empty        | empty        | 103.886438    | Invalid entry {x} for to.address.latitude                                             |
-      | Long Is Empty       | 1.369953     | empty         | Invalid entry {x} for to.address.longitude                                            |
+      | Note                | lat          | long          | status                                                                                                       |
+      | Lat Long Has String | 1.317219a344 | 103.925993?32 | Invalid entry '103.925993?32' for to.address.longitude, Invalid entry '1.317219a344' for to.address.latitude |
+      | Lat Long Has Dash   | -            | -             | Invalid entry '-' for to.address.longitude, Invalid entry '-' for to.address.latitude                        |
+      | Lat Is Empty        | empty        | 103.886438    | Invalid entry '' for to.address.latitude                                                                     |
+      | Long Is Empty       | 1.369953     | empty         | Invalid entry '' for to.address.longitude                                                                    |
 
   Scenario: Bulk Update Order Delivery Address with CSV - Lat Long is Empty
     Given Operator go to menu Utilities -> QRCode Printing

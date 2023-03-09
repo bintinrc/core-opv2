@@ -5,7 +5,7 @@ Feature: Global Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound On Hold Order - DO NOT Resolve NON-MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
@@ -438,7 +438,7 @@ Feature: Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify Delivery "HUB INBOUND SCAN" order event description on Edit order page
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Order Tagging with Global Inbound - Total tags is less/equal 4 (uid:0e043740-9f44-45ae-94a3-94f6987c45ad)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -489,7 +489,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Inbound Parcel With Prior Tag (uid:ac8ca197-533b-4e1a-bf13-b429d44bd93c)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

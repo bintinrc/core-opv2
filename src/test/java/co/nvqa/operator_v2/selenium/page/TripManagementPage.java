@@ -19,7 +19,6 @@ import co.nvqa.operator_v2.util.TestUtils;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -1024,7 +1023,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
   public void selectCancellationReason() {
     // Create random integer from 1 to 6 and click nth option based on it
     String cancellationMessage = String.format(TRIP_CANCEL_PAGE_MESSAGE_XPATH, new Random().nextInt(5) + 1);
-    cancellationReasonInput.waitUntilVisible();
+    cancellationReasonInput.waitUntilClickable();
     cancellationReasonInput.click();
     waitUntilElementIsClickable(cancellationMessage);
     click(cancellationMessage);

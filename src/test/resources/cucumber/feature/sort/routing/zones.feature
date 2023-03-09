@@ -129,7 +129,7 @@ Feature: Zones
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
     When Operator creates "RTS" zone using "{hub-name}" hub
-    And Operator click View Selected Polygons for zone name "{KEY_CREATED_ZONE.name}"
+    And Operator click View Selected Polygons for zone short name "{KEY_CREATED_ZONE.shortName}"
     And Operator click RTS Zones in zone drawing page
     And Operator click Create Polygon in zone drawing page
     And Operator click Set Coordinates in zone drawing page

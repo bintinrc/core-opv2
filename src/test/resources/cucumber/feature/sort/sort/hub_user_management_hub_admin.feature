@@ -40,6 +40,17 @@ Feature: Hub User Management
       | check    | Added               |
       | username | {add-hub-user-name} |
 
+  Scenario: Station Admin Specific Edit User button on Hub User Management Landing Page - Edit User - Remove Staff
+    When Operator refresh page
+    When Operator go to menu Sort -> Hub User Management
+    When Hub User admin click edit user button
+    When Hub User search "{add-hub-user-email}" hub user email
+    When Operator click on remove user button on user modal
+    Then Operator verifies "remove" user modal for Station Admin flow is shown
+    When Operator click on remove button on remove user modal
+    Then Operator verifies that success react notification displayed in Hub User Management Page:
+      | top | Successfully removed {add-hub-user-email} |
+
   Scenario:Hub User Management (Station Admin Flow)  - Edit Staff Hub User
     When Operator refresh page
     When Operator go to menu Sort -> Hub User Management
@@ -84,4 +95,22 @@ Feature: Hub User Management
     Then Operator verifies that error react notification displayed in Hub User Management Page:
       | top    | User not found                                   |
       | bottom | Please try again with correct email or username. |
+
+  Scenario: Station Admin Specific Edit User button on Hub User Management Landing Page - Edit User - Not Able to Remove Admin Role
+    When Operator refresh page
+    When Operator go to menu Sort -> Hub User Management
+    When Hub User admin click edit user button
+    When Hub User search "{hub-user-admin-email}" hub user email
+    Then Operator verifies "edit" user modal for Station Admin flow is shown
+    Then Operator verifies remove user button is not exist
+
+  Scenario:Hub User Management - Edit Hub User  - Should not be Able to Remove Station Admin
+    When Operator refresh page
+    When Operator go to menu Sort -> Hub User Management
+    When Operator search "{station-hub-name-2}" hub name
+    When Operator click edit button "{station-hub-id-2}" on Hub User Management Page
+    When Operator search "{hub-user-admin-name}" username with "{hub-user-admin-role}" role
+    When Operator click edit view user "{hub-user-admin-id}" navigation button on Hub User Management Page
+    Then Operator verifies "edit" user modal for Station Admin flow is shown
+    Then Operator verifies remove user button is not exist
 

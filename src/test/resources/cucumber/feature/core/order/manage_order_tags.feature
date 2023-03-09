@@ -65,7 +65,7 @@ Feature: Manage Order Tags
       | bottom | Order Tag with Name AAA is already in use! |
 
   @DeleteOrderTags
-  Scenario: Operator Fail Create Duplicate Order Tag
+  Scenario: Operator Fail Delete Order Tag - Not Found
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new order tag:
       | name        | AAA                                                                               |

@@ -6,7 +6,7 @@ Feature: Update MAWB 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 10 digits number (uid:a1c09149-7a6a-4403-bb3e-d7480fe91db8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -40,7 +40,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 15 lower-case (uid:7df127c1-3d5e-40cd-a886-99bbe764a42a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -74,7 +74,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 15 mix-case (uid:9af82468-0f27-402e-82e9-994bda816fec)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -108,7 +108,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 15 upper-case (uid:08fa3dbb-dd67-4b3f-9da1-f9834c6ba3f3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -142,7 +142,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 16 lower-case (uid:fe19712f-5aed-4a80-b9c8-b13e506af407)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -176,7 +176,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 16 mix-case (uid:c39b4e12-c498-44a6-8d61-bae6a1212030)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -210,7 +210,7 @@ Feature: Update MAWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for MY with format 16 upper-case (uid:3184c052-d73b-4f18-a26c-8ddead59b61c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
