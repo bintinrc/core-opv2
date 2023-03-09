@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring @NewFeatures1 @current
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring @NewFeatures1
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -794,7 +794,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | Completed          | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | Pending Reschedule | {hub-name}     | {KEY_CREATED_ROUTE_ID} | {gradle-current-date-yyyy-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDER[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @DeleteOrArchiveRoute @wip
+  @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator Partial Success To Pull Out Multiple Orders from Multiple Routes on Outbound Breakroute V2 Page - Pending State & Non-Pending State Delivery (uid:bd01f24e-18ad-45e4-8f33-46ab5acb7324)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
