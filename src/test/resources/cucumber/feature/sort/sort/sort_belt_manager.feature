@@ -6,8 +6,8 @@ Feature: Sort Belt Manager V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Activate Logic On Sort Belt Manager V2
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -33,8 +33,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: Activate Logic On Sort Belt Manager V2 - Logic Is Active
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -63,8 +63,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Create/Edit Logic Section - Create New
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -86,8 +86,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Create/Edit Logic Section - Create A Copy
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -129,8 +129,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Create/Edit Logic Section - Edit Logic
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -172,8 +172,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Create/Edit Logic Section - Filter Exceeds 4 Items
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -190,8 +190,8 @@ Feature: Sort Belt Manager V2
     Then Operator make sure redirected to Sort Belt Manager main page
 
   Scenario: SBMV2UI Create/Edit Logic Section - Empty Mandatory Fields
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -201,8 +201,8 @@ Feature: Sort Belt Manager V2
     And Operator make sure can not create logic
 
   Scenario: SBMV2UI Create/Edit Logic Section - 0 Unassigned Arms
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     And Operator selects hub "JKB" and device "AUTOMATION-DONT-USE-0" of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -211,8 +211,8 @@ Feature: Sort Belt Manager V2
     And Operator make sure there are no arms available
 
   Scenario: SBMV2UI Create/Edit Logic Section - Cancel On Changes
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     And Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -228,8 +228,8 @@ Feature: Sort Belt Manager V2
     Then Operator make sure redirected to Sort Belt Manager main page
 
   Scenario: SBMV2UI Check Logic Section - Arms With No Rules
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -251,8 +251,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Check Logic Section - Multiple Arms With Same Rules
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -275,8 +275,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Check Logic Section - Unique Rules And Arms
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -299,8 +299,8 @@ Feature: Sort Belt Manager V2
     And DB Operator hard deletes created logic
 
   Scenario: SBMV2UI Check Logic Section - Duplicate Rules
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page
@@ -323,8 +323,8 @@ Feature: Sort Belt Manager V2
     And DB Operator make sure sort belt manager logic is not created
 
   Scenario: SBMV2UI Check Logic Section - Conflicting Shipment Destination And Type
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Sort -> Sort Belt Manager
-    And Operator refresh page v1
     And Sort Belt Manager page is loaded
     When Operator selects hub and device of Sort Belt Manager
     Then Operator make sure redirected to Sort Belt Manager main page

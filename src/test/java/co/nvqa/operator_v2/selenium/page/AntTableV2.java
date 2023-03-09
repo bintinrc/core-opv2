@@ -11,6 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -22,10 +23,11 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   private static final String CELL_LOCATOR_PATTERN = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='%s']";
   private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='%s']";
-  private static final String COLUMN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input]";
+  private static final String COLUMN_TEXT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input[@type='text']]";
   private static final String COLUMN_FILTER_LOCATOR_PATTERN_V2 = "//div[@role='gridcell'][@data-key='%s']//div[./input]";
   private static final String CELL_LOCATOR_PATTERN_V2 = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][%d]";
   private static final String COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'ant-select')]";
+  private static final String COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'FilterSelect')]";
 
   @FindBy(xpath = ".//div[contains(@class, 'footer-row')][.='No Results Found']")
   public PageElement noResultsFound;
@@ -108,13 +110,24 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       AntSelect2 select = new AntSelect2(getWebDriver(), xpath);
       select.selectValue(value);
     } else {
-      xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+      xpath = f(COLUMN_TEXT_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
-      AntTextBox input = new AntTextBox(getWebDriver(), xpath);
-      input.scrollIntoView();
-      input.setValue(value);
+      if (isElementExistWait0Second(xpath)) {
+        AntTextBox input = new AntTextBox(getWebDriver(), xpath);
+        input.scrollIntoView();
+        input.setValue(value);
+      } else {
+        xpath = f(COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN, columnLocators.get(columnId));
+        if (isElementExistWait0Second(xpath)) {
+          click(xpath);
+          new AntTextBox(getWebDriver(),
+              "//*[./input[@placeholder='Search or Select']]").setValue(value + Keys.ENTER);
+          click(xpath);
+        }
+      }
+
     }
     return this;
   }
@@ -141,13 +154,20 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
 
   public void clearColumnFilters() {
     getColumnLocators().values().forEach(value -> {
-      String xpath = f(COLUMN_FILTER_LOCATOR_PATTERN, value);
+      String xpath = f(COLUMN_TEXT_FILTER_LOCATOR_PATTERN, value);
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
       }
       if (isElementExistWait0Second(xpath)) {
         AntTextBox input = new AntTextBox(getWebDriver(), xpath);
         input.clear();
+      } else {
+        xpath = f(COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN, columnLocators.get(value));
+        if (isElementExistWait0Second(xpath)) {
+          click(xpath);
+          click("//ul//span[.='Clear All']");
+          click(xpath);
+        }
       }
     });
   }

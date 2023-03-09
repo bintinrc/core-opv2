@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.BatchOrderInfo;
 import co.nvqa.commons.model.core.BulkOrderInfo;
@@ -273,9 +274,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-" + dateUniqueString);
     mapOfDynamicVariable.put("TIMESTAMP", dateUniqueString);
     mapOfDynamicVariable
-        .put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
+        .put("RANDOM_LATITUDE", String.valueOf(StandardTestUtils.generateLatitude()));
     mapOfDynamicVariable
-        .put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
+        .put("RANDOM_LONGITUDE", String.valueOf(StandardTestUtils.generateLongitude()));
 
     setPhoneNumber(mapOfDynamicVariable, country);
 

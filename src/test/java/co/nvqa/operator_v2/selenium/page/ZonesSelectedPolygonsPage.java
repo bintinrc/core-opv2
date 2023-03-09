@@ -52,14 +52,20 @@ public class ZonesSelectedPolygonsPage extends SimpleReactPage {
   @FindBy(xpath = "//strong[@data-testid='zone-drawing-title']")
   public PageElement zoneDrawingHeader;
 
-  @FindBy(xpath = "//button[@data-testid='zone-drawing-save-button']")
-  public Button saveZoneDrawingButton;
+  @FindBy(css = "[data-testid='zone-drawing-save-button']")
+  public PageElement saveZoneDrawingButton;
 
   @FindBy(xpath = "//div[@class='ant-modal-title' and text()='Save Confirmation']")
   public PageElement saveConfirmationDialog;
 
   @FindBy(xpath = "//div[@class='ant-modal-footer']//span[@aria-label='check']/parent::button")
   public PageElement saveConfirmationDialogSaveButton;
+
+  @FindBy(css = ".ant-btn-loading-icon")
+  public PageElement loadingIcon;
+
+  @FindBy(xpath = "//button//span[text()='Set']")
+  public PageElement confirmSetCoordinate;
 
   @FindBy(xpath = ".//button[.//*[@data-icon='map-marker-alt']]")
   public PageElement setCoordinate;
