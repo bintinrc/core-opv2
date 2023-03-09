@@ -19,9 +19,11 @@ import com.google.common.collect.ImmutableMap;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
@@ -605,6 +607,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]//ancestor::li[contains(@class,'ant-dropdown-menu-item')]")
     public PageElement removeRouteMenuItem;
 
+    @FindBy(xpath = "//div[contains(text(),'Clear All')]")
+    public PageElement dropDownClearAll;
+
+    @FindBy(css = "div[data-testid='filterInput.status']")
+    public PageElement jobStatusDropDown;
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
@@ -619,7 +626,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String PICKUP_JOB_ROW_TAGS = "//span[contains(@class,'ant-tag') and contains(text(),'%s')]";
     public static final String BULK_UPDATE_ITEMS = "//div[contains(@class,'ant-dropdown') and not(contains(@class,'ant-dropdown-hidden'))]//span[text() = '%s']/ancestor::li";
     public final String PICKUP_JOB_ROW_ROUTE = "//a[@data-testid='navigatorLink' and contains(text(),'%s')]";
-    public final String PICKUP_JOB_ROW_COL = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL_TEXT = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL = "//div[contains(@class,'BaseTable__row-cell') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL_ROUTE = "//a[contains(@data-testid,'navigatorLink') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_STATUS_SELECT = "input[data-testid='%s']";
 
     public boolean removeRouteStatus() {
 
@@ -660,10 +670,28 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public List<String> getColListByValue(String value) {
-      return findElementsByXpath(f(PICKUP_JOB_ROW_COL, value)).stream()
+
+      List<String> resultList = new ArrayList<>();
+
+//      List<String> colSelector1 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_TEXT, value)).stream()
+//          .map(WebElement::getText)
+//          .collect(Collectors.toList());
+      List<String> colSelector2 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
+          .map(WebElement::getText)
+          .collect(Collectors.toList());
+      List<String> colSelector3 = findElementsByXpath(f(PICKUP_JOB_ROW_COL, value)).stream()
+          .map(WebElement::getText)
+          .collect(Collectors.toList());
+      Stream.of(colSelector2, colSelector3).forEach(resultList::addAll);
+      return resultList;
+    }
+
+    public List<String> getRouteListByValue(String value) {
+      return findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
           .map(WebElement::getText)
           .collect(Collectors.toList());
     }
+
 
     public List<String> getListIDs() {
       String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
@@ -680,6 +708,18 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
             value);
       }, 1000, 5);
     }
+
+    public void selectStatusInTableUsing(String status) {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        jobStatusDropDown.click();
+        WebElement element = findElementBy(By.cssSelector(f(PICKUP_JOB_STATUS_SELECT, status)));
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].click();", element);
+
+        jobStatusDropDown.click();
+      }, 3000, 5);
+    }
+
 
     public void clickEditButton() {
       findElementBy(By.xpath(PICKUP_JOBS_COLUMN_EDIT_BUTTON)).click();

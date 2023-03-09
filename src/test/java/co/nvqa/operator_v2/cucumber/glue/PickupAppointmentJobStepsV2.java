@@ -44,15 +44,17 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @When("Operator goes to Pickup Jobs Page")
   public void operatorGoesToPickupJobsPage() {
 
-    getWebDriver().manage().window().maximize();
-    getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
-    if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
-      pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
-    }
-    getWebDriver().switchTo().frame(0);
-    pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
-        pickupAppointmentJobPage.getLoadSelection().getWebElement());
-    pickupAppointmentJobPage.waitWhilePageIsLoading();
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      getWebDriver().manage().window().maximize();
+      getWebDriver().get("https://operatorv2-qa.ninjavan.co/#/sg/pickup-appointment");
+      if (pickupAppointmentJobPage.isToastContainerDisplayed()) {
+        pickupAppointmentJobPage.waitUntilInvisibilityOfToast();
+      }
+      getWebDriver().switchTo().frame(0);
+      pickupAppointmentJobPage.waitUntilVisibilityOfElementLocated(
+          pickupAppointmentJobPage.getLoadSelection().getWebElement());
+      pickupAppointmentJobPage.waitWhilePageIsLoading();
+    }, 1000, 5);
   }
 
   @When("Operator click on Create or edit job button on this top right corner of the page")
@@ -1337,8 +1339,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     pickupAppointmentJobPage.inFrame(page -> {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         String colValue = resolveValue(value);
-        List<String> tagsListInTable = page.bulkSelect.getColListByValue(colValue);
-        Assertions.assertThat(tagsListInTable)
+        List<String> ListInTable = page.bulkSelect.getColListByValue(colValue);
+        Assertions.assertThat(ListInTable)
             .as(f("Column %s in table count is = %s", colValue, countOfCol)).hasSize(countOfCol);
       }, 1000, 5);
 
@@ -1416,6 +1418,70 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   public void searchForCommentPickupTable(String comment) {
     pickupAppointmentJobPage.inFrame(page -> {
       page.bulkSelect.filterTableUsing("pickupInstructions", resolveValue(comment));
+    });
+  }
+
+
+  @When("Operator search for driver = {string} in pickup jobs table")
+  public void searchForDriverPickupTable(String driver) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("driverName", resolveValue(driver));
+    });
+  }
+
+  @When("Operator search for route id = {string} in pickup jobs table")
+  public void searchForRouteIdPickupTable(String routeID) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("routeId", resolveValue(routeID));
+    });
+  }
+
+
+  @When("Operator check {int} route with value = {string} in PAM search table")
+  public void checkNumberOfRouteWithValueInPAMSearchTable(Integer countOfCol, String value) {
+
+    pickupAppointmentJobPage.inFrame(page -> {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        String colValue = resolveValue(value);
+        List<String> tagsListInTable = page.bulkSelect.getRouteListByValue(colValue);
+        Assertions.assertThat(tagsListInTable)
+            .as(f("Column %s in table count is = %s", colValue, countOfCol)).hasSize(countOfCol);
+      }, 1000, 5);
+
+    });
+  }
+
+  @When("Operator search for failure Reason = {string} in pickup jobs table")
+  public void searchForFailureReasonPickupTable(String failureReson) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      page.bulkSelect.filterTableUsing("failureReasonDescription", resolveValue(failureReson));
+    });
+  }
+
+  @When("Operator select status = {string} in pickup jobs table")
+  public void selectStatusPickupTable(String status) {
+    pickupAppointmentJobPage.inFrame(page -> {
+      String statusToSelect = resolveValue(status);
+      switch (statusToSelect) {
+        case "Routed":
+          page.bulkSelect.selectStatusInTableUsing("routed");
+          break;
+        case "Ready for Routing":
+          page.bulkSelect.selectStatusInTableUsing("ready-for-routing");
+          break;
+        case "Failed":
+          page.bulkSelect.selectStatusInTableUsing("failed");
+          break;
+        case "In Progress":
+          page.bulkSelect.selectStatusInTableUsing("in-progress");
+          break;
+        case "Cancelled":
+          page.bulkSelect.selectStatusInTableUsing("cancelled");
+          break;
+        case "Completed":
+          page.bulkSelect.selectStatusInTableUsing("completed");
+          break;
+      }
     });
   }
 
