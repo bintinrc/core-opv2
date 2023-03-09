@@ -5,7 +5,7 @@ Feature: Shipment Management - Shipment Events
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Create Shipment
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
@@ -20,7 +20,7 @@ Feature: Shipment Management - Shipment Events
       | userId    | qa@ninjavan.co                      |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Close Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -47,7 +47,7 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Re-open Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -75,7 +75,7 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Van Inbound Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -102,7 +102,7 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Hub Inbound Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -139,7 +139,7 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name-2}                        |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Force Complete Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -162,7 +162,7 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name-2}                        |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
+  @DeleteCreatedShipments @CloseNewWindows
   Scenario: Shipment Events - Cancel Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
