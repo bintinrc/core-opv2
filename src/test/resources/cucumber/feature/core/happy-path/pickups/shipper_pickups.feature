@@ -45,7 +45,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
 

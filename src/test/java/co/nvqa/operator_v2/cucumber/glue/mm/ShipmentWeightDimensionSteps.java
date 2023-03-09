@@ -1023,12 +1023,36 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         String mawb = dataTable.get("mawb");
         if (mawb.equalsIgnoreCase("random")) {
           mawb = "000-"+ RandomStringUtils.randomNumeric(8, 9);
+        } else if (mawb.equalsIgnoreCase("random-6-digits")) {
+          mawb = RandomStringUtils.randomNumeric(6);
+        } else if (mawb.equalsIgnoreCase("random-3-10-digits")) {
+          mawb = RandomStringUtils.randomNumeric(3) + "-" + RandomStringUtils.randomNumeric(10);
+        }  else if (mawb.equalsIgnoreCase("random-3-4-4-digits")) {
+          mawb = RandomStringUtils.randomNumeric(3) + "-" + RandomStringUtils.randomNumeric(4) + "-" + RandomStringUtils.randomNumeric(4);
         } else if (mawb.equalsIgnoreCase("invalid")) {
           mawb = "000-123456";
         } else if (mawb.equalsIgnoreCase("alfabet")) {
           mawb ="abcdefg?";
         } else if (mawb.equalsIgnoreCase("empty")) {
           mawb = "";
+        } else if (mawb.equalsIgnoreCase("tbn-lower-random")) {
+          mawb = "tbn" + RandomStringUtils.randomNumeric(8);
+        } else if (mawb.equalsIgnoreCase("tbn-upper-random")) {
+          mawb = "TBN" + RandomStringUtils.randomNumeric(8);
+        } else if (mawb.equalsIgnoreCase("tbn-mix-random")) {
+          mawb = "TBn" + RandomStringUtils.randomNumeric(8);
+        } else if (mawb.equalsIgnoreCase("ai-d-lower-random")) {
+          mawb = "ai-d" + RandomStringUtils.randomNumeric(6);
+        } else if (mawb.equalsIgnoreCase("ai-d-upper-random")) {
+          mawb = "AI-D" + RandomStringUtils.randomNumeric(6);
+        } else if (mawb.equalsIgnoreCase("ai-d-mix-random")) {
+          mawb = "aI-d" + RandomStringUtils.randomNumeric(6);
+        }else if (mawb.equalsIgnoreCase("ai-lower-random")) {
+          mawb = "ai" + RandomStringUtils.randomNumeric(6);
+        } else if (mawb.equalsIgnoreCase("ai-upper-random")) {
+          mawb = "AI" + RandomStringUtils.randomNumeric(6);
+        } else if (mawb.equalsIgnoreCase("ai-mix-random")) {
+          mawb = "aI" + RandomStringUtils.randomNumeric(6);
         }
         put(KEY_SHIPMENT_UPDATED_AWB, mawb);
 
@@ -1123,12 +1147,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     }
   }
 
-  @And("Operator verify Update Billing Number {string} has updated with new value")
-  public void operatorVerifyUpdateBillingNumberHasUpdatedWithNewValue(String billingNumberType) {
+  @And("Operator verify Update Billing Number {string} has updated with new value {string}")
+  public void operatorVerifyUpdateBillingNumberHasUpdatedWithNewValue(String billingNumberType, String billingNumberValue) {
     switch(billingNumberType) {
       case "MAWB":
         retryIfAssertionErrorOccurred(() -> {
-          String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
+          String newMawb = resolveValue(billingNumberValue);
           shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
                   row -> {
                     Assertions.assertThat(row.mawb.getText())
@@ -1139,7 +1163,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         }, "retrying the validation", 1000, 3);
       case "SWB":
         retryIfAssertionErrorOccurred(() -> {
-          String newSwb = get(KEY_MM_SHIPMENT_SWB);
+          String newSwb = resolveValue(billingNumberValue);
           shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
                   row -> {
                     Assertions.assertThat(row.billingNumber.getText())
@@ -1151,9 +1175,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
         break;
       case "BOTH":
         retryIfAssertionErrorOccurred(() -> {
-          String newMawb = get(KEY_SHIPMENT_UPDATED_AWB);
-          String newSwb = get(KEY_MM_SHIPMENT_SWB);
-          String mawbSwb = newMawb + ", " + newSwb;
+          String mawbSwb = resolveValue(billingNumberValue);
           shipmentWeightSumUpreport.shipmentSumUpReportNvTable.rows.forEach(
                   row -> {
                     Assertions.assertThat(row.billingNumber.getText())

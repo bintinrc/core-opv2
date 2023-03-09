@@ -395,7 +395,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String expectedDriver =
         route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
     Assertions.assertThat(pickupDetailsBox.getDriver().trim()).as("Pickup Driver")
-        .isEqualTo(expectedDriver);
+        .isEqualTo(expectedDriver.trim());
   }
 
   public void verifyOrderSummary(Order order) {

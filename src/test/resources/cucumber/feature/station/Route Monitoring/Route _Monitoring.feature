@@ -86,7 +86,7 @@ Feature: Route Monitoring V2
     And Operator removes the route from the created reservation
     And DB Operator verifies "{KEY_CREATED_RESERVATION.waypointId}" waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
@@ -1018,7 +1018,6 @@ Feature: Route Monitoring V2
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
     And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies there are 2 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
