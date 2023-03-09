@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,9 +86,9 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.inFrame(page -> {
       String actualRtsValue = zonesPage.zonesTable.readEntity(1).getType();
       if (RTS.equalsIgnoreCase(zoneType)) {
-       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo(RTS);
+        Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo(RTS);
       } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo("STANDARD");
+        Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo("STANDARD");
       }
       takesScreenshot();
     });
@@ -192,9 +193,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator find {value} zone on Zones page")
   public void findZone(String zoneName) {
-    zonesPage.switchTo();
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilLoaded();
       zonesPage.findZone(zoneName);
     });
   }
@@ -220,32 +219,38 @@ public class ZonesSteps extends AbstractSteps {
 
       zonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
       List<String> values = zonesPage.zonesTable.readColumn(COLUMN_ID);
-     Assertions.assertThat(values).as("ID filter results").allMatch(value -> value.contains(zone.getShortName()));
+      Assertions.assertThat(values).as("ID filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
       values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
-     Assertions.assertThat(values).as("Short Name filter results").allMatch(value -> value.contains(zone.getShortName()));
+      Assertions.assertThat(values).as("Short Name filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
-     Assertions.assertThat(values).as("Name filter results").allMatch(value -> value.contains(zone.getName()));
+      Assertions.assertThat(values).as("Name filter results")
+          .allMatch(value -> value.contains(zone.getName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
-     Assertions.assertThat(values).as("Hub Name filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Hub Name filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
       values = zonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
-     Assertions.assertThat(values).as("Latitude/Longitude filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Latitude/Longitude filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
       values = zonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
-     Assertions.assertThat(values).as("Description filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Description filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
@@ -275,12 +280,12 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("^Operator click View Selected Polygons for zone id \"([^\"]*)\"$")
   public void operatorClickViewSelectedPolygonsForZone(String zoneId) {
-    zonesPage.inFrame(page -> {
-      zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
-      zonesPage.zonesTable.selectRow(1);
-      zonesPage.viewSelectedPolygons.click();
-      zonesSelectedPolygonsPage.waitUntilPageLoaded();
-    });
+    retryIfRuntimeExceptionOccurred(() -> zonesPage.inFrame(page -> {
+          zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
+          zonesPage.zonesTable.selectRow(1);
+          zonesPage.viewSelectedPolygons.click();
+        })
+        , 5);
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
@@ -494,6 +499,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @And("Operator click Zones in zone drawing page")
   public void operatorClickZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesPanel.zones.get(0).click());
   }
@@ -507,9 +513,11 @@ public class ZonesSteps extends AbstractSteps {
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.setValue(latitude);
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.clear();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.setValue(longitude);
-    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.confirmSetCoordinate.click();
     zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialog.waitUntilVisible();
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.loadingIcon.waitUntilInvisible();
   }
 
   @And("Operator click Create Polygon in zone drawing page")
@@ -528,8 +536,20 @@ public class ZonesSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator click View Selected Polygons for zone short name {string}")
+  public void operatorClickViewSelectedPolygonsForZoneShortName(String zoneShortName) {
+    zonesPage.waitUntilPageLoaded();
+    retryIfRuntimeExceptionOccurred(() -> zonesPage.inFrame(page -> {
+      zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
+      zonesPage.zonesTable.selectRow(1);
+      zonesPage.viewSelectedPolygons.click();
+    }));
+
+  }
+
   @And("Operator click RTS Zones in zone drawing page")
   public void operatorClickRTSZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesRTSPanel.zones.get(0).click());
   }

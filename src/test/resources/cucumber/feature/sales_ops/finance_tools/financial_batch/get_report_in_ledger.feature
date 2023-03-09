@@ -57,11 +57,11 @@ Feature: Get Report in Ledger
       | codAmount        | -5.00                                         |
       | insuredAmount    | 0.00                                          |
       | codFee           | 0.05                                          |
-      | insuredFee       | 0.0                                           |
-      | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
-      | totalTax         | 0.59                                          |
-      | totalWithTax     | 9.14                                          |
+      | insuredFee       | 0.00                                          |
+      | deliveryFee      | 8.50                                          |
+      | rtsFee           | 0.00                                          |
+      | totalTax         | 0.68                                          |
+      | totalWithTax     | 9.23                                          |
       | type             | Completed                                     |
 
   @DeleteNewlyCreatedShipper
@@ -124,12 +124,12 @@ Feature: Get Report in Ledger
       | toBillingZone    | WEST                                          |
       | codAmount        | -50.00                                        |
       | insuredAmount    | 0.00                                          |
-      | codFee           | 0.5                                           |
-      | insuredFee       | 0.0                                           |
-      | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
-      | totalTax         | 0.63                                          |
-      | totalWithTax     | 9.63                                          |
+      | codFee           | 0.50                                          |
+      | insuredFee       | 0.00                                          |
+      | deliveryFee      | 8.50                                          |
+      | rtsFee           | 0.00                                          |
+      | totalTax         | 0.72                                          |
+      | totalWithTax     | 9.72                                          |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
@@ -193,14 +193,14 @@ Feature: Get Report in Ledger
       | fromCity         | null                                          |
       | toAddress        | 998 Toa Payoh North V4 NVQA V4 home SG 159363 |
       | toBillingZone    | WEST                                          |
-      | codAmount        | 50.00                                         |
+      | codAmount        | -50.00                                        |
       | insuredAmount    | 0.00                                          |
-      | codFee           | 0.5                                           |
-      | insuredFee       | 0.0                                           |
-      | deliveryFee      | 8.5                                           |
-      | rtsFee           | 0.0                                           |
-      | totalTax         | 0.63                                          |
-      | totalWithTax     | 9.63                                          |
+      | codFee           | 0.50                                          |
+      | insuredFee       | 0.00                                          |
+      | deliveryFee      | 8.50                                          |
+      | rtsFee           | 0.00                                          |
+      | totalTax         | 0.72                                          |
+      | totalWithTax     | 9.72                                          |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
@@ -259,12 +259,12 @@ Feature: Get Report in Ledger
       | toBillingZone    | WEST                                       |
       | codAmount        | 0.00                                       |
       | insuredAmount    | 0.00                                       |
-      | codFee           | 0.0                                        |
-      | insuredFee       | 0.0                                        |
-      | deliveryFee      | 8.5                                        |
-      | rtsFee           | 0.0                                        |
-      | totalTax         | 0.59                                       |
-      | totalWithTax     | 9.09                                       |
+      | codFee           | 0.00                                       |
+      | insuredFee       | 0.00                                       |
+      | deliveryFee      | 8.50                                       |
+      | rtsFee           | 0.00                                       |
+      | totalTax         | 0.68                                       |
+      | totalWithTax     | 9.18                                       |
       | type             | Returned to Sender                         |
 
 
@@ -328,12 +328,12 @@ Feature: Get Report in Ledger
       | toBillingZone    | WEST                                          |
       | codAmount        | -5000.00                                      |
       | insuredAmount    | 0.00                                          |
-      | codFee           | 100.0                                         |
-      | insuredFee       | 0.0                                           |
-      | deliveryFee      | 19.0                                          |
-      | rtsFee           | 0.0                                           |
-      | totalTax         | 8.33                                          |
-      | totalWithTax     | 127.33                                        |
+      | codFee           | 100.00                                        |
+      | insuredFee       | 0.00                                          |
+      | deliveryFee      | 19.00                                         |
+      | rtsFee           | 0.00                                          |
+      | totalTax         | 9.52                                          |
+      | totalWithTax     | 128.52                                        |
       | type             | Completed                                     |
     Examples:
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |

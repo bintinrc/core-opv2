@@ -5,7 +5,7 @@ Feature: Update SWB 7 - ID
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for ID with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -32,7 +32,7 @@ Feature: Update SWB 7 - ID
       | originSeahaul      | {local-seaport-1-code-id}      |
       | destinationSeahaul | {local-seaport-2-code-id}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -44,7 +44,7 @@ Feature: Update SWB 7 - ID
       | originSeahaul      | {local-seaport-1-code-id}      |
       | destinationSeahaul | {local-seaport-2-code-id}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

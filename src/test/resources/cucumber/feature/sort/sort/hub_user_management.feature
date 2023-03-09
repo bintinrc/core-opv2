@@ -197,3 +197,11 @@ Feature: Hub User Management
     Then Operator verifies that error react notification displayed in Hub User Management Page:
       | top | Failed to add user                  |
       | bot | User is already assigned to the hub |
+
+  Scenario: Hub User Management - Remove Staff Hub User - Admin / Manager
+    When Operator refresh page
+    When Operator go to menu Sort -> Hub User Management
+    When Operator search "{station-hub-name-2}" hub name
+    When Operator click edit button "{station-hub-id-2}" on Hub User Management Page
+    When Operator search "{hub-user-admin-name}" username with "{hub-user-admin-role}" role
+    Then Operator verifies delete user button is not exist

@@ -19,12 +19,16 @@ import com.google.common.collect.ImmutableMap;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -93,6 +97,27 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(xpath = "//button//span[@text =]")
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+
+  @FindBy(css = "button.ant-dropdown-trigger")
+  public Button createOrModifyPresetButton;
+
+  @FindBy(xpath = "//li[text()='Save as Preset']")
+  public Button saveAsPresetButton;
+  @FindBy(xpath = "//span[text()='Update Current Preset']")
+  public Button updateCurrentPresetButton;
+
+  @FindBy(xpath = "//span[text()='Delete']")
+  public Button deletePresetButton;
+
+  @FindBy(xpath = "//span[text()='Save as New Preset']")
+  public Button saveAsNewPresetButton;
+
+  @FindBy(css = "div.ant-modal-content")
+  public PresetModal presetModal;
+
+  @FindBy(css = "#presetFilters")
+  public PageElement presetFilters;
+
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
@@ -100,12 +125,51 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
   private static final String FILEPATH = TestConstants.TEMP_DIR;
 
+  public static final String ACTIVE_PRESET_OPTION = "div.ant-select-item-option-active div";
+
   public boolean isToastContainerDisplayed() {
     try {
       return toastContainer.isDisplayed();
     } catch (NoSuchElementException e) {
       return false;
     }
+  }
+
+  public void verifyPresetByNameNotInList(String presetName) {
+    HashMap keys = new HashMap();
+    presetFilters.sendKeys(Keys.ARROW_UP);
+    while (true) {
+      String name = webDriver.findElement(
+          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
+      if (name.equalsIgnoreCase(presetName)) {
+        throw new java.util.NoSuchElementException("the preset name is in the list");
+
+      }
+      if (keys.containsKey(name)) {
+        break;
+      }
+      keys.put(name, "founded");
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+    }
+
+  }
+
+  public void choosePresetByName(String presetName) {
+    HashMap keys = new HashMap();
+    presetFilters.sendKeys(Keys.ARROW_UP);
+    while (true) {
+      String name = webDriver.findElement(
+          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
+      if (name.equalsIgnoreCase(presetName)) {
+        break;
+      }
+      if (keys.containsKey(name)) {
+        throw new java.util.NoSuchElementException("the preset name is not in the list");
+      }
+      keys.put(name, "founded");
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+    }
+    presetFilters.sendKeys(Keys.ENTER);
   }
 
   public PageElement getLoadSelection() {
@@ -285,7 +349,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
-
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -338,8 +401,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
       }
     }
-
-
 
 
     public void addJobComments(String comment) {
@@ -430,6 +491,25 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+  public static class PresetModal extends AntModal {
+
+    @FindBy(css = "input[data-testid='presetAction.presetNameInput']")
+    public PageElement presetNameInput;
+
+    @FindBy(css = "div.ant-modal-footer button")
+    public Button savePresetButton;
+
+    public PresetModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public void fillPresetName(String name) {
+      presetNameInput.sendKeys(name);
+    }
+
+
+  }
 
   public static class JobCreatedModal extends AntModal {
 
@@ -527,6 +607,11 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     @FindBy(xpath = "//li[contains(@class,'ant-dropdown-menu-item')]//span[contains(text(),'Remove route')]//ancestor::li[contains(@class,'ant-dropdown-menu-item')]")
     public PageElement removeRouteMenuItem;
 
+    @FindBy(xpath = "//div[contains(text(),'Clear All')]")
+    public PageElement dropDownClearAll;
+
+    @FindBy(css = "div[data-testid='filterInput.status']")
+    public PageElement jobStatusDropDown;
     public static final String COLUMN_TAGS = "tags";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_ID = "id";
@@ -541,7 +626,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     public final String PICKUP_JOB_ROW_TAGS = "//span[contains(@class,'ant-tag') and contains(text(),'%s')]";
     public static final String BULK_UPDATE_ITEMS = "//div[contains(@class,'ant-dropdown') and not(contains(@class,'ant-dropdown-hidden'))]//span[text() = '%s']/ancestor::li";
     public final String PICKUP_JOB_ROW_ROUTE = "//a[@data-testid='navigatorLink' and contains(text(),'%s')]";
-    public final String PICKUP_JOB_ROW_DRIVER = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL_TEXT = "//div[contains(@class,'BaseTable__row-cell-text') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL = "//div[contains(@class,'BaseTable__row-cell') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_ROW_COL_ROUTE = "//a[contains(@data-testid,'navigatorLink') and contains(text(),'%s')]";
+    public final String PICKUP_JOB_STATUS_SELECT = "input[data-testid='%s']";
 
     public boolean removeRouteStatus() {
 
@@ -581,11 +669,29 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           .collect(Collectors.toList());
     }
 
-    public List<String> getDriverListWithName(String name) {
-      return findElementsByXpath(f(PICKUP_JOB_ROW_DRIVER, name)).stream()
+    public List<String> getColListByValue(String value) {
+
+      List<String> resultList = new ArrayList<>();
+
+//      List<String> colSelector1 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_TEXT, value)).stream()
+//          .map(WebElement::getText)
+//          .collect(Collectors.toList());
+      List<String> colSelector2 = findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
+          .map(WebElement::getText)
+          .collect(Collectors.toList());
+      List<String> colSelector3 = findElementsByXpath(f(PICKUP_JOB_ROW_COL, value)).stream()
+          .map(WebElement::getText)
+          .collect(Collectors.toList());
+      Stream.of(colSelector2, colSelector3).forEach(resultList::addAll);
+      return resultList;
+    }
+
+    public List<String> getRouteListByValue(String value) {
+      return findElementsByXpath(f(PICKUP_JOB_ROW_COL_ROUTE, value)).stream()
           .map(WebElement::getText)
           .collect(Collectors.toList());
     }
+
 
     public List<String> getListIDs() {
       String PICKUP_JOBS_IDS_XPATH = "//div[contains(@class ,'BaseTable__table-frozen-left')]//div[@class='BaseTable__row-cell-text']";
@@ -595,10 +701,25 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
     public void filterTableUsing(String columName, String value) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].scrollIntoView();",
+            findElementBy(By.xpath(f(PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH, columName))));
         findElementBy(By.xpath(f(PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH, columName))).sendKeys(
             value);
       }, 1000, 5);
     }
+
+    public void selectStatusInTableUsing(String status) {
+      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+        jobStatusDropDown.click();
+        WebElement element = findElementBy(By.cssSelector(f(PICKUP_JOB_STATUS_SELECT, status)));
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].click();", element);
+
+        jobStatusDropDown.click();
+      }, 3000, 5);
+    }
+
 
     public void clickEditButton() {
       findElementBy(By.xpath(PICKUP_JOBS_COLUMN_EDIT_BUTTON)).click();

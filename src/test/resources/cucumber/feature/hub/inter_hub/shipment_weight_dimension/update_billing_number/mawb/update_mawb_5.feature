@@ -6,7 +6,7 @@ Feature: Update MAWB 5 - ID
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 3 digits + <dash> + 8 digits (uid:425a6c07-9c06-42ad-8488-6c2e3b4034f0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -40,7 +40,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 3 digits + 8 digits (uid:13bf6ec7-b359-4412-b210-70eccf7bf604)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -74,7 +74,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 7 digits + <dash> + 6 digits (uid:40a406a9-689d-4255-a74b-60fd16c15796)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -108,7 +108,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 6 digits + <dash> + 6 digits (uid:354e45ec-d9a2-45b2-b4be-1c6ea1cfcf3b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -142,7 +142,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 10 digits (uid:00cf7940-6382-4aa6-9385-ef8cf5c08b05)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -176,7 +176,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format tgn + <dash> + 8 digits lower-case (uid:0e10a9dc-bfdf-4b1f-a9d0-d5c2cc5a2ee6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -210,7 +210,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format TGN + <dash> + 8 digits upper-case (uid:477696a5-3b32-4701-adcb-3be0dbcbf0d3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -244,7 +244,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format Tgn + <dash> + 8 digits mix-case (uid:6c3fb0e7-a401-4878-98ff-f89c500b0165)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -278,7 +278,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 3 digits + <dash> + 7 digits (uid:7d938bf6-6357-4596-854c-ee0027b27268)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
@@ -312,7 +312,7 @@ Feature: Update MAWB 5 - ID
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update MAWB for ID with Format 8 digits (uid:90e531c3-8fc7-4d3f-bc32-67596e251ff0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"

@@ -5,7 +5,7 @@ Feature: Update SWB 5 - MY
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -32,7 +32,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -44,9 +44,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -73,7 +73,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -85,9 +85,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -114,7 +114,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -126,9 +126,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -155,7 +155,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -167,9 +167,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -196,7 +196,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -208,9 +208,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format K14B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -237,7 +237,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -249,9 +249,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -278,7 +278,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -290,9 +290,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -319,7 +319,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -331,9 +331,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -360,7 +360,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -372,9 +372,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -401,7 +401,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -413,9 +413,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -442,7 +442,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -454,9 +454,9 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteShipments
+  @DeleteCreatedShipments
   Scenario: Update SWB for MY with format R11B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -483,7 +483,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
     When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
       | expectedNumOfRows | 2 |
     And Operator select all data on Shipment Weight Dimension Table
@@ -495,7 +495,7 @@ Feature: Update SWB 5 - MY
       | originSeahaul      | {local-seaport-1-code-my}      |
       | destinationSeahaul | {local-seaport-2-code-my}      |
     Then Operator click update button on shipment weight update mawb page
-    And Operator verify Update Billing Number "SWB" has updated with new value
+    And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

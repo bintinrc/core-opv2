@@ -62,6 +62,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//span[contains(text(), 'Kecamatan')] /following-sibling::span")
   public PageElement kecamatanAddRow;
 
+  @FindBy(xpath = "//span[contains(text(), 'District')] /following-sibling::span")
+  public PageElement districtAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'Subdistrict')] /following-sibling::span")
+  public PageElement subdistrictAddRow;
+
   @FindBy(xpath = "//span[contains(text(), 'Municipality')] /following-sibling::span")
   public PageElement municipalityAddRow;
 
@@ -166,6 +172,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//div[text()='Required to fill in']")
   public PageElement emptyFieldError;
+
+  @FindBy(css = "[data-testid='search-input-city']")
+  public TextBox districtTextBox;
+
+  @FindBy(css = "[data-testid='search-input-district']")
+  public TextBox subdistrictTextBox;
 
 
   public AddressDatasourcePage(WebDriver webDriver) {

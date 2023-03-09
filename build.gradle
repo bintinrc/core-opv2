@@ -20,7 +20,9 @@ project.ext {
             "classpath:co.nvqa.common.mm.cucumber.glue",
             "classpath:co.nvqa.commonauth.cucumber.glue",
             "classpath:co.nvqa.commonsort.cucumber.glue",
-            "classpath:co.nvqa.common.pricing.cucumber.glue"]
+            "classpath:co.nvqa.common.pricing.cucumber.glue",
+            "classpath:co.nvqa.common.lighthouse.cucumber.glue",
+            "classpath:co.nvqa.common.station.cucumber.glue"]
 }
 
 repositories {
@@ -60,8 +62,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    implementation "co.nvqa:common-base:1.2.3"
-    implementation "co.nvqa:common-ui:1.2.1"
+    implementation "co.nvqa:common-base:1.2.4"
+    implementation "co.nvqa:common-ui:1.2.3"
     implementation "co.nvqa:common-ordercreate:1.2.3"
     implementation "co.nvqa:common-driver:1.2.3"
     implementation "co.nvqa:common-corev2:1.2.6"
@@ -73,4 +75,6 @@ dependencies {
     implementation "co.nvqa:common-shipper:1.2.5"
     implementation "co.nvqa:common-mm:1.2.6"
     implementation "co.nvqa:common-pricing:1.2.8"
+    implementation "co.nvqa:common-lighthouse:1.1.0"
+    implementation "co.nvqa:common-station:1.0.0"
 }
