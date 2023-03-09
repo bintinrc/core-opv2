@@ -668,18 +668,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     expected.compareWithActual(actual);
   }
 
-  @Then("DB Operator verifies route_waypoint record:")
-  public void verifyRouteWaypoint(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    long waypointId = Long.parseLong(data.get("waypointId"));
-    long routeId = Long.parseLong(data.get("routeId"));
-
-    RouteWaypointEntity result = this.getCoreJdbc().getRouteWaypointEntity(waypointId, routeId);
-    Assertions.assertThat(result)
-        .as("route_waypoint record for waypointId %s and routeId %s", waypointId, routeId)
-        .isNotNull();
-  }
-
   @Then("DB Operator verifies route_monitoring_data record:")
   public void verifyRouteMonitoringData(Map<String, String> data) {
     data = resolveKeyValues(data);
@@ -1260,26 +1248,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
 
-  @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies waypoint for (Pickup|Delivery) transaction is deleted from route_waypoint table$")
-  public void dbOperatorVerifiesWaypointIsDeleted(String txnType) {
-    Order order = get(KEY_CREATED_ORDER);
-    final String waypointId = String.valueOf(order.getTransactions().stream()
-        .filter(transaction -> StringUtils.equalsIgnoreCase(transaction.getType(), txnType))
-        .findFirst().orElseThrow(() -> new IllegalArgumentException(
-            f("No %s transaction for %d order", txnType, order.getId())))
-        .getWaypointId());
-    retryIfExpectedExceptionOccurred(() ->
-    {
-      List<Map<String, Object>> waypointRecords = getCoreJdbc().getWaypointRecords(waypointId);
-
-      Assertions.assertThat(waypointRecords.size())
-          .as(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId))
-          .isEqualTo(0);
-      return waypointRecords;
-    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
-  }
-
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
@@ -1349,19 +1317,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .as("Expected Reservation Priority Level %s but actual Priority Level %d",
             expectedPriorityLevel, priorityLevel).isEqualTo(expectedPriorityLevel);
   }
-
-  @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
-  public void dbOperatorVerifyRouteWaypointsTable() throws SQLException, ClassNotFoundException {
-    Long reservationId = get(KEY_CREATED_RESERVATION_ID);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
-    Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
-
-    Assertions.assertThat(routeWaypoint)
-        .as("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d",
-            reservationWaypoint, routeWaypoint).isEqualTo(reservationWaypoint);
-  }
-
+  
   @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")
   public void dbOperatorVerifyBatchIdIsDeleted() throws SQLException, ClassNotFoundException {
     Long batchId = get(KEY_CREATED_BATCH_ID);

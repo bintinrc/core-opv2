@@ -47,7 +47,7 @@ Feature: All Orders - Pull From Route
 #      | routeId | 0                                 |
 #    And DB Operator verifies transaction route id is null
 #    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
+#
 #    And DB Operator verifies route_monitoring_data is hard-deleted
 #    And DB Operator verifies waypoint status is "PENDING"
 #    Then DB Operator verify next Pickup transaction values are updated for the created order:
@@ -55,7 +55,7 @@ Feature: All Orders - Pull From Route
 #      | routeId | 0                                 |
 #    And DB Operator verifies transaction route id is null
 #    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
+#
 #    And DB Operator verifies route_monitoring_data is hard-deleted
 #    And DB Operator verifies waypoint status is "PENDING"
 

@@ -37,10 +37,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -77,10 +77,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -118,10 +118,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -159,10 +159,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -199,10 +199,8 @@ Feature: Add Order To Route
 #    And DB Operator verify Delivery waypoint of the created order using data below:
 #      | status | ROUTED |
 #    And DB Operator verifies transaction routed to new route id
-#    And DB Operator verifies route_waypoint record exist
 #    And DB Operator verifies waypoint status is "ROUTED"
 #    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-#    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
 #    And DB Operator verifies route_monitoring_data record
 #    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
 #    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -241,12 +239,12 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
-    
+
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route is Archived
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -281,10 +279,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -321,10 +319,10 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly

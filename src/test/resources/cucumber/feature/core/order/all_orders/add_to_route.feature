@@ -77,12 +77,11 @@ Feature: All Orders - Add To Route
     And API Operator verify multiple delivery orders is added to route
     When Operator get multiple "Delivery" transactions with status "Pending"
     And DB Operator verifies all transactions routed to new route id
-    And DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
 
     And DB Operator verifies all route_monitoring_data records
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 

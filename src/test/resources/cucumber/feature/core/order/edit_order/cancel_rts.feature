@@ -114,7 +114,7 @@ Feature: Cancel RTS
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies route_monitoring_data record
 

@@ -510,7 +510,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows @WIP
+  @CloseNewWindows
   Scenario: Inbound parcel with changes in dimensions (0 Values) (uid:d2232263-f912-4561-8154-d56327e54ca0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

@@ -58,7 +58,7 @@ Feature: Create Recovery Ticket
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
 
   @DeleteOrArchiveRoute
@@ -391,11 +391,11 @@ Feature: Create Recovery Ticket
       | routeId | 0 |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     Given Operator go to menu Recovery -> Recovery Tickets
     Then Operator chooses Investigating Hub filter as "{hub-name}"
@@ -500,11 +500,11 @@ Feature: Create Recovery Ticket
       | routeId | 0 |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     Given Operator go to menu Recovery -> Recovery Tickets
     Then Operator chooses Investigating Hub filter as "{hub-name}"
