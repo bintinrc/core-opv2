@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
@@ -93,6 +94,27 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   @FindBy(xpath = "//button//span[@text =]")
   public static String KEY_LAST_SELECTED_ROWS_COUNT = "KEY_LAST_SELECTED_ROWS_COUNT";
+
+  @FindBy(css = "button.ant-dropdown-trigger")
+  public Button createOrModifyPresetButton;
+
+  @FindBy(xpath = "//li[text()='Save as Preset']")
+  public Button saveAsPresetButton;
+  @FindBy(xpath = "//span[text()='Update Current Preset']")
+  public Button updateCurrentPresetButton;
+
+  @FindBy(xpath = "//span[text()='Delete']")
+  public Button deletePresetButton;
+
+  @FindBy(xpath = "//span[text()='Save as New Preset']")
+  public Button saveAsNewPresetButton;
+
+  @FindBy(css = "div.ant-modal-content")
+  public PresetModal presetModal;
+
+  @FindBy(css = "#presetFilters")
+  public PageElement presetFilters;
+
   public final String SELECTED_VALUE_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class,'ant-select-dropdown-hidden'))]//div[contains(@label,'%s')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_SORTICON_XPATH = "//div[@data-testid = 'tableHeaderTitle.%s']//div[contains(@data-testid,'sortIcon')]";
   public final String PICKUP_JOBS_COLUMN_HEADER_INPUT_XPATH = "//div[@data-testid = 'searchInput.%s']";
@@ -100,12 +122,51 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
   public static final String ACTIVE_DROPDOWN_XPATH = "//div[contains(@class,'ant-select-dropdown') and not(contains(@class, 'ant-select-dropdown-hidden'))]";
   private static final String FILEPATH = TestConstants.TEMP_DIR;
 
+  public static final String ACTIVE_PRESET_OPTION = "div.ant-select-item-option-active div";
+
   public boolean isToastContainerDisplayed() {
     try {
       return toastContainer.isDisplayed();
     } catch (NoSuchElementException e) {
       return false;
     }
+  }
+
+  public void verifyPresetByNameNotInList(String presetName) {
+    HashMap keys = new HashMap();
+    presetFilters.sendKeys(Keys.ARROW_UP);
+    while (true) {
+      String name = webDriver.findElement(
+          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
+      if (name.equalsIgnoreCase(presetName)) {
+        throw new java.util.NoSuchElementException("the preset name is in the list");
+
+      }
+      if (keys.containsKey(name)) {
+        break;
+      }
+      keys.put(name, "founded");
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+    }
+
+  }
+
+  public void choosePresetByName(String presetName) {
+    HashMap keys = new HashMap();
+    presetFilters.sendKeys(Keys.ARROW_UP);
+    while (true) {
+      String name = webDriver.findElement(
+          By.cssSelector(ACTIVE_PRESET_OPTION)).getText();
+      if (name.equalsIgnoreCase(presetName)) {
+        break;
+      }
+      if (keys.containsKey(name)) {
+        throw new java.util.NoSuchElementException("the preset name is not in the list");
+      }
+      keys.put(name, "founded");
+      presetFilters.sendKeys(Keys.ARROW_DOWN);
+    }
+    presetFilters.sendKeys(Keys.ENTER);
   }
 
   public PageElement getLoadSelection() {
@@ -285,7 +346,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
 
-
     public void selectReadybyTime(String time) {
       retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
         readyByField.click();
@@ -338,8 +398,6 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
       }
     }
-
-
 
 
     public void addJobComments(String comment) {
@@ -430,6 +488,25 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
 
   }
 
+  public static class PresetModal extends AntModal {
+
+    @FindBy(css = "input[data-testid='presetAction.presetNameInput']")
+    public PageElement presetNameInput;
+
+    @FindBy(css = "div.ant-modal-footer button")
+    public Button savePresetButton;
+
+    public PresetModal(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+      PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+    }
+
+    public void fillPresetName(String name) {
+      presetNameInput.sendKeys(name);
+    }
+
+
+  }
 
   public static class JobCreatedModal extends AntModal {
 
