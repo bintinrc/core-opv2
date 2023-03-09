@@ -10,7 +10,7 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Cancelled"
+    When API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Cancelled"
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
     And Operator click "Load All Selection" on Shipment Management page
@@ -25,7 +25,7 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Cancelled"
+    When API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Cancelled"
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Cancelled |
     And Operator click "Load All Selection" on Shipment Management page
@@ -40,7 +40,7 @@ Feature: Shipment Management - Edit Shipment 2
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Completed"
+    When API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Completed"
     When Operator apply filters on Shipment Management Page:
       | shipmentStatus | Completed |
     And Operator click "Load All Selection" on Shipment Management page
