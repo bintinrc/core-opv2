@@ -1347,47 +1347,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @When("Operator search for job id = {string} in pickup jobs table")
-  public void searchForjobIdInPickupTable(String jobId) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupAppointmentJobId", resolveValue(jobId));
-    });
-  }
-
-  @When("Operator search for shipper id = {string} in pickup jobs table")
-  public void searchForshipperIdInPickupTable(String shipperId) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("legacyShipperId", resolveValue(shipperId));
-    });
-  }
-
-  @When("Operator search for shipper name = {string} in pickup jobs table")
-  public void searchForshipperNameInPickupTable(String shipperName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("shipperInfo", resolveValue(shipperName));
-    });
-  }
-
-  @When("Operator search for address name = {string} in pickup jobs table")
-  public void searchForaddressNameInPickupTable(String addressName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupAddress", resolveValue(addressName));
-    });
-  }
-
-  @When("Operator search for ready time = {string} in pickup jobs table")
-  public void searchForReadyTimeInPickupTable(String addressName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupReadyDatetimeStr", resolveValue(addressName));
-    });
-  }
-
-  @When("Operator search for latest time = {string} in pickup jobs table")
-  public void searchForLatestTimeInPickupTable(String addressName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupLatestDatetimeStr", resolveValue(addressName));
-    });
-  }
 
   @When("Operator pare date time to string {string}")
   public void parseDateTimeToString(String date) {
@@ -1398,42 +1357,6 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     String formattedDateTime = dateTime.format(dateTimeFormatter);
     LOGGER.debug(formattedDateTime);
     putInList("KEY_FORMATTED_DATE_TIME", formattedDateTime);
-  }
-
-  @When("Operator search for create time = {string} in pickup jobs table")
-  public void searchForCreateTimeInPickupTable(String addressName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("jobCreationTimeStr", resolveValue(addressName));
-    });
-  }
-
-  @When("Operator search for approx vol = {string} in pickup jobs table")
-  public void searchForApproxValInPickupTable(String addressName) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupApproxVolume", resolveValue(addressName));
-    });
-  }
-
-  @When("Operator search for comment = {string} in pickup jobs table")
-  public void searchForCommentPickupTable(String comment) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("pickupInstructions", resolveValue(comment));
-    });
-  }
-
-
-  @When("Operator search for driver = {string} in pickup jobs table")
-  public void searchForDriverPickupTable(String driver) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("driverName", resolveValue(driver));
-    });
-  }
-
-  @When("Operator search for route id = {string} in pickup jobs table")
-  public void searchForRouteIdPickupTable(String routeID) {
-    pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("routeId", resolveValue(routeID));
-    });
   }
 
 
@@ -1451,10 +1374,50 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
     });
   }
 
-  @When("Operator search for failure Reason = {string} in pickup jobs table")
-  public void searchForFailureReasonPickupTable(String failureReson) {
+  @When("Operator search for {string} = {string} in pickup jobs table")
+  public void searchForFailureReasonPickupTable(String SearchTerm, String SearchString) {
     pickupAppointmentJobPage.inFrame(page -> {
-      page.bulkSelect.filterTableUsing("failureReasonDescription", resolveValue(failureReson));
+      String searchTerm = resolveValue(SearchTerm);
+      String searchString = resolveValue(SearchString);
+      switch (searchTerm) {
+        case "latest time":
+          page.bulkSelect.filterTableUsing("pickupLatestDatetimeStr", resolveValue(searchString));
+          break;
+        case "ready time":
+          page.bulkSelect.filterTableUsing("pickupReadyDatetimeStr", resolveValue(searchString));
+          break;
+        case "address name":
+          page.bulkSelect.filterTableUsing("pickupAddress", resolveValue(searchString));
+          break;
+        case "shipper name":
+          page.bulkSelect.filterTableUsing("shipperInfo", resolveValue(searchString));
+          break;
+        case "shipper id":
+          page.bulkSelect.filterTableUsing("legacyShipperId", resolveValue(searchString));
+          break;
+        case "job id":
+          page.bulkSelect.filterTableUsing("pickupAppointmentJobId", resolveValue(searchString));
+          break;
+        case "failure Reason":
+          page.bulkSelect.filterTableUsing("failureReasonDescription", resolveValue(searchString));
+          break;
+        case "route id":
+          page.bulkSelect.filterTableUsing("routeId", resolveValue(searchString));
+          break;
+        case "driver":
+          page.bulkSelect.filterTableUsing("driverName", resolveValue(searchString));
+          break;
+        case "comment":
+          page.bulkSelect.filterTableUsing("pickupInstructions", resolveValue(searchString));
+          break;
+        case "approx vol":
+          page.bulkSelect.filterTableUsing("pickupApproxVolume", resolveValue(searchString));
+
+          break;
+        case "create time":
+          page.bulkSelect.filterTableUsing("jobCreationTimeStr", resolveValue(searchString));
+          break;
+      }
     });
   }
 

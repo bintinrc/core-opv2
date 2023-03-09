@@ -26,10 +26,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" in PAM search table
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" in pickup jobs table
+    When Operator search for "job id" = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" in pickup jobs table
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for job id = "00000000" in pickup jobs table
+    When Operator search for "job id" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
 
@@ -55,10 +55,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{normal-shipper-pickup-appointment-1-id}" in PAM search table
     When Operator check 1 Column with value = "{premium-shipper-pickup-appointment-1-id}" in PAM search table
-    When Operator search for shipper id = "{normal-shipper-pickup-appointment-1-id}" in pickup jobs table
+    When Operator search for "shipper id" = "{normal-shipper-pickup-appointment-1-id}" in pickup jobs table
     When Operator check 1 Column with value = "{normal-shipper-pickup-appointment-1-id}" in PAM search table
     When Operator check 0 Column with value = "{premium-shipper-pickup-appointment-1-id}" in PAM search table
-    When Operator search for shipper id = "00000000" in pickup jobs table
+    When Operator search for "shipper id" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{normal-shipper-pickup-appointment-1-id}" in PAM search table
     When Operator check 0 Column with value = "{premium-shipper-pickup-appointment-1-id}" in PAM search table
 
@@ -84,10 +84,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{normal-shipper-pickup-appointment-1-name}" in PAM search table
     When Operator check 1 Column with value = "{premium-shipper-pickup-appointment-1-name}" in PAM search table
-    When Operator search for shipper name = "{normal-shipper-pickup-appointment-1-name}" in pickup jobs table
+    When Operator search for "shipper name" = "{normal-shipper-pickup-appointment-1-name}" in pickup jobs table
     When Operator check 1 Column with value = "{normal-shipper-pickup-appointment-1-name}" in PAM search table
     When Operator check 0 Column with value = "{premium-shipper-pickup-appointment-1-name}" in PAM search table
-    When Operator search for shipper name = "00000000" in pickup jobs table
+    When Operator search for "shipper name" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{normal-shipper-pickup-appointment-1-name}" in PAM search table
     When Operator check 0 Column with value = "{premium-shipper-pickup-appointment-1-name}" in PAM search table
 
@@ -112,10 +112,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in PAM search table
     When Operator check 1 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[2].address1}" in PAM search table
-    When Operator search for address name = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
+    When Operator search for "address name" = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in pickup jobs table
     When Operator check 1 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in PAM search table
     When Operator check 0 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[2].address1}" in PAM search table
-    When Operator search for address name = "00000000" in pickup jobs table
+    When Operator search for "address name" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[1].address1}" in PAM search table
     When Operator check 0 Column with value = "{KEY_LIST_OF_CREATED_ADDRESSES[2].address1}" in PAM search table
 
@@ -142,10 +142,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
-    When Operator search for ready time = "{KEY_FORMATTED_DATE_TIME[1]}" in pickup jobs table
+    When Operator search for "ready time" = "{KEY_FORMATTED_DATE_TIME[1]}" in pickup jobs table
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
-    When Operator search for ready time = "00000000" in pickup jobs table
+    When Operator search for "ready time" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
 
@@ -172,10 +172,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
-    When Operator search for latest time = "{KEY_FORMATTED_DATE_TIME[1]}" in pickup jobs table
+    When Operator search for "latest time" = "{KEY_FORMATTED_DATE_TIME[1]}" in pickup jobs table
     When Operator check 2 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
-    When Operator search for latest time = "00000000" in pickup jobs table
+    When Operator search for "latest time" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[1]}" in PAM search table
     When Operator check 0 Column with value = "{KEY_FORMATTED_DATE_TIME[2]}" in PAM search table
 
@@ -201,7 +201,7 @@ Feature: filter on search result table column
       | {KEY_CONTROL_CREATED_PA_JOBS[2].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 2 Column with value = "{gradle-current-date-yyyy-MM-dd}" in PAM search table
-    When Operator search for create time = "00000000" in pickup jobs table
+    When Operator search for "create time" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{gradle-current-date-yyyy-MM-dd}" in PAM search table
 
 
@@ -227,5 +227,5 @@ Feature: filter on search result table column
       | {KEY_CONTROL_CREATED_PA_JOBS[2].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 2 Column with value = "Less than 3 Parcels" in PAM search table
-    When Operator search for approx vol = "00000000" in pickup jobs table
+    When Operator search for "approx vol" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "Less than 3 Parcels" in PAM search table

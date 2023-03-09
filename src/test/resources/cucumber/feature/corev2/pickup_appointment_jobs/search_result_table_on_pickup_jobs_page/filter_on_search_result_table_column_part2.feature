@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @tableFiltersPAMJobsSearchPart2 @CWF
+@OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @tableFiltersPAMJobsSearchPart2
 Feature: filter on search result table column
 
 
@@ -27,10 +27,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "Automation created 1" in PAM search table
     When Operator check 1 Column with value = "Automation created 2" in PAM search table
-    When Operator search for comment = "Automation created 1" in pickup jobs table
+    When Operator search for "comment" = "Automation created 1" in pickup jobs table
     When Operator check 1 Column with value = "Automation created 1" in PAM search table
     When Operator check 0 Column with value = "Automation created 2" in PAM search table
-    When Operator search for comment = "00000000" in pickup jobs table
+    When Operator search for "comment" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "Automation created 1" in PAM search table
     When Operator check 0 Column with value = "Automation created 2" in PAM search table
 
@@ -61,10 +61,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{driver-name}" in PAM search table
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for driver = "{driver-name}" in pickup jobs table
+    When Operator search for "driver" = "{driver-name}" in pickup jobs table
     When Operator check 1 Column with value = "{driver-name}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for driver = "00000000" in pickup jobs table
+    When Operator search for "driver" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{driver-name}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
 
@@ -95,10 +95,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in PAM search table
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for route id = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator check 1 Column with value = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for route id = "00000000" in pickup jobs table
+    When Operator search for "route id" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
 
@@ -131,10 +131,10 @@ Feature: filter on search result table column
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
     When Operator check 1 Column with value = "Delivery Parcel" in PAM search table
     When Operator check 1 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for failure Reason = "Delivery Parcel Damaged" in pickup jobs table
+    When Operator search for "failure Reason" = "Delivery Parcel Damaged" in pickup jobs table
     When Operator check 1 Column with value = "Delivery Parcel" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
-    When Operator search for failure Reason = "00000000" in pickup jobs table
+    When Operator search for "failure Reason" = "00000000" in pickup jobs table
     When Operator check 0 Column with value = "Delivery Parcel" in PAM search table
     When Operator check 0 Column with value = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" in PAM search table
 
@@ -283,7 +283,7 @@ Feature: filter on search result table column
     When Operator check 0 tags with name = "Ready for Routing"
     When Operator check 0 tags with name = "Failed"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario:Filter table column - by Job status - Completed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -322,7 +322,7 @@ Feature: filter on search result table column
     When Operator check 0 tags with name = "Ready for Routing"
     When Operator check 0 tags with name = "Completed"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @RT
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
   Scenario:Filter table column - by Job status - Cancelled
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
