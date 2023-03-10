@@ -90,15 +90,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String HUB_TABLE_FILTER_ID = "hub";
     private static final String COMMENTS_TABLE_FILTER_ID = "comments";
 
-    private static final Integer NEW_NAME_TABLE_FILTER_ID = 2;
-    private static final Integer NEW_ID_TABLE_FILTER_ID = 3;
-    private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 4;
-    private static final Integer NEW_HUB_TABLE_FILTER_ID = 5;
-    private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 6;
-    private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
-    private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
-    private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
-    private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 10;
+    private static final Integer NEW_NAME_TABLE_FILTER_ID = 1;
+    private static final Integer NEW_ID_TABLE_FILTER_ID = 2;
+    private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 3;
+    private static final Integer NEW_HUB_TABLE_FILTER_ID = 4;
+    private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 5;
+    private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 6;
+    private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 7;
+    private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 8;
+    private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 9;
 
     private static final String EMPLOYMENT_TYPE = "employment type";
     private static final String EMPLOYMENT_STATUS = "employment status";
@@ -185,8 +185,12 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void verifiesTotalDriverIsTheSame(int totalDriver) {
+        LOGGER.info("Total driver from API: {}", totalDriver);
+        LOGGER.info("Total driver on FE: {}", getText(TOTAL_DRIVER_SHOW_XPATH));
         if (totalDriver > 0) {
-           Assertions.assertThat(                    getText(TOTAL_DRIVER_SHOW_XPATH).contains(String.valueOf(totalDriver))).as("Total Driver Shown is the same.").isTrue();
+           Assertions.assertThat(getText(TOTAL_DRIVER_SHOW_XPATH))
+               .as("Total Driver Shown is the same.")
+               .contains(String.valueOf(totalDriver));
         }
     }
 
