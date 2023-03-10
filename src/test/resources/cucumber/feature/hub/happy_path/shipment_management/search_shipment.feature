@@ -1,4 +1,4 @@
-@OperatorV2 @HappyPath @Hub @InterHub @ShipmentManagement @SearchShipment
+@OperatorV2 @HappyPath @Hub @InterHub @ShipmentManagement @SearchShipmentHappyPath
 Feature: Shipment Management - Search Shipment
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -23,7 +23,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                                 |
       | currHubName  | {hub-name}                                 |
       | destHubName  | {hub-name-2}                               |
-      | mawb         | mawb_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
+      | mawb         | MAWB_{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - End Hub (uid:21fbac4f-372b-427e-be82-c49c1be439ae)

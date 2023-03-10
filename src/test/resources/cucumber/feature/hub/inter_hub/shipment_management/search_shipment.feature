@@ -55,7 +55,7 @@ Feature: Shipment Management - Search Shipment
     And Operator refresh page
     Then Operator verify filters preset was deleted
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario Outline: Search Shipment by Filter - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -75,7 +75,7 @@ Feature: Shipment Management - Search Shipment
       | Origin Hub      | originHub      | {hub-name}   |
       | Destination Hub | destinationHub | {hub-name-2} |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Type : Air Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -93,7 +93,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Type : Land Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -111,7 +111,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Type : Sea Haul
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -129,7 +129,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Type : Others
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -147,7 +147,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Pending
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -165,7 +165,7 @@ Feature: Shipment Management - Search Shipment
       | currHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Closed
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -190,7 +190,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Transit
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -220,16 +220,11 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment @DeleteDriver @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteCreatedShipments @DeleteDriver @DeleteCreatedPorts @CancelTrip
   Scenario: Search Shipment by Filter - Shipment Status : Transit to Airport
-    Given API Operator create new airport using data below:
-      | system_id   | SG        |
-      | airportCode | GENERATED |
-      | airportName | GENERATED |
-      | city        | GENERATED |
-      | latitude    | GENERATED |
-      | longitude   | GENERATED |
-    And API Operator refresh Airports cache
+    Given API MM - Operator creates new Port with data below:
+      | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
+    And API MM - Operator refreshes "Airport" cache
     And API Operator create 1 new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Shipper create V4 order using data below:
@@ -239,37 +234,38 @@ Feature: Shipment Management - Search Shipment
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Operator put created parcel to shipment
+    And API Operator closes the created shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Inter-Hub -> Airport Trip Management
-    And Operator verifies that the Airport Management Page is opened
-    When Operator fill the departure date for Airport Management
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
       | startDate | {gradle-next-0-day-yyyy-MM-dd} |
       | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
-    When Operator fill the Origin Or Destination for Airport Management
-      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} |
-    And Operator click on 'Load Trips' on Airport Management
-    Then Verify the parameters of loaded trips in Airport Management
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
       | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
       | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
-      | originOrDestination | {KEY_CREATED_AIRPORT_LIST[1].airport_code} (Airport) |
-    And Operator click on 'Create Tofrom Airport Trip' button in Airport Management page
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
+    And Operator click on 'Create Tofrom Airport Trip' button in Port Management page
     And Operator create new airport trip using below data:
-      | originFacility      | {hub-name}                                |
-      | destinationFacility | {airport-name-1}                          |
-      | departureTime       | 12:00                                     |
-      | durationhour        | 01                                        |
-      | durationminutes     | 55                                        |
-      | departureDate       | {gradle-next-1-day-yyyy-MM-dd}            |
-      | drivers             | {KEY_LIST_OF_CREATED_DRIVERS[1].username} |
-      | comments            | Created by Automation                     |
-    And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {hub-name} (Warehouse) to {airport-name-1} (Airport) is created. View Details" created success message
+      | originFacility      | {hub-name}                                 |
+      | destinationFacility | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | departureTime       | 23:00                                      |
+      | durationhour        | 01                                         |
+      | durationminutes     | 55                                         |
+      | departureDate       | {gradle-next-0-day-yyyy-MM-dd}             |
+      | drivers             | {KEY_LIST_OF_CREATED_DRIVERS[1].username}  |
+      | comments            | Created by Automation                      |
+    And Verify the new airport trip "Trip {KEY_CURRENT_MOVEMENT_TRIP_ID} from {hub-name} (Warehouse) to {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) is created. View Details" created success message
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator refresh page
     When Operator fill Shipment Inbound Scanning page with data below:
-      | inboundHub           | {hub-id} - {hub-name}                                                                                                           |
-      | inboundType          | Into Van                                                                                                                        |
-      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
-      | movementTripSchedule | To ABC Test Airport                                                                                                             |
+      | inboundHub           | {hub-id} - {hub-name}                                                                  |
+      | inboundType          | Into Van                                                                               |
+      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
+      | movementTripSchedule | To {KEY_MM_LIST_OF_CREATED_PORTS[1].portName}                                          |
     And Operator click start inbound
     When Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
     When Operator clicks end inbound button
@@ -289,7 +285,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : At Transit Hub
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -319,7 +315,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name-2}                   |
       | destHubName  | {hub-relation-origin-hub-name} |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Completed
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -348,12 +344,12 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Status : Cancelled
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When API Operator change the status of the shipment into "Cancelled"
+    When API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Cancelled"
     When Operator apply filters on Shipment Management Page:
       | shipmentType   | {shipment-dialog-type} |
       | shipmentStatus | Cancelled              |
@@ -366,7 +362,7 @@ Feature: Shipment Management - Search Shipment
       | origHubName  | {hub-name}                |
       | destHubName  | {hub-name-2}              |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search Shipment by Filter - Shipment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
@@ -395,7 +391,7 @@ Feature: Shipment Management - Search Shipment
       | top    | SERVER_ERROR_EXCEPTION                                                     |
       | bottom | ^.*Error Message: Cannot parse parameter id as Long: For input string: "," |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Shipment Details (uid:839a572a-8534-4456-8340-b615174dc29c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
