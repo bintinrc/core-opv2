@@ -77,9 +77,6 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | type       | DD                                 |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |
@@ -166,9 +163,6 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | type       | DD                                 |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |
@@ -256,9 +250,6 @@ Feature: Create New Routes on Station Route
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | type       | DD                                 |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |

@@ -1,4 +1,4 @@
-@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @UpdateDriver
+@OperatorV2 @HappyPath @Hub @InterHub @MiddleMileDrivers @UpdateDriverHappyPath
 Feature: Middle Mile Driver Management - Update Driver
 
   @LaunchBrowser @ShouldAlwaysRun
