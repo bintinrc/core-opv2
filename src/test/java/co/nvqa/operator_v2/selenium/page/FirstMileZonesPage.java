@@ -23,6 +23,9 @@ public class FirstMileZonesPage extends SimpleReactPage<FirstMileZonesPage> {
   @FindBy(css = ".loading-container")
   public PageElement loading;
 
+  @FindBy(css = ".ant-btn-loading-icon")
+  public PageElement loadingIcon;
+
   @FindBy(tagName = "iframe")
   public PageElement pageFrame;
 
