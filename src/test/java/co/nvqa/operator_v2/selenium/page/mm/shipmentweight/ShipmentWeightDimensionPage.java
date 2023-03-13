@@ -100,6 +100,9 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(id = "new_preset_name")
   public PageElement presetName;
 
+  @FindBy(xpath = "//div[@class=\"ant-empty-description\"]")
+  public PageElement emptyDescription;
+
   public ShipmentWeightDimensionPage(WebDriver webDriver) {
     super(webDriver);
   }
