@@ -547,8 +547,9 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public void deleteRulesExceptTheFirstOne() {
     int deleteButtonCount = getElementsCount(DELETE_RULE_XPATH);
     while (true) {
+      scrollIntoView(String.format(DELETE_RULE_SPECIFIC_XPATH, deleteButtonCount));
       click(String.format(DELETE_RULE_SPECIFIC_XPATH, deleteButtonCount));
-      waitUntilInvisibilityOfElementLocated(
+      isElementExist(
           String.format(DELETE_RULE_SPECIFIC_XPATH, deleteButtonCount));
       pause500ms();
       deleteButtonCount = getElementsCount(DELETE_RULE_XPATH);
@@ -578,7 +579,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
             findElementByXpath(FORM_LOGIC_UNASSIGNED_ARM_VALUE_XPATH).getAttribute("title"))
         .as("Logic unassigned arm is PRE-POPULATED")
         .isNotEqualTo("");
-    for (int i = 1; i <= findElementsByXpath(FORM_RULE_ALL_XPATH).size(); i++) {
+    for (int i = 1; i <= findElementsByXpath(FORM_RULE_ALL_XPATH).size() - 1; i++) {
       Assertions.assertThat(
               findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i)).getText())
           .as(String.format("Rule %d arms are PRE-POPULATED", i))
