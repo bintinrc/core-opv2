@@ -118,6 +118,34 @@ Feature: Port Trip Management - Add New Seaport
     And Verify the validation error "Seaport code must be 5 alphanumeric characters long." is displayed in Add New Port form
 
   @DeleteCreatedPorts
+  Scenario: Add New Seaport with Duplicate Seaport Details
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Port Trip Management
+    Given Operator refresh page v1
+    And API MM - Operator refreshes "Seaport" cache
+    And Operator verifies that the Port Management Page is opened
+    When Operator click on Manage Port Facility and verify all components
+    Then Operator Add new Port
+      | portCode  | GENERATED   |
+      | portName  | GENERATED   |
+      | city      | SG          |
+      | region    | JKB         |
+      | latitude  | 37.9220427  |
+      | longitude | -81.6894072 |
+      | portType  | Seaport     |
+    And Verify the new port "Port {KEY_MM_LIST_OF_CREATED_PORTS[1].portName} has been created" created success message
+    And Verify the newly created port values in table
+    Then Operator Add new Port
+      | portCode  | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+      | portName  | {KEY_MM_LIST_OF_CREATED_PORTS[1].portName} |
+      | city      | SG                                         |
+      | region    | JKB                                        |
+      | latitude  | 37.9220427                                 |
+      | longitude | -81.6894072                                |
+      | portType  | Seaport                                    |
+    And Verify the error "Duplicate Seaport code. Seaport code {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} is already exists" is displayed while creating new port
+
+  @DeleteCreatedPorts
   Scenario: Add New Seaport with existing Seaport Code
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Port Trip Management

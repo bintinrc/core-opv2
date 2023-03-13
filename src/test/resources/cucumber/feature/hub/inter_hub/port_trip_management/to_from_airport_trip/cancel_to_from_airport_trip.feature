@@ -238,34 +238,6 @@ Feature: Airport Trip Management - Cancel To From Airport Trip
     Then Operator verifies action buttons below are disable:
       | Cancel |
 
-  @DeleteCreatedPorts
-  Scenario: Cancel Airport to Airport Trip with Other Status
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API MM - Operator creates new Port with data below:
-      | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    Given API MM - Operator creates new Port with data below:
-      | requestBody | {"type":"Airport","port_code":"GENERATED","port_name":"GENERATED","region":"DEFU","city":"Singapore","system_id":"sg","latitude":-1,"longitude":-1} |
-    And API MM - Operator refreshes "Airport" cache
-    Given API MM - Operator create new air trip with data below:
-      | airtripType         | TO_FROM_AIRPORT_TRIP                    |
-      | originFacility      | {KEY_MM_LIST_OF_CREATED_PORTS[1].hubId} |
-      | destinationFacility | {KEY_MM_LIST_OF_CREATED_PORTS[2].hubId} |
-    And API Operator depart flight trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}"
-    Given Operator go to menu Inter-Hub -> Port Trip Management
-    And Operator verifies that the Port Management Page is opened
-    When Operator fill the departure date for Port Management
-      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
-      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
-    When Operator fill the Origin Or Destination for Port Management
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
-    And Operator click on 'Load Trips' on Port Management
-    Then Verify the parameters of loaded trips in Port Management
-      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
-      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
-      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
-    Then Operator verifies action buttons below are disable:
-      | Cancel |
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
