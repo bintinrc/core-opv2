@@ -149,13 +149,13 @@ Feature: DP Administration - Distribution Point Users
     Then Operator press view DP User Button
     Then The Dp page is displayed
     And Operator fill newly created Dp User filter:
-      | dpUser  | KEY_DP_LIST_OF_DP_MANAGEMENT_USERS[1] |
-      | element | username                              |
+      | dpUser  | KEY_DP_LIST_OF_UPDATED_DP_MANAGEMENT_USERS[1] |
+      | element | username                                      |
     When DB Operator gets details for DP User from Hibernate
-      | username | {KEY_DP_LIST_OF_DP_MANAGEMENT_USERS[1].username} |
+      | username | {KEY_DP_LIST_OF_UPDATED_DP_MANAGEMENT_USERS[1].username} |
     And Operator verifies the newly created DP user data is right
-      | dpUser   | KEY_DP_LIST_OF_DP_MANAGEMENT_USERS[1] |
-      | dpUserDb | KEY_DATABASE_DP_USER                  |
+      | dpUser   | KEY_DP_LIST_OF_UPDATED_DP_MANAGEMENT_USERS[1] |
+      | dpUserDb | KEY_DATABASE_DP_USER                          |
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario Outline: DP Administration - Update DP User - Validation check - <dataset_name> (<hiptest-uid>)
@@ -393,6 +393,45 @@ Feature: DP Administration - Distribution Point Users
       | dpUser   | KEY_DP_USER          |
       | dpUserDb | KEY_DATABASE_DP_USER |
       | status   | SUCCESS              |
+
+  @DeleteNewlyCreatedDpManagementPartnerAndDp
+  Scenario: DP Administration - Delete Dp User - Dp Management
+    Given API Operator create new DP Management partner using data below:
+      | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
+    When Operator fill Detail for create DP Management:
+      | name         | shipperId                                    | contact      | shortName | externalStoreId | unitNumber | floorNumber | latitude      | longitude      | directions | isNinjaWarehouse | dpServiceType     | address_1      | address_2      | city      | postalCode       | type | hubId | maxParcelStayDuration | actualMaxCapacity | computedMaxCapacity | isActive | isPublic | allowShipperSend | allowCreatePost | canCustomerCollect | allowCreatePack | allowManualPackOc | allowCustomerReturn | allowCodService | allowViewOrderEventsHistory | packsSoldHere | isHyperlocal | driverCollectionMode | cutoffHour | autoReservationEnabled |
+      | Dp Test User | {shipper-create-new-dp-management-legacy-id} | {dp-contact} | GENERATED | GENERATED       | 1          | 1           | {dp-latitude} | {dp-longitude} | null       | false            | {dp-service-type} | {dp_address_1} | {dp_address_2} | {dp_city} | {dp_postal_code} | BOX  | 1     | 1                     | 1000000           | 10000               | true     | true     | true             | true            | false              | true            | false             | false               | false           | true                        | false         | true         | CONFIRMATION_CODE    | 23:59:59   | true                   |
+    Then API Operator request to create DP Management
+    Given API DP - Operator Create DP Users:
+      | partnerId | {KEY_DP_MANAGEMENT_PARTNER_ID}                                                                 |
+      | dpId      | {KEY_CREATE_DP_MANAGEMENT_RESPONSE_ID}                                                         |
+      | request   | {"first_name":"Diaz","last_name":"Ilyasa","email":"diaz@gmail.com","contact_no": "1526374859"} |
+    Given Operator go to menu Distribution Points -> DP Administration
+    And Operator refresh page
+    Then The Dp Administration page is displayed
+    And Operator fill the partner filter by "id"
+    And Operator press view DP Button
+    Then The Dp page is displayed
+    And Operator fill the Dp list filter by "id"
+    Then Operator press view DP User Button
+    Then The Dp page is displayed
+    And Operator fill newly created Dp User filter:
+      | dpUser  | KEY_DP_LIST_OF_DP_USERS[1] |
+      | element | username                   |
+    When DB Operator gets details for DP User from Hibernate
+      | username | {KEY_DP_LIST_OF_DP_USERS[1].username} |
+    And Operator verifies the newly created DP user data is right
+      | dpUser   | KEY_DP_LIST_OF_DP_USERS[1] |
+      | dpUserDb | KEY_DATABASE_DP_USER       |
+    And API DP Management - Operator Delete DP Users:
+      | partnerId | {KEY_DP_MANAGEMENT_PARTNER.id}         |
+      | dpId      | {KEY_CREATE_DP_MANAGEMENT_RESPONSE.id} |
+      | userId    | {KEY_DATABASE_DP_USER.id}              |
+    When DB Operator gets details for DP User from Hibernate
+      | username | {KEY_DP_LIST_OF_DP_USERS[1].username} |
+    And Operator verifies the newly created DP user data is deleted
+      | dpUserDb | KEY_DATABASE_DP_USER       |
+      | status   | SUCCESS                    |
 
   @DeleteDpManagementPartnerDpAndDpUser
   Scenario: DP Administration - Delete Dp User - Wrong DP (uid:ef25d5d3-d575-4128-af02-5e56cc7cd46e)
