@@ -183,7 +183,10 @@ public class ShipmentWeightDimensionTablePage extends
     SHIPMENT_ID("shipment_id"),
     SHIPMENT_TYPE("shipment_type"),
     STATUS("status"),
-    START_HUB("start_hub");
+    START_HUB("start_hub"),
+    VENDOR("vendor"),
+    ORIGIN_PORT("origin_port"),
+    DESTINATION_PORT("destination_port");
 
     private final String value;
 

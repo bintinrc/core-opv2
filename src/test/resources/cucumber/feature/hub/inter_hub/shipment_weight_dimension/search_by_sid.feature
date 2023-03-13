@@ -8,7 +8,7 @@ Feature: Search by SID
 
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796810
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search by SID with Single Valid Shipment ID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -39,7 +39,7 @@ Feature: Search by SID
     And Operator close Shipment Weight Dimension search error popup
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796820
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID with Multiple Valid Shipment IDs < 300
     Given API Operator create multiple 20 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -71,7 +71,7 @@ Feature: Search by SID
     And Operator close Shipment Weight Dimension search error popup
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796824
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search by SID with input Single JSON Shipment ID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -88,7 +88,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796826
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID with input Multiple JSON Shipment ID
     Given API Operator create multiple 20 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -105,7 +105,7 @@ Feature: Search by SID
     Then Operator verify Shipment Weight Dimension Table page is shown
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6796825
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID with Duplicate Shipment ID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -122,7 +122,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/6853705
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Search by SID with Valid Shipment ID but has NO Weight and Dimension
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -140,7 +140,7 @@ Feature: Search by SID
     And Operator verify can filter Shipment Weight Dimension Table
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7015320
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by Shipment ID field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -164,7 +164,7 @@ Feature: Search by SID
 
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018898
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by Shipment Status field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -188,7 +188,7 @@ Feature: Search by SID
 
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018906
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by End Hub field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -211,7 +211,7 @@ Feature: Search by SID
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "2" as counter
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018908
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by Shipment Creation Date Time field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -234,7 +234,7 @@ Feature: Search by SID
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
   #  https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018914
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by Comments field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -257,7 +257,7 @@ Feature: Search by SID
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "2" as counter
 
   # https://studio.cucumber.io/projects/210778/test-plan/folders/2066579/scenarios/7018917
-  @DeleteShipments
+  @DeleteCreatedShipmentss
   Scenario: Search by SID and Select All Data Searched by Shipment Type field
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
