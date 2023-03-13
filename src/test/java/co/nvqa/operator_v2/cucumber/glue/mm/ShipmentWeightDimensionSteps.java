@@ -1291,5 +1291,77 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           break;
     }
   }
+
+  @When("Operator input invalid {string} value in Shipment Weight Dimension Table")
+  public void operatorInputInvalidValueInShipmentWeightDimensionTable(String columnName) {
+    Shipment shipmentData = ((Shipments) getScenarioStorage().get(KEY_CREATED_SHIPMENT))
+            .getShipment();
+
+    // verify all column filters
+    shipmentWeightDimensionTablePage.clearFilters();
+
+    switch (columnName){
+      case "SHIPMENT ID":
+        shipmentWeightDimensionTablePage.filterColumn(SHIPMENT_ID, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment id with invalid value").isEmpty();
+        break;
+      case "SHIPMENT STATUS":
+        shipmentWeightDimensionTablePage.filterColumn(Column.STATUS, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment status with invalid value").isEmpty();
+        break;
+      case "END HUB":
+        shipmentWeightDimensionTablePage.filterColumn(Column.END_HUB, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment end hub with invalid value").isEmpty();
+        break;
+      case "CREATION DATE":
+        shipmentWeightDimensionTablePage.filterColumn(Column.CREATION_DATE, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment creation date with invalid value").isEmpty();
+        break;
+      case "BILLING NUMBER":
+        shipmentWeightDimensionTablePage.filterColumn(Column.BILLING_NUMBER, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment billing number with invalid value").isEmpty();
+        break;
+      case "COMMENTS":
+        shipmentWeightDimensionTablePage.filterColumn(Column.COMMENTS, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment comments with invalid value").isEmpty();
+        break;
+      case "START HUB":
+        shipmentWeightDimensionTablePage.filterColumn(Column.START_HUB, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment start hub with invalid value").isEmpty();
+        break;
+      case "SHIPMENT TYPE":
+        shipmentWeightDimensionTablePage.filterColumn(Column.SHIPMENT_TYPE, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using shipment shipment type with invalid value").isEmpty();
+        break;
+      case "VENDOR":
+        shipmentWeightDimensionTablePage.filterColumn(Column.VENDOR, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using vendor with invalid value").isEmpty();
+        break;
+      case "ORIGIN PORT":
+        shipmentWeightDimensionTablePage.filterColumn(Column.ORIGIN_PORT, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using origin port with invalid value").isEmpty();
+        break;
+      case "DESTINATION PORT":
+        shipmentWeightDimensionTablePage.filterColumn(Column.DESTINATION_PORT, "wrong value");
+        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
+                .as("Able to filter by using destination port with invalid value").isEmpty();
+        break;
+    }
+  }
+
+  @Then("Operator verify No Data empty description in Shipment Weight Dimension Table is shown")
+  public void operatorVarifyNoDataEmptyDescriptionInShipmentWeightDimensionTableIsShown() {
+    Assertions.assertThat(shipmentWeightDimensionPage.emptyDescription.isDisplayed()).as("No Data message is shown on Shipment Weight Dimension").isTrue();
+  }
 }
 

@@ -82,7 +82,7 @@ Feature: Update Both MAWB & SWB 1
     And Operator verify Update Billing Number "BOTH" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}, {KEY_MM_SHIPMENT_SWB}"
 
   @DeleteCreatedShipments
-  Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create New MAWB & Existing SWB Number with new Vendor, Origin port, and Dest port
+  Scenario: Update Both MAWB & SWB without Download Sum Up Report  - Create Existing MAWB & New SWB Number with new Vendor, Origin port, and Dest port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {local-hub-1-id} to hub id = {local-hub-2-id}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
