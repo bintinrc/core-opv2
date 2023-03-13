@@ -122,7 +122,7 @@ public class FirstMileZonesSteps extends AbstractSteps {
     Zone zone = get(KEY_CREATED_ZONE);
     firstMileZonesPage.inFrame(page -> {
       firstMileZonesPage.waitUntilLoaded();
-      firstMileZonesPage.findZone(zone.getName());
+      firstMileZonesPage.findZone(zone.getShortName());
       firstMileZonesPage.zonesTable.clickActionButton(1, ACTION_EDIT);
       firstMileZonesPage.editFmZoneDialog.waitUntilVisible();
       firstMileZonesPage.editFmZoneDialog.name.setValue(zone.getName() + "-EDITED");
@@ -281,8 +281,9 @@ public class FirstMileZonesSteps extends AbstractSteps {
 
   @When("Operator clicks Bulk Edit Polygons button in First Mile Zones Page")
   public void operatorClicksBulkEditPolygonsButtonInFirstMileZonesPage() {
-    firstMileZonesPage.waitUntilLoaded();
+    firstMileZonesPage.waitUntilPageLoaded();
     firstMileZonesPage.switchTo();
+    firstMileZonesPage.bulkEditPolygons.waitUntilClickable();
     firstMileZonesPage.bulkEditPolygons.click();
   }
 
@@ -297,15 +298,18 @@ public class FirstMileZonesSteps extends AbstractSteps {
     File file = getKmlFile(kmlFileName);
     firstMileZonesPage.uploadKmlFileInput.sendKeys(file);
     firstMileZonesPage.selectKmlFile.click();
+    firstMileZonesPage.loadingIcon.waitUntilInvisible();
   }
 
   @And("Operator clicks save button in first mile zone drawing page")
   public void operatorClicksSaveButtonInFirstMileZoneDrawingPage() {
-    zonesSelectedPolygonsPage.waitUntilPageLoaded();
-    zonesSelectedPolygonsPage.switchTo();
-    zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
-    zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
-    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.inFrame(
+        page -> {
+          zonesSelectedPolygonsPage.saveZoneDrawingButton.waitUntilClickable();
+          zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+          zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.waitUntilVisible();
+          zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+        });
   }
 
   @Then("Operator verifies that error react notification displayed in First Mile Zones Page:")
