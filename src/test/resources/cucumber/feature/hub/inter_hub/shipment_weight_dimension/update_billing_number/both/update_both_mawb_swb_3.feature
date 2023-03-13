@@ -29,10 +29,10 @@ Feature: Update Both MAWB & SWB 3
     When Operator click Update Billing Number "MAWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "MAWB" page UI
     When Operator update billing number "MAWB" information on Shipment Weight Dimension page with following data:
-      | mawb               | RANDOM                 |
-      | airhaulVendor      | {local-vendor-name}    |
-      | originAirhaul      | {local-airport-1-code} |
-      | destinationAirhaul | {local-airport-2-code} |
+      | mawb        | RANDOM                 |
+      | vendor      | {local-vendor-name}    |
+      | origin      | {local-airport-1-code} |
+      | destination | {local-airport-2-code} |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
@@ -42,7 +42,7 @@ Feature: Update Both MAWB & SWB 3
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
     When Operator update billing number "BOTH" information on Shipment Weight Dimension page with following data:
-      | mawb               | {KEY_SHIPMENT_UPDATED_AWB} |
+      | mawb               | {KEY_SHIPMENT_UPDATED_AWB}  |
       | airhaulVendor      | {local-vendor-2-name}       |
       | originAirhaul      | {local-airport-1-code}      |
       | destinationAirhaul | {local-airport-2-code}      |
@@ -78,10 +78,10 @@ Feature: Update Both MAWB & SWB 3
     When Operator click Update Billing Number "MAWB" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "MAWB" page UI
     When Operator update billing number "MAWB" information on Shipment Weight Dimension page with following data:
-      | mawb               | RANDOM                 |
-      | airhaulVendor      | {local-vendor-name}    |
-      | originAirhaul      | {local-airport-1-code} |
-      | destinationAirhaul | {local-airport-2-code} |
+      | mawb        | RANDOM                 |
+      | vendor      | {local-vendor-name}    |
+      | origin      | {local-airport-1-code} |
+      | destination | {local-airport-2-code} |
     Then Operator click update button on shipment weight update mawb page
     And Operator waits for 2 seconds
     And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
@@ -91,7 +91,7 @@ Feature: Update Both MAWB & SWB 3
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
     When Operator update billing number "BOTH" information on Shipment Weight Dimension page with following data:
-      | mawb               | {KEY_SHIPMENT_UPDATED_AWB} |
+      | mawb               | {KEY_SHIPMENT_UPDATED_AWB}  |
       | airhaulVendor      | {local-vendor-name}         |
       | originAirhaul      | {local-airport-3-code}      |
       | destinationAirhaul | {local-airport-2-code}      |
@@ -140,7 +140,7 @@ Feature: Update Both MAWB & SWB 3
     When Operator click Update Billing Number "BOTH" on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Update Billing Number "BOTH" page UI
     When Operator update billing number "BOTH" information on Shipment Weight Dimension page with following data:
-      | mawb               | {KEY_SHIPMENT_UPDATED_AWB} |
+      | mawb               | {KEY_SHIPMENT_UPDATED_AWB}  |
       | airhaulVendor      | {local-vendor-name}         |
       | originAirhaul      | {local-airport-1-code}      |
       | destinationAirhaul | {local-airport-3-code}      |

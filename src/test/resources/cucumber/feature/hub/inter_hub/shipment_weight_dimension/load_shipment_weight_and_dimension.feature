@@ -7,7 +7,7 @@ Feature: Load Shipment Weight and Dimension
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018984
-  @DeleteShipment @DeleteCreatedMAWBs
+  @DeleteCreatedShipments @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by End Hub field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -35,7 +35,7 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018985
-  @DeleteShipment @DeleteCreatedMAWBs
+  @DeleteCreatedShipments @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Shipment Creation Date Time field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -63,7 +63,7 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018992
-  @DeleteShipment @DeleteCreatedMAWBs
+  @DeleteCreatedShipments @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Comments field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -91,7 +91,7 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018994
-  @DeleteShipment @DeleteCreatedMAWBs
+  @DeleteCreatedShipments @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Start Hub field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -119,7 +119,7 @@ Feature: Load Shipment Weight and Dimension
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018995
-  @DeleteShipment @DeleteCreatedMAWBs
+  @DeleteCreatedShipments @DeleteCreatedMAWBs
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Shipment Type field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

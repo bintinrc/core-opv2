@@ -49,7 +49,7 @@ Feature: Load Shipment Weight and Dimension 3
     And Operator verify shipment weight preset "{KEY_CREATED_SHIPMENT_WEIGHT_FILTER}" is deleted
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/6936848
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Load Shipment Weight and Dimension by Select existing Preset Filters
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -85,7 +85,7 @@ Feature: Load Shipment Weight and Dimension 3
     And Operator verify disabled Selected Filter card on Shipment Weight Dimension Filter UI
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018972
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Shipment ID field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -114,7 +114,7 @@ Feature: Load Shipment Weight and Dimension 3
     Then Operator verify Sum up button on Shipment Weight Dimension Table have "1" as counter
 
 #  https://studio.cucumber.io/projects/210778/test-plan/folders/2075581/scenarios/7018982
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Load Shipment Weight and Dimension and Select All Data Searched by Shipment Status field
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
