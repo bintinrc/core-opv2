@@ -14,10 +14,11 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -237,18 +238,59 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
   @FindBy(tagName = "iframe")
   private PageElement pageFrame;
 
+  @FindBy(xpath = "//div[@data-testid='origin-hub-select']//span[contains(@class, 'selection-placeholder') and contains(text(), 'Search or Select')]")
+  private PageElement origHubPlaceholder;
+
+  @FindBy(xpath = "//div[@data-testid='destination-hub-select']//span[contains(@class, 'selection-placeholder') and contains(text(), 'Search or Select')]")
+  private PageElement destHubPlaceholder;
+
+  @FindBy(xpath = "//div[@data-testid='shipment-type-select']//span[contains(@class, 'selection-placeholder') and contains(text(), 'Select a shipment type')]")
+  private PageElement shipmentTypePlaceholder;
+
   public ShipmentScanningPage(WebDriver webDriver) {
     super(webDriver);
   }
 
   public void selectHub(String hubName) {
+    origHubPlaceholder.waitUntilVisible();
     sendKeysAndEnterById("orig_hub", hubName);
     pause50ms();
   }
 
   public void selectDestinationHub(String destHub) {
+    destHubPlaceholder.waitUntilVisible();
     sendKeysAndEnterById("dest_hub", destHub);
     pause50ms();
+  }
+
+  public void fillInComments(String comments) {
+    sendKeys("//textarea[@data-testid='create-shipment-comment-input']", comments);
+    pause50ms();
+  }
+
+  public void selectHubCreate(String hubName) {
+    origHubPlaceholder.waitUntilVisible();
+    sendKeysAndEnterById("orig_hub_id", hubName);
+    pause50ms();
+  }
+
+  public void selectDestinationHubCreate(String destHub) {
+    destHubPlaceholder.waitUntilVisible();
+    sendKeysAndEnterById("dest_hub_id", destHub);
+    pause50ms();
+  }
+
+  private String capitalize(String str) {
+    return Arrays.stream(str.trim().split("_"))
+        .map(t -> t.substring(0, 1).toUpperCase() + t.substring(1).toLowerCase())
+        .collect(Collectors.joining(" "));
+  }
+
+  public void selectShipmentTypeCreate(String shipmentType) {
+    shipmentTypePlaceholder.waitUntilVisible();
+    // TestUtils.findElementAndClick("shipment_type", "id", getWebDriver());
+    click("//div[@data-testid='create-shipment-type-select']");
+    TestUtils.findElementAndClick("//div[.='" + shipmentType + "']", "xpath", getWebDriver());
   }
 
   public void selectShipmentId(Long shipmentId) {
@@ -257,8 +299,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     shipmentIdField.sendKeys(Keys.RETURN);
   }
 
-  public void waitUntilShipmentIdFilled(Long shipmentId)
-  {
+  public void waitUntilShipmentIdFilled(Long shipmentId) {
     String shipmentIdValue = selectedShipmentId.getAttribute("title");
     Assertions.assertThat(shipmentIdValue).as("Shipment id field is filled").isEqualTo(shipmentId.toString());
   }
@@ -276,18 +317,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
   public void selectShipmentType(String shipmentType) {
     TestUtils.findElementAndClick("shipment_type", "id", getWebDriver());
-    if (shipmentType.equals("AIR_HAUL")) {
-      shipmentType = "Air Haul";
-    } else if (shipmentType.equals("SEA_HAUL")) {
-      shipmentType = "Sea Haul";
-    } else if (shipmentType.equals("LAND_HAUL")) {
-      shipmentType = "Land Haul";
-    } else if (shipmentType.equals("OTHERS")) {
-      shipmentType = "Others";
-    } else if (shipmentType.equals("ALL")) {
-      shipmentType = "All";
-    }
-    TestUtils.findElementAndClick("//div[.='" + shipmentType + "']", "xpath", getWebDriver());
+    TestUtils.findElementAndClick("//div[.='" + capitalize(shipmentType) + "']", "xpath",
+        getWebDriver());
   }
 
   public void scanBarcode(String trackingId) {
