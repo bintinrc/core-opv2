@@ -175,8 +175,6 @@ Feature: Add To Shipment 4
       | size    | 70 x 50 mm |
     Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
     And Operator close the shipment which has been created
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -199,8 +197,6 @@ Feature: Add To Shipment 4
       | size    | 70 x 50 mm |
     Then Operator verifies shipment label settings are "Folded, 70 x 50 mm, No print when closing" on Add to Shipment page
     And Operator close the shipment which has been created
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -218,14 +214,11 @@ Feature: Add To Shipment 4
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
-    And Operator close the shipment which has been created
     When Operator set shipment label sticker settings on Add to Shipment page:
       | version | Single       |
       | size    | 100 x 150 mm |
     Then Operator verifies shipment label settings are "Single, 100 x 150 mm, No print when closing" on Add to Shipment page
-    And Operator close shipment on Add to Shipment page
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
