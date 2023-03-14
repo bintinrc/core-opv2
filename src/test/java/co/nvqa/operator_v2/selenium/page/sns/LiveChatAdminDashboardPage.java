@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.page.SimpleReactPage;
 
 import java.util.List;
@@ -242,10 +243,10 @@ public class LiveChatAdminDashboardPage extends SimpleReactPage<LiveChatAdminDas
         public List<PageElement> timeInputBox;
 
         @FindBy(xpath = "//div[@class='ant-space-item']//input[@placeholder='Select date']")
-        public PageElement selectDate;
+        public AntTimePicker selectDate;
 
         @FindBy(xpath = "//td[contains(@class, 'ant-picker-cell-today')]")
-        public PageElement selectHoliday;
+        public AntTimePicker selectHoliday;
 
         @FindBy(xpath = "//div[text()='Holiday Added']")
         public PageElement notificationMessage;
