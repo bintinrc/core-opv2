@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
@@ -12,8 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,9 @@ public class OrderBillingSteps extends AbstractSteps {
         } else {
           File csvFile = createFile("shipper-id-upload.csv", shipperIds);
           LOGGER.info("Path of the created file : " + csvFile.getAbsolutePath());
-          orderBillingPage.uploadCsvShippersAndVerifySuccessMsg(shipperIds, csvFile);
+          int countOfShipperIds = shipperIds.split(",").length;
+          orderBillingPage.uploadCsvShippersAndVerifyToastMsg(csvFile, "Upload success.",
+              f("Extracted %s Shipper IDs.", countOfShipperIds));
         }
       }
       if (Objects.nonNull(mapOfData.get("parentShipper"))) {
@@ -112,7 +115,10 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator tries to upload a PDF and verifies that any other file except csv is not allowed")
   public void operatorTriesToUploadAPDFAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed() {
-    orderBillingPage.uploadPDFShippersAndVerifyErrorMsg();
+    String pdfFileName = "shipper-id-upload.pdf";
+    File pdfFile = createFile(pdfFileName, "TEST");
+    orderBillingPage.uploadCsvShippersAndVerifyToastMsg(pdfFile, "Upload failed",
+        "Please select only .csv file.");
   }
 
   @Then("Operator chooses Select by Parent Shippers option and search for normal shipper ID like below:")
@@ -139,18 +145,14 @@ public class OrderBillingSteps extends AbstractSteps {
       Map<String, String> mapOfData) {
     String errorTitle = mapOfData.get("top");
     String errorMessage = mapOfData.get("bottom");
-    boolean isErrorFound = false;
-    if (Objects.nonNull(errorTitle) && Objects.nonNull(errorMessage)) {
-      isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
-          StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle)
-              && StringUtils
-              .containsIgnoreCase(toastError.toastBottom.getText(), errorMessage));
-    } else if (Objects.nonNull(errorTitle)) {
-      isErrorFound = orderBillingPage.toastErrors.stream().anyMatch(toastError ->
-          StringUtils.equalsIgnoreCase(toastError.toastTop.getText(), errorTitle));
-    }
 
-    Assertions.assertThat(isErrorFound).as("Error message is exist").isTrue();
+    AntNotification notification = orderBillingPage.noticeNotifications.get(0);
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(notification.message.getText()).as("Toast top text is correct")
+        .isEqualTo(errorTitle);
+    softAssertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
+        .contains(errorMessage);
+    softAssertions.assertAll();
   }
 
   @Then("Operator verifies that info pop up is displayed with message {string}")

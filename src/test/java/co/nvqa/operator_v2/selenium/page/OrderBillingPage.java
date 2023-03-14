@@ -8,7 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
 import java.io.File;
 import java.util.List;
-import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -140,48 +140,31 @@ public class OrderBillingPage extends SimpleReactPage {
     return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
   }
 
-  public void uploadCsvShippersAndVerifySuccessMsg(String shipperIds, File csvFile) {
-    int countOfShipperIds = shipperIds.split(",").length;
-    uploadCsvShippers(csvFile);
+  public void uploadCsvShippersAndVerifyToastMsg(File file, String toastTop, String toastBottom) {
+    uploadCsvShippers(file);
     AntNotification notification = noticeNotifications.get(0);
-    Assertions.assertThat(notification.message.getText()).as("Toast top text is correct")
-        .isEqualTo("Upload success.");
-    Assertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
-        .isEqualTo(f("Extracted %s Shipper IDs.", countOfShipperIds));
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(notification.message.getText()).as("Toast top text is correct")
+        .isEqualTo(toastTop);
+    softAssertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
+        .isEqualTo(toastBottom);
+    softAssertions.assertAll();
   }
 
   public void uploadCsvShippers(File csvFile) {
     uploadCsv.click();
     uploadCsvBtn.click();
     browseFilesInput.sendKeys(csvFile.getAbsolutePath());
-//
-//
-//    clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
-//    clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
-//
-//    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH);
-//    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
-//    sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL,
-//        csvFile.getAbsolutePath());
-//    waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
-//    clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
   }
-
-  public void uploadPDFShippersAndVerifyErrorMsg() {
-    String pdfFileName = "shipper-id-upload.pdf";
-    File pdfFile = createFile(pdfFileName, "TEST");
-
-    clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
-    clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
-
-    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH);
-    waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
-
-    sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL,
-        pdfFile.getAbsolutePath());
-    String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
-    assertEquals(expectedToastText, getToastTopText());
-  }
+//
+//  public void uploadPDFShippersAndVerifyErrorMsg() {
+//    String pdfFileName = "shipper-id-upload.pdf";
+//    File pdfFile = createFile(pdfFileName, "TEST");
+//    uploadCsvShippers(pdfFile);
+//
+//    String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
+//    assertEquals(expectedToastText, getToastTopText());
+//  }
 
   public void tickGenerateTheseFilesOption(String option) {
     simpleClick(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
