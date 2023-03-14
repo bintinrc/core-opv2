@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -37,6 +36,8 @@ public class OrderBillingSteps extends AbstractSteps {
   @Override
   public void init() {
     orderBillingPage = new OrderBillingPage(getWebDriver());
+    orderBillingPage.switchToIframe();
+    orderBillingPage.waitUntilLoaded();
   }
 
   @Given("Operator generates success billings using data below:")
@@ -57,12 +58,12 @@ public class OrderBillingSteps extends AbstractSteps {
       if (Objects.nonNull(mapOfData.get("startDate"))) {
         String startDate = mapOfData.get("startDate");
         put(KEY_ORDER_BILLING_START_DATE, startDate);
-        orderBillingPage.selectStartDate(StandardTestUtils.convertToZonedDateTime(startDate, DTF_NORMAL_DATE));
+        orderBillingPage.selectStartDate(startDate);
       }
       if (Objects.nonNull(mapOfData.get("endDate"))) {
         String endDate = mapOfData.get("endDate");
         put(KEY_ORDER_BILLING_END_DATE, endDate);
-        orderBillingPage.selectEndDate(StandardTestUtils.convertToZonedDateTime(endDate, DTF_NORMAL_DATE));
+        orderBillingPage.selectEndDate(endDate);
       }
       if (Objects.nonNull(mapOfData.get("shipper"))) {
         String shipper = mapOfData.get("shipper");
@@ -199,8 +200,8 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} is not available in template selector drop down menu")
   public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
-    Assertions.assertThat(orderBillingPage.csvFileTemplate.isValueExist(template))
+    Assertions.assertThat(orderBillingPage.csvFileTemplate.hasItem(template))
         .as(f(" Template with name : %s is not available in the dropdown ", template))
-        .isFalse();
+        .isTrue();
   }
 }
