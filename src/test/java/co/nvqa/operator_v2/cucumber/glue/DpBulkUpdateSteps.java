@@ -317,7 +317,14 @@ public class DpBulkUpdateSteps extends AbstractSteps {
   public void operatorEditsTheMaxCapacityOfPickDPViaDPBulkUpdatePageFor(String pickDp) {
     if("XS".equalsIgnoreCase(pickDp)) {
       dpBulkUpdatePage.maxPickCapacityXs.sendKeys(100L);
-    } else {
+    } else if ("XL".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityXL.sendKeys(100L);
+    }else if ("L".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityL.sendKeys(100L);
+    }else if ("M".equalsIgnoreCase(pickDp)){
+      dpBulkUpdatePage.maxPickCapacityM.sendKeys(100L);
+    }
+    else {
       dpBulkUpdatePage.maxPickCapacityS.sendKeys(100L);
     }
   }
