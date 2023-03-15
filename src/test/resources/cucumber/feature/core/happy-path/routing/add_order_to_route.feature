@@ -5,7 +5,7 @@ Feature: Add Order To Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario: Add Order to a Route - Delivery, Valid Tracking ID, No Prefix (uid:62260562-a35c-4918-bdbf-02f0f0c9b62f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

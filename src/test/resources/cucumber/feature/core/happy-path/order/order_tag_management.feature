@@ -5,7 +5,6 @@ Feature: Order Tag Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
   Scenario: Add Tags to Order (uid:089dbcd3-1c74-47be-a8f8-439a885b7b2e)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -24,7 +23,6 @@ Feature: Order Tag Management
       | {order-tag-name-2} |
       | {order-tag-name-3} |
 
-  @happy-path
   Scenario: Remove Tags from Order (uid:21797b38-4859-4dd1-a042-a8da01c1ffbf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -45,7 +43,6 @@ Feature: Order Tag Management
     Then Operator verify the tags shown on Edit Order page
       | {order-tag-name-3} |
 
-  @happy-path
   Scenario: View Tagged Orders on the Order Tag Management Page - Delivery Attempted, Pending Reschedule (uid:ea0ac24e-247b-4674-bbb3-43b4eaa39243)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

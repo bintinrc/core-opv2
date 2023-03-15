@@ -5,7 +5,7 @@ Feature: Failed Delivery Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario: Operator RTS Multiple Failed Deliveries (uid:3d3d7420-29b5-4072-9ebe-c5870756c8c5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -85,7 +85,7 @@ Feature: Failed Delivery Management
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -174,7 +174,7 @@ Feature: Failed Delivery Management
       | dnr    | NORMAL                                |
       | name   | {KEY_LIST_OF_CREATED_ORDER[2].toName} |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -200,7 +200,7 @@ Feature: Failed Delivery Management
       | Normal | uid:e2336c49-a955-4f55-a44a-4757a2ce5386 | Normal    | false            |
       | Return | uid:03b0e991-9bb1-4eae-9f2c-944b2856948a | Return    | true             |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Multiple Failed Deliveries by Upload CSV (uid:a57d82d5-1ac1-48a9-9f21-ad5a136a69ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:

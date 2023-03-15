@@ -5,7 +5,6 @@ Feature: Third Party Order Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
   Scenario: Operator Upload Bulk Third Party Orders Successfully (uid:bf633cb4-8610-43f6-b023-83599e0ee1c2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:

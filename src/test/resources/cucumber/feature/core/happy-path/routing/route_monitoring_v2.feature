@@ -5,7 +5,7 @@ Feature: Route Monitoring V2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery (uid:45e0b063-386d-4e9a-aa55-6258b968fe2e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
@@ -43,7 +43,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup (uid:d90eb775-2b4b-42aa-96c7-9a090d49cf64)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
