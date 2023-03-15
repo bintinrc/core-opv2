@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.selenium.page;
+package co.nvqa.operator_v2.selenium.page.sns;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -11,6 +11,8 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.page.MdVirtualRepeatTable;
+import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 

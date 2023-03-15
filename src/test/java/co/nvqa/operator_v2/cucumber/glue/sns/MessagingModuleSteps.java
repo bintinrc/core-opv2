@@ -1,7 +1,8 @@
-package co.nvqa.operator_v2.cucumber.glue;
+package co.nvqa.operator_v2.cucumber.glue.sns;
 
+import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
-import co.nvqa.operator_v2.selenium.page.MessagingModulePage;
+import co.nvqa.operator_v2.selenium.page.sns.MessagingModulePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -13,7 +14,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.WebElement;
 
 /**
  * @author Rizaq Pratama
