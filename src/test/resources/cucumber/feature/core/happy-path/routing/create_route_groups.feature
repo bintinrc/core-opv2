@@ -5,7 +5,7 @@ Feature: Create Route Groups
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @core @category-core @coverage-auto @coverage-operator-auto @step-done @happy-path @JIRA-SHIP-2002
+  @core @category-core @coverage-auto @coverage-operator-auto @step-done @happy-path @JIRA-SHIP-2002 @happy-path
   Scenario: Operator Add Transaction to Route Group (uid:369cd974-fa30-4b93-96e9-4d5c5e82833b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

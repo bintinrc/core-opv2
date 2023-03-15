@@ -5,6 +5,7 @@ Feature: All Orders
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Operator Cancel Multiple Orders on All Orders Page (uid:fee278db-4033-4710-93eb-5568a185a356)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -17,7 +18,7 @@ Feature: All Orders
     When Operator cancel multiple orders on All Orders page
     Then API Operator verify multiple orders info after Canceled
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Pull Out Multiple Orders from Route on All Orders Page (uid:7a711069-4d1e-4eef-9bf9-3d1097aaaac6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -37,7 +38,7 @@ Feature: All Orders
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Add Multiple Orders to Route on All Orders Page (uid:8f8d6b44-5192-4ab7-8c2a-589b0a7d9637)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -57,7 +58,7 @@ Feature: All Orders
       | bottom | add to route       |
     And API Operator verify multiple delivery orders is added to route
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator RTS Multiple Orders on All Orders Page (uid:2ef86230-3d96-4967-b069-bc5fa1a7b9a6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -118,6 +119,7 @@ Feature: All Orders
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
+  @happy-path
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders (uid:4b12a984-33e7-4a59-b5af-aeccc398bd01)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
@@ -154,6 +156,7 @@ Feature: All Orders
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
+  @happy-path
   Scenario: Operator Force Success Multiple Orders on All Orders Page (uid:3e555d2f-69c9-40a4-b560-6337a7e0434c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:

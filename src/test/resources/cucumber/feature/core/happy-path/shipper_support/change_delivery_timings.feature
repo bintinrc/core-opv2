@@ -5,7 +5,7 @@ Feature: Change Delivery Timings
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @CloseNewWindows
+  @CloseNewWindows @happy-path
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page (uid:a0f33e34-b37b-4a8e-b18f-6c52155c3bdb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

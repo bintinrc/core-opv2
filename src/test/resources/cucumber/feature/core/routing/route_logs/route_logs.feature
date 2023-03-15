@@ -265,7 +265,7 @@ Feature: Route Logs
       | id   | {KEY_CREATED_ROUTE_ID} |
       | tags | {route-tag-name}       |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Address Verify Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

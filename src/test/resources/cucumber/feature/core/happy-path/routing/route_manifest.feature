@@ -5,7 +5,7 @@ Feature: Route Manifest
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Fail Reservation on Route Manifest (uid:60dec2d6-20a2-4914-98fb-036c7591f834)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -27,7 +27,7 @@ Feature: Route Manifest
       | reservation.status | Fail                       |
     When Operator waits for 1 seconds
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Success Reservation on Route Manifest (uid:b23ca49e-c64f-4b37-b327-f979e33615cc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -71,7 +71,7 @@ Feature: Route Manifest
       | pickup.status        | Fail                          |
       | pickup.failureReason | 9                             |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Success Pickup Transaction on Route Manifest (uid:c5e5ce6c-bf1b-4113-996a-6ab7ae0532de)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -92,7 +92,7 @@ Feature: Route Manifest
       | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
       | pickup.status     | Success                       |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Fail Delivery Transaction on Route Manifest (uid:4154cb1e-4384-4fea-85fc-edb7bc5705be)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -118,7 +118,7 @@ Feature: Route Manifest
       | delivery.status        | Fail                          |
       | delivery.failureReason | 1                             |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Admin Manifest Force Success Delivery Transaction on Route Manifest (uid:cbfc2a8a-8cb9-455b-a837-0aeb20bf5bf9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

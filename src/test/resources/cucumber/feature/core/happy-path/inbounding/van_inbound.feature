@@ -5,7 +5,7 @@ Feature: Van Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID (uid:059cdf83-90d2-4311-a7f8-f32dd9a4e550)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

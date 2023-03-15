@@ -5,6 +5,7 @@ Feature: Edit Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -29,7 +30,7 @@ Feature: Edit Order
       | OTP to NONE | OTP                        | None                           | uid:cc3af0ad-d92c-4786-a718-5c9187807dab |
       | NONE to OTP | NONE                       | OTP                            | uid:c7a5a67e-b0f5-4901-8b1f-049bb1a4668a |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Edit Delivery Details on Edit Order page (uid:2f315ce8-61c0-499b-8430-059ff2e09679)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -62,7 +63,7 @@ Feature: Edit Order
     And DB Operator verify Delivery transaction record is updated for the created order
     And DB Operator verify Delivery waypoint record is updated
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:0954ea50-2ab7-4072-9053-3868759fbe02)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -95,6 +96,7 @@ Feature: Edit Order
     And DB Operator verify Pickup transaction record is updated for the created order
     And DB Operator verify Pickup waypoint record is updated
 
+  @happy-path
   Scenario: Operator Tag Order to DP (uid:9de17044-af55-4ae0-9a61-a0cf85f82403)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -128,6 +130,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 18 |
 
+  @happy-path
   Scenario: Operator Edit Priority Level (uid:497844f8-45e3-44cd-b6ac-5687b1a29594)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -144,6 +147,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE SLA |
 
+  @happy-path
   Scenario: Operator Edit Order Details on Edit Order page (uid:dda649d5-6ccf-4f12-ac87-4f6e36d3b896)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -153,7 +157,7 @@ Feature: Edit Order
     When Operator Edit Order Details on Edit Order page
     Then Operator Edit Order Details on Edit Order page successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -186,7 +190,7 @@ Feature: Edit Order
       | Normal | uid:e0323f71-ba8c-435f-afa0-c16747c32e6f | Normal    |
       | Return | uid:f4077b6d-4a69-4e5b-8cf1-e3e647ead9df | Return    |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:bb2ffdf8-eb64-4eab-91b4-ea4ac3f10e26)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -217,7 +221,7 @@ Feature: Edit Order
 
     And DB Operator verifies route_monitoring_data is hard-deleted
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Fail Pickup (uid:791d7d9a-0fc3-4c7a-97f5-46ae351b9064)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -248,7 +252,7 @@ Feature: Edit Order
       | status         | Pending        |
       | granularStatus | Pending Pickup |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Fail Delivery (uid:efd3994c-9f5c-45e9-bfe4-f7ae24b4c6ec)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -282,7 +286,7 @@ Feature: Edit Order
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Cancel RTS from Edit Order Page (uid:16012ebc-23b9-4553-8d1e-275aa8bf8913)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -304,6 +308,7 @@ Feature: Edit Order
     And DB Operator verifies orders record using data below:
       | rts | 0 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Add Cash on Delivery (uid:df80eafe-f150-4b8e-ba62-beb1a43e7398)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
@@ -317,6 +322,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Update Cash on Delivery (uid:31927712-7e5f-4772-9435-44e4e936dae7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
@@ -330,6 +336,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery (uid:126396fb-36d2-430e-879c-4bdc5ef253e6)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
@@ -342,6 +349,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 15 |
 
+  @happy-path
   Scenario: Operator Untag/Remove Order from DP (uid:6f8ecea3-8835-4bea-9337-1cc8a4f5f10c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -354,7 +362,7 @@ Feature: Edit Order
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
-#  initially city is ""
+    #  initially city is ""
     Then DB Operator verify next Delivery transaction values are updated for the created order:
       | distribution_point_id | 0                      |
       | address1              | GET_FROM_CREATED_ORDER |
@@ -368,7 +376,7 @@ Feature: Edit Order
     And DB Operator verify the order_events record exists for the created order with type:
       | 35 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:ae47574b-3ae9-4c6f-bd73-3c29125492f1)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -400,6 +408,7 @@ Feature: Edit Order
 
     And DB Operator verifies route_monitoring_data is hard-deleted
 
+  @happy-path
   Scenario: Cancel Order - Pending Pickup (uid:0af2c2aa-51e1-4780-8b8c-0207feed6dfe)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -432,6 +441,7 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
+  @happy-path
   Scenario: Operator Manually Complete Order on Edit Order Page (uid:2fd50201-9432-497a-9b7d-71c49ab27330)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -441,7 +451,7 @@ Feature: Edit Order
     And Operator confirm manually complete order on Edit Order page
     Then Operator verify the order completed successfully on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -470,6 +480,7 @@ Feature: Edit Order
       | Return - Delivery | uid:75691bdc-712b-4b5a-a19a-8bd10ff8bba7 | Return    | Delivery  |
       | Return - Pickup   | uid:5b768149-fbee-4f18-9970-942e86ce68c8 | Return    | Pickup    |
 
+  @happy-path
   Scenario: Operator Delete Order - Status = Pending Pickup (uid:137ca011-9ebb-4f49-b917-e9d2872da9a4)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -500,6 +511,7 @@ Feature: Edit Order
     And Operator verify order event on Edit order page using data below:
       | name | RESUME |
 
+  @happy-path
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:ad15e79d-7fcf-40ff-92cd-bb2667c8379f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

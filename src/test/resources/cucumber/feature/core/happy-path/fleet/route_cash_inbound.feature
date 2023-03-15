@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Create COD on Route Cash Inbound Page (uid:5210d62e-f909-449a-b381-8553a46dfd3d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -26,7 +26,7 @@ Feature: Route Cash Inbound
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
     And DB Operator verify the new COD for created route is created successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Update COD on Route Cash Inbound Page (uid:d1e30cde-1112-4089-8f06-104b8a4ea99b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -47,7 +47,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Delete COD on Route Cash Inbound Page (uid:ad04e32c-b948-4bce-a04d-f969d65ca0fe)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |

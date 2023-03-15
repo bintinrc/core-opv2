@@ -5,7 +5,7 @@ Feature: Resume Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @routing-refactor
+  @routing-refactor @happy-path
   Scenario: Operator Resume a Cancelled Order on Edit Order page - Pickup Cancelled, Delivery Cancelled (uid:849dfc99-3ee7-4e7d-a665-bbfec8396ff3)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

@@ -5,7 +5,7 @@ Feature: Route Monitoring V2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery (uid:45e0b063-386d-4e9a-aa55-6258b968fe2e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
@@ -21,9 +21,9 @@ Feature: Route Monitoring V2
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}               |
+      | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}   |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId                | {KEY_CREATED_ROUTE_ID} |
       | totalParcels           | 2                      |
@@ -43,7 +43,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup (uid:d90eb775-2b4b-42aa-96c7-9a090d49cf64)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -63,9 +63,9 @@ Feature: Route Monitoring V2
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}               |
+      | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}   |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId                | {KEY_CREATED_ROUTE_ID} |
       | totalParcels           | 2                      |
@@ -132,9 +132,9 @@ Feature: Route Monitoring V2
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}               |
+      | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
-      | routeId | {KEY_CREATED_ROUTE_ID}   |
+      | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId          | {KEY_CREATED_ROUTE_ID} |
       | totalWaypoint    | 3                      |

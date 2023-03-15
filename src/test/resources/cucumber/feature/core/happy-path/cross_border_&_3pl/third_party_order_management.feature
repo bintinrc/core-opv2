@@ -1,7 +1,7 @@
 @OperatorV2 @Core @CrossBorderAnd3PL @ThirdPartyOrderManagement @happy-path
 Feature: Third Party Order Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @happy-path
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

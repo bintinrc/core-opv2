@@ -5,7 +5,7 @@ Feature: Route Logs
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Edit Details of a Single Route on Route Logs Page (uid:2a2ab038-88aa-45be-b2a4-f651da5023e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -35,7 +35,7 @@ Feature: Route Logs
       | comments       | Route has been edited by automated test |
       | tags           | {route-tag-name}                        |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Archive Multiple Routes from Route Logs Page (uid:161bdba2-5816-446e-988d-56889e3103c9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -58,7 +58,7 @@ Feature: Route Logs
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | ARCHIVED |
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | ARCHIVED |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page (uid:647f207b-ca4b-4e6e-89d3-817f88d301a5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -84,7 +84,7 @@ Feature: Route Logs
       | top    | Transactions with 2 Routes Merged                                          |
       | bottom | Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]}, {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Create a Single Route from Route Logs Page (uid:31070e4b-b30d-4323-8ea0-96be44488282)
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
@@ -109,7 +109,7 @@ Feature: Route Logs
       | tags           | {route-tag-name}                 |
 
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page (uid:613d5782-5aa0-4519-ac39-50a59ca0a208)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:

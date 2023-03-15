@@ -5,7 +5,7 @@ Feature: Implanted Manifest
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Creates Implanted Manifest Pickup with Total Scanned Orders = Total of POD (uid:a3672fcb-84a9-4154-8df2-e962b1beabcd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:

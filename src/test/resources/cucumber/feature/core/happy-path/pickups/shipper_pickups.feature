@@ -5,6 +5,7 @@ Feature: Shipper Pickups
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Operator Find Created Reservation by Shipper Name (uid:d8f5c2ca-1c9b-401d-8125-b6b91989f090)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -22,7 +23,7 @@ Feature: Shipper Pickups
       | shipperId     | {shipper-v4-legacy-id}       |
       | reservationId | GET_FROM_CREATED_RESERVATION |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:040e08e7-97f9-4085-94e9-e52db7f32edc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -51,6 +52,7 @@ Feature: Shipper Pickups
 
     And DB Operator verifies route_monitoring_data record
 
+  @happy-path
   Scenario: Operator Filters Created Reservation by Master Shipper (uid:5020c570-4f72-4ba2-bc26-8de5560eca89)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper set Shipper V4 using data below:
@@ -68,6 +70,7 @@ Feature: Shipper Pickups
       | approxVolume | Less than 3 Parcels                            |
       | comments     | Please be careful with the v-day flowers.      |
 
+  @happy-path
   Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations (uid:2641d40f-f8f5-4dae-86bb-c64cd36c1ca0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create multiple shipper addresses V2 using data below:
@@ -85,7 +88,7 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations (uid:3aa95d49-297d-43ca-a082-32606a32fe0c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create multiple shipper addresses V2 using data below:
@@ -105,7 +108,7 @@ Feature: Shipper Pickups
     And Operator removes the route from the created reservations
     Then Operator verify the route was removed from the created reservations
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations (uid:7a0ad9b6-cb35-4321-954f-c8a04b7645ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
@@ -142,7 +145,7 @@ Feature: Shipper Pickups
       | routeId     | {KEY_CREATED_ROUTE_ID} |
       | driverName  | {ninja-driver-name}    |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Success Reservation (uid:4a2910a0-364b-4fc7-9149-a4c80bcdc70b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
@@ -179,7 +182,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
     And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Fail Reservation (uid:7edbeffb-bd5e-466c-bc8d-2aa43eb50555)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:

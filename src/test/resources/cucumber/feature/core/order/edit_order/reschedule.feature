@@ -224,7 +224,7 @@ Feature: Reschedule
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Fail Pickup - Edit Pickup Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -301,7 +301,7 @@ Feature: Reschedule
       | city     | Singapore                          |
       | country  | Singapore                          |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
