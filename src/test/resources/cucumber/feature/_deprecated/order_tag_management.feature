@@ -51,7 +51,7 @@ Feature: Order Tag Management
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Pending Pickup                  |
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute
   Scenario: View Tagged Orders on the Order Tag Management Page - Delivery Attempted, Pending Reschedule (uid:3ea40471-cd24-4809-8b7d-c8e7605d4847)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
