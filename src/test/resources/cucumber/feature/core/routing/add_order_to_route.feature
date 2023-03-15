@@ -51,7 +51,7 @@ Feature: Add Order To Route
     Then Operator verifies that "Order TESTINVALIDTRACKINGID not found!" error toast message is displayed
     And Operator verifies the last scanned tracking id is "TESTINVALIDTRACKINGID"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Add Order to a Route - Delivery, Valid Tracking ID, No Prefix
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

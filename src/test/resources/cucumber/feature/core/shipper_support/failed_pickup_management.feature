@@ -5,7 +5,7 @@ Feature: Failed Pickup Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Cancel Failed Pickup of Multiple Return Orders (uid:90c0137a-63ff-41c8-a8d7-2707aba85192)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -24,7 +24,7 @@ Feature: Failed Pickup Management
     And Operator cancel multiple orders on Failed Pickup Management page
     Then API Operator verify multiple failed pickup orders info after Canceled
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Multiple Failed Pickups of Return Orders on Specific Date (uid:aabfef93-1287-45ac-af2b-7447b36c2c0f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -79,7 +79,7 @@ Feature: Failed Pickup Management
     When Operator go to menu Shipper Support -> Failed Pickup Management
     Then Operator verify the failed pickup C2C/Return order is listed on Failed Pickup orders list
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Failed Return Pickup on Next Day (uid:2681404c-127f-4dc4-b74f-9a6bd9f1a186)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

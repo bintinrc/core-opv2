@@ -84,7 +84,7 @@ Feature: Failed Delivery Management
     Then Operator verify failed delivery order RTS-ed successfully
     And API Operator verify order info after failed delivery order RTS-ed on next day
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario Outline: Operator Reschedule Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -174,7 +174,7 @@ Feature: Failed Delivery Management
       | Normal | uid:adb3d9da-c4e7-4f1b-b782-5677d909e2d2 | Normal    | false            |
       | Return | uid:a4a37f22-cac7-48b7-aa86-9f124d582d2a | Return    | true             |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario Outline: Operator RTS Failed Delivery Order on Next Day - <Note> (<hiptest-uid>)
     When Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -258,7 +258,7 @@ Feature: Failed Delivery Management
       | Normal | uid:8a5c4ede-96ec-4cb6-98c2-776bbfe1e3c3 | Normal    | false            |
       | Return | uid:13de8904-3423-4f4c-b27d-4d1050873bc4 | Return    | true             |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator RTS Multiple Failed Deliveries (uid:02bc7568-b4d6-48f7-8d69-14bbfc57130d)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
@@ -338,7 +338,7 @@ Feature: Failed Delivery Management
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Multiple Failed Deliveries (uid:aec2fa4a-bd14-4541-9820-b3370cbd564a)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
@@ -519,7 +519,7 @@ Feature: Failed Delivery Management
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Multiple Failed Deliveries by Upload CSV (uid:7e2f169f-1e30-41a7-8d7c-f87a8a844c79)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:

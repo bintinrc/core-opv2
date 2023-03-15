@@ -28,6 +28,7 @@ Feature: Cancel Order
       | statusCode | 500               |
       | message    | Order is On Hold! |
 
+  @happy-path
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
