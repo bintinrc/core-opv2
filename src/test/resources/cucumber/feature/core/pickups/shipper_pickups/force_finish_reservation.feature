@@ -5,7 +5,7 @@ Feature: Shipper Pickups - Force Finish Reservation
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Success Reservation (uid:46685d49-fd6d-4234-b2a2-594bc411bbb3)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -42,7 +42,7 @@ Feature: Shipper Pickups - Force Finish Reservation
       | comments     | GET_FROM_CREATED_RESERVATION |
     And Operator verify that "Finish" icon is disabled for created reservation on Shipper Pickups page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Force Finishes a Pending Reservation on Shipper Pickup Page - Fail Reservation (uid:42df2c09-16b2-4081-a325-00e8aaffada3)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:

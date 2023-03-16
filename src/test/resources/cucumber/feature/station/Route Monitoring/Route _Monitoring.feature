@@ -110,7 +110,7 @@ Feature: Route Monitoring V2
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    And API Operator set tags of the new created route to [{route-tag-id}]
+    #    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -441,14 +441,14 @@ Feature: Route Monitoring V2
     When Operator Filters the records in the "Invalid Failed Reservations" by applying the following filters:
       | Reservation ID               | Pickup Name        |
       | {KEY_CREATED_RESERVATION_ID} | {KEY_SHIPPER_NAME} |
-#      | Reservation ID               | Pickup Name        | Address               | Contact              |
-#      | {KEY_CREATED_RESERVATION_ID} | {KEY_SHIPPER_NAME} | {KEY_SHIPPER_ADDRESS} | {KEY_SHIPPER_CONTACT} |
+    #      | Reservation ID               | Pickup Name        | Address               | Contact              |
+    #      | {KEY_CREATED_RESERVATION_ID} | {KEY_SHIPPER_NAME} | {KEY_SHIPPER_ADDRESS} | {KEY_SHIPPER_CONTACT} |
     And Operator selects the timeslot "3pm - 6pm" in the table
     Then Operator verify value in the "Invalid Failed Reservations" table for the "RESERVATION_ID" column value is equal to "{KEY_CREATED_RESERVATION_ID}"
     Then Operator verify value in the "Invalid Failed Reservations" table for the "PICKUP_NAME" column value is equal to "{KEY_SHIPPER_NAME}"
-#    Then Operator verify value in the "Invalid Failed Reservations" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
+    #    Then Operator verify value in the "Invalid Failed Reservations" table for the "ADDRESS" column value is equal to "{KEY_SHIPPER_ADDRESS}"
     Then Operator verify value in the "Invalid Failed Reservations" table for the "TIME_SLOT" column value is equal to "3pm - 6pm"
-#    Then Operator verify value in the "Invalid Failed Reservations" table for the "CONTACT" column contains "{KEY_SHIPPER_CONTACT}"
+    #    Then Operator verify value in the "Invalid Failed Reservations" table for the "CONTACT" column contains "{KEY_SHIPPER_CONTACT}"
     And Operator verifies that Shipper Pickup page is opened on clicking Reservation ID "{KEY_CREATED_RESERVATION_ID}" table "Invalid Failed Reservations"
 
     Examples:

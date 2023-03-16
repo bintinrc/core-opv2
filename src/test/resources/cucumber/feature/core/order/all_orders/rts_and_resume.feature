@@ -55,7 +55,7 @@ Feature: All Orders - RTS & Resume
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator RTS Multiple Orders on All Orders Page (uid:0061ef8a-2496-4ed9-a259-4dd01e8c7cba)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -141,6 +141,7 @@ Feature: All Orders - RTS & Resume
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
+  @happy-path
   Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Multiple Orders (uid:07ae3956-3711-4994-8de4-94d43ca93edf)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:

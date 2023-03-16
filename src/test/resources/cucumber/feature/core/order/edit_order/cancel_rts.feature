@@ -5,7 +5,7 @@ Feature: Cancel RTS
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Cancel RTS from Edit Order Page (uid:d4419364-fa79-41db-8b2f-2367864463fb)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
