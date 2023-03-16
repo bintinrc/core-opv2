@@ -1235,8 +1235,8 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
 
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       pickupAppointmentJobPage.inFrame(() -> {
-        
-        pickupAppointmentJobPage.bulkSelect.clickColumn(1, COLUMN_ROUTE_POS);
+        pickupAppointmentJobPage.bulkSelect.clickColumnRoute(routeId);
+       
         pickupAppointmentJobPage.switchToOtherWindow("route-manifest/" + routeId);
       });
     }, 5000, 3);

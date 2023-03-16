@@ -669,6 +669,10 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
           .collect(Collectors.toList());
     }
 
+    public void clickColumnRoute(String value) {
+      findElementBy(By.xpath(f(PICKUP_JOB_ROW_COL_ROUTE, value))).click();
+    }
+
     public List<String> getColListByValue(String value) {
 
       List<String> resultList = new ArrayList<>();
