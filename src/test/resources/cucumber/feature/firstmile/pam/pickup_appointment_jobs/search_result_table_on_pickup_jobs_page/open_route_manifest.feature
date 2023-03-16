@@ -26,6 +26,7 @@ Feature: open route manifest
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Success                                                                                                                                                                        |
@@ -56,6 +57,7 @@ Feature: open route manifest
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Fail                                                                                                                                                                           |
@@ -84,6 +86,7 @@ Feature: open route manifest
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Cancel                                                                                                                                                                         |
@@ -111,6 +114,7 @@ Feature: open route manifest
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Pending                                                                                                                                                                        |
@@ -141,6 +145,7 @@ Feature: open route manifest
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
     And  Operator clicks "Filter Jobs" button on Pickup Jobs page
+    When Operator search for "route id" = "{KEY_LIST_OF_CREATED_ROUTES[1].id}" in pickup jobs table
     When Operator open Route Manifest of created route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Pickup Jobs page
     Then Operator verify waypoint at Route Manifest using data below:
       | status  | Pending                                                                                                                                                                        |
