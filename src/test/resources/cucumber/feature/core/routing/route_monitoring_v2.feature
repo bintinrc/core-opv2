@@ -297,7 +297,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
