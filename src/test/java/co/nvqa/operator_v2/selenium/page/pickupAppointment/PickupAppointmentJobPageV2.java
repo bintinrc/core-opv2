@@ -670,7 +670,12 @@ public class PickupAppointmentJobPageV2 extends SimpleReactPage<PickupAppointmen
     }
 
     public void clickColumnRoute(String value) {
-      findElementBy(By.xpath(f(PICKUP_JOB_ROW_COL_ROUTE, value))).click();
+      JavascriptExecutor js = (JavascriptExecutor) webDriver;
+      js.executeScript("arguments[0].scrollIntoView();",
+          findElementBy(By.xpath(f(PICKUP_JOB_ROW_COL_ROUTE, value))));
+      js.executeScript("arguments[0].click();",
+          findElementBy(By.xpath(f(PICKUP_JOB_ROW_COL_ROUTE, value))));
+//      findElementBy(By.xpath(f(PICKUP_JOB_ROW_COL_ROUTE, value))).click();
     }
 
     public List<String> getColListByValue(String value) {
