@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsTag
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsTag @BulkTagOnPickupJob
 Feature: bulk tag on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun

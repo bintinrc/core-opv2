@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @createJobFromExistingJob1
+@OperatorV2 @CoreV2 @PickupAppointment @createJobFromExistingJob1 @CreatePAFromExistingJobPart1
 Feature: Create pickup jobs from existing job
 
   @LaunchBrowser @ShouldAlwaysRun
