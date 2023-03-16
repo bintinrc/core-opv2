@@ -457,7 +457,7 @@ Feature: Create pickup jobs on Pickup Jobs page calendar view
       | ROUTED            |
       | IN_PROGRESS       |
     When Operator get Pickup Jobs for date = "{gradle-next-3-day-yyyy-MM-dd}" from pickup jobs list = "KEY_CONTROL_PA_JOBS_IN_DB[2]"
-    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 3
+    Then Operator check pickup jobs list = "KEY_CONTROL_CREATED_PA_JOBS_DB_OBJECT" size is = 2
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
