@@ -1237,7 +1237,7 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
       pickupAppointmentJobPage.bulkSelect.filterByColumnV2(COLUMN_ROUTE, routeId);
       pickupAppointmentJobPage.bulkSelect.clickColumn(1, COLUMN_ROUTE_POS);
     });
-    pickupAppointmentJobPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
+    pickupAppointmentJobPage.switchToOtherWindow("route-manifest/" + routeId);
   }
 
   @When("Operator click on Create Modify preset button in pickup appointment")
