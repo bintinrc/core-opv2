@@ -423,6 +423,7 @@ Feature: Address Datasource
       | longitude   | {longitude-2}   |
       | whitelisted | False           |
 
+  @DeleteAddressDatasource
   Scenario: TH Address Datasource - Edit Row Form - Delete
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
