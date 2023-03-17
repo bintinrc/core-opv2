@@ -18,6 +18,7 @@ Feature: Tag & Untag DP
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
+    And Operator verifies Delivery Details are updated on Edit Order Page
     And Operator verify order event on Edit order page using data below:
       | name | ASSIGNED TO DP |
     And Operator verify order event on Edit order page using data below:
@@ -31,17 +32,24 @@ Feature: Tag & Untag DP
       | toCountry  | GET_FROM_CREATED_ORDER |
       | toState    |                        |
       | toDistrict |                        |
-    Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | {dpms-id}              |
-      | address1              | GET_FROM_CREATED_ORDER |
-      | address2              | GET_FROM_CREATED_ORDER |
-      | postcode              | GET_FROM_CREATED_ORDER |
-      | city                  | GET_FROM_CREATED_ORDER |
-      | country               | GET_FROM_CREATED_ORDER |
-    And Operator verifies Delivery Details are updated on Edit Order Page
-    And DB Operator verify Delivery waypoint record is updated
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 18 |
+    And DB Core - verify transactions record:
+      | id                    | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status                | Pending                                                    |
+      | distribution_point_id | {dpms-id}                                                  |
+      | address1              | 501, ORCHARD ROAD, SG, 238880                              |
+      | address2              | 3-4                                                        |
+      | postcode              | 238880                                                     |
+      | city                  | SG                                                         |
+      | country               | SG                                                         |
+    And DB Core - verify waypoints record:
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
+      | address1 | 501, ORCHARD ROAD, SG, 238880                              |
+      | address2 | 3-4                                                        |
+      | postcode | 238880                                                     |
+      | city     | SG                                                         |
+      | country  | sg                                                         |
 
   @happy-path
   Scenario: Operator Untag/Remove Order from DP (uid:cc4e3098-6bdd-48ea-9488-579535af8722)
