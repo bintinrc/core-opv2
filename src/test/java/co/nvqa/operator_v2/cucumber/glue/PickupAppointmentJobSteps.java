@@ -116,8 +116,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void selectDataRange(Map<String, String> dataTable) {
     final String startDay = dataTable.get("startDay");
     final String endDay = dataTable.get("endDay");
+    pickupAppointmentJobPage.inFrame(() -> {
 
-    pickupAppointmentJobPage.getCreateOrEditJobPage().selectDataRangeByTitle(startDay, endDay);
+      pickupAppointmentJobPage.getCreateOrEditJobPage().selectDataRangeByTitle(startDay, endDay);
+    });
+
   }
 
   @And("Operator select time slot from Select time range field")
@@ -514,12 +517,14 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     String jobID = resolveValue(dataTable.get("jobID"));
     final String notificationMessage = dataTable.get("notificationMessage");
 
-    pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationMessage())
-          .as("Notification message is displayed").isEqualTo(notificationMessage);
-      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationDescription())
-          .as(f("Notification message is contains %s:", jobID)).contains(jobID);
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationMessage())
+            .as("Notification message is displayed").isEqualTo(notificationMessage);
+        Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationDescription())
+            .as(f("Notification message is contains %s:", jobID)).contains(jobID);
+      });
+    }, 1000, 3);
 
 
   }
@@ -646,7 +651,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click on Show or hide dropdown button")
   public void clickOnShowOrHideDropdownButton() {
-    pickupAppointmentJobPage.clickOnShowOrHideFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickOnShowOrHideFilters();
+    });
   }
 
   @Then("QA verify filters are hidden")
@@ -665,7 +673,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click load selection on pickup jobs filter")
   public void clickLoadSelection() {
-    pickupAppointmentJobPage.clickLoadSelectionButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickLoadSelectionButton();
+    });
   }
 
   @After("@deletePickupJob")
@@ -692,7 +703,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click on Clear Selection button")
   public void clickOnClearSelectionButton() {
-    pickupAppointmentJobPage.clickOnClearSelectionButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickOnClearSelectionButton();
+    });
   }
 
   @When("Operator upload Success proof photo on pickup appointment job")
