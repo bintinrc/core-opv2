@@ -96,9 +96,4 @@ public class ScenarioManager extends CommonUiScenarioManager {
     optionalFile.flatMap(dir -> Optional.ofNullable(dir.listFiles()))
         .ifPresent(files -> Stream.of(files).forEach(File::delete));
   }
-
-  @After
-  public void afterScenario(Scenario scenario) {
-    getTestCaseService().pushExecutionResultViaApi(scenario);
-  }
 }
