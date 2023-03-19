@@ -140,8 +140,8 @@ public class OrderBillingPage extends SimpleReactPage {
     }
   }
 
-  public Boolean isAggregatedInfoMsgExist(String infoMsg) {
-    return aggregatedDisabledTxt.getText().equals(infoMsg);
+  public String getAggregatedInfoMsg() {
+    return aggregatedDisabledTxt.getText();
   }
 
   public String getCsvFileTemplateName() {

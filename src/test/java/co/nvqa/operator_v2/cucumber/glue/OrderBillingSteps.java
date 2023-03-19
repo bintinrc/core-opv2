@@ -95,8 +95,9 @@ public class OrderBillingSteps extends AbstractSteps {
         if (generateFile.contains("Orders consolidated by shipper")) {
           put(KEY_ORDER_BILLING_REPORT_TYPE, "SHIPPER");
         } else if (generateFile.contains("All orders grouped by shipper")) {
-          Assertions.assertThat(orderBillingPage.isAggregatedInfoMsgExist(
-              "Customized Template is not supported for aggregated report type.")).isTrue();
+          Assertions.assertThat(orderBillingPage.getAggregatedInfoMsg())
+              .as("Aggregated Ino msg is available")
+              .isEqualTo("* Customized Template is not supported for aggregated report type.");
         }
       }
       String csvFileTemplate = mapOfData.get("csvFileTemplate");
