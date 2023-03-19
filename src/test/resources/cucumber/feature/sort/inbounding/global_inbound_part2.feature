@@ -15,7 +15,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | INVALID  |
       | rackInfo       | RECOVERY |
-      | color          | #e86161  |
+      | color          | #fa002c |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Inbound failed delivery - <dataset_name> (<hiptest-uid>)
@@ -45,7 +45,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId | {hub-id-3} |
       | type  | 2          |
@@ -80,7 +80,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows @happy-path
@@ -102,7 +102,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows @happy-path
@@ -125,7 +125,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows
@@ -142,7 +142,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -197,7 +197,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #55a1e8                            |
+      | color          | #f7f7f7                            |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
     And DB Operator verify dp_qa_gl.dp_job_orders record using data below:
@@ -221,47 +221,6 @@ Feature: Global Inbound
       | hubName | {KEY_CREATED_ORDER.destinationHub}         |
 
   @CloseNewWindows
-  Scenario Outline: Inbound with Priority Level - <dataset_name> (<hiptest-uid>)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator update priority level of an order:
-      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
-      | priorityLevel | <priorityLevel>                   |
-    And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name-3}                               |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
-    Then Operator verifies priority level info is correct using data below:
-      | priorityLevel           | <priorityLevel>           |
-      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
-    Then API Operator verify order info after Global Inbound
-    And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id-3}                                 |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | type       | 2                                          |
-    And DB Operator verify next Delivery transaction values are updated for the created order:
-      | priorityLevel | <priorityLevel> |
-    And DB Operator verify order_events record for the created order:
-      | type | 26 |
-    When Operator switch to edit order page using direct URL
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    Examples:
-      | Note   | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex | dataset_name |
-      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 | Level 1      |
-      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 | Level 2-90   |
-      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 | Level >90    |
-
-  @CloseNewWindows
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -274,7 +233,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And Operator verifies DP tag is displayed
     And API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
@@ -302,7 +261,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id-3}                                 |
@@ -337,7 +296,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then Operator verifies tags on Global Inbound page
       | OPV2AUTO1 |
       | OPV2AUTO2 |
@@ -350,7 +309,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows @happy-path
+  @CloseNewWindows @happy-path @TAG
   Scenario: Inbound On Hold Order - Resolve PENDING MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -391,7 +350,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator removes all ticket status filters

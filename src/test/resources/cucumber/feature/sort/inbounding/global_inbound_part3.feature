@@ -48,7 +48,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | ON HOLD - SHIPPER ISSUE |
       | rackInfo       | RECOVERY                |
-      | color          | #e86161                 |
+      | color          | #fa002c                |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
@@ -74,7 +74,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                              |
@@ -93,7 +93,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                              |
@@ -112,7 +112,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                              |
@@ -131,7 +131,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                                              |
@@ -150,7 +150,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -298,7 +298,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And DB Operator verify the order_events record exists for the created order with type:
       | 26 |
 
@@ -322,7 +322,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #e86161                            |
+      | color          | #fa002c                           |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -346,7 +346,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -364,7 +364,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | INTERNATIONAL                  |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector} |
-      | color          | #ffa400                        |
+      | color          | #f06c00                        |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -382,7 +382,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -415,7 +415,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And Operator verifies DP tag is displayed
     And DB Operator verify order_events record for the created order:
       | type | 26 |
@@ -434,7 +434,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     Then Operator verify Delivery "HUB INBOUND SCAN" order event description on Edit order page
 
@@ -452,7 +452,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
       | OPV2AUTO1 |
@@ -479,7 +479,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And Operator verify failed tagging error toast is shown
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify the tags shown on Edit Order page
@@ -504,7 +504,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     And Operator verifies prior tag is displayed
     When Operator switch to edit order page using direct URL
     And DB Operator verify order_events record for the created order:
@@ -526,7 +526,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -548,7 +548,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -572,7 +572,7 @@ Feature: Global Inbound
       | overrideDimLength | {dimension-length}                         |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | {KEY_CREATED_ORDER.rackSector} |
-      | color    | #55a1e8                        |
+      | color    | #f7f7f7                        |
     Then API Operator verify order info after Global Inbound
     When API Operator get order details by saved Order ID
     And Operator switch to edit order page using direct URL

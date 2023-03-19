@@ -18,7 +18,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -46,7 +46,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -79,7 +79,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -104,7 +104,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When API Operator save current order cost
     When API Operator recalculate order price
@@ -133,7 +133,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -159,7 +159,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -186,7 +186,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | ROUTED  |
-      | color    | #e86161 |
+      | color    | #fa002c|
     And API Operator verify order info after Global Inbound
     And DB Operator verify the order_events record exists for the created order with type:
       | 26 |
@@ -215,7 +215,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | RTS      |
       | rackInfo       | RECOVERY |
-      | color          | #e86161  |
+      | color          | #fa002c |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -237,7 +237,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | TRANSFERRED TO 3PL |
       | rackInfo       | RECOVERY           |
-      | color          | #e86161            |
+      | color          | #fa002c           |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -255,7 +255,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | COMPLETED |
       | rackInfo       | RECOVERY  |
-      | color          | #e86161   |
+      | color          | #fa002c  |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -274,7 +274,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | CANCELLED |
       | rackInfo       | RECOVERY  |
-      | color          | #e86161   |
+      | color          | #fa002c  |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -300,7 +300,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | ROUTED  |
-      | color    | #e86161 |
+      | color    | #fa002c|
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
@@ -321,6 +321,6 @@ Feature: Global Inbound
     Then Operator verifies error toast with "Exception" message is shown
 
 
-  @KillBrowser @ShouldAlwaysRun @TAG
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
