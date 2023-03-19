@@ -127,17 +127,10 @@ public class OrderBillingSteps extends AbstractSteps {
     orderBillingPage.setInvalidParentShipper(shipperId);
   }
 
-  @Then("Operator verifies that the name of normal shipper suggestion is not displayed")
-  public void operatorVerifiesThatTheNameOfNormalShipperSuggestionIsNotDisplayed() {
-    Assertions.assertThat(orderBillingPage.getNoParentErrorMsg()).as("Check error msg")
-        .contains("No Parent Shipper matching");
-  }
-
   @Then("Operator verifies {string} is selected in Customized CSV File Template")
   public void operatorVerifiesIsSelectedInCustomizedCSVFileTemplate(String value) {
     Assertions.assertThat(orderBillingPage.getCsvFileTemplateName())
-        .as("file template name is selected and shown")
-        .isEqualTo(value);
+        .as("file template name is selected and shown").isEqualTo(value);
   }
 
   @Then("Operator verifies that error toast is displayed on Order Billing page:")
@@ -146,6 +139,10 @@ public class OrderBillingSteps extends AbstractSteps {
     String errorTitle = mapOfData.get("top");
     String errorMessage = mapOfData.get("bottom");
 
+    retryIfAssertionErrorOccurred(
+        () -> Assertions.assertThat(orderBillingPage.noticeNotifications.get(0).message.getText())
+            .as("Notifications are available").isNotEmpty(), "Get Notifications",
+        500, 3);
     AntNotification notification = orderBillingPage.noticeNotifications.get(0);
     SoftAssertions softAssertions = new SoftAssertions();
     softAssertions.assertThat(notification.message.getText()).as("Toast top text is correct")
@@ -158,8 +155,7 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies that info pop up is displayed with message {string}")
   public void operatorVerifiesThatInfoPopUpIsDisplayedWithMessage(String expectedInfoMsg) {
     String actualInfoMsg = orderBillingPage.infoMessage.getText();
-    Assertions.assertThat(actualInfoMsg)
-        .as("info pop up message is correct")
+    Assertions.assertThat(actualInfoMsg).as("info pop up message is correct")
         .isEqualTo(expectedInfoMsg);
   }
 
@@ -177,8 +173,7 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies Generate Success Billings button is disabled")
   public void operatorVerifiesGenerateSuccessBillingsButtonIsDisabled() {
     Assertions.assertThat(orderBillingPage.isGenerateSuccessBillingsButtonEnabled())
-        .as("Generate Success Billings button is disabled")
-        .isFalse();
+        .as("Generate Success Billings button is disabled").isFalse();
   }
 
   @When("Operator generates CSV file with {int} shippers")
@@ -203,7 +198,6 @@ public class OrderBillingSteps extends AbstractSteps {
   @Then("Operator verifies {string} is not available in template selector drop down menu")
   public void operatorVerifiesIsNotAvailableInTemplateSelectorDropDownMenu(String template) {
     Assertions.assertThat(orderBillingPage.csvFileTemplate.hasItem(template))
-        .as(f(" Template with name : %s is not available in the dropdown ", template))
-        .isTrue();
+        .as(f(" Template with name : %s is not available in the dropdown ", template)).isTrue();
   }
 }
