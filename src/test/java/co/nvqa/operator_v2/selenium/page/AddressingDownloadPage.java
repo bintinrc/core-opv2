@@ -565,11 +565,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     // Click on datepicker field
     retryIfAssertionErrorOccurred(() -> {
-      click(startDatepickerFieldXpath);
+      do{click(startDatepickerFieldXpath);
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("Start datepicker is displayed")
-          .isTrue();
-      waitUntilVisibilityOfElementLocated(selectYearButtonXpath);
+          .isTrue();}
+     while(!waitUntilVisibilityOfElementLocated(selectYearButtonXpath).isDisplayed()) ;
     }, "Clicking datepicker field until it's showing...");
 
     // Select start year
