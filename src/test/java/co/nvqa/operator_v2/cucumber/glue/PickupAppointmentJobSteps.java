@@ -784,32 +784,44 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click Priority field")
   public void clickPriorityField() {
-    pickupAppointmentJobPage.clickOnPriorityButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clickOnPriorityButton();
+    });
+
   }
 
   @Then("QA verify a dropdown menu shown with priority option")
   public void verifyADropdownMenuShownWIthPriorityOption() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
-            PickupAppointmentPriorityEnum.PRIORITY.getName()))
-        .as("Priority in Priority Filter is displayed").isTrue();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
-            PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
-        .as("Non-Priority in Priority Filter is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnPriorityButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+              PickupAppointmentPriorityEnum.PRIORITY.getName()))
+          .as("Priority in Priority Filter is displayed").isTrue();
+      Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+              PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
+          .as("Non-Priority in Priority Filter is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnPriorityButton();
+    });
+
   }
 
   @When("Operator click Job Service Type field")
   public void clickJobServiceTypeField() {
-    pickupAppointmentJobPage.clickOnJobServiceType();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clickOnJobServiceType();
+    });
+
   }
 
   @Then("QA verify a dropdown menu shown with no data")
   public void verifyServiceTypeDropdownMenuShown() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Service Type Filter Dropdown Menu is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnJobServiceType();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
+          .as("Service Type Filter Dropdown Menu is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnJobServiceType();
+    });
+
   }
 
   @When("Operator click Job Service Level field")
@@ -830,9 +842,12 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @And("QA verify data start to end limited to 7 days")
   public void verifyDataStartToEndLimitedToSevenDays() {
-    String startDay = getDateByDaysAgo(7);
-    String endDay = getDateByDaysLater(7);
-    pickupAppointmentJobPage.verifyDataStartToEndLimited(startDay, endDay);
+    pickupAppointmentJobPage.inFrame(() -> {
+      String startDay = getDateByDaysAgo(7);
+      String endDay = getDateByDaysLater(7);
+      pickupAppointmentJobPage.verifyDataStartToEndLimited(startDay, endDay);
+    });
+
   }
 
   @And("Select multiple service level")
