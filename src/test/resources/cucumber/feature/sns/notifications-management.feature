@@ -1,4 +1,4 @@
-@SG @NinjaChat @batool
+@SG @NinjaChat
 Feature: Opv2 Notifications Management Scenarios
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -7,7 +7,7 @@ Feature: Opv2 Notifications Management Scenarios
 
   Scenario: opv2 - Search template id
     Given Operator go to menu Mass Communications -> Notifications Management
-#    Then Operator searches and verifies the template id "10"
+   Then Operator searches and verifies the template id "10"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

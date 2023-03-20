@@ -14,20 +14,19 @@ public class NotificationsManagementSteps extends AbstractSteps {
     notificationsManagementPage = new NotificationsManagementPage(getWebDriver());
   }
 
-//  @Then("Operator searches and verifies the template id {string}")
-//  public void operatorSearchesTheTemplateId(String templateId) {
-////    notificationsManagementPage.waitWhilePageIsLoading();
-////    notificationsManagementPage.switchTo();
-//    String templateName;
-//   // templateId = resolveValue(templateId);
-//    if (templateId.equalsIgnoreCase("10")) {
-//      templateName = "Failed Delivery";
-//    } else if (templateId.equalsIgnoreCase("98765432")) {
-//      templateName = "Updated Test";
-//      templateId = "9876543";
-//    } else {
-//      templateName = "Test";
-//    }
-// //   notificationsManagementPage.verifyTemplateIdAndName(templateId, templateName);
-//  }
+  @Then("Operator searches and verifies the template id {string}")
+  public void operatorSearchesTheTemplateId(String templateId) {
+    notificationsManagementPage.waitWhilePageIsLoading();
+    notificationsManagementPage.switchTo();
+    String templateName;
+    if (templateId.equalsIgnoreCase("10")) {
+      templateName = "Failed Delivery";
+    } else if (templateId.equalsIgnoreCase("98765432")) {
+      templateName = "Updated Test";
+      templateId = "9876543";
+    } else {
+      templateName = "Test";
+    }
+   notificationsManagementPage.verifyTemplateIdAndName(templateId, templateName);
+  }
 }
