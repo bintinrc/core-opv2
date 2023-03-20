@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobPage1
+@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobPage1 @CWF
 Feature: Pickup Appointment Job Page Part 1
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -27,7 +27,7 @@ Feature: Pickup Appointment Job Page Part 1
       | jobServiceType | Scheduled                        |
       | jobStatus      | Ready for Routing, Routed        |
 
-  @FillInFilters
+  @FillInFilters @RT
   Scenario: Fill in filters on Pickup Jobs page
     When Operator goes to Pickup Jobs Page
     Then QA verify filters on Pickup Jobs page are shown

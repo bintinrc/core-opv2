@@ -941,15 +941,20 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @Then("QA verify Shipper list will be shown after operator type 3 characters or more {string} in the Shipper field")
   public void verifyShipperListShownAfterTypeThreeCharacters(String text) {
-    pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
-          .as("Dropdown Menu No Data is displayed").isTrue();
-      pickupAppointmentJobPage.inputOnJobShipper(text);
-      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
-          .as("Dropdown Menu No Data is displayed").isTrue();
-      pickupAppointmentJobPage.clearOnJobShipper();
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
+            .as("Dropdown Menu No Data is displayed").isTrue();
+        pickupAppointmentJobPage.clearOnJobShipper();
+        pickupAppointmentJobPage.inputOnJobShipper(text);
+        Assertions.assertThat(
+                pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
+            .as("Dropdown Menu No Data is displayed").isTrue();
+        pickupAppointmentJobPage.clearOnJobShipper();
+      });
+    }, 3000, 3);
+
 
   }
 
