@@ -11,3 +11,4 @@ Feature: Create shipper part1
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
     When Operator switch to create new shipper tab
+

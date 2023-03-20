@@ -30,8 +30,7 @@ public class AllShippersStepV2 extends AbstractSteps {
 
   @When("Operator switch to create new shipper tab")
   public void switchToCreateShipperTab() {
-    String currentWindowHandle = allShippersPage.switchToNewWindow();
-    getWebDriver().switchTo().window(currentWindowHandle);
+    allShippersPage.switchToOtherWindowAndWaitWhileLoading("/shippers/create");
   }
 
   @When("Operator select Fixed prefix type in shipper settings page")
