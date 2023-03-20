@@ -659,8 +659,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @Then("QA verify filters are hidden")
   public void verifyFiltersAreHidden() {
-    Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
-        .as("Filters are hidden").isTrue();
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
+          .as("Filters are hidden").isTrue();
+    });
   }
 
   @When("Operator fills in the Shippers field with valid shipper = {string}")
@@ -696,8 +698,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator select only In progress job status, on pickup jobs filter")
   public void selectInProgressJobStatus() {
-    pickupAppointmentJobPage.clearJobStatusFilter();
-    pickupAppointmentJobPage.selectInprogressJobStatus();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clearJobStatusFilter();
+      pickupAppointmentJobPage.selectInprogressJobStatus();
+    });
   }
 
 
@@ -752,15 +756,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click Preset Filters field")
   public void openPresetFiltersField() {
-    pickupAppointmentJobPage.clickOnPresetFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+          pickupAppointmentJobPage.clickOnPresetFilters();
+
+        }
+    );
   }
 
   @Then("QA verify dropdown menu shown with a list of saved preset")
   public void verifyDropdownMenuShownWIthAListOfSavedPreset() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Preset Filter Dropdown Menu is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnPresetFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
+          .as("Preset Filter Dropdown Menu is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnPresetFilters();
+    });
+
   }
 
   @When("Operator click Data Range field")
