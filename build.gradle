@@ -76,5 +76,5 @@ dependencies {
     implementation "co.nvqa:common-mm:1.2.7"
     implementation "co.nvqa:common-pricing:1.2.8"
     implementation "co.nvqa:common-lighthouse:1.1.0"
-    implementation "co.nvqa:common-station:1.0.0"
+    implementation "co.nvqa:common-station:1.0.1"
 }
