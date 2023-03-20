@@ -21,33 +21,36 @@ Feature: All test cases related to insufficient permission for Finance related p
   @KillBrowser @User1
   Scenario: Upload Invoiced Orders - Insufficient Permissions (uid:7868e75b-9772-4b82-a046-228327a80b0a)
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
+    When Upload Invoiced Orders page is loaded
     Then Operator waits for 2 seconds
-    And Operator clicks Upload Invoiced Orders with CSV button on the Upload Invoiced Orders Page
     And Operator upload a CSV file with below order ids
       | TEST |
-    Then Operator verifies that error toast is displayed on Order Billing page:
+    Then Operator verifies that error toast is displayed on Upload Invoiced Orders page:
       | top    | Network Request Error                                                                                                                                           |
       | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
 
   @KillBrowser @User1
   Scenario: Search by Uploading CSV file - Insufficient Permissions (uid:1bf9760d-8c0f-4579-bf47-914c2d97deda)
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
+    When Search Invoiced Orders page is loaded
     Then Operator waits for 2 seconds
     And Operator upload a CSV file with below order ids on Invoiced Orders Search Page
       | TEST |
-    And Operator clicks Search Invoiced Order button
     Then Operator verifies that error toast is displayed on Invoiced Orders Search page:
-      | access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
+      | top    | Network Request Error                                                                                                                                           |
+      | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
 
   @KillBrowser @User1
   Scenario: Search by Uploading CSV file - Insufficient Permissions
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     Then Operator waits for 2 seconds
+    When Search Invoiced Orders page is loaded
     And Operator clicks in Enter Tracking ID(s) tab
-    And Operator enters "TEST" tracking id on Invoiced Orders Search Page
+    And Operator enters "NVSGSLPSH0LFED90LE" tracking id on Invoiced Orders Search Page
     And Operator clicks Search Invoiced Order button
     Then Operator verifies that error toast is displayed on Invoiced Orders Search page:
-      | access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
+      | top    | Network Request Error                                                                                                                                           |
+      | bottom | Error Message: access denied due to insufficient Permissions. Required any of the scopes: [OPERATOR_ADMIN CORE_GET_SHIPPER_BILLING ALL_ACCESS INTERNAL_SERVICE] |
 
   @KillBrowser @User1
   Scenario: Create Pricing Script - Insufficient Permissions (uid:88fc357a-d47d-45c8-bac3-6d33f8dc7c12)

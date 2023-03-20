@@ -1,13 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.page.UploadInvoicedOrdersPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,4 +113,23 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     uploadInvoicedOrdersPage.waitUntilLoaded();
   }
 
+  @Then("Operator verifies that error toast is displayed on Upload Invoiced Orders page:")
+  public void operatorVerifiesThatErrorToastDisplayedOnUploadInvoicedOrdersPage(
+      Map<String, String> mapOfData) {
+    String errorTitle = mapOfData.get("top");
+    String errorMessage = mapOfData.get("bottom");
+
+    retryIfAssertionErrorOccurred(
+        () -> Assertions.assertThat(
+                uploadInvoicedOrdersPage.noticeNotifications.get(0).message.getText())
+            .as("Notifications are available").isNotEmpty(), "Get Notifications",
+        500, 3);
+    AntNotification notification = uploadInvoicedOrdersPage.noticeNotifications.get(0);
+    SoftAssertions softAssertions = new SoftAssertions();
+    softAssertions.assertThat(notification.message.getText()).as("Toast top text is correct")
+        .isEqualTo(errorTitle);
+    softAssertions.assertThat(notification.description.getText()).as("Toast bottom text is correct")
+        .contains(errorMessage);
+    softAssertions.assertAll();
+  }
 }
