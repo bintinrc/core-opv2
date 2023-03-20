@@ -309,7 +309,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @CloseNewWindows @happy-path @TAG
+  @CloseNewWindows @happy-path
   Scenario: Inbound On Hold Order - Resolve PENDING MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

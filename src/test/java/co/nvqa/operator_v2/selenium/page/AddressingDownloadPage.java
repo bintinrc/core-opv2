@@ -569,6 +569,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("Start datepicker is displayed")
           .isTrue();
+      waitUntilVisibilityOfElementLocated(selectYearButtonXpath);
     }, "Clicking datepicker field until it's showing...");
 
     // Select start year
