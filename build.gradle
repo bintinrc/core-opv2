@@ -74,5 +74,5 @@ dependencies {
     implementation "co.nvqa:common-shipper:1.2.5"
     implementation "co.nvqa:common-mm:1.2.5"
     implementation "co.nvqa:common-pricing:1.2.8"
-    implementation "co.nvqa:common-station:1.0.1"
+    implementation "co.nvqa:common-station:1.0.0"
 }
