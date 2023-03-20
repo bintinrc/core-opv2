@@ -946,6 +946,8 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
         pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
         Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
             .as("Dropdown Menu No Data is displayed").isTrue();
+
+        pickupAppointmentJobPage.inputOnJobShipper(text);
         pickupAppointmentJobPage.clearOnJobShipper();
         pickupAppointmentJobPage.inputOnJobShipper(text);
         Assertions.assertThat(
