@@ -221,6 +221,7 @@ Feature: filter on search result table column
     When Operator pare date time to string "{KEY_CONTROL_CREATED_PA_JOBS[2].pickupReadyDatetime}"
     When Operator goes to Pickup Jobs Page
     And  Operator clicks "Filter by job ID" button on Pickup Jobs page
+
     Then Operator verifies Filter Job button is disabled on Pickup job page
     Given Operator fills the pickup job ID list below:
       | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
