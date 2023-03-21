@@ -28,15 +28,9 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId | NOT ROUTED |
-      | color   | #cccccc    |
+      | routeId         | No AV                |
+      | backgroundColor | {success-bg-inbound} |
     When API Operator get all zones preferences
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | NO AV   |
-      | color    | #cccccc |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #cccccc |
     When Operator switch to edit order page using direct URL
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
@@ -76,14 +70,13 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId | NOT ROUTED |
-      | color   | #55a1e8    |
+      | backgroundColor | {success-bg-inbound} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | {rts-zone-name} |
-      | color    | #55a1e8         |
+      | zoneName  | {rts-zone-name}  |
+      | textColor | {blue-hex-color} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {KEY_CREATED_ORDER.destinationHub} |
-      | color   | #55a1e8                            |
+      | hubName   | {KEY_CREATED_ORDER.destinationHub} |
+      | textColor | {dark-gray-hex-color}              |
     When Operator switch to edit order page using direct URL
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
