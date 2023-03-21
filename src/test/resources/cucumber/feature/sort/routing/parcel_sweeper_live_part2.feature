@@ -18,15 +18,11 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | RECOVERY  |
-      | driverName | COMPLETED             |
-      | color      | #e86161               |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #e86161 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #e86161 |
+      | backgroundColor       | {error-bg-invalid} |
+      | routeId               | Recovery           |
+      | routeInfoColor        | {white-hex-color}  |
+      | driverName            | Completed          |
+      | routeDescriptionColor | {white-hex-color}  |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -58,15 +54,11 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify RTS label on Parcel Sweeper Live page
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | RECOVERY           |
-      | driverName | RETURNED TO SENDER    |
-      | color      | #e86161               |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #e86161 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #e86161 |
+      | backgroundColor       | {error-bg-invalid} |
+      | routeId               | Recovery           |
+      | routeInfoColor        | {white-hex-color}  |
+      | driverName            | Returned To Sender |
+      | routeDescriptionColor | {white-hex-color}  |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -86,6 +78,8 @@ Feature: Parcel Sweeper Live
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"{address1}","address2":"","postcode":{postcode},"country":"SG","latitude":{latitude},"longitude":{longitude}}}} |
     Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator uploads new mapping
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
@@ -95,15 +89,11 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | RECOVERY           |
-      | driverName | TRANSFERRED TO 3PL    |
-      | color      | #e86161               |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #e86161 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #e86161 |
+      | backgroundColor       | {error-bg-invalid} |
+      | routeId               | Recovery           |
+      | routeInfoColor        | {white-hex-color}  |
+      | driverName            | Transferred to 3PL |
+      | routeDescriptionColor | {white-hex-color}  |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -139,20 +129,19 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId | -       |
-      | color   | #55a1e8 |
+      | backgroundColor | {success-bg-inbound} |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #55a1e8            |
+      | zoneName  | FROM CREATED ORDER |
+      | textColor | {blue-hex-color}   |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | GLOBAL INBOUND |
-      | color   | #e8e8e8        |
+      | hubName   | GLOBAL INBOUND        |
+      | textColor | {dark-gray-hex-color} |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -190,20 +179,19 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId | -       |
-      | color   | #55a1e8 |
+      | backgroundColor | {success-bg-inbound} |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #55a1e8            |
+      | zoneName  | FROM CREATED ORDER |
+      | textColor | {blue-hex-color}   |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | GLOBAL INBOUND |
-      | color   | #e8e8e8        |
+      | hubName   | GLOBAL INBOUND        |
+      | textColor | {dark-gray-hex-color} |
     And Operator verifies tags on Parcel Sweeper Live page
       | OPV2AUTO1 |
       | OPV2AUTO2 |
@@ -243,15 +231,11 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | RECOVERY                |
-      | driverName | ON VEHICLE FOR DELIVERY |
-      | color      | #e86161                 |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #e86161 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #e86161 |
+      | backgroundColor       | {error-bg-invalid}      |
+      | routeId               | Recovery                |
+      | routeInfoColor        | {white-hex-color}       |
+      | driverName            | On Vehicle for Delivery |
+      | routeDescriptionColor | {white-hex-color}       |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -276,15 +260,11 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #ffa400 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #ffa400 |
+      | backgroundColor       | {error-bg-not-inbounded} |
+      | routeId               | Error                    |
+      | routeInfoColor        | {white-hex-color}        |
+      | driverName            | Not Inbounded            |
+      | routeDescriptionColor | {white-hex-color}        |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -320,27 +300,23 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name}                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #ffa400 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #ffa400 |
+      | backgroundColor       | {error-bg-not-inbounded} |
+      | routeId               | Error                    |
+      | routeInfoColor        | {white-hex-color}        |
+      | driverName            | Not Inbounded            |
+      | routeDescriptionColor | {white-hex-color}        |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
     And DB Operator verify order_events record for the created order:
       | type | 27 |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN                |
-      | hubName   | {hub-name} |
-      | hubId     | {hub-id}                           |
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order page
 
@@ -356,15 +332,11 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | ERROR         |
-      | driverName | NOT INBOUNDED       |
-      | color      | #ffa400             |
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
-      | color    | #ffa400 |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | -       |
-      | color   | #ffa400 |
+      | backgroundColor       | {error-bg-not-inbounded} |
+      | routeId               | Error                    |
+      | routeInfoColor        | {white-hex-color}        |
+      | driverName            | Not Inbounded            |
+      | routeDescriptionColor | {white-hex-color}        |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -390,23 +362,22 @@ Feature: Parcel Sweeper Live
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name}                       |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID}  |
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId | NOT ROUTED |
-      | color   | #55a1e8    |
+      | backgroundColor | {success-bg-inbound} |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #55a1e8            |
+      | zoneName  | FROM CREATED ORDER |
+      | textColor | {blue-hex-color}   |
     When DB Operator Get Next Sorting Task
-      | zone      | FROM CREATED ORDER   |
-      | source    | {hub-name}           |
+      | zone   | FROM CREATED ORDER |
+      | source | {hub-name}         |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {hub-name} |
-      | color   | #e8e8e8    |
+      | hubName   | {hub-name}            |
+      | textColor | {dark-gray-hex-color} |
     Then Operator verify Prior tag on Parcel Sweeper Live page
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |

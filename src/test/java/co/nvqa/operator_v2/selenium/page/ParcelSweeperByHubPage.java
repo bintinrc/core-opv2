@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Sergey Mishanin
@@ -15,12 +17,18 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage {
   private static final String LOCATOR_SPINNER = "//md-progress-circular";
   private static final String LOCATOR_ROUTE_INFO_CONTAINER = "//div[contains(@class, 'route-info-container')]";
   private static final String LOCATOR_ZONE_INFO_CONTAINER = "//div[contains(@class, 'zone-info-container')]";
-  private static final String LOCATOR_DESTINATION_HUB_CONTAINER = "//div[contains(@class, 'destination-hub-container')]";
   private static final String LOCATOR_RTS_INFO = "//div[@ng-if='ctrl.data.isRtsed']";
   private static final String LOCATOR_DIFFERENT_DATE_INFO = "//div[contains(@class,'different-date-container')]";
   private static final Pattern ZONE_NAME_PATTERN = Pattern.compile("^(.+?)(\\(.*\\))$");
+  private static final String LOCATOR_DESTINATION_HUB_COLOR = "//div[contains(@class, 'panel info-container')]//h4";
 
   private SyncOrdersByDestinationHubDialog syncOrdersByDestinationHubDialog;
+
+  @FindBy(xpath = "//h4/span[contains(@data-testid,'destination-hub')]")
+  public PageElement destinationHub;
+
+  @FindBy(xpath = "//div[contains(@class, 'panel info-container')]//h4")
+  public PageElement destinationHubContainer;
 
   public ParcelSweeperByHubPage(WebDriver webDriver) {
     super(webDriver);
@@ -94,14 +102,13 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage {
 
   public void verifyDestinationHub(String hubName, String color) {
     if (StringUtils.isNotBlank(hubName)) {
-      Assertions.assertThat(getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"))
+      Assertions.assertThat(destinationHub.getText())
           .as("Unexpected Destination Hub Name").isEqualToIgnoringCase(hubName);
     }
 
     if (StringUtils.isNotBlank(color)) {
-      Color actualColor = Color
-          .fromString(getCssValue(LOCATOR_DESTINATION_HUB_CONTAINER, "background-color"));
-      Assertions.assertThat(actualColor.asHex()).as("Unexpected Destination Hub Container color")
+      Color actualColor = Color.fromString(getCssValue(LOCATOR_DESTINATION_HUB_COLOR, "color"));
+      Assertions.assertThat(actualColor.asHex()).as("Unexpected Destination Hub Text color")
           .isEqualTo(color);
     }
   }
