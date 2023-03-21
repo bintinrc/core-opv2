@@ -1,4 +1,4 @@
-@StationManagement @StationHome @AgeingParcels
+@StationManagement @AgeingParcels
 Feature: Ageing Parcels In Hub
 
   @LaunchBrowser @ShouldAlwaysRun
