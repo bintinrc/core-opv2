@@ -1834,7 +1834,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "Payoh" is displayed in row 1 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage on Station Route ID -  Area [ G H I ], Area Variation [ A B C ], Keyword [ A B C ] [ D E F ] - Have > 2 Occurrence
+  Scenario: Operator Search Tracking IDs With Address [ A B C ] Match To Overlapping Single Coverage -  Area [ G H I ], Area Variation [ A B C ], Keyword [ A B C ] [ D E F ] - Have > 2 Occurrence
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
