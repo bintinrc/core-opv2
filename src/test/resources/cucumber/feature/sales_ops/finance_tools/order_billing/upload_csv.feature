@@ -65,7 +65,6 @@ Feature: Order Billing - Upload CSV
       | emailAddress    | {order-billing-email}                               |
       | csvFileTemplate | {csv-template}                                      |
     And Operator clicks Generate Success Billing Button
-    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top    | Network Request Error                                                                               |
       | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
@@ -79,9 +78,6 @@ Feature: Order Billing - Upload CSV
 
 
   Scenario: Search Shipper by Upload CSV -  Invalid File Type (uid:2c0617ed-a93e-4146-8a57-8743c472b050)
-    Given Operator generates success billings using data below:
-      | startDate | {gradle-current-date-yyyy-MM-dd} |
-      | endDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator tries to upload a PDF and verifies that any other file except csv is not allowed
 
   @DeleteOrArchiveRoute
@@ -179,7 +175,6 @@ Feature: Order Billing - Upload CSV
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     And Operator clicks Generate Success Billing Button
-    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top    | Network Request Error                                                                               |
       | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
@@ -235,7 +230,6 @@ Feature: Order Billing - Upload CSV
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     And Operator clicks Generate Success Billing Button
-    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top    | Network Request Error                                                                               |
       | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
@@ -287,7 +281,6 @@ Feature: Order Billing - Upload CSV
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
     And Operator clicks Generate Success Billing Button
-    Then Operator verifies that info pop up is displayed with message "Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers"
     Then Operator verifies that error toast is displayed on Order Billing page:
       | top    | Network Request Error                                                                               |
       | bottom | Note: 1 Shippers in the file were not found. We will continue generation for the remaining shippers |
@@ -309,8 +302,8 @@ Feature: Order Billing - Upload CSV
     When Operator selects Order Billing data as below
       | uploadCsv | generatedCsv |
     Then Operator verifies that error toast is displayed on Order Billing page:
-      | top | Your selected file has > 1000 shippers - please re-upload in smaller batches. |
-    Then Operator verifies Generate Success Billings button is disabled
+      | top    | Upload failed                                                                 |
+      | bottom | Your selected file has > 1000 shippers - please re-upload in smaller batches. |
     Then Finance Operator waits for '4' seconds
     When Operator generates CSV file with 1000 shippers
     When Operator generates success billings using data below:

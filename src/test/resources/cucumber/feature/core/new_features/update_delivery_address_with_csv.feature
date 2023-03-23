@@ -5,6 +5,7 @@ Feature: Update Delivery Address with CSV
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Bulk Update Order Delivery Address with CSV - Valid Order Status
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

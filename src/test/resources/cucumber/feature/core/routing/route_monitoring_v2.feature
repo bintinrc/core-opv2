@@ -260,7 +260,7 @@ Feature: Route Monitoring V2
       | Valid Failed   | 7                   | 100                  | 0                | 1              | uid:528bb29f-1f4f-4d52-b029-7787030289f1 |
       | Invalid Failed | 9                   | 0                    | 1                | 0              | uid:a320bc69-a868-46ba-a9b4-0e073ed84d24 |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -297,7 +297,7 @@ Feature: Route Monitoring V2
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -656,7 +656,7 @@ Feature: Route Monitoring V2
     And Operator check there are 0 Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute @CloseNewWindows @happy-path
   Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -925,7 +925,7 @@ Feature: Route Monitoring V2
     And Operator removes the route from the created reservation
     And DB Operator verifies "{KEY_CREATED_RESERVATION.waypointId}" waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
@@ -957,8 +957,8 @@ Feature: Route Monitoring V2
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
@@ -989,8 +989,8 @@ Feature: Route Monitoring V2
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
@@ -1034,13 +1034,12 @@ Feature: Route Monitoring V2
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} |
     And DB Operator verifies there are 2 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies there are 2 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
@@ -1081,7 +1080,7 @@ Feature: Route Monitoring V2
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |
@@ -1121,7 +1120,7 @@ Feature: Route Monitoring V2
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name}                     |

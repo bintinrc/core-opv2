@@ -5,8 +5,8 @@ Feature: Shipment Management - Shipment Events
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Create Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Create Shipment
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -20,8 +20,8 @@ Feature: Shipment Management - Shipment Events
       | userId    | qa@ninjavan.co                      |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Close Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Close Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
@@ -47,8 +47,8 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Re-open Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Re-open Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
@@ -75,12 +75,13 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Re-open Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Van Inbound Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator closes the created shipment
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
@@ -101,12 +102,13 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Hub Inbound Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Hub Inbound Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    And API Operator closes the created shipment
     And API Operator performs van inbound by updating shipment status using data below:
       | scanValue  | {KEY_CREATED_SHIPMENT_ID} |
       | hubCountry | SG                        |
@@ -137,13 +139,13 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name-2}                        |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Force Complete Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Force Complete Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Operator change the status of the shipment into "Completed"
+    And API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Completed"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -154,19 +156,19 @@ Feature: Shipment Management - Shipment Events
       | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
     Then Operator verify shipment event on Shipment Details page:
-      | source    | SHIPMENT_FORCE_COMPLETED            |
+      | source    | SHIPMENT_HUB_INBOUND(MMDA)          |
       | userId    | qa@ninjavan.co                      |
       | result    | Completed                           |
-      | hub       | null                                |
+      | hub       | {hub-name-2}                        |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
-  @DeleteShipment @CloseNewWindows
-  Scenario: Shipment Events -  Cancel Shipment
+  @DeleteCreatedShipments @CloseNewWindows
+  Scenario: Shipment Events - Cancel Shipment
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    And API Operator change the status of the shipment into "Cancelled"
+    And API MM - Update shipment status with id "{KEY_CREATED_SHIPMENT_ID}" to "Cancelled"
     And Operator search shipments by given Ids on Shipment Management page:
       | {KEY_CREATED_SHIPMENT_ID} |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
@@ -180,7 +182,7 @@ Feature: Shipment Management - Shipment Events
       | source    | SHIPMENT_CANCELLED                  |
       | userId    | qa@ninjavan.co                      |
       | result    | Cancelled                           |
-      | hub       | null                                |
+      | hub       | {hub-name}                          |
       | createdAt | ^{gradle-current-date-yyyy-MM-dd}.* |
 
   @KillBrowser @ShouldAlwaysRun

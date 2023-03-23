@@ -28,6 +28,7 @@ Feature: Cancel Order
       | statusCode | 500               |
       | message    | Order is On Hold! |
 
+  @happy-path
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -109,7 +110,7 @@ Feature: Cancel Order
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |

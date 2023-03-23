@@ -5,7 +5,7 @@ Feature: Add To Shipment 4
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Add Completed Parcel to Shipment (uid:b703c8fe-a10f-4b92-b4c7-1afb577164e5)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -15,14 +15,10 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
+    And Operator close the shipment which has been created
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Add Arrived at Sorting Hub to Shipment (uid:4a1176a8-bb81-4713-8d4d-78f0eb7c625a)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -33,14 +29,10 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
+    And Operator close the shipment which has been created
 
-  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
+  @DeleteCreatedShipments @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Pending Reschedule Parcel to Shipment (uid:63b05de8-14e2-4ea0-8b66-7d4ec1a4746b)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -60,14 +52,10 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
+    And Operator close the shipment which has been created
 
-  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
+  @DeleteCreatedShipments @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Add Returned to Sender Parcel to Shipment (uid:c9a90e68-17e2-42b8-b527-a45010410e88)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -89,14 +77,10 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
+    And Operator close the shipment which has been created
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Add On Hold Non Missing Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -133,14 +117,10 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
+    And Operator close the shipment which has been created
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Add Parcel with Tag to Shipment (uid:3d303265-3fae-445e-a59b-982a9d1f281d)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -155,12 +135,7 @@ Feature: Add To Shipment 4
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB_ID}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID}    |
-      | originHub      | {hub-name}                         |
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | shipmentType   | Air Haul                           |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {KEY_CREATED_ORDER.destinationHub}
     Then Operator verifies tags are displayed on Add to Shipment page:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -185,7 +160,7 @@ Feature: Add To Shipment 4
       | destHubName  | {KEY_CREATED_ORDER.destinationHub} |
       | ordersCount  | 1                                  |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Single 70x50 mm
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -193,20 +168,13 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | originHub      | {hub-name}                      |
-      | destinationHub | {hub-name-2}                    |
-      | shipmentType   | Air Haul                        |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
     When Operator set shipment label sticker settings on Add to Shipment page:
       | version | Single     |
       | size    | 70 x 50 mm |
     Then Operator verifies shipment label settings are "Single, 70 x 50 mm, No print when closing" on Add to Shipment page
-    And Operator close shipment on Add to Shipment page
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -215,7 +183,7 @@ Feature: Add To Shipment 4
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Closed                    |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Folded 70x50 mm
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -223,19 +191,12 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | originHub      | {hub-name}                      |
-      | destinationHub | {hub-name-2}                    |
-      | shipmentType   | Air Haul                        |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     When Operator set shipment label sticker settings on Add to Shipment page:
       | version | Folded     |
       | size    | 70 x 50 mm |
     Then Operator verifies shipment label settings are "Folded, 70 x 50 mm, No print when closing" on Add to Shipment page
-    And Operator close shipment on Add to Shipment page
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -244,7 +205,7 @@ Feature: Add To Shipment 4
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Closed                    |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Single 100x150 mm
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -252,19 +213,12 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | originHub      | {hub-name}                      |
-      | destinationHub | {hub-name-2}                    |
-      | shipmentType   | Air Haul                        |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     When Operator set shipment label sticker settings on Add to Shipment page:
       | version | Single       |
       | size    | 100 x 150 mm |
     Then Operator verifies shipment label settings are "Single, 100 x 150 mm, No print when closing" on Add to Shipment page
-    And Operator close shipment on Add to Shipment page
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -273,7 +227,7 @@ Feature: Add To Shipment 4
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Closed                    |
 
-  @DeleteShipment @ForceSuccessOrder
+  @DeleteCreatedShipments @ForceSuccessOrder
   Scenario: Close Shipment without Print Shipment Label - Folded 100x150 mm
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -281,19 +235,12 @@ Feature: Add To Shipment 4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan order to shipment on Add to Shipment page:
-      | barcode        | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | originHub      | {hub-name}                      |
-      | destinationHub | {hub-name-2}                    |
-      | shipmentType   | Air Haul                        |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}       |
+    Then Operator scan the created order to shipment in hub {hub-name} to hub id = {hub-name-2}
     When Operator set shipment label sticker settings on Add to Shipment page:
       | version | Folded       |
       | size    | 100 x 150 mm |
     Then Operator verifies shipment label settings are "Folded, 100 x 150 mm, No print when closing" on Add to Shipment page
-    And Operator close shipment on Add to Shipment page
-    Then Operator verifies that notification displayed:
-      | top | Shipment {KEY_CREATED_SHIPMENT_ID} closed |
+    And Operator close the shipment which has been created
     And Operator go to menu Inter-Hub -> Shipment Management
 #    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -302,7 +249,7 @@ Feature: Add To Shipment 4
       | id     | {KEY_CREATED_SHIPMENT_ID} |
       | status | Closed                    |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Create New Shipment - with selected origin hub
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -312,7 +259,6 @@ Feature: Add To Shipment 4
     Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
       | originHub | {hub-name} |
     When Operator set values in Create Shipment modal on Add to Shipment page:
-      | originHub      | {hub-name}                                          |
       | destinationHub | {hub-name-2}                                        |
       | shipmentType   | Air Haul                                            |
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
@@ -339,7 +285,7 @@ Feature: Add To Shipment 4
       | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | mawb            | null                                                |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Create New Shipment - with selected destination hub
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -350,7 +296,6 @@ Feature: Add To Shipment 4
       | destinationHub | {hub-name-2} |
     When Operator set values in Create Shipment modal on Add to Shipment page:
       | originHub      | {hub-name}                                          |
-      | destinationHub | {hub-name-2}                                        |
       | shipmentType   | Air Haul                                            |
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
@@ -376,19 +321,18 @@ Feature: Add To Shipment 4
       | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | mawb            | null                                                |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario Outline: Create New Shipment - with selected shipment type - <shipmentType>
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator select values on Add to Shipment page:
-      | shipmentType | <shipmentType> |
+      | shipmentType | <shipmentTypeTable> |
     And Operator clicks Create Shipment on Add to Shipment page
     Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
       | shipmentType | <shipmentType> |
     When Operator set values in Create Shipment modal on Add to Shipment page:
       | originHub      | {hub-name}                                          |
       | destinationHub | {hub-name-2}                                        |
-      | shipmentType   | <shipmentType>                                      |
       | comments       | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator clicks Create Shipment in Create Shipment modal on Add to Shipment page
     Then Operator verifies that Created new shipment notification displayed
@@ -419,14 +363,14 @@ Feature: Add To Shipment 4
       | Sea Haul     | SEA_HAUL          |
       | Others       | OTHERS            |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Create New Shipment - with selected all mandatory fields
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
     And Operator select values on Add to Shipment page:
       | originHub      | {hub-name}   |
       | destinationHub | {hub-name-2} |
-      | shipmentType   | Air Haul     |
+      | shipmentType   | AIR_HAUL     |
     And Operator clicks Create Shipment on Add to Shipment page
     Then Operator verifies fields in Create Shipment modal on Add to Shipment page:
       | originHub      | {hub-name}   |
@@ -457,7 +401,7 @@ Feature: Add To Shipment 4
       | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | mawb            | null                                                |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Create New Shipment - without selected any fields
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -489,7 +433,7 @@ Feature: Add To Shipment 4
       | comments        | created by AT {gradle-current-date-yyyyMMddHHmmsss} |
       | mawb            | null                                                |
 
-  @DeleteShipment
+  @DeleteCreatedShipments
   Scenario: Create New Shipment - with selected same origin and destination hub
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu Inter-Hub -> Add To Shipment
@@ -500,7 +444,7 @@ Feature: Add To Shipment 4
     Then Operator verifies same hubs alert in Create Shipment modal on Add to Shipment page
     And Operator verifies Create Shipment button is disabled in Create Shipment modal on Add to Shipment page
 
-  @DeleteShipment @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteCreatedShipments @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Can not create new shipment using virtual hubs
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Hub using data below:
@@ -519,6 +463,6 @@ Feature: Add To Shipment 4
     Then Operator verifies "{KEY_CREATED_HUB.name}" Origin Hub is not shown in Create Shipment modal on Add to Shipment page
     Then Operator verifies "{KEY_CREATED_HUB.name}" Destination Hub is not shown in Create Shipment modal on Add to Shipment page
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

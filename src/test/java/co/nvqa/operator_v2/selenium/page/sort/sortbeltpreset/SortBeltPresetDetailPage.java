@@ -14,7 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class SortBeltPresetDetailPage extends SimpleReactPage<SortBeltPresetDetailPage> {
 
-  @FindBy(css = ".ant-col.title")
+  @FindBy(css = ".ant-col.title > span")
   public PageElement presetTitle;
 
   @FindBy(css = "[data-testid='cancel-button']")

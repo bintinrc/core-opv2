@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Create COD on Route Cash Inbound Page (uid:20798517-49fd-4133-95ff-19605dd90f3d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -26,7 +26,7 @@ Feature: Route Cash Inbound
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
     And DB Operator verify the new COD for created route is created successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Update COD on Route Cash Inbound Page (uid:17a49e4e-1886-47d6-832d-054cb52f7872)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
@@ -48,7 +48,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Delete COD on Route Cash Inbound Page (uid:0379802a-7b41-4cd2-8c2b-26d0490b310e)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:

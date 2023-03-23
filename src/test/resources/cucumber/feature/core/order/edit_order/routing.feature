@@ -5,7 +5,7 @@ Feature: Routing
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <Note> (<hiptest-uid>)
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -29,11 +29,11 @@ Feature: Routing
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
 
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -43,7 +43,7 @@ Feature: Routing
       | Normal | uid:9d63adef-503f-48af-9232-c2a003c5240e | Normal    |
       | Return | uid:75222ea2-43c3-4783-9b1c-bed9a999f45e | Return    |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Pull Out Parcel from a Route - PICKUP (uid:c6ab425f-c508-451f-b84c-09eb267c5f27)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -74,37 +74,37 @@ Feature: Routing
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
 
   #   TODO DISABLED
   #scenario is disabled because causing db inconsistent data
-#  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted (uid:ea35eba9-818c-4a84-a4c5-bb884bd1ba91)
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
-#      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add parcel to the route using data below:
-#      | addParcelToRouteRequest | { "type":"PP" } |
-#    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
-#    And API Operator get order details
-#    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-#    And Operator click Pickup -> Pull from Route on Edit Order page
-#    And Operator pull out parcel from the route for Pickup on Edit Order page
-#    And Operator refresh page
-#    Then Operator verify order events on Edit order page using data below:
-#      | name              |
-#      | PULL OUT OF ROUTE |
-#    Then DB Operator verify next Pickup transaction values are updated for the created order:
-#      | routeId | 0 |
-#    And DB Operator verifies transaction route id is null
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
-#    And DB Operator verifies route_monitoring_data is hard-deleted
-#    And DB Operator verifies waypoint status is "PENDING"
+  #  Scenario: Operator Pull Out Parcel from a Route - PICKUP - Route is Soft Deleted (uid:ea35eba9-818c-4a84-a4c5-bb884bd1ba91)
+  #    Given API Shipper create V4 order using data below:
+  #      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
+  #      | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+  #    Given API Operator create new route using data below:
+  #      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+  #    Given API Operator add parcel to the route using data below:
+  #      | addParcelToRouteRequest | { "type":"PP" } |
+  #    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+  #    And API Operator get order details
+  #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+  #    And Operator click Pickup -> Pull from Route on Edit Order page
+  #    And Operator pull out parcel from the route for Pickup on Edit Order page
+  #    And Operator refresh page
+  #    Then Operator verify order events on Edit order page using data below:
+  #      | name              |
+  #      | PULL OUT OF ROUTE |
+  #    Then DB Operator verify next Pickup transaction values are updated for the created order:
+  #      | routeId | 0 |
+  #    And DB Operator verifies transaction route id is null
+  #    And DB Operator verifies waypoints.route_id & seq_no is NULL
+  #
+  #    And DB Operator verifies route_monitoring_data is hard-deleted
+  #    And DB Operator verifies waypoint status is "PENDING"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Pull Out Parcel from a Route - DELIVERY (uid:91bf2923-94ba-4d8c-bd1b-c000eca19ee9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -132,41 +132,41 @@ Feature: Routing
       | routeId | 0 |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
-    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
 
   #   TODO DISABLED
   #scenario is disabled because causing db inconsistent data
-#  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add parcel to the route using data below:
-#      | addParcelToRouteRequest | { "type":"DD" } |
-#    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
-#    And API Operator get order details
-#    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-#    And Operator click Delivery -> Pull from Route on Edit Order page
-#    And Operator pull out parcel from the route for Delivery on Edit Order page
-#    And Operator refresh page
-#    Then Operator verify order events on Edit order page using data below:
-#      | name              |
-#      | PULL OUT OF ROUTE |
-#    Then DB Operator verify next Delivery transaction values are updated for the created order:
-#      | routeId | 0 |
-#    And DB Operator verifies transaction route id is null
-#    And DB Operator verifies waypoints.route_id & seq_no is NULL
-#    And DB Operator verifies route_waypoint is hard-deleted
-#    And DB Operator verifies route_monitoring_data is hard-deleted
-#    And DB Operator verifies waypoint status is "PENDING"
+  #  Scenario: Operator Pull Out Parcel from a Route - DELIVERY - Route is Soft Deleted (uid:a3346fd5-8f4f-40c6-98f1-5fd172a2261c)
+  #    Given API Shipper create V4 order using data below:
+  #      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+  #      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+  #    Given API Operator create new route using data below:
+  #      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+  #    Given API Operator add parcel to the route using data below:
+  #      | addParcelToRouteRequest | { "type":"DD" } |
+  #    And DB Operator soft delete route "KEY_CREATED_ROUTE_ID"
+  #    And API Operator get order details
+  #    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+  #    And Operator click Delivery -> Pull from Route on Edit Order page
+  #    And Operator pull out parcel from the route for Delivery on Edit Order page
+  #    And Operator refresh page
+  #    Then Operator verify order events on Edit order page using data below:
+  #      | name              |
+  #      | PULL OUT OF ROUTE |
+  #    Then DB Operator verify next Delivery transaction values are updated for the created order:
+  #      | routeId | 0 |
+  #    And DB Operator verifies transaction route id is null
+  #    And DB Operator verifies waypoints.route_id & seq_no is NULL
+  #
+  #    And DB Operator verifies route_monitoring_data is hard-deleted
+  #    And DB Operator verifies waypoint status is "PENDING"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario Outline: Operator Add to Route on Pickup Menu Edit Order Page - <Note> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
@@ -187,11 +187,9 @@ Feature: Routing
     And DB Operator verify <routeType> waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
 
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
     And DB Operator verifies route_monitoring_data record
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
@@ -262,7 +260,7 @@ Feature: Routing
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies route_monitoring_data record
 

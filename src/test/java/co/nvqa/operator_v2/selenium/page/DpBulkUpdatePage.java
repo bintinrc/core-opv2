@@ -60,6 +60,15 @@ public class DpBulkUpdatePage extends OperatorV2SimplePage {
   @FindBy(xpath = "//span[text()='S']/following-sibling::input")
   public PageElement maxPickCapacityS;
 
+  @FindBy(xpath = "//span[text()='M']/following-sibling::input")
+  public PageElement maxPickCapacityM;
+
+  @FindBy(xpath = "//span[text()='L']/following-sibling::input")
+  public PageElement maxPickCapacityL;
+
+  @FindBy(xpath = "//span[text()='XL']/following-sibling::input")
+  public PageElement maxPickCapacityXL;
+
   @FindBy(xpath = "//input[@data-testid='toggle_enable_cust_collect']")
   public PageElement canCustomerCollectEnable;
   @FindBy(xpath = "//input[@data-testid='toggle_disable_cust_collect']")

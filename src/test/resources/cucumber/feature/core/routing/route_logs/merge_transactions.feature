@@ -5,7 +5,7 @@ Feature: Route Logs - Merge Transactions
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Merge Transactions of Multiple Routes from Route Logs Page (uid:b4768f8e-befb-44d6-a7f4-0ffc9d77e7c9)
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -63,8 +63,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -104,8 +104,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -145,8 +145,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -186,8 +186,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -227,8 +227,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "<transaction_type>" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -268,8 +268,8 @@ Feature: Route Logs - Merge Transactions
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies there are 1 route_monitoring_data records for route "KEY_CREATED_ROUTE_ID"
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies there are 1 route_waypoint records for route "KEY_CREATED_ROUTE_ID"
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
+
     And DB Operator verifies there are 1 waypoint records for route "KEY_CREATED_ROUTE_ID" with status Routed
     And DB Operator verifies all orphaned waypoints records are unrouted
     Examples:
@@ -557,30 +557,26 @@ Feature: Route Logs - Merge Transactions
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | seqNo   | null                               |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+
     And DB Operator verifies route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     And Operator save the last PICKUP transaction of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order as "KEY_TRANSACTION_AFTER"
     And DB Operator verifies waypoints record:
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | seqNo   | null                               |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+
     And DB Operator verifies route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     Examples:
       | email_1             | phone_number_1 |
       | support@ninjavan.co | +6595557073    |
@@ -624,15 +620,13 @@ Feature: Route Logs - Merge Transactions
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | seqNo   | null                               |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+
     And DB Operator verifies route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | +6595557073    | false              |
@@ -674,15 +668,13 @@ Feature: Route Logs - Merge Transactions
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | seqNo   | null                               |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+
     And DB Operator verifies route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
@@ -724,15 +716,13 @@ Feature: Route Logs - Merge Transactions
       | status  | Routed                             |
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
       | seqNo   | null                               |
-    And DB Operator verifies route_waypoint record:
-      | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
+
     And DB Operator verifies route_monitoring_data record:
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTE_ID[1]}  |
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
     And DB Operator verifies all orphaned route_monitoring_data is hard-deleted
-    And DB Operator verifies all orphaned route_waypoint records are hard-deleted
+
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |

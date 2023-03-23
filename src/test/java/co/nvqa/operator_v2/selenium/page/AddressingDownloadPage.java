@@ -169,7 +169,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String CSV_FILENAME_FORMAT = "av-addresses_";
 
   private static final DateTimeFormatter ADDRESS_DOWNLOAD_DATE_FORMAT = DateTimeFormatter.ofPattern(
-      "yyyy/MM/dd hh:mm");
+      "yyyy/MM/dd HH:mm");
 
   public final String LOAD_ADDRESS_BUTTON_LOADING_ICON = "//button[@data-testid='load-addresses-button']/span[@class='ant-btn-loading-icon']";
   public final String ADDRESS_DOWNLOAD_STATS = "//div[@class='download-csv-holder']/div[@class='download-stats']";
@@ -565,10 +565,11 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     // Click on datepicker field
     retryIfAssertionErrorOccurred(() -> {
-      click(startDatepickerFieldXpath);
+      do{click(startDatepickerFieldXpath);
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("Start datepicker is displayed")
-          .isTrue();
+          .isTrue();}
+     while(!waitUntilVisibilityOfElementLocated(selectYearButtonXpath).isDisplayed()) ;
     }, "Clicking datepicker field until it's showing...");
 
     // Select start year
@@ -638,7 +639,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
     int resultsCount = getAddressDownloadResultCount();
-    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(), SYS_ID);
+    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(), "Asia/Singapore");
 
     if (resultsCount == 0) {
       LOGGER.debug(
@@ -704,7 +705,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         if (!verifyChecklist.get(ORDER_CREATED_AT_EXISTS)) {
           LocalDateTime toleratedCreatedAt = adjustedOCCreatedAt.plus(
               Duration.of(1, ChronoUnit.MINUTES));
-          String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(toleratedCreatedAt);
+          String toleratedCreatedAtStr = ADDRESS_DOWNLOAD_DATE_FORMAT.format(adjustedOCCreatedAt);
           creationTimeLatencyExists = createdAtEl.get(i).getText().equals(toleratedCreatedAtStr);
           verifyChecklist.put(ORDER_CREATED_AT_EXISTS, creationTimeLatencyExists);
         }

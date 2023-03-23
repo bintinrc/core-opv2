@@ -5,6 +5,7 @@ Feature: Force Success
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Operator Manually Complete Order on Edit Order Page (uid:1f4e604d-51e2-4654-a912-5f5d2525accb)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

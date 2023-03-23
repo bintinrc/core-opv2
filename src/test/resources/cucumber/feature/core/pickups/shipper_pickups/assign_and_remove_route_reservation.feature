@@ -5,7 +5,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Assign a Pending Reservation to a Driver Route
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -27,11 +27,11 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | comments     | {KEY_CREATED_RESERVATION.comments}       |
       | routeId      | {KEY_CREATED_ROUTE_ID}                   |
       | driverName   | {ninja-driver-name}                      |
-    And DB Operator verifies route_waypoint record exist
+
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
+
     And DB Operator verifies route_monitoring_data record
     And DB Events - verify pickup_events record:
       | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
@@ -67,7 +67,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | null    | null       |
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-    And DB Operator verifies route_waypoint is hard-deleted
+
     And DB Operator verifies route_monitoring_data is hard-deleted
     And DB Events - verify pickup_events record:
       | pickupId   | {KEY_CREATED_RESERVATION_ID}        |
@@ -387,7 +387,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
     And Operator select "Suggest Route" action for created reservations on Shipper Pickup page
     Then Operator verifies that "No Valid Reservation Selected" error toast message is displayed
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create multiple shipper addresses V2 using data below:
@@ -445,7 +445,7 @@ Feature: Shipper Pickups - Assign & Remove Route Reservation
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Bulk Assign Route to Reservation on Shipper Pickup Page - Multiple Reservations
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:

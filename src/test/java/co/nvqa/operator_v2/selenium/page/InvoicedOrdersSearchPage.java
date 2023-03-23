@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
+import java.util.List;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -36,6 +38,9 @@ public class InvoicedOrdersSearchPage extends SimpleReactPage {
   public PageElement antNotificationMessage;
   @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
   public PageElement antNotificationMessageDescription;
+
+  @FindBy(css = ".ant-notification-notice")
+  public List<AntNotification> noticeNotifications;
   @FindBy(xpath = "//button[@data-testid='invoiced-orders.search-button']")
   public PageElement searchInvoiceOrdersButton;
   @FindBy(xpath = "//button[@data-testid='invoiced-orders.results.refresh-button']")

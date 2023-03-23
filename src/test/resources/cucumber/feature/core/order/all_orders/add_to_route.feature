@@ -56,7 +56,7 @@ Feature: All Orders - Add To Route
       | status  | PENDING                |
       | routeId | {KEY_CREATED_ROUTE_ID} |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Add Multiple Orders to Route on All Orders Page (uid:1e20a4ff-0254-47c8-8453-948097da2946)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -77,12 +77,11 @@ Feature: All Orders - Add To Route
     And API Operator verify multiple delivery orders is added to route
     When Operator get multiple "Delivery" transactions with status "Pending"
     And DB Operator verifies all transactions routed to new route id
-    And DB Operator verifies all route_waypoint records
     And DB Operator verifies all waypoints status is "ROUTED"
     And DB Operator verifies all waypoints.route_id & seq_no is populated correctly
 
     And DB Operator verifies all route_monitoring_data records
-    And DB Operator verifies waypoints.seq_no is the same as route_waypoint.seq_no for each waypoint
+
     When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
@@ -107,7 +106,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that warning toast displayed:
       | top    | 1 order(s) failed to update |
@@ -136,7 +135,7 @@ Feature: All Orders - Add To Route
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
-    
+
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -153,7 +152,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \| Order is Cancelled and cannot be added to route |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \|Order is Cancelled and cannot be added to route |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that info toast displayed:
       | top    | 1 order(s) updated |

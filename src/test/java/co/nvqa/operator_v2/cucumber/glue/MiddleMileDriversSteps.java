@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.core.GetDriverDataResponse;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
@@ -13,10 +14,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +82,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   private static final String MALAYSIA = "malaysia";
   private static final String PHILIPPINES = "philippines";
 
+  private static final String MIDDLE_MILE_DRIVERS_URL = "https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers";
+
   private static Boolean IS_FIRST_TIME_SETUP_DRIVER = true;
 
   private MiddleMileDriversPage middleMileDriversPage;
@@ -108,7 +114,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     int totalDriver = 0;
 
     if (driver != null) {
-      totalDriver = driver.getData().getCount();
+      totalDriver = driver.getData().getDrivers().size();
     }
 
     middleMileDriversPage.verifiesTotalDriverIsTheSame(totalDriver);
@@ -441,11 +447,44 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     operatorVerifiesUIElementsInMiddleMileDriverPage(dataTableAsMap);
   }
 
+  private void filterAllDriverDataWithQueryParam(String queryParam) {
+    Map<String, Boolean> statusMap = new HashMap<>();
+    List<String> statuses = Arrays.stream(queryParam.split("&")).collect(Collectors.toList());
+
+    if (statuses.contains("employmentStatus=active") || statuses.contains("employmentStatus=inactive")) statusMap.put("isEmploymentActive", statuses.contains("employmentStatus=active"));
+    if (statuses.contains("licenseStatus=active") || statuses.contains("licenseStatus=inactive")) statusMap.put("isLicenseActive", statuses.contains("licenseStatus=active"));
+
+    GetDriverResponse driver = get(KEY_ALL_DRIVERS_DATA);
+    List<Driver> drivers = driver.getData().getDrivers();
+
+    if (statusMap.containsKey("isEmploymentActive")) {
+      drivers = drivers.stream().filter(d -> {
+        if (d.getEmploymentEndDate() == null) return statusMap.get("isEmploymentActive");
+        return (Long.parseLong(d.getEmploymentEndDate()) >= new Date().getTime()) == statusMap.get("isEmploymentActive");
+      }).collect(
+          Collectors.toList());
+    }
+    if (statusMap.containsKey("isLicenseActive")) {
+      drivers = drivers.stream().filter(d -> {
+        if (d.getLicenseExpiryDate() == null) return false;
+        return (Long.parseLong(d.getLicenseExpiryDate()) >= new Date().getTime()) == statusMap.get("isLicenseActive");
+      }).collect(
+          Collectors.toList());
+    }
+
+    LOGGER.info("Driver count: {}", drivers.size());
+
+    GetDriverDataResponse driverData = driver.getData();
+    driverData.setDrivers(drivers);
+    driver.setData(driverData);
+    put(KEY_ALL_DRIVERS_DATA, driver);
+  }
+
   @When("Operator verifies UI elements in Middle Mile Driver Page with data below")
   public void operatorVerifiesUIElementsInMiddleMileDriverPage(Map<String, String> dataTableAsMap) {
     String url = dataTableAsMap.get("url");
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-      middleMileDriversPage.refreshPage();
+      middleMileDriversPage.goToUrl(MIDDLE_MILE_DRIVERS_URL);
       operatorMovementTripPageIsLoaded();
       if (dataTableAsMap.keySet().size() > 1) {
         List<String> filterKeys = dataTableAsMap.keySet().stream()
@@ -458,9 +497,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       }
       operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage();
       VerifyURLinMiddleDriverPage(url);
+      filterAllDriverDataWithQueryParam(url.split("\\?+")[1]);
       operatorVerifiesThatTheDataShownHasTheSameValue();
       operatorVerifyTheElementsAreShown();
-    }, "Retrying until UI is showing the right data...", 1000, 20);
+    }, "Retrying until UI is showing the right data...", 1000, 1);
   }
 
 //  @Then("API Fillter the list of driver")

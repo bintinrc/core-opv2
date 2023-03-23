@@ -5,6 +5,7 @@ Feature: Edit Order Details
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario Outline: Operator Change Delivery Verification Method from Edit Order - <Note> (<hiptest-uid>)
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -28,6 +29,7 @@ Feature: Edit Order Details
       | OTP to NONE | OTP                        | None                           | uid:faa86019-64a6-4755-aa51-252d4fe2dc38 |
       | NONE to OTP | NONE                       | OTP                            | uid:f4cda665-1173-49a8-83ec-e261e69ae554 |
 
+  @happy-path
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:bde3592e-843f-4a99-9a60-66c46c4b257c)
     Given API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -64,7 +66,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                                                                                                        |
       | description | ^Pickup Start Time changed from .* to {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 Pickup End Time changed from .* 15:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit order page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                            |
+      | name        | UPDATE AV                                                                                                                                                                                                                                    |
       | description | User: AUTO (system AV) (support@ninjavan.co) Address: Orchard Road central \|\|\|\|511200 Zone ID: 30688 Destination Hub ID: 25215 Lat, Long: 1.288147, 103.740233 Address Status: UNVERIFIED AV Mode (Manual/Auto): AUTO Source: DEFAULT_AV |
     And DB Operator verify zones record:
       | legacyZoneId | 55       |
@@ -96,6 +98,7 @@ Feature: Edit Order Details
       | longitude     | 103.844767199536                   |
       | routingZoneId | 55                                 |
 
+  @happy-path
   Scenario: Operator Edit Delivery Details on Edit Order page (uid:e17ae476-5ccb-436e-b256-21ab3443a2ee)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
@@ -180,6 +183,7 @@ Feature: Edit Order Details
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE INSTRUCTION |
 
+  @happy-path
   Scenario: Operator Edit Priority Level (uid:849b151c-967b-4a20-afba-73fc9334570d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -196,6 +200,7 @@ Feature: Edit Order Details
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE SLA |
 
+  @happy-path
   Scenario: Operator Edit Order Details on Edit Order page (uid:1884a911-4599-4faa-8d63-a9b984f1c989)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

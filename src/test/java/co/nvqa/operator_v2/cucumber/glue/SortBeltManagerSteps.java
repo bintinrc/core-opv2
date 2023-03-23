@@ -230,6 +230,7 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @And("Operator make sure logic form is pre-populated")
   public void operatorMakeSureLogicFormIsPrePopulated() {
+    sortBeltManagerPage.waitUntilPageLoaded();
     Assertions.assertThat(sortBeltManagerPage.checkAllFieldIsPrePopulated())
         .as("All fields are PRE-POPULATED")
         .isTrue();

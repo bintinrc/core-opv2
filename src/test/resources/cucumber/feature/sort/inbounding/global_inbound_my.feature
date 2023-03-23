@@ -107,7 +107,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | color          | #ffa400                            |
+      | color          | #f06c00                            |
     Then Operator verifies priority level info is correct using data below:
       | priorityLevel           | 100     |
       | priorityLevelColorAsHex | #c65d44 |

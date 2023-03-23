@@ -123,6 +123,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Operator close the shipment which has been created")
   public void operatorCloseTheShipmentWhichHasBeenCreated() {
+    shipmentScanningPage.switchTo();
     shipmentScanningPage.closeShipment();
   }
 

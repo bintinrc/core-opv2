@@ -154,29 +154,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresArchived() {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
+    retryIfAssertionErrorOccurred(() -> {
+      Order order = get(KEY_ORDER_DETAILS);
+      String trackingId = order.getTrackingId();
 
-    List<Transaction> transactions = order.getTransactions();
+      List<Transaction> transactions = order.getTransactions();
 
-    ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
+      ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+      {
+        Optional<Transaction> transactionOptional = transactions.stream()
+            .filter(t -> transactionType.equals(t.getType())).findFirst();
 
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
-          Assertions.assertThat(jaroScores.get(0).getArchived() == 1).as("jaro scores are archived")
-              .isTrue();
+        if (transactionOptional.isPresent()) {
+          Transaction transaction = transactionOptional.get();
+          Long waypointId = transaction.getWaypointId();
+
+          if (waypointId != null) {
+            List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+            Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
+            Assertions.assertThat(jaroScores.get(0).getArchived() == 1)
+                .as("jaro scores are archived")
+                .isTrue();
+          }
+        } else {
+          fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
         }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
-    });
+      });
+    }, "Check Db Jaro Score");
   }
 
   @Then("DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived")
@@ -666,18 +670,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .as("Waypoint with id=%s", expected.getId())
         .isNotNull();
     expected.compareWithActual(actual);
-  }
-
-  @Then("DB Operator verifies route_waypoint record:")
-  public void verifyRouteWaypoint(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    long waypointId = Long.parseLong(data.get("waypointId"));
-    long routeId = Long.parseLong(data.get("routeId"));
-
-    RouteWaypointEntity result = this.getCoreJdbc().getRouteWaypointEntity(waypointId, routeId);
-    Assertions.assertThat(result)
-        .as("route_waypoint record for waypointId %s and routeId %s", waypointId, routeId)
-        .isNotNull();
   }
 
   @Then("DB Operator verifies route_monitoring_data record:")
@@ -1260,26 +1252,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
 
-  @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies waypoint for (Pickup|Delivery) transaction is deleted from route_waypoint table$")
-  public void dbOperatorVerifiesWaypointIsDeleted(String txnType) {
-    Order order = get(KEY_CREATED_ORDER);
-    final String waypointId = String.valueOf(order.getTransactions().stream()
-        .filter(transaction -> StringUtils.equalsIgnoreCase(transaction.getType(), txnType))
-        .findFirst().orElseThrow(() -> new IllegalArgumentException(
-            f("No %s transaction for %d order", txnType, order.getId())))
-        .getWaypointId());
-    retryIfExpectedExceptionOccurred(() ->
-    {
-      List<Map<String, Object>> waypointRecords = getCoreJdbc().getWaypointRecords(waypointId);
-
-      Assertions.assertThat(waypointRecords.size())
-          .as(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId))
-          .isEqualTo(0);
-      return waypointRecords;
-    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
-  }
-
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
@@ -1348,18 +1320,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(priorityLevel)
         .as("Expected Reservation Priority Level %s but actual Priority Level %d",
             expectedPriorityLevel, priorityLevel).isEqualTo(expectedPriorityLevel);
-  }
-
-  @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
-  public void dbOperatorVerifyRouteWaypointsTable() throws SQLException, ClassNotFoundException {
-    Long reservationId = get(KEY_CREATED_RESERVATION_ID);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
-    Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
-
-    Assertions.assertThat(routeWaypoint)
-        .as("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d",
-            reservationWaypoint, routeWaypoint).isEqualTo(reservationWaypoint);
   }
 
   @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")

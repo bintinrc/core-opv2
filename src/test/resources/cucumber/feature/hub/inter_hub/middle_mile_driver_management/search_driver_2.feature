@@ -1,5 +1,5 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @SearchDriver2
-Feature: Middle Mile Driver Management - Search Driver
+Feature: Middle Mile Driver Management - Search Driver 2
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -11,7 +11,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-current-date-yyyy-MM-dd}"}} |
     And API Operator deactivate "employment status" for driver "{KEY_CREATED_DRIVER_ID}"
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=inactive&licenseStatus=active |
@@ -24,7 +24,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-current-date-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator deactivate "license status" for driver "{KEY_CREATED_DRIVER_ID}"
-    And API Driver get all middle mile driver
+    And API MM - Operator gets all Middle Mile Drivers
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Then Operator verifies UI elements in Middle Mile Driver Page with data below
       | url               | https://operatorv2-qa.ninjavan.co/#/sg/middle-mile-drivers?employmentStatus=active&licenseStatus=inactive |
@@ -37,7 +37,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Given Operator get info of hub details id "{hub-id}"
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-0-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-0-day-yyyy-MM-dd}"}} |
-    And API Driver get all middle mile driver using hub filter with value "{hub-id}"
+    And API MM - Operator gets all Middle Mile Drivers with Hub Id "{hub-id}"
     And API Operator deactivate "license status" for driver "{KEY_CREATED_DRIVER_ID}"
     And API Operator deactivate "employment status" for driver "{KEY_CREATED_DRIVER_ID}"
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
