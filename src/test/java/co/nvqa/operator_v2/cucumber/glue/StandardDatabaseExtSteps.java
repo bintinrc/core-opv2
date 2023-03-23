@@ -154,29 +154,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresArchived() {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
+    retryIfAssertionErrorOccurred(() -> {
+      Order order = get(KEY_ORDER_DETAILS);
+      String trackingId = order.getTrackingId();
 
-    List<Transaction> transactions = order.getTransactions();
+      List<Transaction> transactions = order.getTransactions();
 
-    ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
+      ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+      {
+        Optional<Transaction> transactionOptional = transactions.stream()
+            .filter(t -> transactionType.equals(t.getType())).findFirst();
 
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
-          Assertions.assertThat(jaroScores.get(0).getArchived() == 1).as("jaro scores are archived")
-              .isTrue();
+        if (transactionOptional.isPresent()) {
+          Transaction transaction = transactionOptional.get();
+          Long waypointId = transaction.getWaypointId();
+
+          if (waypointId != null) {
+            List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+            Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
+            Assertions.assertThat(jaroScores.get(0).getArchived() == 1)
+                .as("jaro scores are archived")
+                .isTrue();
+          }
+        } else {
+          fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
         }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
-    });
+      });
+    }, "Check Db Jaro Score");
   }
 
   @Then("DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived")
@@ -1317,7 +1321,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .as("Expected Reservation Priority Level %s but actual Priority Level %d",
             expectedPriorityLevel, priorityLevel).isEqualTo(expectedPriorityLevel);
   }
-  
+
   @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")
   public void dbOperatorVerifyBatchIdIsDeleted() throws SQLException, ClassNotFoundException {
     Long batchId = get(KEY_CREATED_BATCH_ID);
