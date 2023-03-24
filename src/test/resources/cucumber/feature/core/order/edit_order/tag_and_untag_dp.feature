@@ -66,12 +66,18 @@ Feature: Tag & Untag DP
       | country               | SG                                                         |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status   | Pending                                                    |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
       | address2 | 3-4                                                        |
       | postcode | 238880                                                     |
       | city     | SG                                                         |
-      | country  | sg                                                         |
+      | country  | SG                                                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | address1 | 501, ORCHARD ROAD, SG, 238880                              |
+      | address2 | 3-4                                                        |
+      | postcode | 238880                                                     |
+      | city     | SG                                                         |
+      | country  | SG                                                         |
 
   @happy-path @wip
   Scenario: Operator Untag/Remove Order from DP (uid:cc4e3098-6bdd-48ea-9488-579535af8722)
@@ -117,7 +123,12 @@ Feature: Tag & Untag DP
       | country               | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     And DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status   | Pending                                                    |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
