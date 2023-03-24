@@ -432,7 +432,8 @@ Feature: Cancel Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator get order details
     And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |

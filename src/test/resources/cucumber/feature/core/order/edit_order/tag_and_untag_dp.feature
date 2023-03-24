@@ -155,7 +155,8 @@ Feature: Tag & Untag DP
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
+    And And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator untags order from DP on Edit Order Page
