@@ -49,7 +49,7 @@ public class AddressVerificationSteps extends AbstractSteps {
   public void operatorVerifyFetchAddresses(List<String> expected) {
     expected = resolveValues(expected);
     List<String> actual = addressVerificationPage.fetchedAddresses.stream()
-        .map(PageElement::getNormalizedText)
+        .map(PageElement::getText)
         .collect(Collectors.toList());
     Assertions.assertThat(actual).as("List of fetched addresses").containsAll(expected);
   }

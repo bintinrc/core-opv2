@@ -116,8 +116,11 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
   public void selectDataRange(Map<String, String> dataTable) {
     final String startDay = dataTable.get("startDay");
     final String endDay = dataTable.get("endDay");
+    pickupAppointmentJobPage.inFrame(() -> {
 
-    pickupAppointmentJobPage.getCreateOrEditJobPage().selectDataRangeByTitle(startDay, endDay);
+      pickupAppointmentJobPage.getCreateOrEditJobPage().selectDataRangeByTitle(startDay, endDay);
+    });
+
   }
 
   @And("Operator select time slot from Select time range field")
@@ -514,12 +517,14 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
     String jobID = resolveValue(dataTable.get("jobID"));
     final String notificationMessage = dataTable.get("notificationMessage");
 
-    pickupAppointmentJobPage.inFrame(page -> {
-      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationMessage())
-          .as("Notification message is displayed").isEqualTo(notificationMessage);
-      Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationDescription())
-          .as(f("Notification message is contains %s:", jobID)).contains(jobID);
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(page -> {
+        Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationMessage())
+            .as("Notification message is displayed").isEqualTo(notificationMessage);
+        Assertions.assertThat(page.getCreateOrEditJobPage().getTextFromNotificationDescription())
+            .as(f("Notification message is contains %s:", jobID)).contains(jobID);
+      });
+    }, 1000, 3);
 
 
   }
@@ -646,13 +651,18 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click on Show or hide dropdown button")
   public void clickOnShowOrHideDropdownButton() {
-    pickupAppointmentJobPage.clickOnShowOrHideFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickOnShowOrHideFilters();
+    });
   }
 
   @Then("QA verify filters are hidden")
   public void verifyFiltersAreHidden() {
-    Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
-        .as("Filters are hidden").isTrue();
+    pickupAppointmentJobPage.inFrame(() -> {
+      Assertions.assertThat(pickupAppointmentJobPage.verifyIsFiltersBlockInvisible())
+          .as("Filters are hidden").isTrue();
+    });
   }
 
   @When("Operator fills in the Shippers field with valid shipper = {string}")
@@ -665,7 +675,10 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click load selection on pickup jobs filter")
   public void clickLoadSelection() {
-    pickupAppointmentJobPage.clickLoadSelectionButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickLoadSelectionButton();
+    });
   }
 
   @After("@deletePickupJob")
@@ -685,14 +698,19 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator select only In progress job status, on pickup jobs filter")
   public void selectInProgressJobStatus() {
-    pickupAppointmentJobPage.clearJobStatusFilter();
-    pickupAppointmentJobPage.selectInprogressJobStatus();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clearJobStatusFilter();
+      pickupAppointmentJobPage.selectInprogressJobStatus();
+    });
   }
 
 
   @When("Operator click on Clear Selection button")
   public void clickOnClearSelectionButton() {
-    pickupAppointmentJobPage.clickOnClearSelectionButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+
+      pickupAppointmentJobPage.clickOnClearSelectionButton();
+    });
   }
 
   @When("Operator upload Success proof photo on pickup appointment job")
@@ -738,15 +756,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click Preset Filters field")
   public void openPresetFiltersField() {
-    pickupAppointmentJobPage.clickOnPresetFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+          pickupAppointmentJobPage.clickOnPresetFilters();
+
+        }
+    );
   }
 
   @Then("QA verify dropdown menu shown with a list of saved preset")
   public void verifyDropdownMenuShownWIthAListOfSavedPreset() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Preset Filter Dropdown Menu is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnPresetFilters();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
+          .as("Preset Filter Dropdown Menu is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnPresetFilters();
+    });
+
   }
 
   @When("Operator click Data Range field")
@@ -759,32 +784,44 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @When("Operator click Priority field")
   public void clickPriorityField() {
-    pickupAppointmentJobPage.clickOnPriorityButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clickOnPriorityButton();
+    });
+
   }
 
   @Then("QA verify a dropdown menu shown with priority option")
   public void verifyADropdownMenuShownWIthPriorityOption() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
-            PickupAppointmentPriorityEnum.PRIORITY.getName()))
-        .as("Priority in Priority Filter is displayed").isTrue();
-    Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
-            PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
-        .as("Non-Priority in Priority Filter is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnPriorityButton();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+              PickupAppointmentPriorityEnum.PRIORITY.getName()))
+          .as("Priority in Priority Filter is displayed").isTrue();
+      Assertions.assertThat(pickupAppointmentJobPage.isJobPriorityFilterByNameDisplayed(
+              PickupAppointmentPriorityEnum.NON_PRIORITY.getName()))
+          .as("Non-Priority in Priority Filter is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnPriorityButton();
+    });
+
   }
 
   @When("Operator click Job Service Type field")
   public void clickJobServiceTypeField() {
-    pickupAppointmentJobPage.clickOnJobServiceType();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.clickOnJobServiceType();
+    });
+
   }
 
   @Then("QA verify a dropdown menu shown with no data")
   public void verifyServiceTypeDropdownMenuShown() {
-    pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-    Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
-        .as("Service Type Filter Dropdown Menu is displayed").isTrue();
-    pickupAppointmentJobPage.clickOnJobServiceType();
+    pickupAppointmentJobPage.inFrame(() -> {
+      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuDisplayed())
+          .as("Service Type Filter Dropdown Menu is displayed").isTrue();
+      pickupAppointmentJobPage.clickOnJobServiceType();
+    });
+
   }
 
   @When("Operator click Job Service Level field")
@@ -805,9 +842,12 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @And("QA verify data start to end limited to 7 days")
   public void verifyDataStartToEndLimitedToSevenDays() {
-    String startDay = getDateByDaysAgo(7);
-    String endDay = getDateByDaysLater(7);
-    pickupAppointmentJobPage.verifyDataStartToEndLimited(startDay, endDay);
+    pickupAppointmentJobPage.inFrame(() -> {
+      String startDay = getDateByDaysAgo(7);
+      String endDay = getDateByDaysLater(7);
+      pickupAppointmentJobPage.verifyDataStartToEndLimited(startDay, endDay);
+    });
+
   }
 
   @And("Select multiple service level")
@@ -901,15 +941,22 @@ public class PickupAppointmentJobSteps extends AbstractSteps {
 
   @Then("QA verify Shipper list will be shown after operator type 3 characters or more {string} in the Shipper field")
   public void verifyShipperListShownAfterTypeThreeCharacters(String text) {
-    pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
-      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
-          .as("Dropdown Menu No Data is displayed").isTrue();
-      pickupAppointmentJobPage.inputOnJobShipper(text);
-      Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
-          .as("Dropdown Menu No Data is displayed").isTrue();
-      pickupAppointmentJobPage.clearOnJobShipper();
-    });
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.waitUntilDropdownMenuVisible();
+        Assertions.assertThat(pickupAppointmentJobPage.isFilterDropdownMenuWithoutDataDisplayed())
+            .as("Dropdown Menu No Data is displayed").isTrue();
+
+        pickupAppointmentJobPage.inputOnJobShipper(text);
+        pickupAppointmentJobPage.clearOnJobShipper();
+        pickupAppointmentJobPage.inputOnJobShipper(text);
+        Assertions.assertThat(
+                pickupAppointmentJobPage.isFilterDropdownMenuShipperWithDataDisplayed())
+            .as("Dropdown Menu No Data is displayed").isTrue();
+        pickupAppointmentJobPage.clearOnJobShipper();
+      });
+    }, 3000, 3);
+
 
   }
 

@@ -311,7 +311,7 @@ public class GlobalInboundPage extends SimpleReactPage {
 
   public void verifiesPriorTag() {
     String actualTag = priorTag.getText();
-   Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("PRIOR");
+   Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
   public void verifiesRtsTag() {

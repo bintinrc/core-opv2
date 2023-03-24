@@ -54,8 +54,12 @@ public class ParcelSweeperSteps extends AbstractSteps {
     Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
     String routeId = resolvedMapOfData.get("routeId");
     String driverName = resolvedMapOfData.get("driverName");
-    String color = resolvedMapOfData.get("color");
-    parcelSweeperPage.verifyRouteInfo(routeId, driverName, color);
+    String routeInfoColor = resolvedMapOfData.get("routeInfoColor");
+    String routeDescriptionColor = resolvedMapOfData.get("routeDescriptionColor");
+    String backgroundColor = resolvedMapOfData.get("backgroundColor");
+    parcelSweeperPage
+        .verifyRouteInfo(routeId, driverName, routeInfoColor, routeDescriptionColor,
+            backgroundColor);
   }
 
   @Then("^Operator verify Zone on Parcel Sweeper page using data below:$")
@@ -78,7 +82,7 @@ public class ParcelSweeperSteps extends AbstractSteps {
       zoneName = f("%s", routingZone.getName());
       zoneShortName = f("%s", routingZone.getShortName());
     }
-    String color = mapOfData.get("color");
+    String color = mapOfData.get("textColor");
     parcelSweeperPage.verifyZoneInfo(zoneShortName, zoneName, color);
   }
 
