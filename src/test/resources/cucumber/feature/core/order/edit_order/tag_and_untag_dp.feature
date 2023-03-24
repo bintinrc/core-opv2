@@ -1,11 +1,11 @@
-@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules @current
+@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules
 Feature: Tag & Untag DP
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path @wip
+  @happy-path
   Scenario: Operator Tag Order to DP (uid:b6540556-8969-4519-9716-f273a96db356)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -79,7 +79,7 @@ Feature: Tag & Untag DP
       | city     | SG                                                         |
       | country  | SG                                                         |
 
-  @happy-path @wip
+  @happy-path
   Scenario: Operator Untag/Remove Order from DP (uid:cc4e3098-6bdd-48ea-9488-579535af8722)
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
