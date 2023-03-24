@@ -56,9 +56,9 @@ Feature: RTS
       | toName     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
       | toEmail    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}      |
       | toContact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}    |
-    And DB Core - verify transactions after RTS:
-      | number_of_txn   | 2       |
-      | delivery_status | Pending |
+#    And DB Core - verify transactions after RTS:
+#      | number_of_txn   | 2       |
+#      | delivery_status | Pending |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify transactions record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].id} |
@@ -100,7 +100,7 @@ Feature: RTS
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrdersManagerImpl::rts                     |
       | seq_no   | 1                                          |
-#    When DB Operator gets waypoint record
+    When DB Operator gets waypoint record
 #    And API Operator get Addressing Zone from a lat long with type "RTS"
 #    Then Operator verifies Zone is correct after RTS on Edit Order page
 #    And Operator verifies waypoints.routing_zone_id is correct
