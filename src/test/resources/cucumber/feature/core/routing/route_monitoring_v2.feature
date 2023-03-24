@@ -951,7 +951,8 @@ Feature: Route Monitoring V2
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Operator get order details
     And API Operator gets "Delivery" transaction waypoint ids of created orders
-    And API Operator merge route transactions
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator get order details
     And API Operator verifies that each "Delivery" transaction of created orders has the same waypoint_id
     And API Operator gets orphaned "Delivery" transaction waypoint ids of created orders
@@ -983,7 +984,8 @@ Feature: Route Monitoring V2
       | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator get order details
     And API Operator gets "Pickup" transaction waypoint ids of created orders
-    And API Operator merge route transactions
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator get order details
     And API Operator verifies that each "Pickup" transaction of created orders has the same waypoint_id
     And API Operator gets orphaned "Pickup" transaction waypoint ids of created orders
@@ -1025,7 +1027,8 @@ Feature: Route Monitoring V2
     And API Operator get order details
     And API Operator gets "Delivery" transaction waypoint ids of created orders
     And API Operator gets "Pickup" transaction waypoint ids of created orders
-    And API Operator merge route transactions
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator get order details
     And API Operator verifies that each "Delivery" transaction of orders has the same waypoint_id:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |

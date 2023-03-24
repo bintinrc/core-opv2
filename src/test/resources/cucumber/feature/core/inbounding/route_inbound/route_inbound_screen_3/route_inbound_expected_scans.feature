@@ -23,7 +23,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -84,7 +83,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
@@ -152,7 +150,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
@@ -218,7 +215,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator merge route transactions
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
