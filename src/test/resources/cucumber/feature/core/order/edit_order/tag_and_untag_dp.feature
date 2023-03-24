@@ -1,37 +1,55 @@
-@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules
+@OperatorV2 @Core @EditOrder @TagAndUntagDP @EditOrder1 @RoutingModules @current
 Feature: Tag & Untag DP
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @happy-path
+  @happy-path @wip
   Scenario: Operator Tag Order to DP (uid:b6540556-8969-4519-9716-f273a96db356)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                 |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"dimensions": {"weight": 1}, "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","to":{"name": "QA core api automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator tags order to "{dpms-id}" DP on Edit Order Page
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
-    And Operator verifies Delivery Details are updated on Edit Order Page
+    And Operator verifies Delivery Details on Edit Order Page:
+      | toName     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}    |
+      | toEmail    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}   |
+      | toContact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact} |
+      | toAddress1 | 501, ORCHARD ROAD, SG, 238880             |
+      | toAddress2 | 3-4                                       |
+      | toPostcode | 238880                                    |
     And Operator verify order event on Edit order page using data below:
       | name | ASSIGNED TO DP |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE ADDRESS |
-    When DB Operator get DP address by ID = "{dpms-id}"
-    Then DB Operator verifies orders record using data below:
-      | toAddress1 | GET_FROM_CREATED_ORDER |
-      | toAddress2 | GET_FROM_CREATED_ORDER |
-      | toPostcode | GET_FROM_CREATED_ORDER |
-      | toCity     | GET_FROM_CREATED_ORDER |
-      | toCountry  | GET_FROM_CREATED_ORDER |
-      | toState    |                        |
-      | toDistrict |                        |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
+    And DB Core - verify orders record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | toAddress1 | 501, ORCHARD ROAD, SG, 238880      |
+      | toAddress2 | 3-4                                |
+      | toPostcode | 238880                             |
+      | toCity     | SG                                 |
+      | toCountry  | SG                                 |
+    And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
+      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | comments | OrdersManagerImpl::generateOrderDataBean   |
+      | seq_no   | 1                                          |
     And DB Core - verify transactions record:
       | id                    | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
       | waypointId            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
@@ -51,14 +69,14 @@ Feature: Tag & Untag DP
       | city     | SG                                                         |
       | country  | sg                                                         |
 
-  @happy-path
+  @happy-path @wip
   Scenario: Operator Untag/Remove Order from DP (uid:cc4e3098-6bdd-48ea-9488-579535af8722)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                  |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","to":{"name": "QA core api automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
     And Operator tags order to "{dpms-id}" DP on Edit Order Page
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
@@ -68,18 +86,37 @@ Feature: Tag & Untag DP
       | name | UNASSIGNED FROM DP |
     And Operator verify order event on Edit order page using data below:
       | name | UPDATE ADDRESS |
-    Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | 0                      |
-      | address1              | GET_FROM_CREATED_ORDER |
-      | address2              | GET_FROM_CREATED_ORDER |
-      | postcode              | GET_FROM_CREATED_ORDER |
-      | city                  | GET_FROM_CREATED_ORDER |
-      | country               | GET_FROM_CREATED_ORDER |
-    And DB Operator verifies delivery info is updated in order record
-    And Operator verifies Delivery Details are updated on Edit Order Page
-    And DB Operator verify Delivery waypoint record is updated
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 35 |
+    And Operator verify order event on Edit order page using data below:
+      | name | UPDATE AV |
+    And Operator verifies Delivery Details on Edit Order Page:
+      | toName     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
+      | toEmail    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
+      | toContact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+    And DB Core - verify orders record:
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
+      | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | toCountry  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+    And DB Core - verify transactions record:
+      | id                    | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
+      | waypointId            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status                | Pending                                                    |
+      | distribution_point_id | null                                                       |
+      | address1              | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
+      | address2              | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
+      | postcode              | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
+      | country               | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
+    And DB Core - verify waypoints record:
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Untag DP Order that is merged and routed (uid:77fec425-2a5b-4667-b82f-b6394caec5d5)
