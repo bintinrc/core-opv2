@@ -126,7 +126,7 @@ Feature: View Tagged Orders
       | granularStatus       | On Hold                         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point (uid:394ad334-33f9-430e-bd86-0bba014816da)
+  Scenario: View Tagged Orders - DP Delivery Attempted, Arrived at Distribution Point
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |

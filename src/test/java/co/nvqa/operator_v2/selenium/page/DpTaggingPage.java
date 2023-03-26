@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -52,7 +53,7 @@ public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
   @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;
   @FindBy(xpath = "//button[@data-testid='assign_all']")
-  public Button assignAll;
+  public AntButton assignAll;
 
   @FindBy(xpath = "//button[@data-testid='button_untag_all']")
   public Button untagAll;
@@ -149,7 +150,7 @@ public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
       clickf(LOCATOR_ROW_CHECKBOX, row);
       row++;
     }
-    assignAll.click();
+    assignAll.clickAndWaitUntilDone(60);
     pause1s();
     if (isMultipleOrders) {
       verifyTaggingToast("DP tagging performed successfully");

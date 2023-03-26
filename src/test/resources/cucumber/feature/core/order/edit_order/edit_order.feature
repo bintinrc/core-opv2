@@ -29,7 +29,7 @@ Feature: Edit Order
       | verification method | NO_VERIFICATION         |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Reverify Order Address in Edit Order Page (uid:4021b29d-4ddf-4cd8-9141-b56f1e0fa6c0)
+  Scenario: Operator Reverify Order Address in Edit Order Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

@@ -86,7 +86,7 @@ Feature: All Orders - Add To Route
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)
+  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -106,7 +106,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that warning toast displayed:
       | top    | 1 order(s) failed to update |
@@ -152,7 +152,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \|Order is Cancelled and cannot be added to route |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \| Order is Cancelled and cannot be added to route |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that info toast displayed:
       | top    | 1 order(s) updated |

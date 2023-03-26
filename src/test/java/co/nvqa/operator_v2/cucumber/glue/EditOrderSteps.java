@@ -1483,6 +1483,9 @@ public class EditOrderSteps extends AbstractSteps {
   public void operatorOpenEditOrderPage(String orderId) {
     orderId = resolveValue(orderId);
     editOrderPage.openPage(Long.parseLong(orderId));
+    if (!editOrderPage.status.isDisplayedFast()) {
+      editOrderPage.refreshPage();
+    }
   }
 
   @Then("^Operator verify following order info parameters after Global Inbound$")
