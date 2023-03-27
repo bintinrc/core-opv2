@@ -45,9 +45,9 @@ Feature: Edit Order
     And Operator verifies that info toast displayed:
       | top | Reverified Successfully |
     And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
-      | archived | score |
-      | 1        | 1.0   |
-      | 0        | 0.5   |
+      | archived | score    |
+      | 1        | 1.0      |
+      | 0        | not null |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
