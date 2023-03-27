@@ -155,7 +155,7 @@ Feature: Tag & Untag DP
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And And API Core - Operator merge routed waypoints:
+    And API Core - Operator merge routed waypoints:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     And Operator click Delivery -> DP Drop Off Setting on Edit Order page
@@ -204,7 +204,9 @@ Feature: Tag & Untag DP
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And Operator get multiple "DELIVERY" transactions with status "PENDING"
-    And Operator merge transactions on Zonal Routing
+    And API Core - Operator merge waypoints on Zonal Routing:
+      | {KEY_LIST_OF_WAYPOINT_IDS[1]} |
+      | {KEY_LIST_OF_WAYPOINT_IDS[2]} |
     Then API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |

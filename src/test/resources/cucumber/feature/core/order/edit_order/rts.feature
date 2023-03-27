@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @RTS @EditOrder3 @current
+@OperatorV2 @Core @EditOrder @RTS @EditOrder4 @current
 Feature: RTS
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -56,12 +56,12 @@ Feature: RTS
       | toName     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS) |
       | toEmail    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}      |
       | toContact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}    |
-#    And DB Core - verify transactions after RTS:
-#      | number_of_txn   | 2       |
-#      | delivery_status | Pending |
+    And DB Core - verify transactions after RTS:
+      | number_of_txn   | 2       |
+      | delivery_status | Pending |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify transactions record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].id} |
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
       | status   | Pending                                            |
       | routeId  | null                                               |
       | name     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS)     |
@@ -72,7 +72,7 @@ Feature: RTS
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
     Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
@@ -81,7 +81,7 @@ Feature: RTS
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
     Then DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
@@ -100,10 +100,13 @@ Feature: RTS
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrdersManagerImpl::rts                     |
       | seq_no   | 1                                          |
-    When DB Operator gets waypoint record
-#    And API Operator get Addressing Zone from a lat long with type "RTS"
-#    Then Operator verifies Zone is correct after RTS on Edit Order page
-#    And Operator verifies waypoints.routing_zone_id is correct
+    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS[1].latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS[1].longitude}} |
+    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE[1].shortName}" on Edit Order page
+    And DB Core - verify waypoints record:
+      | id            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId} |
+      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE[1].legacyZoneId}                   |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)

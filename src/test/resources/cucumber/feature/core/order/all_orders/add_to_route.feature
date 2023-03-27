@@ -106,7 +106,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that warning toast displayed:
       | top    | 1 order(s) failed to update |
@@ -152,7 +152,7 @@ Feature: All Orders - Add To Route
     When Operator add multiple orders to route on All Orders page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \|Order is Cancelled and cannot be added to route |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \| Order is Cancelled and cannot be added to route |
     When Operator close Errors dialog on All Orders page
     Then Operator verifies that info toast displayed:
       | top    | 1 order(s) updated |

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @ForceSuccess
+@OperatorV2 @Core @AllOrders @ForceSuccess @current
 Feature: All Orders - Manually Completed Selected
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -94,7 +94,7 @@ Feature: All Orders - Manually Completed Selected
       | trackingId                      | collected |
       | {KEY_CREATED_ORDER_TRACKING_ID} | true      |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Order id = {KEY_LIST_OF_CREATED_ORDER_ID[1]}not allowed to collect cod! |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[1]}not allowed to collect cod! |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
@@ -319,7 +319,7 @@ Feature: All Orders - Manually Completed Selected
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:850b6b66-82aa-45d8-bb7e-f3b602e27f8a |
-
+@wip
   Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD (uid:8ea6768c-87d4-4845-a769-e99985363cdf)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -340,7 +340,7 @@ Feature: All Orders - Manually Completed Selected
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | true      |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | false     |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} \|Order id = {KEY_LIST_OF_CREATED_ORDER_ID[3]}not allowed to collect cod! |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[3]}not allowed to collect cod! |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
@@ -459,7 +459,7 @@ Feature: All Orders - Manually Completed Selected
     And Operator Manually Complete orders on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Order id={KEY_LIST_OF_CREATED_ORDER_ID[1]} has active PETS ticket. Please resolve PETS ticket to update status. |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id={KEY_LIST_OF_CREATED_ORDER_ID[1]} has active PETS ticket. Please resolve PETS ticket to update status. |
 
   Scenario Outline: Operator Force Success Order by Select Reason on All Orders Page - <reason>
     Given API Shipper create V4 order using data below:
