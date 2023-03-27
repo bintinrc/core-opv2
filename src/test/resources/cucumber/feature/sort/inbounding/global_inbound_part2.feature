@@ -200,12 +200,11 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #f06c00                            |
-    Then API Operator verify order info after Global Inbound
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator removes all ticket status filters
     And Operator enters the Tracking Id
     And Operator chooses Created At Filter
-      | toDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | toDate | {date: 1 days next, yyyy-MM-dd} |
     Then Operator chooses the ticket status as "RESOLVED"
     And Operator enters the tracking id and verifies that is exists
     Then API Operator make sure "TICKET_RESOLVED" event is exist
