@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @ForceSuccess @current
+@OperatorV2 @Core @AllOrders @ForceSuccess
 Feature: All Orders - Manually Completed Selected
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -319,7 +319,7 @@ Feature: All Orders - Manually Completed Selected
     Examples:
       | note               | cod_amount | collected_amount | collected | uid                                      |
       | Do not Collect COD | 23.57      | 0                | false     | uid:850b6b66-82aa-45d8-bb7e-f3b602e27f8a |
-@wip
+
   Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD (uid:8ea6768c-87d4-4845-a769-e99985363cdf)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:

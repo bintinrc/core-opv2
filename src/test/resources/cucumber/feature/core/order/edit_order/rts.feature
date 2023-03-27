@@ -6,7 +6,7 @@ Feature: RTS
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @routing-refactor @happy-path @wip
-  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted (uid:2ce27a02-460b-40f3-91f4-e42981a6eb96)
+  Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Unrouted
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -57,8 +57,10 @@ Feature: RTS
       | toEmail    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}      |
       | toContact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}    |
     And DB Core - verify transactions after RTS:
-      | number_of_txn   | 2       |
-      | delivery_status | Pending |
+      | number_of_txn   | 2                                  |
+      | delivery_status | Pending                            |
+      | orderId         | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | routeId         | 0                                  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify transactions record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].id} |
