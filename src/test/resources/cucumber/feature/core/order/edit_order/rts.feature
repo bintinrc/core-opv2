@@ -105,10 +105,10 @@ Feature: RTS
     When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE[1].shortName}" on Edit Order page
+    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
     And DB Core - verify waypoints record:
       | id            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE[1].legacyZoneId}                   |
+      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Operator RTS an Order on Edit Order Page - Arrived at Sorting Hub, Delivery Routed (uid:d66b5b2a-a59e-4e74-b001-5605489da68a)
