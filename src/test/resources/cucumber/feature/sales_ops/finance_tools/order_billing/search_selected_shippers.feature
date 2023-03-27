@@ -103,7 +103,8 @@ Feature: Order Billing - Selected Shippers
       | emailAddress    | {order-billing-email}                                                                 |
       | csvFileTemplate | {csv-template}                                                                        |
     Then Operator chooses 'Selected Shippers' option and does not input a shipper ID
-    Then Operator verifies Generate Success Billings button is disabled
+    Then Operator clicks Generate Success Billing Button
+    Then Operator verifies error msg "At least 1 shippers must be selected." in Order Billing Page
 
 
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper - RTS Order Exist and RTS Fee in Surcharge (uid:6422949f-9ecd-4239-95b4-8301c44d89e4)

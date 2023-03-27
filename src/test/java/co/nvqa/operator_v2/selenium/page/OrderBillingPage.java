@@ -41,6 +41,8 @@ public class OrderBillingPage extends SimpleReactPage {
   public AntSelect3 emailAddressInput;
   private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//md-select[@placeholder='No Template Selected']/md-select-value/span";
   private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//span[text() = '%s']/preceding-sibling::span/input";
+
+  private static final String XPATH_ERROR = "//span[text()='%s']";
   @FindBy(css = "[data-testid='orderBilling.template.disabledText']")
   public PageElement aggregatedDisabledTxt;
 
@@ -92,12 +94,14 @@ public class OrderBillingPage extends SimpleReactPage {
 
   public void setEmptyParentShipper() {
     parentShippers.click();
-    parentShippers.searchInput.click();
+    parentShippersInput.click();
+    parentShippers.click();
   }
 
   public void setEmptySelectedShipper() {
     selectedShippers.click();
-    selectedShippers.searchInput.click();
+    selectedShippersInput.click();
+    selectedShippers.click();
   }
 
   public void uploadCsvShippersAndVerifyToastMsg(File file, String toastTop, String toastBottom) {
@@ -150,5 +154,9 @@ public class OrderBillingPage extends SimpleReactPage {
 
   public void setCsvFileTemplateName(String value) {
     csvFileTemplate.selectValue(value);
+  }
+
+  public boolean verifyErrorMsgIsVisible(String errorMsg) {
+    return isElementVisible(f(XPATH_ERROR, errorMsg));
   }
 }
