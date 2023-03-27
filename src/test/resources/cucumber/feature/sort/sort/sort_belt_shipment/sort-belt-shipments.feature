@@ -1,4 +1,4 @@
-@Sort @SortBeltManager
+@Sort @SortBeltShipments
 Feature: Sort Belt Manager
 
   @LaunchBrowser @ShouldAlwaysRun
