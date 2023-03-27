@@ -74,7 +74,7 @@ Feature: RTS
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
     Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId} |
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
@@ -102,7 +102,7 @@ Feature: RTS
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrdersManagerImpl::rts                     |
       | seq_no   | 1                                          |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[3].waypointId}"
+    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS[1].latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS[1].longitude}} |
     Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE[1].shortName}" on Edit Order page
