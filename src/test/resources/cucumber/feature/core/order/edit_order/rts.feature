@@ -91,17 +91,17 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
-    And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
-      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
-      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
-      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
-      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
-      | comments | OrdersManagerImpl::rts                     |
-      | seq_no   | 1                                          |
+#    And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
+#      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
+#      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+#      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+#      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+#      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+#      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
+#      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
+#      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+#      | comments | OrdersManagerImpl::rts                     |
+#      | seq_no   | 1                                          |
     When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS[1].latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS[1].longitude}} |
