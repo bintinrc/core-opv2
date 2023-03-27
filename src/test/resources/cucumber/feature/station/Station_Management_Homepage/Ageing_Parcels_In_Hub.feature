@@ -1464,7 +1464,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcome    | TicketStatus |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | RESUME DELIVERY | IN PROGRESS  |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: Missing Ticket Not Appears in Ageing Parcel
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
