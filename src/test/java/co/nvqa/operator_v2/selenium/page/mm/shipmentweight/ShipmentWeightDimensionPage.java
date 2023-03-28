@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.mm.AntConfirmModal;
@@ -62,6 +63,12 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
 
   @FindBy(css = ".ant-modal-confirm")
   public AntConfirmModal searchErrorConfirmModal;
+  
+  @FindBy(xpath = "//div[contains(@class, 'ant-form-item-explain-error')]")
+  public PageElement duplicateNamePresetFilters;
+
+  @FindBy(xpath = "//div[contains(@class, 'ant-message-custom-content ant-message-warning')]/span[2]")
+  public PageElement clearPresetFilterPopup;
 
   // new filter
   @FindBy(css = "[data-testid='preset-clear-and-close-button']")
@@ -102,6 +109,36 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
 
   @FindBy(xpath = "//div[@class=\"ant-empty-description\"]")
   public PageElement emptyDescription;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-shipment-id']")
+  public TextBox shipmentIdSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-status']")
+  public TextBox shipmentStatusSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-destination-hub-name']")
+  public TextBox endHubSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-created-at']")
+  public TextBox shipmentCreationDateTimeSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-comments']")
+  public TextBox commentsSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-origin-hub-name']")
+  public TextBox startHubSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-shipment-type']")
+  public TextBox shipmentTypeSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-vendor-name']")
+  public TextBox vendorSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-origin-port']")
+  public TextBox originPortSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-destination-port']")
+  public TextBox destinationPortSearchField;
 
   public ShipmentWeightDimensionPage(WebDriver webDriver) {
     super(webDriver);

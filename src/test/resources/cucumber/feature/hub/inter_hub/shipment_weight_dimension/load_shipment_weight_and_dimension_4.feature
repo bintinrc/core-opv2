@@ -19,7 +19,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "SHIPMENT ID" value in Shipment Weight Dimension Table
+    When Operator search the "SHIPMENT ID" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -36,7 +36,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "SHIPMENT STATUS" value in Shipment Weight Dimension Table
+    When Operator search the "SHIPMENT STATUS" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -53,7 +53,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "END HUB" value in Shipment Weight Dimension Table
+    When Operator search the "END HUB" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -70,7 +70,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "CREATION DATE" value in Shipment Weight Dimension Table
+    When Operator search the "SHIPMENT CREATION DATE TIME" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -87,7 +87,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "COMMENTS" value in Shipment Weight Dimension Table
+    When Operator search the "COMMENTS" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -104,7 +104,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "START HUB" value in Shipment Weight Dimension Table
+    When Operator search the "START HUB" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -121,7 +121,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "SHIPMENT TYPE" value in Shipment Weight Dimension Table
+    When Operator search the "SHIPMENT TYPE" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -138,7 +138,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "VENDOR" value in Shipment Weight Dimension Table
+    When Operator search the "VENDOR" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -155,7 +155,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "ORIGIN PORT" value in Shipment Weight Dimension Table
+    When Operator search the "ORIGIN PORT" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @DeleteCreatedShipments
@@ -172,7 +172,7 @@ Feature: Load Shipment Weight and Dimension 4
       | state | search_valid |
     When Operator click search button on Shipment Weight Dimension page
     Then Operator verify Shipment Weight Dimension Table page is shown
-    When Operator input invalid "DESTINATION PORT" value in Shipment Weight Dimension Table
+    When Operator search the "DESTINATION PORT" column with inputted data "INVALID" on Shipment Weight Dimension Table
     Then Operator verify No Data empty description in Shipment Weight Dimension Table is shown
 
   @KillBrowser
