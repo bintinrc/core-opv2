@@ -1488,13 +1488,6 @@ public class EditOrderSteps extends AbstractSteps {
     }
   }
 
-  @When("test")
-  public void operatorOpenEditOrderPage() {
-    List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
-    System.out.println("size ordersnya "+orders.size());
-    System.out.println("gran status "+ orders.get(0).getGranularStatus());
-  }
-
   @Then("^Operator verify following order info parameters after Global Inbound$")
   public void operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(
       Map<String, String> mapOfData) {
