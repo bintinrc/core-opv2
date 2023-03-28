@@ -86,7 +86,7 @@ Feature: All Orders - Add To Route
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)
+  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

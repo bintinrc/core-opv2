@@ -41,7 +41,7 @@ Feature: Global Inbound
     When API Operator recalculate order price
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
-      | hubName        | JKB                                        |
+      | hubName        | {hub-name-3}                                        |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 7                                          |
     Then Operator verify info on Global Inbound page using data below:

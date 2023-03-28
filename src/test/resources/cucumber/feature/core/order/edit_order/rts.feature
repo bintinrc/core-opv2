@@ -1100,8 +1100,8 @@ Feature: RTS
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
       | timeslot     | All Day (9AM - 10PM)           |
     Then Operator verifies that info toast displayed:
-      | top                | 1 order(s) RTS-ed |
-      | waitUntilInvisible | true              |
+      | top | 1 order(s) RTS-ed |
+    And Operator refresh page
     And Operator verifies RTS tag is displayed in delivery details box on Edit Order page
     Then Operator verify order events on Edit order page using data below:
       | name                       |
@@ -1111,7 +1111,6 @@ Feature: RTS
       | UPDATE AV                  |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    When API Operator get order details
     When API Operator get order details
     When Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
     Then DB Operator verifies transactions record:

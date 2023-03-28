@@ -135,18 +135,16 @@ Feature: Tag & Untag DP
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Untag DP Order that is merged and routed (uid:77fec425-2a5b-4667-b82f-b6394caec5d5)
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+  Scenario: Untag DP Order that is merged and routed
     When API Shipper create V4 order using data below:
       | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                                                      |
       | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                                                      |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator new add parcel to the route using data below:
-      | addParcelToRouteRequest | DELIVERY |
+    And API Operator tag "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order to "{dp-id}" DP
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
     When API Shipper create V4 order using data below:
       | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                         |
       | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                         |
@@ -196,13 +194,21 @@ Feature: Tag & Untag DP
 
     And DB Operator verifies all route_monitoring_data records
 
-  @routing-refactor
-  Scenario: Untag DP Order that is merged and not routed (uid:cea0056a-d4e8-4d54-8b7d-28fc786ee3db)
+  @routing-refactor @DeleteRouteGroups
+  Scenario: Untag DP Order that is merged and not routed
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                             |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator assign delivery multiple waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And API Operator tag "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order to "{dp-id}" DP
+    And API Operator tag "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order to "{dp-id}" DP
+    And API Operator create new Route Group:
+      | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    And API Operator add transactions to "{KEY_CREATED_ROUTE_GROUP.id}" Route Group:
+      | trackingId                                 | type     |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | DELIVERY   |
     And Operator get multiple "DELIVERY" transactions with status "PENDING"
     And API Core - Operator merge waypoints on Zonal Routing:
       | {KEY_LIST_OF_WAYPOINT_IDS[1]} |

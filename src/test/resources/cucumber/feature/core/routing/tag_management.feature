@@ -6,7 +6,7 @@ Feature: Tag Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteTags
-  Scenario: Operator Create New Tag on Tag Management Page (uid:20d3f2d8-175b-4b13-8e53-fb6538f81d7a)
+  Scenario: Operator Create New Tag on Tag Management Page
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     And Operator create new route tag on Tag Management page:
@@ -28,7 +28,7 @@ Feature: Tag Management
     When Operator go to menu Routing -> Tag Management
     And Tag Management page is loaded
     And Operator update created tag on Tag Management page:
-      | name        | AAB                                                                                        |
+      | name        | AAC                                                                                        |
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. [EDITED] |
     Then Operator verifies that success react notification displayed:
       | top                | Tag successfully edited |

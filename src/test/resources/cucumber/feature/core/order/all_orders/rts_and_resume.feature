@@ -6,7 +6,7 @@ Feature: All Orders - RTS & Resume
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator RTS Failed Delivery Order on All Orders Page (uid:babc6862-40c1-45d4-a626-f0ebf5d0cbf9)
+  Scenario: Operator RTS Failed Delivery Order on All Orders Page
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -116,7 +116,7 @@ Feature: All Orders - RTS & Resume
     And DB Operator verifies orders record using data below:
       | rts | 1 |
 
-  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order (uid:9c22866c-b910-4834-a050-347552d4a801)
+  Scenario: Operator Resume Selected Cancelled Order on All Orders Page - Single Order
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
