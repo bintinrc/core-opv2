@@ -61,53 +61,53 @@ Feature: RTS
       | delivery_status | Pending                            |
       | orderId         | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId         | 0                                  |
-    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify transactions record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
       | status   | Pending                                            |
       | routeId  | null                                               |
-      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} (RTS)     |
-      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].fromEmail}          |
-      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}        |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}       |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}       |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
+      | name     | {KEY_LIST_OF_CREATED_ORDERS[2].fromName} (RTS)     |
+      | email    | {KEY_LIST_OF_CREATED_ORDERS[2].fromEmail}          |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[2].fromContact}        |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}       |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}       |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}       |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}        |
     Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
     Then DB Route - verify waypoints record:
-      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
-#    And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
-#      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
-#      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
-#      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
-#      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
-#      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
-#      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
-#      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
-#      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
-#      | comments | OrdersManagerImpl::rts                     |
-#      | seq_no   | 1                                          |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
+    And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
+      | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+      | name     | {KEY_LIST_OF_CREATED_ORDERS[1].toName}     |
+      | email    | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}    |
+      | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
+      | comments | OrdersManagerImpl::rts                     |
+      | seq_no   | 1                                          |
+    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
     And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
   @DeleteOrArchiveRoute @routing-refactor
