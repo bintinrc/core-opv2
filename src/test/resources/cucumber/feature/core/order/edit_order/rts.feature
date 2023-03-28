@@ -157,6 +157,7 @@ Feature: RTS
     And Operator verify Delivery transaction on Edit order page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}             |
       | rts        | 1                                              |
@@ -174,7 +175,6 @@ Feature: RTS
       | old_delivery_status | Fail                               |
       | new_delivery_status | Pending                            |
       | new_delivery_type   | DD                                 |
-    And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify transactions record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
       | status   | Pending                                            |
@@ -236,6 +236,26 @@ Feature: RTS
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+
+
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | generateTo          | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | { "service_type":"Parcel","service_level":"Standard","from":{"name": "QA core opv2 automation","phone_number": "+65189681","email": "qa@test.co", "address": {"address1": "80 MANDAI LAKE ROAD","address2": "Singapore Zoological","country": "SG","postcode": "238900","latitude": 1.3248209,"longitude": 103.6983167}},"parcel_job":{ "dimensions": {"weight": 1}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
+    And API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+
+
+
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
@@ -244,14 +264,14 @@ Feature: RTS
       | failureReasonFindMode  | findAdvance |
       | failureReasonCodeId    | 6           |
       | failureReasonIndexMode | FIRST       |
-    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status | FAIL |
     And Operator verify Delivery transaction on Edit order page using data below:
-      | status  | FAIL                   |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | status  | FAIL                               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator RTS order on Edit Order page using data below:
       | reason       | Nobody at address              |
       | deliveryDate | {gradle-next-1-day-yyyy-MM-dd} |
@@ -276,8 +296,8 @@ Feature: RTS
     And Operator verify Pickup transaction on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
-      | status  | FAIL                   |
-      | routeId | {KEY_CREATED_ROUTE_ID} |
+      | status  | FAIL                               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Operator verifies orders record using data below:
       | rts | 1 |
     And DB Operator verifies transactions after RTS
