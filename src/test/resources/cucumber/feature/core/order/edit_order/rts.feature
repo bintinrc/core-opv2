@@ -155,7 +155,8 @@ Feature: RTS
     And Operator verify Pickup transaction on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
-      | status | PENDING |
+      | status  | FAIL                               |
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}             |
       | rts        | 1                                              |
