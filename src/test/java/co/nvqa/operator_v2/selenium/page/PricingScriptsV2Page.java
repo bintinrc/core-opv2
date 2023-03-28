@@ -144,7 +144,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
       searchTableDraftsByScriptName(script.getName());
       if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
-        fail("Draft script found");
+        searchTableDraftsByScriptName(script.getName());
+        if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
+          fail("Data still not loaded");
+        }
       }
     }, String.format("Data still not loaded"));
    Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
@@ -406,7 +409,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
       searchTableActiveScriptsByScriptName(script.getName());
       if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
-        fail("Draft script found");
+        searchTableActiveScriptsByScriptName(script.getName());
+        if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
+          fail("Data still not loaded");
+        }
       }
     }, String.format("Data still not loaded"));
    Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();

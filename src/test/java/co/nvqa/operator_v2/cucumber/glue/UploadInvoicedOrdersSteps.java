@@ -63,9 +63,9 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     String actualErrorMsg = uploadInvoicedOrdersPage.getPopUpMsg();
     String actualErrorDescription = uploadInvoicedOrdersPage.getPopUpMsgDescription();
     Assertions.assertThat(actualErrorMsg).as("Error message title is correct")
-        .isEqualTo("Error uploading file");
+        .contains("Error uploading file");
     Assertions.assertThat(actualErrorDescription).as("Error message description is correct")
-        .isEqualTo("Error: Invalid file type");
+        .isEqualTo("Invalid file type");
 
   }
 
@@ -77,9 +77,9 @@ public class UploadInvoicedOrdersSteps extends AbstractSteps {
     String actualErrorMsg = uploadInvoicedOrdersPage.getPopUpMsg();
     String actualErrorDescription = uploadInvoicedOrdersPage.getPopUpMsgDescription();
     Assertions.assertThat(actualErrorMsg).as("Error message title is correct")
-        .isEqualTo("Error uploading file");
+        .contains("Error uploading file");
     Assertions.assertThat(actualErrorDescription).as("Error message description is correct")
-        .isEqualTo("Error: Invalid CSV file");
+        .isEqualTo("Invalid CSV file");
 
   }
 

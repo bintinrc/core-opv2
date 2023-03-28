@@ -29,6 +29,15 @@ public class UploadPaymentsPage extends SimpleReactPage {
     return getAntTopText();
   }
 
+  public String getUploadPaymentErrorToastTopText() {
+    return getToastText("(//div[@class='ant-notification-notice-message'])[2]");
+
+  }
+
+  public String getUploadPaymentErrorToastDescription() {
+    return getToastText("(//div[@class='ant-notification-notice-description'])[2]");
+  }
+
   public void verifyDownloadErrorsCsvFileDownloadedSuccessfully(String expectedBody,
       String filename) {
     verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(filename),
