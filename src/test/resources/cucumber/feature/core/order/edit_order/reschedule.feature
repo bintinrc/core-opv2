@@ -90,7 +90,7 @@ Feature: Reschedule
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan (uid:6a7a2f76-f033-4637-b2e0-e1973d080026)
+  Scenario: Operator Reschedule Fail Delivery - Latest Scan = Hub Inbound Scan
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

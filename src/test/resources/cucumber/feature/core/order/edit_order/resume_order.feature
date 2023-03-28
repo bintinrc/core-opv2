@@ -38,7 +38,7 @@ Feature: Resume Order
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Cancelled\nNew Granular Status: Pending Pickup\n\nOld Order Status: Cancelled\nNew Order Status: Pending\n\nReason: RESUME_ORDER |
 
-  Scenario: Resume Pickup For On Hold Order (uid:75e59db9-3f68-4979-8cde-493cb766d524)
+  Scenario: Resume Pickup For On Hold Order
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -100,7 +100,7 @@ Feature: Resume Order
       | status | PENDING |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint (uid:56dd7c4f-e5a3-4e7e-93b4-0f29a9caa4f6)
+  Scenario: Operator Resume a Cancelled Order on Edit Order page - Return Pickup Fail With Waypoint
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
