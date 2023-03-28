@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable;
+import co.nvqa.operator_v2.selenium.page.NewShipmentManagementPage.ShipmentsTable;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -33,7 +33,7 @@ public class SortBeltShipmentPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[contains(@class,'btn-primary')]")
   public Button createShipmentButton;
 
-  @FindBy(xpath = "//div[contains(@id,'rcDialogTitle')]")
+  @FindBy(xpath = "//div[contains(@class,'ant-modal-title')]")
   public PageElement dialog;
 
   @FindBy(xpath = "//div[label[div[text()='Arm Output(s)']]]//div[contains(@class,'selector')]")
@@ -57,11 +57,11 @@ public class SortBeltShipmentPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//td[contains(@class,'action')]/button")
   public Button viewShipmentButton;
 
-  private static final String OPTION_TO_BE_SELECTED = "//div[@label='%s']";
+  private static final String OPTION_TO_BE_SELECTED = "//div[@title='%s']";
   private static final String SHIPMENT_IDS_XPATH = "//td[@class='id']";
   private static final String HIGHLIGHTED_FILTER_INPUT_XPATH = "//mark[text()='%s']";
 
-  public ShipmentsTable shipmentsTable;
+public ShipmentsTable shipmentsTable;
 
   public SortBeltShipmentPage(WebDriver webDriver) {
     super(webDriver);
@@ -89,14 +89,14 @@ public class SortBeltShipmentPage extends OperatorV2SimplePage {
 
   public void validateShipmentDetails(Long shipmentId) {
     final String BELT = "BELT";
-
-    shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-    String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
+    NewShipmentManagementPage.shipmentsTable.filterByColumn("id",
+        String.valueOf(shipmentId));
+    String expectedShipmentId = getText("//mark[@class ='highlight ']");
     Assertions.assertThat(String.valueOf(shipmentId)).as("Shipment ID")
         .isEqualTo(expectedShipmentId);
 
     String expectedShipmentEntrySource = getText(
-        "//td[@nv-table-highlight='filter.shipment_entry_source']");
+        "//td[@class='shipment_entry_source']");
     Assertions.assertThat(BELT).as("Shipment Entry Source").isEqualTo(expectedShipmentEntrySource);
   }
 
