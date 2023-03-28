@@ -7,11 +7,6 @@ Feature: Sort Belt Manager
 
   @DeleteNewlyCreatedSortBeltConfig
   Scenario: Create Shipment (uid:d854e586-6b9d-4287-970d-3c43a1cc5c99)
-    Given API Operator creates new configuration for sort belt with device id "{config-device-id}"
-      | numberOfConfig | 2        |
-      | destinationHub | {hub-id} |
-      | shipmentType   | AIR_HAUL |
-    And API Operator activates the newly created configuration with device id "{config-device-id}"
     When Operator go to menu Sort -> Sort Belt Shipments
     And Operator switches to iframe
     And Operator selects "{sort-belt-shipment-hub}" "hub" on Sort Belt Shipment Page
@@ -22,16 +17,12 @@ Feature: Sort Belt Manager
       | numberOfShipments | 2 |
     Then Operator verifies that the shipment is created on Sort Belt Shipment Page
     When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator click "Load All Selection" on Shipment Management page
+    When Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_ID} |
     Then Operator verifies that the details of created shipments are correct
 
   @DeleteNewlyCreatedSortBeltConfig
   Scenario: Create Shipment Shipments per output More Than Max Limit (uid:9de43a16-f58d-481a-b980-20e95a541a49)
-    Given API Operator creates new configuration for sort belt with device id "{config-device-id}"
-      | numberOfConfig | 2        |
-      | destinationHub | {hub-id} |
-      | shipmentType   | AIR_HAUL |
-    And API Operator activates the newly created configuration with device id "{config-device-id}"
     When Operator go to menu Sort -> Sort Belt Shipments
     And Operator switches to iframe
     And Operator selects "{sort-belt-shipment-hub}" "hub" on Sort Belt Shipment Page
@@ -42,7 +33,8 @@ Feature: Sort Belt Manager
       | numberOfShipments | 50 |
     Then Operator verifies that the shipment is created on Sort Belt Shipment Page
     When Operator go to menu Inter-Hub -> Shipment Management
-    And Operator click "Load All Selection" on Shipment Management page
+    When Operator search shipments by given Ids on Shipment Management page:
+      | {KEY_LIST_OF_CREATED_SHIPMENT_ID} |
     Then Operator verifies that the details of created shipments are correct
 
   Scenario: Create Shipment With Empty Compulsory Field (uid:2fe48046-947d-4442-ad95-a4ff43041415)
@@ -57,11 +49,7 @@ Feature: Sort Belt Manager
 
   @DeleteNewlyCreatedSortBeltConfig
   Scenario: View Shipments Details (uid:1f0b69c6-c270-414f-8623-836518f6be32)
-    Given API Operator creates new configuration for sort belt with device id "{config-device-id}"
-      | numberOfConfig | 2        |
-      | destinationHub | {hub-id} |
-      | shipmentType   | AIR_HAUL |
-    And API Operator activates the newly created configuration with device id "{config-device-id}"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Sort -> Sort Belt Shipments
     And Operator switches to iframe
     And Operator selects "{sort-belt-shipment-hub}" "hub" on Sort Belt Shipment Page
