@@ -229,4 +229,29 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
     }
   }
 
+  public void verifyAddNewWeightDimensionNewUI() {
+    Assertions.assertThat(header.getText()).as("is header message correct")
+            .isEqualTo("Add New Weight & Dimension");
+    Assertions.assertThat(loadShipmentHeader.getText()).as("Load Shipments Weight & Dimension is shown")
+            .isEqualTo("Load Shipments Weight & Dimension");
+    Assertions.assertThat(selectSearchFilter.getText()).as("Select Search Filter is shown")
+            .isEqualTo("Select Search Filter");
+    Assertions.assertThat(searchBySID.getText()).as("Search by SID is shown")
+            .isEqualTo("Search by SID");
+    Assertions.assertThat(loadSelectionButton.getText()).as("Load Selection is shown")
+            .isEqualTo("Load Selection");
+    Assertions.assertThat(newRecordBtn.isDisplayed()).as("is New Record button is visible")
+            .isTrue();
+    Assertions.assertThat(shipmentCounter.isDisplayed()).as("Shipment counter is shown")
+            .isTrue();
+    Assertions.assertThat(searchButton.isDisplayed()).as("Search button is shown")
+            .isTrue();
+    Assertions.assertThat(newFilterToggleButton.isDisplayed()).as("New filter toggle button is shown")
+            .isTrue();
+    Assertions.assertThat(searchByBillinNumberButton.isDisplayed()).as("Search by Billing Number button is shown")
+            .isTrue();
+    Assertions.assertThat(sidsTextArea.isDisplayed()).as("SID text area is shown")
+            .isTrue();
+  }
+
 }

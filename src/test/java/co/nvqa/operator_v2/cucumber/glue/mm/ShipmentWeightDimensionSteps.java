@@ -1356,5 +1356,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     Assertions.assertThat(shipmentWeightDimensionPage.clearPresetFilterPopup.getText())
             .as("Verify clear filters popup is shown").isEqualTo(popupMessage);
   }
+
+  @Then("Operator verifies Shipment Weight Dimension page UI")
+  public void operatorVerifiesShipmentWeightDimensionPageUI() {
+    shipmentWeightDimensionPage.switchTo();
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
+  }
 }
 

@@ -14,7 +14,7 @@ Feature: Search by SID
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
@@ -28,7 +28,7 @@ Feature: Search by SID
   Scenario: Search by SID with Single Invalid Shipment ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "INVALID" on Shipment Weight Dimension search by SID text
@@ -45,7 +45,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -59,7 +59,7 @@ Feature: Search by SID
   Scenario: Search by SID with Multiple Invalid Shipment IDs < 300
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE_INVALID" on Shipment Weight Dimension search by SID text
@@ -77,7 +77,7 @@ Feature: Search by SID
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "JSON" on Shipment Weight Dimension search by SID text
@@ -94,7 +94,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE_JSON" on Shipment Weight Dimension search by SID text
@@ -111,7 +111,7 @@ Feature: Search by SID
     Given API Operator update shipment dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "DUPLICATE" on Shipment Weight Dimension search by SID text
@@ -127,7 +127,7 @@ Feature: Search by SID
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "{KEY_CREATED_SHIPMENT_ID}" on Shipment Weight Dimension search by SID text
@@ -146,7 +146,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -170,7 +170,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -194,7 +194,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -217,7 +217,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -240,7 +240,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
@@ -263,7 +263,7 @@ Feature: Search by SID
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
-    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verifies Shipment Weight Dimension page UI
     Then Operator verify Shipment Weight Dimension Load Shipment page UI
       | state | initial |
     When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
