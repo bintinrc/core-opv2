@@ -312,6 +312,40 @@ Feature: Update MAWB 4 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
 
+  @DeleteCreatedShipments
+  Scenario: Update MAWB for PH with Format 000 + <dash> + 8 digits
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator change the country to "Philippines"
+    Given API MM - Operator create multiple 1 new shipment with type "AIR_HAUL" from hub id = "{hub-id-ph-2}" to hub id = "{hub-id-ph-3}"
+    Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
+    And API Operator link mawb for following shipment ids
+      | mawb                 | 123 12345         |
+      | destinationAirportId | {airport-id-ph-1} |
+      | originAirportId      | {airport-id-ph-2} |
+      | vendorId             | {vendor-id-ph-1}  |
+    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+    Then Operator verify Shipment Weight Dimension page UI
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state | initial |
+    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state             | search_valid |
+      | numberOfShipments | 1            |
+    When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+      | expectedNumOfRows | 1 |
+    And Operator select all data on Shipment Weight Dimension Table
+    When Operator click update MAWB button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Update MAWB page UI
+    When Operator update MAWB information on shipment weight dimension page with following data
+      | mawb        | 000-12345678        |
+      | vendor      | {vendor-name-ph-2}  |
+      | origin      | {airport-name-ph-2} |
+      | destination | {airport-name-ph-1} |
+    Then Operator click update button on shipment weight update mawb page
+    And Operator verify Shipment Weight Update MAWB page UI updated with new MAWB
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
