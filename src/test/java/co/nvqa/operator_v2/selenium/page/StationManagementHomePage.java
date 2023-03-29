@@ -951,6 +951,9 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
             .replaceAll(" hour ", "")
             .replaceAll(" minutes", "")
             .replaceAll(" minute", "");
+        if (!value.contains(".")) {
+          value = "0." + value;
+        }
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(
