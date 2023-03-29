@@ -210,7 +210,9 @@ Feature: Tag & Untag DP
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | DELIVERY |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | DELIVERY   |
     And Operator get multiple "DELIVERY" transactions with status "PENDING"
-    And Operator merge transactions on Zonal Routing
+    And API Core - Operator merge waypoints on Zonal Routing:
+      | {KEY_LIST_OF_WAYPOINT_IDS[1]} |
+      | {KEY_LIST_OF_WAYPOINT_IDS[2]} |
     Then API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[2]} |
