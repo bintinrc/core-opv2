@@ -209,6 +209,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else if (key.equalsIgnoreCase("multiple_invalid")) {
       searchTerm = IntStream.range(0, 20).mapToObj(x -> f("9999999999%d", x))
           .collect(Collectors.joining("\n"));
+    } else if (key.equalsIgnoreCase("multiple_invalid_more_300")) {
+      searchTerm = IntStream.range(0, 301).mapToObj(x -> f("9999999999%d", x))
+              .collect(Collectors.joining("\n"));
     } else if (key.equalsIgnoreCase("multiple")) {
       List<Long> shipmentIdsList = resolveValue(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
       searchTerm = shipmentIdsList.stream().map(Object::toString).collect(
@@ -1355,6 +1358,71 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     shipmentWeightDimensionPage.clearPresetFilterPopup.waitUntilVisible();
     Assertions.assertThat(shipmentWeightDimensionPage.clearPresetFilterPopup.getText())
             .as("Verify clear filters popup is shown").isEqualTo(popupMessage);
+  }
+
+  @Then("Operator verifies Shipment Weight Dimension page UI")
+  public void operatorVerifiesShipmentWeightDimensionPageUI() {
+    shipmentWeightDimensionPage.switchTo();
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
+  }
+
+  @When("Operator clicks {string} button on Shipment Weight Dimension page")
+  public void operatorClicksButtonOnShipmentWeightDimensionPage(String buttonName) {
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    switch (buttonName) {
+      case "Search by Billing Number":
+        shipmentWeightDimensionPage.searchByBillinNumberButton.waitUntilVisible();
+        shipmentWeightDimensionPage.searchByBillinNumberButton.click();
+        break;
+      case "New Record":
+        shipmentWeightDimensionPage.newRecordBtn.waitUntilVisible();
+        shipmentWeightDimensionPage.newRecordBtn.click();
+        break;
+      case "Load Selection":
+        shipmentWeightDimensionPage.loadSelectionButton.waitUntilVisible();
+        shipmentWeightDimensionPage.loadSelectionButton.click();
+        break;
+      case "Search Shipments":
+        shipmentWeightDimensionPage.searchShipments.waitUntilVisible();
+        shipmentWeightDimensionPage.searchShipments.click();
+        break;
+      case "Close Search by Billing Number":
+        shipmentWeightDimensionPage.closeSearchBillingNumberPopup.waitUntilVisible();
+        shipmentWeightDimensionPage.closeSearchBillingNumberPopup.click();
+        break;
+      case "Back to Main":
+        shipmentWeightDimensionPage.backToMain.waitUntilVisible();
+        shipmentWeightDimensionPage.backToMain.click();
+        break;
+    }
+  }
+
+  @Then("Operator verifies {string} popup is shown on Shipment Weight Dimension page")
+  public void operatorVerifiesPopupIsShownOnShipmentWeightDimensionPage(String popupName) {
+    shipmentWeightDimensionPage.headerSearchByBillingNumberPopup.waitUntilVisible(5);
+    shipmentWeightDimensionPage.verifyShipmentWeightDimensionPagePopup(popupName);
+  }
+
+  @When("Operator input {string} billing number with value {string} on Shipment Weight Dimension page")
+  public void operatorInputBillingNumberWithValueOnShipmentWeightDimensionPage(String billingNumberType, String billingNumberValue) {
+    String newBillingNumberValue = resolveValue(billingNumberValue);
+    switch (billingNumberType) {
+      case "MAWB":
+        shipmentWeightDimensionPage.mawbBillingNumberInput.click();
+        shipmentWeightDimensionPage.mawbBillingNumberInput.sendKeys(newBillingNumberValue);
+        break;
+      case "SWB":
+        shipmentWeightDimensionPage.swbBillingNumberInput.click();
+        shipmentWeightDimensionPage.swbBillingNumberInput.sendKeys(newBillingNumberValue);
+        break;
+    }
+  }
+
+  @Then("Operator verifies the popup is closed on Shipment Weight Dimension page")
+  public void operatorVerifiesThePopupIsClosedOnShipmentWeightDimensionPage() {
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
   }
 }
 
