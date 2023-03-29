@@ -209,6 +209,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else if (key.equalsIgnoreCase("multiple_invalid")) {
       searchTerm = IntStream.range(0, 20).mapToObj(x -> f("9999999999%d", x))
           .collect(Collectors.joining("\n"));
+    } else if (key.equalsIgnoreCase("multiple_invalid_more_300")) {
+      searchTerm = IntStream.range(0, 301).mapToObj(x -> f("9999999999%d", x))
+              .collect(Collectors.joining("\n"));
     } else if (key.equalsIgnoreCase("multiple")) {
       List<Long> shipmentIdsList = resolveValue(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
       searchTerm = shipmentIdsList.stream().map(Object::toString).collect(

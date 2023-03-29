@@ -12,6 +12,27 @@ Feature: Search by Billing Number 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
     Then Operator verifies Shipment Weight Dimension page UI
+    When Operator search "MULTIPLE" on Shipment Weight Dimension search by SID text
+    Then Operator verify Shipment Weight Dimension Load Shipment page UI
+      | state             | search_valid |
+      | numberOfShipments | 2            |
+    When Operator click search button on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Dimension Table page is shown
+    When Operator filter Shipment Weight Dimension Table by "billing_number" column with first shipment value
+      | expectedNumOfRows | 2 |
+    And Operator select all data on Shipment Weight Dimension Table
+    When Operator click Update Billing Number "MAWB" on Shipment Weight Dimension page
+    Then Operator verify Shipment Weight Update Billing Number "MAWB" page UI
+    When Operator update billing number "MAWB" information on Shipment Weight Dimension page with following data:
+      | mawb        | RANDOM                 |
+      | vendor      | {local-vendor-name}    |
+      | origin      | {local-airport-1-code} |
+      | destination | {local-airport-2-code} |
+    Then Operator click update button on shipment weight update mawb page
+    And Operator verify Update Billing Number "MAWB" has updated with new value "{KEY_SHIPMENT_UPDATED_AWB}"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Weight Dimension
+    Then Operator verifies Shipment Weight Dimension page UI
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
