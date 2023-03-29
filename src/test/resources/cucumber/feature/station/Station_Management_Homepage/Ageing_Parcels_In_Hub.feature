@@ -563,7 +563,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                         |
@@ -670,7 +670,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -708,7 +708,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -761,7 +761,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -799,7 +799,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -856,7 +856,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -911,7 +911,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -966,7 +966,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1020,7 +1020,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1079,7 +1079,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1137,7 +1137,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1195,7 +1195,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1253,7 +1253,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1313,7 +1313,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1371,7 +1371,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1429,7 +1429,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1484,7 +1484,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -1543,7 +1543,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1600,7 +1600,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1632,7 +1632,7 @@ Feature: Ageing Parcels In Hub
 
     Examples:
       | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
-      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | RESOLVED     |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | FOUND - INBOUND | RESOLVED     |
 
 
   @ForceSuccessOrder
@@ -1655,7 +1655,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1711,7 +1711,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1767,7 +1767,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1822,7 +1822,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1879,7 +1879,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1911,7 +1911,7 @@ Feature: Ageing Parcels In Hub
 
     Examples:
       | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
-      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | CANCELLED    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | FOUND - INBOUND | CANCELLED    |
 
 
   @ForceSuccessOrder
@@ -1934,7 +1934,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1990,7 +1990,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2046,7 +2046,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2103,7 +2103,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2163,7 +2163,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2221,7 +2221,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2279,7 +2279,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -2336,7 +2336,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
