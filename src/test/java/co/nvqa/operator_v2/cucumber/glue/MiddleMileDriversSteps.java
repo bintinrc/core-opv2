@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverDataResponse;
 import co.nvqa.commons.model.core.GetDriverResponse;
@@ -20,8 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import org.apache.commons.text.RandomStringGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,8 +97,17 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Given("Operator verifies middle mile driver management page is loaded")
   public void operatorMovementTripPageIsLoaded() {
-    middleMileDriversPage.switchTo();
-    middleMileDriversPage.loadButton.waitUntilClickable(30);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      try {
+        middleMileDriversPage.waitUntilPageLoaded();
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable(30);
+      } catch (RuntimeException e) {
+        middleMileDriversPage.refreshPage();
+        middleMileDriversPage.waitUntilPageLoaded();
+        throw new RuntimeException(e);
+      }
+    }, "Retrying until page is properly loaded...", 1000, 10);
   }
 
   @When("Operator clicks on Load Driver Button on the Middle Mile Driver Page")
@@ -154,7 +162,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
+            String lastName = new RandomStringGenerator.Builder().withinRange('A', 'Z').build()
+                .generate(12);
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
@@ -277,19 +286,20 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName,
       String value) {
     middleMileDriversPage.selectFilter(filterName, value);
-    if (IS_FIRST_TIME_SETUP_DRIVER){
-      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
-      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
-      IS_FIRST_TIME_SETUP_DRIVER = false;
-    }
-    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
+//    if (IS_FIRST_TIME_SETUP_DRIVER){
+//      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+//      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
+//      IS_FIRST_TIME_SETUP_DRIVER = false;
+//    }
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
   }
 
   @When("Operator searches by {string} with value {string}")
   public void operatorSearchesByWithValue(String filterName, String filterValue) {
-    String resolvedFilterValue = resolveValue(filterValue);
     if ("id".equals(filterName)) {
-      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolvedFilterValue));
+      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolveValue(filterValue)));
+    } else {
+      middleMileDriversPage.tableFilterByIdWithValue(resolveValue(filterValue));
     }
 
   }
@@ -534,7 +544,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
+            String lastName = new RandomStringGenerator.Builder().withinRange('A', 'Z').build()
+                .generate(12);
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
