@@ -22,7 +22,6 @@ Feature: Station User Management
       | HubName      | HubID      |
       | {hub-name-6} | {hub-id-6} |
 
-  @Debug
   Scenario Outline: Add User that Already Added to the Station
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station User Management

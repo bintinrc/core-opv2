@@ -6,7 +6,7 @@ Feature: Search Tracking IDs on Station Route
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -49,7 +49,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Primary Driver on Leave
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage  - Match Area and Match Keyword - Primary Driver on Leave
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -93,7 +93,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "{KEY_CREATED_ORDER.toAddress2}" is displayed in row 1 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area and Match Keyword - Primary Driver and Fallback Driver on Leave
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area and Match Keyword - Primary Driver and Fallback Driver on Leave
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -259,7 +259,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "{KEY_LIST_OF_CREATED_ORDERS[2].toAddress2}" is displayed in row 1 on Station Route page
 
   @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Do Not Match To Single Coverage on Station Route
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Do Not Match To Single Coverage
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -291,7 +291,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match is not displayed on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Area Only
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Area
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -334,7 +334,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match is not displayed on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs With Address Match To Single Coverage on Station Route - Match Keyword Only
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Match To Single Coverage - Match Keyword
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -940,7 +940,7 @@ Feature: Search Tracking IDs on Station Route
       | top | No orders found |
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - Duplicate Orders
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - Duplicate Orders
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -981,7 +981,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "home {gradle-current-date-yyyyMMddHHmmsss}" is displayed in row 1 on Station Route page
 
   @DeleteDriver @DeleteCoverage @DeleteShipment
-  Scenario: Operator Search Tracking IDs on Station Route - Include Parcel In Hub and Additional Tracking IDs - No Duplicate Orders
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter and Additional Tracking IDs - No Duplicate Orders
     And API Shipper create V4 order using data below:
       | generateFrom   | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard","to": {"name": "QA-SO-Test-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss}","address2": "home {gradle-current-date-yyyyMMddHHmmsss}","country": "SG","postcode": "159363"}},"parcel_job":{ "cash_on_delivery": 50,"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

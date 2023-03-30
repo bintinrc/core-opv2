@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Inbounding @RouteInbound
 Feature: Collection Summary
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

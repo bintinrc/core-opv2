@@ -218,7 +218,22 @@ public class StationRouteKeywordSteps extends AbstractSteps {
     page.inFrame(() -> {
       Assertions.assertThat(page.areasTable.getRowsCount())
           .withFailMessage("Coverage is not displayed for area: " + data).isPositive();
-      page.areasTable.clickActionButton(1, ACTION_ACTION);
+      int index = 0;
+      if ("empty".equals(data.get("keywords"))) {
+        for (int i = 1; i <= page.areasTable.getRowsCount(); i++) {
+          if (StringUtils.isBlank(page.areasTable.getColumnText(i, COLUMN_KEYWORDS))) {
+            index = i;
+            break;
+          }
+        }
+        Assertions.assertThat(index)
+            .withFailMessage(
+                "Coverage with parameters and empty keywords is not displayed: " + data)
+            .isPositive();
+      } else {
+        index = 1;
+      }
+      page.areasTable.clickActionButton(index, ACTION_ACTION);
     });
   }
 
@@ -230,7 +245,8 @@ public class StationRouteKeywordSteps extends AbstractSteps {
       if (StringUtils.isNotBlank(expected.getArea())) {
         page.areasTable.filterByColumn(COLUMN_AREA, expected.getArea());
       }
-      if (CollectionUtils.isNotEmpty(expected.getKeywords())) {
+      if (CollectionUtils.isNotEmpty(expected.getKeywords()) && !"empty".equalsIgnoreCase(
+          expected.getKeywords().get(0))) {
         page.areasTable.filterByColumn(COLUMN_KEYWORDS, expected.getKeywords().get(0));
       }
       if (StringUtils.isNotBlank(expected.getPrimaryDriver())) {
@@ -445,6 +461,15 @@ public class StationRouteKeywordSteps extends AbstractSteps {
           .collect(Collectors.toList());
       Assertions.assertThat(actual).as("List of keywords")
           .containsExactlyInAnyOrderElementsOf(keywords);
+    });
+  }
+
+  @When("Operator verify there are no keywords on Add Keywords tab on Station Route Keyword page")
+  public void verifyEmptyKeywords() {
+    page.inFrame(() -> {
+      page.addKeywords.click();
+      Assertions.assertThat(page.addKeywordsTab.keywords).as("List of keywords")
+          .isEmpty();
     });
   }
 
