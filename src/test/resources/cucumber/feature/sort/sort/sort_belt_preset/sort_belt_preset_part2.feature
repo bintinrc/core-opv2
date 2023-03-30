@@ -47,8 +47,6 @@ Feature: Sort Belt Preset
     And Operator verify preset has error on Check Sort Belt Preset detail page
       | fields        | Tags        |
 
-#  https://studio.cucumber.io/projects/208191/test-plan/folders/2172562/scenarios/7016572
-  Scenario: Sort Belt Preset - Create Preset - Duplicate Rules in Different Order
   @CleanCreatedSortBeltPreset
   Scenario: Sort Belt Preset - Create Preset - Duplicate Rules
     Given Operator go to menu Utilities -> QRCode Printing
