@@ -326,6 +326,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       for (int j = 0; j < keyList.size(); j++) {
         String columnXpath = String.format(COLUMN_MAPPING_XPATH, i + 1, j + 2);
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+          scrollIntoView(columnXpath);
           waitUntilElementIsClickable(columnXpath);
           click(columnXpath);
           Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();

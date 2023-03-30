@@ -22,6 +22,7 @@ import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
+import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH;
 import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH;
 import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_ARM_VALUE_XPATH;
 import static co.nvqa.operator_v2.selenium.page.SortBeltManagerPage.FORM_RULE_GRANULAR_STATUSES_VALUE_XPATH;
@@ -652,9 +653,8 @@ public class SortBeltManagerSteps extends AbstractSteps {
 
   @And("Operator make sure duplicate rules are correct v2")
   public void operatorMakeSureDuplicateRulesAreCorrectV() {
-    int duplicate = get("duplicate");
-    int arms = get("arms");
-    System.out.println(duplicate);
+    int duplicate = get("DUPLICATE");
+    int arms = get("ARMS");
     Assertions.assertThat(
             sortBeltManagerPage.findElementByXpath(CHECK_LOGIC_DUPLICATE_RULES_SUMMARY_XPATH).getText())
         .as("Duplicate rules checking is CORRECT")
@@ -679,16 +679,6 @@ public class SortBeltManagerSteps extends AbstractSteps {
         if (sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
             .getText().equalsIgnoreCase(
                 sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(
-                        String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, j))
-                    .getText()) && sortBeltManagerPage.findElementByXpath(
-                String.format(FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH, i))
-            .getText().equalsIgnoreCase(
-                sortBeltManagerPage.findElementByXpath(
-                        String.format(FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH, j))
                     .getText()) && sortBeltManagerPage.findElementByXpath(
                 String.format(FORM_RULE_RTS_VALUE_XPATH, i))
             .getText().equalsIgnoreCase(
@@ -726,7 +716,70 @@ public class SortBeltManagerSteps extends AbstractSteps {
     for (int g : dupes.values()) {
       duplicateCount += g;
     }
-    put("arms", dupes.size());
-    put("duplicate", duplicateCount);
+    put("ARMS", dupes.size());
+    put("DUPLICATE", duplicateCount);
+  }
+
+  @And("Operator checks conflicting logic rules")
+  public void operatorChecksConflictingLogicRules() {
+    LogicForm logic = get(KEY_SBM_CREATED_LOGIC_FORM);
+    int conflictingCount = 0;
+    List<RuleForm> rules = logic.getRules();
+    HashMap<String, Integer> conflicts = new HashMap<String, Integer>();
+    for (int i = 1; i < rules.size(); i++) {
+      if (conflicts.containsKey(
+          sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
+              .getText())) {
+        i++;
+      }
+      for (int j = i + 1; j <= rules.size(); j++) {
+        if (sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
+            .getText().equalsIgnoreCase(
+                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, j))
+                    .getText())) {
+          if (!sortBeltManagerPage.findElementByXpath(
+                  String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, i))
+              .getText().equalsIgnoreCase(
+                  sortBeltManagerPage.findElementByXpath(
+                          String.format(FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH, j))
+                      .getText())) {
+            if (conflicts.containsKey(
+                sortBeltManagerPage.findElementByXpath(String.format(FORM_RULE_ARM_VALUE_XPATH, i))
+                    .getText())) {
+              conflicts.put(
+                  sortBeltManagerPage.findElementByXpath(
+                          String.format(FORM_RULE_ARM_VALUE_XPATH, i))
+                      .getText(), conflicts.getOrDefault(sortBeltManagerPage.findElementByXpath(
+                      String.format(FORM_RULE_ARM_VALUE_XPATH, i)).getText(), 0) + 1);
+            } else {
+              conflicts.put(
+                  sortBeltManagerPage.findElementByXpath(
+                          String.format(FORM_RULE_ARM_VALUE_XPATH, i))
+                      .getText(), 2);
+            }
+          }
+
+        }
+      }
+
+    }
+    for (int g : conflicts.values()) {
+      conflictingCount += g;
+    }
+    put("ARMS", conflictingCount);
+    put("CONFLICTS", conflictingCount);
+  }
+
+  @And("Operator make sure conflicting shipment rules are correct v2")
+  public void operatorMakeSureConflictingShipmentRulesAreCorrectV() {
+    int conflicts = get("CONFLICTS");
+    int arms = get("ARMS");
+    Assertions.assertThat(
+            sortBeltManagerPage.findElementByXpath(CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH)
+                .getText())
+        .as("Conflicting rules checking is CORRECT")
+        .isEqualTo(
+            "Conflicting shipment destination & type: " + conflicts + " rule(s) across " + arms
+                + " arm(s)");
   }
 }
