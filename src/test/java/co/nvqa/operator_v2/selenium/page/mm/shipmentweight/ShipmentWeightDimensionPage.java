@@ -140,6 +140,27 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(xpath = "//input[@data-testid='column-search-field-destination-port']")
   public TextBox destinationPortSearchField;
 
+  @FindBy(xpath = "//button[@data-testid = 'back-to-main-button']")
+  public Button backToMain;
+
+  // Search by Billing Number section
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(text(),'Search by Billing Number')]")
+  public PageElement headerSearchByBillingNumberPopup;
+
+  @FindBy(xpath = "//input[@data-testid = 'filter-mawb-input' and @id = 'mawb']")
+  public TextBox mawbBillingNumberInput;
+
+  @FindBy(xpath = "//input[@data-testid = 'filter-swb-input' and @id = 'swb']")
+  public TextBox swbBillingNumberInput;
+
+  @FindBy(xpath = "//button[@data-testid = 'submit-search-by-billing-number-button']")
+  public Button searchShipments;
+
+  @FindBy(xpath = "//span[@role = 'img' and @aria-label = 'close']")
+  public Button closeSearchBillingNumberPopup;
+
+  private static final String BILLING_NUMBER_RADIO_BUTTON = "//label[@class='ant-radio-wrapper']/span[contains(text(), '%s')]";
+
   public ShipmentWeightDimensionPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -226,6 +247,44 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
           .filter(instance -> instance.value.equals(label))
           .findFirst()
           .orElse(INITIAL);
+    }
+  }
+
+  public void verifyAddNewWeightDimensionNewUI() {
+    Assertions.assertThat(header.getText()).as("is header message correct")
+            .isEqualTo("Add New Weight & Dimension");
+    Assertions.assertThat(loadShipmentHeader.getText()).as("Load Shipments Weight & Dimension is shown")
+            .isEqualTo("Load Shipments Weight & Dimension");
+    Assertions.assertThat(selectSearchFilter.getText()).as("Select Search Filter is shown")
+            .isEqualTo("Select Search Filter");
+    Assertions.assertThat(searchBySID.getText()).as("Search by SID is shown")
+            .isEqualTo("Search by SID");
+    Assertions.assertThat(loadSelectionButton.getText()).as("Load Selection is shown")
+            .isEqualTo("Load Selection");
+    Assertions.assertThat(newRecordBtn.isDisplayed()).as("is New Record button is visible")
+            .isTrue();
+    Assertions.assertThat(shipmentCounter.isDisplayed()).as("Shipment counter is shown")
+            .isTrue();
+    Assertions.assertThat(searchButton.isDisplayed()).as("Search button is shown")
+            .isTrue();
+    Assertions.assertThat(newFilterToggleButton.isDisplayed()).as("New filter toggle button is shown")
+            .isTrue();
+    Assertions.assertThat(searchByBillinNumberButton.isDisplayed()).as("Search by Billing Number button is shown")
+            .isTrue();
+    Assertions.assertThat(sidsTextArea.isDisplayed()).as("SID text area is shown")
+            .isTrue();
+  }
+
+  public void verifyShipmentWeightDimensionPagePopup(String popupName) {
+    switch (popupName) {
+      case "Search by Billing Number":
+        Assertions.assertThat(headerSearchByBillingNumberPopup.isDisplayed()).as("Search by Billing Number popup is visible")
+                .isTrue();
+        Assertions.assertThat(findElementByXpath(f(BILLING_NUMBER_RADIO_BUTTON, "MAWB")).isDisplayed()).as("MAWB on Search by Billing Number popup is visible")
+                .isTrue();
+        Assertions.assertThat(findElementByXpath(f(BILLING_NUMBER_RADIO_BUTTON, "SWB")).isDisplayed()).as("SWB on Search by Billing Number popup is visible")
+                .isTrue();
+        break;
     }
   }
 
