@@ -118,9 +118,10 @@ Feature: Sort Belt Manager V2
       | unassignedArm | 15                                        |
     And Operator fills logic rules
       | rules | [{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","RTS":"No","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"1","Description":"Brief description","Granular Statuses":"Pending Pickup,En-route to Sorting Hub,Arrived at Sorting Hub","RTS":"Yes","Service Levels":"STANDARD,SAMEDAY","Tags":"QA-TAG,BRUH-TAG","Shipment Destination":"JKB","Shipment Type":"Air haul"},{"Arm":"2","Description":"Brief description","Granular Statuses":"Arrived at Sorting Hub,On Vehicle for Delivery","RTS":"No","Service Levels":"EXPRESS,SAMEDAY","Tags":"PRIOR,PRIORITY","Shipment Destination":"RECOVERY1","Shipment Type":"Land haul"}] |
+    And Operator checks filled logic rules
     And Operator clicks next button in create logic
     Then Operator make sure redirected to check logic page
-    And Operator make sure duplicate rules are correct
+    And Operator make sure duplicate rules are correct v2
     And Operator make sure can not click save button in check logic
     And Operator edits the selected logic
     And Operator clicks cancel button in create logic
