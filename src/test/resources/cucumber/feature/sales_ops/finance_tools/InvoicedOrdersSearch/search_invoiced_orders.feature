@@ -47,15 +47,15 @@ Feature: Upload Invoiced Orders
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     When Search Invoiced Orders page is loaded
     Then Operator uploads a PDF on Invoiced Orders Search Page and verifies error message as below:
-      | top    | Failed to upload CSV file             |
-      | bottom | Error: Please select only .csv files. |
+      | top    | Failed to upload CSV file      |
+      | bottom | Please select only .csv files. |
 
   Scenario: Search by Uploading CSV file with invalid format template (uid:e4e8b221-0776-45fd-9924-5229f390020d)
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     When Search Invoiced Orders page is loaded
     Then Operator uploads an invalid CSV on Invoiced Orders Search Page CSV and verifies error message as below:
-      | top    | Failed to upload CSV file                       |
-      | bottom | Error: More than 1 column detected in csv file. |
+      | top    | Failed to upload CSV file                |
+      | bottom | More than 1 column detected in csv file. |
 
   @HappyPath
   Scenario: Search by Inputting invoiced order tracking IDs manually (uid:caceedb4-fdd5-4f71-a82c-e80271b6cc4b)
@@ -141,8 +141,8 @@ Feature: Upload Invoiced Orders
     Given Operator go to menu Finance Tools -> Invoiced Orders Search
     When Search Invoiced Orders page is loaded
     Then Operator uploads an empty CSV on Invoiced Orders Search Page CSV and verifies error message as below:
-      | top    | Failed to upload CSV file       |
-      | bottom | Error: Empty csv file detected. |
+      | top    | Failed to upload CSV file |
+      | bottom | Empty csv file detected.  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

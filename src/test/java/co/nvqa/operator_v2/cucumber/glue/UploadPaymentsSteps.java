@@ -62,10 +62,10 @@ public class UploadPaymentsSteps extends AbstractSteps {
 
   @Then("Operator - verifies csv file is not successfully uploaded on the Upload Payments page")
   public void operatorVerifiesCsvFileIsNotSuccessfullyUploadedOnTheUploadPaymentsPage() {
-    String actualErrorMsg = uploadPaymentsPage.getAntTopTextV2();
+    String actualErrorMsg = uploadPaymentsPage.getUploadPaymentErrorToastTopText();
     String expectedToastText = CSV_FILENAME_PATTERN
         + " file upload failed.";
-    String actualErrorDescription = uploadPaymentsPage.getAntDescription();
+    String actualErrorDescription = uploadPaymentsPage.getUploadPaymentErrorToastDescription();
     String expectedErrorDescription = "Please refer to the auto-downloaded error csv file.";
     Assertions.assertThat(actualErrorMsg).as("Error message is correct")
         .isEqualTo(expectedToastText);

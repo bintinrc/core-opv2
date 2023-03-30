@@ -90,7 +90,6 @@ Feature: Upload Invoiced Orders
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"STANDARD", "from": {"name": "QA-SO-Test-UIO-From","phone_number": "+6512453201","email": "senderV4@nvqa.co","address": {"address1": "30 Jalan Kilang Barat","address2": "NVQA V4 HQ","country": "SG","postcode": "159364"}},"to": {"name": "QA-SO-Test-UIO-To","phone_number": "+6522453201","email": "recipientV4@nvqa.co","address": {"address1": "998 Toa Payoh North V4","address2": "NVQA V4 home","country": "SG","postcode": "159363"}},"parcel_job":{"cash_on_delivery": 35,"insured_value": 75, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "dimensions": {"size": "S", "weight": "1.0" },"delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force succeed created order
     And DB Operator verifies the order is not in billing_qa_gl.invoiced_orders table
-    Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     And Operator upload a CSV file with below order ids and verify success message
       | {KEY_CREATED_ORDER_TRACKING_ID} |
     And DB Operator verifies the order is in billing_qa_gl.invoiced_orders table

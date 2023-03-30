@@ -23,8 +23,8 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 17.12 |
-      | gst          | 1.12  |
+      | grandTotal   | 17.28 |
+      | gst          | 1.28  |
       | deliveryFee  | 16    |
       | insuranceFee | 0     |
       | codFee       | 0     |
@@ -53,8 +53,8 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 13.91 |
-      | gst          | 0.91  |
+      | grandTotal   | 14.04 |
+      | gst          | 1.04  |
       | deliveryFee  | 13    |
       | insuranceFee | 0     |
       | codFee       | 0     |
@@ -83,8 +83,8 @@ Feature: Service Type and Service Level params
       | fromZone     | WEST     |
       | toZone       | EAST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 3.21 |
-      | gst          | 0.21 |
+      | grandTotal   | 3.24 |
+      | gst          | 0.24 |
       | deliveryFee  | 3    |
       | insuranceFee | 0    |
       | codFee       | 0    |
