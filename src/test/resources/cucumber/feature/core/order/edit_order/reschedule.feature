@@ -633,6 +633,9 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
+    Then DB Operator verify Jaro Scores:
+      | waypointId                                                 | archived |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} | 1        |
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Reschedule Fail Delivery - Edit Delivery Address
