@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 
 public class SortBeltShipmentSteps extends AbstractSteps {
 
@@ -113,11 +115,14 @@ public class SortBeltShipmentSteps extends AbstractSteps {
 
     // Number of Shipment
     sortBeltShipmentPage.shipmentOutput.sendKeys(numberOfShipments);
-    String changedShipmentNumber = sortBeltShipmentPage.shipmentOutput.getText();
+    sortBeltShipmentPage.shipmentOutput.sendKeys(Keys.ENTER);
+    String changedShipmentNumber = sortBeltShipmentPage.shipmentOutput.getValue();
     Assertions.assertThat("30".equalsIgnoreCase(changedShipmentNumber))
         .as("Shipment Number is Changed to 30").isTrue();
+    WebElement we = sortBeltShipmentPage.shipmentOutput.getWebElement();
+    sortBeltShipmentPage.clearWebField(we);
     sortBeltShipmentPage.shipmentOutput.sendKeys(String.valueOf(n));
-
+    sortBeltShipmentPage.shipmentOutput.sendKeys(Keys.ENTER);
     // Comment
     sortBeltShipmentPage.comment.sendKeys(comment);
 
@@ -144,6 +149,7 @@ public class SortBeltShipmentSteps extends AbstractSteps {
   @Then("Operator verifies that the details of created shipments are correct")
   public void operatorVerifiesThatTheDetailsOfCreatedShipmentsAreCorrect() {
     List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+    sortBeltShipmentPage.switchTo();
     for (Long shipmentId : shipmentIds) {
       sortBeltShipmentPage.validateShipmentDetails(shipmentId);
     }

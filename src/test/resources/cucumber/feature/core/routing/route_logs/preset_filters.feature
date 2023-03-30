@@ -45,7 +45,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
 
   @DeleteFilterTemplate
-  Scenario: Operator Apply Filter Preset on Route Logs Page (uid:6707eccc-3717-43d4-8f5f-a582ee833507)
+  Scenario: Operator Apply Filter Preset on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |

@@ -563,7 +563,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                         |
@@ -670,7 +670,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -708,7 +708,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -761,7 +761,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
     And Operator selects the hub as "<HubName>" and proceed
@@ -799,7 +799,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -856,7 +856,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -911,7 +911,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -966,7 +966,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1020,7 +1020,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1079,7 +1079,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1137,7 +1137,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1195,7 +1195,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1253,7 +1253,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1313,7 +1313,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1371,7 +1371,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1429,7 +1429,7 @@ Feature: Ageing Parcels In Hub
       | taskId             | 868538                                                                                       |
       | hubId              | <HubId>                                                                                      |
       | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
-    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 2:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
     And Operator go to menu Recovery -> Recovery Tickets
     And Operator create new ticket on page Recovery Tickets using data below:
       | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -1463,6 +1463,914 @@ Feature: Ageing Parcels In Hub
     Examples:
       | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcome    | TicketStatus |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | RESUME DELIVERY | IN PROGRESS  |
+
+  @ForceSuccessOrder
+  Scenario Outline: Missing Ticket Not Appears in Ageing Parcel
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator get the count from the tile: "<TileName>"
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | orderOutcomeMissing     | <OrderOutcome>                             |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has decreased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator expects no results when searching for the orders by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | LOST - DECLARED | IN PROGRESS  |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Resolved Ticket Status - Recovery Ticket Type = Damaged
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | IMPROPER PACKAGING                         |
+      | parcelLocation          | DAMAGED RACK                               |
+      | liability               | Recovery                                   |
+      | damageDescription       | GENERATED                                  |
+      | orderOutcomeDamaged     | NV LIABLE - FULL                           |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | RESOLVED     |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Resolved Ticket Status - Recovery Ticket Type = Missing
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | orderOutcomeMissing     | <OrderOutcome>                             |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | FOUND - INBOUND | RESOLVED     |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel On Hold
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | ROUTE CLEANING                             |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | <TicketSubType>                            |
+      | orderOutcome            | <OrderOutcome>                             |
+      | exceptionReason         | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType     | TicketSubType   | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | RESOLVED     |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Resolved Ticket Status - Recovery Ticket Type = Parcel Exception
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                   | ROUTE CLEANING                             |
+      | investigatingDepartment       | Fleet (First Mile)                         |
+      | investigatingHub              | <HubName>                                  |
+      | ticketType                    | <TicketType>                               |
+      | ticketSubType                 | <TicketSubType>                            |
+      | orderOutcomeInaccurateAddress | RTS                                        |
+      | rtsReason                     | Nobody at address                          |
+      | exceptionReason               | GENERATED                                  |
+      | custZendeskId                 | 1                                          |
+      | shipperZendeskId              | 1                                          |
+      | ticketNotes                   | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType       | TicketSubType      | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL EXCEPTION | INACCURATE ADDRESS | RESUME DELIVERY | RESOLVED     |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Resolved Ticket Status - Recovery Ticket Type = Shipper Issue
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                 | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment     | Fleet (First Mile)                         |
+      | investigatingHub            | <HubName>                                  |
+      | ticketType                  | <TicketType>                               |
+      | ticketSubType               | <TicketSubType>                            |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED                            |
+      | issueDescription            | GENERATED                                  |
+      | custZendeskId               | 1                                          |
+      | shipperZendeskId            | 1                                          |
+      | ticketNotes                 | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | RESUME DELIVERY | RESOLVED     |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Cancelled Ticket Status - Recovery Ticket Type = Damaged
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | IMPROPER PACKAGING                         |
+      | parcelLocation          | DAMAGED RACK                               |
+      | liability               | Recovery                                   |
+      | damageDescription       | GENERATED                                  |
+      | orderOutcomeDamaged     | NV LIABLE - FULL                           |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | CANCELLED    |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Cancelled Ticket Status - Recovery Ticket Type = Missing
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | orderOutcomeMissing     | <OrderOutcome>                             |
+      | parcelDescription       | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | MISSING    | IMPROPER PACKAGING | FOUND - INBOUND | CANCELLED    |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel On Hold
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | ROUTE CLEANING                             |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | <TicketSubType>                            |
+      | orderOutcome            | <OrderOutcome>                             |
+      | exceptionReason         | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType     | TicketSubType   | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | CANCELLED    |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Cancelled Ticket Status - Recovery Ticket Type = Parcel Exception
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                   | ROUTE CLEANING                             |
+      | investigatingDepartment       | Fleet (First Mile)                         |
+      | investigatingHub              | <HubName>                                  |
+      | ticketType                    | <TicketType>                               |
+      | ticketSubType                 | <TicketSubType>                            |
+      | orderOutcomeInaccurateAddress | RTS                                        |
+      | rtsReason                     | Nobody at address                          |
+      | exceptionReason               | GENERATED                                  |
+      | custZendeskId                 | 1                                          |
+      | shipperZendeskId              | 1                                          |
+      | ticketNotes                   | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType       | TicketSubType      | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL EXCEPTION | INACCURATE ADDRESS | RESUME DELIVERY | CANCELLED    |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Cancelled Ticket Status - Recovery Ticket Type = Shipper Issue
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                 | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment     | Fleet (First Mile)                         |
+      | investigatingHub            | <HubName>                                  |
+      | ticketType                  | <TicketType>                               |
+      | ticketSubType               | <TicketSubType>                            |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED                            |
+      | issueDescription            | GENERATED                                  |
+      | custZendeskId               | 1                                          |
+      | shipperZendeskId            | 1                                          |
+      | ticketNotes                 | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | Arrived at Sorting Hub                        |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcome    | TicketStatus |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | RESUME DELIVERY | CANCELLED    |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Damaged
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Shipper tags "{KEY_LIST_OF_CREATED_ORDERS[1].id}" parcel with following tags:
+      | 5570 |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | IMPROPER PACKAGING                         |
+      | parcelLocation          | DAMAGED RACK                               |
+      | liability               | Recovery                                   |
+      | damageDescription       | GENERATED                                  |
+      | orderOutcomeDamaged     | NV LIABLE - FULL                           |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | On Hold                                       |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | PENDING SHIPPER |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel On Hold
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Shipper tags "{KEY_LIST_OF_CREATED_ORDERS[1].id}" parcel with following tags:
+      | 5570 |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | ROUTE CLEANING                             |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | <TicketSubType>                            |
+      | orderOutcome            | <OrderOutcome>                             |
+      | exceptionReason         | GENERATED                                  |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | On Hold                                       |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType     | TicketSubType   | OrderOutcome    | TicketStatus    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL ON HOLD | SHIPPER REQUEST | RESUME DELIVERY | PENDING SHIPPER |
+
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Parcel Exception
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Shipper tags "{KEY_LIST_OF_CREATED_ORDERS[1].id}" parcel with following tags:
+      | 5570 |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                    | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                   | ROUTE CLEANING                             |
+      | investigatingDepartment       | Fleet (First Mile)                         |
+      | investigatingHub              | <HubName>                                  |
+      | ticketType                    | <TicketType>                               |
+      | ticketSubType                 | <TicketSubType>                            |
+      | orderOutcomeInaccurateAddress | RTS                                        |
+      | rtsReason                     | Nobody at address                          |
+      | exceptionReason               | GENERATED                                  |
+      | custZendeskId                 | 1                                          |
+      | shipperZendeskId              | 1                                          |
+      | ticketNotes                   | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | On Hold                                       |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType       | TicketSubType      | OrderOutcome    | TicketStatus    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | PARCEL EXCEPTION | INACCURATE ADDRESS | RESUME DELIVERY | PENDING SHIPPER |
+
+  @ForceSuccessOrder
+  Scenario Outline: View Ageing Parcel of Pending Shipper Ticket Status - Recovery Ticket Type = Shipper Issue
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Shipper tags "{KEY_LIST_OF_CREATED_ORDERS[1].id}" parcel with following tags:
+      | 5570 |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId                  | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource                 | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment     | Fleet (First Mile)                         |
+      | investigatingHub            | <HubName>                                  |
+      | ticketType                  | <TicketType>                               |
+      | ticketSubType               | <TicketSubType>                            |
+      | orderOutcomeDuplicateParcel | PARCEL SCRAPPED                            |
+      | issueDescription            | GENERATED                                  |
+      | custZendeskId               | 1                                          |
+      | shipperZendeskId            | 1                                          |
+      | ticketNotes                 | GENERATED                                  |
+    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    When Operator updates recovery ticket on Edit Order page:
+      | status | <TicketStatus> |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | On Hold                                       |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType    | TicketSubType    | OrderOutcome    | TicketStatus    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | SHIPPER ISSUE | DUPLICATE PARCEL | RESUME DELIVERY | PENDING SHIPPER |
+
+  @ForceSuccessOrder
+  Scenario Outline: Search Ageing Parcel in Hub by Recovery Ticket Type
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator get the count from the tile: "<TileName>"
+    When API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"Standard","parcel_job":{"is_pickup_required":false,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","pickup_timeslot":{"start_time":"12:00","end_time":"15:00"},"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00"}},"to":{"name":"Sort Automation Customer","email":"sort.automation.customer@ninjavan.co","phone_number":"+6598980004","address":{"address1":"30A ST. THOMAS WALK 102600 SG","address2":"","postcode":"102600","country":"SG","latitude":"1.288147","longitude":"103.740233"}}} |
+    When API Core - Operator get order details for tracking order "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
+    And API Shipper tags "{KEY_LIST_OF_CREATED_ORDERS[1].id}" parcel with following tags:
+      | 5570 |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    When API Sort - Operator parcel sweep
+      | taskId             | 868538                                                                                       |
+      | hubId              | <HubId>                                                                                      |
+      | parcelSweepRequest | {"scan":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","to_return_dp_id":true,"hub_user":null} |
+    When DB Station - Operator updates inboundedIntoHubAt "{date: -3 days next, YYYY-MM-dd} 00:00:00" for the parcel with tracking Id "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}"
+    And Operator go to menu Recovery -> Recovery Tickets
+    And Operator create new ticket on page Recovery Tickets using data below:
+      | trackingId              | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | entrySource             | CUSTOMER COMPLAINT                         |
+      | investigatingDepartment | Fleet (First Mile)                         |
+      | investigatingHub        | <HubName>                                  |
+      | ticketType              | <TicketType>                               |
+      | ticketSubType           | IMPROPER PACKAGING                         |
+      | parcelLocation          | DAMAGED RACK                               |
+      | liability               | Recovery                                   |
+      | damageDescription       | GENERATED                                  |
+      | orderOutcomeDamaged     | NV LIABLE - FULL                           |
+      | custZendeskId           | 1                                          |
+      | shipperZendeskId        | 1                                          |
+      | ticketNotes             | GENERATED                                  |
+    Given Operator loads Operator portal home page
+    When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator selects the hub as "<HubName>" and proceed
+    And Operator verifies that the count in tile: "<TileName>" has increased by 1
+    And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
+    And Operator selects the following values in the modal pop up
+      | Recovery Ticket Type | <TicketType> |
+    And Operator searches for the orders in modal pop-up by applying the following filters:
+      | Tracking ID/ Route ID                      |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    And Operator verifies that the following details are displayed on the modal
+      | Tracking ID/ Route ID | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}\n- |
+      | Granular Status       | On Hold                                       |
+      | Recovery Ticket Type  | <TicketType>                                  |
+      | Ticket Status         | <TicketStatus>                                |
+
+    Examples:
+      | HubName       | HubId       | TileName              | ModalName             | TicketType | TicketSubType      | OrderOutcome          | TicketStatus    |
+      | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub | DAMAGED    | IMPROPER PACKAGING | NV TO REPACK AND SHIP | PENDING SHIPPER |
 
 
   @KillBrowser @ShouldAlwaysRun

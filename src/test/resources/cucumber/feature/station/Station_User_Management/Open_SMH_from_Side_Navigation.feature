@@ -3,7 +3,7 @@ Feature: Open SMH from Side Navigation
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And Operator login Operator portal with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And DB Operator updates the station_admins table deleted_at to current timestamp: "" for the user "{operator-email}"
 
 

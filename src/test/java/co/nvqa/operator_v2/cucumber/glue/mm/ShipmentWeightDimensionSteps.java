@@ -209,6 +209,9 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     } else if (key.equalsIgnoreCase("multiple_invalid")) {
       searchTerm = IntStream.range(0, 20).mapToObj(x -> f("9999999999%d", x))
           .collect(Collectors.joining("\n"));
+    } else if (key.equalsIgnoreCase("multiple_invalid_more_300")) {
+      searchTerm = IntStream.range(0, 301).mapToObj(x -> f("9999999999%d", x))
+              .collect(Collectors.joining("\n"));
     } else if (key.equalsIgnoreCase("multiple")) {
       List<Long> shipmentIdsList = resolveValue(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
       searchTerm = shipmentIdsList.stream().map(Object::toString).collect(
@@ -1292,76 +1295,134 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     }
   }
 
-  @When("Operator input invalid {string} value in Shipment Weight Dimension Table")
-  public void operatorInputInvalidValueInShipmentWeightDimensionTable(String columnName) {
-    Shipment shipmentData = ((Shipments) getScenarioStorage().get(KEY_CREATED_SHIPMENT))
-            .getShipment();
+  @Then("Operator verify No Data empty description in Shipment Weight Dimension Table is shown")
+  public void operatorVarifyNoDataEmptyDescriptionInShipmentWeightDimensionTableIsShown() {
+    Assertions.assertThat(shipmentWeightDimensionPage.emptyDescription.isDisplayed()).as("No Data message is shown on Shipment Weight Dimension").isTrue();
+  }
 
-    // verify all column filters
-    shipmentWeightDimensionTablePage.clearFilters();
-
+  @When("Operator search the {string} column with inputted data {string} on Shipment Weight Dimension Table")
+  public void operatorSearchTheColumnWithInputtedDataOnShipmentWeightDimensionTable(String columnName, String inputtedData) {
     switch (columnName){
       case "SHIPMENT ID":
-        shipmentWeightDimensionTablePage.filterColumn(SHIPMENT_ID, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment id with invalid value").isEmpty();
+        shipmentWeightDimensionPage.shipmentIdSearchField.click();
+        shipmentWeightDimensionPage.shipmentIdSearchField.sendKeys(inputtedData);
         break;
       case "SHIPMENT STATUS":
-        shipmentWeightDimensionTablePage.filterColumn(Column.STATUS, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment status with invalid value").isEmpty();
+        shipmentWeightDimensionPage.shipmentStatusSearchField.click();
+        shipmentWeightDimensionPage.shipmentStatusSearchField.sendKeys(inputtedData);
         break;
       case "END HUB":
-        shipmentWeightDimensionTablePage.filterColumn(Column.END_HUB, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment end hub with invalid value").isEmpty();
+        shipmentWeightDimensionPage.endHubSearchField.click();
+        shipmentWeightDimensionPage.endHubSearchField.sendKeys(inputtedData);
         break;
-      case "CREATION DATE":
-        shipmentWeightDimensionTablePage.filterColumn(Column.CREATION_DATE, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment creation date with invalid value").isEmpty();
-        break;
-      case "BILLING NUMBER":
-        shipmentWeightDimensionTablePage.filterColumn(Column.BILLING_NUMBER, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment billing number with invalid value").isEmpty();
+      case "SHIPMENT CREATION DATE TIME":
+        shipmentWeightDimensionPage.shipmentCreationDateTimeSearchField.click();
+        shipmentWeightDimensionPage.shipmentCreationDateTimeSearchField.sendKeys(inputtedData);
         break;
       case "COMMENTS":
-        shipmentWeightDimensionTablePage.filterColumn(Column.COMMENTS, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment comments with invalid value").isEmpty();
+        shipmentWeightDimensionPage.commentsSearchField.click();
+        shipmentWeightDimensionPage.commentsSearchField.sendKeys(inputtedData);
         break;
       case "START HUB":
-        shipmentWeightDimensionTablePage.filterColumn(Column.START_HUB, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment start hub with invalid value").isEmpty();
+        shipmentWeightDimensionPage.startHubSearchField.click();
+        shipmentWeightDimensionPage.startHubSearchField.sendKeys(inputtedData);
         break;
       case "SHIPMENT TYPE":
-        shipmentWeightDimensionTablePage.filterColumn(Column.SHIPMENT_TYPE, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using shipment shipment type with invalid value").isEmpty();
+        shipmentWeightDimensionPage.shipmentTypeSearchField.click();
+        shipmentWeightDimensionPage.shipmentTypeSearchField.sendKeys(inputtedData);
         break;
       case "VENDOR":
-        shipmentWeightDimensionTablePage.filterColumn(Column.VENDOR, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using vendor with invalid value").isEmpty();
+        shipmentWeightDimensionPage.vendorSearchField.click();
+        shipmentWeightDimensionPage.vendorSearchField.sendKeys(inputtedData);
         break;
       case "ORIGIN PORT":
-        shipmentWeightDimensionTablePage.filterColumn(Column.ORIGIN_PORT, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using origin port with invalid value").isEmpty();
+        shipmentWeightDimensionPage.originPortSearchField.click();
+        shipmentWeightDimensionPage.originPortSearchField.sendKeys(inputtedData);
         break;
       case "DESTINATION PORT":
-        shipmentWeightDimensionTablePage.filterColumn(Column.DESTINATION_PORT, "wrong value");
-        Assertions.assertThat(shipmentWeightDimensionTablePage.shipmentWeightNvTable.rows)
-                .as("Able to filter by using destination port with invalid value").isEmpty();
+        shipmentWeightDimensionPage.destinationPortSearchField.click();
+        shipmentWeightDimensionPage.destinationPortSearchField.sendKeys(inputtedData);
         break;
     }
   }
 
-  @Then("Operator verify No Data empty description in Shipment Weight Dimension Table is shown")
-  public void operatorVarifyNoDataEmptyDescriptionInShipmentWeightDimensionTableIsShown() {
-    Assertions.assertThat(shipmentWeightDimensionPage.emptyDescription.isDisplayed()).as("No Data message is shown on Shipment Weight Dimension").isTrue();
+  @Then("Operator verifies {string} error message is shown on Shipment Weight Dimension Filter UI")
+  public void operatorVerifiesErrorMessageIsShownOnShipmentWeightDimensionFilterUI(String errorMessage) {
+    shipmentWeightDimensionPage.duplicateNamePresetFilters.waitUntilVisible();
+    Assertions.assertThat(shipmentWeightDimensionPage.duplicateNamePresetFilters.getText())
+            .as("Verify duplicate name preset filter is shown").isEqualTo(errorMessage);
+  }
+
+  @Then("Operator verifies {string} popup is shown on Shipment Weight Dimension Filter UI")
+  public void operatorVerifiesPopupIsShownOnShipmentWeightDimensionFilterUI(String popupMessage) {
+    shipmentWeightDimensionPage.clearPresetFilterPopup.waitUntilVisible();
+    Assertions.assertThat(shipmentWeightDimensionPage.clearPresetFilterPopup.getText())
+            .as("Verify clear filters popup is shown").isEqualTo(popupMessage);
+  }
+
+  @Then("Operator verifies Shipment Weight Dimension page UI")
+  public void operatorVerifiesShipmentWeightDimensionPageUI() {
+    shipmentWeightDimensionPage.switchTo();
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
+  }
+
+  @When("Operator clicks {string} button on Shipment Weight Dimension page")
+  public void operatorClicksButtonOnShipmentWeightDimensionPage(String buttonName) {
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    switch (buttonName) {
+      case "Search by Billing Number":
+        shipmentWeightDimensionPage.searchByBillinNumberButton.waitUntilVisible();
+        shipmentWeightDimensionPage.searchByBillinNumberButton.click();
+        break;
+      case "New Record":
+        shipmentWeightDimensionPage.newRecordBtn.waitUntilVisible();
+        shipmentWeightDimensionPage.newRecordBtn.click();
+        break;
+      case "Load Selection":
+        shipmentWeightDimensionPage.loadSelectionButton.waitUntilVisible();
+        shipmentWeightDimensionPage.loadSelectionButton.click();
+        break;
+      case "Search Shipments":
+        shipmentWeightDimensionPage.searchShipments.waitUntilVisible();
+        shipmentWeightDimensionPage.searchShipments.click();
+        break;
+      case "Close Search by Billing Number":
+        shipmentWeightDimensionPage.closeSearchBillingNumberPopup.waitUntilVisible();
+        shipmentWeightDimensionPage.closeSearchBillingNumberPopup.click();
+        break;
+      case "Back to Main":
+        shipmentWeightDimensionPage.backToMain.waitUntilVisible();
+        shipmentWeightDimensionPage.backToMain.click();
+        break;
+    }
+  }
+
+  @Then("Operator verifies {string} popup is shown on Shipment Weight Dimension page")
+  public void operatorVerifiesPopupIsShownOnShipmentWeightDimensionPage(String popupName) {
+    shipmentWeightDimensionPage.headerSearchByBillingNumberPopup.waitUntilVisible(5);
+    shipmentWeightDimensionPage.verifyShipmentWeightDimensionPagePopup(popupName);
+  }
+
+  @When("Operator input {string} billing number with value {string} on Shipment Weight Dimension page")
+  public void operatorInputBillingNumberWithValueOnShipmentWeightDimensionPage(String billingNumberType, String billingNumberValue) {
+    String newBillingNumberValue = resolveValue(billingNumberValue);
+    switch (billingNumberType) {
+      case "MAWB":
+        shipmentWeightDimensionPage.mawbBillingNumberInput.click();
+        shipmentWeightDimensionPage.mawbBillingNumberInput.sendKeys(newBillingNumberValue);
+        break;
+      case "SWB":
+        shipmentWeightDimensionPage.swbBillingNumberInput.click();
+        shipmentWeightDimensionPage.swbBillingNumberInput.sendKeys(newBillingNumberValue);
+        break;
+    }
+  }
+
+  @Then("Operator verifies the popup is closed on Shipment Weight Dimension page")
+  public void operatorVerifiesThePopupIsClosedOnShipmentWeightDimensionPage() {
+    shipmentWeightDimensionPage.waitUntilLoaded();
+    shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
   }
 }
 

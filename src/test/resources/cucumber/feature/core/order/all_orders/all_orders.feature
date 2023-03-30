@@ -77,7 +77,7 @@ Feature: All Orders
   #      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
   #      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
-  Scenario: Operator Download CSV File of Blocked TIDs by Force Success Multiple Parcel Orders and Active PETS (uid:de96ff5a-0888-4403-bff0-d940eb4673e4)
+  Scenario: Operator Download CSV File of Blocked TIDs by Force Success Multiple Parcel Orders and Active PETS
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -128,8 +128,8 @@ Feature: All Orders
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \|Order id={KEY_LIST_OF_CREATED_ORDER_ID[1]} has active PETS ticket. Please resolve PETS ticket to update status. |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \|Order id={KEY_LIST_OF_CREATED_ORDER_ID[2]} has active PETS ticket. Please resolve PETS ticket to update status. |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id={KEY_LIST_OF_CREATED_ORDER_ID[1]} has active PETS ticket. Please resolve PETS ticket to update status. |
+      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} \| Order id={KEY_LIST_OF_CREATED_ORDER_ID[2]} has active PETS ticket. Please resolve PETS ticket to update status. |
     When Operator clicks 'Download the failed updates' in Update Errors dialog on All Orders page
     Then Operator verifies manually complete errors CSV file on All Orders page:
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |

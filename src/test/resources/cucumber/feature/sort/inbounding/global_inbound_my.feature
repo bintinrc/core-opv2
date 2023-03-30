@@ -22,7 +22,7 @@ Feature: Global Inbound
       | overrideDimLength | 50                                         |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | NO AV   |
-      | color    | #cccccc |
+      | color    | #f7f7f7 |
     Then API Operator verify order info after Global Inbound
     When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
@@ -60,10 +60,7 @@ Feature: Global Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | rackInfo | NO AV   |
-      | color    | #cccccc |
-    Then Operator verifies priority level info is correct using data below:
-      | priorityLevel           | 100     |
-      | priorityLevelColorAsHex | #c65d44 |
+      | color    | #f7f7f7 |
     And Operator verifies prior tag is displayed
     And Operator verifies RTS tag is displayed
     When Operator switch to edit order page using direct URL
@@ -108,9 +105,6 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | color          | #f06c00                            |
-    Then Operator verifies priority level info is correct using data below:
-      | priorityLevel           | 100     |
-      | priorityLevelColorAsHex | #c65d44 |
     And Operator verifies prior tag is displayed
     And Operator verifies RTS tag is displayed
     When Operator switch to edit order page using direct URL

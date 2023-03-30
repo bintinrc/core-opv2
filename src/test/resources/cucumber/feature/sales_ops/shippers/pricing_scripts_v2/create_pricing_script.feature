@@ -131,7 +131,7 @@ Feature: Pricing Scripts V2
       | Return, NEXTDAY                    | Return, NEXTDAY                    | NEXTDAY       | Return                    | 32.4       | 2.4   | 30          | 0            | 0      | 0           | OK       | uid:8718aa6b-c660-49a3-8736-491e5b6c3d69 |
       | Document, SAMEDAY                  | Document, SAMEDAY                  | SAMEDAY       | Document                  | 32.4       | 2.4   | 30          | 0            | 0      | 0           | OK       | uid:b6b2ba5a-a6b3-4da1-b912-46f446eccd4c |
       | Bulky, STANDARD                    | Bulky, STANDARD                    | STANDARD      | Bulky                     | 15.228     | 1.128 | 14.1        | 0            | 0      | 0           | OK       | uid:96a6e6b0-f0a0-436d-a201-d6c27b645400 |
-      | International, EXPRESS             | International, EXPRESS             | EXPRESS       | International             | 16.416     | 1.216 | 15.2        | 0            | 0      | 0           | OK       | uid:ea0f7b2d-5e3b-4af5-8c6e-c9e94fe5637d |
+      | International, EXPRESS             | International, EXPRESS             | EXPRESS       | International             | 20.736     | 1.536 | 19.2        | 0            | 0      | 0           | OK       | uid:ea0f7b2d-5e3b-4af5-8c6e-c9e94fe5637d |
       | Ninja Pack, NEXTDAY                | Ninja Pack, NEXTDAY                | NEXTDAY       | Ninja Pack                | 28.404     | 2.104 | 26.3        | 0            | 0      | 0           | OK       | uid:0a2605a8-b707-43b7-9650-0407b0197f9d |
       | Marketplace International, SAMEDAY | Marketplace International, SAMEDAY | SAMEDAY       | Marketplace International | 25.272     | 1.872 | 23.4        | 0            | 0      | 0           | OK       | uid:26d8083c-2829-432b-8f2d-99a4ff754ce2 |
       | Corporate, STANDARD                | Corporate, STANDARD                | STANDARD      | Corporate                 | 19.98      | 1.48  | 18.5        | 0            | 0      | 0           | OK       | uid:64d99231-93cf-4aa1-a13e-ab7e4b118c5f |
@@ -331,13 +331,13 @@ Feature: Pricing Scripts V2
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 50.22 |
-      | gst          | 3.72  |
-      | deliveryFee  | 15.1  |
-      | insuranceFee | 10    |
-      | codFee       | 20    |
-      | handlingFee  | 1.4   |
-      | comments     | OK    |
+      | grandTotal   | 51.084 |
+      | gst          | 3.784  |
+      | deliveryFee  | 15.9   |
+      | insuranceFee | 10     |
+      | codFee       | 20     |
+      | handlingFee  | 1.4    |
+      | comments     | OK     |
 
   @DeletePricingScript
   Scenario: Create and Check Script - RETURN, NEXT_DAY, TIMESLOT, L (uid:297bb781-77e3-486e-b88a-e596aacfc5e1)

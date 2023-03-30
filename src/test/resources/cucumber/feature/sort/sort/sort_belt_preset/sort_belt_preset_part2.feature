@@ -1,4 +1,4 @@
-@Sort @SortBeltPresetPart1
+@Sort @SortBeltPresetPart2
 Feature: Sort Belt Preset
 
   @LaunchBrowser @ShouldAlwaysRun
