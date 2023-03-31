@@ -935,10 +935,10 @@ Feature: Reschedule
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
       | routes          | KEY_DRIVER_ROUTES                                                                                   |
       | jobType         | TRANSACTION                                                                                         |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":13}] |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"FAIL","failure_reason_id":10}] |
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
-      | failureReasonId | 13                                                                                                  |
+      | failureReasonId | 10                                                                                                  |
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
