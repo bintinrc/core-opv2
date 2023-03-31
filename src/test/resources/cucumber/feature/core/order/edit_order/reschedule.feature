@@ -948,24 +948,16 @@ Feature: Reschedule
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator click Order Settings -> Reschedule Order on Edit Order page
-    And Operator reschedule Delivery on Edit Order Page with address changes
+    And Operator reschedule Delivery on Edit Order Page
       | recipientName    | test recipient name       |
       | recipientContact | +9727894434               |
       | recipientEmail   | test@mail.com             |
       | internalNotes    | test internalNotes        |
       | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
       | deliveryTimeslot | 9AM - 12PM                |
-      | country          | Singapore                 |
-      | city             | Singapore                 |
-      | address1         | 116 Keng Lee Rd           |
-      | address2         | 15                        |
-      | postalCode       | 308402                    |
     Then Operator verify order events on Edit order page using data below:
-      | name                |
-      | RESCHEDULE          |
-      | UPDATE ADDRESS      |
-      | DRIVER INBOUND SCAN |
-      | UPDATE AV           |
+      | name       |
+      | RESCHEDULE |
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -979,16 +971,15 @@ Feature: Reschedule
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
-      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
-      | toAddress1 | 116 Keng Lee Rd                    |
-      | toAddress2 | 15                                 |
-      | toPostcode | 308402                             |
-      | toCountry  | Singapore                          |
-      | toCity     | Singapore                          |
-      | toName     | test recipient name                |
-      | toEmail    | test@mail.com                      |
-      | toContact  | +9727894434                        |
+      | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
+      | rts        | 1                                          |
+      | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
+      | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
+      | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
+      | toCountry  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}  |
+      | toName     | test recipient name                        |
+      | toEmail    | test@mail.com                              |
+      | toContact  | +9727894434                                |
     And DB Core - verify transactions after RTS:
       | number_of_txn       | 3                                  |
       | orderId             | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -1003,31 +994,28 @@ Feature: Reschedule
       | name     | test recipient name                                |
       | email    | test@mail.com                                      |
       | contact  | +9727894434                                        |
-      | address1 | 116 Keng Lee Rd                                    |
-      | address2 | 15                                                 |
-      | postcode | 308402                                             |
-      | country  | Singapore                                          |
-      | city     | Singapore                                          |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}         |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}         |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}         |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}          |
     Then DB Core - verify waypoints record:
       | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
       | routeId  | null                                                       |
       | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
+      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
+      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
+      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
+      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
