@@ -1261,55 +1261,28 @@ public class EditOrderSteps extends AbstractSteps {
     editOrderPage.deleteOrder();
   }
 
+  @Then("Operator reschedule Pickup on Edit Order Page with address changes")
+  public void operatorReschedulePickupWithAddressChangeOnEditOrderPage(Map<String, String> mapOfData) {
+    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
+    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
+    editOrderPage.reschedulePickupWithAddressChanges(mapOfData);
+    takesScreenshot();
+  }
+
   @Then("Operator reschedule Pickup on Edit Order Page")
   public void operatorReschedulePickupOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.reschedulePickup(mapOfData);
     takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
-    String senderName = mapOfData.get("senderName");
-    String senderContact = mapOfData.get("senderContact");
-    String senderEmail = mapOfData.get("senderEmail");
-    String pickupDate = mapOfData.get("pickupDate");
-    String pickupTimeslot = mapOfData.get("pickupTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
+  }
 
-    if (Objects.nonNull(senderName)) {
-      order.setFromName(senderName);
-    }
-    if (Objects.nonNull(senderContact)) {
-      order.setFromContact(senderContact);
-    }
-    if (Objects.nonNull(senderEmail)) {
-      order.setFromEmail(senderEmail);
-    }
-    if (Objects.nonNull(pickupDate)) {
-      order.setPickupDate(pickupDate);
-    }
-    if (Objects.nonNull(pickupTimeslot)) {
-      order.setPickupTimeslot(pickupTimeslot);
-    }
-    if (Objects.nonNull(address1)) {
-      order.setFromAddress1(address1);
-    }
-    if (Objects.nonNull(address2)) {
-      order.setFromAddress2(address2);
-    }
-    if (Objects.nonNull(postalCode)) {
-      order.setFromPostcode(postalCode);
-    }
-    if (Objects.nonNull(city)) {
-      order.setFromCity(city);
-    }
-    if (Objects.nonNull(country)) {
-      order.setFromCountry(country);
-    }
-    put(KEY_CREATED_ORDER, order);
+  @Then("Operator reschedule Delivery on Edit Order Page with address changes")
+  public void operatorRescheduleDeliveryOnEditOrderPageWithAddressChange(Map<String, String> mapOfData) {
+    Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
+    mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
+    editOrderPage.rescheduleDeliveryWithAddressChange(mapOfData);
+    takesScreenshot();
   }
 
   @Then("Operator reschedule Delivery on Edit Order Page")
@@ -1318,49 +1291,6 @@ public class EditOrderSteps extends AbstractSteps {
     mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData, mapOfTokens);
     editOrderPage.rescheduleDelivery(mapOfData);
     takesScreenshot();
-    Order order = get(KEY_CREATED_ORDER);
-    String recipientName = mapOfData.get("recipientName");
-    String recipientContact = mapOfData.get("recipientContact");
-    String recipientEmail = mapOfData.get("recipientEmail");
-    String deliveryDate = mapOfData.get("deliveryDate");
-    String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
-    String country = mapOfData.get("country");
-    String city = mapOfData.get("city");
-    String address1 = mapOfData.get("address1");
-    String address2 = mapOfData.get("address2");
-    String postalCode = mapOfData.get("postalCode");
-
-    if (Objects.nonNull(recipientName)) {
-      order.setToName(recipientName);
-    }
-    if (Objects.nonNull(recipientContact)) {
-      order.setToContact(recipientContact);
-    }
-    if (Objects.nonNull(recipientEmail)) {
-      order.setToEmail(recipientEmail);
-    }
-    if (Objects.nonNull(deliveryDate)) {
-      order.setDeliveryDate(deliveryDate);
-    }
-    if (Objects.nonNull(deliveryTimeslot)) {
-      order.setDeliveryTimeslot(deliveryTimeslot);
-    }
-    if (Objects.nonNull(address1)) {
-      order.setToAddress1(address1);
-    }
-    if (Objects.nonNull(address2)) {
-      order.setToAddress2(address2);
-    }
-    if (Objects.nonNull(postalCode)) {
-      order.setToPostcode(postalCode);
-    }
-    if (Objects.nonNull(city)) {
-      order.setToCity(city);
-    }
-    if (Objects.nonNull(country)) {
-      order.setToCountry(country);
-    }
-    put(KEY_CREATED_ORDER, order);
   }
 
   @Then("^Operator pull out parcel from the route for (Pickup|Delivery) on Edit Order page$")
