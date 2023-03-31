@@ -60,6 +60,11 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String FORM_RULE_SHIPMENT_DESTINATION_VALUE_XPATH = "(//div[@class='editable-cell-holder shipment_destination_hub_id']//div)[%d]";
   public static final String FORM_RULE_SHIPMENT_TYPE_VALUE_XPATH = "(//div[@class='editable-cell-holder shipment_type']//div)[%d]";
 
+  public static final String FORM_RULE_RTS_VALUE_XPATH = "(//div[@class='editable-cell-holder rts']//div)[%d]";
+  public static final String FORM_RULE_GRANULAR_STATUSES_VALUE_XPATH = "(//div[@class='editable-cell-holder granular_statuses']//div)[%d]";
+  public static final String FORM_RULE_SERVICE_LEVELS_VALUE_XPATH = "(//div[@class='editable-cell-holder service_levels']//div)[%d]";
+  public static final String FORM_RULE_TAGS_VALUE_XPATH = "(//div[@class='editable-cell-holder tags']//div)[%d]";
+
   public static final String CHECK_LOGIC_NAME_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block category-title']";
   public static final String CHECK_LOGIC_DESCRIPTION_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][1]";
   public static final String CHECK_LOGIC_ARM_FILTERS_VALUE_XPATH = "//div[@class='section-content']//div[@class='summary']//div[@class='text-block info'][2]";
@@ -76,6 +81,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
   public static final String CHECK_LOGIC_DUPLICATE_RULES_TABLE_XPATH = "//div[contains(text(),'Multiple rules with the same filters')]/following-sibling::div//table";
   public static final String CHECK_LOGIC_CONFLICTING_RULES_SUMMARY_XPATH = "//div[contains(text(),'Conflicting shipment destination & type')]";
 
+  public String DUPLICATE_KEY = "DUPLICATE_KEY";
   public static final String CANCEL_CREATE_DIALOG_XPATH = "//div[text()='Leave this page?']";
   public static final String LOGIC_DETAIL_NAME_VALUE_XPATH = "//div[@class='section-header']//div[contains(@class,'title')]";
   public static final String LOGIC_DETAIL_DESC_VALUE_XPATH = "//div[@class='section-header']//div[contains(@class,'title')]";
@@ -320,6 +326,7 @@ public class SortBeltManagerPage extends OperatorV2SimplePage {
       for (int j = 0; j < keyList.size(); j++) {
         String columnXpath = String.format(COLUMN_MAPPING_XPATH, i + 1, j + 2);
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+          scrollIntoView(columnXpath);
           waitUntilElementIsClickable(columnXpath);
           click(columnXpath);
           Assertions.assertThat(isElementExist(columnXpath + "//input")).isTrue();
