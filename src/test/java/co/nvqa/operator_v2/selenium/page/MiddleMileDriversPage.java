@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.cucumber.glue.MiddleMileDriversSteps;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -56,7 +58,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'apply-action-btn')]";
     private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-to-coming-btn')]";
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//li[contains(@class, 'set-not-to-coming-btn')]";
-    private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead";
+    private static final String MODAL_TABLE_HEADER_XPATH = "//div[@class='ant-table-container']//thead//span[contains(@data-testid,'column-title-middle-mile-driver')]";
     private static final String TABLE_COLUMN_VALUES_BY_INDEX_XPATH = "//div[@class='ant-table-container']//tbody//td[%d]";
     private static final String TABLE_FILTER_SORT_XPATH = "//span[@class='ant-table-column-title']//span[text()='%s']";
     private static final String EMPLOYMENT_STATUS_FILTER_TEXT = "//input[@id='employmentStatus']/ancestor::div[contains(@class, ' ant-select')]//span[@class='ant-select-selection-item']";
@@ -95,10 +97,10 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final Integer NEW_USERNAME_TABLE_FILTER_ID = 3;
     private static final Integer NEW_HUB_TABLE_FILTER_ID = 4;
     private static final Integer NEW_EMPLOYMENT_TYPE_FILTER_ID = 5;
-    private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 6;
-    private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 7;
-    private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 8;
-    private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 9;
+    private static final Integer NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID = 7;
+    private static final Integer NEW_LICENSE_TYPE_TABLE_FILTER_ID = 8;
+    private static final Integer NEW_LICENSE_STATUS_TABLE_FILTER_ID = 9;
+    private static final Integer NEW_COMMENTS_TABLE_FILTER_ID = 10;
 
     private static final String EMPLOYMENT_TYPE = "employment type";
     private static final String EMPLOYMENT_STATUS = "employment status";
@@ -187,11 +189,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     public void verifiesTotalDriverIsTheSame(int totalDriver) {
         LOGGER.info("Total driver from API: {}", totalDriver);
         LOGGER.info("Total driver on FE: {}", getText(TOTAL_DRIVER_SHOW_XPATH));
-        if (totalDriver > 0) {
-           Assertions.assertThat(getText(TOTAL_DRIVER_SHOW_XPATH))
-               .as("Total Driver Shown is the same.")
-               .contains(String.valueOf(totalDriver));
-        }
+        Assertions.assertThat(getText(TOTAL_DRIVER_SHOW_XPATH))
+            .as(f("Total Driver Shown is the same: %d", totalDriver))
+            .contains(String.valueOf(totalDriver));
     }
 
     public void verifiesTextInEmploymentStatusFilter(String ExpectedResult) {
@@ -410,27 +410,35 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualComments = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_COMMENTS_TABLE_FILTER_ID));
 
-       Assertions.assertThat(actualName).as("Name is not the same : ").isEqualTo(middleMileDriver.getFirstName());
-       Assertions.assertThat(actualId).as("ID is not the same : ").isEqualTo(driverId.toString());
-       Assertions.assertThat(actualUsername).as("Username is not the same : ").isEqualTo(middleMileDriver.getUsername());
-       Assertions.assertThat(actualHub).as("Hub is not the same : ").isEqualTo(middleMileDriver.getHub());
-       Assertions.assertThat(                actualEmploymentType).as("Employment Type is not the same : ").isEqualTo(middleMileDriver.getEmploymentType());
-       Assertions.assertThat(                actualLicenseType).as("License Type is not the same : ").isEqualTo(middleMileDriver.getLicenseType());
-       Assertions.assertThat(actualComments).as("Comment is not the same : ").isEqualTo(middleMileDriver.getComments());
+        Assertions.assertThat(actualName).as("Name is not the same : ")
+            .isEqualTo(middleMileDriver.getFirstName());
+        Assertions.assertThat(actualId).as("ID is not the same : ").isEqualTo(driverId.toString());
+        Assertions.assertThat(actualUsername).as("Username is not the same : ")
+            .isEqualTo(middleMileDriver.getUsername());
+        Assertions.assertThat(actualHub).as("Hub is not the same : ")
+            .isEqualTo(middleMileDriver.getHub());
+        Assertions.assertThat(actualEmploymentType).as("Employment Type is not the same : ")
+            .isEqualTo(middleMileDriver.getEmploymentType());
+        Assertions.assertThat(actualLicenseType).as("License Type is not the same : ")
+            .isEqualTo(middleMileDriver.getLicenseType());
+        Assertions.assertThat(actualComments).as("Comment is not the same : ")
+            .isEqualTo(middleMileDriver.getComments());
     }
 
-    public void tableFilterByname(Driver middleMileDriver) {
-        displayNameFilter.setValue(middleMileDriver.getFirstName());
+    public void tableFilterByname(MiddleMileDriver middleMileDriver) {
+        LOGGER.info("Display name: {}", middleMileDriver.getDisplayName());
+        displayNameFilter.click();
+        displayNameFilter.setValue(middleMileDriver.getDisplayName());
         waitUntilVisibilityOfElementLocated(
             f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
 
         String actualName = getText(f(TABLE_ASSERTION_XPATH, NEW_NAME_TABLE_FILTER_ID));
         String actualId = getText(f(TABLE_ASSERTION_XPATH, NEW_ID_TABLE_FILTER_ID));
         String actualUsername = getText(
-                f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
+            f(TABLE_ASSERTION_XPATH, NEW_USERNAME_TABLE_FILTER_ID));
         String actualHub = getText(f(TABLE_ASSERTION_XPATH, NEW_HUB_TABLE_FILTER_ID));
         String actualEmploymentType = getText(
-                f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
+            f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_TYPE_FILTER_ID));
         String actualEmpStatus = getText(f(TABLE_ASSERTION_XPATH, NEW_EMPLOYMENT_STATUS_TABLE_FILTER_ID));
         String actualLicenseType = getText(
                 f(TABLE_ASSERTION_XPATH, NEW_LICENSE_TYPE_TABLE_FILTER_ID));
@@ -442,12 +450,18 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             .isEqualTo(middleMileDriver.getDisplayName());
         Assertions.assertThat(actualUsername).as("The Username is the same")
             .isEqualTo(middleMileDriver.getUsername());
-        Assertions.assertThat(actualHub).as("The Hub is the same").isEqualTo(middleMileDriver.getHub());
-        Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same").isEqualTo(middleMileDriver.getEmploymentType());
-        Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same").isEqualTo(getEmploymentStatus(middleMileDriver));
-        Assertions.assertThat(actualLicenseType).as("The License Type is the same").isEqualTo(middleMileDriver.getLicenseType());
-        Assertions.assertThat(actualLicenseStatus).as("The License Status is the same").isEqualTo(getLicenseStatus(middleMileDriver));
-        Assertions.assertThat(actualComments).as("The Comment is the same").isEqualTo(middleMileDriver.getComments());
+        Assertions.assertThat(actualHub).as("The Hub is the same")
+            .isEqualTo(middleMileDriver.getHubName());
+        Assertions.assertThat(actualEmploymentType).as("The Employment Type is the same")
+            .isEqualTo(middleMileDriver.getEmploymentType());
+        Assertions.assertThat(actualEmpStatus).as("The Employment Status is the same")
+            .isEqualTo(middleMileDriver.getIsEmploymentActive() ? "Active" : "Inactive");
+        Assertions.assertThat(actualLicenseType).as("The License Type is the same")
+            .isEqualTo(middleMileDriver.getLicenseType());
+        Assertions.assertThat(actualLicenseStatus).as("The License Status is the same")
+            .isEqualTo(middleMileDriver.getIsLicenseActive() ? "Active" : "Inactive");
+        Assertions.assertThat(actualComments).as("The Comment is the same")
+            .isEqualTo(middleMileDriver.getComments());
         Assertions.assertThat(editDriver.isDisplayed()).as("The Edit driver is shown").isTrue();
         Assertions.assertThat(viewDriver.isDisplayed()).as("The View driver is shown").isTrue();
     }
@@ -692,13 +706,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 body_class_name ="employment-type";
                 break;
             case "Employment Status":
-                body_class_name ="employment-status";
+                body_class_name = "is-employment-active";
                 break;
             case "License Type":
                 body_class_name ="license-type";
                 break;
             case "License Status":
-                body_class_name ="license-status";
+                body_class_name = "is-license-active";
                 break;
             case "Comments":
                 body_class_name ="comments";
@@ -724,14 +738,18 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         List<String> colData = new ArrayList<String>();
         waitWhilePageIsLoading();
         String headerXpath = f(MODAL_TABLE_HEADER_XPATH);
-        List<WebElement> headerFields = getWebDriver().findElements(By.xpath(headerXpath));
+        List<String> headerFields = getWebDriver().findElements(By.xpath(headerXpath))
+            .stream()
+            .map(webElement -> webElement.getText().trim().toLowerCase())
+            .collect(Collectors.toList());
         if (headerFields.size() == 0) {
-            Assertions.assertThat(headerFields.size()).as(f("Assert that the column %s to be sorted is displayed on the screen", columnName)).isGreaterThan(0);
+            Assertions.assertThat(headerFields.size())
+                .as(f("Assert that the column %s to be sorted is displayed on the screen",
+                    columnName)).isGreaterThan(0);
         }
-        for (WebElement header : headerFields) {
-            String headerName = header.getText().trim().toLowerCase();
+        for (String header : headerFields) {
             columnIndex++;
-            if (headerName.contains(columnName.toLowerCase())) {
+            if (header.contains(columnName.toLowerCase())) {
                 break;
             }
         }
@@ -745,17 +763,23 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     }
 
     public void getRecordsAndValidateSorting(String columnName, String sortingOrder) {
-        List<String> colData = getColumnValuesByColumnName(columnName);
+        List<String> colData = getColumnValuesByColumnName(columnName).stream()
+            .filter(c -> !c.isEmpty()).collect(
+                Collectors.toList());
+        LOGGER.info("Values: {}", colData);
         if (sortingOrder.equalsIgnoreCase("Ascending")) {
-            Assertions.assertThat(Comparators.isInOrder(colData, Comparator.naturalOrder())).as(f("The column values %s are sorted as expected", columnName)).isTrue();
+            Assertions.assertThat(Comparators.isInOrder(colData, Comparator.naturalOrder()))
+                .as(f("The column values %s are sorted as expected", columnName)).isTrue();
             return;
         }
         if (sortingOrder.equalsIgnoreCase("Descending")) {
-            Assertions.assertThat(Comparators.isInOrder(colData, Comparator.reverseOrder())).as(f("The column values %s are sorted as expected", columnName)).isTrue();
+            Assertions.assertThat(Comparators.isInOrder(colData, Comparator.reverseOrder()))
+                .as(f("The column values %s are sorted as expected", columnName)).isTrue();
             return;
         }
 
-        Assertions.assertThat(Comparators.isInOrder(colData, Comparator.naturalOrder())).as(f("The column values %s are sorted as expected", columnName)).isTrue();
+        Assertions.assertThat(Comparators.isInOrder(colData, Comparator.naturalOrder()))
+            .as(f("The column values %s are sorted as expected", columnName)).isTrue();
     }
 
     public void ClickToBrowserBackButton() {
