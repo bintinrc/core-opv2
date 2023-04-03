@@ -52,7 +52,7 @@ Feature: End Route Inbound Session
       | cashCollected | cashOnDelivery |
       | 23.57         | 23.57          |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario Outline: End a Route Inbound Session : Completed Scans (uid:9c6ea453-4162-4571-80f7-333381c202a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

@@ -25,6 +25,7 @@ Feature: Shipper Pickups - Edit Priority Reservation Level
     And DB Operator verify reservation priority level
       | priorityLevel | 2 |
 
+  @happy-path
   Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations (uid:8b24231a-34a4-493a-8a97-45b100e6888f)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create multiple shipper addresses V2 using data below:

@@ -56,7 +56,7 @@ Feature: All Orders - Add To Route
       | status  | PENDING                |
       | routeId | {KEY_CREATED_ROUTE_ID} |
 
-  @DeleteOrArchiveRoute @routing-refactor
+  @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Add Multiple Orders to Route on All Orders Page (uid:1e20a4ff-0254-47c8-8453-948097da2946)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
@@ -86,7 +86,7 @@ Feature: All Orders - Add To Route
     Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page (uid:aa8e8606-e1a6-4c07-afa5-d17a01028bb9)
+  Scenario: Operator Add Partial Multiple Orders to Route on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -135,7 +135,7 @@ Feature: All Orders - Add To Route
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
     And DB Operator verifies route_monitoring_data record
-    
+
   Scenario: Block Add to Route for Cancelled Order on All Orders Page
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

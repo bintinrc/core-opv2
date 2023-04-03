@@ -132,7 +132,7 @@ public class RouteInboundSteps extends AbstractSteps {
             DTF_ISO_8601_LITE);
       } else {
         routeDate = StandardTestUtils.convertToZonedDateTime(routeDateAsString, ZoneId.of("UTC"),
-            DTF_ISO_8601_LITE);
+            DTF_NORMAL_DATE);
       }
     } catch (DateTimeParseException ex) {
       throw new NvTestRuntimeException("Failed to parse route date.", ex);
@@ -471,6 +471,7 @@ public class RouteInboundSteps extends AbstractSteps {
     pause5s();
     routeInboundPage.photoAuditDialog.completePhotoAudit.click();
     routeInboundPage.photoAuditDialog.waitUntilInvisible();
+    routeInboundPage.waitWhilePageIsLoading();
   }
 
   @When("Operator search {string} Tracking ID in Photo Audit dialog")

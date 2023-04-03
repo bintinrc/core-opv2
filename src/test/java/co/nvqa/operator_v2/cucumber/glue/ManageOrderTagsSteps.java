@@ -81,6 +81,7 @@ public class ManageOrderTagsSteps extends AbstractSteps {
   public void filterTags(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     manageOrderTagsPage.inFrame(page -> {
+      page.waitUntilLoaded();
       page.tagsTable.clearColumnFilters();
       if (finalData.containsKey(COLUMN_NAME)) {
         page.tagsTable.filterByColumn(COLUMN_NAME, finalData.get(COLUMN_NAME));

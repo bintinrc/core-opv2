@@ -3,7 +3,7 @@ Feature: Station User Management
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    And Operator login Operator portal with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Add User to Station with Invalid Email
     Given Operator loads Operator portal home page

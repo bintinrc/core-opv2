@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.JsonUtils;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.Partner;
@@ -39,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class DpAdministrationSteps extends AbstractSteps {
 
   private static final String NINJA_POINT_URL = StandardTestConstants.API_BASE_URL
-          .replace("api", "point");
+      .replace("api", "point");
   private DpAdministrationPage dpAdminPage;
   private DpAdministrationReactPage dpAdminReactPage;
 
@@ -71,7 +72,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Given("Operator add new DP Partner on DP Administration page with the following attributes:")
   public void operatorAddNewDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     DpPartner dpPartner = new DpPartner(data);
     dpAdminPage.addPartner(dpPartner);
     put(KEY_DP_PARTNER, dpPartner);
@@ -124,7 +125,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Downloaded CSV file contains correct DP Users data in new react page")
   public void downloadedCsvFileContainsCorrectDpUsersDataInNewReactPage(
-          Map<String, String> detailsAsMap) {
+      Map<String, String> detailsAsMap) {
     List<User> user = get(detailsAsMap.get("userList"));
     DpDetailsResponse dp = get(detailsAsMap.get("dp"));
     dpAdminPage.verifyDownloadedFileContentNewReactPageDpUsers(user, dp);
@@ -137,7 +138,6 @@ public class DpAdministrationSteps extends AbstractSteps {
   }
 
 
-
   @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
   public void operatorGetFirstDpPartnersParamsOnDpAdministrationPage(int count) {
     List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readFirstEntities(count);
@@ -146,7 +146,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator get DP Partners Data on DP Administration page")
   public void operatorGetFirstDpPartnersDataOnDpAdministrationPage(
-          Map<String, String> detailsAsMap) {
+      Map<String, String> detailsAsMap) {
     co.nvqa.commons.model.dp.DpPartner dpPartner = resolveValue(detailsAsMap.get("dpPartnerList"));
     int countValue = Integer.parseInt(resolveValue(detailsAsMap.get("count")));
     List<DpPartner> dpPartners = new ArrayList<>();
@@ -171,7 +171,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator update created DP Partner on DP Administration page with the following attributes:")
   public void operatorUpdateCreatedDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
     String partnerName = dpPartner.getName();
     dpPartner.fromMap(data);
@@ -181,7 +181,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator add new DP for the DP Partner on DP Administration page with the following attributes:")
   public void operatorAddNewDpForTheDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     DpPartner dpPartner = get(KEY_DP_PARTNER);
     File file = null;
     if (data.get("dpPhoto") != null) {
@@ -194,7 +194,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator add new DP for the DP Partner on DP Administration page using existed partner with the following attributes:")
   public void operatorAddNewDpForTheDpPartnerOnDpAdministrationPageUsingExistedPartnerWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     final Partner dpPartner = get(KEY_DP_PARTNER);
     File file = null;
     if (data.get("dpPhoto") != null) {
@@ -223,7 +223,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchSDetailsAsMap.get("searchDetails"),
         StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
@@ -246,7 +247,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     }
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchSDetailsAsMap.get("searchDetails"),
         StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
@@ -267,7 +269,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpUser dpUser = dpAdminReactPage.convertUserToDpUser(user);
 
     searchDetailsAsMap = resolveKeyValues(searchDetailsAsMap);
-    String searchDetailsData = StandardTestUtils.replaceTokens(searchDetailsAsMap.get("searchDetails"),
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchDetailsAsMap.get("searchDetails"),
         StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
@@ -395,7 +398,7 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.formRestrictions.setValue(partner.getRestrictions());
       }
       if (partner.getSendNotificationsToCustomer() != null
-              && partner.getSendNotificationsToCustomer()) {
+          && partner.getSendNotificationsToCustomer()) {
         dpAdminReactPage.buttonSendNotifications.click();
       }
 
@@ -417,7 +420,8 @@ public class DpAdministrationSteps extends AbstractSteps {
   @Then("Operator Fill Dp User Details to Check The Error Status with key {string}")
   public void operatorFillDpUserDetailsForErrorChecking(String errorCheckKey) {
 
-    dpAdminReactPage.inFrame(() -> dpAdminReactPage.errorCheckDpUser(get(errorCheckKey), errorCheckKey));
+    dpAdminReactPage.inFrame(
+        () -> dpAdminReactPage.errorCheckDpUser(get(errorCheckKey), errorCheckKey));
   }
 
   @Then("Operator clear the {string} from DP Partner form")
@@ -517,7 +521,8 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator will receiving error message pop-up {string}")
   public void duplicateDpError(String popUpMsg) {
-    dpAdminReactPage.inFrame(() -> Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
+    dpAdminReactPage.inFrame(
+        () -> Assertions.assertThat(dpAdminReactPage.elementErrorCreatingDP.getText())
             .as(f("Distribution point is Error because of %s", popUpMsg))
             .containsIgnoringCase(popUpMsg));
   }
@@ -527,11 +532,11 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorFillThePartnerFilter(String element) {
     Partner newlyCreatedPartner = get(KEY_DP_MANAGEMENT_PARTNER);
     DpPartner newlyCreatedDpPartner = dpAdminReactPage.convertPartnerToDpPartner(
-            newlyCreatedPartner);
+        newlyCreatedPartner);
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.textBoxDpPartnerFilter.get(element).waitUntilVisible();
       String fillInValue = dpAdminReactPage.getDpPartnerElementByMap(element,
-              newlyCreatedDpPartner);
+          newlyCreatedDpPartner);
       dpAdminReactPage.textBoxDpPartnerFilter.get(element).setValue(fillInValue);
     });
   }
@@ -548,10 +553,10 @@ public class DpAdministrationSteps extends AbstractSteps {
   @When("Operator press clear alternate DP number {string}")
   public void operatorPressClearAlternateDPNumber(String numberOfDp) {
     ImmutableMap<String, PageElement> clearNumberOfDp = ImmutableMap.<String, PageElement>builder()
-            .put("1", dpAdminReactPage.buttonClearAlternateDp1)
-            .put("2", dpAdminReactPage.buttonClearAlternateDp2)
-            .put("3", dpAdminReactPage.buttonClearAlternateDp3)
-            .build();
+        .put("1", dpAdminReactPage.buttonClearAlternateDp1)
+        .put("2", dpAdminReactPage.buttonClearAlternateDp2)
+        .put("3", dpAdminReactPage.buttonClearAlternateDp3)
+        .build();
 
     dpAdminReactPage.inFrame(() -> {
       clearNumberOfDp.get(numberOfDp).click();
@@ -604,25 +609,25 @@ public class DpAdministrationSteps extends AbstractSteps {
 
       for (String dp : dpListFromDisplay) {
         if (dpDetailsResponse.getAlternateDpId1() != null && dp.contains(
-                dpDetailsResponse.getAlternateDpId1().toString())) {
+            dpDetailsResponse.getAlternateDpId1().toString())) {
 
           Assertions.assertThat(dp)
-                  .as(f("Alternate DP 1 Field is %s on Display", dp))
-                  .containsIgnoringCase(dpDetailsResponse.getAlternateDpId1().toString());
+              .as(f("Alternate DP 1 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId1().toString());
 
         } else if (dpDetailsResponse.getAlternateDpId2() != null && dp.contains(
-                dpDetailsResponse.getAlternateDpId2().toString())) {
+            dpDetailsResponse.getAlternateDpId2().toString())) {
 
           Assertions.assertThat(dp)
-                  .as(f("Alternate DP 2 Field is %s on Display", dp))
-                  .containsIgnoringCase(dpDetailsResponse.getAlternateDpId2().toString());
+              .as(f("Alternate DP 2 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId2().toString());
 
         } else if (dpDetailsResponse.getAlternateDpId3() != null && dp.contains(
-                dpDetailsResponse.getAlternateDpId3().toString())) {
+            dpDetailsResponse.getAlternateDpId3().toString())) {
 
           Assertions.assertThat(dp)
-                  .as(f("Alternate DP 3 Field is %s on Display", dp))
-                  .containsIgnoringCase(dpDetailsResponse.getAlternateDpId3().toString());
+              .as(f("Alternate DP 3 Field is %s on Display", dp))
+              .containsIgnoringCase(dpDetailsResponse.getAlternateDpId3().toString());
 
         }
       }
@@ -640,10 +645,22 @@ public class DpAdministrationSteps extends AbstractSteps {
     });
   }
 
+  @Then("Operator fill newly created Dp User filter:")
+  public void operatorFillNewDpUserFilter(Map<String, String> dataTableAsMap) {
+    DpUser dpUser = dpUserConverter(resolveValue(dataTableAsMap.get("dpUser")));
+    dpAdminReactPage.inFrame(() -> {
+      String element = dataTableAsMap.get("element");
+      dpAdminReactPage.textBoxDpUserFilter.get(element).waitUntilVisible();
+      String fillInValue = dpAdminReactPage.getDpUserElementByMap(element, dpUser);
+      dpAdminReactPage.textBoxDpUserFilter.get(element).setValue(fillInValue);
+    });
+  }
+
   @And("Operator check the submitted data in the table")
   public void checkSubmittedDataInTable() {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
-    dpAdminReactPage.inFrame(page -> dpAdminReactPage.fillFilterDpPartner("name", partner.getName()));
+    dpAdminReactPage.inFrame(
+        page -> dpAdminReactPage.fillFilterDpPartner("name", partner.getName()));
   }
 
   @And("Operator Search Dp Partners by Id")
@@ -651,7 +668,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     Partner partner = get(KEY_DP_MANAGEMENT_PARTNER);
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.waitUntilVisibilityOfElementLocated(
-              f("//h2[@data-testid='%s']", DP_PARTNER_LABEL));
+          f("//h2[@data-testid='%s']", DP_PARTNER_LABEL));
       dpAdminReactPage.filterPartnerId.setValue(partner.getId());
     });
   }
@@ -684,7 +701,7 @@ public class DpAdministrationSteps extends AbstractSteps {
   public void operatorPressAddDp() {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.waitUntilVisibilityOfElementLocated(
-              f("//h2[@data-testid='%s']", DP_LABEL));
+          f("//h2[@data-testid='%s']", DP_LABEL));
       dpAdminReactPage.buttonAddDp.click();
     });
   }
@@ -722,26 +739,26 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       if (alternateDp1) {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp1.isDisplayed())
-                .as("Alternate DP 1 Field is Enabled").isTrue();
+            .as("Alternate DP 1 Field is Enabled").isTrue();
       } else {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp1Disabled.isDisplayed())
-                .as("Alternate DP 1 Field is Disabled").isTrue();
+            .as("Alternate DP 1 Field is Disabled").isTrue();
       }
 
       if (alternateDp2) {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp2.isDisplayed())
-                .as("Alternate DP 2 Field is Enabled").isTrue();
+            .as("Alternate DP 2 Field is Enabled").isTrue();
       } else {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp2Disabled.isDisplayed())
-                .as("Alternate DP 2 Field is Disabled").isTrue();
+            .as("Alternate DP 2 Field is Disabled").isTrue();
       }
 
       if (alternateDp3) {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp3.isDisplayed())
-                .as("Alternate DP 3 Field is Enabled").isTrue();
+            .as("Alternate DP 3 Field is Enabled").isTrue();
       } else {
         Assertions.assertThat(dpAdminReactPage.fieldAlternateDp3Disabled.isDisplayed())
-                .as("Alternate DP 3 Field is Disabled").isTrue();
+            .as("Alternate DP 3 Field is Disabled").isTrue();
       }
     });
 
@@ -803,9 +820,9 @@ public class DpAdministrationSteps extends AbstractSteps {
   @When("Operator delete the opening and operating hours {string}")
   public void operatorDeleteTheOpeningAndOperatingHours(String hourKey) {
     dpAdminReactPage.inFrame(() -> {
-      if ("opening_hours".equalsIgnoreCase(hourKey)){
+      if ("opening_hours".equalsIgnoreCase(hourKey)) {
         dpAdminReactPage.removeOpeningHoursDay();
-      } else if ("operating_hours".equalsIgnoreCase(hourKey)){
+      } else if ("operating_hours".equalsIgnoreCase(hourKey)) {
         dpAdminReactPage.removeOperatingHoursDay();
       }
     });
@@ -828,7 +845,7 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.fieldContactNumber.setValue(dpDetailsResponse.getContact());
       }
       if (dpDetailsResponse.getExternalStoreId() != null) {
-        if ("space".equalsIgnoreCase(dpDetailsResponse.getExternalStoreId())){
+        if ("space".equalsIgnoreCase(dpDetailsResponse.getExternalStoreId())) {
           dpAdminReactPage.fieldExternalStoreId.forceClear();
           dpAdminReactPage.fieldExternalStoreId.setValue(" ");
         } else {
@@ -854,11 +871,11 @@ public class DpAdministrationSteps extends AbstractSteps {
       }
 
       if (dpDetailsResponse.getLatLongSearch() != null
-              && dpDetailsResponse.getLatLongSearchName() != null) {
+          && dpDetailsResponse.getLatLongSearchName() != null) {
         dpAdminReactPage.fieldLatLongSearch.setValue(dpDetailsResponse.getLatLongSearch());
         dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getLatLongSearchName());
       } else if (dpDetailsResponse.getAddressSearch() != null
-              && dpDetailsResponse.getAddressSearchName() != null) {
+          && dpDetailsResponse.getAddressSearchName() != null) {
         dpAdminReactPage.fieldAddressSearch.setValue(dpDetailsResponse.getAddressSearch());
         dpAdminReactPage.chooseFromSearch(dpDetailsResponse.getAddressSearchName());
       } else {
@@ -918,25 +935,25 @@ public class DpAdministrationSteps extends AbstractSteps {
       if (dpDetailsResponse.getComputedMaxCapacity() != null) {
         dpAdminReactPage.fieldMaximumParcelCapacityForCollect.forceClear();
         dpAdminReactPage.fieldMaximumParcelCapacityForCollect.setValue(
-                dpDetailsResponse.getComputedMaxCapacity());
+            dpDetailsResponse.getComputedMaxCapacity());
       }
       if (dpDetailsResponse.getActualMaxCapacity() != null) {
         dpAdminReactPage.fieldBufferCapacity.forceClear();
         dpAdminReactPage.fieldBufferCapacity.setValue(
-                dpDetailsResponse.getActualMaxCapacity());
+            dpDetailsResponse.getActualMaxCapacity());
       }
       if (dpDetailsResponse.getMaxParcelStayDuration() != null) {
         dpAdminReactPage.fieldMaximumParcelStay.forceClear();
         dpAdminReactPage.fieldMaximumParcelStay.setValue(
-                dpDetailsResponse.getMaxParcelStayDuration());
+            dpDetailsResponse.getMaxParcelStayDuration());
       }
       if (dpDetailsResponse.getDpPhoto() != null) {
-        if(dpDetailsResponse.getDpPhoto().equalsIgnoreCase("clear")
-            || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")){
+        if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("clear")
+            || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")) {
           dpAdminReactPage.removeExistingPicture();
-        }else{
-        dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
-                dpDetailsResponse.getDpPhotoFile());
+        } else {
+          dpAdminReactPage.fieldPhotoOfPudoPoint.setValue(
+              dpDetailsResponse.getDpPhotoFile());
         }
       }
       if (dpDetailsResponse.getIsActive() != null && dpDetailsResponse.getIsActive()) {
@@ -949,19 +966,19 @@ public class DpAdministrationSteps extends AbstractSteps {
         dpAdminReactPage.checkBoxHyperLocal.click();
       }
       if (dpDetailsResponse.getAutoReservationEnabled() != null
-              && dpDetailsResponse.getAutoReservationEnabled()) {
+          && dpDetailsResponse.getAutoReservationEnabled()) {
         dpAdminReactPage.checkBoxAutoReservationEnabled.click();
       }
       if (dpDetailsResponse.getAutoReservationCutOffTime() != null) {
         dpAdminReactPage.fillAutoReservationCutoffTime(
-                dpDetailsResponse.getAutoReservationCutOffTime());
+            dpDetailsResponse.getAutoReservationCutOffTime());
       }
       if (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() != null
-              && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
+          && !dpDetailsResponse.getEditDaysIndividuallyOpeningHours()) {
         dpAdminReactPage.buttonEditDaysIndividuallyOpeningHours.click();
       }
       if (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() != null
-              && !dpDetailsResponse.getEditDaysIndividuallyOperatingHours()) {
+          && !dpDetailsResponse.getEditDaysIndividuallyOperatingHours()) {
         dpAdminReactPage.buttonEditDaysIndividuallyOperatingHours.click();
       }
       if (canFillOpeningOperatingHour(dpDetailsResponse)) {
@@ -972,11 +989,11 @@ public class DpAdministrationSteps extends AbstractSteps {
           for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
             if (i == 0) {
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                      dpDetailsResponse.getOpeningHours().get(day).get(i), SINGLE, OPENING_HOURS);
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), SINGLE, OPENING_HOURS);
             } else if (i == 1) {
               dpAdminReactPage.buttonAddTimeSlotOpeningHour.get(day).click();
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                      dpDetailsResponse.getOpeningHours().get(day).get(i), NEXT, OPENING_HOURS);
+                  dpDetailsResponse.getOpeningHours().get(day).get(i), NEXT, OPENING_HOURS);
             }
 
           }
@@ -986,11 +1003,11 @@ public class DpAdministrationSteps extends AbstractSteps {
           for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
             if (i == 0) {
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                      dpDetailsResponse.getOperatingHours().get(day).get(i), SINGLE, OPERATING_HOURS);
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), SINGLE, OPERATING_HOURS);
             } else if (i == 1) {
               dpAdminReactPage.buttonAddTimeSlotOperatingHour.get(day).click();
               dpAdminReactPage.fillOpeningOperatingHour(day,
-                      dpDetailsResponse.getOperatingHours().get(day).get(i), NEXT, OPERATING_HOURS);
+                  dpDetailsResponse.getOperatingHours().get(day).get(i), NEXT, OPERATING_HOURS);
             }
 
           }
@@ -1009,11 +1026,11 @@ public class DpAdministrationSteps extends AbstractSteps {
 
       }
       if (dpDetailsResponse.getApplyFirstDayOpeningHours() != null
-              && dpDetailsResponse.getApplyFirstDayOpeningHours()) {
+          && dpDetailsResponse.getApplyFirstDayOpeningHours()) {
         dpAdminReactPage.buttonApplyFirstDaySlotsOpeningHours.click();
       }
       if (dpDetailsResponse.getApplyFirstDayOperatingHours() != null
-              && dpDetailsResponse.getApplyFirstDayOperatingHours()) {
+          && dpDetailsResponse.getApplyFirstDayOperatingHours()) {
         dpAdminReactPage.buttonApplyFirstDaySlotsOperatingHours.click();
       }
     });
@@ -1021,12 +1038,12 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   public boolean canFillOpeningOperatingHour(DpDetailsResponse dpDetailsResponse) {
     return dpDetailsResponse.getIsOperatingHours() != null
-            && dpDetailsResponse.getIsOperatingHours()
-            && dpDetailsResponse.getOperatingHoursDay() != null
-            && (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() == null
-            || dpDetailsResponse.getEditDaysIndividuallyOpeningHours())
-            && (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() == null
-            || dpDetailsResponse.getEditDaysIndividuallyOperatingHours());
+        && dpDetailsResponse.getIsOperatingHours()
+        && dpDetailsResponse.getOperatingHoursDay() != null
+        && (dpDetailsResponse.getEditDaysIndividuallyOpeningHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOpeningHours())
+        && (dpDetailsResponse.getEditDaysIndividuallyOperatingHours() == null
+        || dpDetailsResponse.getEditDaysIndividuallyOperatingHours());
   }
 
 
@@ -1186,7 +1203,8 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @Then("Operator will get the error message {string}")
   public void pressSaveResetPasswordButton(String errorMessage) {
-    dpAdminReactPage.inFrame(() -> Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
+    dpAdminReactPage.inFrame(
+        () -> Assertions.assertThat(dpAdminReactPage.labelPasswordNotMatch.getText())
             .as(f("error message '%s' appeared", errorMessage)).isEqualTo(errorMessage));
   }
 
@@ -1217,20 +1235,23 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
 
     if ("Enabled".equalsIgnoreCase(status)) {
-      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation enabled").isTrue();
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
+          .as("DP has auto reservation enabled").isTrue();
     } else {
-      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled()).as("DP has auto reservation disabled").isFalse();
+      Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
+          .as("DP has auto reservation disabled").isFalse();
     }
   }
 
   @Then("Operator verifies the image for {string} is {string}")
-  public void operatorVerifiesTheImageIs(String dpDetails,String status) {
+  public void operatorVerifiesTheImageIs(String dpDetails, String status) {
     DpDetailsResponse dpDetailsResponse = resolveValue(dpDetails);
     if ("present".equalsIgnoreCase(status)) {
       Assertions.assertThat(dpDetailsResponse.getDpPhotoFile()).as("dp image status is incorrect")
           .isNotNull();
-    }else{
-     Assertions.assertThat(dpDetailsResponse.getDpPhoto()).as("dp image status is incorrect").isNull();
+    } else {
+      Assertions.assertThat(dpDetailsResponse.getDpPhoto()).as("dp image status is incorrect")
+          .isNull();
     }
 
   }
@@ -1256,34 +1277,34 @@ public class DpAdministrationSteps extends AbstractSteps {
       dpAdminReactPage.checkNewlyCreatedDpAndAuditMetadata(dp, auditMetadata);
     } else if (condition != null) {
       if ((condition.equals(CHECK_DP_SEARCH_LAT_LONG) || condition.equals(CHECK_DP_SEARCH_ADDRESS))
-              && dpDetailsResponse != null) {
+          && dpDetailsResponse != null) {
         dpAdminReactPage.checkNewlyCreatedDpBySearchAddressLatLong(dp, dpDetailsResponse);
       } else if (condition.equals(CHECK_DP_OPENING_OPERATING_HOURS) && dpDetailsResponse != null) {
         String[] days = dpDetailsResponse.getOperatingHoursDay().split(",");
         List<DpOpeningHour> dpOpeningHours = resolveValue(dataTableAsMap.get("dpOpeningHours"));
         List<DpOperatingHour> dpOperatingHours = resolveValue(
-                dataTableAsMap.get("dpOperatingHours"));
+            dataTableAsMap.get("dpOperatingHours"));
         ImmutableMap<String, Integer> dayNumberMap = ImmutableMap.<String, Integer>builder()
-                .put("monday", 1)
-                .put("tuesday", 2)
-                .put("wednesday", 3)
-                .put("thursday", 4)
-                .put("friday", 5)
-                .put("saturday", 6)
-                .put("sunday", 7)
-                .build();
+            .put("monday", 1)
+            .put("tuesday", 2)
+            .put("wednesday", 3)
+            .put("thursday", 4)
+            .put("friday", 5)
+            .put("saturday", 6)
+            .put("sunday", 7)
+            .build();
 
         for (String day : days) {
           for (int i = 0; i < dpDetailsResponse.getOpeningHours().get(day).size(); i++) {
             dpAdminReactPage.checkOpeningTime(day, dayNumberMap.get(day), dpOpeningHours,
-                    dpDetailsResponse.getOpeningHours().get(day).get(i));
+                dpDetailsResponse.getOpeningHours().get(day).get(i));
           }
         }
 
         for (String day : days) {
           for (int i = 0; i < dpDetailsResponse.getOperatingHours().get(day).size(); i++) {
             dpAdminReactPage.checkOperatingTime(day, dayNumberMap.get(day), dpOperatingHours,
-                    dpDetailsResponse.getOperatingHours().get(day).get(i));
+                dpDetailsResponse.getOperatingHours().get(day).get(i));
           }
         }
       } else if (condition.equals(CHECK_ALTERNATE_DP_DATA)) {
@@ -1298,22 +1319,22 @@ public class DpAdministrationSteps extends AbstractSteps {
         if (dpDetailsResponse != null && dpsToRedirect != null) {
           for (String altDp : dpsToRedirect) {
             if (dpDetailsResponse.getAlternateDpId1() != null
-                    && dpDetailsResponse.getAlternateDpId1()
-                    .toString().equals(altDp)) {
+                && dpDetailsResponse.getAlternateDpId1()
+                .toString().equals(altDp)) {
               Assertions.assertThat(dpDetailsResponse.getAlternateDpId1().toString())
-                      .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
+                  .as(f("Alternate DP ID 1 is %s", altDp)).isEqualTo(altDp);
             }
             if (dpDetailsResponse.getAlternateDpId2() != null
-                    && dpDetailsResponse.getAlternateDpId2()
-                    .toString().equals(altDp)) {
+                && dpDetailsResponse.getAlternateDpId2()
+                .toString().equals(altDp)) {
               Assertions.assertThat(dpDetailsResponse.getAlternateDpId2().toString())
-                      .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
+                  .as(f("Alternate DP ID 2 is %s", altDp)).isEqualTo(altDp);
             }
             if (dpDetailsResponse.getAlternateDpId3() != null
-                    && dpDetailsResponse.getAlternateDpId3()
-                    .toString().equals(altDp)) {
+                && dpDetailsResponse.getAlternateDpId3()
+                .toString().equals(altDp)) {
               Assertions.assertThat(dpDetailsResponse.getAlternateDpId3().toString())
-                      .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
+                  .as(f("Alternate DP ID 3 is %s", altDp)).isEqualTo(altDp);
             }
           }
         } else {
@@ -1323,41 +1344,41 @@ public class DpAdministrationSteps extends AbstractSteps {
         DpSetting dpSetting = get(KEY_DP_SETTINGS);
         if (dpDetailsResponse != null && dpSetting != null) {
           Assertions.assertThat(dpSetting.getCutOffTime())
-                  .as(f("Dp Auto Reservation Cut-Off Time Is %s", dpSetting.getCutOffTime()))
-                  .contains(dpDetailsResponse.getAutoReservationCutOffTime());
+              .as(f("Dp Auto Reservation Cut-Off Time Is %s", dpSetting.getCutOffTime()))
+              .contains(dpDetailsResponse.getAutoReservationCutOffTime());
 
           Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
-                  .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
-                  .isEqualTo(dpSetting.getAutoReservationEnabled());
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       } else if (condition.equals(CHECK_DP_RESERVATION_DATA_DEFAULT)) {
         DpSetting dpSetting = get(KEY_DP_SETTINGS);
         if (dpDetailsResponse != null && dpSetting != null) {
           Assertions.assertThat(dpSetting.getCutOffTime())
-                  .as(f("Dp Auto Reservation Cut-Off Time Is %s", "23:59:59"))
-                  .contains("23:59:59");
+              .as(f("Dp Auto Reservation Cut-Off Time Is %s", "23:59:59"))
+              .contains("23:59:59");
 
           Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
-                  .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
-                  .isEqualTo(dpSetting.getAutoReservationEnabled());
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       } else if (condition.equals(CHECK_DP_RESERVATION_DATA_DISABLED)) {
         DpSetting dpSetting = get(KEY_DP_SETTINGS);
         if (dpDetailsResponse != null && dpSetting != null) {
           Assertions.assertThat(dpDetailsResponse.getAutoReservationEnabled())
-                  .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
-                  .isEqualTo(dpSetting.getAutoReservationEnabled());
+              .as(f("Dp Auto Reservation Enabled Is %s", dpSetting.getAutoReservationEnabled()))
+              .isEqualTo(dpSetting.getAutoReservationEnabled());
         }
       } else if (condition.equals(CHECK_DP_PHOTO)) {
         DpSetting dpSetting = get(KEY_DP_SETTINGS);
         if (dpDetailsResponse != null && dpSetting != null) {
           if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("valid")
-              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")){
+              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("notSaveClear")) {
             Assertions.assertThat(dpSetting.getImages())
                 .as("Dp Images is Existed Is Valid")
                 .isNotNull();
           } else if (dpDetailsResponse.getDpPhoto().equalsIgnoreCase("clear")
-              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("invalid")){
+              || dpDetailsResponse.getDpPhoto().equalsIgnoreCase("invalid")) {
             Assertions.assertThat(dpSetting.getImages())
                 .as("Dp Images is Existed Is Invalid")
                 .isEqualTo("[]");
@@ -1373,7 +1394,8 @@ public class DpAdministrationSteps extends AbstractSteps {
     DpPartner expected = dpAdminReactPage.convertPartnerToDpPartner(partner);
 
     searchSDetailsAsMap = resolveKeyValues(searchSDetailsAsMap);
-    String searchDetailsData = StandardTestUtils.replaceTokens(searchSDetailsAsMap.get("searchDetails"),
+    String searchDetailsData = StandardTestUtils.replaceTokens(
+        searchSDetailsAsMap.get("searchDetails"),
         StandardTestUtils.createDefaultTokens());
     String[] extractDetails = searchDetailsData.split(",");
 
@@ -1403,7 +1425,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator update created DP for the DP Partner on DP Administration page with the following attributes:")
   public void operatorUpdateCreatedDpForTheDpPartnerOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     final Dp dpParams = get(KEY_DISTRIBUTION_POINT);
     final String currentDpName = dpParams.getName();
     dpParams.fromMap(data);
@@ -1427,7 +1449,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator add DP User for the created DP on DP Administration page with the following attributes:")
   public void operatorAddDpUserForTheCreatedDpOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     Dp dpParams = get(KEY_DISTRIBUTION_POINT);
     DpUser dpUser = new DpUser();
     dpUser.fromMap(data);
@@ -1438,7 +1460,7 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @When("Operator update created DP User for the created DP on DP Administration page with the following attributes:")
   public void operatorUpdateDpUserForTheCreatedDpOnDpAdministrationPageWithTheFollowingAttributes(
-          Map<String, String> data) {
+      Map<String, String> data) {
     DpUser dpUser = get(KEY_DP_USER);
     String username = dpUser.getClientId();
     DpUser newPdUserParams = new DpUser(data);
@@ -1569,7 +1591,12 @@ public class DpAdministrationSteps extends AbstractSteps {
 
   @And("Operator verifies the newly created DP user data is right")
   public void verifyNewlyCreatedDpUser(Map<String, String> dataTableAsMap) {
-    DpUser dpUser = get(dataTableAsMap.get("dpUser"));
+    DpUser dpUser;
+    if (get(dataTableAsMap.get("dpUser")) != null) {
+      dpUser = get(dataTableAsMap.get("dpUser"), DpUser.class);
+    } else {
+      dpUser = dpUserConverter(resolveValue(dataTableAsMap.get("dpUser")));
+    }
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
     dpAdminPage.verifyNewlyCreatedDpUser(dpUser, dpUserDb);
   }
@@ -1579,5 +1606,12 @@ public class DpAdministrationSteps extends AbstractSteps {
     co.nvqa.commons.model.dp.DpUser dpUserDb = get(dataTableAsMap.get("dpUserDb"));
     String status = dataTableAsMap.get("status");
     dpAdminPage.verifyNewlyCreatedDpUserDeleted(dpUserDb, status);
+  }
+
+  public DpUser dpUserConverter(co.nvqa.common.dp.model.beans.DpUser dpUser){
+    DpUser dpUserOld = JsonUtils.fromJsonSnakeCase(JsonUtils.toJsonSnakeCase(dpUser), DpUser.class);
+    dpUserOld.setEmailId(dpUser.getEmail());
+    dpUserOld.setContactNo(dpUser.getContactNo());
+    return dpUserOld;
   }
 }

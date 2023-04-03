@@ -23,6 +23,7 @@ Feature: Shipper Pickups - Filter Reservation Pickup
       | shipperName  | ^{shipper-v4-name}.*                     |
       | comments     | {KEY_CREATED_RESERVATION.comments}       |
 
+  @happy-path
   Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
@@ -60,27 +61,27 @@ Feature: Shipper Pickups - Filter Reservation Pickup
       | id                                       | routeId                | driverName          |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} | {KEY_CREATED_ROUTE_ID} | {ninja-driver-name} |
 
-#    TODO enabled once first mile zone is available in shipper pickup page
-#  @DeleteOrArchiveRoute
-#  Scenario: Operator Filters Reservation by Zone Name
-#    Given Operator go to menu Utilities -> QRCode Printing
-#    And API Operator create new shipper address V2 using data below:
-#      | shipperId       | {shipper-v4-id}    |
-#      | generateAddress | ZONE {zone-name-3} |
-#    And API Operator create V2 reservation using data below:
-#      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-#    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
-#      | {KEY_WAYPOINT_ID} |
-#    When Operator go to menu Pick Ups -> Shipper Pickups
-#    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-#      | fromDate | {gradle-current-date-yyyy-MM-dd} |
-#      | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
-#      | zone     | {zone-full-name-3}               |
-#    Then Operator verify reservation details on Shipper Pickups page:
-#      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}            |
-#      | shipperName | ^{shipper-v4-name} - {shipper-v4-contact} \(\+\d+\) |
-#      | routeId     | null                                                |
-#      | driverName  | null                                                |
+  #    TODO enabled once first mile zone is available in shipper pickup page
+  #  @DeleteOrArchiveRoute
+  #  Scenario: Operator Filters Reservation by Zone Name
+  #    Given Operator go to menu Utilities -> QRCode Printing
+  #    And API Operator create new shipper address V2 using data below:
+  #      | shipperId       | {shipper-v4-id}    |
+  #      | generateAddress | ZONE {zone-name-3} |
+  #    And API Operator create V2 reservation using data below:
+  #      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+  #    And DB Operator set "{zone-id-3}" routing_zone_id for waypoints:
+  #      | {KEY_WAYPOINT_ID} |
+  #    When Operator go to menu Pick Ups -> Shipper Pickups
+  #    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+  #      | fromDate | {gradle-current-date-yyyy-MM-dd} |
+  #      | toDate   | {gradle-next-1-day-yyyy-MM-dd}   |
+  #      | zone     | {zone-full-name-3}               |
+  #    Then Operator verify reservation details on Shipper Pickups page:
+  #      | id          | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}            |
+  #      | shipperName | ^{shipper-v4-name} - {shipper-v4-contact} \(\+\d+\) |
+  #      | routeId     | null                                                |
+  #      | driverName  | null                                                |
 
   Scenario: Operator Filters Reservation by Waypoint Status - PENDING (uid:f9641b05-1512-48f9-961d-b627e044c5a5)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -217,6 +218,7 @@ Feature: Shipper Pickups - Filter Reservation Pickup
       | approxVolume | Less than 10 Parcels               |
       | comments     | {KEY_CREATED_RESERVATION.comments} |
 
+  @happy-path
   Scenario: Operator Filters Created Reservation by Master Shipper (uid:8977782b-6756-410b-86e7-c947d200eda9)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:

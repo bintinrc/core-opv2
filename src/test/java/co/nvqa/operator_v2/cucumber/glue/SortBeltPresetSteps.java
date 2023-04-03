@@ -136,6 +136,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
   @And("Operator click Proceed in the Create Preset UI")
   public void operatorClickProceedInTheCreatePresetUI() {
     createPresetSortBeltPresetPage.nextBtn.click();
+    createPresetSortBeltPresetPage.loadingIcon.waitUntilInvisible();
   }
 
   @Then("Operator verify the new preset is failed to be submitted")
@@ -180,7 +181,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
       criteriaElement.addFilterMenu.click();
       pause1s();
       criteriaElement.findElement(
-          By.xpath(f(CriteriaCard.FILTER_OPTION, criteriaElement.getFilterTestId(fields.get(i)))))
+              By.xpath(f(CriteriaCard.FILTER_OPTION, criteriaElement.getFilterTestId(fields.get(i)))))
           .click();
 
       List<String> vals;
@@ -209,9 +210,8 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator verify preset created correctly on Sort Belt Preset detail page")
-  public void operatorVerifyPresetCreatedCorrectlyOnSortBeltPresetDetailPage(Map<String,String> dataTable) {
-    sortBeltPresetDetailPage.waitUntilLoaded();
-
+  public void operatorVerifyPresetCreatedCorrectlyOnSortBeltPresetDetailPage(
+      Map<String, String> dataTable) {
     SortBeltPreset sb = get(KEY_CREATED_SORT_BELT_PRESET);
 
     Assertions.assertThat(sortBeltPresetDetailPage.cancelBtn.isDisplayed())
@@ -224,7 +224,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
 
     Assertions.assertThat(sortBeltPresetDetailPage.presetTitle.getText())
         .as("Preset title contains the correct string: " + sb.getName())
-        .isEqualTo("Preset: "+sb.getName());
+        .isEqualTo("Preset: " + sb.getName());
 
     Assertions.assertThat(
             sortBeltPresetDetailPage.description.getText().contains(sb.getDescription()))
@@ -253,7 +253,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
           break;
         case "DP IDs":
           String dpName = dataTable.get("dpName");
-          if (dpName!=null) {
+          if (dpName != null) {
             String finalDpName = resolveValue(dpName);
             Assertions.assertThat(row.getFilterValue())
                 .as(f("DP show correct value : %s", finalDpName))
@@ -262,7 +262,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
           break;
         case "Zones":
           String zones = dataTable.get("zones");
-          if (zones!= null) {
+          if (zones != null) {
             String finalZones = resolveValue(zones);
             Assertions.assertThat(row.getFilterValue())
                 .as(f("Zones show correct value : %s", finalZones))
@@ -271,7 +271,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
           break;
         case "Destination Hub":
           String destinationHub = dataTable.get("destinationHub");
-          if (destinationHub!=null) {
+          if (destinationHub != null) {
             String finalDestinationHub = resolveValue(destinationHub);
             Assertions.assertThat(row.getFilterValue())
                 .as(f("Destination Hub show correct value : %s", finalDestinationHub))
@@ -281,7 +281,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
           break;
         case "Marketplace Shipper":
           String masterShipper = dataTable.get("masterShipper");
-          if (masterShipper!=null) {
+          if (masterShipper != null) {
             String finalMasterShipper = resolveValue(masterShipper);
             Assertions.assertThat(row.getFilterValue())
                 .as(f("Master shipper show correct value : %s", finalMasterShipper))
@@ -292,7 +292,7 @@ public class SortBeltPresetSteps extends AbstractSteps {
         case "Shipper":
         case "Exclude Shippers":
           String shipper = dataTable.get("shipper");
-          if (shipper!=null) {
+          if (shipper != null) {
             String finalShipper = resolveValue(shipper);
             Assertions.assertThat(row.getFilterValue())
                 .as(f("shipper show correct value : %s", finalShipper))
@@ -360,10 +360,11 @@ public class SortBeltPresetSteps extends AbstractSteps {
   }
 
   @And("Operator select {string} as the preset base on Sort Belt Preset page")
-  public void operatorSelectBasePresetNameAsThePresetBaseOnSortBeltPresetPage(String basePresetName) {
-      sortBeltPresetPage.presetBaseModal.waitUntilVisible();
-      sortBeltPresetPage.presetBaseModal.presetBaseSelect.selectValue(basePresetName);
-      sortBeltPresetPage.presetBaseModal.confirmBtn.click();
+  public void operatorSelectBasePresetNameAsThePresetBaseOnSortBeltPresetPage(
+      String basePresetName) {
+    sortBeltPresetPage.presetBaseModal.waitUntilVisible();
+    sortBeltPresetPage.presetBaseModal.presetBaseSelect.selectValue(basePresetName);
+    sortBeltPresetPage.presetBaseModal.confirmBtn.click();
   }
 
   @Then("Operator select the preset from Sort Belt Preset page")

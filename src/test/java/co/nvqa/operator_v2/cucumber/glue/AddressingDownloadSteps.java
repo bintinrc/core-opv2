@@ -321,23 +321,26 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
-    Order createdOrder = get(KEY_ORDER_DETAILS);
+    retryIfRuntimeExceptionOccurred(() -> {
+      Order createdOrder = get(KEY_ORDER_DETAILS);
 
-    if (createdOrder == null) {
-      LOGGER.error("Order hasn't been created", new NullPointerException());
-      return;
-    }
+      if (createdOrder == null) {
+        LOGGER.error("Order hasn't been created", new NullPointerException());
+        return;
+      }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
-        createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
-    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
-        orderCreationTimestamp, 30);
+      LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
+          createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
+      Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
+          orderCreationTimestamp, 30);
 
-    LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
-    LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
-    LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
+      LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
+      LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
+      LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
-    addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+      addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+    });
+
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")

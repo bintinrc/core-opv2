@@ -5,7 +5,7 @@ Feature: Route Inbound Expected Scans
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Pending Deliveries
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -23,7 +23,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -84,7 +83,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
@@ -133,7 +131,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Failed Deliveries (Valid)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -152,7 +150,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
@@ -199,7 +196,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -218,7 +215,6 @@ Feature: Route Inbound Expected Scans
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator merge route transactions
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
@@ -264,7 +260,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Pending Return Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
@@ -314,7 +310,7 @@ Feature: Route Inbound Expected Scans
       | hubName | {hub-name}             |
     And DB Operator verifies inbound_scans record with type "2" and correct route_id
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Route Inbound Expected Scans : Reservation Pickups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
@@ -461,9 +457,9 @@ Feature: Route Inbound Expected Scans
       | status | SUCCESS |
     And Operator verify order event on Edit order page using data below:
       | name | PICKUP SUCCESS |
-#    TODO This event is absent
-#    And Operator verify order event on Edit order page using data below:
-#      | name | FROM DP TO DRIVER |
+    #    TODO This event is absent
+    #    And Operator verify order event on Edit order page using data below:
+    #      | name | FROM DP TO DRIVER |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |

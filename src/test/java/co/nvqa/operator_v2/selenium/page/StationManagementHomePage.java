@@ -57,7 +57,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
-  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//div[@class='icon']";
+  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//div[@class='icon']//span";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
@@ -945,8 +945,15 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" days ", ".").replaceAll(" hours ", "")
-            .replaceAll(" minutes", "");
+        value = value.replaceAll(" day ", ".")
+            .replaceAll(" days ", ".")
+            .replaceAll(" hours ", "")
+            .replaceAll(" hour ", "")
+            .replaceAll(" minutes", "")
+            .replaceAll(" minute", "");
+        if (!value.contains(".")) {
+          value = "0." + value;
+        }
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(

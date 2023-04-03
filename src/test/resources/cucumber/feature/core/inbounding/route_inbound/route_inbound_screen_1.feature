@@ -28,15 +28,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | <fetchBy>      |
       | fetchByValue | <fetchByValue> |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 0                      |
-      | wpCompleted | 1                      |
-      | wpTotal     | 1                      |
+      | routeId     | GET_FROM_CREATED_ROUTE           |
+      | driverName  | {ninja-driver-name}              |
+      | hubName     | {hub-name}                       |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
+      | wpPending   | 0                                |
+      | wpPartial   | 0                                |
+      | wpFailed    | 0                                |
+      | wpCompleted | 1                                |
+      | wpTotal     | 1                                |
     Examples:
       | Note        | hiptest-uid                              | fetchBy              | fetchByValue                    |
       | Route ID    | uid:a5f5fc7f-ee43-423a-a0f8-9e1193285952 | FETCH_BY_ROUTE_ID    | {KEY_CREATED_ROUTE_ID}          |
@@ -117,15 +117,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID} |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 4                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 3                      |
-      | wpCompleted | 3                      |
-      | wpTotal     | 10                     |
+      | routeId     | {KEY_CREATED_ROUTE_ID}           |
+      | driverName  | {ninja-driver-name}              |
+      | hubName     | {hub-name}                       |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
+      | wpPending   | 4                                |
+      | wpPartial   | 0                                |
+      | wpFailed    | 3                                |
+      | wpCompleted | 3                                |
+      | wpTotal     | 10                               |
 
   @DeleteOrArchiveRoute
   Scenario: Get Route Details by Route ID - Route with No Waypoints (uid:fc8b3c2d-a024-4cae-8bc1-b8377f056326)
@@ -192,15 +192,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_TRACKING_ID            |
       | fetchByValue | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID} |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 0                      |
-      | wpCompleted | 1                      |
-      | wpTotal     | 1                      |
+      | routeId     | {KEY_CREATED_ROUTE_ID}           |
+      | driverName  | {ninja-driver-name}              |
+      | hubName     | {hub-name}                       |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
+      | wpPending   | 0                                |
+      | wpPartial   | 0                                |
+      | wpFailed    | 0                                |
+      | wpCompleted | 1                                |
+      | wpTotal     | 1                                |
 
   @DeleteOrArchiveRoute
   Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: Only 1 Route_Id (uid:c77ab66c-7c1f-42bf-ac61-4a869be47651)
@@ -233,7 +233,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
       | driverName  | {ninja-driver-name}               |
       | hubName     | {hub-name}                        |
-      | routeDate   | GET_FROM_CREATED_ROUTE            |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}  |
       | wpPending   | 1                                 |
       | wpPartial   | 0                                 |
       | wpFailed    | 0                                 |
@@ -250,7 +250,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
       | driverName  | {ninja-driver-name}               |
       | hubName     | {hub-name}                        |
-      | routeDate   | GET_FROM_CREATED_ROUTE            |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}  |
       | wpPending   | 0                                 |
       | wpPartial   | 0                                 |
       | wpFailed    | 0                                 |
@@ -306,15 +306,15 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_DRIVER                |
       | fetchByValue | {KEY_CREATED_DRIVER.firstName} |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | {KEY_CREATED_ROUTE_ID}         |
-      | driverName  | {KEY_CREATED_DRIVER.firstName} |
-      | hubName     | {hub-name}                     |
-      | routeDate   | GET_FROM_CREATED_ROUTE         |
-      | wpPending   | 1                              |
-      | wpPartial   | 0                              |
-      | wpFailed    | 0                              |
-      | wpCompleted | 0                              |
-      | wpTotal     | 1                              |
+      | routeId     | {KEY_CREATED_ROUTE_ID}           |
+      | driverName  | {KEY_CREATED_DRIVER.firstName}   |
+      | hubName     | {hub-name}                       |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
+      | wpPending   | 1                                |
+      | wpPartial   | 0                                |
+      | wpFailed    | 0                                |
+      | wpCompleted | 0                                |
+      | wpTotal     | 1                                |
 
   @DeleteOrArchiveRoute @DeleteDriver
   Scenario: Get Route Details by Driver Name - Number of Route_Id > 1 (uid:62ce5fbf-6f11-4dff-85ce-7c4d45e418f2)
@@ -346,7 +346,7 @@ Feature: Route Inbound Screen 1
       | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
       | driverName  | {KEY_CREATED_DRIVER.firstName}    |
       | hubName     | {hub-name}                        |
-      | routeDate   | GET_FROM_CREATED_ROUTE            |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd}  |
       | wpPending   | 1                                 |
       | wpPartial   | 0                                 |
       | wpFailed    | 0                                 |

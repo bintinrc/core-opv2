@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @Recovery @EditOrder3
+@OperatorV2 @Core @EditOrder @Recovery @ResolveTicket @EditOrder3
 Feature: Resolve Recovery Ticket
 
   @LaunchBrowser @ShouldAlwaysRun

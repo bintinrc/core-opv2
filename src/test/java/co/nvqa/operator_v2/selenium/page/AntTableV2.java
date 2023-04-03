@@ -196,6 +196,7 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     }
   }
 
+
   public void clickColumn(int rowNumber, int columnId) {
     String xpath = f(CELL_LOCATOR_PATTERN_V2, rowNumber, columnId);
     if (StringUtils.isNotBlank(tableLocator)) {

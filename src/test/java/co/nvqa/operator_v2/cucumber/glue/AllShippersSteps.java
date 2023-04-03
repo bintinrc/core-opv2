@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -518,8 +519,8 @@ public class AllShippersSteps extends AbstractSteps {
         LOGGER.info("Set Start date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(
             value);
-        ZonedDateTime zdtEffectiveDate = ZonedDateTime.from(
-            DTF_NORMAL_DATE.withZone(ZoneId.systemDefault()).parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtEffectiveDate = date.atStartOfDay(ZoneId.systemDefault());
         pricing.setEffectiveDate(Date.from(zdtEffectiveDate.toInstant()));
       }
       value = data.get("endDate");
@@ -527,8 +528,8 @@ public class AllShippersSteps extends AbstractSteps {
         LOGGER.info("Set End date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(
             value);
-        ZonedDateTime zdtContractEndDate = ZonedDateTime.from(
-            DTF_NORMAL_DATE.withZone(ZoneId.systemDefault()).parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtContractEndDate = date.atStartOfDay(ZoneId.systemDefault());
         pricing.setContractEndDate(Date.from(zdtContractEndDate.toInstant()));
       }
       value = data.get("pricingScriptName");
@@ -1916,9 +1917,7 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
-    Pricing pricingProfile =
-        Objects.isNull(get(KEY_PRICING_PROFILE_DETAILS)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
-            : get(KEY_PRICING_PROFILE_DETAILS);
+    Pricing pricingProfile = get(KEY_CREATED_PRICING_PROFILE_OPV2);
 
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
     if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {

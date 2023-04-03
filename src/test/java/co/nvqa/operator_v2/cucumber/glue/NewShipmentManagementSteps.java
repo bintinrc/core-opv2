@@ -162,6 +162,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
   public void fillSearchShipmentsByIds(List<String> ids) {
     enterShipmentIds(ids);
     clickSearchByShipmentId();
+    page.waitUntilInvisibilityOfElementLocated("//span[@class='ant-btn-loading-icon']");
   }
 
   @When("Operator click Search by shipment id on Shipment Management page")
@@ -174,7 +175,7 @@ public class NewShipmentManagementSteps extends AbstractSteps {
 
   @When("Operator enters shipment ids on Shipment Management page:")
   public void enterShipmentIds(List<String> ids) {
-    String shipmentIds = Strings.join(resolveValues(ids)).with("\n");
+    String shipmentIds = Strings.join(resolveValues(ids)).with("\n").replace("[","").replace("]","").replace(",","\n");
     retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
       reloadPage();
       page.inFrame(() -> {

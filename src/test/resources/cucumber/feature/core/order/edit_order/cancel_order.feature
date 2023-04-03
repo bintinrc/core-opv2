@@ -28,6 +28,7 @@ Feature: Cancel Order
       | statusCode | 500               |
       | message    | Order is On Hold! |
 
+  @happy-path
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -431,7 +432,8 @@ Feature: Cancel Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Operator merge route transactions
+    And API Core - Operator merge routed waypoints:
+      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator get order details
     And API Operator verifies Delivery transactions of following orders have same waypoint id:
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |

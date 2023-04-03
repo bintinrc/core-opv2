@@ -1233,11 +1233,16 @@ public class PickupAppointmentJobStepsV2 extends AbstractSteps {
   @And("Operator open Route Manifest of created route {value} from Pickup Jobs page")
   public void operatorOpenRouteManifestOfCreatedRouteFromPickupJobPage(String routeId) {
 
-    pickupAppointmentJobPage.inFrame(() -> {
-      pickupAppointmentJobPage.bulkSelect.filterByColumnV2(COLUMN_ROUTE, routeId);
-      pickupAppointmentJobPage.bulkSelect.clickColumn(1, COLUMN_ROUTE_POS);
-    });
-    pickupAppointmentJobPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      pickupAppointmentJobPage.inFrame(() -> {
+        pickupAppointmentJobPage.bulkSelect.clickColumnRoute(resolveValue(routeId));
+
+        pickupAppointmentJobPage.switchToOtherWindowAndWaitWhileLoading(
+            "route-manifest/" + resolveValue(routeId));
+      });
+    }, 5000, 3);
+
+
   }
 
   @When("Operator click on Create Modify preset button in pickup appointment")

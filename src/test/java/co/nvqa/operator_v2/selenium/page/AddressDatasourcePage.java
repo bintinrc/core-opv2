@@ -4,7 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -51,7 +51,7 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   public TextBox postcode;
 
   @FindBy(css = "[data-testid='form-input-whitelist']")
-  public AntSelect3 whitelisted;
+  public AntSelect whitelisted;
 
   @FindBy(xpath = "//span[contains(text(), 'Province')] /following-sibling::span")
   public PageElement provinceAddRow;

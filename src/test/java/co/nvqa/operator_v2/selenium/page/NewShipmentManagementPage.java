@@ -72,7 +72,7 @@ public class NewShipmentManagementPage extends SimpleReactPage<NewShipmentManage
 
   public String inputUpdateMawbDestinationAirport = "//input[@id='updateMAWBForm_destination_airport_id']";
 
-  public ShipmentsTable shipmentsTable;
+  public static ShipmentsTable shipmentsTable;
   public ShipmentEventsTable shipmentEventsTable;
   public MovementEventsTable movementEventsTable;
 

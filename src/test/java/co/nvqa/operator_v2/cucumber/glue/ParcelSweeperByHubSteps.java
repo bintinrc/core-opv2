@@ -112,7 +112,7 @@ public class ParcelSweeperByHubSteps extends AbstractSteps {
       Order order = get(KEY_CREATED_ORDER);
       hubName = order.getDestinationHub();
     }
-    String color = mapOfData.get("color");
+    String color = mapOfData.get("textColor");
     parcelSweeperByHubPage.verifyDestinationHub(hubName, color);
   }
 

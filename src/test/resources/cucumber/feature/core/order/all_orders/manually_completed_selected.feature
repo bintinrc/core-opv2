@@ -5,7 +5,7 @@ Feature: All Orders - Manually Completed Selected
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Force Success Order on All Orders Page - End State = Completed (uid:0fa34155-b840-45c0-95eb-a789526c6e26)
+  Scenario: Operator Force Success Order on All Orders Page - End State = Completed
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -35,6 +35,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
+  @happy-path
   Scenario: Operator Force Success Multiple Orders on All Orders Page (uid:07e813db-12db-4861-a27f-f5a059f186af)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
@@ -79,7 +80,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD (uid:80acf3bd-c1c7-4a02-a21b-2008a5f91b84)
+  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
@@ -281,7 +282,7 @@ Feature: All Orders - Manually Completed Selected
       | note        | cod_amount | collected_amount | collected | uid                                      |
       | Collect COD | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
 
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
@@ -316,10 +317,10 @@ Feature: All Orders - Manually Completed Selected
       | expectedCodAmount | <collected_amount> |
 
     Examples:
-      | note               | cod_amount | collected_amount | collected | uid                                      |
-      | Do not Collect COD | 23.57      | 0                | false     | uid:850b6b66-82aa-45d8-bb7e-f3b602e27f8a |
+      | note               | cod_amount | collected_amount | collected |
+      | Do not Collect COD | 23.57      | 0                | false     |
 
-  Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD (uid:8ea6768c-87d4-4845-a769-e99985363cdf)
+  Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                                         |
@@ -403,7 +404,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - With RTS Normal Parcel (uid:a1f60a0f-31c6-4c5a-a59a-dba59f00e895)
+  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - With RTS Normal Parcel
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -428,7 +429,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS (uid:435ba8e7-bb4b-4b77-8dc8-e3fc66bc0dfc)
+  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -446,7 +447,7 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                       |
       | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
-  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page (uid:435ba8e7-bb4b-4b77-8dc8-e3fc66bc0dfc)
+  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

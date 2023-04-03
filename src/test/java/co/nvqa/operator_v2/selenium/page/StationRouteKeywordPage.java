@@ -200,7 +200,7 @@ public class StationRouteKeywordPage extends SimpleReactPage<StationRouteKeyword
     @FindBy(xpath = ".//table[@data-testid='simple-table']//tr[3]/td[2]")
     public PageElement fallbackDriver;
 
-    @FindBy(xpath = ".//label[contains(.,'keywords added')]")
+    @FindBy(xpath = ".//label[contains(.,'keyword(s) added')]")
     public PageElement keywordsAdded;
 
     @FindBy(xpath = ".//div[@data-testid='inner-element']//div[@role='gridcell']//span[@class]")

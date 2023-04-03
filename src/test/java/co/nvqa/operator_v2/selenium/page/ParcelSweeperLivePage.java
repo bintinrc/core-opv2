@@ -126,7 +126,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
   public void verifyPriorTag() {
     String actualTag = priorTag.getText();
-    Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("PRIOR");
+    Assertions.assertThat(actualTag).as("Prior tag").isEqualTo("Prior.");
   }
 
   public void selectHubToBeginWithTask(String hubName, String task) {

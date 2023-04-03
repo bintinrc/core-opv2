@@ -10,6 +10,7 @@ Feature: Change Delivery Timings
     When Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample
     Then Operator verify CSV file of Change Delivery Timings' sample
 
+  @happy-path
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page (uid:c45d09b1-9082-4e8d-86f6-1fee6987ea15)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -150,7 +151,7 @@ Feature: Change Delivery Timings
       | endDate    | {gradle-next-1-day-yyyy-MM-dd}   |
       | timewindow | 0                                |
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is assigned to a DP! Not allowed to change delivery timings. |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \|Delivery is assigned to a DP! Not allowed to change delivery timings. |
     And Operator click Close button on Change Delivery Timings page
 
   Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Past Date
@@ -165,7 +166,7 @@ Feature: Change Delivery Timings
       | endDate    | {gradle-previous-1-day-yyyy-MM-dd} |
       | timewindow | 0                                  |
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| cannot change delivery date before today's date |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \|cannot change delivery date before today's date |
     And Operator click Close button on Change Delivery Timings page
 
   Scenario: Operator Change Delivery Timings with Partial Failed Orders
@@ -186,7 +187,7 @@ Feature: Change Delivery Timings
     And Operator waits for 2 seconds
     And Operator submit uploaded CSV file on Change Delivery Timings page
     Then Operator verify errors on Change Delivery Timings page:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Invalid tracking id |
+      | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \|Invalid tracking id |
     And Operator click Close button on Change Delivery Timings page
     Then Operator verifies that success react notification displayed:
       | top                | 1 order(s) updated      |

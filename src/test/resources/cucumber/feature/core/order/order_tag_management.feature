@@ -5,6 +5,7 @@ Feature: Order Tag Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @happy-path
   Scenario: Add Tags to Order (uid:370389c7-d387-4f1d-9af8-57380c4c3d0d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -23,6 +24,7 @@ Feature: Order Tag Management
       | {order-tag-name-2} |
       | {order-tag-name-3} |
 
+  @happy-path
   Scenario: Remove Tags from Order (uid:1ea8fbc7-d934-4433-9cc2-3034f6d9ae2a)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
