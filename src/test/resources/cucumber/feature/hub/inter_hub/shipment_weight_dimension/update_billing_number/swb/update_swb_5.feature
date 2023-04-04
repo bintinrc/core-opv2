@@ -5,7 +5,7 @@ Feature: Update SWB 5 - MY
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -46,7 +46,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -87,7 +87,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -128,7 +128,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -169,7 +169,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -210,7 +210,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format K14B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -251,7 +251,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 7 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -292,7 +292,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 7 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -333,7 +333,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 7 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -374,7 +374,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 8 digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -415,7 +415,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 8 digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"
@@ -456,7 +456,7 @@ Feature: Update SWB 5 - MY
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for MY with format R11B + 8 digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Malaysia"

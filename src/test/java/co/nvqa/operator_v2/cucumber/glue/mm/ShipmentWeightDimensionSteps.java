@@ -42,6 +42,8 @@ import org.slf4j.LoggerFactory;
 
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_EXISTING_SHIPMENT_SWB;
 import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_SHIPMENT_SWB;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_MAWBS;
+import static co.nvqa.common.mm.cucumber.MiddleMileScenarioStorageKeys.KEY_MM_LIST_OF_CREATED_SWBS;
 import static co.nvqa.operator_v2.selenium.page.mm.shipmentweight.ShipmentWeightDimensionTablePage.Column.SHIPMENT_ID;
 
 @ScenarioScoped
@@ -859,6 +861,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
       mawb = "";
     }
     put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+    putInList(KEY_MM_LIST_OF_CREATED_MAWBS, mawb);
 
     shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
     shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
@@ -900,6 +903,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorTakeNoteOfTheExistingMawb() {
     String mawb = get(KEY_SHIPMENT_AWB);
     put(KEY_EXISTING_SHIPMENT_AWB, mawb);
+    putInList(KEY_MM_LIST_OF_CREATED_MAWBS, mawb);
     put(KEY_SHIPMENT_AWB, null);
     put(KEY_LIST_OF_CREATED_SHIPMENT_IDS, null);
   }
@@ -1058,6 +1062,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           mawb = "aI" + RandomStringUtils.randomNumeric(6);
         }
         put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+        putInList(KEY_MM_LIST_OF_CREATED_MAWBS, mawb);
 
         shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
         shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("vendor"));
@@ -1108,6 +1113,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           swb = "";
         }
         put(KEY_MM_SHIPMENT_SWB, swb);
+        putInList(KEY_MM_LIST_OF_CREATED_SWBS, swb);
 
         shipmentWeightDimensionUpdateMawbPage.swbInput.sendKeys(swb);
         shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.selectValue(dataTable.get("seahaulVendor"));
@@ -1126,6 +1132,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           mawb = "";
         }
         put(KEY_SHIPMENT_UPDATED_AWB, mawb);
+        putInList(KEY_MM_LIST_OF_CREATED_MAWBS, mawb);
         shipmentWeightDimensionUpdateMawbPage.mawbInput.sendKeys(mawb);
         shipmentWeightDimensionUpdateMawbPage.vendorSelect.selectValue(dataTable.get("airhaulVendor"));
         shipmentWeightDimensionUpdateMawbPage.originAirportSelect.selectValue(dataTable.get("originAirhaul"));
@@ -1142,6 +1149,7 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           swb = "";
         }
         put(KEY_MM_SHIPMENT_SWB, swb);
+        putInList(KEY_MM_LIST_OF_CREATED_SWBS, swb);
         shipmentWeightDimensionUpdateMawbPage.swbInput.sendKeys(swb);
         shipmentWeightDimensionUpdateMawbPage.seahaulVendorSelect.selectValue(dataTable.get("seahaulVendor"));
         shipmentWeightDimensionUpdateMawbPage.originSeaportSelect.selectValue(dataTable.get("originSeahaul"));
