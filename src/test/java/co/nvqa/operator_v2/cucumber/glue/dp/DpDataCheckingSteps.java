@@ -13,10 +13,14 @@ import co.nvqa.commons.model.dp.persisted_classes.LodgeInStatus;
 import co.nvqa.operator_v2.cucumber.glue.AbstractSteps;
 import co.nvqa.operator_v2.model.dp.DpOrderAnalytic;
 import co.nvqa.operator_v2.model.dp.DpOrderDetailsContent;
+import co.nvqa.operator_v2.model.dp.OrderCsvData;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
+import co.nvqa.operator_v2.selenium.page.DpDataCheckingPage;
 import io.cucumber.java.en.Then;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,13 +31,18 @@ import org.slf4j.LoggerFactory;
 
 public class DpDataCheckingSteps extends AbstractSteps {
 
+  private DpDataCheckingPage dpDataCheckingPage;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DpDataCheckingSteps.class);
 
   private static final String RESERVATION = "RESERVATION";
   private static final String LODGE_IN_ORDER = "LODGE_IN_ORDER";
   private static final String LODGE_IN_STATUS = "LODGE_IN_STATUS";
+  private static final String DP_JOB_ORDER = "DP_JOB_ORDER";
+  private static final String DP_JOB = "DP_JOB";
   private static final String CREATING_MULTIPLE_SEND_ORDER = "creating_multiple_send_order";
   private static final String CREATING_SEND_ORDER = "creating_send_order";
+  private static final String ORDER_REGULAR_PICKUP = "order_regular_pickup";
   private static final String CONFIRMED = "CONFIRMED";
   private static final String ORDER_DETAILS = "ORDER_DETAILS";
   private static final String PROCESSED = "PROCESSED";
@@ -45,7 +54,22 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
   @Override
   public void init() {
+    dpDataCheckingPage = new DpDataCheckingPage(getWebDriver());
+  }
 
+
+  @Then("Operator verified the order data is based on the data below:")
+  public void verifiedNewBulkUploadForThailandError(Map<String, String> dataTableAsMap) {
+    Map<String, String> map = resolveKeyValues(dataTableAsMap);
+    String[] reasons = map.get("reasonList").split("/");
+    List<String> reasonList = Arrays.asList(reasons);
+    pause2s();
+    String fileDir = dpDataCheckingPage.getLatestDownloadOrderDataPathFile();
+    final List<OrderCsvData> orderCsvData = OrderCsvData.fromCsvFile(
+        OrderCsvData.class,
+        fileDir, true);
+
+    dpDataCheckingPage.checkMsgFromRegularPickupCsv(reasonList,orderCsvData);
   }
 
   @Then("Ninja Point V3 verifies that the data from newly created order with DB table is right")
@@ -65,6 +89,21 @@ public class DpDataCheckingSteps extends AbstractSteps {
         setLodgeInStatusDataChecking(resolveValue(dataTableAsMap.get("condition")),
             resolveValue(dataTableAsMap.get("dataCheckFromDb")));
         break;
+
+      case DP_JOB_ORDER:
+        dpJobOrders = resolveValue(dataTableAsMap.get("dataCheckFromDb"));
+        dpJobOrderDataChecking(resolveValue(dataTableAsMap.get("condition")), dpJobOrders);
+        break;
+      case DP_JOB:
+        List<DpJob> dpJobs = resolveValue(
+            dataTableAsMap.get("dataCheckFromDb"));
+        dpJobOrders = resolveValue(
+            dataTableAsMap.get("dpJobOrderFromDb"));
+
+        dpJobDataChecking(dataTableAsMap.get("condition"),
+            dpJobs, dpJobOrders);
+        break;
+
 
       case ORDER_DETAILS:
         DpOrderDetail dpOrderDetails = resolveValue(dataTableAsMap.get("dataCheckFromDb"));
@@ -312,6 +351,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
     switch (conditionEnum) {
 
+      case ORDER_REGULAR_PICKUP:
       case CREATING_SEND_ORDER:
         Assertions.assertThat(dpJobOrders.get(0).getStatus())
             .as("dp_qa_gl/dp_job_orders: Status is PENDING")
@@ -332,6 +372,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
     final String COMPLETED = "COMPLETED";
 
     switch (conditionEnum) {
+      case ORDER_REGULAR_PICKUP:
       case CREATING_SEND_ORDER:
 
         if (dpJobs.get(0).getStatus().equals(ACTIVE)) {
@@ -349,6 +390,10 @@ public class DpDataCheckingSteps extends AbstractSteps {
         Assertions.assertThat(dpJobs.get(0).getId())
             .as("dp_qa_gl/dp_jobs: Id is same for each order")
             .isEqualTo(dpJobOrders.get(0).getDpJobId());
+        Assertions.assertThat(dpJobs.get(0).getDate())
+            .as(f("dp_qa_gl/dp_jobs: Date is %s",dpJobs.get(0).getDate()))
+            .isNotNull();
+
 
         break;
       default:
