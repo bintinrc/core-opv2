@@ -53,3 +53,9 @@ Feature: DP Administration - Distribution Point Partners
       | dpOrderAnalyticFromDb | KEY_LIST_DP_ORDER_ANALYTIC_DETAILS[1] |
       | order                 | KEY_CREATED_ORDER                     |
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+    Given Operator go to menu Order -> All Orders
+    And Operator waits for 5 seconds
+    When Operator disable granular status filter for "Pending Pickup"
+    And Operator waits for 5 seconds
+    And Operator press load selection button
+

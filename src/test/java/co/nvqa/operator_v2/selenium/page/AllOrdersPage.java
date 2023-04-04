@@ -6,6 +6,7 @@ import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCol
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -25,6 +26,8 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import io.cucumber.java.en.But;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -73,6 +76,12 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "nv-filter-box[main-title='Status']")
   public NvFilterBox statusFilter;
+
+  @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
+  public Button disablePendingPickup;
+
+  @FindBy(name = "commons.load-selection")
+  public NvApiTextButton loadSelection;
 
   @FindBy(css = "nv-filter-box[main-title='Granular Status']")
   public NvFilterBox granularStatusFilter;
@@ -153,7 +162,12 @@ public class AllOrdersPage extends OperatorV2SimplePage {
     addFilter.simpleSelectValue(value);
   }
 
-  public enum Category {
+  public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending Pickup", disablePendingPickup)
+      .build();
+
+
+    public enum Category {
     TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
     NAME("Name"),
     CONTACT_NUMBER("Contact Number"),

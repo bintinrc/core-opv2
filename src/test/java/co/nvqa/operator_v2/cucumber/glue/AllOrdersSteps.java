@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -879,6 +880,17 @@ public class AllOrdersSteps extends AbstractSteps {
     Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
         .as("Save button is enabled")
         .isFalse();
+  }
+
+  @When("Operator disable granular status filter for {string}")
+  public void disableGranularStatus(String granStatus) {
+    Objects.requireNonNull(allOrdersPage.disableGranStatusElement.get(granStatus)).click();
+  }
+
+  @When("Operator press load selection button")
+  public void pressLoadSelectionButton() {
+    allOrdersPage.loadSelection.waitUntilVisible();
+    allOrdersPage.loadSelection.click();
   }
 
   @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")
