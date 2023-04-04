@@ -159,6 +159,9 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(xpath = "//span[@role = 'img' and @aria-label = 'close']")
   public Button closeSearchBillingNumberPopup;
 
+  @FindBy(xpath = "//div[@class = 'ant-notification-notice-message' and contains(text(), 'Request failed with status code 404')]")
+  public PageElement errorStatusCode404;
+
   private static final String BILLING_NUMBER_RADIO_BUTTON = "//label[@class='ant-radio-wrapper']/span[contains(text(), '%s')]";
 
   public ShipmentWeightDimensionPage(WebDriver webDriver) {

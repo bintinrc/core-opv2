@@ -1410,10 +1410,20 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
     switch (billingNumberType) {
       case "MAWB":
         shipmentWeightDimensionPage.mawbBillingNumberInput.click();
+
+        if (newBillingNumberValue.equalsIgnoreCase("random")) {
+          newBillingNumberValue = RandomStringUtils.randomNumeric(7) + "-" + RandomStringUtils.randomNumeric(6);
+        }
+
         shipmentWeightDimensionPage.mawbBillingNumberInput.sendKeys(newBillingNumberValue);
         break;
       case "SWB":
         shipmentWeightDimensionPage.swbBillingNumberInput.click();
+
+        if (newBillingNumberValue.equalsIgnoreCase("random-r11b")) {
+          newBillingNumberValue = "R11B" + RandomStringUtils.randomNumeric(8);
+        }
+
         shipmentWeightDimensionPage.swbBillingNumberInput.sendKeys(newBillingNumberValue);
         break;
     }
@@ -1423,6 +1433,13 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
   public void operatorVerifiesThePopupIsClosedOnShipmentWeightDimensionPage() {
     shipmentWeightDimensionPage.waitUntilLoaded();
     shipmentWeightDimensionPage.verifyAddNewWeightDimensionNewUI();
+  }
+
+  @Then("Operator verifies error message {string} is shown on Shipment Weight Dimension page")
+  public void operatorVerifiesErrorMessageIsShownOnShipmentWeightDimensionPage(String errorMessage) {
+    shipmentWeightDimensionPage.errorStatusCode404.waitUntilVisible();
+    Assertions.assertThat(shipmentWeightDimensionPage.errorStatusCode404.getText())
+            .as("Verify error message toast is shown").isEqualTo(errorMessage);
   }
 }
 
