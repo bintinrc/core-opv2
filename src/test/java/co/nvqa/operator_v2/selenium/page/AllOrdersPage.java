@@ -80,6 +80,12 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
   public Button disablePendingPickup;
 
+  @FindBy(xpath = "//input[@class='md-datepicker-input']")
+  public TextBox datePickerInput;
+
+  @FindBy(css = "[aria-label='Submit']")
+  public PageElement submit;
+
   @FindBy(xpath = "//button//span[text()='Apply Action']")
   public Button buttonApplyAction;
 

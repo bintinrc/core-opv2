@@ -916,6 +916,17 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.applyActionOrder(action);
   }
 
+  @When("Operator set the pickup date for regular pickup at {string}")
+  public void setPickupDate(String date) {
+    allOrdersPage.datePickerInput.forceClear();
+    allOrdersPage.datePickerInput.setValue(resolveValue(date));
+  }
+
+  @When("Operator press submit regular pickup button")
+  public void pressSubmitRegulatPickupButton() {
+    allOrdersPage.submit.click();
+  }
+
   @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")
   public void verifyCancelIsEnabledInDeletePreset() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();

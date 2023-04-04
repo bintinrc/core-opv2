@@ -62,4 +62,5 @@ Feature: DP Administration - Distribution Point Partners
     Then Operator check the checkbox from created order
     Then Operator press Apply Action button
     Then Operator apply action for "Regular Pickup"
-
+    Then Operator set the pickup date for regular pickup at "{date: 0 days next, YYYY-MM-dd}"
+    Then Operator press submit regular pickup button
