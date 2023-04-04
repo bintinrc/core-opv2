@@ -80,8 +80,17 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
   public Button disablePendingPickup;
 
+  @FindBy(xpath = "//button//span[text()='Apply Action']")
+  public Button buttonApplyAction;
+
   @FindBy(name = "commons.load-selection")
   public NvApiTextButton loadSelection;
+
+  @FindBy(xpath = "//nv-search-input-filter[@search-text='filter.trackingId']//input")
+  public TextBox trackingIdFilter;
+
+  @FindBy(xpath = "//td[@class='column-checkbox']//md-checkbox")
+  public PageElement buttonCheckboxOrder;
 
   @FindBy(css = "nv-filter-box[main-title='Granular Status']")
   public NvFilterBox granularStatusFilter;
@@ -167,7 +176,7 @@ public class AllOrdersPage extends OperatorV2SimplePage {
       .build();
 
 
-    public enum Category {
+  public enum Category {
     TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
     NAME("Name"),
     CONTACT_NUMBER("Contact Number"),
@@ -290,6 +299,15 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         .map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
     Assertions.assertThat(listOfActualInvalidTrackingId).as("Expected Tracking ID not found.")
         .has(new Condition<>(l -> l.containsAll(listOfInvalidTrackingId), ""));
+  }
+
+  public void applyActionOrder(String action) {
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath(f("//button[@aria-label = '%s']",action)));
+    pause2s();
+
   }
 
   public void verifyOrderStatus(String trackingId, String expectedOrderStatus) {

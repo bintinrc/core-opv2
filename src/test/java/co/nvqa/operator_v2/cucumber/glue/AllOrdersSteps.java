@@ -893,6 +893,29 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.loadSelection.click();
   }
 
+  @When("Operator fill the tracking id filter with {string}")
+  public void pressLoadSelectionButton(String trackingId) {
+    allOrdersPage.trackingIdFilter.waitUntilVisible();
+    allOrdersPage.trackingIdFilter.setValue(resolveValue(trackingId));
+  }
+
+  @When("Operator check the checkbox from created order")
+  public void checkCheckbox() {
+    allOrdersPage.buttonCheckboxOrder.waitUntilVisible();
+    allOrdersPage.buttonCheckboxOrder.click();
+  }
+
+  @When("Operator press Apply Action button")
+  public void pressApplyActionButton() {
+    allOrdersPage.buttonApplyAction.waitUntilVisible();
+    allOrdersPage.buttonApplyAction.click();
+  }
+
+  @When("Operator apply action for {string}")
+  public void pressChooseApplyAction(String action) {
+    allOrdersPage.applyActionOrder(action);
+  }
+
   @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")
   public void verifyCancelIsEnabledInDeletePreset() {
     allOrdersPage.deletePresetDialog.waitUntilVisible();

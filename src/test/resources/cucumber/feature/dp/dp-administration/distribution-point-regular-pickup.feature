@@ -1,7 +1,7 @@
-@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP
+@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP @CWF
 Feature: DP Administration - Distribution Point Partners
 
-  @LaunchBrowser @ForceSuccessOrder @CompleteDpJob @CompleteDpReservations
+  @LaunchBrowser @ForceSuccessOrder @CompleteDpJob @CompleteDpReservations @RT
   Scenario: Regular pickup - Shipper drop off - Parcel status CONFIRMED - Success create new reservation
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-send-order-client-id}                                                                                                                                                                                                                                                                                                   |
@@ -58,4 +58,8 @@ Feature: DP Administration - Distribution Point Partners
     When Operator disable granular status filter for "Pending Pickup"
     And Operator waits for 5 seconds
     And Operator press load selection button
+    Then Operator fill the tracking id filter with "{KEY_CREATED_ORDER_TRACKING_ID}"
+    Then Operator check the checkbox from created order
+    Then Operator press Apply Action button
+    Then Operator apply action for "Regular Pickup"
 
