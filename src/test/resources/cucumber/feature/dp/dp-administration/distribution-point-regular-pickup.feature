@@ -1,7 +1,7 @@
-@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP @CWF
+@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP
 Feature: DP Administration - Distribution Point Partners
 
-  @LaunchBrowser @ForceSuccessOrder @CompleteDpJob @CompleteDpReservations @RT
+  @LaunchBrowser @ForceSuccessOrder @CompleteDpJob @CompleteDpReservations
   Scenario: Regular pickup - Shipper drop off - Parcel status CONFIRMED - Success create new reservation
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-send-order-client-id}                                                                                                                                                                                                                                                                                                   |
