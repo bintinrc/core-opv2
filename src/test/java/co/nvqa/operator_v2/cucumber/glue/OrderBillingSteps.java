@@ -130,6 +130,7 @@ public class OrderBillingSteps extends AbstractSteps {
 
   @Then("Operator verifies {string} is selected in Customized CSV File Template")
   public void operatorVerifiesIsSelectedInCustomizedCSVFileTemplate(String value) {
+    orderBillingPage.waitUntilLoaded();
     Assertions.assertThat(orderBillingPage.getCsvFileTemplateName())
         .as("file template name is selected and shown").isEqualTo(value);
   }
