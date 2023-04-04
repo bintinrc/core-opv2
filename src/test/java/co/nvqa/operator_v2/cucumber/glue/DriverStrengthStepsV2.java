@@ -343,12 +343,22 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     });
   }
 
+  @Then("Operator delete driver on Driver Strength page by userName {string}")
+  public void operatorDeleteCreatedDriverOnDriverStrengthPage(String userName) {
+    userName = resolveValue(userName);
+    String finalUserName = userName;
+    dsPage.inFrame(() -> {
+      dsPage.waitUntilTableLoaded();
+      dsPage.deleteDriver(finalUserName);
+    });
+  }
+
   @Then("Operator verify new driver is deleted successfully on Driver Strength page")
   public void operatorVerifyNewDriverIsDeletedSuccessfullyOnDriverStrengthPage() {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
       dsPage.filterBy(COLUMN_USERNAME, driverInfo.getUsername());
-     Assertions.assertThat(dsPage.verifyNoDataOnTable()).as("Table has no data").isTrue();
+      Assertions.assertThat(dsPage.verifyNoDataOnTable()).as("Table has no data").isTrue();
     });
     takesScreenshot();
     remove(KEY_CREATED_DRIVER_UUID);
