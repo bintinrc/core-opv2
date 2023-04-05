@@ -1763,9 +1763,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyTripMessageSuccessful(String expectedMessage) {
-    antNotificationMessage.waitUntilVisible();
-    String actualMessage = getAntTopTextV2();
-    Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      antNotificationMessage.waitUntilVisible();
+      String actualMessage = getAntTopTextV2();
+      Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
+    }, "Retrying until correct message is shown...", 1000, 10);
   }
 
   public void verifyButtonIsShown(String button) {
