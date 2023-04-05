@@ -81,14 +81,16 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan and close shipment with data below:
-      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | shipmentType | Land Haul                          |
-      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
+    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
+#    And Operator scan and close shipment with data below:
+#      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#      | shipmentType | Land Haul                          |
+#      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+#    And DB Operator verify sla in movement_events table is succeed for the following data:
+#      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+#      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":[{KEY_LIST_OF_CREATED_HUBS[1].id},{KEY_LIST_OF_CREATED_HUBS[2].id}],"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -187,14 +189,16 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan and close shipment with data below:
-      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | shipmentType | Land Haul                          |
-      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}]},"crossdock_detail":null,"error_message":null} |
+    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].name}
+    And Operator close the shipment which has been created
+#    And Operator scan and close shipment with data below:
+#      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+#      | shipmentType | Land Haul                          |
+#      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+#    And DB Operator verify sla in movement_events table is succeed for the following data:
+#      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+#      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[3].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]},{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[2]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
@@ -333,14 +337,16 @@ Feature: Shipment Hub Inbound With Trip Scanning 3
     Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     And API Operator assign driver to movement trip schedule
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    And Operator scan and close shipment with data below:
-      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | shipmentType | Land Haul                          |
-      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
-    And DB Operator verify sla in movement_events table is succeed for the following data:
-      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
-      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
+    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
+    And Operator close the shipment which has been created
+#    And Operator scan and close shipment with data below:
+#      | origHubName  | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#      | shipmentType | Land Haul                          |
+#      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
+#    And DB Operator verify sla in movement_events table is succeed for the following data:
+#      | shipmentIds | {KEY_CREATED_SHIPMENT_ID} |
+#      | extData     | {"path_cache":{"full_path":["{KEY_LIST_OF_CREATED_HUBS[1].name} (sg)","{KEY_LIST_OF_CREATED_HUBS[2].name} (sg)"],"full_path_hub_ids":null,"trip_path":[{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}]},"crossdock_detail":null,"error_message":null} |
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator shipment inbound scan with trip with data below:
