@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobsUpdateRoute
+@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobsUpdateRoute @UpdatePARoute
 Feature: Update route on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
