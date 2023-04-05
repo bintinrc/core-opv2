@@ -5,7 +5,7 @@ Feature: Update SWB 3
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with existing SWB - Update Vendor, Origin Seaport, and Destination Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -45,7 +45,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report - Update with same Vendor, Origin Seaport, and Destination Seaport from previous value
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -85,7 +85,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB - Create SWB Number with New SWB Number, Vendor, Origin Seaport, and Dest Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -116,7 +116,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB - Create SWB Number with New SWB Number, existing Vendor, Origin Seaport, and Dest Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -159,7 +159,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB - Create SWB Number with existing SWB Number, Vendor, Origin Seaport, and Dest Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -202,7 +202,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB - Create SWB Number with existing SWB Number, and new Vendor, Origin Seaport, and Dest Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -245,7 +245,7 @@ Feature: Update SWB 3
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB with Invalid Format
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -276,7 +276,7 @@ Feature: Update SWB 3
     Then Operator verifies Update Billing Number "SWB" page UI has error
       | seawayBillMessage | Invalid SWB Format |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Select SID from Sum up Report and Update SWB with Empty SWB Number
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

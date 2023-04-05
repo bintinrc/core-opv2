@@ -5,7 +5,7 @@ Feature: Update SWB 6 - PH
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for PH with format 5 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -46,7 +46,7 @@ Feature: Update SWB 6 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for PH with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -87,7 +87,7 @@ Feature: Update SWB 6 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for PH with format KMMT + 3 Digits uppercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -128,7 +128,7 @@ Feature: Update SWB 6 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for PH with format KMMT + 3 Digits mixcase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
@@ -169,7 +169,7 @@ Feature: Update SWB 6 - PH
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for PH with format KMMT + 3 Digits lowercase
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Philippines"
