@@ -51,14 +51,6 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destHubName  | {hub-name-temp-2}         |
       | shipmentType | Air Haul                  |
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
-#    Then Operator scan the created order to shipment in hub {hub-name-temp} to hub id = {hub-name-temp-2}
-#    And Operator close the shipment which has been created
-#    Given Operator go to menu Inter-Hub -> Add To Shipment
-#    And Operator close shipment with data below:
-#      | origHubName  | {hub-name-temp}           |
-#      | destHubName  | {hub-name-temp-2}         |
-#      | shipmentType | Air Haul                  |
-#      | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
     And Operator refresh page
     When Operator change the country to "Singapore"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -244,9 +236,6 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}         |
       | shipmentType | Land Haul                  |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-#    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-#    And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And API Operator depart trip with data below:
@@ -357,9 +346,6 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[2].name}         |
       | shipmentType | Land Haul                  |
       | shipmentId   | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]} |
-#    Then Operator scan the created order to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-#    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-#    And Operator close the shipment which has been created
     And Operator refresh page
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator fill Shipment Inbound Scanning page with data below:
