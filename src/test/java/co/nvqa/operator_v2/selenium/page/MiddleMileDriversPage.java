@@ -77,6 +77,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
     private static final String FIRST_NAME_INPUT_CREATE_DRIVER_ID = "first_name";
     private static final String LAST_NAME_INPUT_CREATE_DRIVER_ID = "last_name";
+    private static final String DISPLAY_NAME_INPUT_CREATE_DRIVER_ID = "display_name";
     private static final String HUB_INPUT_CREATE_DRIVER_ID = "hub_id";
     private static final String CONTACT_NUMBER_INPUT_CREATE_DRIVER_ID = "contact_number";
     private static final String LICENSE_NUMBER_INPUT_CREATE_DRIVER_ID = "license_number";
@@ -238,6 +239,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         addDriverModalTitle.waitUntilVisible();
         sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, FIRST_NAME_INPUT_CREATE_DRIVER_ID), firstName);
         sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, LAST_NAME_INPUT_CREATE_DRIVER_ID), lastName);
+        sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, DISPLAY_NAME_INPUT_CREATE_DRIVER_ID),
+            firstName + " " + lastName);
     }
 
     public void chooseHub(String hubName) {
