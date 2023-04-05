@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsSuccess
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsSuccess @BulkSuccessOnPickupJob
 Feature: bulk success job on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun

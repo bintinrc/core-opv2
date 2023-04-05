@@ -124,7 +124,7 @@ Feature: Preset on pickup jobs page
     When Operator verify Preset with name = "testCreateUsingNewStep" is not in pickup appointment
 
   @DeletePickupAppointmentJobPresetFilter
-  Scenario: Update preset Save as new preset filters on Pickup Jobs page
+  Scenario: Save as new preset filters on Pickup Jobs page
     Given API Lighthouse - Operator delete Pickup job preset with name = "automationCreateNewTestNew"
     Given API Lighthouse - Operator delete Pickup job preset with name = "automationCreateNewTest"
     Given API Operator create new Preset filters using data below:

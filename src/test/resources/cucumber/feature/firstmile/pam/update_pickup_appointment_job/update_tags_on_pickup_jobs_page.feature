@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PickupJobsUpdateTags
+@OperatorV2 @CoreV2 @PickupAppointment @PickupJobsUpdateTags @UpdatePATag
 Feature: Update tags on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun
