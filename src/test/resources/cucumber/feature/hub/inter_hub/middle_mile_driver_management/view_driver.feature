@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @ViewDriver @wip
+@OperatorV2 @MiddleMile @Hub @InterHub @MiddleMileDrivers @ViewDriver
 Feature: Middle Mile Driver Management - View Driver
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -15,7 +15,7 @@ Feature: Middle Mile Driver Management - View Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "id" with value "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
     When Operator clicks view button on the middle mile driver page
-#    Then Operator verifies that the details of the middle mile driver is true
+    Then Operator verifies details of driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

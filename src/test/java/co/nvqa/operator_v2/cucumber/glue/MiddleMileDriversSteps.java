@@ -672,4 +672,13 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     }, 1);
 
   }
+
+  @Then("Operator verifies details of driver {string} is correct")
+  public void operatorVerifiesDetailsOfDriverIsCorrect(String storageKey) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+    MiddleMileDriver mmd = getList(keyIdx.get("key"), MiddleMileDriver.class).get(
+        Integer.parseInt(keyIdx.get("idx"))).generateMiddleMileDriverWithTripData();
+    mmd.setDriver();
+    middleMileDriversPage.verifiesDataInViewModalIsTheSame(mmd.getDriver());
+  }
 }
