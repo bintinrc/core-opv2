@@ -1,11 +1,11 @@
-@OperatorV2 @DpAdministration @DistributionPointUsersReact @CIFFeatureFlagOn @OperatorV2Part1 @DpAdministrationV2 @CWF @DP
+@OperatorV2 @DpAdministration @DistributionPointUsersReact @CIFFeatureFlagOn @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration - Distribution Point Users
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteNewlyCreatedDpManagementPartnerAndDp @RT
+  @DeleteNewlyCreatedDpManagementPartnerAndDp
   Scenario Outline: DP Administration - Create DP User - Validation check - CIF Login - Feature Flag ON - <dataset_name>
     Given API Operator create new DP Management partner using data below:
       | createDpManagementPartnerRequest | { "name": "DP Users Test", "poc_name": "Diaz View User", "poc_tel": "DUSER00123","poc_email": "{default-partners-dp-user-email}","restrictions": "Test View DP","send_notifications_to_customer": false } |
