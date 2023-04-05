@@ -1258,6 +1258,14 @@ public class DpAdministrationReactPage extends SimpleReactPage<DpAdministrationR
         formDpUserLastName.setValue(value);
         formDpUserLastName.forceClear();
         break;
+      case "INFIRNME":
+        formDpUserFirstName.forceClear();
+        formDpUserFirstName.setValue(value);
+        break;
+      case "INLANME":
+        formDpUserLastName.forceClear();
+        formDpUserLastName.setValue(value);
+        break;
       case "CONTACT":
         formDpUserContact.forceClear();
         formDpUserContact.setValue(value);
