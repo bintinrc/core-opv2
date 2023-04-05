@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsFail
+@OperatorV2 @CoreV2 @PickupAppointment @BulkUpdatePickupJobsFail @BulkFailOnPickupJobPart2
 Feature: bulk fail job on pickup jobs page
 
   @LaunchBrowser @ShouldAlwaysRun

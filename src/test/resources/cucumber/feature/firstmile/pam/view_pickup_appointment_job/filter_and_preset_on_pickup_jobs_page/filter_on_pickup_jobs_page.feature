@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobPage1
+@OperatorV2 @CoreV2 @PickupAppointment @PickupAppointmentJobPage1 @FilterPA
 Feature: Pickup Appointment Job Page Part 1
 
   @LaunchBrowser @ShouldAlwaysRun

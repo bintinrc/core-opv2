@@ -6,7 +6,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Ready For Routing
+  Scenario: Delete pickup jobs on Pickup Jobs page calendar view - enabled - ready for routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -33,7 +33,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - Routed
+  Scenario: Delete pickup jobs on Pickup Jobs page calendar view - enabled - routed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -66,7 +66,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "CANCELLED" ,in pickup_appointment_jobs table
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - Enabled - In Progress
+  Scenario: Delete pickup jobs on Pickup Jobs page calendar view - enabled - in progress
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -126,7 +126,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
     Then Operator verify there is no Edit button in job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Delete Pickup Jobs on Pickup Jobs Page Calendar View - disabled - failed
+  Scenario: Delete pickup jobs on Pickup Jobs page calendar view - disabled - failed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |

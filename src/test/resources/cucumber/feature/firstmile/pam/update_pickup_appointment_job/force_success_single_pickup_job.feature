@@ -1,12 +1,12 @@
-@OperatorV2 @CoreV2 @PickupAppointment @ForceFailSinglePickupJob
-Feature: Force Fail Single Pickup Job
+@OperatorV2 @CoreV2 @PickupAppointment @ForceSuccessSinglePickupJob @ForceSuccessPAPart1
+Feature: Force Success Single Pickup Job
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Force Fail Single Pickup Job Routed With Photo
+  Scenario:Force Success Single Pickup Job Routed With Photo
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -28,23 +28,18 @@ Feature: Force Fail Single Pickup Job
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
-    When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
-    When Operator upload Fail proof photo on pickup appointment job
-    When Operator click proceed fail on pickup appointment job
-    Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Ninja Point - Delivery Parcel Damaged |
-    When Operator click submit button on pickup fail job
+    When Operator click success button in pickup job drawer
+    When Operator upload Success proof photo on pickup appointment job
+    When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Fail job successful                 |
+      | notificationMessage | Success job successful              |
       | jobID               | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "FAILED" ,in pickup_appointment_jobs table
+    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
-
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Force Fail Single Pickup Job In Progress With Photo
+  Scenario:Force Success Single Pickup Job In Progress With Photo
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -69,22 +64,18 @@ Feature: Force Fail Single Pickup Job
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
-    When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
-    When Operator upload Fail proof photo on pickup appointment job
-    When Operator click proceed fail on pickup appointment job
-    Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Ninja Point - Delivery Parcel Damaged |
-    When Operator click submit button on pickup fail job
+    When Operator click success button in pickup job drawer
+    When Operator upload Success proof photo on pickup appointment job
+    When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Fail job successful                 |
+      | notificationMessage | Success job successful              |
       | jobID               | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "FAILED" ,in pickup_appointment_jobs table
+    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "1" proof in proof_photos table
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Force Fail Single Pickup Job Routed With No Photo
+  Scenario:Force Success Single Pickup Job Routed With No Photo
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -106,22 +97,17 @@ Feature: Force Fail Single Pickup Job
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
-    When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
-    When Operator click proceed fail on pickup appointment job
-    Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Ninja Point - Delivery Parcel Damaged |
-    When Operator click submit button on pickup fail job
+    When Operator click success button in pickup job drawer
+    When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Fail job successful                 |
+      | notificationMessage | Success job successful              |
       | jobID               | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "FAILED" ,in pickup_appointment_jobs table
+    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
-    Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "0" proof in proof_photos table
-
+    Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has no proof in proof_photos table
 
   @deletePickupJob @DeleteShipperAddressCommonV2
-  Scenario:Force Fail Single Pickup Job In Progress With no Photo
+  Scenario:Force Success Single Pickup Job In Progress With no Photo
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
       | generateAddress | RANDOM                                          |
@@ -131,7 +117,7 @@ Feature: Force Fail Single Pickup Job
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{driver-id} } |
     Given API Driver - Driver login with username "{driver-username}" and "{driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    Given API Core - Operator add pickup job to the route using data below:
+    When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
       | addPickupJobToRouteRequest | {"new_route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"overwrite":false} |
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "IN_PROGRESS" ,in pickup_appointment_jobs table
@@ -146,18 +132,14 @@ Feature: Force Fail Single Pickup Job
     When Operator click edit icon for Pickup job row
     Then Operator check Fail button enabled in pickup job drawer
     Then Operator check Success button enabled in pickup job drawer
-    When Operator click Fail button in pickup job drawer
-    When Operator select from failure drop down number = "1", failure reason = "Ninja Point - Delivery Parcel Damaged"
-    When Operator click proceed fail on pickup appointment job
-    Then Operator check pickup fail modal for job id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has:
-      | Ninja Point - Delivery Parcel Damaged |
-    When Operator click submit button on pickup fail job
+    When Operator click success button in pickup job drawer
+    When Operator click submit button on pickup success job
     Then QA verify successful message is displayed with the jobID:
-      | notificationMessage | Fail job successful                 |
+      | notificationMessage | Success job successful              |
       | jobID               | {KEY_CONTROL_CREATED_PA_JOBS[1].id} |
-    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "FAILED" ,in pickup_appointment_jobs table
+    Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
-    Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has "0" proof in proof_photos table
+    Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has no proof in proof_photos table
 
 
   @KillBrowser @ShouldAlwaysRun

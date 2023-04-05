@@ -1,7 +1,6 @@
 @OperatorV2 @CoreV2 @PickupAppointment @SearchResultTable @tableFiltersPAMJobsSearchPart2
 Feature: filter on search result table column
 
-
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
