@@ -1105,6 +1105,12 @@ public class ShipmentWeightDimensionSteps extends AbstractSteps {
           swb = "K14b" + RandomStringUtils.randomNumeric(8);
         } else if (swb.equalsIgnoreCase("k14b-lower-8-random")) {
           swb = "k14b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k28b-upper-8-random")) {
+          swb = "K28B" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k28b-mix-8-random")) {
+          swb = "K28b" + RandomStringUtils.randomNumeric(8);
+        } else if (swb.equalsIgnoreCase("k28b-lower-8-random")) {
+          swb = "k28b" + RandomStringUtils.randomNumeric(8);
         } else if (swb.equalsIgnoreCase("invalid")) {
           swb = "00112233445566";
         } else if (swb.equalsIgnoreCase("alfabet")) {
