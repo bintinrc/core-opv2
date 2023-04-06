@@ -42,6 +42,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
   private static final String DP_JOB = "DP_JOB";
   private static final String CREATING_SEND_ORDER = "creating_send_order";
   private static final String CREATING_SEND_ORDER_RELEASED = "creating_send_order_released";
+  private static final String TRIGGER_DRIVER_COLLECT_RELEASED = "trigger_driver_collect_released";
   private static final String CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN = "creating_normal_order_after_driver_scan";
   private static final String ORDER_REGULAR_PICKUP = "order_regular_pickup";
   private static final String CONFIRMED = "CONFIRMED";
@@ -303,6 +304,23 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
         break;
 
+      case TRIGGER_DRIVER_COLLECT_RELEASED:
+        Assertions.assertThat(dpReservations.get(0).getBarcode())
+            .as(f("dp_qa_gl/dp_reservations: Barcode is %s", dpReservations.get(0).getBarcode()))
+            .isNotNull();
+
+        Assertions.assertThat(sdf.format(dpReservations.get(0).getCollectedAt()))
+            .as("dp_qa_gl/dp_reservations: Collected At is At Current Time")
+            .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
+
+        Assertions.assertThat(dpReservations.get(0).getReceivedFrom())
+            .as("dp_qa_gl/dp_reservations: Received From is Driver").isEqualTo(DRIVER);
+
+        Assertions.assertThat(dpReservations.get(0).getStatus())
+            .as("dp_qa_gl/dp_reservations: Status is Released").isEqualTo(RELEASED);
+
+        break;
+
       case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpReservations.get(0).getBarcode())
             .as(f("dp_qa_gl/dp_reservations: Barcode is %s", dpReservations.get(0).getBarcode()))
@@ -388,6 +406,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
         break;
 
+      case TRIGGER_DRIVER_COLLECT_RELEASED:
       case CREATING_SEND_ORDER_RELEASED:
         for (DpReservationEvent dpReservationEvent : dpReservationEvents) {
           if (dpReservationEvent.getName().equals("DP_RELEASED_TO_DRIVER")) {
@@ -435,6 +454,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
         break;
 
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
+      case TRIGGER_DRIVER_COLLECT_RELEASED:
       case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpJobOrders.get(0).getStatus())
             .as("dp_qa_gl/dp_job_orders: Status is SUCCESS")
@@ -480,6 +500,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
             .isNotNull();
         break;
 
+      case TRIGGER_DRIVER_COLLECT_RELEASED:
       case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpJobs.get(0).getStatus())
             .as("dp_qa_gl/dp_jobs: Status is Completed")
