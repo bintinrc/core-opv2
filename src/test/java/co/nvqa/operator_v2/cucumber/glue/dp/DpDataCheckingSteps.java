@@ -43,6 +43,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
   private static final String CREATING_SEND_ORDER = "creating_send_order";
   private static final String CREATING_SEND_ORDER_RELEASED = "creating_send_order_released";
   private static final String TRIGGER_DRIVER_COLLECT_RELEASED = "trigger_driver_collect_released";
+  private static final String TRIGGER_DRIVER_COLLECT = "trigger_driver_collect";
   private static final String CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN = "creating_normal_order_after_driver_scan";
   private static final String ORDER_REGULAR_PICKUP = "order_regular_pickup";
   private static final String CONFIRMED = "CONFIRMED";
@@ -321,6 +322,19 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
         break;
 
+      case TRIGGER_DRIVER_COLLECT:
+        Assertions.assertThat(dpReservations.get(0).getBarcode())
+            .as(f("dp_qa_gl/dp_reservations: Barcode is %s", dpReservations.get(0).getBarcode()))
+            .isNotNull();
+
+        Assertions.assertThat(dpReservations.get(0).getReceivedFrom())
+            .as("dp_qa_gl/dp_reservations: Received From is Driver").isEqualTo(DRIVER);
+
+        Assertions.assertThat(dpReservations.get(0).getStatus())
+            .as("dp_qa_gl/dp_reservations: Status is Confirmed").isEqualTo(CONFIRMED);
+
+        break;
+
       case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpReservations.get(0).getBarcode())
             .as(f("dp_qa_gl/dp_reservations: Barcode is %s", dpReservations.get(0).getBarcode()))
@@ -426,6 +440,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
         Assertions.assertThat(isExist).isTrue();
         break;
 
+      case TRIGGER_DRIVER_COLLECT:
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
         Assertions.assertThat(dpReservationEvents.get(0).getName())
             .as("dp_qa_gl/dp_reservation_events: Name is DRIVER_DROPPED_OFF")
@@ -455,6 +470,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
       case TRIGGER_DRIVER_COLLECT_RELEASED:
+      case TRIGGER_DRIVER_COLLECT:
       case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpJobOrders.get(0).getStatus())
             .as("dp_qa_gl/dp_job_orders: Status is SUCCESS")
@@ -476,6 +492,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
     final String ACTIVE = "ACTIVE";
     final String COLLECT = "COLLECT";
     final String COMPLETED = "COMPLETED";
+    final String DROP_OFF = "DROP_OFF";
 
     switch (conditionEnum) {
       case ORDER_REGULAR_PICKUP:
@@ -506,6 +523,17 @@ public class DpDataCheckingSteps extends AbstractSteps {
             .as("dp_qa_gl/dp_jobs: Status is Completed")
             .isEqualTo(COMPLETED);
         break;
+
+      case TRIGGER_DRIVER_COLLECT:
+        Assertions.assertThat(dpJobs.get(0).getStatus())
+            .as("dp_qa_gl/dp_jobs: Status is Completed")
+            .isEqualTo(COMPLETED);
+        Assertions.assertThat(dpJobs.get(0).getType())
+            .as("dp_qa_gl/dp_jobs: Status is DROP_OFF")
+            .isEqualTo(DROP_OFF);
+        break;
+
+
       default:
         LOGGER.warn("Condition is not valid");
     }

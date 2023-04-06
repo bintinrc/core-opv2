@@ -1,4 +1,4 @@
-@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP @CWF
+@OperatorV2 @DpAdministration @DistributionPointPartnersReact @OperatorV2Part1 @DpAdministrationV2 @EnableClearCache @DP
 Feature: DP Administration - Distribution Point Partners
 
   @LaunchBrowser @ForceSuccessOrder @CompleteDpJob @CompleteDpReservations
@@ -113,6 +113,26 @@ Feature: DP Administration - Distribution Point Partners
       | jobAction  | SUCCESS                                                                               |
       | jobMode    | DELIVERY                                                                              |
       | dpId       | {dp-send-order-id}                                                                    |
+    Given DB Operator gets all details for dp reservations by barcode from Hibernate
+      | orderTrackingId | {KEY_CREATED_ORDER.trackingId} |
+    And DB Operator gets all details for dp reservation events from Hibernate
+      | searchParameter | reservationId                             |
+      | reservations    | KEY_DATABASE_CHECKING_NINJA_COLLECT_ORDER |
+      | eventsName      | DRIVER_DROPPED_OFF                        |
+    And DB Operator gets all details of dp job orders from Hibernate
+      | searchParameter | trackingId                     |
+      | barcode         | {KEY_CREATED_ORDER.trackingId} |
+      | status          | SUCCESS                        |
+    And DB Operator gets all details of dp jobs from Hibernate
+      | searchParameter | id                                         |
+      | value           | {KEY_DATABASE_GET_DP_JOB_ORDER[1].dpJobId} |
+    And Ninja Point V3 verifies that the data from newly created order with DB table is right
+      | condition                 | trigger_driver_collect                    |
+      | dataChecking              | RESERVATION                               |
+      | dataCheckFromDb           | KEY_DATABASE_CHECKING_NINJA_COLLECT_ORDER |
+      | dpReservationEventsFromDb | KEY_DATABASE_GET_DP_RESERVATION_EVENTS    |
+      | dpJobOrderFromDb          | KEY_DATABASE_GET_DP_JOB_ORDER             |
+      | dpJobFromDb               | KEY_DATABASE_GET_DP_JOBS                  |
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Order -> All Orders
     And Operator waits for 5 seconds
