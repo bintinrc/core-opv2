@@ -199,7 +199,6 @@ public class RouteInboundNewPage extends OperatorV2SimplePage {
   }
 
   public void validateRouteSummaryText() {
-    waitWhilePageIsLoading();
     switchToFrame();
     routeSummaryHeadingText.waitUntilVisible(5);
     pause5s();
@@ -308,6 +307,7 @@ public class RouteInboundNewPage extends OperatorV2SimplePage {
   }
 
   public void validationOfErrorToastMessage(String message) {
+    pause2s();
     String Xpath = "//div[text()='" + message + "']";
     WebElement errorToastMessage = getWebDriver().findElement(By.xpath(Xpath));
     Assertions.assertThat(errorToastMessage.isDisplayed())
