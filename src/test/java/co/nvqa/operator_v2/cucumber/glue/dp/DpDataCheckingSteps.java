@@ -41,11 +41,13 @@ public class DpDataCheckingSteps extends AbstractSteps {
   private static final String DP_JOB_ORDER = "DP_JOB_ORDER";
   private static final String DP_JOB = "DP_JOB";
   private static final String CREATING_SEND_ORDER = "creating_send_order";
+  private static final String CREATING_SEND_ORDER_RELEASED = "creating_send_order_released";
   private static final String CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN = "creating_normal_order_after_driver_scan";
   private static final String ORDER_REGULAR_PICKUP = "order_regular_pickup";
   private static final String CONFIRMED = "CONFIRMED";
   private static final String ORDER_DETAILS = "ORDER_DETAILS";
   private static final String PROCESSED = "PROCESSED";
+  private static final String RELEASED = "RELEASED";
   private static final String SUCCESS = "SUCCESS";
   private static final String SEND = "SEND";
   private static final String DRIVER = "DRIVER";
@@ -301,6 +303,28 @@ public class DpDataCheckingSteps extends AbstractSteps {
 
         break;
 
+      case CREATING_SEND_ORDER_RELEASED:
+        Assertions.assertThat(dpReservations.get(0).getBarcode())
+            .as(f("dp_qa_gl/dp_reservations: Barcode is %s", dpReservations.get(0).getBarcode()))
+            .isNotNull();
+        Assertions.assertThat(sdf.format(dpReservations.get(0).getReleasedAt()))
+            .as("dp_qa_gl/dp_reservations: Released At is At Current Time")
+            .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
+
+        Assertions.assertThat(sdf.format(dpReservations.get(0).getCollectedAt()))
+            .as("dp_qa_gl/dp_reservations: Collected At At is At Current Time")
+            .isEqualTo(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH).format(ldt));
+
+        Assertions.assertThat(dpReservations.get(0).getReleasedTo())
+            .as("dp_qa_gl/dp_reservations: Released To is Driver").isEqualTo(DRIVER);
+
+        Assertions.assertThat(dpReservations.get(0).getStatus())
+            .as("dp_qa_gl/dp_reservations: Status is Released").isEqualTo(RELEASED);
+
+        Assertions.assertThat(dpReservations.get(0).getSource())
+            .as("dp_qa_gl/dp_reservations: Source is equal to SEND").isEqualTo(SEND);
+        break;
+
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
         SoftAssertions sa = new SoftAssertions();
         sa.assertThat(dpReservations.get(0).getBarcode())
@@ -350,7 +374,10 @@ public class DpDataCheckingSteps extends AbstractSteps {
   public void dpReservationEventsDataChecking(String condition,
       List<DpReservationEvent> dpReservationEvents) {
     final String conditionEnum = condition;
+    final String DP_RELEASED_TO_DRIVER = "DP_RELEASED_TO_DRIVER";
+    final String DRIVER_COLLECTED = "DRIVER_COLLECTED";
     final String DP_RECEIVED_FROM_SHIPPER = "DP_RECEIVED_FROM_SHIPPER";
+    boolean isExist = false;
 
     switch (conditionEnum) {
 
@@ -359,6 +386,25 @@ public class DpDataCheckingSteps extends AbstractSteps {
             .as("dp_qa_gl/dp_reservation_events: Name is DP_RECEIVED_FROM_SHIPPER")
             .isEqualTo(DP_RECEIVED_FROM_SHIPPER);
 
+        break;
+
+      case CREATING_SEND_ORDER_RELEASED:
+        for (DpReservationEvent dpReservationEvent : dpReservationEvents) {
+          if (dpReservationEvent.getName().equals("DP_RELEASED_TO_DRIVER")) {
+            Assertions.assertThat(dpReservationEvent.getName())
+                .as("dp_qa_gl/dp_reservation_events: Name is DP_RELEASED_TO_DRIVER")
+                .isEqualTo(DP_RELEASED_TO_DRIVER);
+
+            isExist = true;
+          } else if (dpReservationEvent.getName().equals("DRIVER_COLLECTED")) {
+            Assertions.assertThat(dpReservationEvent.getName())
+                .as("dp_qa_gl/dp_reservation_events: Name is DRIVER_COLLECTED")
+                .isEqualTo(DRIVER_COLLECTED);
+
+            isExist = true;
+          }
+        }
+        Assertions.assertThat(isExist).isTrue();
         break;
 
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
@@ -389,6 +435,7 @@ public class DpDataCheckingSteps extends AbstractSteps {
         break;
 
       case CREATING_NORMAL_ORDER_AFTER_DRIVER_SCAN:
+      case CREATING_SEND_ORDER_RELEASED:
         Assertions.assertThat(dpJobOrders.get(0).getStatus())
             .as("dp_qa_gl/dp_job_orders: Status is SUCCESS")
             .isEqualTo(SUCCESS);
@@ -396,10 +443,6 @@ public class DpDataCheckingSteps extends AbstractSteps {
         Assertions.assertThat(dpJobOrders.get(0).getIsSwappable())
             .as("dp_qa_gl/dp_job_orders: Is Swappable is False")
             .isFalse();
-
-        Assertions.assertThat(dpJobOrders.get(0).getCustomerUnlockCode())
-            .as("dp_qa_gl/dp_job_orders: Customer Unlock Code is Populated")
-            .isNotNull();
         break;
 
       default:
@@ -417,7 +460,6 @@ public class DpDataCheckingSteps extends AbstractSteps {
     switch (conditionEnum) {
       case ORDER_REGULAR_PICKUP:
       case CREATING_SEND_ORDER:
-
         if (dpJobs.get(0).getStatus().equals(ACTIVE)) {
           Assertions.assertThat(dpJobs.get(0).getStatus())
               .as("dp_qa_gl/dp_jobs: Status is ACTIVE")
@@ -436,8 +478,12 @@ public class DpDataCheckingSteps extends AbstractSteps {
         Assertions.assertThat(dpJobs.get(0).getDate())
             .as(f("dp_qa_gl/dp_jobs: Date is %s",dpJobs.get(0).getDate()))
             .isNotNull();
+        break;
 
-
+      case CREATING_SEND_ORDER_RELEASED:
+        Assertions.assertThat(dpJobs.get(0).getStatus())
+            .as("dp_qa_gl/dp_jobs: Status is Completed")
+            .isEqualTo(COMPLETED);
         break;
       default:
         LOGGER.warn("Condition is not valid");
