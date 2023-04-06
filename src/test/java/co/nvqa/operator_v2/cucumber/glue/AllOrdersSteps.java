@@ -889,6 +889,11 @@ public class AllOrdersSteps extends AbstractSteps {
     Objects.requireNonNull(allOrdersPage.disableGranStatusElement.get(granStatus)).click();
   }
 
+  @When("Operator disable status filter for {string}")
+  public void disableStatus(String status) {
+    Objects.requireNonNull(allOrdersPage.disableStatusElement.get(status)).click();
+  }
+
   @When("Operator press load selection button")
   public void pressLoadSelectionButton() {
     allOrdersPage.loadSelection.waitUntilVisible();

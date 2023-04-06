@@ -80,6 +80,9 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
   public Button disablePendingPickup;
 
+  @FindBy(xpath = "//button[@aria-label='Pending']/i")
+  public Button disablePending;
+
   @FindBy(xpath = "//input[@class='md-datepicker-input']")
   public TextBox datePickerInput;
 
@@ -179,6 +182,10 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()
       .put("Pending Pickup", disablePendingPickup)
+      .build();
+
+  public ImmutableMap<String, Button> disableStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending", disablePending)
       .build();
 
 

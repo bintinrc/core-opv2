@@ -118,6 +118,8 @@ Feature: DP Administration - Distribution Point Partners
     And Operator waits for 5 seconds
     When Operator disable granular status filter for "Pending Pickup"
     And Operator waits for 5 seconds
+    When Operator disable status filter for "Pending"
+    And Operator waits for 5 seconds
     And Operator press load selection button
     Then Operator fill the tracking id filter with "{KEY_CREATED_ORDER_TRACKING_ID}"
     Then Operator check the checkbox from created order
