@@ -25,6 +25,9 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   private static final String FILTER_BUTTON_XPATH = "//span[text()='%s']";
 
+  private static final String CLICKED_BUTTON = "//span[text()='%s' and contains(@class,'ant-tag-checkable-checked styled')]";
+  private static final String UNCLICKED_BUTTON = "//span[text()='%s' and contains(@class,'ant-tag ant-tag-checkable styled')]";
+
   public StationPendingPickupJobsPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -202,4 +205,25 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     String filterColumnXpath = f(FILTER_BUTTON_XPATH, buttonText);
     getWebDriver().findElement(By.xpath(filterColumnXpath)).click();
   }
+
+  public void validateButtonIsClicked(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String clickedButtonXpath = f(CLICKED_BUTTON, buttonText);
+    WebElement clickedButton = getWebDriver().findElement(By.xpath(clickedButtonXpath));
+    Assertions.assertThat(clickedButton.isDisplayed())
+        .as("Validation for " + buttonText + " button is clicked").isTrue();
+  }
+
+  public void validateButtonIsUnClicked(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String clickedButtonXpath = f(UNCLICKED_BUTTON, buttonText);
+    WebElement clickedButton = getWebDriver().findElement(By.xpath(clickedButtonXpath));
+    Assertions.assertThat(clickedButton.isDisplayed())
+        .as("Validation for " + buttonText + "  button is unclicked").isTrue();
+  }
+
 }

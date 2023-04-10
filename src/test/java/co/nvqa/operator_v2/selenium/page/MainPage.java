@@ -71,6 +71,7 @@ public class MainPage extends OperatorV2SimplePage {
     MAP_OF_END_URL.put("QRCode Printing", "qrcode-printing");
     MAP_OF_END_URL.put("Live Chat Admin Dashboard", "sns-live-chat");
     MAP_OF_END_URL.put("Notifications Management", "notifications");
+    MAP_OF_END_URL.put("Route Inbound (New)", "station-route-inbound");
   }
 
   public MainPage(WebDriver webDriver) {
