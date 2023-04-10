@@ -12,9 +12,9 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | province    | {province}                 |
-      | kota        | {kota}                     |
-      | kecamatan   | {kecamatan}                |
+      | province    | {province-3}          |
+      | kota        | {kota-3}              |
+      | kecamatan   | {kecamatan-3}         |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
@@ -55,9 +55,9 @@ Feature: Address Datasource
     When Operator clicks on Add a Row Button on Address Datasource Page
     And Operator fills address parameters in Add a Row modal on Address Datasource page:
       | latlong     | {latitude-1},{longitude-1} |
-      | province    | {province}                 |
-      | kota        | {kota}                     |
-      | kecamatan   | {kecamatan}                |
+      | province    | {province-3}          |
+      | kota        | {kota-3}              |
+      | kecamatan   | {kecamatan-3}         |
       | whitelisted | True                       |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
@@ -94,9 +94,9 @@ Feature: Address Datasource
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province  | {province}                |
-      | kota      | {kota}                    |
-      | kecamatan | {kecamatan}               |
+      | province  | {province-3}         |
+      | kota      | {kota-3}             |
+      | kecamatan | {kecamatan-3}        |
       | zone      | {KEY_ZONE_INFO.shortName} |
       | hub       | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
