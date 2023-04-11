@@ -116,21 +116,21 @@ Feature: Address Datasource
       | postcode    | {KEY_CREATED_ADDRESSING.postcode}    |
     When Operator clicks on Edit Button on Address Datasource Page
     And Operator fills address parameters in Edit Address modal on Address Datasource page:
-      | latlong     | {latitude-2},{longitude-2} |
-      | province    | {province-2}               |
-      | district    | {district-2}               |
-      | subdistrict | {subdistrict-2}            |
-      | postcode    | {postcode-2}               |
+      | latlong     | {latitude-4},{longitude-4} |
+      | province    | {province-4}               |
+      | district    | {district-4}               |
+      | subdistrict | {subdistrict-4}            |
+      | postcode    | {postcode-4}               |
       | whitelisted | False                      |
     When API Operator get Addressing Zone:
-      | latitude  | {latitude-2}  |
-      | longitude | {longitude-2} |
+      | latitude  | {latitude-4}  |
+      | longitude | {longitude-4} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | province    | {province-2}              |
-      | district    | {district-2}              |
-      | subdistrict | {subdistrict-2}           |
+      | province    | {province-4}              |
+      | district    | {district-4}              |
+      | subdistrict | {subdistrict-4}           |
       | zone        | {KEY_ZONE_INFO.shortName} |
       | hub         | {KEY_HUB_INFO.name}       |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -139,17 +139,16 @@ Feature: Address Datasource
       | body | 1 match edited     |
     When Operator refresh page
     When Operator search the existing address datasource:
-      | postcode | {postcode-2} |
+      | postcode | {postcode-4} |
     Then Operator verifies new address datasource is added:
-      | province    | {province-2}    |
-      | district    | {district-2}    |
-      | subdistrict | {subdistrict-2} |
-      | postcode    | {postcode-2}    |
-      | latitude    | {latitude-2}    |
-      | longitude   | {longitude-2}   |
+      | province    | {province-4}    |
+      | district    | {district-4}    |
+      | subdistrict | {subdistrict-4} |
+      | postcode    | {postcode-4}    |
+      | latitude    | {latitude-4}    |
+      | longitude   | {longitude-4}   |
       | whitelisted | False           |
-
-  @DeleteAddressDatasource
+  @TAG
   Scenario: TH Address Datasource - Edit Row Form - Delete
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
