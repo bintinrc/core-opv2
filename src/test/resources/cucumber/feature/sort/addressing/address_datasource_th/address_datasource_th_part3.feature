@@ -148,7 +148,7 @@ Feature: Address Datasource
       | latitude    | {latitude-4}    |
       | longitude   | {longitude-4}   |
       | whitelisted | False           |
-  @TAG
+
   Scenario: TH Address Datasource - Edit Row Form - Delete
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
