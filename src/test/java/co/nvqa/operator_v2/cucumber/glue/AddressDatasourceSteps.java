@@ -532,6 +532,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
 
     put(KEY_CREATED_ADDRESSING, addressing);
+    addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
   @When("Operator clicks on Save Button in Edit a Row modal on Address Datasource page")

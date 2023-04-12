@@ -103,7 +103,13 @@ Feature: Address Datasource
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match edited     |
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
+    When Operator search the created address datasource:
+      | province  | {KEY_CREATED_ADDRESSING.province} |
+      | kota      | {KEY_CREATED_ADDRESSING.city}     |
+      | kecamatan | {KEY_CREATED_ADDRESSING.district} |
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-2}, {longitude-2} |
       | zone    | {KEY_ZONE_INFO.shortName}   |
