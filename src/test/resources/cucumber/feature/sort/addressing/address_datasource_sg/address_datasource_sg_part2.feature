@@ -70,7 +70,7 @@ Feature: Address Datasource
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     Then Operator verifies the address datasource details in Row Details modal:
-      | postcode | {datasource-postcode-1}     |
+      | postcode | {datasource-postcode-1}   |
       | zone     | {KEY_ZONE_INFO.shortName} |
       | hub      | {KEY_HUB_INFO.shortName}  |
 
@@ -112,7 +112,7 @@ Feature: Address Datasource
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator clicks on Save Button in Edit a Row modal on Address Datasource page
     Then Operator verifies the address datasource details in Row Details modal:
-      | postcode | {datasource-postcode-2}     |
+      | postcode | {datasource-postcode-2}   |
       | zone     | {KEY_ZONE_INFO.shortName} |
       | hub      | {KEY_HUB_INFO.shortName}  |
     When Operator clicks on Proceed Button in Row Details modal on Address Datasource page
@@ -124,9 +124,9 @@ Feature: Address Datasource
       | postcode | {datasource-postcode-2} |
     Then Operator verifies new address datasource is added:
       | postcode    | {datasource-postcode-2} |
-      | latitude    | {latitude-2}          |
-      | longitude   | {longitude-2}         |
-      | whitelisted | True                  |
+      | latitude    | {latitude-2}            |
+      | longitude   | {longitude-2}           |
+      | whitelisted | True                    |
 
   Scenario: SG Address Datasource - Edit Row - with Empty Field
     Given Operator go to menu Utilities -> QRCode Printing
@@ -229,7 +229,7 @@ Feature: Address Datasource
       | longitude | {longitude-1} |
     And Operator get info of hub details string id "{KEY_ZONE_INFO.hubId}"
     When Operator search the existing address datasource:
-      | postcode | {datasource-postcode} |
+      | postcode | {datasource-postcode-1} |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-1}, {longitude-1} |
@@ -288,7 +288,7 @@ Feature: Address Datasource
       | postcode    | {datasource-postcode-2} |
       | latitude    | {latitude-1}            |
       | longitude   | {longitude-1}           |
-      | whitelisted | False                   |
+      | whitelisted | False                    |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

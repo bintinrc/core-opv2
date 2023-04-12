@@ -58,7 +58,7 @@ Feature: Address Datasource
       | province    | {province-3}          |
       | kota        | {kota-3}              |
       | kecamatan   | {kecamatan-3}         |
-      | whitelisted | True                       |
+      | whitelisted | True                  |
     When Operator clicks on Add Button in Add a Row modal on Address Datasource page
     When API Operator get Addressing Zone:
       | latitude  | {latitude-1}  |
@@ -103,6 +103,12 @@ Feature: Address Datasource
     And Operator verify the data source toast:
       | top  | Datasource Updated |
       | body | 1 match edited     |
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province    | {province-3}          |
+      | kota        | {kota-3}              |
+      | kecamatan   | {kecamatan-3}         |
     When Operator clicks on View Zone and Hub Match Button on Address Datasource Page
     Then Operator verifies the zone and hub details in View Zone and Hub Match modal:
       | latlong | {latitude-2}, {longitude-2} |
