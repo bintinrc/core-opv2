@@ -189,7 +189,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     String username = driverInfo.getUsername();
     dsPage.inFrame(() -> {
       if (!dsPage.isTableLoaded()) {
-        dsPage.click("//button[span[text()='Load Selection']]");
+        dsPage.loadSelection.click();
       }
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, username);
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
@@ -413,11 +413,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @Then("Operator load all data for driver on Driver Strength Page")
   public void operatorLoadAllData() {
-    final String loadSelectionXpath = "//button[span[text()='Load Selection']]";
     dsPage.inFrame(() -> {
       pause2s();
-      dsPage.waitUntilVisibilityOfElementLocated(loadSelectionXpath);
-      dsPage.click(loadSelectionXpath);
+      dsPage.loadSelection.waitUntilVisible();
+      dsPage.loadSelection.click();
     });
   }
 

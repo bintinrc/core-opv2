@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @RunThis @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -297,6 +297,7 @@ Feature: Driver Strength
     And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
     And  Operator removes contact details on Edit Driver dialog on Driver Strength page
+    And  Operator click Submit button in Update Driver dialog
     Then Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
 
   @DeleteDriver
@@ -399,7 +400,7 @@ Feature: Driver Strength
       | DriverType    |
       | Mitra - Fleet |
 
-  @RunThis @DeleteDriverType
+  @DeleteDriverType
   Scenario Outline: Can Not Create New Driver Account with Invalid Phone Number (uid:5012477c-39d3-419b-8aee-f6201203ef99)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
