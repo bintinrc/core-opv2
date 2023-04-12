@@ -6,8 +6,8 @@ Feature: Upload Invoiced Orders
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    And API Operator whitelist email "{order-billing-email}"
-    Given API Gmail - Operator connect to "{order-billing-email}" inbox using password "{order-billing-email-password}"
+    And API Operator whitelist email "{invoiced-orders-email}"
+    Given API Gmail - Operator connect to "{invoiced-orders-emai}" inbox using password "{invoiced-orders-email-password}"
     And operator marks gmail messages as read
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     When Upload Invoiced Orders page is loaded
