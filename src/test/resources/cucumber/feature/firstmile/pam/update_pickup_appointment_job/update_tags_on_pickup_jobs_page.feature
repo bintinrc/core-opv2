@@ -5,7 +5,7 @@ Feature: Update tags on pickup jobs page
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddress @HappyPath
   Scenario: Add jobs tag for single PA Job on pickup job page
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |

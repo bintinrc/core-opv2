@@ -6,7 +6,7 @@ Feature: bulk remove route on pickup jobs page
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @HappyPath
   Scenario:Bulk Update PA Job - Remove route - Routed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |

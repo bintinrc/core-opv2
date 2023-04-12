@@ -5,7 +5,7 @@ Feature: Delete pickup jobs on pickup jobs page calendar view
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @HappyPath
   Scenario: Delete pickup jobs on Pickup Jobs page calendar view - enabled - ready for routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
