@@ -227,17 +227,23 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     String notResignedXpath = "//div[@label='Not Resigned']";
     String resignedXPath = "//div[@label='Resigned']";
     String allXpath = "//div[@label='All']";
+    String selectResignedContainer = "//div[div[@label='All' or @label='Resigned' or @label='Not Resigned']]";
 
-    if (!isElementVisible(allXpath, 1)) {
-      this.resignedFilter.click();
+    resignedFilter.click();
+    waitUntilVisibilityOfElementLocated(By.xpath(selectResignedContainer));
+
+    if (resigned.equalsIgnoreCase("no") && isElementVisible(notResignedXpath)) {
+      click(notResignedXpath);
+    }
+    if (resigned.equalsIgnoreCase("yes") && isElementVisible(resignedXPath)) {
+      click(resignedXPath);
+    }
+    if (resigned.equalsIgnoreCase("all") && isElementVisible(allXpath)) {
       click(allXpath);
     }
 
-    this.resignedFilter.click();
-    if (resigned.equalsIgnoreCase("no")) {
-      click(notResignedXpath);
-    } else if (resigned.equalsIgnoreCase("yes")) {
-      click(resignedXPath);
+    if (isElementVisible(selectResignedContainer)) {
+      resignedFilter.click();
     }
   }
 
