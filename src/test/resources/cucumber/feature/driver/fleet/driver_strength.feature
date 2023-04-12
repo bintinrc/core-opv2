@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @RunThis @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -399,7 +399,7 @@ Feature: Driver Strength
       | DriverType    |
       | Mitra - Fleet |
 
-  @DeleteDriverType
+  @RunThis @DeleteDriverType
   Scenario Outline: Can Not Create New Driver Account with Invalid Phone Number (uid:5012477c-39d3-419b-8aee-f6201203ef99)
     Given Operator loads Operator portal home page
     And API Operator create new driver type with the following attributes:
@@ -407,6 +407,7 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -430,7 +431,7 @@ Feature: Driver Strength
 
     Examples:
       | VehicleType | ContactNumber    | ErrorMessage                                              |
-      | Bus         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
+      | Car         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
   @DeleteDriverType @DeleteDriver
   Scenario Outline: Can Not Update Driver Account with Invalid Phone Number (uid:1d5d6d06-3bc5-4a19-91f9-1a7e892f8bc6)
