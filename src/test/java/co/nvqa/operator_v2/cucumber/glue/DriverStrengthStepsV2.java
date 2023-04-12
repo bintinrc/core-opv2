@@ -278,6 +278,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @When("Operator filter driver strength using data below:")
   public void operatorFilterDriverStrengthUsingDataBelow(Map<String, String> map) {
+    dsPage.refreshPage();
     Map<String, String> data = resolveKeyValues(map);
     dsPage.inFrame(() -> {
       dsPage.loadSelection.waitUntilClickable();

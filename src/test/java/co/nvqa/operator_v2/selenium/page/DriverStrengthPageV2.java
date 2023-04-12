@@ -224,13 +224,20 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void clickResignedOption(String resigned) {
-    pause2s();
-    resignedFilter.click();
-    pause2s();
+    String notResignedXpath = "//div[@label='Not Resigned']";
+    String resignedXPath = "//div[@label='Resigned']";
+    String allXpath = "//div[@label='All']";
+
+    if (!isElementVisible(allXpath, 1)) {
+      this.resignedFilter.click();
+      click(allXpath);
+    }
+
+    this.resignedFilter.click();
     if (resigned.equalsIgnoreCase("no")) {
-      click("//div[@label='Not Resigned']");
-    } else {
-      click("//div[@label='Resigned']");
+      click(notResignedXpath);
+    } else if (resigned.equalsIgnoreCase("yes")) {
+      click(resignedXPath);
     }
   }
 

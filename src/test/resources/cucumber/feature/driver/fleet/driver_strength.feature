@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @RunThis @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -434,7 +434,7 @@ Feature: Driver Strength
       | VehicleType | ContactNumber    | ErrorMessage                                              |
       | Car         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
-  @DeleteDriverType @DeleteDriver
+  @RunThis @DeleteDriverType @DeleteDriver
   Scenario Outline: Can Not Update Driver Account with Invalid Phone Number (uid:1d5d6d06-3bc5-4a19-91f9-1a7e892f8bc6)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Strength
