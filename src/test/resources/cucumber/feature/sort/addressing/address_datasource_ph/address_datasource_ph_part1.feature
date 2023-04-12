@@ -144,7 +144,7 @@ Feature: Address Datasource
   Scenario: PH Address Datasource  Landing Page - Search Box No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
-    When Operator verifies search Scenariobutton is disabled
+    When Operator verifies search button is disabled
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

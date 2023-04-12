@@ -173,4 +173,17 @@ public class StationPendingPickupJobsSteps extends AbstractSteps {
   public void operatorClickFilterButton(String buttonText) {
     stationPendingPickupJobsPage.clickFilterButton(buttonText);
   }
+
+  @Then("Operator verifies that {string} button is in clicked status")
+  public void operatorVerifiesThatButtonIsInClickedStatus(String buttonText) {
+    stationPendingPickupJobsPage.validateButtonIsClicked(buttonText);
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that {string} button is in unclicked status")
+  public void operatorVerifiesThatButtonIsInUnClickedStatus(String buttonText) {
+    stationPendingPickupJobsPage.validateButtonIsUnClicked(buttonText);
+    takesScreenshot();
+  }
+
 }

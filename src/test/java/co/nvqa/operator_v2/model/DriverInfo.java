@@ -80,6 +80,17 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     return firstName;
   }
 
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    if ("GENERATED".equalsIgnoreCase(displayName)) {
+      displayName = "Station" + TestUtils.generateDateUniqueString();
+    }
+    this.displayName = displayName;
+  }
+
   public void setFirstName(String firstName) {
     if ("GENERATED".equalsIgnoreCase(firstName)) {
       firstName = "Driver";

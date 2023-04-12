@@ -32,6 +32,7 @@ import org.openqa.selenium.NoSuchElementException;
 import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.ACTION_REMOVE;
 import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.COLUMN_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.COLUMN_DRIVER_ID;
+import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.COLUMN_ORDER_TAGS;
 import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.COLUMN_PARCEL_SIZE;
 import static co.nvqa.operator_v2.selenium.page.StationRoutePage.ParcelsTable.COLUMN_TRACKING_ID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -325,6 +326,23 @@ public class StationRouteSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verify any parcel is displayed on Station Route page:")
+  public void verifyParcel(List<Map<String, String>> list) {
+    boolean found = false;
+    for (Map<String, String> data : list) {
+      try {
+        verifyParcel(data);
+        found = true;
+        break;
+      } catch (AssertionError err) {
+
+      }
+    }
+    Assertions.assertThat(found)
+        .withFailMessage("No one parcel record was not found: " + list)
+        .isTrue();
+  }
+
   @When("Operator verify parcels table is empty on Station Route page")
   public void verifyParcelsTableIsEmpty() {
     page.inFrame(() -> {
@@ -358,6 +376,9 @@ public class StationRouteSteps extends AbstractSteps {
       }
       if (StringUtils.isNotBlank(expected.getParcelSize())) {
         page.parcelsTable.filterByColumn(COLUMN_PARCEL_SIZE, expected.getParcelSize());
+      }
+      if (CollectionUtils.isNotEmpty(expected.getOrderTags())) {
+        page.parcelsTable.filterByColumn(COLUMN_ORDER_TAGS, expected.getOrderTags().get(0));
       }
       if (StringUtils.isNotBlank(expected.getDriverId())) {
         page.parcelsTable.filterByColumn(COLUMN_DRIVER_ID, expected.getDriverId());
@@ -444,6 +465,18 @@ public class StationRouteSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verify any area match is displayed on {int} position on Station Route page:")
+  public void verifyAreaMatch(int index, List<String> data) {
+    page.inFrame(() -> {
+      assertThat(page.areaMatch)
+          .as("Displayed row count")
+          .hasSizeGreaterThanOrEqualTo(index - 1);
+      assertThat(page.areaMatch.get(index - 1).getText())
+          .as("Area match in row %d", index)
+          .isIn(resolveValues(data));
+    });
+  }
+
   @When("Operator verify area match is not displayed on Station Route page")
   public void verifyNoAreaMatch() {
     page.inFrame(() -> assertThat(page.areaMatch)
@@ -452,6 +485,7 @@ public class StationRouteSteps extends AbstractSteps {
   }
 
   @When("Operator verify keyword match {value} is displayed in row {int} on Station Route page")
+  @When("Operator verify keyword match {value} is displayed on {int} position on Station Route page")
   public void verifyKeywordMatch(String value, int index) {
     page.inFrame(() -> {
       assertThat(page.keywordMatch)
@@ -460,6 +494,23 @@ public class StationRouteSteps extends AbstractSteps {
       assertThat(page.keywordMatch.get(index - 1).getText())
           .as("Keyword match in row %d", index)
           .isEqualTo(StringUtils.normalizeSpace(value));
+    });
+  }
+
+  @When("Operator verify any keyword match is displayed on {int} position on Station Route page:")
+  public void verifyKeywordMatch(int index, List<String> data) {
+    page.inFrame(() -> {
+      if (data.contains("empty") && page.keywordMatch.size() < index) {
+        return;
+      }
+      data.remove("empty");
+      assertThat(page.keywordMatch)
+          .as("Displayed row count")
+          .hasSizeGreaterThanOrEqualTo(index - 1);
+
+      assertThat(page.keywordMatch.get(index - 1).getText())
+          .as("Keyword match in row %d", index)
+          .isIn(resolveValues(data));
     });
   }
 
@@ -605,6 +656,25 @@ public class StationRouteSteps extends AbstractSteps {
   @When("Operator click Create routes button on Station Route page")
   public void clickCreateRoutesButton() {
     page.inFrame(() -> page.createRoutes.click());
+  }
+
+  @When("Operator verify errors are displayed on Station Route page:")
+  public void checkErrors(List<String> data) {
+    page.inFrame(() -> {
+      page.errorsDialog.waitUntilVisible();
+      Assertions.assertThat(page.errorsDialog.error.stream().map(PageElement::getText).collect(
+              Collectors.toList()))
+          .as("List of errors")
+          .containsExactlyInAnyOrderElementsOf(resolveValues(data));
+    });
+  }
+
+  @When("Operator click Cancel button in Error dialog on Station Route page")
+  public void clickCancelInErrorDialog() {
+    page.inFrame(() -> {
+      page.errorsDialog.waitUntilVisible();
+      page.errorsDialog.cancel.click();
+    });
   }
 
   @When("Operator assign {value} driver for {int} row parcel on Station Route page")
