@@ -832,5 +832,4 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     boolean isDisplayed = message.size() > 0;
     return isDisplayed;
   }
-
 }
