@@ -12,6 +12,7 @@ Feature: Driver Strength
       | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator create new Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -25,7 +26,7 @@ Feature: Driver Strength
       | contact              | GENERATED                                                        |
       | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 1                                                                |
-      | zoneMax              | 1                                                                |
+      | zoneMax              | 2                                                                |
       | zoneCost             | 1                                                                |
       | username             | GENERATED                                                        |
       | password             | GENERATED                                                        |
@@ -245,6 +246,7 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName         | GENERATED                                                        |
       | firstName           | GENERATED                                                        |
       | lastName            | GENERATED                                                        |
       | licenseNumber       | GENERATED                                                        |
@@ -328,6 +330,7 @@ Feature: Driver Strength
     Given Operator loads Operator portal home page
     When Operator go to menu Fleet -> Driver Strength
     And Operator create new Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -473,7 +476,7 @@ Feature: Driver Strength
     And API Operator create new driver type with the following attributes:
       | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}" } } |
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":2,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
     Then Operator verifies that the following buttons are displayed in driver strength page
       | Select Search Filters |
@@ -623,7 +626,7 @@ Feature: Driver Strength
 
     Examples:
       | Resigned | FileName                                                  | Message                                                                                           |
-      | No       | {update_driver_details_prefilled_csv_200_records_invalid} | You have exceeded the maximum no. of rows in a file upload. Please upload 200 accounts at a time. |
+      | No       | {update_driver_details_prefilled_csv_2000_records_invalid} | You have exceeded the maximum no. of rows in a file upload. Please upload 200 accounts at a time. |
 
   @CleanDownloadFolder
   Scenario Outline: Download Failure Reason of Failed Updated Driver
