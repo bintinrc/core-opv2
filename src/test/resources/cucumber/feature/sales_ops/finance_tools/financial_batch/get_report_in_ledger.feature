@@ -24,6 +24,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -81,6 +82,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -135,7 +137,7 @@ Feature: Get Report in Ledger
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 3.0    | CREDIT | Banking        | {"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"} | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} |
 
-  @DeleteNewlyCreatedShipper
+  @DeleteNewlyCreatedShipper @mad
   Scenario Outline: Get Report for All Orders in Batch - Batch Status is Completed (uid:7d8fa2e7-90cf-4fb7-9d48-21e055848bce)
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
@@ -152,6 +154,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -285,6 +288,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table

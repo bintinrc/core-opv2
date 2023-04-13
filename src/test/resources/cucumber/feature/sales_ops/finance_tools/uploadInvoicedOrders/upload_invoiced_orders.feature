@@ -6,8 +6,9 @@ Feature: Upload Invoiced Orders
 
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given API Operator whitelist email "{qa-email-address}"
-    Given operator marks gmail messages as read
+    And API Operator whitelist email "{invoiced-orders-email}"
+    Given API Gmail - Operator connect to "{invoiced-orders-emai}" inbox using password "{invoiced-orders-email-password}"
+    And operator marks gmail messages as read
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     When Upload Invoiced Orders page is loaded
 
@@ -48,7 +49,7 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
@@ -72,7 +73,7 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing Result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
@@ -114,12 +115,12 @@ Feature: Upload Invoiced Orders
       | created_at | notNull        |
       | updated_at | notNull        |
       | deleted_at | notNull        |
-    Then Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
 
-
+  @mad1
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -130,7 +131,7 @@ Feature: Upload Invoiced Orders
     And Operator upload a CSV file with below order ids and verify success message
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
-    Then Operator waits for 20 seconds
+    And Finance Operator waits for "{order-billing-wait-time}" seconds
     Then Operator opens Gmail and verifies email with below details
       | subject            | Invoicing Result                           |
       | body               | (Total failed: 0, Total not yet priced: 1) |
