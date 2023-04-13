@@ -5,7 +5,7 @@ Feature: Update route on pickup jobs page
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @HappyPath
   Scenario: Add route for single pickup job - Routed
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {premium-shipper-pickup-appointment-1-global-id} |

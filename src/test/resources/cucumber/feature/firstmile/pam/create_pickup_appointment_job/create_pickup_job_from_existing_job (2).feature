@@ -57,7 +57,7 @@ Feature: Create pickup jobs from existing job part 2
     Then Operator verifies job created success following data below:
       | timeSlot | {date: 2 days next, yyyy-MM-dd} - {gradle-next-3-day-yyyy-MM-dd} 18:00 - 22:00 |
 
-  @deletePickupJob @DeleteShipperAddress
+  @deletePickupJob @DeleteShipperAddress @HappyPath
   Scenario:Create new pickup job from existing job on Pickup Jobs page - job drawer
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |

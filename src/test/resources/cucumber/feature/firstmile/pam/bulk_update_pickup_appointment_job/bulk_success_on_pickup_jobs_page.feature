@@ -83,7 +83,7 @@ Feature: bulk success job on pickup jobs page
       | Error: Job {KEY_CONTROL_CREATED_PA_JOBS[1].id} cannot be success because its Route {KEY_LIST_OF_CREATED_ROUTES[1].id} is ARCHIVED |
     And Operator verifies Submit button is "disable" on Bulk Update Success Job page
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @HappyPath
   Scenario:Bulk Update PA Job - Success Job - with proof
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
