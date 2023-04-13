@@ -49,7 +49,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | {hub-name-23} | {hub-id-23} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
 
 
   Scenario Outline: View Order Details of Exception Cases Parcels (uid:36f6ec17-4e1d-4bcb-b99a-fd754118bf06)
@@ -96,7 +96,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType    | TicketSubType    | OrderOutcome    | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
+      | {hub-name-23} | {hub-id-23} | SHIPPER ISSUE | DUPLICATE PARCEL | PARCEL SCRAPPED | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Missing Ticket Not Appears in Exception Cases (uid:0af9d116-d7ec-449d-87ca-65e8697e294e)
     Given Operator loads Operator portal home page
@@ -140,7 +140,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | MISSING    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | {hub-name-23} | {hub-id-23} | MISSING    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   Scenario Outline: Damaged Ticket Not Appears in Exception Cases (uid:e03bc400-4f70-4192-b520-4621c9288617)
     Given Operator loads Operator portal home page
@@ -187,7 +187,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | DAMAGED    | Number of parcels with exception cases | Parcels with Exception Cases |
+      | {hub-name-23} | {hub-id-23} | DAMAGED    | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @ForceSuccessOrder
   Scenario Outline: View Hub Inbound Scanned Parcels with Exception Cases (uid:e4008185-20ef-483f-b786-854adf617c35)
@@ -238,7 +238,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName            | HubId            | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent |
-      | {hub-name-Global2} | {hub-id-Global2} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
+      | {hub-name-23} | {hub-id-23} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | HUB_INBOUND_SCAN |
 
   @ForceSuccessOrder
   Scenario Outline: View Parcel Routing Scanned Parcels with Exception Cases
@@ -293,7 +293,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent    |
-      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
+      | {hub-name-23} | {hub-id-23} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | PARCEL_ROUTING_SCAN |
 
   @ForceSuccessOrder @DeleteOrArchiveRoute
   Scenario Outline: View Route Inbound Scanned Parcels with Exception Cases (uid:40bdc110-b89a-4e87-a185-a648e51765af)
@@ -364,7 +364,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TicketType     | TicketSubType   | TileName                               | ModalName                    | LastScannedEvent   |
-      | {hub-name-3} | {hub-id-3} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | ROUTE_INBOUND_SCAN |
+      | {hub-name-23} | {hub-id-23} | PARCEL ON HOLD | SHIPPER REQUEST | Number of parcels with exception cases | Parcels with Exception Cases | ROUTE_INBOUND_SCAN |
 
   @ForceSuccessOrder
   Scenario Outline: Sort Parcels with Exception Cases Based on Last Scanned Time (uid:636ee061-6ab8-45d5-b012-98be24179d10)
@@ -376,7 +376,7 @@ Feature: Number of Parcels with Exception Cases
 
     Examples:
       | HubName      | HubId      | TileName                               | ModalName                    |
-      | {hub-name-3} | {hub-id-3} | Number of parcels with exception cases | Parcels with Exception Cases |
+      | {hub-name-23} | {hub-id-23} | Number of parcels with exception cases | Parcels with Exception Cases |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
