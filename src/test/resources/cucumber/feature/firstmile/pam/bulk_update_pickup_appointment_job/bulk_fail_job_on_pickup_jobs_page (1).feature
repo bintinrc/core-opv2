@@ -59,7 +59,7 @@ Feature: bulk fail job on pickup jobs page
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" has proof in proof_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[2].id}" has "0" proof in proof_photos table
 
-  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @ArchiveRouteCommonV2 @HappyPath
   Scenario:Bulk Update PA Job - Fail Job - with proof
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |

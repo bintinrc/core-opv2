@@ -5,6 +5,7 @@ Feature: Pickup Appointment Job - Bulk update on pickup jobs page
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
+  @HappyPath
   Scenario: Bulk select on Pickup Jobs page result table - select all shown
     When Operator goes to Pickup Jobs Page
     Given Operator clicks "Load Selection" button on Pickup Jobs page

@@ -181,7 +181,7 @@ Feature: Edit pickup jobs on Pickup Jobs page calendar view 1
     Then Operator verify Save button in disabled
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @HappyPath
   Scenario: Edit pickup appointment job - jobs timeslot - ready for routing
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
