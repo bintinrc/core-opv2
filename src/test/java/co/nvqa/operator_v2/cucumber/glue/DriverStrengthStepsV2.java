@@ -4,13 +4,11 @@ import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.NVDriversInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -616,9 +614,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
   @Then("Operator verifies that the notice/alert message: {string} is displayed")
   public void operatorVerifiesThatTheNoticeMessageIsDisplayed(String noticeMessage) {
     dsPage.inFrame(() -> {
-      boolean isDisplayed = dsPage.verifyNoticeDisplayed(noticeMessage);
-      Assertions.assertThat(isDisplayed)
-          .as(f("Assert that notice : %s  is displayed as expected!", noticeMessage)).isTrue();
+      dsPage.verifyNoticeDisplayed(noticeMessage);
     });
   }
 

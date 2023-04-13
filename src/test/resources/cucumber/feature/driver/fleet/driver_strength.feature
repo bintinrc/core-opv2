@@ -579,8 +579,8 @@ Feature: Driver Strength
     And Operator verifies that the notice message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                              | Message                                |
-      | No       | {update_driver_details_prefilled_csv} | Succesfully updated 1 drivers' details |
+      | Resigned | FileName                              | Message                                 |
+      | No       | {update_driver_details_prefilled_csv} | Successfully updated 1 drivers' details |
 
   Scenario Outline: Cannot Upload Non-CSV File for Bulk Update Drivers (uid:b675717c-bcd5-4fa2-9db0-f8057ba7c0f0)
     Given Operator loads Operator portal home page
@@ -625,7 +625,7 @@ Feature: Driver Strength
     And Operator verifies that the alert message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                                                  | Message                                                                                           |
+      | Resigned | FileName                                                   | Message                                                                                           |
       | No       | {update_driver_details_prefilled_csv_2000_records_invalid} | You have exceeded the maximum no. of rows in a file upload. Please upload 200 accounts at a time. |
 
   @CleanDownloadFolder
