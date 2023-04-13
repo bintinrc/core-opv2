@@ -9,6 +9,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -340,16 +341,19 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @Then("Operator verify driver strength is filtered by {string} driver type")
   public void operatorVerifyDriverStrengthIsFilteredByDriverType(String expectedDriverType) {
-    if ("GET_FROM_CREATED_DRIVER".equalsIgnoreCase(expectedDriverType)) {
-      DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-      expectedDriverType = driverInfo.getType();
+    List<String> rowDataTypes = new ArrayList<>();
+    String currentExpectedDriverType = expectedDriverType;
+    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
+    if (driverInfo.getType().equalsIgnoreCase(expectedDriverType)) {
+      currentExpectedDriverType = driverInfo.getType();
     }
-    final String exp = expectedDriverType;
+    final String exp = currentExpectedDriverType;
     dsPage.inFrame(() -> {
-      List<String> actualDriverTypes = dsPage.driversTable().readFirstRowsInColumn(COLUMN_TYPE, 10);
-      takesScreenshot();
-      Assertions.assertThat(actualDriverTypes).as("Driver Strength records list").isNotEmpty();
-      Assertions.assertThat(actualDriverTypes).as("Type values")
+      for (int i = 1; i <= 10; i++) {
+        rowDataTypes.add(dsPage.driversTable().readRow(i).get("dpmsId"));
+      }
+      Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
+      Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(driverType -> Assertions.assertThat(driverType).contains(exp));
     });
   }
