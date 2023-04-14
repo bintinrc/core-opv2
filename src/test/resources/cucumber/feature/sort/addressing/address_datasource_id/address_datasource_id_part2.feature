@@ -57,7 +57,7 @@ Feature: Address Datasource
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
-      | province | Jakarta |
+      | province | {province} |
     Then Operator verifies search box not affected by the scroll
 
   @DeleteAddressDatasource
