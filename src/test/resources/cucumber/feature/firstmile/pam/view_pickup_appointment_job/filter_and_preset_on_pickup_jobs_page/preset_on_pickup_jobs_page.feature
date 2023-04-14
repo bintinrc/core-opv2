@@ -5,7 +5,7 @@ Feature: Preset on pickup jobs page
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @DeletePickupAppointmentJobPresetFilter
+  @DeletePickupAppointmentJobPresetFilter @HappyPath
   Scenario: Create preset filters on Pickup Jobs page
     Given API Lighthouse - Operator delete Pickup job preset with name = "testPreset"
     Given Operator goes to Pickup Jobs Page

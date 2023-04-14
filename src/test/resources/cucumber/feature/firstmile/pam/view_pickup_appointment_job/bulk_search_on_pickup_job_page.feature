@@ -5,7 +5,7 @@ Feature: Bulk search on pickup jobs
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob @DeleteShipperAddressCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @HappyPath
   Scenario:Search pickup jobs by job ID on Pickup Jobs page - single valid ID
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |

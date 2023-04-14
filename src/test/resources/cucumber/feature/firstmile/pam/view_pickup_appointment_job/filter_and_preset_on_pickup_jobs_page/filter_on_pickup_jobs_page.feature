@@ -27,7 +27,7 @@ Feature: Pickup Appointment Job Page Part 1
       | jobServiceType | Scheduled                        |
       | jobStatus      | Ready for Routing, Routed        |
 
-  @FillInFilters
+  @FillInFilters @HappyPath
   Scenario: Fill in filters on Pickup Jobs page
     When Operator goes to Pickup Jobs Page
     Then QA verify filters on Pickup Jobs page are shown
@@ -73,6 +73,7 @@ Feature: Pickup Appointment Job Page Part 1
     Given Operator clicks "Load Selection" button on Pickup Jobs page
     Then Operator verifies the Table on Pickup Jobs Page
 
+  @HappyPath
   Scenario: View pickup jobs on Pickup Jobs page
     When Operator goes to Pickup Jobs Page
     Then QA verify filters on Pickup Jobs page are shown

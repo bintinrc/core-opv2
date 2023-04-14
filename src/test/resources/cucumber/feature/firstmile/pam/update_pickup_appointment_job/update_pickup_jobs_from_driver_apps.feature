@@ -5,7 +5,7 @@ Feature: update pickup jobs from driver apps
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{Operator-portal-uid}" and password = "{Operator-portal-pwd}"
 
-  @deletePickupJob
+  @deletePickupJob @HappyPath
   Scenario: Success pickup jobs on Driver Apps - Order with pickup
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {normal-shipper-pickup-appointment-1-client-id}                                                                                                                                                                                                                                                                                          |
@@ -43,7 +43,7 @@ Feature: update pickup jobs from driver apps
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOB_IDS[1]}" has proof in proof_jobs table
 
 
-  @deletePickupJob @DeleteShipperAddressCommonV2
+  @deletePickupJob @DeleteShipperAddressCommonV2 @HappyPath
   Scenario: Success pickup jobs on Driver Apps - PA Job
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
@@ -80,7 +80,7 @@ Feature: update pickup jobs from driver apps
     Then DB Control - verify pickup appointment job with id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" status = "COMPLETED" ,in pickup_appointment_jobs table
     Then DB Control - verify pickup appointment id = "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" has proof in proof_jobs table
 
-  @DeleteShipperAddressCommonV2   @deletePickupJob
+  @DeleteShipperAddressCommonV2  @deletePickupJob @HappyPath
   Scenario: Fail pickup jobs on Driver Apps - PA Job
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {normal-shipper-pickup-appointment-1-global-id} |
