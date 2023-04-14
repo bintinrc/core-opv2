@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @RunThis @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -175,7 +175,7 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
     Then Operator verify driver strength is filtered by "No" resigned
 
-  @RunThis @DeleteDriver
+  @DeleteDriver
   Scenario: Filter Driver Account by Edit Search Filter after Load Driver without using Search Filter first (uid:1083c42d-5fcb-4e08-a838-0072a7e1e36f)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
