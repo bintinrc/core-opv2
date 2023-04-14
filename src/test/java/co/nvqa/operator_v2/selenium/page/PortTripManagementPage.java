@@ -33,6 +33,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.JavascriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -340,6 +341,13 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   @FindBy(id = createFlightTrip_commentId)
   public PageElement createFlightTrip_comment;
 
+  // xpath = "//input[@data-testid = 'flight-number']"
+  @FindBy(id = createFlightTrip_flightNoId)
+  public TextBox editFlightTrip_flightNo;
+
+  @FindBy(xpath = "//textarea[@id = 'editForm_comment']")
+  public TextBox editFlightTrip_comment;
+
   @FindBy(css = "[data-testid$='confirm-button']")
   public Button confirmButton;
 
@@ -371,6 +379,10 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Load Trips appears in Port trip Management page").isTrue();
     Assertions.assertThat(loadTrips.isEnabled())
         .as("Load Trips button is disabled in Port trip Management page").isFalse();
+    Assertions.assertThat(createToFromAirportTrip.isEnabled())
+            .as("Create To/from Airport Trip button appear in Port Trip Management page").isTrue();
+    Assertions.assertThat(createFlightTrip.isEnabled())
+            .as("Create Flight Trip button appear in Port Trip Management page").isTrue();
     Assertions.assertThat(managePortFacility.isEnabled())
         .as("Manage Port Facility button appear in Port Trip Management page").isTrue();
     Assertions.assertThat(selectFacility.isDisplayed())
@@ -1596,10 +1608,12 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     switch (pageName) {
       case "Flight Trip":
         if (data.get("comment") != null) {
-          createFlightTrip_comment.clearAndSendKeys(data.get("comment"));
+          editFlightTrip_comment.clearAndSendkeysV2(data.get("comment"));
         }
         if (data.get("flight_no") != null) {
-          createFlightTrip_flightNo.clearAndSendKeys(data.get("flight_no"));
+          editFlightTrip_flightNo.click();
+          editFlightTrip_flightNo.clear();
+          editFlightTrip_flightNo.sendKeys(data.get("flight_no"));
         }
         if (data.get("mawb") != null) {
           if (!data.get("mawb").trim().equals("-")) {
