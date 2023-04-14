@@ -230,8 +230,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     String selectResignedContainer = "//div[div[@label='All' or @label='Resigned' or @label='Not Resigned']]";
 
     resignedFilter.click();
-    waitUntilVisibilityOfElementLocated(By.xpath(selectResignedContainer));
-
+    pause500ms();
     if (resigned.equalsIgnoreCase("no") && isElementVisible(notResignedXpath)) {
       click(notResignedXpath);
     }
@@ -714,13 +713,22 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     private static final String LOCATOR_COMING_VALUE = "//tr[contains(@class,'ant-table-row')][%d]//td[contains(@class,'ant-table-cell-fix-right')]//span[contains(@class,'ant-typography')]";
 
     public static final String COLUMN_ID = "id";
-    //    public static final String COLUMN_ID = "//span[@class='ant-table-filter-column-title']/div/div/span[.='Id']";
     public static final String COLUMN_USERNAME = "username";
+    public static final String COLUMN_DISPLAY_NAME = "displayName";
+
     public static final String COLUMN_TYPE = "type";
-    public static final String COLUMN_ZONE = "zoneId";
-    public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartName";
-    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndName";
-    public static final String COLUMN_RESIGNED = "resign";
+    public static final String COLUMN_ZONE_ID = "zoneId";
+    public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartDate";
+    public static final String COLUMN_EMPLOYMENT_END_DATE = "employmentEndDate";
+    public static final String COLUMN_RESIGNED = "resigned";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DPMS_ID = "dpmsId";
+    public static final String COLUMN_HUB = "hub";
+    public static final String COLUMN_VEHICLE_TYPE = "vehicleType";
+    public static final String COLUMN_VEHICLE_OWN = "vehicleOwn";
+    public static final String COLUMN_ZONE_MIN = "zoneMin";
+    public static final String COLUMN_ZONE_MAX = "zoneMax";
+    public static final String COLUMN_COMMENTS = "comments";
 
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_DELETE = "delete";
@@ -731,19 +739,20 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
       setColumnLocators(ImmutableMap.<String, String>builder()
           .put(COLUMN_ID, "2")
           .put(COLUMN_USERNAME, "3")
-          .put("name", "4")
-          .put("hub", "5")
-          .put(COLUMN_TYPE, "6")
-          .put("dpmsId", "7")
-          .put("vehicleType", "8")
-          .put("vehicleOwn", "9")
-          .put(COLUMN_ZONE, "10")
-          .put("zoneMin", "11")
-          .put("zoneMax", "12")
-          .put("comments", "13")
-          .put(COLUMN_EMPLOYMENT_START_DATE, "14")
-          .put(COLUMN_EMPLOYMENT_END_DATE, "15")
-          .put(COLUMN_RESIGNED, "16")
+          .put(COLUMN_DISPLAY_NAME, "4")
+          .put(COLUMN_NAME, "5")
+          .put(COLUMN_HUB, "6")
+          .put(COLUMN_TYPE, "7")
+          .put(COLUMN_DPMS_ID, "8")
+          .put(COLUMN_VEHICLE_TYPE, "9")
+          .put(COLUMN_VEHICLE_OWN, "10")
+          .put(COLUMN_ZONE_ID, "11")
+          .put(COLUMN_ZONE_MIN, "12")
+          .put(COLUMN_ZONE_MAX, "13")
+          .put(COLUMN_COMMENTS, "14")
+          .put(COLUMN_EMPLOYMENT_START_DATE, "15")
+          .put(COLUMN_EMPLOYMENT_END_DATE, "16")
+          .put(COLUMN_RESIGNED, "17")
           .build()
       );
       setActionButtonsLocators(ImmutableMap

@@ -4,7 +4,9 @@ import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.NVDriversInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
+import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable;
 import io.cucumber.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
@@ -17,10 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_RESIGNED;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE_ID;
 
 /**
  * @author Sergey Mishanin
@@ -206,7 +207,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.waitUntilTableLoaded();
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, expectedDriverInfo.getUsername());
       Map<String, String> actualDriverInfo = dsPage.driversTable.readRow(1);
-      if (expectedDriverInfo.getId() != null) {
+      if (StringUtils.isNotBlank(expectedDriverInfo.getId().toString())) {
         Assertions.assertThat(Long.parseLong(actualDriverInfo.get("id"))).as("Id")
             .isEqualTo(expectedDriverInfo.getId());
       }
@@ -215,40 +216,53 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
             .isEqualTo(expectedDriverInfo.getUsername());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getDisplayName())) {
-        Assertions.assertThat(actualDriverInfo.get("name")).as("Display Name")
+        Assertions.assertThat(actualDriverInfo.get("displayName")).as("Display Name")
             .isEqualTo(expectedDriverInfo.getDisplayName());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getFullName())) {
-        Assertions.assertThat(actualDriverInfo.get("hub")).as("Name")
+        Assertions.assertThat(actualDriverInfo.get("name")).as("Name")
             .isEqualTo(expectedDriverInfo.getFullName());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
-        Assertions.assertThat(actualDriverInfo.get("dpmsId")).as("Type")
+        Assertions.assertThat(actualDriverInfo.get("type")).as("Type")
             .isEqualTo(expectedDriverInfo.getType());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getDpmsId())) {
-        Assertions.assertThat(actualDriverInfo.get("vehicleType")).as("DPMS ID")
+        Assertions.assertThat(actualDriverInfo.get("dpmsId")).as("DPMS ID")
             .isEqualTo(expectedDriverInfo.getDpmsId());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getVehicleType())) {
-        Assertions.assertThat(actualDriverInfo.get("vehicleOwn")).as("Vehicle Type")
+        Assertions.assertThat(actualDriverInfo.get("vehicleType")).as("Vehicle Type")
             .isEqualTo(expectedDriverInfo.getVehicleType());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getHub())) {
-        Assertions.assertThat(actualDriverInfo.get("type")).as("Hub Id")
+        Assertions.assertThat(actualDriverInfo.get("hub")).as("Hub Id")
             .isEqualTo(expectedDriverInfo.getHub());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getZoneId())) {
-        Assertions.assertThat(actualDriverInfo.get("zoneMin")).as("Zone Id")
+        Assertions.assertThat(actualDriverInfo.get("zoneId")).as("Zone Id")
             .isEqualTo(expectedDriverInfo.getZoneId());
       }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMax().toString())) {
+        Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMax"))).as("Zone Max")
+            .isEqualTo(expectedDriverInfo.getZoneMax());
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMin().toString())) {
+        Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMin"))).as("Zone Min")
+            .isEqualTo(expectedDriverInfo.getZoneMin());
+      }
       if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
-        Assertions.assertThat(actualDriverInfo.get("employmentStartName")).as("Comments")
+        Assertions.assertThat(actualDriverInfo.get("comments")).as("Comments")
             .isEqualTo(expectedDriverInfo.getComments());
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentStartDate())) {
-        Assertions.assertThat(actualDriverInfo.get("employmentEndName")).as("Employment Start Date")
+        Assertions.assertThat(actualDriverInfo.get("employmentStartDate"))
+            .as("Employment Start Date")
             .isEqualTo(expectedDriverInfo.getEmploymentStartDate());
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentEndDate())) {
+        Assertions.assertThat(actualDriverInfo.get("employmentEndDate")).as("Employment Start Date")
+            .isEqualTo(expectedDriverInfo.getEmploymentEndDate());
       }
     });
     takesScreenshot();
@@ -269,7 +283,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
       zone = driverInfo.getZoneId();
     }
-    dsPage.filterBy(COLUMN_ZONE, zone);
+    dsPage.filterBy(COLUMN_ZONE_ID, zone);
   }
 
   @When("Operator filter driver strength by {string} driver type")
@@ -323,47 +337,46 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
   @Then("Operator verify driver strength is filtered by {string} zone")
   public void operatorVerifyDriverStrengthIsFilteredByZone(String expectedZone) {
-    if ("GET_FROM_CREATED_DRIVER".equalsIgnoreCase(expectedZone)) {
-      DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-      expectedZone = driverInfo.getZoneId();
-    }
-    final String exp = expectedZone;
+    List<String> rowDataTypes = new ArrayList<>();
+    final String currentExpectedZone = expectedZone;
     dsPage.inFrame(() -> {
-      List<String> actualZones = dsPage.driversTable().readFirstRowsInColumn(COLUMN_ZONE, 10);
-      takesScreenshot();
-      Assertions.assertThat(actualZones).as("Driver Strength records list").isNotEmpty();
-      Assertions.assertThat(actualZones).as("Zone values")
-          .allSatisfy(zone -> Assertions.assertThat(zone).contains(exp));
+      for (int i = 1; i <= 5; i++) {
+        rowDataTypes.add(dsPage.driversTable().readRow(i).get("zoneId"));
+      }
+      Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
+      Assertions.assertThat(rowDataTypes).as("Zone values")
+          .allSatisfy(
+              driverType -> Assertions.assertThat(driverType).contains(currentExpectedZone));
     });
   }
 
   @Then("Operator verify driver strength is filtered by {string} driver type")
   public void operatorVerifyDriverStrengthIsFilteredByDriverType(String expectedDriverType) {
     List<String> rowDataTypes = new ArrayList<>();
-    String currentExpectedDriverType = expectedDriverType;
-    DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
-    if (driverInfo.getType().equalsIgnoreCase(expectedDriverType)) {
-      currentExpectedDriverType = driverInfo.getType();
-    }
-    final String exp = currentExpectedDriverType;
+    final String currentExpectedDriverType = expectedDriverType;
     dsPage.inFrame(() -> {
       for (int i = 1; i <= 10; i++) {
-        rowDataTypes.add(dsPage.driversTable().readRow(i).get("dpmsId"));
+        rowDataTypes.add(dsPage.driversTable().readRow(i).get("type"));
       }
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
-          .allSatisfy(driverType -> Assertions.assertThat(driverType).contains(exp));
+          .allSatisfy(
+              driverType -> Assertions.assertThat(driverType).contains(currentExpectedDriverType));
     });
   }
 
   @Then("Operator verify driver strength is filtered by {string} resigned")
   public void operatorVerifyDriverStrengthIsFilteredByResigned(String expected) {
+    List<String> rowDataTypes = new ArrayList<>();
+    final String currentExpectedResigned = expected;
     dsPage.inFrame(() -> {
-      List<String> actualDriverTypes = dsPage.driversTable()
-          .readFirstRowsInColumn(COLUMN_RESIGNED, 10);
-      Assertions.assertThat(actualDriverTypes).as("Driver Strength records list").isNotEmpty();
-      Assertions.assertThat(actualDriverTypes).as("Type values")
-          .allSatisfy(driverType -> Assertions.assertThat(driverType).contains(expected));
+      for (int i = 1; i <= 10; i++) {
+        rowDataTypes.add(dsPage.driversTable().readRow(i).get("resigned"));
+      }
+      Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
+      Assertions.assertThat(rowDataTypes).as("Type values")
+          .allSatisfy(
+              driverType -> Assertions.assertThat(driverType).contains(currentExpectedResigned));
     });
   }
 
@@ -525,41 +538,46 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
         Assertions.assertThat(actualDriverInfo.get(0).getId()).as("Id")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("id")));
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("hub"))) {
+      if (StringUtils.isNotBlank(expectedDriverInfo.get("name"))) {
         Assertions.assertThat(actualDriverInfo.get(0).getName()).as("Full name")
+            .isEqualTo(String.valueOf(expectedDriverInfo.get("name")));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.get("hub"))) {
+        Assertions.assertThat(actualDriverInfo.get(0).getHub()).as("Hub ID")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("hub")));
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("type"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getHub()).as("Hub ID")
+        Assertions.assertThat(actualDriverInfo.get(0).getType()).as("Type")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("type")));
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("dpmsId"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getType()).as("Type")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("dpmsId")));
+      if (StringUtils.isNotBlank(expectedDriverInfo.get("vehicleType"))) {
+        Assertions.assertThat(actualDriverInfo.get(0).getVehicle()).as("Vehicle")
+            .isEqualTo(String.valueOf(expectedDriverInfo.get("vehicleType")));
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("vehicleOwn"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getVehicle()).as("Vehicle")
+        Assertions.assertThat(actualDriverInfo.get(0).getOwn()).as("Vehicle")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("vehicleOwn")));
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("employmentStartName"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getComments()).as("Comments")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("employmentStartName")));
-      }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("username"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getLicenseNumber()).as("License Number")
-            .isEqualTo(expectedDriverInfo.get("username"));
-      }
-      if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneMax"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getMinCapacity()).as("Min")
-            .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneMax")));
+        Assertions.assertThat(actualDriverInfo.get(0).getLicenseNumber())
+            .as("Vehicle License Number")
+            .isEqualTo(String.valueOf(expectedDriverInfo.get("username")));
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("comments"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getMaxCapacity()).as("Max")
+        Assertions.assertThat(actualDriverInfo.get(0).getComments()).as("Comments")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("comments")));
       }
       if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneMin"))) {
-        Assertions.assertThat(actualDriverInfo.get(0).getZone()).as("Zone ID")
+        Assertions.assertThat(actualDriverInfo.get(0).getMinCapacity()).as("Zone Min")
             .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneMin")));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneMax"))) {
+        Assertions.assertThat(actualDriverInfo.get(0).getMaxCapacity()).as("Zone Max")
+            .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneMax")));
+      }
+      if (StringUtils.isNotBlank(expectedDriverInfo.get("zoneId"))) {
+        Assertions.assertThat(actualDriverInfo.get(0).getZone()).as("Zone ID")
+            .isEqualTo(String.valueOf(expectedDriverInfo.get("zoneId")));
       }
     });
   }
@@ -627,5 +645,4 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.verifyFileDownloadedSuccessfully(resolvedFileName);
     });
   }
-
 }

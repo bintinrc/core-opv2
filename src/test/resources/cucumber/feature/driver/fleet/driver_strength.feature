@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverStrengthV2
 Feature: Driver Strength
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @RunThis @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -175,7 +175,7 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{driver-type-name}" driver type
     Then Operator verify driver strength is filtered by "No" resigned
 
-  @DeleteDriver
+  @RunThis @DeleteDriver
   Scenario: Filter Driver Account by Edit Search Filter after Load Driver without using Search Filter first (uid:1083c42d-5fcb-4e08-a838-0072a7e1e36f)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
@@ -346,7 +346,7 @@ Feature: Driver Strength
       | contact              | GENERATED                                                        |
       | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 1                                                                |
-      | zoneMax              | 1                                                                |
+      | zoneMax              | 2                                                                |
       | zoneCost             | 1                                                                |
       | username             | GENERATED                                                        |
       | password             | GENERATED                                                        |
@@ -360,7 +360,7 @@ Feature: Driver Strength
 
     Examples:
       | DriverType    | VehicleType | DpmsId    | ChangeType1 | ChangeType2 |
-      | Mitra - Fleet | Bus         | GENERATED | CREATE      | UPDATE      |
+      | Mitra - Fleet | Car         | GENERATED | CREATE      | UPDATE      |
 
   Scenario Outline: Update DPMS ID of Driver Account with DPMS ID (uid:6efb7bbd-58b8-4218-9a92-48804bb3a43a)
     Given Operator loads Operator portal home page
