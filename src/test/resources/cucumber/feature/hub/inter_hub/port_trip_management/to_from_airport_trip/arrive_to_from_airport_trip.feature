@@ -5,7 +5,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -49,7 +49,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Airport to Warehouse Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -93,7 +93,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Warehouse to Airport Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -138,7 +138,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Warehouse to Airport Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -183,7 +183,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Warehouse to Airport Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -229,7 +229,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Airport to Warehouse Trip with Expired Employment Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -274,7 +274,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Airport to Warehouse Trip with Expired License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -319,7 +319,7 @@ Feature: Airport Trip Management - Arrive To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETE" button is shown on Port Trip Management page
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriver @CancelTrip
   Scenario: Arrive Airport to Warehouse Trip with Expired Employment and License Date
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
