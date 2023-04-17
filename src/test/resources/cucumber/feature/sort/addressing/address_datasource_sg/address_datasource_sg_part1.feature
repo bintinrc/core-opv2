@@ -32,7 +32,7 @@ Feature: Address Datasource
       | postcode    | {datasource-postcode-1} |
       | latitude    | {latitude-1}            |
       | longitude   | {longitude-1}           |
-      | whitelisted | False                   |
+      | whitelisted | True                    |
 
   @DeleteAddressDatasource
   Scenario: SG Address Datasource - Add a Row with Valid Input
