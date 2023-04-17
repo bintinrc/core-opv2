@@ -1,10 +1,11 @@
 @OperatorV2 @Driver @Fleet @DriverTypeManagement
 Feature: Driver Type Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @RunThis @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @RunThis
   Scenario: Download CSV File of Driver Type (uid:76f6ba04-4f9c-46f7-b450-8b73f67a7b7b)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
@@ -26,7 +27,7 @@ Feature: Driver Type Management
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
-      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator get new Driver Type params on Driver Type Management page
     When Operator edit new Driver Type with the following attributes:
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss}Updatedname |

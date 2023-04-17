@@ -26,7 +26,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
-public class DriverTypeManagementPage extends OperatorV2SimplePage {
+public class DriverTypeManagementPage extends SimpleReactPage {
 
   private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
   private static final String CSV_FILENAME_PATTERN = "driver-types";
@@ -55,6 +55,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage {
 
   @FindBy(css = "md-dialog")
   public ConfirmDeleteDialog confirmDeleteDialog;
+
+  @FindBy(xpath = "//button[text()='Download CSV File']")
+  public Button btnDownloadSCV;
 
   public DriverTypeManagementPage(WebDriver webDriver) {
     super(webDriver);

@@ -32,7 +32,9 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @When("Operator click on Download CSV File button on Driver Type Management page")
   public void operatorClickOnDownloadCSVFileButtonOfDriverTypeManagementPage() {
-    dtmPage.downloadFile();
+    dtmPage.inFrame(() -> {
+      dtmPage.btnDownloadSCV.click();
+    });
   }
 
   @When("Operator get all Driver Type params on Driver Type Management page")
