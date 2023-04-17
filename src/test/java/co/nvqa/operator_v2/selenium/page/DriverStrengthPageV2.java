@@ -836,10 +836,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public boolean verifyNoticeDisplayed(String notice) {
     String noticeXpath = f(ALERT_MESSAGE_XPATH, notice);
-    Boolean isElementExist = isElementExist(noticeXpath);
-    Assertions.assertThat(isElementExist)
+    Boolean isExist = isElementExist(noticeXpath);
+    Assertions.assertThat(isExist)
         .as(f("Assert that notice : %s  is displayed as expected!", notice))
         .isTrue();
-    return isElementExist;
+    return isExist;
   }
 }

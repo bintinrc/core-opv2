@@ -11,12 +11,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_TYPE;
@@ -340,7 +342,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedZone = expectedZone;
     dsPage.inFrame(() -> {
-      for (int i = 1; i <= 5; i++) {
+      Integer totalRow = dsPage.findElementsBy(
+          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("zoneId"));
       }
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
@@ -355,9 +359,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedDriverType = expectedDriverType;
     dsPage.inFrame(() -> {
-      for (int i = 1; i <= 10; i++) {
+      Integer totalRow = dsPage.findElementsBy(
+          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("type"));
       }
+      
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
@@ -370,9 +377,12 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedResigned = expected;
     dsPage.inFrame(() -> {
-      for (int i = 1; i <= 10; i++) {
+      Integer totalRow = dsPage.findElementsBy(
+          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("resigned"));
       }
+      
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
