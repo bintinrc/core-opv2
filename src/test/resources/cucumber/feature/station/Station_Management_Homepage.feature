@@ -185,7 +185,6 @@ Feature: Station Management Homepage
       | Country  | HubName      | Header1                      | Header2 | PageName              | LinkName          |
       | Thailand | {hub-name-7} | Standard Operating Procedure | Reports | PCF Management System | Petty Cash Claims |
 
-  @Debug
   Scenario Outline: Be an FSR Ninja Training Navigation Panel - <dataset_name>
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
