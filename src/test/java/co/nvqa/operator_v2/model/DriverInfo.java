@@ -104,7 +104,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setLastName(String lastName) {
     if ("GENERATED".equalsIgnoreCase(lastName)) {
-      lastName = TestUtils.generateDateUniqueString();
+      lastName = "Auto";
     }
     this.lastName = lastName;
   }
@@ -276,7 +276,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setPassword(String password) {
     if ("GENERATED".equalsIgnoreCase(password)) {
-      password = "D00" + TestUtils.generateDateUniqueString();
+      password = "Ninjitsu89";
     }
     this.password = password;
   }
