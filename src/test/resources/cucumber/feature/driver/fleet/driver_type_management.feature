@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverTypeManagement
 Feature: Driver Type Management
 
-  @RunThis @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -21,7 +21,7 @@ Feature: Driver Type Management
     When Operator get new Driver Type params on Driver Type Management page
     Then Operator verify new Driver Type params
 
-  @RunThis @DeleteDriverType
+  @DeleteDriverType
   Scenario: Update Driver Type (uid:d47cf8da-5c64-4771-ad90-0ceed2f4bac0)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
