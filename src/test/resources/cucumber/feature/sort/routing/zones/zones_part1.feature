@@ -49,17 +49,20 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Delete Zone (uid:fa98df0c-2681-4c86-961b-de5a9ee19bdd)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator delete the new Zone
+    And Operator verifies that success react notification displayed:
+      | top | Zone Deleted Successfully |
+    And Operator refresh page
     Then Operator verify the new Zone is deleted successfully
 
   @DeleteCreatedZone
   Scenario: Operator View All Zones & Check All Zone Filters Work Fine
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
@@ -94,7 +97,7 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Operator Download and Verify Zone CSV File
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
@@ -106,7 +109,7 @@ Feature: Zones
   Scenario: Set Coordinates Polygon of Normal Zone
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     And Operator click View Selected Polygons for zone id "{KEY_CREATED_ZONE.id}"
