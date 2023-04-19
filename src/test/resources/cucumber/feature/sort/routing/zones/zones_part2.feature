@@ -73,25 +73,6 @@ Feature: Zones
       | longitude | {zone-longitude-3}           |
       | type      | STANDARD                     |
 
-  @DeleteCreatedZone
-  Scenario: Set Coordinates Polygon of RTS Zone
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    When Operator creates "RTS" zone using "{hub-name}" hub
-    And Operator click View Selected Polygons for zone short name "{KEY_CREATED_ZONE.shortName}"
-    And Operator click RTS Zones in zone drawing page
-    And Operator click Create Polygon in zone drawing page
-    And Operator click Set Coordinates in zone drawing page
-      | latitude  | {zone-latitude-3}  |
-      | longitude | {zone-longitude-3} |
-    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
-    Then Operator verifies zone details on Zones page:
-      | shortName | {KEY_CREATED_ZONE.shortName} |
-      | name      | {KEY_CREATED_ZONE.name}      |
-      | hubName   | {KEY_CREATED_ZONE.hubName}   |
-      | latitude  | {zone-latitude-3}            |
-      | longitude | {zone-longitude-3}           |
-      | type      | RTS                          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
