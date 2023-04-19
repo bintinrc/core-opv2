@@ -110,7 +110,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");

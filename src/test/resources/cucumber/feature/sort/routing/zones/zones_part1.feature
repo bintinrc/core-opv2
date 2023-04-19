@@ -80,7 +80,7 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Update Existing Zone Details
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
