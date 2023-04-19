@@ -210,7 +210,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
@@ -270,7 +270,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
           zone.getHubName());
