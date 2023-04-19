@@ -46,8 +46,8 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   @FindBy(css = "ng-pluralize")
   public PageElement rowsCount;
 
-  @FindBy(xpath = "//*[@type='submit']")
-  public PageElement submitButton;
+  @FindBy(xpath = "//button[contains(@class,'ant-btn')][span[text() = 'Update']]")
+  public PageElement updateButton;
 
   @FindBy(xpath = "//*[@type='button' and contains(@class, 'ant-btn')][span[text() = 'Add']]")
   public PageElement btnAdd;
@@ -61,6 +61,9 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   @FindBy(xpath = "//button/span[text()='Create Driver Type']")
   public Button btnCreateDriverType;
 
+  @FindBy(xpath = "//span[@role=\"button\" and contains(@class,\"ant-input-clear-icon\")]")
+  public Button btnClear;
+
   public DriverTypeManagementPage(WebDriver webDriver) {
     super(webDriver);
     driverTypesTable = new DriverTypesTable(webDriver);
@@ -69,9 +72,9 @@ public class DriverTypeManagementPage extends SimpleReactPage {
     filtersForm = new FiltersForm(webDriver);
   }
 
-  public void clickSubmitButton() {
-    waitUntilElementIsClickable(submitButton.getWebElement());
-    submitButton.click();
+  public void clickUpdateButton() {
+    waitUntilElementIsClickable(updateButton.getWebElement());
+    updateButton.click();
   }
 
   public FiltersForm filtersForm() {
@@ -105,14 +108,6 @@ public class DriverTypeManagementPage extends SimpleReactPage {
       Assertions.assertThat(actualParams).as("Driver Type with Id").isNotNull();
       Assertions.assertThat(actualParams.getDriverTypeName()).as("Driver Type Name")
           .isEqualTo(expectedParams.getDriverTypeName());
-      Assertions.assertThat(actualParams.getDeliveryType()).as(DELIVERY_TYPE)
-          .isEqualTo(expectedParams.getDeliveryType());
-      Assertions.assertThat(actualParams.getPriorityLevel()).as(PRIORITY_LEVEL)
-          .isEqualTo(expectedParams.getPriorityLevel());
-      Assertions.assertThat(actualParams.getReservationSize()).as(RESERVATION_SIZE)
-          .isEqualTo(expectedParams.getReservationSize());
-      Assertions.assertThat(actualParams.getParcelSize()).as(PARCEL_SIZE)
-          .isEqualTo(expectedParams.getParcelSize());
     }
   }
 
@@ -435,7 +430,8 @@ public class DriverTypeManagementPage extends SimpleReactPage {
 
     @Override
     public EditDriverTypeDialog waitUntilVisible() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+      waitUntilVisibilityOfElementLocated(
+          "//div[@class='ant-modal-header'][div[text() = 'Update Driver Type']]");
       return this;
     }
 

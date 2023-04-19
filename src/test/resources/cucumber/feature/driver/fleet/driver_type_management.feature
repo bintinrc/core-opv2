@@ -21,7 +21,7 @@ Feature: Driver Type Management
     When Operator get new Driver Type params on Driver Type Management page
     Then Operator verify new Driver Type params
 
-  @DeleteDriverType
+  @RunThis @DeleteDriverType
   Scenario: Update Driver Type (uid:d47cf8da-5c64-4771-ad90-0ceed2f4bac0)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
@@ -29,7 +29,7 @@ Feature: Driver Type Management
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator get new Driver Type params on Driver Type Management page
     When Operator edit new Driver Type with the following attributes:
-      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss}Updatedname |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss}-Updatedname |
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
@@ -42,7 +42,7 @@ Feature: Driver Type Management
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
 
-  @RunThis @DeleteDriverType @DeleteDriver
+  @DeleteDriverType @DeleteDriver
   Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management

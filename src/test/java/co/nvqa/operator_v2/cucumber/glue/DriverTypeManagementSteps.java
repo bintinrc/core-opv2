@@ -9,9 +9,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.By;
 
 /**
  * Modified by Sergey Mishanin
@@ -40,8 +42,16 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @When("Operator get all Driver Type params on Driver Type Management page")
   public void operatorGetAllDriverTypeParamsOnDriverTypeManagementPage() {
-    List<DriverTypeParams> params = dtmPage.driverTypesTable.readAllEntities();
-    put(KEY_LIST_OF_DRIVER_TYPE_PARAMS, params);
+    List<DriverTypeParams> params = new ArrayList<DriverTypeParams>();
+    dtmPage.inFrame(() -> {
+      Integer pageRow = dtmPage.findElementsBy(
+          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      for (int i = 1; i <= pageRow; i++) {
+        DriverTypeParams driverType = dtmPage.driverTypesTable.readEntity(i);
+        params.add(driverType);
+      }
+      put(KEY_LIST_OF_DRIVER_TYPE_PARAMS, params);
+    });
   }
 
   @Then("Downloaded CSV file contains correct Driver Types data")
@@ -63,13 +73,22 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @When("Operator edit new Driver Type with the following attributes:")
   public void operatorEditNewDriverTypeWithTheFollowingAttributes(Map<String, String> dataMap) {
-    DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
-    String searchString = driverTypeParams.getDriverTypeName();
-    driverTypeParams.fromMap(resolveKeyValues(dataMap));
-    dtmPage.searchDriverType.setValue(searchString);
-    dtmPage.driverTypesTable.clickActionButton(1, DriverTypesTable.ACTION_UPDATE);
-    dtmPage.editDriverTypeDialog.fillForm(driverTypeParams);
-    dtmPage.clickSubmitButton();
+    dtmPage.refreshPage();
+    dtmPage.waitUntilLoaded();
+    DriverTypeParams oldDriverType = get(KEY_DRIVER_TYPE_PARAMS);
+    DriverTypeParams newDriverType = new DriverTypeParams();
+    newDriverType.setDriverTypeName(resolveKeyValues(dataMap).get("driverTypeName"));
+    newDriverType.setDriverTypeId(oldDriverType.getDriverTypeId());
+    dtmPage.inFrame(() -> {
+      dtmPage.searchDriverType.setValue(oldDriverType.getDriverTypeName());
+      dtmPage.clickActionButtonOnTable(1, DriverTypesTable.ACTION_UPDATE);
+      dtmPage.editDriverTypeDialog.waitUntilVisible();
+      dtmPage.btnClear.click();
+      dtmPage.editDriverTypeDialog.fillForm(newDriverType);
+      dtmPage.clickUpdateButton();
+    });
+
+    put(KEY_DRIVER_TYPE_PARAMS, newDriverType);
   }
 
   @Then("Operator verify new Driver Type params")
@@ -137,12 +156,15 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @Then("Operator verify new Driver Type is deleted successfully")
   public void operatorVerifyNewDriverTypeIsDeletedSuccessfully() {
-    dtmPage.refreshPage();
     DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
-    dtmPage.searchDriverType.setValue(driverTypeParams.getDriverTypeName());
-    Assertions.assertThat(dtmPage.driverTypesTable.isTableEmpty())
-        .as("Created Driver Type was not deleted").isFalse();
-    remove(KEY_DRIVER_TYPE_ID);
+    dtmPage.refreshPage();
+    dtmPage.waitUntilLoaded();
+    dtmPage.inFrame(() -> {
+      dtmPage.searchDriverType.setValue(driverTypeParams.getDriverTypeName());
+      Assertions.assertThat(dtmPage.driverTypesTable.isTableEmpty())
+          .as("Created Driver Type was not deleted").isFalse();
+      remove(KEY_DRIVER_TYPE_ID);
+    });
     takesScreenshot();
   }
 
