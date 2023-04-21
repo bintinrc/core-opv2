@@ -106,6 +106,12 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   private static final String NOTIFICATION_ERROR_MESSAGES_XPATH = "(//div[contains(@class,'ant-notification-notice-description')]//span[normalize-space(.)])[3]";
   private static final String TOAST_ERROR_MESSAGES_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[normalize-space(.)]";
 
+  public static final String VIEW_MAWB_DETAIL_PAGE_XPATH = "//div/span[contains(text(),'%s')]";
+  public static final String VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH = "//div/span/strong[contains(text(),'Assigned MAWB on Flight Trip')]";
+
+  @FindBy(xpath = "//button/span[contains(text(), 'View MAWB')]")
+  public static Button viewMawb;
+
   @FindBy(xpath = "//input[@id='departure']")
   public PageElement departureInput;
 
@@ -2141,6 +2147,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
                 isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "assign-mawb-button"), 5))
             .as("Assign MAWB button is disabled on Airport Trip page").isTrue();
         break;
+      case "View MAWB":
+        Assertions.assertThat(
+                        isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "view-mawb-button"), 5))
+                .as("View MAWB button is disabled on Airport Trip page").isTrue();
+        break;
     }
   }
 
@@ -2215,6 +2226,38 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     String message = getAntTopText();
     Assertions.assertThat(message).as("Message is the same")
         .isEqualTo("Successfully assigned MAWB.");
+  }
+
+  public void clickButtonOnPortTripManagement(String buttonName) {
+    switch (buttonName) {
+      case "View MAWB":
+        viewMawb.waitUntilVisible();
+        viewMawb.click();
+        break;
+      case "Back":
+        backButton.waitUntilVisible();
+        backButton.click();
+        break;
+    }
+  }
+
+  public void verifyCanViewAssignedMAWBOnFlightTrip() {
+    waitUntilVisibilityOfElementLocated(VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH);
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "Flight Trip Origin - Destination Airport"), 5))
+            .as("Flight Trip Origin - Destination Airport appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "Flight Scheduled Departure Time"), 5))
+            .as("Flight Scheduled Departure Time appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH, 5))
+            .as("Assigned MAWB on Flight Trip appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "MAWB Origin - Destination Airport"), 5))
+            .as("MAWB Origin - Destination Airport appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "MAWB Vendor"), 5))
+            .as("MAWB Vendor appear in Airport Trip Management page").isTrue();
   }
 
 }

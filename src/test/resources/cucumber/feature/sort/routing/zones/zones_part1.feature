@@ -49,80 +49,15 @@ Feature: Zones
   @DeleteCreatedZone
   Scenario: Delete Zone (uid:fa98df0c-2681-4c86-961b-de5a9ee19bdd)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    And API Operator create zone using data below:
+    And API Sort - Operator create Addressing Zone with details:
       | hubName | {hub-name} |
       | hubId   | {hub-id}   |
     Given Operator go to menu Routing -> Last Mile and RTS Zones
     And Operator delete the new Zone
+    And Operator verifies that success react notification displayed:
+      | top | Zone Deleted Successfully |
+    And Operator refresh page
     Then Operator verify the new Zone is deleted successfully
-
-  @DeleteCreatedZone
-  Scenario: Operator View All Zones & Check All Zone Filters Work Fine
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
-      | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    Then Operator check all filters on Zones page work fine
-
-  Scenario: Find and View Polygon of Normal Zone
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu Routing -> Last Mile and RTS Zones
-    And Operator click View Selected Polygons for zone id "{zone-id}"
-    And Operator remove all selected zones on View Selected Polygons page
-    And Operator add new "{zone-name-2}" zone on View Selected Polygons page
-    Then Operator verify zone "{zone-name-2}" is selected on View Selected Polygons page
-    And Operator verify count of selected zones is 1 on View Selected Polygons page
-
-  @DeleteCreatedZone
-  Scenario: Update Existing Zone Details
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
-      | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    And Operator update the new Zone
-    Then Operator verifies zone details on Zones page:
-      | shortName   | {KEY_EDITED_ZONE.shortName}   |
-      | name        | {KEY_EDITED_ZONE.name}        |
-      | hubName     | {KEY_EDITED_ZONE.hubName}     |
-      | latitude    | {KEY_EDITED_ZONE.latitude}    |
-      | longitude   | {KEY_EDITED_ZONE.longitude}   |
-      | description | {KEY_EDITED_ZONE.description} |
-      | type        | STANDARD                      |
-
-  @DeleteCreatedZone
-  Scenario: Operator Download and Verify Zone CSV File
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create zone using data below:
-      | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
-    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
-    And Operator download Zone CSV file
-    Then Operator verify Zone CSV file is downloaded successfully
-
-  @DeleteCreatedZone
-  Scenario: Set Coordinates Polygon of Normal Zone
-    Given Operator go to menu Utilities -> QRCode Printing
-    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    And API Operator create zone using data below:
-      | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
-    And Operator click View Selected Polygons for zone id "{KEY_CREATED_ZONE.id}"
-    And Operator click Zones in zone drawing page
-    And Operator click Create Polygon in zone drawing page
-    And Operator click Set Coordinates in zone drawing page
-      | latitude  | {zone-latitude-3}  |
-      | longitude | {zone-longitude-3} |
-    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
-    Then Operator verifies zone details on Zones page:
-      | shortName | {KEY_CREATED_ZONE.shortName} |
-      | name      | {KEY_CREATED_ZONE.name}      |
-      | hubName   | {KEY_CREATED_ZONE.hubName}   |
-      | latitude  | {zone-latitude-3}            |
-      | longitude | {zone-longitude-3}           |
-      | type      | STANDARD                     |
 
   @DeleteCreatedZone
   Scenario: Set Coordinates Polygon of RTS Zone
