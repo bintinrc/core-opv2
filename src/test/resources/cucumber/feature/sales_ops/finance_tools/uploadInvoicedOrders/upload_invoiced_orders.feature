@@ -7,7 +7,7 @@ Feature: Upload Invoiced Orders
   Background: Login to Operator Portal V2  and go to Order Billing Page
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And API Operator whitelist email "{invoiced-orders-email}"
-    Given API Gmail - Operator connect to "{invoiced-orders-emai}" inbox using password "{invoiced-orders-email-password}"
+    Given API Gmail - Operator connect to "{invoiced-orders-email}" inbox using password "{invoiced-orders-email-password}"
     And operator marks gmail messages as read
     Given Operator go to menu Finance Tools -> Upload Invoiced Orders
     When Upload Invoiced Orders page is loaded
@@ -120,7 +120,6 @@ Feature: Upload Invoiced Orders
       | subject | Invoicing Result                           |
       | body    | All Tracking IDs are successfully invoiced |
 
-  @mad1
   Scenario: Upload Invoice Orders CSV - Some Orders are non-invoiced, Some Orders are non-priced neither non-invoiced (uid:531d9dea-0866-48e5-9fb8-522d029e696d)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |

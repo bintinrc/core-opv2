@@ -137,7 +137,7 @@ Feature: Get Report in Ledger
       | source   | account_id                                       | amount | type   | payment_method | payee_info                                                                                                                       | transaction_no                                             |
       | Netsuite | QA-SO-AUTO-{gradle-current-date-yyyyMMddHHmmsss} | 3.0    | CREDIT | Banking        | {"name": "QA-SO-AUTO-Payee","account_number": "QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd}","bank": "QA-SO-Bank"} | QA-SO-AUTO-{KEY_SHIPPER_ID}-{gradle-current-date-yyyyMMdd} |
 
-  @DeleteNewlyCreatedShipper @mad
+  @DeleteNewlyCreatedShipper
   Scenario Outline: Get Report for All Orders in Batch - Batch Status is Completed (uid:7d8fa2e7-90cf-4fb7-9d48-21e055848bce)
     Given API Operator create new 'normal' shipper
     And API Operator send below request to addPricingProfile endpoint for Shipper ID "{KEY_SHIPPER_ID}"
