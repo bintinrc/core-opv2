@@ -80,6 +80,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
     newDriverType.setDriverTypeName(resolveKeyValues(dataMap).get("driverTypeName"));
     newDriverType.setDriverTypeId(oldDriverType.getDriverTypeId());
     dtmPage.inFrame(() -> {
+      dtmPage.searchDriverType.setValue("");
       dtmPage.searchDriverType.setValue(oldDriverType.getDriverTypeName());
       dtmPage.clickActionButtonOnTable(1, DriverTypesTable.ACTION_UPDATE);
       dtmPage.editDriverTypeDialog.waitUntilVisible();
@@ -114,21 +115,35 @@ public class DriverTypeManagementSteps extends AbstractSteps {
 
   @Then("Operator search created Driver Type using ID")
   public void operatorSearchDriverTypeById() {
-    DriverTypeParams expected = get(KEY_DRIVER_TYPE_PARAMS);
-    dtmPage.searchDriverType.setValue(expected.getDriverTypeId());
-    DriverTypeParams actual = dtmPage.driverTypesTable.readEntity(1);
-    expected.compareWithActual(actual);
+    DriverTypeParams driverTypeName = get(KEY_DRIVER_TYPE_PARAMS);
+    dtmPage.refreshPage();
+    dtmPage.waitUntilLoaded();
+    dtmPage.inFrame(() -> {
+      dtmPage.searchDriverType.setValue(driverTypeName.getDriverTypeId());
+      DriverTypeParams actual = dtmPage.driverTypesTable.readEntity(1);
+
+      Assertions.assertThat(
+              actual.getDriverTypeName().equalsIgnoreCase(driverTypeName.getDriverTypeName()))
+          .as(f("Driver type: %s not found!", driverTypeName.getDriverTypeName())).isTrue();
+
+      Assertions.assertThat(
+              actual.getDriverTypeId().equals(driverTypeName.getDriverTypeId()))
+          .as(f("Driver id: %s not found!", driverTypeName.getDriverTypeId())).isTrue();
+    });
   }
 
   @Then("Operator verify all driver types are displayed on Driver Type Management page")
   public void operatorVerifyAllDriverTypesAreDisplayed() {
     List<DriverType> driverTypes = get(KEY_LIST_OF_DRIVER_TYPES);
-    String count = dtmPage.rowsCount.getText();
-    int actualCount = Integer.parseInt(count.split(" ")[0]);
-    Assertions.assertThat(actualCount).as("Driver Types count").isEqualTo(driverTypes.size());
-    Assertions.assertThat(dtmPage.driverTypesTable.getRowsCount() > 1).as("Driver Types rows count")
-        .isTrue();
-    takesScreenshot();
+    Integer expectedCount = driverTypes.size();
+    dtmPage.inFrame(() -> {
+      Integer actualCount = Integer.parseInt(dtmPage.rowsCount.getText());
+      Assertions.assertThat(actualCount > 1)
+          .as("Driver Types rows count")
+          .isTrue();
+      Assertions.assertThat(actualCount).as("Driver Types count").isEqualTo(expectedCount);
+      takesScreenshot();
+    });
   }
 
   @And("Operator get new Driver Type params on Driver Type Management page")

@@ -43,7 +43,7 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   @FindBy(xpath = "//input[@placeholder='Search']")
   public TextBox searchDriverType;
 
-  @FindBy(css = "ng-pluralize")
+  @FindBy(xpath = "//h3[contains(text(),'out of')]/strong")
   public PageElement rowsCount;
 
   @FindBy(xpath = "//button[contains(@class,'ant-btn')][span[text() = 'Update']]")
@@ -75,6 +75,7 @@ public class DriverTypeManagementPage extends SimpleReactPage {
   public void clickUpdateButton() {
     waitUntilElementIsClickable(updateButton.getWebElement());
     updateButton.click();
+    pause2s();
   }
 
   public FiltersForm filtersForm() {
@@ -165,6 +166,7 @@ public class DriverTypeManagementPage extends SimpleReactPage {
     pause2s();
     addDriverTypeDialog.fillForm(driverTypeParams);
     btnAdd.click();
+    pause2s();
   }
 
   public static class ConfirmDeleteDialog extends MdDialog {

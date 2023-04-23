@@ -92,7 +92,7 @@ Feature: Driver Type Management
 #      | Timeslot: 6PM to 10PM                  | uid:867017c2-566a-465f-b253-b78b52367824 | timeslot        | 6PM To 10PM          |
 
   @DeleteDriverType
-  Scenario: Search Driver Type by ID (uid:xxx)
+  Scenario: Search Driver Type by ID
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
@@ -101,7 +101,7 @@ Feature: Driver Type Management
     Then Operator search created Driver Type using ID
 
   @DeleteDriverType
-  Scenario: List All Driver Type (uid:xxx)
+  Scenario: List All Driver Type
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     When Operator create new Driver Type with the following attributes:
