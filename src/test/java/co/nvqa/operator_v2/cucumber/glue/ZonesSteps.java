@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -18,10 +18,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.commonsort.cucumber.KeysStorage.KEY_SORT_CREATED_ZONE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_DESCRIPTION;
@@ -110,7 +110,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");
@@ -181,7 +181,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator delete the new Zone")
   public void operatorDeleteTheNewZone() {
-    Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
+   Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zone.getName());
@@ -200,7 +200,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-    Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_CREATED_ZONE);
+   Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
@@ -210,7 +210,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
@@ -270,7 +270,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
           zone.getHubName());

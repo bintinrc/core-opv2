@@ -405,6 +405,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     isRtsWebElement = webDriver.findElements(By.xpath(IS_RTS_COLUMN_XPATH));
 
     for (WebElement we : isRtsWebElement) {
+      scrollIntoView(we);
       if (YES.equalsIgnoreCase(we.getText())) {
         isRtsFound = true;
         break;
