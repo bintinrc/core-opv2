@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @Shippers @CreateShipperPart1
+@OperatorV2 @CoreV2 @Shippers @CreateShipper
 Feature: Create shipper part1
 
   Background:
