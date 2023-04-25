@@ -467,6 +467,7 @@ public class DpAdministrationSteps extends AbstractSteps {
     dpAdminReactPage.inFrame(() -> {
       dpAdminReactPage.checkErrorMsg(errorMsg);
       pause3s();
+      takesScreenshot();
     });
   }
 

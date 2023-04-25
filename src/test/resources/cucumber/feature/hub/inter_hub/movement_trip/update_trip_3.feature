@@ -68,6 +68,12 @@ Feature: Movement Trip - Update Trip
     And Operator verify Load Trip Button is gone
     And Operator arrive trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} arrived" is shown on movement page
+    When Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator clicks on "Arrival" tab
+    When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
     When Operator complete trip
     Then Operator verifies toast with message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" is shown on movement page
     Then DB Operator verify trip with id "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" status is "completed"

@@ -185,9 +185,11 @@ Feature: Station Management Homepage
       | Country  | HubName      | Header1                      | Header2 | PageName              | LinkName          |
       | Thailand | {hub-name-7} | Standard Operating Procedure | Reports | PCF Management System | Petty Cash Claims |
 
-  Scenario Outline: [SG, MY, PH] Be an FSR Ninja Training Navigation Panel
+  Scenario Outline: Be an FSR Ninja Training Navigation Panel - <dataset_name>
     Given Operator loads Operator portal home page
     When Operator go to menu Station Management Tool -> Station Management Homepage
+    And Operator changes the country to "<Country>"
+    And Operator verify operating country is "<Country>"
     And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the following navigation links are displayed under the header:"<Header1>"
       | Route Engine - Zonal Routing |
@@ -208,8 +210,13 @@ Feature: Station Management Homepage
     Then Operator verifies that the URL "<URL>" is loaded on new tab on clicking the link:"<LinkName>"
 
     Examples:
-      | HubName      | Header1                      | Header2 | Header3 | URL                                      | LinkName                 |
-      | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://sgp-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | dataset_name | Country     | HubName      | Header1                      | Header2 | Header3 | URL                                      | LinkName                 |
+      | SG FSR Link  | Singapore   | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://sgp-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | MY FSR Link  | Malaysia    | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://mys-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | PH FSR Link  | Philippines | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://phl-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | TH FSR Link  | Thailand    | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://tha-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | VN FSR Link  | Vietnam     | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://vnm-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
+      | ID FSR Link  | Indonesia   | {hub-name-1} | Standard Operating Procedure | Reports | Others  | https://idn-ninjavan.talentlms.com/index | Be an FSR Ninja Training |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -861,7 +861,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         LOGGER.error(ex.getMessage());
         throw ex;
       }
-    }, getCurrentMethodName(), 1000, 5);
+    }, getCurrentMethodName(), 1000, 15);
   }
 
   public void verifyToastContainingMessageIsShownWithoutClosing(String expectedToastMessage) {

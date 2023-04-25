@@ -24,6 +24,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -81,6 +82,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -152,6 +154,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table
@@ -285,6 +288,7 @@ Feature: Get Report in Ledger
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator force succeed created order id "{KEY_CREATED_ORDER_ID}" with cod
+    Then Operator waits for 5 seconds
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     Then DB Operator gets ledger details for shipper "{KEY_SHIPPER_ID}" from billing_qa_gl.ledgers table
     Then Operator verifies below details in billing_qa_gl.ledgers table

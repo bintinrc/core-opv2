@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.FileInput;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -132,7 +132,6 @@ public class ZonesPage extends SimpleReactPage<ZonesPage> {
     int count = 0;
     while (zonesTable.isEmpty() && count < 10) {
       pause5s();
-      refreshCash();
       zonesTable.filterByColumn(COLUMN_NAME, zoneName);
       count++;
     }

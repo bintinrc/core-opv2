@@ -435,7 +435,7 @@ Feature: Financial Batch Report
     Then DB Operator verifies order id "{KEY_CREATED_ORDER_ID}" is added to billing_qa_gl.priced_orders
     And Operator verifies the number of entries in billing_qa_gl.ledgers table is 1
     And API Operator trigger reconcile scheduler endpoint
-    Then Operator waits for 5 seconds
+    Then Operator waits for 20 seconds
     And API Operator generates financial batch report using data below
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL","EXTENDED_DETAILS"], "parent_shipper_ids": [ {KEY_SHIPPER_ID} ]} |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds

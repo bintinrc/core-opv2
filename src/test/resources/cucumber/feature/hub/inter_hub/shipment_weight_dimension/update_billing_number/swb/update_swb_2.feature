@@ -5,7 +5,7 @@ Feature: Update SWB 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with Empty Seahaul Origin Port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -34,7 +34,7 @@ Feature: Update SWB 2
     Then Operator verifies Update Billing Number "SWB" page UI has error
       | emptyOriginSeaportErrorMessage | Please enter Sea Haul Origin Port |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with Empty Seahaul Destination Port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -63,7 +63,7 @@ Feature: Update SWB 2
     Then Operator verifies Update Billing Number "SWB" page UI has error
       | emptyDestinationSeaportErrorMessage | Please enter Sea Haul Destination Port |
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with existing SWB - Update Vendor
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -103,7 +103,7 @@ Feature: Update SWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with existing SWB - Update Origin Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -143,7 +143,7 @@ Feature: Update SWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with existing SWB - Update Destination Seaport
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7
@@ -183,7 +183,7 @@ Feature: Update SWB 2
     Then Operator click update button on shipment weight update mawb page
     And Operator verify Update Billing Number "SWB" has updated with new value "{KEY_MM_SHIPMENT_SWB}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB without Download Sum Up Report with Same Seahaul Origin and Destination Port
     Given API Operator create multiple 2 new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     Given API Operator update multiple shipments dimension with weight: 16.0 and length: 8.0 and width: 1.9 and height: 9.7

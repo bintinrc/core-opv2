@@ -627,4 +627,14 @@ public class PortTripManagementSteps extends AbstractSteps {
     public void operatorVerifiesAssignedMawbSuccessMessaage() {
         portTripManagementPage.verifyAssignMawbSuccessMessage();
     }
+
+    @When("Operator clicks {string} button on Port Trip Management page")
+    public void operatorClicksButtonOnPortTripManagementPage(String buttonName) {
+        portTripManagementPage.clickButtonOnPortTripManagement(buttonName);
+    }
+
+    @Then("Operator verifies can view assigned MAWB on Flight Trip in Port Trip Management page")
+    public void operatorVerifiesCanViewAssignedMAWBOnFlightTripInPortTripManagementPage() {
+        portTripManagementPage.verifyCanViewAssignedMAWBOnFlightTrip();
+    }
 }

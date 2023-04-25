@@ -5,7 +5,7 @@ Feature: Update SWB 7 - ID
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @DeleteCreatedSWBs
   Scenario: Update SWB for ID with format 6 Digits number
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator change the country to "Indonesia"
