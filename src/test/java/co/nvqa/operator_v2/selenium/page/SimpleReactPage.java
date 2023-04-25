@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.Wait;
 public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2SimplePage {
 
   @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
+  protected PageElement pageFrame;
 
   @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;

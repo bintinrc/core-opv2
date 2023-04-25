@@ -113,6 +113,39 @@ public class StationRouteSteps extends AbstractSteps {
     });
   }
 
+  @When("Operator verify {value} Shipment date error on Station Route page")
+  public void verifyShipmentDateMessage(String expected) {
+    page.inFrame(() -> {
+      Assertions.assertThat(page.shipmentDateError.isDisplayed())
+          .withFailMessage("Shipment date error is not displayed")
+          .isTrue();
+      Assertions.assertThat(page.shipmentDateError.getNormalizedText())
+          .as("Shipment date error")
+          .isEqualTo(expected);
+    });
+  }
+
+  @When("Operator verify {value} Shipment completion time error on Station Route page")
+  public void verifyShipmentCompletionDateMessage(String expected) {
+    page.inFrame(() -> {
+      Assertions.assertThat(page.shipmentCompletionTimeError.isDisplayed())
+          .withFailMessage("Shipment completion time error is not displayed")
+          .isTrue();
+      Assertions.assertThat(page.shipmentCompletionTimeError.getNormalizedText())
+          .as("Shipment completion time error")
+          .isEqualTo(expected);
+    });
+  }
+
+  @When("Operator verify Assign drivers button is disabled on Station Route page")
+  public void assignDriversIsDisabled() {
+    page.inFrame(() -> {
+      Assertions.assertThat(page.assignDrivers.isEnabled())
+          .as("Assign drivers button is not disabled")
+          .isFalse();
+    });
+  }
+
   @When("Operator verify Assign Drivers button is disabled on Station Route page")
   public void checkAssignDriversIsDisabled() {
     page.inFrame(() -> {

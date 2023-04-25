@@ -2160,7 +2160,7 @@ Feature: Pending Pickup Jobs
       | {hub-name-2} | {hub-id-2} | 5.55555  | 5.55555   | 09:00      | 22:00    | Vietnam | N+0 Pickup Rates | Addresses with no jobs created | Addresses with unrouted jobs |
 
 
-  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn @Debug
+  @ForceSuccessOrder @ForceSuccessReservationByApi @DeleteOrArchiveRoute @SystemIdNotSg @default-vn
   Scenario Outline: View Addresses with No Jobs Created
     Given Operator loads Operator portal home page
     When DB Station - Operator delete Station Pending Pickup records for the hub "<HubId>"

@@ -1,7 +1,7 @@
 @OperatorV2 @Route @NewFeatures @StationRoute
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -2718,6 +2718,33 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify any keyword match is displayed on 1 position on Station Route page:
       | empty  |
       | MERUYA |
+
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Start Date > End Date
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
+    And Operator select filters on Station Route page:
+      | hub                        | {hub-name-2}                   |
+      | shipmentType               | AIR_HAUL                       |
+      | shipmentDateFrom           | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentDateTo             | {gradle-next-0-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeFrom | {gradle-next-1-day-yyyy-MM-dd} |
+      | shipmentCompletionTimeTo   | {gradle-next-0-day-yyyy-MM-dd} |
+    And Operator verify "Start date cannot be after end date" Shipment date error on Station Route page
+    And Operator verify "Start date cannot be after end date" Shipment completion time error on Station Route page
+    And Operator verify Assign drivers button is disabled on Station Route page
+
+  @Debug
+  Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Time Range Greater Than 1 Month
+    When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
+    And Operator select filters on Station Route page:
+      | hub                        | {hub-name-2} |
+      | shipmentType               | AIR_HAUL     |
+      | shipmentDateFrom           | 31/03/2023   |
+      | shipmentDateTo             | 30/04/2023   |
+      | shipmentCompletionTimeFrom | 31/03/2023   |
+      | shipmentCompletionTimeTo   | 30/04/2023   |
+    And Operator verify "Time range cannot be greater than 1 month(s)" Shipment date error on Station Route page
+    And Operator verify "Time range cannot be greater than 1 month(s)" Shipment completion time error on Station Route page
+    And Operator verify Assign drivers button is disabled on Station Route page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
