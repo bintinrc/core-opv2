@@ -1,4 +1,4 @@
-@OperatorV2 @CoreV2 @Shippers @CreateShipperPart1 @CWF
+@OperatorV2 @CoreV2 @Shippers @CreateShipperPart1
 Feature: Create shipper part1
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -50,7 +50,6 @@ Feature: Create shipper part1
     Then Operator check error message in multi shipper prefix "0" input is "Must enter 2-5 characters for Prefix"
 
 
-  @RT
   Scenario: Create shipper - invalid prefix - existing fixed prefix in same system id
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -60,7 +59,6 @@ Feature: Create shipper part1
     Then Operator check error message in shipper prefix input is "Prefix already used"
 
 
-  @RT
   Scenario: Create shipper - invalid prefix - existing multi fixed prefix in same system id
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -70,7 +68,6 @@ Feature: Create shipper part1
     Then Operator check error message in multi shipper prefix "0" input is "Prefix already used"
 
 
-  @RT
   Scenario: Create shipper - invalid prefix - existing dynamic prefix in same system id
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
@@ -80,7 +77,6 @@ Feature: Create shipper part1
     Then Operator check error message in shipper prefix input is "Prefix already used"
 
 
-  @RT
   Scenario: Create shipper - invalid prefix - existing multi dynamic prefix in same system id
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
