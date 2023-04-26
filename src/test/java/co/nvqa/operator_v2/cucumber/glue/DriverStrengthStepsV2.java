@@ -425,7 +425,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
       if (!dsPage.isTableLoaded()) {
-        dsPage.click("//button[span[text()='Load Selection']]");
+        dsPage.loadSelection.click();
       }
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
       takesScreenshot();
