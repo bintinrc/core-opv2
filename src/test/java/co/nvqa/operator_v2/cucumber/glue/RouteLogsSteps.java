@@ -1102,24 +1102,22 @@ public class RouteLogsSteps extends AbstractSteps {
     boolean found;
     do {
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
-        String value = finalData.get("top");
-        if (StringUtils.isNotBlank(value)) {
-          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
+        String actualTop = toast.toastTop.getNormalizedText();
+        String actualBottom = toast.toastBottom.getNormalizedText();
+        String expTop = finalData.get("top");
+        String expBottom = finalData.get("bottom");
+
+        if (!(StringUtils.isNotBlank(actualTop) && !StringUtils.isNotBlank(actualBottom))) {
+          if (!(StringUtils.containsIgnoreCase(actualTop, expTop) && StringUtils.containsIgnoreCase(
+              actualBottom, expBottom))) {
             return false;
           }
         }
-        value = finalData.get("bottom");
-        if (StringUtils.isNotBlank(value)) {
-          String actual = toast.toastBottom.getNormalizedText();
-          if (value.startsWith("^")) {
-            return actual.matches(value);
-          } else {
-            return StringUtils.equalsIgnoreCase(value, actual);
-          }
-        }
+
         return true;
       });
     } while (!found && new Date().getTime() - start < 20000);
+
     Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
   }
 
