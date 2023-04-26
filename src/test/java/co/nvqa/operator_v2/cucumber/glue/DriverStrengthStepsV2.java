@@ -153,6 +153,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     driverInfo.fromMap(mapOfData);
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     put(KEY_UPDATED_DRIVER_FIRST_NAME, driverInfo.getFirstName());
+    put(KEY_UPDATED_DRIVER_DISPLAY_NAME, driverInfo.getDisplayName());
     dsPage.inFrame(() -> {
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
       dsPage.editDriverDialog.fillForm(driverInfo);
