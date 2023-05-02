@@ -1,18 +1,30 @@
-@OperatorV2 @Core @AllOrders @ForceSuccess
-Feature: All Orders - Manually Completed Selected
+@OperatorV2 @Core @EditOrder @ForceSuccessPart2 @EditOrder2
+Feature: Force Success
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Force Success Order on All Orders Page - End State = Completed
+  @happy-path
+  Scenario: Operator Manually Complete Order on Edit Order Page (uid:1f4e604d-51e2-4654-a912-5f5d2525accb)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify the order completed successfully on Edit Order page
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Completed (uid:11fd9e1a-9caf-4b2e-9da9-6f240649c79d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page
-    Then API Operator verify order info after Force Successed
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -35,84 +47,23 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  @happy-path
-  Scenario: Operator Force Success Multiple Orders on All Orders Page (uid:07e813db-12db-4861-a27f-f5a059f186af)
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - End State = Returned to Sender (uid:5f5c3de3-50a7-483f-ac1e-2775204c3f91)
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success multiple orders on All Orders page
-    And Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    When Operator get multiple "Delivery" transactions with status "Success"
-    Then DB Operator verifies all waypoints status is "Success"
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
-
-  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | true      |
-    Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[1]}not allowed to collect cod! |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-
-  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD (uid:c61d23ee-53ef-4c59-8bba-b4f16b46a96a)
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
-      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | false     |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -122,7 +73,9 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify Pickup transaction on Edit order page using data below:
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
+      | status | FAIL |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
@@ -131,18 +84,172 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender (uid:1ea0141f-e3ef-495c-b9cb-b014cfc7ff73)
+  Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Collect COD (uid:2c0df634-56da-4771-8989-fd9e746870bd)
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order with COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY                      |
+      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Collect COD (uid:c763009d-b2b4-4746-9794-272317d96cd6)
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order with COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY                      |
+      | expectedCodAmount | {KEY_CASH_ON_DELIVERY_AMOUNT} |
+      | driverId          | {ninja-driver-id}             |
+
+  Scenario: Operator Force Success Order on Edit Order Page - Unrouted Order with COD - Do not Collect COD (uid:6d6c623c-1f06-4d4e-a39d-0ef3226c3547)
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order without collecting COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY |
+      | expectedCodAmount | 0        |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Force Success Order on Edit Order Page - Routed Order Delivery with COD - Do not Collect COD (uid:5d1aadd6-394d-4cbd-ad20-7858a8bae9c5)
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new COD for created order
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order without collecting COD on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    When Operator get "Delivery" transaction with status "Success"
+    Then DB Operator verifies waypoint status is "Success"
+    And Operator verify order event on Edit order page using data below:
+      | name | PRICING CHANGE |
+    And Operator verify order event on Edit order page using data below:
+      | name | FORCED SUCCESS |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
+    And DB Operator verify the collected sum stored in cod_collections using data below:
+      | transactionMode   | DELIVERY          |
+      | expectedCodAmount | 0                 |
+      | driverId          | {ninja-driver-id} |
+
+  Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Collect COD (uid:eca7d659-1475-4913-8459-c063e9fe306a)
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    Then Operator verify 'COD Collected' checkbox is disabled on Edit Order page
+
+  Scenario: Operator Force Success Order on Edit Order Page - RTS with COD - Do not Collect COD (uid:8f47b188-2f88-45e3-8c6c-599c173b872b)
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    Then Operator verify 'COD Collected' checkbox is disabled on Edit Order page
+    When Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -163,259 +270,76 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  @DeleteOrArchiveRoute
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD (<uid>)
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new COD for created order
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected   |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
-    And DB Operator verify the collected sum stored in cod_collections using data below:
-      | transactionMode   | DELIVERY           |
-      | expectedCodAmount | <collected_amount> |
-      | driverId          | {ninja-driver-id}  |
-    Examples:
-      | note        | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
-
-  @DeleteOrArchiveRoute
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD (<uid>)
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator create new COD for created order
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected   |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
-    And DB Operator verify the collected sum stored in cod_collections using data below:
-      | transactionMode   | DELIVERY           |
-      | expectedCodAmount | <collected_amount> |
-      | driverId          | {ninja-driver-id}  |
-    Examples:
-      | note               | cod_amount | collected_amount | collected | uid                                      |
-      | Do not Collect COD | 23.57      | 0                | false     | uid:a5fbe7f1-650d-48d8-a2cc-29e963ca09d7 |
-
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD (<uid>)
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected   |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
-    Then Operator verifies that info toast displayed:
-      | top    | 1 order(s) updated |
-      | bottom | Complete Order     |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
-    And DB Operator verify the collected sum stored in cod_collections using data below:
-      | transactionMode   | DELIVERY           |
-      | expectedCodAmount | <collected_amount> |
-    Examples:
-      | note        | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
-
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cod_amount>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                      | collected   |
-      | {KEY_CREATED_ORDER_TRACKING_ID} | <collected> |
-    Then Operator verifies that info toast displayed:
-      | top    | 1 order(s) updated |
-      | bottom | Complete Order     |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
-    And DB Operator verify the collected sum stored in cod_collections using data below:
-      | transactionMode   | DELIVERY           |
-      | expectedCodAmount | <collected_amount> |
-
-    Examples:
-      | note               | cod_amount | collected_amount | collected |
-      | Do not Collect COD | 23.57      | 0                | false     |
-
-  Scenario: Operator Force Success Partial Orders on All Orders Page - RTS with COD - Collect COD
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                                         |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":12.3, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS orders:
-      | orderId                           | rtsRequest                                                                                                 |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[3]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-      | {KEY_LIST_OF_CREATED_ORDER_ID[4]} | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success orders with COD collection on All Orders page:
-      | trackingId                                 | collected |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} | true      |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} | false     |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | true      |
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[4]} | false     |
-    Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} \| Order id = {KEY_LIST_OF_CREATED_ORDER_ID[3]}not allowed to collect cod! |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[2]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Completed" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                            |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Completed Old Order Status: Transit New Order Status: Completed Reason: FORCE_SUCCESS |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[3]}"
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | PENDING |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | PENDING |
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[4]}"
-    Then Operator verify order status is "Completed" on Edit Order page
-    And Operator verify order granular status is "Returned to Sender" on Edit Order page
-    And Operator verify Pickup details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Pickup transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify Delivery transaction on Edit order page using data below:
-      | status | SUCCESS |
-    And Operator verify order event on Edit order page using data below:
-      | name | PRICING CHANGE |
-    And Operator verify order event on Edit order page using data below:
-      | name | FORCED SUCCESS |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
-
-  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - With RTS Normal Parcel
-    Given Operator go to menu Utilities -> QRCode Printing
+  Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - Resolved PETS Ticket (uid:25054d61-8286-409a-8808-170375bbccc8)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
-      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT                  |
+      | investigatingDepartment | Recovery                            |
+      | investigatingHub        | {hub-name}                          |
+      | ticketType              | DAMAGED                             |
+      | ticketSubType           | IMPROPER PACKAGING                  |
+      | parcelLocation          | DAMAGED RACK                        |
+      | liability               | Shipper                             |
+      | damageDescription       | GENERATED                           |
+      | orderOutcomeDamaged     | NV LIABLE - FULL - PARCEL DELIVERED |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | RESOLVED |
+      | keepCurrentOrderOutcome | Yes      |
+    Then Operator verifies that success toast displayed:
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
+    When Operator refresh page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Completed" on Edit Order page
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                              |
+      | description | Reason: TICKET_RESOLUTION RTS: false Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                  |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold New Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold New Order Status: Transit\n\nReason: TICKET_RESOLUTION |
+
+  Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page - With RTS PETS Ticket (uid:e6f1e484-d16c-4964-ae14-eafcb2a5b6ae)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    When Operator create new recovery ticket on Edit Order page:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | PARCEL ON HOLD     |
+      | ticketSubType           | SHIPPER REQUEST    |
+      | orderOutcome            | RTS                |
+      | rtsReason               | Nobody at address  |
+      | exceptionReason         | GENERATED          |
+    When Operator refresh page
+    Then Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+    When Operator updates recovery ticket on Edit Order page:
+      | status                  | RESOLVED          |
+      | keepCurrentOrderOutcome | Yes               |
+      | outcome                 | RTS               |
+      | rtsReason               | Nobody at address |
+    Then Operator verifies that success toast displayed:
+      | top                | ^Ticket ID : .* updated |
+      | waitUntilInvisible | true                    |
+    When Operator refresh page
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verify Pickup transaction on Edit order page using data below:
@@ -429,14 +353,13 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Show Force Success Order Event Details for Manual Complete All Orders Page  - Without RTS
-    Given Operator go to menu Utilities -> QRCode Printing
+  Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page  - Without RTS (uid:000e6943-1682-40eb-a989-e1c466436d18)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify Pickup transaction on Edit order page using data below:
@@ -447,29 +370,48 @@ Feature: All Orders - Manually Completed Selected
       | name        | FORCED SUCCESS                                                                                                                                                                                                                                       |
       | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success |
 
-  Scenario: Shows Error Message on Force Success On Hold Order with Active PETS Ticket on All Orders Page
-    Given Operator go to menu Utilities -> QRCode Printing
+  Scenario: Show Force Success Order Event Details for Manual Complete Edit Order Page  - With RTS Normal Parcel (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page
+    Then Operator verify order status is "Completed" on Edit Order page
+    And Operator verify order granular status is "Returned to Sender" on Edit Order page
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify order event on Edit order page using data below:
+      | name        | FORCED SUCCESS                                                                                                                                                                                                                                                       |
+      | description | Reason: Others - {KEY_ORDER_CHANGE_REASON} RTS: true Old Order Status: Transit New Order Status: Completed Old Order Granular Status: Arrived at Sorting Hub New Order Granular Status: Returned to Sender Old Delivery Status: Pending New Delivery Status: Success |
+    And Operator verify order events on Edit order page using data below:
+      | tags          | name          | description                                                                                                                                                           |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
+
+  Scenario: Disable Force Success On Hold Order with Active PETS Ticket (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | granularStatus | On Hold                           |
-    When Operator go to menu Order -> All Orders
-    And Operator Manually Complete orders on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verifies error messages in dialog on All Orders page:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} \| Order id={KEY_LIST_OF_CREATED_ORDER_ID[1]} has active PETS ticket. Please resolve PETS ticket to update status. |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify menu item "Order Settings" > "Manually Complete Order" is disabled on Edit order page
 
-  Scenario Outline: Operator Force Success Order by Select Reason on All Orders Page - <reason>
+  Scenario Outline: Operator Force Success Order by Select Reason on Edit Order Page - <reason>
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page:
       | changeReason | <reason> |
-    Then API Operator verify order info after Force Successed
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -487,11 +429,10 @@ Feature: All Orders - Manually Completed Selected
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And Operator verify order event on Edit order page using data below:
+      | name | UPDATE STATUS |
+    And Operator verify order event on Edit order page using data below:
       | name        | FORCED SUCCESS |
       | description | <description>  |
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                           |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
     Examples:
       | reason                                | description                                                                                                                                                                                                                                             |
       | 3PL completed delivery                | Reason: 3PL completed delivery RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                |
@@ -500,16 +441,15 @@ Feature: All Orders - Manually Completed Selected
       | Lazada returns                        | Reason: Lazada returns RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                        |
       | XB fulfilment storage                 | Reason: XB fulfilment storage RTS: false Old Order Status: Pending New Order Status: Completed Old Order Granular Status: Pending Pickup New Order Granular Status: Completed Old Delivery Status: Pending New Delivery Status: Success                 |
 
-  Scenario: Operator Force Success Order by Input Reason on All Orders Page
+  Scenario: Operator Force Success Order by Input Reason on Edit Order Page
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator Force Success single order on All Orders page:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator click Order Settings -> Manually Complete Order on Edit Order page
+    And Operator confirm manually complete order on Edit Order page:
       | changeReason    | Others (fill in below) |
       | reasonForChange | Force success by TA    |
-    Then API Operator verify order info after Force Successed
-    When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
