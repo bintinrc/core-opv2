@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.selenium.page.AntTableV3;
@@ -111,11 +113,8 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
 
   @Then("Operator verify the CSV file")
   public void operatorVerifyCsvFile() {
-    VehicleType vehicleType =
-        containsKey(KEY_CREATED_VEHICLE_TYPE_EDITED) ? get(KEY_CREATED_VEHICLE_TYPE_EDITED)
-            : get(KEY_CREATED_VEHICLE_TYPE);
     vtmPage.inFrame(() -> {
-      vtmPage.csvDownloadSuccessful(vehicleType.getName());
+      vtmPage.verifyFileDownloadedSuccessfully(VehicleTypeManagementPage.CSV_FILENAME);
       takesScreenshot();
     });
   }

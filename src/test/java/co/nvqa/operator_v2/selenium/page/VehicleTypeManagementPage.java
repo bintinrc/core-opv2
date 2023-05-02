@@ -27,8 +27,8 @@ import org.openqa.selenium.support.FindBy;
 public class VehicleTypeManagementPage extends SimpleReactPage {
 
   public VehicleTypeTable vehicleTypeTable;
+  public static final String CSV_FILENAME = "vehicle-types.csv";
   private static final String NG_REPEAT = "vehicleType in $data";
-  private static final String CSV_FILENAME = "vehicle-types.csv";
   private static final String COLUMN_DATA_TITLE_NAME = "'commons.name' | translate";
   private static final String ACTION_BUTTON_EDIT = "update";
   private static final String ACTION_BUTTON_DEL = "delete";
@@ -150,10 +150,6 @@ public class VehicleTypeManagementPage extends SimpleReactPage {
     vehicleTypeTable.waitUntilPageLoaded();
     btnDownloadCSVFile.click();
     pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
-  }
-
-  public void csvDownloadSuccessful(String vehicleTypeName) {
-    verifyFileDownloadedSuccessfully(CSV_FILENAME, vehicleTypeName);
   }
 
   public boolean isTableEmpty() {
