@@ -6,7 +6,7 @@ Feature: Van Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
-  Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID (uid:677bce9c-ca6e-4842-99e7-ccecba82f2d8)
+  Scenario: Operator Van Inbounds And Starts Route with Valid Tracking ID
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -48,7 +48,7 @@ Feature: Van Inbound
     And DB Operator verifies inbound_scans record with type "4" and correct route_id
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds with Invalid Tracking ID (uid:fd5c0c47-7a31-44f7-b2dd-d07bd9a0645f)
+  Scenario: Operator Van Inbounds with Invalid Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -58,7 +58,7 @@ Feature: Van Inbound
     Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds with Empty Tracking ID (uid:d04f2df6-82f8-455a-a1a5-91db0fc6962a)
+  Scenario: Operator Van Inbounds with Empty Tracking ID
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -68,7 +68,7 @@ Feature: Van Inbound
     Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels (uid:836ad450-1dd6-4ea9-80af-123a1723c379)
+  Scenario: Operator Van Inbounds Multiple Orders With Different Order Status And Checks Scanned Parcels
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -114,7 +114,7 @@ Feature: Van Inbound
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[3]} | {KEY_LIST_OF_CREATED_ORDER[3].toName} | {KEY_LIST_OF_CREATED_ORDER[3].toContact} | {KEY_LIST_OF_CREATED_ORDER[3].buildToAddressString} | Pending Pickup          | Pending |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Pickups In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                               |
@@ -179,7 +179,7 @@ Feature: Van Inbound
       | status | IN_PROGRESS            |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Van Inbounds And Starts Route Multiple Success, Failed and Pending Deliveries In A Route
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |

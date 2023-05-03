@@ -6,7 +6,7 @@ Feature: Route Inbound Screen 1
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id (uid:0a303f61-a35d-46ac-97b7-7fa3b58debfd)
+  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: More than 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -39,7 +39,7 @@ Feature: Route Inbound Screen 1
       | wpTotal     | 1                                |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: Only 1 Route_Id (uid:c77ab66c-7c1f-42bf-ac61-4a869be47651)
+  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: Only 1 Route_Id
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -94,7 +94,7 @@ Feature: Route Inbound Screen 1
       | wpTotal     | 1                                 |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Tracking ID - Order is Not Routed (uid:edd843b2-f5ee-49e7-be18-adf71169da16)
+  Scenario: Get Route Details by Tracking ID - Order is Not Routed
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -111,7 +111,7 @@ Feature: Route Inbound Screen 1
       | errorMessage | Order is not on any route! |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Tracking ID - Order Not Found (uid:40aef4e7-967d-450a-a1f3-8ba6e6266d7a)
+  Scenario: Get Route Details by Tracking ID - Order Not Found
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
@@ -124,7 +124,7 @@ Feature: Route Inbound Screen 1
       | errorMessage | Order not found! |
 
   @DeleteOrArchiveRoute @DeleteDriver
-  Scenario: Get Route Details by Driver Name - Number of Route_Id = 1 (uid:086b2bfe-8a68-43fb-a31d-011ef48de7bf)
+  Scenario: Get Route Details by Driver Name - Number of Route_Id = 1
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
@@ -153,7 +153,7 @@ Feature: Route Inbound Screen 1
       | wpTotal     | 1                                |
 
   @DeleteOrArchiveRoute @DeleteDriver
-  Scenario: Get Route Details by Driver Name - Number of Route_Id > 1 (uid:62ce5fbf-6f11-4dff-85ce-7c4d45e418f2)
+  Scenario: Get Route Details by Driver Name - Number of Route_Id > 1
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"{default-phone-number}"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"{default-driver-password}","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |

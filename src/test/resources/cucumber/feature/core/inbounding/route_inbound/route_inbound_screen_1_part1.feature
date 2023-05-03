@@ -6,7 +6,7 @@ Feature: Route Inbound Screen 1
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator get route details by - <Note> (<hiptest-uid>)
+  Scenario Outline: Operator get route details by - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -38,13 +38,13 @@ Feature: Route Inbound Screen 1
       | wpCompleted | 1                                |
       | wpTotal     | 1                                |
     Examples:
-      | Note        | hiptest-uid                              | fetchBy              | fetchByValue                    |
-      | Route ID    | uid:a5f5fc7f-ee43-423a-a0f8-9e1193285952 | FETCH_BY_ROUTE_ID    | {KEY_CREATED_ROUTE_ID}          |
-      | Tracking ID | uid:dbbf61d7-deec-4e8e-8277-f2a73ac05768 | FETCH_BY_TRACKING_ID | {KEY_CREATED_ORDER_TRACKING_ID} |
-      | Driver      | uid:97852b05-c887-40a7-88b7-2a6cba64e6a1 | FETCH_BY_DRIVER      | {ninja-driver-name}             |
+      | Note        | fetchBy              | fetchByValue                    |
+      | Route ID    | FETCH_BY_ROUTE_ID    | {KEY_CREATED_ROUTE_ID}          |
+      | Tracking ID | FETCH_BY_TRACKING_ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Driver      | FETCH_BY_DRIVER      | {ninja-driver-name}             |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Route ID - Route with Waypoints (uid:896979db-0ac5-4304-9c94-e76c9d8c4a02)
+  Scenario: Get Route Details by Route ID - Route with Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -128,7 +128,7 @@ Feature: Route Inbound Screen 1
       | wpTotal     | 10                               |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Route ID - Route with No Waypoints (uid:fc8b3c2d-a024-4cae-8bc1-b8377f056326)
+  Scenario: Get Route Details by Route ID - Route with No Waypoints
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -155,7 +155,7 @@ Feature: Route Inbound Screen 1
       | errorMessage | Route for id=123456 not found |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Route ID - Route not Assigned to a Driver (uid:09c660de-0c62-4171-bcf1-3c0a4b93560b)
+  Scenario: Get Route Details by Route ID - Route not Assigned to a Driver
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id} } |
