@@ -13,6 +13,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.guice.ScenarioScoped;
 import java.util.Map;
+import java.util.function.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -121,18 +122,21 @@ public class VehicleTypeManagementSteps extends AbstractSteps {
 
   @And("^Operator gets new vehicle type on Vehicle type management page")
   public void operatorGetsNewVehicleTypeOnVehicleTypeManagementPage() {
-    VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
-    vtmPage.refreshPage();
-    vtmPage.inFrame(() -> {
-      boolean isSearchBarDisplayed = vtmPage.seachBar.isDisplayed();
-      while (!isSearchBarDisplayed) {
-        pause(500);
-        isSearchBarDisplayed = vtmPage.seachBar.isDisplayed();
-      }
-      vtmPage.seachBar.sendKeys(vehicleType.getName());
-      Map<String, String> vehicleTypeData = vtmPage.vehicleTypeTable.readRow(1);
-      vehicleType.setId(Long.parseLong(vehicleTypeData.get("vehicleId")));
-      put(KEY_CREATED_VEHICLE_TYPE, vehicleType);
-    });
+    Runnable getNewVehicleType = () -> {
+      vtmPage.refreshPage();
+      VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+      vtmPage.inFrame(() -> {
+        boolean isSearchBarDisplayed = vtmPage.seachBar.isDisplayed();
+        while (!isSearchBarDisplayed) {
+          pause(500);
+          isSearchBarDisplayed = vtmPage.seachBar.isDisplayed();
+        }
+        vtmPage.seachBar.sendKeys(vehicleType.getName());
+        Map<String, String> vehicleTypeData = vtmPage.vehicleTypeTable.readRow(1);
+        vehicleType.setId(Long.parseLong(vehicleTypeData.get("vehicleId")));
+        put(KEY_CREATED_VEHICLE_TYPE, vehicleType);
+      });
+    };
+    doWithRetry(getNewVehicleType, "Operator get new vehicle type", 5000L, 3);
   }
 }
