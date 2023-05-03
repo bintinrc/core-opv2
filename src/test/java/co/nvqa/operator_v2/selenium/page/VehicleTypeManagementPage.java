@@ -97,6 +97,7 @@ public class VehicleTypeManagementPage extends SimpleReactPage {
     txtFieldInput.sendKeys(vehicleType.getName());
     btnAddVehicleType.click();
     addVehicleTypeModal.waitUntilInvisible();
+    pause5s();
   }
 
   public void verifyVehicleType(VehicleType vehicleType) {

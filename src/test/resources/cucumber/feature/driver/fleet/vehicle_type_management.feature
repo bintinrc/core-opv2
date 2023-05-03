@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @VehicleTypeManagement
 Feature: Vehicle Type Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @RunThis @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -38,7 +38,7 @@ Feature: Vehicle Type Management
     When Operator delete the vehicle type name
     Then Operator verify vehicle type name is deleted
 
-  @DeleteVehicleTypes
+  @RunThis @DeleteVehicleTypes
   Scenario: Download CSV File of Vehicle Type (uid:4bbcbebc-4848-4105-bf78-321ada1ddbe1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
