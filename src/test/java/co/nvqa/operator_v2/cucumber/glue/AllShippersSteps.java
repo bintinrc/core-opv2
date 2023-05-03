@@ -1917,7 +1917,9 @@ public class AllShippersSteps extends AbstractSteps {
 
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
-    Pricing pricingProfile = get(KEY_CREATED_PRICING_PROFILE_OPV2);
+    Pricing pricingProfile =
+        Objects.isNull(get(KEY_CREATED_PRICING_PROFILE_OPV2)) ? get(KEY_PRICING_PROFILE_DETAILS)
+            : get(KEY_CREATED_PRICING_PROFILE_OPV2);
 
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
     if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {

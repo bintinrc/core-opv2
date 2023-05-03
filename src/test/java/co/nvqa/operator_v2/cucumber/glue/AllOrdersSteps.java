@@ -8,6 +8,7 @@ import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.dp.OrderCsvData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
@@ -19,10 +20,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -879,6 +882,56 @@ public class AllOrdersSteps extends AbstractSteps {
     Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
         .as("Save button is enabled")
         .isFalse();
+  }
+
+  @When("Operator disable granular status filter for {string}")
+  public void disableGranularStatus(String granStatus) {
+    Objects.requireNonNull(allOrdersPage.disableGranStatusElement.get(granStatus)).click();
+  }
+
+  @When("Operator disable status filter for {string}")
+  public void disableStatus(String status) {
+    Objects.requireNonNull(allOrdersPage.disableStatusElement.get(status)).click();
+  }
+
+  @When("Operator press load selection button")
+  public void pressLoadSelectionButton() {
+    allOrdersPage.loadSelection.waitUntilVisible();
+    allOrdersPage.loadSelection.click();
+  }
+
+  @When("Operator fill the tracking id filter with {string}")
+  public void pressLoadSelectionButton(String trackingId) {
+    allOrdersPage.trackingIdFilter.waitUntilVisible();
+    allOrdersPage.trackingIdFilter.setValue(resolveValue(trackingId));
+  }
+
+  @When("Operator check the checkbox from created order")
+  public void checkCheckbox() {
+    allOrdersPage.buttonCheckboxOrder.waitUntilVisible();
+    allOrdersPage.buttonCheckboxOrder.click();
+  }
+
+  @When("Operator press Apply Action button")
+  public void pressApplyActionButton() {
+    allOrdersPage.buttonApplyAction.waitUntilVisible();
+    allOrdersPage.buttonApplyAction.click();
+  }
+
+  @When("Operator apply action for {string}")
+  public void pressChooseApplyAction(String action) {
+    allOrdersPage.applyActionOrder(action);
+  }
+
+  @When("Operator set the pickup date for regular pickup at {string}")
+  public void setPickupDate(String date) {
+    allOrdersPage.datePickerInput.forceClear();
+    allOrdersPage.datePickerInput.setValue(resolveValue(date));
+  }
+
+  @When("Operator press submit regular pickup button")
+  public void pressSubmitRegulatPickupButton() {
+    allOrdersPage.submit.click();
   }
 
   @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")

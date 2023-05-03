@@ -26,10 +26,10 @@ Feature: Driver Type Management
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
-      | driverTypeName  | DT-{gradle-current-date-yyyyMMddHHmmsss} |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator get new Driver Type params on Driver Type Management page
     When Operator edit new Driver Type with the following attributes:
-      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss}Updatedname |
+      | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss}-Updatedname |
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
@@ -50,11 +50,11 @@ Feature: Driver Type Management
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator get new Driver Type params on Driver Type Management page
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_DRIVER_TYPE_PARAMS.driverTypeName}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verifies that error toast displayed:
-      | top    | Network Request Error                                                                         |
-      | bottom | ^.*Error Code: 110001.*NVConflictException: Driver type is still being used by some drivers.* |
+      | top    | Network Request Error                           |
+      | bottom | Driver type is still being used by some drivers |
     And Operator verify new Driver Type params
 
 #  @DeleteDriverType Commented as this scenario is no longer applicable as these columns are removed from the Driver Type
@@ -92,7 +92,7 @@ Feature: Driver Type Management
 #      | Timeslot: 6PM to 10PM                  | uid:867017c2-566a-465f-b253-b78b52367824 | timeslot        | 6PM To 10PM          |
 
   @DeleteDriverType
-  Scenario: Search Driver Type by ID (uid:xxx)
+  Scenario: Search Driver Type by ID
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     And Operator create new Driver Type with the following attributes:
@@ -101,7 +101,7 @@ Feature: Driver Type Management
     Then Operator search created Driver Type using ID
 
   @DeleteDriverType
-  Scenario: List All Driver Type (uid:xxx)
+  Scenario: List All Driver Type
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
     When Operator create new Driver Type with the following attributes:

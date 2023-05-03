@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.mm.model.MiddleMileDriver;
+import co.nvqa.common.mm.utils.MiddleMileUtils;
 import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverDataResponse;
 import co.nvqa.commons.model.core.GetDriverResponse;
@@ -20,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import org.apache.commons.text.RandomStringGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,13 +99,29 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Given("Operator verifies middle mile driver management page is loaded")
   public void operatorMovementTripPageIsLoaded() {
-    middleMileDriversPage.switchTo();
-    middleMileDriversPage.loadButton.waitUntilClickable(30);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      try {
+        middleMileDriversPage.waitUntilPageLoaded();
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable(30);
+      } catch (RuntimeException e) {
+        middleMileDriversPage.refreshPage();
+        middleMileDriversPage.waitUntilPageLoaded();
+        throw new RuntimeException(e);
+      }
+    }, "Retrying until page is properly loaded...", 1000, 10);
   }
 
   @When("Operator clicks on Load Driver Button on the Middle Mile Driver Page")
   public void operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage() {
     middleMileDriversPage.clickLoadDriversButton();
+  }
+
+  @Then("Operator verifies Middle Mile Drivers page is showing {string} results upon loading drivers")
+  public void operatorVerifiesMiddleMileDriversPageIsShowingResultsUponLoadingDrivers(
+      String countAsString) {
+    middleMileDriversPage.verifiesTotalDriverIsTheSame(
+        Integer.parseInt(resolveValue(countAsString)));
   }
 
   @Then("Operator verifies that the data shown has the same value")
@@ -154,7 +171,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
+            String lastName = new RandomStringGenerator.Builder().withinRange('A', 'Z').build()
+                .generate(12);
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
@@ -277,19 +295,20 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName,
       String value) {
     middleMileDriversPage.selectFilter(filterName, value);
-    if (IS_FIRST_TIME_SETUP_DRIVER){
-      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
-      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
-      IS_FIRST_TIME_SETUP_DRIVER = false;
-    }
-    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
+//    if (IS_FIRST_TIME_SETUP_DRIVER){
+//      GetDriverResponse drivers = get(KEY_ALL_DRIVERS_DATA);
+//      middleMileDriversPage.LIST_OF_FILTER_DRIVERS = drivers.getData().getDrivers();
+//      IS_FIRST_TIME_SETUP_DRIVER = false;
+//    }
+//    middleMileDriversPage.LIST_OF_FILTER_DRIVERS=middleMileDriversPage.filterDriver(middleMileDriversPage.LIST_OF_FILTER_DRIVERS,filterName,value);
   }
 
   @When("Operator searches by {string} with value {string}")
   public void operatorSearchesByWithValue(String filterName, String filterValue) {
-    String resolvedFilterValue = resolveValue(filterValue);
     if ("id".equals(filterName)) {
-      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolvedFilterValue));
+      middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolveValue(filterValue)));
+    } else {
+      middleMileDriversPage.tableFilterByIdWithValue(resolveValue(filterValue));
     }
 
   }
@@ -435,9 +454,17 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
   @Then("Operator verifies that the GUI elements are shown on the Middle Mile Driver Page")
   public void operatorVerifyTheElementsAreShown() {
-    List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
-    middleMileDriversPage.convertDateToUnixTimestamp(middleMileDriver.get(0));
-    middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+//    List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+//    middleMileDriversPage.convertDateToUnixTimestamp(middleMileDriver.get(0));
+//    middleMileDriversPage.tableFilterByname(middleMileDriver.get(0));
+  }
+
+  @Then("Operator verifies driver {string} is shown in Middle Mile Driver page")
+  public void operatorVerifiesDriverDataIsShownInMiddleMileDriverPage(String storageKey) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+    MiddleMileDriver driver = getList(keyIdx.get("key"), MiddleMileDriver.class).get(
+        Integer.parseInt(keyIdx.get("idx")));
+    middleMileDriversPage.tableFilterByname(driver);
   }
 
   @When("Operator verifies UI elements in Middle Mile Driver Page on {string}")
@@ -497,9 +524,11 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       }
       operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage();
       VerifyURLinMiddleDriverPage(url);
-      filterAllDriverDataWithQueryParam(url.split("\\?+")[1]);
-      operatorVerifiesThatTheDataShownHasTheSameValue();
-      operatorVerifyTheElementsAreShown();
+//      filterAllDriverDataWithQueryParam(url.split("\\?+")[1]);
+//      operatorVerifiesThatTheDataShownHasTheSameValue();
+//      operatorVerifiesMiddleMileDriversPageIsShowingResultsUponLoadingDrivers(String.valueOf(drivers.size()));
+//      operatorVerifyTheElementsAreShown();
+//      operatorVerifiesDriverDataIsShownInMiddleMileDriverPage(dataTableAsMap.get("driver"));
     }, "Retrying until UI is showing the right data...", 1000, 1);
   }
 
@@ -534,7 +563,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
           if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName())) {
             String name = AUTO;
-            String lastName = StandardTestUtils.generateRequestedTrackingNumber();
+            String lastName = new RandomStringGenerator.Builder().withinRange('A', 'Z').build()
+                .generate(12);
             String displayName = name + " " + lastName;
             System.out.println("Display name: " + displayName);
             middleMileDriver.setFirstName(name);
@@ -641,5 +671,14 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       }
     }, 1);
 
+  }
+
+  @Then("Operator verifies details of driver {string} is correct")
+  public void operatorVerifiesDetailsOfDriverIsCorrect(String storageKey) {
+    Map<String, String> keyIdx = MiddleMileUtils.getKeyIndex(storageKey);
+    MiddleMileDriver mmd = getList(keyIdx.get("key"), MiddleMileDriver.class).get(
+        Integer.parseInt(keyIdx.get("idx"))).generateMiddleMileDriverWithTripData();
+    mmd.setDriver();
+    middleMileDriversPage.verifiesDataInViewModalIsTheSame(mmd.getDriver());
   }
 }

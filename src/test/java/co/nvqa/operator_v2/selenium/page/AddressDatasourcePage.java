@@ -41,6 +41,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='form-input-latlong']")
   public TextBox latlong;
 
+  @FindBy(css = ".ant-btn-loading-icon")
+  public PageElement loadingIcon;
+
   @FindBy(css = "[data-testid='form-input-city']")
   public TextBox municipality;
 

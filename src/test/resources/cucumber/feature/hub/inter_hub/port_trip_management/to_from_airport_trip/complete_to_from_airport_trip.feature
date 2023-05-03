@@ -36,6 +36,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -70,6 +82,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -104,6 +128,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -139,6 +175,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -172,6 +220,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -206,6 +266,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -240,6 +312,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @DeleteCreatedPorts @DeleteDriver
@@ -275,6 +359,18 @@ Feature: Airport Trip Management - Complete To From Airport Trip
       | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     When Operator completes trip "{KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" on Port Trip Management page
     Then Operator verifies trip message "Trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]} has completed" display on Port Trip Management page
+    When Operator refresh page
+    And Operator verifies that the Port Management Page is opened
+    When Operator fill the departure date for Port Management
+      | startDate | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    When Operator fill the Origin Or Destination for Port Management
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} |
+    And Operator click on 'Load Trips' on Port Management
+    Then Verify the parameters of loaded trips in Port Management
+      | startDate           | {gradle-next-0-day-yyyy-MM-dd}                       |
+      | endDate             | {gradle-next-1-day-yyyy-MM-dd}                       |
+      | originOrDestination | {KEY_MM_LIST_OF_CREATED_PORTS[1].portCode} (Airport) |
     And Operator verifies "COMPLETED" button is shown on Port Trip Management page
 
   @KillBrowser @ShouldAlwaysRun

@@ -134,12 +134,14 @@ public class AddressDatasourceSteps extends AbstractSteps {
   public void operatorClickAddButton() {
     addressDatasourcePage.add.waitUntilClickable();
     addressDatasourcePage.add.click();
+    addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
   @When("^Operator clicks on Proceed Button in Row Details modal on Address Datasource page$")
   public void operatorClickProceedButton() {
     addressDatasourcePage.proceed.waitUntilClickable();
     addressDatasourcePage.proceed.click();
+    addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
   @When("^Operator clicks on Replace Button in Row Details modal on Address Datasource page$")
@@ -311,6 +313,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
       addressDatasourcePage.postcodeTextBox.sendKeys(data.get(KEY_POSTCODE));
     }
     addressDatasourcePage.searchButton.click();
+    addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
   @Then("^Operator verify search field lable:$")
@@ -529,6 +532,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     }
 
     put(KEY_CREATED_ADDRESSING, addressing);
+    addressDatasourcePage.loadingIcon.waitUntilInvisible();
   }
 
   @When("Operator clicks on Save Button in Edit a Row modal on Address Datasource page")

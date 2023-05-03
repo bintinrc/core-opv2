@@ -9,7 +9,9 @@ import co.nvqa.operator_v2.selenium.elements.mm.AntDateTimeRangePicker;
 import java.io.File;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 /**
@@ -39,7 +41,7 @@ public class OrderBillingPage extends SimpleReactPage {
   public AntSelect3 scriptId;
   @FindBy(css = "[data-testid='orderBilling.emails']")
   public AntSelect3 emailAddressInput;
-  private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//md-select[@placeholder='No Template Selected']/md-select-value/span";
+  private static final String FILTER_CSV_FILE_TEMPLATE_NAME_XPATH = "//div[@data-testid = 'orderBilling.template']//div//span[2]";
   private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//span[text() = '%s']/preceding-sibling::span/input";
 
   private static final String XPATH_ERROR = "//span[text()='%s']";
@@ -79,6 +81,8 @@ public class OrderBillingPage extends SimpleReactPage {
   public void setSpecificShipper(String shipper) {
     selectedShippers.click();
     selectedShippersInput.selectValue(shipper);
+    Actions actions = new Actions(getWebDriver());
+    actions.sendKeys(Keys.ESCAPE).build().perform();
   }
 
   public void setParentShipper(String parentShipper) {

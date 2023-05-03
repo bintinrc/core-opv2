@@ -120,6 +120,9 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
   @FindBy(css = ".ant-modal")
   public InvalidInputDialog invalidInputDialog;
 
+  @FindBy(css = ".ant-modal")
+  public ErrorsDialog errorsDialog;
+
   @FindBy(css = "div.route-date")
   public AntPicker crRouteDate;
 
@@ -169,6 +172,7 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
     public static final String COLUMN_TRACKING_ID = "trackingId";
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_PARCEL_SIZE = "parcelSize";
+    public static final String COLUMN_ORDER_TAGS = "orderTags";
     public static final String COLUMN_DRIVER_ID = "driverId";
 
     public static final String ACTION_EDIT = "Edit";
@@ -181,6 +185,7 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
               .put(COLUMN_TRACKING_ID, "id")
               .put(COLUMN_ADDRESS, "address")
               .put(COLUMN_PARCEL_SIZE, "parcelSize")
+              .put(COLUMN_ORDER_TAGS, "_orderTagsRender")
               .put(COLUMN_DRIVER_ID, "driverId")
               .build());
       setEntityClass(Parcel.class);
@@ -207,6 +212,7 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
     private String trackingId;
     private String address;
     private String parcelSize;
+    private List<String> orderTags;
     private String driverId;
 
     public Parcel() {
@@ -248,6 +254,18 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
       this.driverId = driverId;
     }
 
+    public List<String> getOrderTags() {
+      return orderTags;
+    }
+
+    public void setOrderTags(List<String> orderTags) {
+      this.orderTags = orderTags;
+    }
+
+    public void setOrderTags(String orderTags) {
+      splitAndNormalize(orderTags);
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) {
@@ -280,6 +298,19 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
     public Button cancel;
 
     public InvalidInputDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
+    }
+  }
+
+  public static class ErrorsDialog extends AntModal {
+
+    @FindBy(xpath = ".//tr/td[2]")
+    public List<PageElement> error;
+
+    @FindBy(css = "[data-testid='bulk-progress-cancel.button']")
+    public Button cancel;
+
+    public ErrorsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
   }

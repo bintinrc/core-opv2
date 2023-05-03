@@ -106,6 +106,12 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   private static final String NOTIFICATION_ERROR_MESSAGES_XPATH = "(//div[contains(@class,'ant-notification-notice-description')]//span[normalize-space(.)])[3]";
   private static final String TOAST_ERROR_MESSAGES_XPATH = "//div[contains(@class,'ant-notification-notice ant-notification-notice-error')]//span[normalize-space(.)]";
 
+  public static final String VIEW_MAWB_DETAIL_PAGE_XPATH = "//div/span[contains(text(),'%s')]";
+  public static final String VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH = "//div/span/strong[contains(text(),'Assigned MAWB on Flight Trip')]";
+
+  @FindBy(xpath = "//button/span[contains(text(), 'View MAWB')]")
+  public static Button viewMawb;
+
   @FindBy(xpath = "//input[@id='departure']")
   public PageElement departureInput;
 
@@ -340,6 +346,13 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   @FindBy(id = createFlightTrip_commentId)
   public PageElement createFlightTrip_comment;
 
+  // xpath = "//input[@data-testid = 'flight-number']"
+  @FindBy(id = createFlightTrip_flightNoId)
+  public TextBox editFlightTrip_flightNo;
+
+  @FindBy(xpath = "//textarea[@id = 'editForm_comment']")
+  public TextBox editFlightTrip_comment;
+
   @FindBy(css = "[data-testid$='confirm-button']")
   public Button confirmButton;
 
@@ -371,6 +384,10 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
         .as("Load Trips appears in Port trip Management page").isTrue();
     Assertions.assertThat(loadTrips.isEnabled())
         .as("Load Trips button is disabled in Port trip Management page").isFalse();
+    Assertions.assertThat(createToFromAirportTrip.isEnabled())
+            .as("Create To/from Airport Trip button appear in Port Trip Management page").isTrue();
+    Assertions.assertThat(createFlightTrip.isEnabled())
+            .as("Create Flight Trip button appear in Port Trip Management page").isTrue();
     Assertions.assertThat(managePortFacility.isEnabled())
         .as("Manage Port Facility button appear in Port Trip Management page").isTrue();
     Assertions.assertThat(selectFacility.isDisplayed())
@@ -1596,10 +1613,12 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     switch (pageName) {
       case "Flight Trip":
         if (data.get("comment") != null) {
-          createFlightTrip_comment.clearAndSendKeys(data.get("comment"));
+          editFlightTrip_comment.clearAndSendkeysV2(data.get("comment"));
         }
         if (data.get("flight_no") != null) {
-          createFlightTrip_flightNo.clearAndSendKeys(data.get("flight_no"));
+          editFlightTrip_flightNo.click();
+          editFlightTrip_flightNo.clear();
+          editFlightTrip_flightNo.sendKeys(data.get("flight_no"));
         }
         if (data.get("mawb") != null) {
           if (!data.get("mawb").trim().equals("-")) {
@@ -1763,9 +1782,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyTripMessageSuccessful(String expectedMessage) {
-    antNotificationMessage.waitUntilVisible();
-    String actualMessage = getAntTopTextV2();
-    Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      antNotificationMessage.waitUntilVisible();
+      String actualMessage = getAntTopTextV2();
+      Assertions.assertThat(actualMessage).as("Meesage is the same").isEqualTo(expectedMessage);
+    }, "Retrying until correct message is shown...", 1000, 10);
   }
 
   public void verifyButtonIsShown(String button) {
@@ -2126,6 +2147,11 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
                 isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "assign-mawb-button"), 5))
             .as("Assign MAWB button is disabled on Airport Trip page").isTrue();
         break;
+      case "View MAWB":
+        Assertions.assertThat(
+                        isElementVisible(f(ACTION_DISABLED_BUTTON, 1, "view-mawb-button"), 5))
+                .as("View MAWB button is disabled on Airport Trip page").isTrue();
+        break;
     }
   }
 
@@ -2200,6 +2226,38 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     String message = getAntTopText();
     Assertions.assertThat(message).as("Message is the same")
         .isEqualTo("Successfully assigned MAWB.");
+  }
+
+  public void clickButtonOnPortTripManagement(String buttonName) {
+    switch (buttonName) {
+      case "View MAWB":
+        viewMawb.waitUntilVisible();
+        viewMawb.click();
+        break;
+      case "Back":
+        backButton.waitUntilVisible();
+        backButton.click();
+        break;
+    }
+  }
+
+  public void verifyCanViewAssignedMAWBOnFlightTrip() {
+    waitUntilVisibilityOfElementLocated(VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH);
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "Flight Trip Origin - Destination Airport"), 5))
+            .as("Flight Trip Origin - Destination Airport appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "Flight Scheduled Departure Time"), 5))
+            .as("Flight Scheduled Departure Time appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(VIEW_MAWB_ASSIGNED_MAWB_ON_FLIGHT_TRIP_TEXT_XPATH, 5))
+            .as("Assigned MAWB on Flight Trip appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "MAWB Origin - Destination Airport"), 5))
+            .as("MAWB Origin - Destination Airport appear in Airport Trip Management page").isTrue();
+    Assertions.assertThat(
+                    isElementVisible(f(VIEW_MAWB_DETAIL_PAGE_XPATH, "MAWB Vendor"), 5))
+            .as("MAWB Vendor appear in Airport Trip Management page").isTrue();
   }
 
 }

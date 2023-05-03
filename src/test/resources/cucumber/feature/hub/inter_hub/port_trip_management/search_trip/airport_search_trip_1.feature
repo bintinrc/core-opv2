@@ -30,7 +30,7 @@ Feature: Airport Trip Management - Search Airport Trip 1
     And Verify only filtered results are displayed on Port Trip Management page
 
   @CancelTrip
-  Scenario: Search by Trip Id
+  Scenario: Search by Trip ID
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API MM - Operator refreshes "Airport" cache
     Given API Operator create new air trip with data below:

@@ -12,6 +12,7 @@ Feature: Driver Strength
       | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}"} } |
     When Operator go to menu Fleet -> Driver Strength
     And Operator create new Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -25,7 +26,7 @@ Feature: Driver Strength
       | contact              | GENERATED                                                        |
       | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 1                                                                |
-      | zoneMax              | 1                                                                |
+      | zoneMax              | 2                                                                |
       | zoneCost             | 1                                                                |
       | username             | GENERATED                                                        |
       | password             | GENERATED                                                        |
@@ -245,6 +246,7 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName         | GENERATED                                                        |
       | firstName           | GENERATED                                                        |
       | lastName            | GENERATED                                                        |
       | licenseNumber       | GENERATED                                                        |
@@ -297,6 +299,7 @@ Feature: Driver Strength
     And Operator load all data for driver on Driver Strength Page
     And Operator opens Edit Driver dialog for created driver on Driver Strength page
     And  Operator removes contact details on Edit Driver dialog on Driver Strength page
+    And  Operator click Submit button in Update Driver dialog
     Then Operator verifies hint "At least one contact required." is displayed in Add Driver dialog
 
   @DeleteDriver
@@ -327,6 +330,7 @@ Feature: Driver Strength
     Given Operator loads Operator portal home page
     When Operator go to menu Fleet -> Driver Strength
     And Operator create new Driver on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -342,7 +346,7 @@ Feature: Driver Strength
       | contact              | GENERATED                                                        |
       | zoneId               | {zone-name-2}                                                    |
       | zoneMin              | 1                                                                |
-      | zoneMax              | 1                                                                |
+      | zoneMax              | 2                                                                |
       | zoneCost             | 1                                                                |
       | username             | GENERATED                                                        |
       | password             | GENERATED                                                        |
@@ -356,7 +360,7 @@ Feature: Driver Strength
 
     Examples:
       | DriverType    | VehicleType | DpmsId    | ChangeType1 | ChangeType2 |
-      | Mitra - Fleet | Bus         | GENERATED | CREATE      | UPDATE      |
+      | Mitra - Fleet | Car         | GENERATED | CREATE      | UPDATE      |
 
   Scenario Outline: Update DPMS ID of Driver Account with DPMS ID (uid:6efb7bbd-58b8-4218-9a92-48804bb3a43a)
     Given Operator loads Operator portal home page
@@ -407,6 +411,7 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator opens Add Driver dialog on Driver Strength
     And Operator fill Add Driver form on Driver Strength page using data below:
+      | displayName          | GENERATED                                                        |
       | firstName            | GENERATED                                                        |
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
@@ -430,7 +435,7 @@ Feature: Driver Strength
 
     Examples:
       | VehicleType | ContactNumber    | ErrorMessage                                              |
-      | Bus         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
+      | Car         | 3159432900000000 | Please input a valid mobile phone number (e.g. 8123 4567) |
 
   @DeleteDriverType @DeleteDriver
   Scenario Outline: Can Not Update Driver Account with Invalid Phone Number (uid:1d5d6d06-3bc5-4a19-91f9-1a7e892f8bc6)
@@ -471,7 +476,7 @@ Feature: Driver Strength
     And API Operator create new driver type with the following attributes:
       | driverTypeRequest | { "driverType": { "name": "DT-{gradle-current-date-yyyyMMddHHmmsss}" } } |
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":2,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
     When Operator go to menu Fleet -> Driver Strength
     Then Operator verifies that the following buttons are displayed in driver strength page
       | Select Search Filters |
@@ -574,8 +579,8 @@ Feature: Driver Strength
     And Operator verifies that the notice message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                              | Message                                |
-      | No       | {update_driver_details_prefilled_csv} | Succesfully updated 1 drivers' details |
+      | Resigned | FileName                              | Message                                 |
+      | No       | {update_driver_details_prefilled_csv} | Successfully updated 1 drivers' details |
 
   Scenario Outline: Cannot Upload Non-CSV File for Bulk Update Drivers (uid:b675717c-bcd5-4fa2-9db0-f8057ba7c0f0)
     Given Operator loads Operator portal home page
@@ -620,8 +625,8 @@ Feature: Driver Strength
     And Operator verifies that the alert message: "<Message>" is displayed
 
     Examples:
-      | Resigned | FileName                                                  | Message                                                                                           |
-      | No       | {update_driver_details_prefilled_csv_200_records_invalid} | You have exceeded the maximum no. of rows in a file upload. Please upload 200 accounts at a time. |
+      | Resigned | FileName                                                   | Message                                                                                           |
+      | No       | {update_driver_details_prefilled_csv_2000_records_invalid} | You have exceeded the maximum no. of rows in a file upload. Please upload 200 accounts at a time. |
 
   @CleanDownloadFolder
   Scenario Outline: Download Failure Reason of Failed Updated Driver

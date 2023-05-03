@@ -6,6 +6,7 @@ import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCol
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.RegularPickup;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -25,6 +26,8 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import io.cucumber.java.en.But;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -73,6 +76,30 @@ public class AllOrdersPage extends OperatorV2SimplePage {
 
   @FindBy(css = "nv-filter-box[main-title='Status']")
   public NvFilterBox statusFilter;
+
+  @FindBy(xpath = "//button[@aria-label='Pending Pickup']/i")
+  public Button disablePendingPickup;
+
+  @FindBy(xpath = "//button[@aria-label='Pending']/i")
+  public Button disablePending;
+
+  @FindBy(xpath = "//input[@class='md-datepicker-input']")
+  public TextBox datePickerInput;
+
+  @FindBy(css = "[aria-label='Submit']")
+  public PageElement submit;
+
+  @FindBy(xpath = "//button//span[text()='Apply Action']")
+  public Button buttonApplyAction;
+
+  @FindBy(name = "commons.load-selection")
+  public NvApiTextButton loadSelection;
+
+  @FindBy(xpath = "//nv-search-input-filter[@search-text='filter.trackingId']//input")
+  public TextBox trackingIdFilter;
+
+  @FindBy(xpath = "//td[@class='column-checkbox']//md-checkbox")
+  public PageElement buttonCheckboxOrder;
 
   @FindBy(css = "nv-filter-box[main-title='Granular Status']")
   public NvFilterBox granularStatusFilter;
@@ -152,6 +179,15 @@ public class AllOrdersPage extends OperatorV2SimplePage {
   public void addFilter(String value) {
     addFilter.simpleSelectValue(value);
   }
+
+  public ImmutableMap<String, Button> disableGranStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending Pickup", disablePendingPickup)
+      .build();
+
+  public ImmutableMap<String, Button> disableStatusElement = ImmutableMap.<String, Button>builder()
+      .put("Pending", disablePending)
+      .build();
+
 
   public enum Category {
     TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
@@ -276,6 +312,15 @@ public class AllOrdersPage extends OperatorV2SimplePage {
         .map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
     Assertions.assertThat(listOfActualInvalidTrackingId).as("Expected Tracking ID not found.")
         .has(new Condition<>(l -> l.containsAll(listOfInvalidTrackingId), ""));
+  }
+
+  public void applyActionOrder(String action) {
+    selectAllShown();
+    ((JavascriptExecutor) getWebDriver()).executeScript("document.body.style.zoom='70%'");
+    ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click();",
+        findElementByXpath(f("//button[@aria-label = '%s']",action)));
+    pause2s();
+
   }
 
   public void verifyOrderStatus(String trackingId, String expectedOrderStatus) {

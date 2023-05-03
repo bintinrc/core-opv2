@@ -83,7 +83,7 @@ public class CampaignCreateEditPage extends SimpleReactPage<CampaignCreateEditPa
   @FindBy(xpath = "//span[text()='Search by shipper']//parent::li")
   public PageElement searchByShipperTab;
 
-  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_7']]")
+  @FindBy(xpath = "//div[contains(@class, ' ant-select')][.//input[@id='rc_select_14']]")
   public AntSelect searchByShipper;
 
   @FindBy(xpath = "//span[text()='Upload']//parent::button")
