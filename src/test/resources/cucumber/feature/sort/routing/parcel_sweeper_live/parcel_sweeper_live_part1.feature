@@ -48,15 +48,18 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor | {success-bg-inbound} |
-    When API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {blue-hex-color}   |
-    When DB Operator Get Next Sorting Task
-      | zone   | FROM CREATED ORDER |
-      | source | {hub-name}         |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {blue-hex-color}                   |
+    When DB Sort - get next sorting task
+      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+      | sourceName | {hub-name}                    |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | FROM CREATED ORDER |
+      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {KEY_CREATED_ORDER.destinationHub} |
       | textColor | {dark-gray-hex-color}              |
@@ -95,15 +98,18 @@ Feature: Parcel Sweeper Live
       | routeInfoColor        | {blue-hex-color}       |
       | driverName            | {ninja-driver-name}    |
       | routeDescriptionColor | {dark-gray-hex-color}  |
-    When API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {blue-hex-color}   |
-    When DB Operator Get Next Sorting Task
-      | zone   | FROM CREATED ORDER |
-      | source | {hub-name}         |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {blue-hex-color}                   |
+    When DB Sort - get next sorting task
+      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+      | sourceName | {hub-name}                    |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | FROM CREATED ORDER |
+      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
@@ -147,15 +153,18 @@ Feature: Parcel Sweeper Live
       | routeInfoColor        | {blue-hex-color}       |
       | driverName            | {ninja-driver-name}    |
       | routeDescriptionColor | {dark-gray-hex-color}  |
-    When API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {blue-hex-color}   |
-    When DB Operator Get Next Sorting Task
-      | zone   | FROM CREATED ORDER |
-      | source | {hub-name}         |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {blue-hex-color}                   |
+    When DB Sort - get next sorting task
+      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+      | sourceName | {hub-name}                    |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | FROM CREATED ORDER |
+      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
@@ -195,10 +204,13 @@ Feature: Parcel Sweeper Live
       | routeInfoColor        | {white-hex-color}      |
       | driverName            | NOT ROUTED TODAY       |
       | routeDescriptionColor | {white-hex-color}      |
-    When API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {white-hex-color}  |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {white-hex-color}                  |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | GLOBAL INBOUND    |
       | textColor | {white-hex-color} |
@@ -237,10 +249,13 @@ Feature: Parcel Sweeper Live
       | routeInfoColor        | {white-hex-color}      |
       | driverName            | NOT ROUTED TODAY       |
       | routeDescriptionColor | {white-hex-color}      |
-    When API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {white-hex-color}  |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {white-hex-color}                  |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {hub-name} |
       | textColor | #ffffff    |
@@ -280,10 +295,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify RTS label on Parcel Sweeper Live page
     And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
       | backgroundColor | {success-bg-inbound} |
-    And API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {blue-hex-color}   |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {blue-hex-color}                   |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | GLOBAL INBOUND        |
       | textColor | {dark-gray-hex-color} |
@@ -406,13 +424,18 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | backgroundColor | {success-bg-inbound} |
-    And API Operator get all zones preferences
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
+    And API Sort - Operator get Addressing Zone with details:
+      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName  | FROM CREATED ORDER |
-      | textColor | {blue-hex-color}   |
-    When DB Operator Get Next Sorting Task
-      | zone   | FROM CREATED ORDER |
-      | source | {hub-name}         |
+      | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
+      | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
+      | textColor     | {blue-hex-color}                   |
+    When DB Sort - get next sorting task
+      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+      | sourceName | {hub-name}                    |
+    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
       | nextSortingHub | FROM CREATED ORDER |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
