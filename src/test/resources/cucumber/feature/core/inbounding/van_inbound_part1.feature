@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @VanInboundPart1
+@OperatorV2 @Core @Inbounding @VanInbound @VanInboundPart1
 Feature: Van Inbound
 
   @LaunchBrowser @ShouldAlwaysRun

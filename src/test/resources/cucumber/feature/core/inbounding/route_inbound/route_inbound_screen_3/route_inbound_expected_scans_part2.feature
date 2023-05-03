@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScansPart2
+@OperatorV2 @Core @Inbounding @RouteInbound @RouteInboundExpectedScans @RouteInboundExpectedScansPart2
 Feature: Route Inbound Expected Scans
 
   @LaunchBrowser @ShouldAlwaysRun

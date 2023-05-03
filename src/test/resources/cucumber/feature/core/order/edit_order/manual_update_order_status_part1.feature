@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrder @ManualUpdateOrderStatusPart1 @EditOrder1
+@OperatorV2 @Core @EditOrder @ManualUpdateOrderStatus @ManualUpdateOrderStatusPart1 @EditOrder1
 Feature: Manual Update Order Status
 
   @LaunchBrowser @ShouldAlwaysRun

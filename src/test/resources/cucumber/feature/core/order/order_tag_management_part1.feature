@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @OrderTagManagementPart1
+@OperatorV2 @Core @Order @OrderTagManagement @OrderTagManagementPart1
 Feature: Order Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Order @ViewTaggedOrdersPart2
+@OperatorV2 @Core @Order @ViewTaggedOrders @ViewTaggedOrdersPart2
 Feature: View Tagged Orders
 
   @LaunchBrowser @ShouldAlwaysRun
