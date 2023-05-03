@@ -1,15 +1,18 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.CodInfo;
 import co.nvqa.operator_v2.selenium.page.CodReportPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 
@@ -62,8 +65,16 @@ public class CodReportSteps extends AbstractSteps {
   }
 
   @Then("^Operator verify the downloaded COD Report data is correct$")
-  public void operatorVerifyTheDownloadedCodReportDataIsCorrect() {
-    Order order = get(KEY_ORDER_DETAILS);
-    codReportPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(order);
+  public void operatorVerifyTheDownloadedCodReportDataIsCorrect(Map<String, String> dataTableRaw) {
+    Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
+    Long orderId = Long.valueOf(dataTable.get("orderId"));
+
+    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS, Collections.emptyList());
+
+    Order createdOrder = orders.stream()
+        .filter(order -> order.getId().equals(orderId))
+        .collect(Collectors.toList()).get(0);
+
+    codReportPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(createdOrder);
   }
 }
