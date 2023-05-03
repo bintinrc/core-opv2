@@ -5,7 +5,7 @@ Feature: Manual Update Order Status
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Van en-route to pickup (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Van en-route to pickup
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -31,10 +31,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                             | uuid                                     |
-      | Van en-route to pickup | Transit | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Van en-route to pickup\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:83a280ce-b428-4b33-82d6-b4255d9abd41 |
+      | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                             |
+      | Van en-route to pickup | Transit | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Van en-route to pickup\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - En-route to Sorting Hub (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - En-route to Sorting Hub
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -60,10 +60,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                        | uuid                                     |
-      | En-route to Sorting Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:ee5d4d71-8f2c-4760-bd15-cf50a3d04920 |
+      | granularStatus          | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                        |
+      | En-route to Sorting Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: En-route to Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Sorting Hub (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Sorting Hub
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -89,10 +89,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       | uuid                                     |
-      | Arrived at Sorting Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:ddaa1a0c-b7cf-43d9-956d-f6154c62e557 |
+      | granularStatus         | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                       |
+      | Arrived at Sorting Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Origin Hub (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Origin Hub
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -118,10 +118,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus        | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                      | uuid                                     |
-      | Arrived at Origin Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Origin Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:5597f459-3432-4e34-9f6e-ff8255b16ec0 |
+      | granularStatus        | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                      |
+      | Arrived at Origin Hub | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Origin Hub\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Staging (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Staging
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -147,10 +147,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                      | uuid                                     |
-      | Staging        | Staging | STAGING      | STAGING        | PENDING        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Staging\n\nOld Delivery Status: Pending\nNew Delivery Status: Staging\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Staging\n\nOld Order Status: Pending\nNew Order Status: Staging\n\nReason: Status updated for testing purposes | uid:c6d2bf03-de72-429c-8226-e6bb9165da61 |
+      | granularStatus | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                      |
+      | Staging        | Staging | STAGING      | STAGING        | PENDING        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Staging\n\nOld Delivery Status: Pending\nNew Delivery Status: Staging\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Staging\n\nOld Order Status: Pending\nNew Order Status: Staging\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Pickup fail (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Pickup fail
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -176,10 +176,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus | status      | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                             | uuid                                     |
-      | Pickup fail    | Pickup fail | FAIL         | PENDING        | FAIL           | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: Status updated for testing purposes | uid:2857c8d6-004e-4a6f-8a1e-80c0bebe4137 |
+      | granularStatus | status      | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                             |
+      | Pickup fail    | Pickup fail | FAIL         | PENDING        | FAIL           | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pickup fail\n\nOld Order Status: Pending\nNew Order Status: Pickup fail\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Pending Reschedule
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -205,10 +205,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus     | status        | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                    | uuid                                     |
-      | Pending Reschedule | Delivery Fail | SUCCESS      | FAIL           | SUCCESS        | FAIL             | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Pending\nNew Order Status: Delivery fail\n\nReason: Status updated for testing purposes | uid:badb6905-40ba-4bcc-b9f5-3e77f7ff37fc |
+      | granularStatus     | status        | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                    |
+      | Pending Reschedule | Delivery Fail | SUCCESS      | FAIL           | SUCCESS        | FAIL             | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Fail\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Pending Reschedule\n\nOld Order Status: Pending\nNew Order Status: Delivery fail\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Transferred to 3PL (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Transferred to 3PL
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -234,10 +234,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus     | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                     | uuid                                     |
-      | Transferred to 3PL | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\n\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:e7549bed-4a72-4fe6-b37c-ad39e5b448fd |
+      | granularStatus     | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                     |
+      | Transferred to 3PL | Transit | SUCCESS      | PENDING        | SUCCESS        | PENDING          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Transferred to 3PL\n\nOld Order Status: Pending\n\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Distribution Point (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Arrived at Distribution Point
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -263,10 +263,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus                | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                            | uuid                                     |
-      | Arrived at Distribution Point | Transit | SUCCESS      | SUCCESS        | SUCCESS        | SUCCESS          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Distribution Point\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:ed8a3a8e-a0f1-4ec5-9987-e5f19036c380 |
+      | granularStatus                | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                                                                                                                                                            |
+      | Arrived at Distribution Point | Transit | SUCCESS      | SUCCESS        | SUCCESS        | SUCCESS          | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Delivery Status: Pending\nNew Delivery Status: Success\n\nOld Granular Status: Pending Pickup\nNew Granular Status: Arrived at Distribution Point\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Cross Border Transit (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Cross Border Transit
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -292,8 +292,8 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus       | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                           | uuid                                     |
-      | Cross Border Transit | Transit | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Cross Border Transit\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes | uid:14f60c2a-bc34-4d9f-bbf4-1432bb91149e |
+      | granularStatus       | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                                                           |
+      | Cross Border Transit | Transit | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Cross Border Transit\n\nOld Order Status: Pending\nNew Order Status: Transit\n\nReason: Status updated for testing purposes |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

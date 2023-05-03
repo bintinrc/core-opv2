@@ -36,7 +36,7 @@ Feature: All Orders - Manually Completed Selected
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup New Granular Status: Completed\n\nOld Order Status: Pending\nNew Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
   @happy-path
-  Scenario: Operator Force Success Multiple Orders on All Orders Page (uid:07e813db-12db-4861-a27f-f5a059f186af)
+  Scenario: Operator Force Success Multiple Orders on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -99,7 +99,7 @@ Feature: All Orders - Manually Completed Selected
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD (uid:c61d23ee-53ef-4c59-8bba-b4f16b46a96a)
+  Scenario: Operator Force Success Order on All Orders Page - RTS with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -131,7 +131,7 @@ Feature: All Orders - Manually Completed Selected
       | tags          | name          | description                                                                                                                                                           |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
-  Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender (uid:1ea0141f-e3ef-495c-b9cb-b014cfc7ff73)
+  Scenario: Operator Force Success Order on All Orders Page - End State = Returned to Sender
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -164,7 +164,7 @@ Feature: All Orders - Manually Completed Selected
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub New Granular Status: Returned to Sender\n\nOld Order Status: Transit New Order Status: Completed\n\nReason: FORCE_SUCCESS |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -201,11 +201,11 @@ Feature: All Orders - Manually Completed Selected
       | expectedCodAmount | <collected_amount> |
       | driverId          | {ninja-driver-id}  |
     Examples:
-      | note        | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD | 23.57      | 23.57            | true      | uid:ae5c6bab-1d1b-48bf-a32e-779983df9087 |
+      | note        | cod_amount | collected_amount | collected |
+      | Collect COD | 23.57      | 23.57            | true      |
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Routed Order Delivery with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -242,8 +242,8 @@ Feature: All Orders - Manually Completed Selected
       | expectedCodAmount | <collected_amount> |
       | driverId          | {ninja-driver-id}  |
     Examples:
-      | note               | cod_amount | collected_amount | collected | uid                                      |
-      | Do not Collect COD | 23.57      | 0                | false     | uid:a5fbe7f1-650d-48d8-a2cc-29e963ca09d7 |
+      | note               | cod_amount | collected_amount | collected |
+      | Do not Collect COD | 23.57      | 0                | false     |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

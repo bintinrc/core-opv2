@@ -5,7 +5,7 @@ Feature: Manual Update Order Status
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup at Distribution Point (<uuid>)
+  Scenario Outline: Operator Manually Update Order Granular Status - Pending Pickup at Distribution Point
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -31,10 +31,10 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | <deliveryWpStatus> |
     Examples:
-      | granularStatus                       | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                   | uuid                                     |
-      | Pending Pickup at Distribution Point | Pending | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Pending Pickup at Distribution Point\n\nReason: Status updated for testing purposes | uid:a7cfefcc-aad6-471a-a5a7-0fb61e52963f |
+      | granularStatus                       | status  | pickupStatus | deliveryStatus | pickupWpStatus | deliveryWpStatus | description                                                                                                                                   |
+      | Pending Pickup at Distribution Point | Pending | PENDING      | PENDING        | PENDING        | PENDING          | Old Granular Status: Pending Pickup\nNew Granular Status: Pending Pickup at Distribution Point\n\nReason: Status updated for testing purposes |
 
-  Scenario: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Unrouted (uid:e1f23694-0b3d-49e4-b891-24b5ea3b6637)
+  Scenario: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Unrouted
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -65,7 +65,7 @@ Feature: Manual Update Order Status
       | status | PENDING |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Routed (uid:6aa58426-ed6c-494c-9b42-524f2764be77)
+  Scenario: Operator Manually Update Order Granular Status - Pending Pickup, Latest Pickup is Routed
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -99,7 +99,7 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
 
-  Scenario: Operator Manually Update Order Granular Status - On Vehicle for Delivery , Latest Delivery is Unrouted (uid:af550420-08b8-46af-bddf-bce1b9dd2f02)
+  Scenario: Operator Manually Update Order Granular Status - On Vehicle for Delivery , Latest Delivery is Unrouted
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -131,7 +131,7 @@ Feature: Manual Update Order Status
       | status | PENDING |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Manually Update Order Granular Status - On Vehicle for Delivery, Latest Delivery is Routed (uid:20006f7c-3f0b-4ce8-ad23-e98049e8a629)
+  Scenario: Operator Manually Update Order Granular Status - On Vehicle for Delivery, Latest Delivery is Routed
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -166,7 +166,7 @@ Feature: Manual Update Order Status
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
 
-  Scenario: Operator Not Allowed to Manually Update Normal Order Granular Status - Pickup Fail (uid:e515270b-6d35-4bf1-a282-d75e2112e836)
+  Scenario: Operator Not Allowed to Manually Update Normal Order Granular Status - Pickup Fail
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -181,7 +181,7 @@ Feature: Manual Update Order Status
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
 
-  Scenario: Disable Manual Update Status for On Hold Order with Active PETS Ticket (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Disable Manual Update Status for On Hold Order with Active PETS Ticket
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

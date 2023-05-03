@@ -6,7 +6,7 @@ Feature: Cancel Order
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - Returned to Sender (uid:a3db613d-d61b-4da6-9d9f-bd0a27b755c9)
+  Scenario: Cancel Order - Returned to Sender
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -28,7 +28,7 @@ Feature: Cancel Order
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - Arrived at Distribution Point (uid:3efb6678-7df0-46a1-9fc1-2010534d58d2)
+  Scenario: Cancel Order - Arrived at Distribution Point
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -56,7 +56,7 @@ Feature: Cancel Order
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - Completed (uid:449f0846-f150-4dfe-b738-d9c72f701f16)
+  Scenario: Cancel Order - Completed
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -79,7 +79,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  Scenario: Cancel Order - Cancelled (uid:b6e1568f-28c8-4725-9903-412f7cd4d590)
+  Scenario: Cancel Order - Cancelled
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -89,7 +89,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Cancelled" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  Scenario: Cancel Order - Transferred to 3PL (uid:fb4a419b-e97a-4f3a-9414-b40b0f932fb4)
+  Scenario: Cancel Order - Transferred to 3PL
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -105,7 +105,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  Scenario: Operator Cancel Order From Resolved Recovery Ticket (uid:46244d7b-ed84-4d1e-a1ab-84a5ab5b66a9)
+  Scenario: Operator Cancel Order From Resolved Recovery Ticket
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | {"service_type":"Return","service_level":"Standard","parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

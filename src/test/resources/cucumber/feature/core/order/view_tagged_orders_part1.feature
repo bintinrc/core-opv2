@@ -5,7 +5,7 @@ Feature: View Tagged Orders
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days (uid:b6a6b1fc-6e70-402d-8646-1f1ce7d02fe9)
+  Scenario: View Tagged Orders - Pending Pickup, No Route Id, No Attempt, No Inbound Days
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -25,7 +25,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pending Pickup                  |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule (uid:ed0f7f4b-4158-4044-9a5f-4ae27fb5ed10)
+  Scenario: View Tagged Orders - Delivery Attempted, Pending Reschedule
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -60,7 +60,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                                   |
       | granularStatus       | Pending Reschedule                  |
 
-  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt (uid:388b0dc8-f85c-478d-84d0-7e40093c8e34)
+  Scenario: View Tagged Orders - Arrived at Sorting Hub, No Route Id,  No Attempt
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -82,7 +82,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | 1                               |
       | granularStatus       | Arrived at Sorting Hub          |
 
-  Scenario: View Tagged Orders - Staging, No Route Id, No Attempt, No Inbound Days (uid:6a174a76-2ec9-4c2b-b3f3-f021a5e87d87)
+  Scenario: View Tagged Orders - Staging, No Route Id, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -102,7 +102,7 @@ Feature: View Tagged Orders
       | daysFromFirstInbound | Not Inbounded                   |
       | granularStatus       | Staging                         |
 
-  Scenario: View Tagged Orders - On Hold, No Route Id, No Attempt, No Inbound Days (uid:50e91935-b501-47f7-9877-43cf62e306ea)
+  Scenario: View Tagged Orders - On Hold, No Route Id, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |

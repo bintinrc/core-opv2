@@ -5,7 +5,7 @@ Feature: Order Tag Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders (uid:b2d0b3b7-e915-49ed-94a1-0ac287889db5)
+  Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Show RTS Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -22,7 +22,7 @@ Feature: Order Tag Management
       | rts | Show |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  Scenario: Search Orders on the Order Tag Management Page by Shipper Filter (uid:d4180b65-215f-48f0-9c42-7f7ac5a45b2c)
+  Scenario: Search Orders on the Order Tag Management Page by Shipper Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -33,7 +33,7 @@ Feature: Order Tag Management
       | shipperName | {filter-shipper-name} |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter (uid:ae438b3a-376d-46bf-811a-1ccfcd8ef6b0)
+  Scenario: Search Orders on the Order Tag Management Page by Master Shipper Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -45,7 +45,7 @@ Feature: Order Tag Management
       | masterShipperName | {shipper-v4-marketplace-name} |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  Scenario: Search Orders on the Order Tag Management Page by Status & Granular Status Filter (uid:3ff15dde-21af-4e3c-89f1-6b57534e4e73)
+  Scenario: Search Orders on the Order Tag Management Page by Status & Granular Status Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -59,7 +59,7 @@ Feature: Order Tag Management
       | granularStatus | Arrived at Sorting Hub |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  Scenario: Search Orders on the Order Tag Management Page by CSV File (uid:45a9e1a9-2112-4a5d-b753-83dd279c2f43)
+  Scenario: Search Orders on the Order Tag Management Page by CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |

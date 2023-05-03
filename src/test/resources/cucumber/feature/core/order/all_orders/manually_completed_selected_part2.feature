@@ -5,7 +5,7 @@ Feature: All Orders - Manually Completed Selected
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD (<uid>)
+  Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Collect COD
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                            |
@@ -39,8 +39,8 @@ Feature: All Orders - Manually Completed Selected
       | transactionMode   | DELIVERY           |
       | expectedCodAmount | <collected_amount> |
     Examples:
-      | note        | cod_amount | collected_amount | collected | uid                                      |
-      | Collect COD | 23.57      | 23.57            | true      | uid:d477b7d1-9a47-445b-84ca-34b7c8da10c4 |
+      | note        | cod_amount | collected_amount | collected |
+      | Collect COD | 23.57      | 23.57            | true      |
 
   Scenario Outline: Operator Force Success Order on All Orders Page - Unrouted Order with COD - Do not Collect COD
     Given Operator go to menu Utilities -> QRCode Printing

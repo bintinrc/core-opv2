@@ -6,7 +6,7 @@ Feature: View Tagged Orders
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - En-route to Sorting Hub, No Route Id,  No Attempt, No Inbound Days (uid:c85cdc7d-03ad-4d19-9e84-f6a09b3fe923)
+  Scenario: View Tagged Orders - En-route to Sorting Hub, No Route Id,  No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -35,7 +35,7 @@ Feature: View Tagged Orders
       | granularStatus       | En-route to Sorting Hub         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - On Vehicle Delivery, No Attempt (uid:47e71b73-c90e-43f8-86dd-869be076ec5d)
+  Scenario: View Tagged Orders - On Vehicle Delivery, No Attempt
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -67,7 +67,7 @@ Feature: View Tagged Orders
       | granularStatus       | On Vehicle for Delivery         |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Pending Pickup at Distribution Point, No Route Id, No Attempt, No Inbound Days (uid:006826c7-611c-4212-8e02-fe65c7a32292)
+  Scenario: View Tagged Orders - Pending Pickup at Distribution Point, No Route Id, No Attempt, No Inbound Days
     When Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -89,7 +89,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pending Pickup at Distribution Point |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days (uid:df1fb45b-264f-4689-bbdd-044690c46754)
+  Scenario: View Tagged Orders - Pickup Fail, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -122,7 +122,7 @@ Feature: View Tagged Orders
       | granularStatus       | Pickup fail                     |
 
   @DeleteOrArchiveRoute
-  Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days (uid:77704c4b-9221-4320-9449-8047d4f0159e)
+  Scenario: View Tagged Orders - Van en-route to pickup, No Attempt, No Inbound Days
     Given Operator go to menu Utilities -> QRCode Printing
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

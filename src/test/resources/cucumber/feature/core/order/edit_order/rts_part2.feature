@@ -6,7 +6,7 @@ Feature: RTS
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Operator RTS Order with Allowed Granular Status - On Vehicle for Delivery (uid:d56ee23a-ca14-4d91-9942-4ae1c71a49b9)
+  Scenario: Operator RTS Order with Allowed Granular Status - On Vehicle for Delivery
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

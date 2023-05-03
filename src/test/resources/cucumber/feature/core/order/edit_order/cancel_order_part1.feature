@@ -5,7 +5,7 @@ Feature: Cancel Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Cancel Order - On Hold (uid:0bb9bcdb-c2aa-45fe-be71-4c182ffc7a8f)
+  Scenario: Cancel Order - On Hold
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -29,7 +29,7 @@ Feature: Cancel Order
       | message    | Order is On Hold! |
 
   @happy-path
-  Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
+  Scenario: Cancel Order - Pending Pickup
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -65,7 +65,7 @@ Feature: Cancel Order
     And DB Operator verify Jaro Scores of the created order after cancel
 
   @DeleteOrArchiveRoute @routing-refactor
-  Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
+  Scenario: Cancel Order - Van En-route to Pickup
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -117,7 +117,7 @@ Feature: Cancel Order
     And DB Operator verify Jaro Scores of the created order after cancel
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - Pickup Fail (uid:91b0c811-faf3-41c0-ae2d-7398ec635134)
+  Scenario: Cancel Order - Pickup Fail
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -165,7 +165,7 @@ Feature: Cancel Order
       | waypointId                         | archived | status  |
       | {KEY_TRANSACTION_AFTER.waypointId} | 1        | Pending |
 
-  Scenario: Cancel Order - Staging (uid:0bd14e39-9e38-463c-ab66-784553f537cf)
+  Scenario: Cancel Order - Staging
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -199,7 +199,7 @@ Feature: Cancel Order
     And DB Operator verify Jaro Scores of the created order after cancel
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - En-route to Sorting Hub (uid:426b4ab8-7ed3-4220-88e1-e36c2b87003b)
+  Scenario: Cancel Order - En-route to Sorting Hub
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -229,7 +229,7 @@ Feature: Cancel Order
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - Arrived at Sorting Hub (uid:d2d30151-158f-4e04-945b-5f04e16a1c2d)
+  Scenario: Cancel Order - Arrived at Sorting Hub
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -244,7 +244,7 @@ Feature: Cancel Order
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
   @DeleteOrArchiveRoute
-  Scenario: Cancel Order - On Vehicle for Delivery (uid:8ef43ca4-b72b-4aaf-913e-ec96800c01fa)
+  Scenario: Cancel Order - On Vehicle for Delivery
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

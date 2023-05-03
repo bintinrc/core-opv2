@@ -6,7 +6,7 @@ Feature: Order Tag Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @happy-path
-  Scenario: Add Tags to Order (uid:370389c7-d387-4f1d-9af8-57380c4c3d0d)
+  Scenario: Add Tags to Order
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -25,7 +25,7 @@ Feature: Order Tag Management
       | {order-tag-name-3} |
 
   @happy-path
-  Scenario: Remove Tags from Order (uid:1ea8fbc7-d934-4433-9cc2-3034f6d9ae2a)
+  Scenario: Remove Tags from Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -45,7 +45,7 @@ Feature: Order Tag Management
     Then Operator verify the tags shown on Edit Order page
       | {order-tag-name-3} |
 
-  Scenario: Update Tags from Order (uid:7d001759-5de3-42aa-9622-dd72913aae5a)
+  Scenario: Update Tags from Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -65,7 +65,7 @@ Feature: Order Tag Management
       | {order-tag-name-2} |
       | {order-tag-name-3} |
 
-  Scenario: Clear All Tags from Order (uid:abb24ee5-c2b1-4b8a-afa2-8b7fbee392b0)
+  Scenario: Clear All Tags from Order
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -82,7 +82,7 @@ Feature: Order Tag Management
     When Operator open Edit Order page for order ID "{KEY_LIST_OF_CREATED_ORDER_ID[1]}"
     Then Operator verifies no tags shown on Edit Order page
 
-  Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note> (<hiptest-uid>)
+  Scenario Outline: Search Orders on Order Tag Management Page by Order Type Filter - <Note>
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
@@ -93,11 +93,11 @@ Feature: Order Tag Management
       | orderType | <orderType> |
     Then Operator searches and selects orders created on Order Tag Management page
     Examples:
-      | Note   | hiptest-uid                              | orderType | isPickupRequired |
-      | Normal | uid:5a9eb763-3f2e-406a-a920-2fde0f189ace | Normal    | false            |
-      | Return | uid:c2cb8cdc-f354-4afc-a5c8-63cc99a7955e | Return    | true             |
+      | Note   | orderType | isPickupRequired |
+      | Normal | Normal    | false            |
+      | Return | Return    | true             |
 
-  Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders (uid:375d4322-b8ba-4cd3-a211-ce59402fc803)
+  Scenario: Search Orders on the Order Tag Management Page by RTS Filter - Hide RTS Orders
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
