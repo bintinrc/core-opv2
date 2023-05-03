@@ -295,9 +295,9 @@ Feature: Parcel Sweeper Live
     Then Operator verify RTS label on Parcel Sweeper Live page
     And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
       | backgroundColor | {success-bg-inbound} |
-    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[3].waypointId}"
+    When DB Core - operator get waypoints details for "{KEY_CREATED_ORDER.transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
       | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
