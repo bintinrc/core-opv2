@@ -372,6 +372,18 @@ Feature: Address Datasource
       | longitude   | {longitude-2}       |
       | whitelisted | False               |
 
+  Scenario: VN Address Datasource - Edit Row - with Empty Field
+    Given Operator go to menu Utilities -> QRCode Printing
+    Given Operator go to menu Addressing -> Address Datasource
+    When Operator search the existing address datasource:
+      | province | {created-province} |
+    When Operator clicks on Edit Button on Address Datasource Page
+    And Operator fills address parameters in Edit Address modal on Address Datasource page:
+      | province  | EMPTY |
+      | kota      | EMPTY |
+      | kecamatan | EMPTY |
+    And Operator verifies empty field error shows up in address datasource page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

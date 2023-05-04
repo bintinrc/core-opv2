@@ -5,7 +5,7 @@ Feature: Address Datasource
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: VN Address Datasource  Landing Page - Search Box 1 of 3 Input
+  Scenario: VN Address Datasource Landing Page - Search Box 1 of 3 Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -17,7 +17,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}       |
       | longitude | {longitude-1}      |
 
-  Scenario: VN Address Datasource  Landing Page - Search Box 2 of 3 Input
+  Scenario: VN Address Datasource Landing Page - Search Box 2 of 3 Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -30,7 +30,7 @@ Feature: Address Datasource
       | latitude  | {latitude-1}       |
       | longitude | {longitude-1}      |
 
-  Scenario: VN Address Datasource  Landing Page - Search Box 3 of 3  Input
+  Scenario: VN Address Datasource Landing Page - Search Box 3 of 3  Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -53,7 +53,7 @@ Feature: Address Datasource
       | kecamatan | INVALID |
     Then Operator verifies no result found on Address Datasource page
 
-  Scenario: VN Address Datasource  Landing Page - Scrolling
+  Scenario: VN Address Datasource Landing Page - Scrolling
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator search the existing address datasource:
@@ -122,7 +122,7 @@ Feature: Address Datasource
       | latitude  | {latitude-2}    |
       | longitude | {longitude-2}   |
 
-  Scenario: VN Address Datasource  - View Zone and Hub match - Existing Row
+  Scenario: VN Address Datasource - View Zone and Hub match - Existing Row
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When API Operator get Addressing Zone:

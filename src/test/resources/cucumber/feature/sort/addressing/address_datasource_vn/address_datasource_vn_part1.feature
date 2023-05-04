@@ -146,7 +146,7 @@ Feature: Address Datasource
       | l2 | District |
       | l3 | Ward     |
 
-  Scenario: VN Address Datasource  Landing Page - Search Box No Input
+  Scenario: VN Address Datasource Landing Page - Search Box No Input
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Addressing -> Address Datasource
     When Operator verifies search button is disabled
