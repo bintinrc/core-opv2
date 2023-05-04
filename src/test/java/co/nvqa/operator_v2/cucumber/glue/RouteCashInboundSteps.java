@@ -1,14 +1,19 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.Cod;
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order.Cod;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
 
@@ -28,15 +33,19 @@ public class RouteCashInboundSteps extends AbstractSteps {
     routeCashInboundPage = new RouteCashInboundPage(getWebDriver());
   }
 
-  @When("^Operator create new COD on Route Cash Inbound page$")
-  public void operatorCreateNewCod() {
-    Order order = get(KEY_CREATED_ORDER);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
+  @When("Operator create new COD on Route Cash Inbound page")
+  public void operatorCreateNewCod(Map<String, String> dataTableRaw) {
+    Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
+    Long orderId = Long.valueOf(dataTable.get("orderId"));
+    Long routeId = Long.valueOf(dataTable.get("routeId"));
+
+    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS, Collections.emptyList());
+    Order order = orders.stream().filter(o -> o.getId().equals(orderId)).collect(Collectors.toList()).get(0);
 
     Cod cod = order.getCod();
-   Assertions.assertThat(cod).as("COD should not be null.").isNotNull();
+    Assertions.assertThat(cod).as("COD should not be null.").isNotNull();
     Double codGoodsAmount = cod.getGoodsAmount();
-   Assertions.assertThat(codGoodsAmount).as("COD Goods Amount should not be null.").isNotNull();
+    Assertions.assertThat(codGoodsAmount).as("COD Goods Amount should not be null.").isNotNull();
 
     Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
     String receiptNumber = "#" + routeId + "-" + StandardTestUtils.generateDateUniqueString();
