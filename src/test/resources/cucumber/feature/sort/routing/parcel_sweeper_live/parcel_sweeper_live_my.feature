@@ -30,7 +30,6 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId         | No AV                |
       | backgroundColor | {success-bg-inbound} |
-    When API Operator get all zones preferences
     When Operator switch to edit order page using direct URL
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
