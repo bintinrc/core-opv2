@@ -172,6 +172,6 @@ Feature: Address Verification
     Then Operator verify order event on Edit order page using data below:
       | name | VERIFY ADDRESS |
 
-  @KillBrowser @ShouldAlwaysRun @WIP
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
