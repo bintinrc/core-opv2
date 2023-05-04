@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -29,26 +30,23 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   private final TimeBoundedScriptsPage timeBoundedScriptsPage;
 
   private static final String MD_VIRTUAL_REPEAT_TABLE_DRAFTS = "script in getTableData()";
-  public static final String COLUMN_CLASS_DATA_ID_ON_TABLE = "id";
-  public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "name";
-  public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE = "description";
-  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE = "last-modified";
-  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE = "last-modified-by";
-  public static final String ACTION_BUTTON_EDIT_ON_TABLE = "container.pricing-scripts.edit-script";
+  public static final String COLUMN_CLASS_DATA_ID_ON_TABLE = "1";
+  public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "2";
+  public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE = "3";
+  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE = "4";
+  public static final String COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE = "5";
+  public static final String ACTION_BUTTON_EDIT_ON_TABLE = "scriptTable.editBtn.";
 
   private static final String MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS = "script in getTableData()";
-  public static final String ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.link-shippers";
-  public static final String ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.manage-time-bounded-scripts";
+  public static final String ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS = "linkShippers.linkBtn";
+  public static final String ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS = "scriptTable.manage-time-bounded-scripts";
 
   private static final String TAB_DRAFTS = "Drafts";
   private static final String TAB_ACTIVE_SCRIPTS = "Active Scripts";
-  private static final String ACTIVE_TAB_XPATH = "//tab-content[@aria-hidden='false']";
+  private static final String ACTIVE_TAB_XPATH = "//div[@data-testid='virtualTable.noData']";
   private static final Pattern SHIPPER_SELECT_VALUE_PATTERN = Pattern.compile("(\\d+)-(.*)");
 
-  @FindBy(xpath = "//md-virtual-repeat-container//div[@class='md-virtual-repeat-scroller']")
-  public PageElement progressBar;
-
-  @FindBy(name = "container.pricing-scripts.create-draft")
+  @FindBy(xpath = "//button[@data-testid='scriptTable.createDraft']")
   public NvIconTextButton createDraftBtn;
 
   @FindBy(xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div")
@@ -60,7 +58,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   @FindBy(name = "commons.undo")
   public NvApiTextButton undoBtn;
 
-  @FindBy(name = "commons.save-changes")
+  @FindBy(xpath = "//button[@data-testid='linkShippers.saveBtn']/..")
   public NvApiTextButton saveBtn;
 
   public PricingScriptsV2Page(WebDriver webDriver) {
@@ -70,6 +68,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void createDraftAndSave(Script script) {
+    pause2s();
     clickCreateDraftBtn();
     pricingScriptsV2CreateEditDraftPage.createDraftAndSave(script);
   }
@@ -80,11 +79,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   private void clickCreateDraftBtn() {
-    clickNvIconTextButtonByName("container.pricing-scripts.create-draft");
-    if (!getCurrentUrl().endsWith("pricing-scripts-v2/create?type=normal") && createDraftBtn
-        .isEnabled()) {
-      createDraftBtn.click();
-    }
+    clickNvIconTextButtonByName("Create Draft");
   }
 
   public void checkErrorHeader(String message) {
@@ -102,8 +97,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void verifyTheNewScriptIsCreatedOnDrafts(Script script) {
     clickTabItem(TAB_DRAFTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       searchTableDraftsByScriptName(script.getName());
       waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
@@ -122,11 +116,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void searchActiveScriptName(String scriptName) {
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       searchTableActiveScriptsByScriptName(scriptName);
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
-        refreshPage();
         searchTableActiveScriptsByScriptName(scriptName);
         if (isTableEmpty(ACTIVE_TAB_XPATH)) {
           fail("Data still not loaded");
@@ -139,8 +131,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void verifyDraftScriptIsDeleted(Script script) {
     waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
     clickTabItem(TAB_DRAFTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       searchTableDraftsByScriptName(script.getName());
       if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
@@ -150,7 +141,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         }
       }
     }, String.format("Data still not loaded"));
-   Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
+    Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
   }
 
   public void runCheckDraftScript(Script script, RunCheckParams runCheckParams) {
@@ -178,12 +169,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script, verifyDraftParams);
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
+    acceptAlertDialogIfAppear();
   }
 
   public void validateDraftAndReleaseScript(Script script) {
     goToEditDraftScript(script);
     pricingScriptsV2CreateEditDraftPage.validateDraftAndReleaseScript(script);
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
+    acceptAlertDialogIfAppear();
   }
 
   public String validateDraftAndReturnWarnings(Script script) {
@@ -195,6 +188,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByNameAndWaitUntilDone(
         "Release Script");
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
+    acceptAlertDialogIfAppear();
   }
 
   public void goToEditDraftScript(Script script) {
@@ -207,7 +201,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void verifyDraftScriptIsReleased(Script script) {
     waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
-    refreshPage();
     clickTabItem(TAB_ACTIVE_SCRIPTS);
 
     retryIfAssertionErrorOccurred(() ->
@@ -221,11 +214,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void verifyDraftScriptIsReleased(Script script, String searchWay) {
-    refreshPage();
     clickTabItem(TAB_ACTIVE_SCRIPTS);
 
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       switch (searchWay) {
         case "name":
           searchTableActiveScripts(searchWay, script.getName());
@@ -235,13 +226,13 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableActiveScripts(searchWay, script.getUpdatedAt());
+          searchTableActiveScripts("updated_at", script.getUpdatedAt());
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
         case "id":
           searchTableActiveScripts(searchWay, (script.getId() + ""));
           break;
-        case "last-modified-by":
+        case "last_modified_by":
           searchTableActiveScripts(searchWay, script.getLastModifiedUser());
           searchTableActiveScripts("id", (script.getId() + ""));
           break;
@@ -254,10 +245,8 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void searchInDraftScript(Script script, String searchWay) {
-    refreshPage();
     clickTabItem(TAB_DRAFTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       switch (searchWay) {
         case "name":
           searchTableDraftScripts(searchWay, script.getName());
@@ -267,7 +256,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "last-modified":
-          searchTableDraftScripts(searchWay, script.getUpdatedAt());
+          searchTableDraftScripts("updated_at", script.getUpdatedAt());
           searchTableDraftScripts("id", (script.getId() + ""));
           break;
         case "id":
@@ -287,8 +276,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void searchAccordingScriptId(Script script) {
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       searchTableActiveScripts("id", (script.getId() + ""));
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
         refreshPage();
@@ -319,81 +307,62 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void linkShippersWithIdAndName(Script script, Shipper shipper) {
     searchAndSelectShipper(script, shipper);
     saveBtn.clickAndWaitUntilDone();
+    waitUntilInvisibilityOfToast();
   }
 
   public void searchAndSelectShipper(Script script, Shipper shipper) {
     String scriptName = script.getName();
     String legacyId = shipper.getLegacyId().toString();
     String name = shipper.getName();
-
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
-      refreshPage();
-      searchTableActiveScriptsByScriptName(scriptName);
-      if (isTableEmpty(ACTIVE_TAB_XPATH)) {
-        fail("Data still not loaded");
-      }
-      Assertions.assertThat(
-              getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE))
-          .isEqualTo(scriptName);
-    }, String.format("Active script found "), 10, 5);
-
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
-    NvLogger.info("Waiting until Link Shippers Dialog loaded.");
-    waitUntilInvisibilityOfElementLocated(
-        "//md-dialog//md-dialog-content/div/md-progress-circular");
-    String searchValue = Objects.isNull(name) ? legacyId : legacyId.concat("-").concat(name);
-
-    sendKeys(".//nv-autocomplete[@search-text='ctrl.view.textShipper']//input", searchValue);
-    progressBar.waitUntilVisible();
-    String menuXpath = "//md-virtual-repeat-container//ul[@class='md-autocomplete-suggestions light']";
-    String itemXpath = f("//li//span[starts-with(text(),'%s')]", legacyId);
-
-    int count = 0;
-    while (!isElementVisible(itemXpath, 1) && count < 5) {
-      String lastItemXpath = menuXpath + "//li[last()]";
-      scrollIntoView(lastItemXpath, true);
-      count++;
+    searchTableActiveScriptsByScriptName(scriptName);
+    if (isTableEmpty(ACTIVE_TAB_XPATH)) {
+      fail("Data still not loaded");
     }
-    scrollIntoView(itemXpath, true);
-    waitUntilElementIsClickable(itemXpath);
-    click(itemXpath);
+    Assertions.assertThat(getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE))
+        .isEqualTo(scriptName);
+
+    String actionButtonXpath = f("//button[@data-testid='%s']",
+        ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
+    clickActionButtonOnTable(1, actionButtonXpath);
+    NvLogger.info("Waiting until Link Shippers Dialog loaded.");
+    waitUntilVisibilityOfElementLocated("//div[text()='Link Shippers']");
+    String searchValue = Objects.isNull(name) ? legacyId : legacyId.concat(" - ").concat(name);
+
+    click("//div[@name='shippers']//input");
+    sendKeys("//div[@name='shippers']//input", legacyId);
+    click("//*[text()='" + searchValue + "']");
+    sendKeys("//div[@name='shippers']//input", Keys.TAB);
   }
 
-  public void clickUndoBtn() {
-    undoBtn.click();
+  public void clickUndoBtn(String shipperId) {
+  clickf("//span[contains(@title,'%s')]/span[contains(@class,'remove')]",shipperId);
+//    undoBtn.click();
   }
 
   private List<String> getLinkedShipperNames() {
-    return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream()
-        .map(we ->
-        {
-          String text = we.getText().trim();
-          Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
-          if (m.matches()) {
-            return m.group(2).trim();
-          } else {
-            return "";
-          }
-        })
-        .collect(Collectors.toList());
+    return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream().map(we -> {
+      String text = we.getText().trim();
+      Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
+      if (m.matches()) {
+        return m.group(2).trim();
+      } else {
+        return "";
+      }
+    }).collect(Collectors.toList());
   }
 
 
   private List<String> getLinkedShipperIds() {
-    return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream()
-        .map(we ->
-        {
-          String text = we.getText().trim();
-          Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
-          if (m.matches()) {
-            return m.group(1).trim();
-          } else {
-            return "";
-          }
-        })
-        .collect(Collectors.toList());
+    return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream().map(we -> {
+      String text = we.getText().trim();
+      Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
+      if (m.matches()) {
+        return m.group(1).trim();
+      } else {
+        return "";
+      }
+    }).collect(Collectors.toList());
   }
 
   public void deleteActiveScript(Script script) {
@@ -404,23 +373,22 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void verifyActiveScriptIsDeleted(Script script) {
     waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    retryIfAssertionErrorOccurred(() ->
-    {
+    retryIfAssertionErrorOccurred(() -> {
       searchTableActiveScriptsByScriptName(script.getName());
       if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
-        refreshPage();
+//        refreshPage();
         searchTableActiveScriptsByScriptName(script.getName());
         if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
           fail("Data still not loaded");
         }
       }
     }, String.format("Data still not loaded"));
-   Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
+    Assertions.assertThat(isTableEmpty(ACTIVE_TAB_XPATH)).as("No Results Found").isTrue();
   }
 
   public void goToEditActiveScript(Script script) {
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-    searchTableActiveScriptsByScriptName(script.getName());
+//    searchTableActiveScriptsByScriptName(script.getName());
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Active Scripts Table is empty. Cannot delete script.");
     clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
@@ -438,8 +406,8 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   public void createAndReleaseNewTimeBoundedScripts(Script parentScript, Script script,
       VerifyDraftParams verifyDraftParams) {
     goToManageTimeBoundedScript(parentScript);
-    timeBoundedScriptsPage
-        .createAndReleaseTimeBoundedScript(parentScript, script, verifyDraftParams);
+    timeBoundedScriptsPage.createAndReleaseTimeBoundedScript(parentScript, script,
+        verifyDraftParams);
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
   }
 
@@ -465,25 +433,27 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     switch (tabItemText) {
       case TAB_DRAFTS:
         waitUntilPageLoaded("pricing-scripts-v2/drafts");
-        waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.draftScriptsTableParam']",
-            120);
+        waitUntilVisibilityOfElementLocated(
+            "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]", 120);
         break;
       case TAB_ACTIVE_SCRIPTS:
         waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
-        waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.activeScriptsTableParam']");
+        waitUntilVisibilityOfElementLocated(
+            "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'active-scripts')]");
         break;
     }
   }
 
   public void searchTableDraftsByScriptName(String scriptName) {
-    sendKeys(
-        "//nv-table[@param='ctrl.draftScriptsTableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
-        scriptName);
+    String xpathExpression = "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.name']";
+    click(xpathExpression);
+    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+    sendKeys(xpathExpression, scriptName);
   }
 
   public String getTextOnTableDrafts(int rowNumber, String columnDataClass) {
     return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass,
-        MD_VIRTUAL_REPEAT_TABLE_DRAFTS, "ctrl.draftScriptsTableParam");
+        MD_VIRTUAL_REPEAT_TABLE_DRAFTS, "drafts");
   }
 
   public void clickActionButtonOnTableDrafts(int rowNumber, String actionButtonName) {
@@ -492,39 +462,45 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void searchTableActiveScriptsByScriptName(String scriptName) {
-    sendKeys(
-        "//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input",
-        scriptName);
+    String xpathExpression = "//div[@aria-hidden='false' and contains(@id,'active-scripts')]//input[@data-testid='searchInput.name']";
+    click(xpathExpression);
+    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+    sendKeys(xpathExpression, scriptName);
   }
 
   public void searchTableActiveScripts(String searchBy, String scriptName) {
-    sendKeys(
-        f("//nv-table[@param='ctrl.activeScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
-            searchBy), scriptName);
+    String xpathExpression = f(
+        "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'active-scripts')]//input[@data-testid='searchInput.%s']",
+        searchBy);
+    click(xpathExpression);
+    sendKeys(xpathExpression, scriptName);
   }
 
   public void searchTableDraftScripts(String searchBy, String scriptName) {
-    sendKeys(
-        f("//nv-table[@param='ctrl.draftScriptsTableParam']//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input",
-            searchBy), scriptName);
+    String xpathExpression = f(
+        "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'drafts')]//input[@data-testid='searchInput.%s']",
+        searchBy);
+    click(xpathExpression);
+    sendKeys(xpathExpression, Keys.CONTROL + "a" + Keys.DELETE);
+    sendKeys(xpathExpression, scriptName);
   }
 
   public String getTextOnTableActiveScripts(int rowNumber, String columnDataClass) {
-    return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass,
-        MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS, "ctrl.activeScriptsTableParam");
+    String returnValue = getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass,
+        MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS, "active-scripts");
+    return returnValue;
+
   }
 
   public void clickActionButtonOnTableActiveScripts(int rowNumber, String actionButtonName) {
     clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName,
-        MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS, XpathTextMode.CONTAINS,
-        "ctrl.activeScriptsTableParam");
+        MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS, XpathTextMode.CONTAINS, "active-scripts");
   }
 
   public void waitUntilPageLoaded(String expectedUrlEndsWith) {
     super.waitUntilPageLoaded();
 
-    waitUntil(() ->
-        {
+    waitUntil(() -> {
           String currentUrl = getCurrentUrl();
           NvLogger.infof(
               "PricingScriptsV2Page.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]",
@@ -532,5 +508,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
           return currentUrl.endsWith(expectedUrlEndsWith);
         }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS,
         String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
+  }
+
+  public void switchToIframe() {
+    switchToFrame("//iframe[@ng-style='iframeStyleObj']");
   }
 }

@@ -57,10 +57,12 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("^Operator create new Draft Script using data below:$")
   public void operatorCreateNewDraftScript(Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = setScriptData(mapOfData);
     pricingScriptsV2Page.createDraftAndSave(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
     takesScreenshot();
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("^Operator send below data to create new Draft Script:$")
@@ -122,41 +124,53 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @Then("Operator verify error message in header with {string}")
   public void operatorVerifyErrorMessage(String message) {
+    pricingScriptsV2Page.switchToIframe();
     pricingScriptsV2Page.checkErrorHeader(message);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("^Operator verify the new Script is created successfully on Drafts$")
   public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
     put(KEY_ACTIVE_SCRIPT_ID, script.getId());
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator edit the created Draft Script using data below:")
   public void operatorEditCreatedDraft(Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
     pricingScriptsV2CreateEditDraftPage.checkSuccessfulSyntax();
     pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
     pricingScriptsV2CreateEditDraftPage.validateDraft();
+    getWebDriver().switchTo().defaultContent();
   }
 
   @And("Operator send below data to created Draft Script:")
   public void operatorSendBelowDataToCreatedDraftScript(Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedDraft(script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator edit the created Active Script using data below:")
   public void operatorEditCreatedActiveScript(Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = editCreatedDraftOrActiveScript(mapOfData);
     pricingScriptsV2Page.editCreatedActive(script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("Operator search according Active Script name")
   public void operatorSearchActiveScriptName() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.searchActiveScriptName(script.getName());
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("^Operator delete Draft Script$")
@@ -173,38 +187,47 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("Operator search custom script id {string}")
   public void operatorSearchAccordingScriptId(String scriptId) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = new Script();
     script.setId(Long.parseLong(scriptId));
     pricingScriptsV2Page.searchAccordingScriptId(script);
     put(KEY_CREATED_PRICING_SCRIPT, script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("Operator do Run Check on specific Draft Script using this data below:")
   public void operatorDoRunCheckOnSpecificDraftScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     RunCheckParams runCheckParams = runCheckScriptDraftAndActive(mapOfData);
     pricingScriptsV2Page.runCheckDraftScript(script, runCheckParams);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("Operator do Run Check on specific Active Script using this data below:")
   public void operatorDoRunCheckOnSpecificActiveScriptUsingThisDataBelow(
       Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     RunCheckParams runCheckParams = runCheckScriptDraftAndActive(mapOfData);
     pricingScriptsV2Page.runCheckActiveScript(script, runCheckParams);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator verify error message")
   public void verifyErrorMessage(Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     String message = mapOfData.get("message");
     String response = mapOfData.get("response");
     pricingScriptsV2Page.verifyErrorMessage(message, response);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator verify the Run Check Result is correct using data below:")
   public void operatorVerifyTheRunCheckResultIsCorrectUsingDataBelow(
       Map<String, String> mapOfData) {
+    pricingScriptsV2Page.switchToIframe();
     Double grandTotal = Double.parseDouble(mapOfData.get("grandTotal"));
     Double gst = Double.parseDouble(mapOfData.get("gst"));
     Double deliveryFee = Double.parseDouble(mapOfData.get("deliveryFee"));
@@ -222,18 +245,23 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     runCheckResult.setHandlingFee(handlingFee);
     runCheckResult.setComments(comments);
     pricingScriptsV2Page.verifyTheRunCheckResultIsCorrect(runCheckResult);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator close page")
   public void operatorCloseScreen() {
+    pricingScriptsV2Page.switchToIframe();
     pricingScriptsV2Page.closeScreen();
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator clicks validate and release Draft Script")
   @Then("Operator validate and release Draft Script")
   public void operatorValidateAndReleaseDraft() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.validateDraftAndReleaseScript(script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator release Draft Script")
@@ -266,40 +294,50 @@ public class PricingScriptsV2Steps extends AbstractSteps {
   @When("Operator verify Draft Script is released successfully")
   @Then("Operator verify the script is saved successfully")
   public void operatorVerifyDraftScriptIsReleasedSuccessfully() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator verify Active Script data is correct")
   public void operatorVerifyActiveScriptDataIsCorrect() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     verifyScriptDetailsInActiveScriptPage(pricingScriptsV2Page, script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator verify Draft Script data is correct")
   public void operatorVerifyDraftScriptDataIsCorrect() {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     verifyScriptDetailsInDraftScriptPage(pricingScriptsV2Page, script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator search according to {string} and verify search result")
   public void operatorSearch(String searchType) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     Script dbScript = get(KEY_PRICING_SCRIPT_DETAILS);
     script.setLastModifiedUser(dbScript.getLastModifiedUser());
     script.setLastModifiedEmail(dbScript.getLastModifiedEmail());
     pricingScriptsV2Page.verifyDraftScriptIsReleased(script, searchType);
     verifyScriptDetailsInActiveScriptPage(pricingScriptsV2Page, script);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator search according to {string} and verify search result in Draft Script page")
   public void operatorSearchDraftScript(String searchType) {
+    pricingScriptsV2Page.switchToIframe();
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
     Script dbScript = get(KEY_PRICING_SCRIPT_DETAILS);
     script.setLastModifiedUser(dbScript.getLastModifiedUser());
     script.setLastModifiedEmail(dbScript.getLastModifiedEmail());
     pricingScriptsV2Page.searchInDraftScript(script, searchType);
     verifyScriptDetailsInDraftScriptPage(pricingScriptsV2Page, script);
+    getWebDriver().switchTo().defaultContent();
   }
 
 
@@ -324,14 +362,16 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String lastModified = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
         COLUMN_CLASS_DATA_LAST_MODIFIED_ON_TABLE);
     ScriptVersion scriptVersion = get(KEY_PRICING_SCRIPT_LATEST_VERSION_DETAILS);
+    System.out.println(
+        "Date " + DateUtil.getAdjustedLocalTimeFromUTC(scriptVersion.getCreatedAt(), 1));
     softAssertions.assertThat(lastModified).as("Last Modified date is correct")
         .isEqualTo(DateUtil.getDefaultDateTimeFromUTC(scriptVersion.getCreatedAt()));
 
     String lastModifiedBy = pricingScriptsV2Page.getTextOnTableActiveScripts(1,
         COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE);
     softAssertions.assertThat(lastModifiedBy).as("Last Modified By date is correct")
-        .isEqualTo(scriptVersion.getLastModifiedUser() + " (" + scriptVersion.getLastModifiedEmail()
-            + ")");
+        .isEqualTo(
+            scriptVersion.getLastModifiedUser() + " - " + scriptVersion.getLastModifiedEmail());
 
     softAssertions.assertAll();
   }
@@ -363,8 +403,8 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String lastModifiedBy = pricingScriptsV2Page.getTextOnTableDrafts(1,
         COLUMN_CLASS_DATA_LAST_MODIFIED_BY_ON_TABLE);
     softAssertions.assertThat(lastModifiedBy).as("Last Modified By date is correct")
-        .isEqualTo(scriptVersion.getLastModifiedUser() + " (" + scriptVersion.getLastModifiedEmail()
-            + ")");
+        .isEqualTo(
+            scriptVersion.getLastModifiedUser() + " - " + scriptVersion.getLastModifiedEmail());
 
     softAssertions.assertAll();
   }
@@ -483,9 +523,9 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     String timeslotType = mapOfData.get("timeslotType");
     String isRts = mapOfData.get("isRts");
     String size = mapOfData.get("size");
-    double weight = Double.parseDouble(mapOfData.get("weight"));
-    double insuredValue = Double.parseDouble(mapOfData.get("insuredValue"));
-    double codValue = Double.parseDouble(mapOfData.get("codValue"));
+    String weight = mapOfData.get("weight");
+    String insuredValue = mapOfData.get("insuredValue");
+    String codValue = mapOfData.get("codValue");
     String fromZone = mapOfData.get("fromZone");
     String toZone = mapOfData.get("toZone");
     String originPricingZone = mapOfData.get("originPricingZone");
@@ -573,8 +613,10 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("Operator verifies Save button is inactive")
   public void operatorVerifiesSaveButtonIsInactive() {
+    pricingScriptsV2Page.switchToIframe();
     Assertions.assertThat(pricingScriptsV2Page.saveBtn.isDisabled()).as("Save Btn is disabled")
         .isTrue();
+    getWebDriver().switchTo().defaultContent();
   }
 
   @When("Operator verifies Save Draft button is inactive")
@@ -586,6 +628,7 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @When("Operator link Script to Shipper with ID and Name = {string} and undo the changes")
   public void operatorLinkScriptToShipperWithIDAndNameAndUndoTheChanges(String shipperIdAndName) {
+    pricingScriptsV2Page.switchToIframe();
     shipperIdAndName = resolveValue(shipperIdAndName);
     Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
@@ -596,13 +639,16 @@ public class PricingScriptsV2Steps extends AbstractSteps {
     shipper.setName(shipperName);
 
     pricingScriptsV2Page.searchAndSelectShipper(script, shipper);
-    pricingScriptsV2Page.clickUndoBtn();
+    pricingScriptsV2Page.clickUndoBtn(shipperId);
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator clicks Check Syntax")
   public void operatorClicksCheckScript() {
+    pricingScriptsV2Page.switchToIframe();
     pricingScriptsV2CreateEditDraftPage.checkSyntaxBtn.clickAndWaitUntilDone();
     takesScreenshot();
+    getWebDriver().switchTo().defaultContent();
   }
 
   @Then("Operator clicks Verify Draft")
@@ -613,9 +659,11 @@ public class PricingScriptsV2Steps extends AbstractSteps {
 
   @Then("Operator clicks Check Syntax, Verify Draft and Validate Draft")
   public void operatorClicksCheckScriptSaveDraft() {
+    pricingScriptsV2Page.switchToIframe();
     pricingScriptsV2CreateEditDraftPage.checkSyntaxBtn.clickAndWaitUntilDone();
     pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByName("Verify Draft");
     pricingScriptsV2CreateEditDraftPage.validateDraft();
     takesScreenshot();
+    getWebDriver().switchTo().defaultContent();
   }
 }

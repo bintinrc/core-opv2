@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimpleWebPage {
 
+  private final Actions action = new Actions(getWebDriver());
   private static final Logger LOGGER = LoggerFactory.getLogger(OperatorV2SimplePage.class);
 
   private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
@@ -119,14 +120,16 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   public void clickNvIconTextButtonByName(String name) {
-    clickf("//nv-icon-text-button[@name='%s']//button", name);
+    String xpathExpression = f("//span[text()='%s']/parent::button", name);
+    waitUntilVisibilityOfElementLocated(xpathExpression);
+    clickf(xpathExpression);
   }
 
   public void clickNvIconTextButtonByNameAndWaitUntilDone(String name) {
-    String xpathExpression = f("//nv-icon-text-button[@name='%s']", name);
+    String xpathExpression = f("//span[text()='%s']/parent::button", name);
     click(xpathExpression);
     waitUntilInvisibilityOfElementLocated(
-        xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+        xpathExpression + "/div[contains(@class,'show')]/md-progress-circular");
   }
 
   public void clickNvApiTextButtonByName(String name) {
@@ -178,6 +181,13 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     pause100ms();
   }
 
+  public void deleteText(String xpathExpression) {
+    WebElement we = findElementByXpath(xpathExpression);
+    we.sendKeys(Keys.CONTROL+"a"+Keys.DELETE);
+    we.sendKeys(Keys.COMMAND+"a"+Keys.DELETE);
+    pause100ms();
+  }
+
   public void clearf(String xpathExpression, Object... args) {
     xpathExpression = f(xpathExpression, args);
     WebElement we = findElementByXpath(xpathExpression);
@@ -223,17 +233,21 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   public void clickTabItem(String tabItemText) {
-    clickf("//tab-item[contains(text(), '%s')]", tabItemText);
+    String xpathExpression = f("//div[@role='tab' and contains(text(), '%s')]", tabItemText);
+    waitUntilVisibilityOfElementLocated(xpathExpression);
+    simpleClick(xpathExpression);
   }
 
   public void waitUntilVisibilityOfToast(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
-        f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+        f("//div[@class='ant-notification ant-notification-topRight']//div[contains(text(), '%s')]",
+            containsMessage));
   }
 
   public void waitUntilNoticeMessage(String containsMessage) {
     waitUntilVisibilityOfElementLocated(
-            f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]", containsMessage));
+        f("//div[@class='ant-notification-notice-message' and contains(text(), '%s')]",
+            containsMessage));
   }
 
   public void waitUntilVisibilityOfToastReact(String containsMessage) {
@@ -244,22 +258,22 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public Map<String, String> waitUntilVisibilityAndGetErrorToastData() {
     Map<String, String> toastData = new HashMap<>();
-    String xpath = "//div[@class='toast-message']";
+    String xpath = "//div[@class='ant-notification-notice-description']/div";
     waitUntilVisibilityOfElementLocated(xpath);
 
-    String childXpath = xpath + "//strong[1]";
+    String childXpath = xpath + "/div[1]";
     if (isElementExistFast(childXpath)) {
       toastData.put("status", StringUtils.trim(getText(childXpath)));
     }
-    childXpath = xpath + "//strong[2]";
+    childXpath = xpath + "/div[2]";
     if (isElementExistFast(childXpath)) {
       toastData.put("url", StringUtils.trim(getText(childXpath)));
     }
-    childXpath = xpath + "//strong[3]";
+    childXpath = xpath + "/div[3]";
     if (isElementExistFast(childXpath)) {
       toastData.put("errorCode", StringUtils.trim(getText(childXpath)));
     }
-    childXpath = xpath + "//strong[4]";
+    childXpath = xpath + "/div[4]";
     if (isElementExistFast(childXpath)) {
       toastData.put("errorMessage", StringUtils.trim(getText(childXpath)));
     }
@@ -281,9 +295,9 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfToast(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
-        : "//div[@id='toast-container']";
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
+        "//div[@class='ant-notification ant-notification-topRight']//div[contains(text(), '%s')]",
+        containsMessage) : "//div[@class='ant-notification ant-notification-topRight']";
 
     if (waitUntilElementVisibleFirst) {
       waitUntilVisibilityOfElementLocated(xpathExpression);
@@ -294,17 +308,16 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void waitUntilInvisibilityOfNotification(String containsMessage,
       boolean waitUntilElementVisibleFirst) {
-    String xpathExpression = StringUtils.isNotBlank(containsMessage)
-        ? f(
+    String xpathExpression = StringUtils.isNotBlank(containsMessage) ? f(
         "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message'][contains(text(),'%s')]",
-        containsMessage)
-        : "//div[contains(@class,'ant-notification')]";
+        containsMessage) : "//div[contains(@class,'ant-notification')]";
 
     if (waitUntilElementVisibleFirst) {
       waitUntilVisibilityOfElementLocated(xpathExpression);
     }
     if (isElementExistFast(xpathExpression)) {
-      waitUntilElementIsClickable("//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
+      waitUntilElementIsClickable(
+          "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
       click(
           "//div[contains(@class,'ant-notification')]//a[@class='ant-notification-notice-close']");
     }
@@ -432,39 +445,19 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
     try {
       if (!isBlank(nvTableParam)) {
-        nvTableXpathExpression = f(".//nv-table[@param='%s']", nvTableParam);
+        nvTableXpathExpression = f(
+            "//div[@role='tabpanel' and @aria-hidden='false' and contains(@id,'%s')]//div[contains(@class,'table-main')]/div[@class='BaseTable__body']",
+            nvTableParam);
       }
 
-      WebElement we;
-
-      switch (xpathTextMode) {
-        case EXACT:
-          we = findElementByXpath(
-              f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']",
-                  nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
-          break;
-        case CONTAINS:
-          we = findElementByXpath(
-              f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[contains(@class, '%s')]",
-                  nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
-          break;
-        case STARTS_WITH:
-          we = findElementByXpath(
-              f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]",
-                  nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
-          break;
-        default:
-          we = findElementByXpath(
-              f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]",
-                  nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
-      }
-
+      WebElement we = findElementByXpath(
+          f("%s//div[@role='row' and @class='BaseTable__row'][%d]/div[@role='gridcell'][%s]",
+              nvTableXpathExpression, rowNumber, columnDataClass));
       text = we.getText().trim();
     } catch (NoSuchElementException ex) {
       LOGGER.warn("Failed to find element by XPath. XPath: {}", nvTableXpathExpression);
-      NvAllure
-          .addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s",
-              nvTableXpathExpression);
+      NvAllure.addWarnAttachment(getCurrentMethodName(),
+          "Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
     }
 
     return text;
@@ -478,8 +471,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void clickCustomActionButtonOnTableWithMdVirtualRepeat(int rowNumber,
       String actionButtonXpath, String mdVirtualRepeat) {
-    clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat,
-        XpathTextMode.STARTS_WITH, null, actionButtonXpath);
+    clickActionButtonOnTable(rowNumber, actionButtonXpath);
   }
 
   public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName,
@@ -496,43 +488,20 @@ public class OperatorV2SimplePage extends SimpleWebPage {
 
   public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName,
       String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam) {
-    String actionButtonXpath = f("//nv-icon-button[@name='%s']/button", actionButtonName);
+    String actionButtonXpath = f("//button[contains(@data-testid,'%s')]", actionButtonName);
     try {
-      clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat, xpathTextMode,
-          nvTableParam, actionButtonXpath);
+      clickActionButtonOnTable(rowNumber, actionButtonXpath);
     } catch (RuntimeException ex) {
       throw new RuntimeException(f("Cannot find action button '%s' on table.", actionButtonName),
           ex);
     }
   }
 
-  public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat,
-      XpathTextMode xpathTextMode, String nvTableParam, String actionButtonXpath) {
+
+  public void clickActionButtonOnTable(int rowNumber, String actionButtonXpath) {
     try {
-      String nvTableXpathExpression = "";
-
-      if (!isBlank(nvTableParam)) {
-        nvTableXpathExpression = f("//nv-table[@param='%s']", nvTableParam);
-      }
-
-      String xpathExpression;
-
-      switch (xpathTextMode) {
-        case CONTAINS:
-          xpathExpression = f(
-              "%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]%s",
-              nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
-          break;
-        case STARTS_WITH:
-          xpathExpression = f(
-              "%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s",
-              nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
-          break;
-        default:
-          xpathExpression = f(
-              "%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s",
-              nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
-      }
+      String xpathExpression = f("//div[@aria-hidden='false']//div[@role='row'][%d]%s", rowNumber,
+          actionButtonXpath);
 
       simpleClick(xpathExpression);
     } catch (NoSuchElementException ex) {
@@ -540,6 +509,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
           ex);
     }
   }
+
 
   /**
    * @param rowNumber       The row number.
@@ -835,8 +805,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
          */
     String noMatchingErrorText = f("\"%s\" were found.", value);
 
-    retryIfRuntimeExceptionOccurred(() ->
-    {
+    retryIfRuntimeExceptionOccurred(() -> {
       try {
         WebElement noMatchingErrorWe = findElementByXpath(
             f("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
@@ -890,7 +859,9 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     if (isMdSelectEnabled(mdSelectNgModel)) {
       selectValueFromMdSelect(mdSelectNgModel, value);
     } else {
-     Assertions.assertThat(getMdSelectValue(mdSelectNgModel)).as(selectName + " select is disabled and current value is not equal to expected").isEqualTo(          value);
+      Assertions.assertThat(getMdSelectValue(mdSelectNgModel))
+          .as(selectName + " select is disabled and current value is not equal to expected")
+          .isEqualTo(value);
     }
   }
 
@@ -960,10 +931,6 @@ public class OperatorV2SimplePage extends SimpleWebPage {
               value);
           break;
         case CONTAINS:
-          clickf(
-              "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s')]",
-              value);
-          break;
         default:
           clickf(
               "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s')]",
@@ -973,8 +940,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       pause40ms();
     }
 
-    Actions actions = new Actions(getWebDriver());
-    actions.sendKeys(Keys.ESCAPE).build().perform();
+    action.sendKeys(Keys.ESCAPE).build().perform();
     pause300ms();
   }
 
@@ -1007,10 +973,6 @@ public class OperatorV2SimplePage extends SimpleWebPage {
               value);
           break;
         case CONTAINS:
-          clickf(
-              "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]",
-              value);
-          break;
         default:
           clickf(
               "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]",
@@ -1021,8 +983,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
       pause100ms();
     }
 
-    Actions actions = new Actions(getWebDriver());
-    actions.sendKeys(Keys.ESCAPE).build().perform();
+    action.sendKeys(Keys.ESCAPE).build().perform();
     pause300ms();
   }
 
@@ -1036,11 +997,10 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   public void selectValueFromMdSelectById(String mdSelectId, String value) {
-    clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
+    scrollIntoView(f("//div[@name='%s']//input", mdSelectId));
+    clickf("//div[@name='%s']//input", mdSelectId);
     pause1s();
-    clickf(
-        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value= \"%s\" or contains(./div/text(),\"%s\")]",
-        value, value);
+    clickf("//div[text()='%s' and contains(@class,'option')]",value);
     pause50ms();
   }
 
@@ -1063,11 +1023,10 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   public void selectValueFromMdSelectByName(String mdSelectId, String value) {
-    clickf(".//md-select[starts-with(@name, '%s')]", mdSelectId);
-    pause100ms();
-    clickf(
-        "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%<s\")]",
-        value);
+    scrollIntoView(f("//div[@name='%s']//input", mdSelectId));
+    clickf("//div[@name='%s']//input", mdSelectId);
+    pause1s();
+    clickf("//div[text()='%s' and contains(@class,'option')]",value);
     pause50ms();
   }
 
@@ -1191,11 +1150,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   public void closeModal() {
     WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
 
-    Actions actions = new Actions(getWebDriver());
-    actions.moveToElement(we, 5, 5)
-        .click()
-        .build()
-        .perform();
+    action.moveToElement(we, 5, 5).click().build().perform();
     pause100ms();
   }
 
@@ -1231,7 +1186,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   public boolean isTableEmpty(String tableXpath) {
-    String xpath = tableXpath + "//*[text()='No Results Found']";
+    String xpath = tableXpath + "//*[text()='No Data']";
     try {
       return isElementVisible(xpath, FAST_WAIT_IN_SECONDS);
     } catch (TimeoutException ex) {
@@ -1266,12 +1221,10 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     getWebDriver().navigate().refresh();
     acceptAlertDialogIfAppear();
 
-    waitUntil(() ->
-    {
+    waitUntil(() -> {
       boolean result;
       String currentUrl = getCurrentUrl();
-      LOGGER
-          .info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
+      LOGGER.info("refreshPage: Current URL = [{}] - Expected URL = [{}]", currentUrl, previousUrl);
 
       if (previousUrl.contains("linehaul")) {
         result = currentUrl.contains("linehaul");
@@ -1391,7 +1344,6 @@ public class OperatorV2SimplePage extends SimpleWebPage {
   }
 
   private void moveAndDoubleClick(WebElement webElement) {
-    Actions action = new Actions(getWebDriver());
     action.moveToElement(webElement);
     pause100ms();
     action.doubleClick();
@@ -1425,8 +1377,7 @@ public class OperatorV2SimplePage extends SimpleWebPage {
           dialogXpath + "//nv-icon-button[@name='Cancel']",
           dialogXpath + "//nv-icon-text-button[@name='Cancel']",
           dialogXpath + "//button[@aria-label='Leave']",
-          dialogXpath + "//button[@aria-label='Leave Anyway']"
-      );
+          dialogXpath + "//button[@aria-label='Leave Anyway']");
       for (String closeLocator : closeLocators) {
         if (isElementVisible(closeLocator, 0)) {
           click(closeLocator);

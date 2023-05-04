@@ -4,7 +4,7 @@ Feature: Service Type and Service Level params
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario: Create Script - Include service_type and service_level - Added Successfully (uid:2cff4b8b-c704-4679-9335-8c0e44edaeee)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -12,9 +12,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -34,7 +34,7 @@ Feature: Service Type and Service Level params
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario: Create Script - Include service_type and service_level - Incorrect service_type (uid:454f1a82-3194-4112-9f47-56cc087e6a64)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -42,9 +42,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -64,7 +64,7 @@ Feature: Service Type and Service Level params
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario: Create Script - Include service_type and service_level - Incorrect service_level (uid:aa172bd5-4655-4239-9e65-e48ffff429b8)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -72,9 +72,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |

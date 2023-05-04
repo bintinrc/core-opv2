@@ -5,7 +5,7 @@ Feature: Import Script ByParam Function
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario: Create Script with importScriptByParams (uid:0487bb08-5069-44f3-9c81-88728f3d6d26)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -13,9 +13,9 @@ Feature: Import Script ByParam Function
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -33,7 +33,7 @@ Feature: Import Script ByParam Function
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript @HappyPathID
+  @DeletePricingScript @HappyPathID @Pass
   Scenario: Create Script with importScriptByParams include the input params logic (uid:032b15f5-8b26-41f2-b0af-fa78d9245d1b)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -42,7 +42,7 @@ Feature: Import Script ByParam Function
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario: Create Script with importScriptByParams and importScript (uid:90c1b136-7d06-4f9c-8fcf-87854237895f)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -51,7 +51,7 @@ Feature: Import Script ByParam Function
     And Operator validate and release Draft Script
     And Operator verify the script is saved successfully
 
-  @DeletePricingScript @HappyPathID
+  @DeletePricingScript @HappyPathID @Pass
   Scenario: Create Script with importScript (uid:7d63a996-1129-4d82-910f-b112a186b8ad)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:

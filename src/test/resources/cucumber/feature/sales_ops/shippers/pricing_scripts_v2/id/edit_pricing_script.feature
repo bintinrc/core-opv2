@@ -5,7 +5,7 @@ Feature: Edit Pricing Script
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
 
-  @DeletePricingScript
+  @DeletePricingScript @Pass
   Scenario Outline: Edit and Check Script - Send is_RTS - Use calculatePricing() - ID - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -16,9 +16,9 @@ Feature: Edit Pricing Script
     When Operator search according Active Script name
     When Operator do Run Check on specific Active Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | <is_RTS> |
       | size         | S        |
       | weight       | 1.0      |
