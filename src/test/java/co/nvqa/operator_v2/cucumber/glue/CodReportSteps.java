@@ -48,7 +48,7 @@ public class CodReportSteps extends AbstractSteps {
     codReportPage.waitWhilePageIsLoading();
   }
 
-  @Then("^Operator verify COD record on COD Report page:$")
+  @Then("Operator verify COD record on COD Report page:")
   public void operatorVerifyOrderIsExistWithCorrectInfo(Map<String, String> data) {
     CodInfo expected = new CodInfo(resolveKeyValues(data));
     int index = codReportPage.codTable.findRow(expected.getTrackingId());
@@ -59,12 +59,12 @@ public class CodReportSteps extends AbstractSteps {
     expected.compareWithActual(actual);
   }
 
-  @When("^Operator download COD Report$")
+  @When("Operator download COD Report")
   public void operatorDownloadCodReport() {
     codReportPage.downloadCsv.click();
   }
 
-  @Then("^Operator verify the downloaded COD Report data is correct$")
+  @Then("Operator verify the downloaded COD Report data is correct")
   public void operatorVerifyTheDownloadedCodReportDataIsCorrect(Map<String, String> dataTableRaw) {
     Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
     Long orderId = Long.valueOf(dataTable.get("orderId"));
