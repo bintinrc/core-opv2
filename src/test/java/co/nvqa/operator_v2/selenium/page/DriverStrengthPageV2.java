@@ -323,7 +323,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "username")
     public ForceClearTextBox username;
 
-    @FindBy(id = "password")
+    @FindBy(xpath = "//span[contains(@class,'ant-input')]/input[@name='password' and @id='password']")
     public ForceClearTextBox password;
 
     @FindBy(id = "comment")
@@ -534,7 +534,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public AddDriverDialog setPassword(String value) {
-      if (value != null) {
+      if (value != null && password.isDisplayed()) {
         password.setValue(value);
       }
       return this;

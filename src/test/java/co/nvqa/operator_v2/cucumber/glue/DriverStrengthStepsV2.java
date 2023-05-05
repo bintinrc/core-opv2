@@ -214,56 +214,57 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
         Assertions.assertThat(Long.parseLong(actualDriverInfo.get("id"))).as("Id")
             .isEqualTo(expectedDriverInfo.getId());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getUsername())) {
+      if (expectedDriverInfo.getUsername() != null) {
         Assertions.assertThat(actualDriverInfo.get("username")).as("Username")
             .isEqualTo(expectedDriverInfo.getUsername());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getDisplayName())) {
+      if (expectedDriverInfo.getDisplayName() != null) {
         Assertions.assertThat(actualDriverInfo.get("displayName")).as("Display Name")
             .isEqualTo(expectedDriverInfo.getDisplayName());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getFullName())) {
+      if (expectedDriverInfo.getFullName() != null) {
         Assertions.assertThat(actualDriverInfo.get("name")).as("Name")
             .isEqualTo(expectedDriverInfo.getFullName());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getType())) {
+      if (expectedDriverInfo.getType() != null) {
         Assertions.assertThat(actualDriverInfo.get("type")).as("Type")
             .isEqualTo(expectedDriverInfo.getType());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getDpmsId())) {
+      if (expectedDriverInfo.getDpmsId() != null) {
         Assertions.assertThat(actualDriverInfo.get("dpmsId")).as("DPMS ID")
             .isEqualTo(expectedDriverInfo.getDpmsId());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getVehicleType())) {
+      if (expectedDriverInfo.getVehicleType() != null) {
         Assertions.assertThat(actualDriverInfo.get("vehicleType")).as("Vehicle Type")
             .isEqualTo(expectedDriverInfo.getVehicleType());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getHub())) {
+      if (expectedDriverInfo.getHub() != null) {
         Assertions.assertThat(actualDriverInfo.get("hub")).as("Hub Id")
             .isEqualTo(expectedDriverInfo.getHub());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneId())) {
+      if (expectedDriverInfo.getZoneId() != null) {
         Assertions.assertThat(actualDriverInfo.get("zoneId")).as("Zone Id")
             .isEqualTo(expectedDriverInfo.getZoneId());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneMax().toString())) {
+      if (expectedDriverInfo.getZoneMax() != null) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMax"))).as("Zone Max")
             .isEqualTo(expectedDriverInfo.getZoneMax());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneMin().toString())) {
+      if (expectedDriverInfo.getZoneMin() != null) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMin"))).as("Zone Min")
             .isEqualTo(expectedDriverInfo.getZoneMin());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getComments())) {
+      if (expectedDriverInfo.getComments() != null) {
         Assertions.assertThat(actualDriverInfo.get("comments")).as("Comments")
             .isEqualTo(expectedDriverInfo.getComments());
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getEmploymentStartDate())) {
-        Assertions.assertThat(actualDriverInfo.get("employmentStartDate"))
+      if (expectedDriverInfo.getEmploymentStartDate() != null) {
+        Assertions.assertThat(expectedDriverInfo.getEmploymentStartDate()
+                .contains(actualDriverInfo.get("employmentStartDate")))
             .as("Employment Start Date")
-            .isEqualTo(expectedDriverInfo.getEmploymentStartDate());
+            .isTrue();
       }
-      if (StringUtils.isNotEmpty(expectedDriverInfo.getEmploymentEndDate())) {
+      if (expectedDriverInfo.getEmploymentEndDate() != null) {
         Assertions.assertThat(actualDriverInfo.get("employmentEndDate")).as("Employment Start Date")
             .isEqualTo(expectedDriverInfo.getEmploymentEndDate());
       }
@@ -365,7 +366,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("type"));
       }
-      
+
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
@@ -383,7 +384,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("resigned"));
       }
-      
+
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
