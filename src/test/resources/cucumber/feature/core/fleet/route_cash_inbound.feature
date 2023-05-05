@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path @wipScenario
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Create COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -43,7 +43,7 @@ Feature: Route Cash Inbound
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
     And DB Operator verify the new COD for created route is created successfully
 
-  @DeleteOrArchiveRoute @happy-path @wipScenario
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Update COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -82,7 +82,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @DeleteOrArchiveRoute @happy-path @wipScenario
+  @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Delete COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -122,7 +122,7 @@ Feature: Route Cash Inbound
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
     And DB Operator verify the COD for created route is soft deleted
 
-  @DeleteOrArchiveRoute @wipScenario
+  @DeleteOrArchiveRoute
   Scenario: Operator Fetch COD Inbound with Date Range Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
