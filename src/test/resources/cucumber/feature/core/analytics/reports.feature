@@ -1,7 +1,7 @@
 @OperatorV2 @Core @Analytics @Reports
 Feature: Order Creation V4
 
-  @LaunchBrowser @ShouldAlwaysRun @wip
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -27,7 +27,7 @@ Feature: Order Creation V4
     And  Operator generate COD Reports
     Then Verify the COD reports attachments are sent to the Operator email
 
-  @DeleteOrArchiveRoute @wip
+  @DeleteOrArchiveRoute
   Scenario: Generate Order Statuses Report - Less Than 4000 Tracking Ids
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Order - Shipper create multiple V4 orders using data below:
@@ -75,7 +75,7 @@ Feature: Order Creation V4
       | jobAction  | SUCCESS                                                                         |
       | jobMode    | DELIVERY                                                                        |
     When Operator go to menu Analytics -> Reports
-    And Operator generates order statuses report for created orders on Reports page
+    And Operator generates order statuses report for created orders on Reports page below:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     Then Operator verifies that success toast displayed:
@@ -85,6 +85,6 @@ Feature: Order Creation V4
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | Completed | XXLARGE | NA          | ^{gradle-current-date-yyyy-MM-dd}.* | {gradle-next-3-working-day-yyyy-MM-dd} | ^{gradle-current-date-yyyy-MM-dd}.* | ^{gradle-current-date-yyyy-MM-dd}.* | 1                | NA                    | NA                   | ^{gradle-current-date-yyyy-MM-dd}.* | NA            |
 
-  @KillBrowser @ShouldAlwaysRun @wip
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

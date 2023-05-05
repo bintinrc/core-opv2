@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.core.model.order.Order;
-//import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -39,7 +38,7 @@ public class ReportsSteps extends AbstractSteps {
     reportsPage = new ReportsPage(getWebDriver());
   }
 
-  @When("^Operator filter COD Reports by Mode = \"([^\"]*)\" and Date = \"([^\"]*)\"$")
+  @When("Operator filter COD Reports by Mode = {string} and Date = {string}")
   public void operatorFilterCodReportByGivenModeAndDate(String mode, String dateAsString) {
     try {
       reportsPage.filterCodReportsBy(mode,
@@ -49,21 +48,20 @@ public class ReportsSteps extends AbstractSteps {
     }
   }
 
-  @When("^Operator generate COD Reports")
+  @When("Operator generate COD Reports")
   public void operatorGenerateCodReports() {
     reportsPage.codReportGenerateReport.clickAndWaitUntilDone();
     pause5s();
   }
 
-  @Then("^Verify the COD reports attachments are sent to the Operator email")
+  @Then("Verify the COD reports attachments are sent to the Operator email")
   public void verifyTheCodReportsAttachmentsAreSentToTheOperatorEmail() {
     reportsPage.codReportsAttachment();
   }
 
-  @When("Operator generates order statuses report for created orders on Reports page")
+  @When("Operator generates order statuses report for created orders on Reports page below:")
   public void operatorGeneratesOrderStatusesReportForCreatedOrdersOnReportsPage(List<String> trackingIds) {
     trackingIds = resolveValues(trackingIds);
-    //List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     File csvFile = reportsPage.createFile(
         f("order_statuses_find_%s.csv", generateDateUniqueString()), trackingIds);
     reportsPage.orderStatusesUploadCsv.setValue(csvFile);
@@ -80,7 +78,7 @@ public class ReportsSteps extends AbstractSteps {
     List<OrderStatusReportEntry> expectedData = data.stream()
         .map(entry -> new OrderStatusReportEntry(resolveKeyValues(entry)))
         .peek(o -> {
-          final List<Order> createdOrders = get(KEY_LIST_OF_CREATED_ORDER);
+          final List<Order> createdOrders = get(KEY_LIST_OF_CREATED_ORDERS);
           final Optional<Order> orderOpt = createdOrders.stream()
               .filter(co -> co.getTrackingId().equalsIgnoreCase(o.getTrackingId()))
               .findFirst();
@@ -92,7 +90,7 @@ public class ReportsSteps extends AbstractSteps {
           }
         })
         .collect(Collectors.toList());
-    Assertions.assertThat(actualData.size()).as("Number of records in order statses report")
+    Assertions.assertThat(actualData.size()).as("Number of records in order status report")
         .isEqualTo(data.size());
     for (int i = 0; i < expectedData.size(); i++) {
       expectedData.get(i).compareWithActual(actualData.get(i));
