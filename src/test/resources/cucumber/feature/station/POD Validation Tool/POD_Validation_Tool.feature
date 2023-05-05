@@ -6,39 +6,6 @@ Feature: POD Validation
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  Scenario: Download Validation Report
-    Given Operator loads Operator portal home page
-    And Operator go to menu Station Management Tool -> Download Validation Reports
-    When Operator selects the date time range based on below data:
-      | startDate | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
-      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
-    When Operator click "Download Report" button
-    And Verify that csv file is downloaded with filename: "Download_Validation_Report.csv"
-    Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
-      | TaskID            |
-      | JobID             |
-      | JobStatus         |
-      | JobType           |
-      | AttemptedAt       |
-      | HubID             |
-      | FailureReasonId   |
-      | DriverID          |
-      | ShipperIDs        |
-      | ParentShipperIDs  |
-      | OrderIds          |
-      | TrackingIds       |
-      | ValidatorId       |
-      | ValidatorEmail    |
-      | ValidatorValidity |
-      | ValidatorReason   |
-      | ValidationTime    |
-      | AuditorId         |
-      | AuditorEmail      |
-      | AuditorValidity   |
-      | AuditorReason     |
-      | AuditTime         |
-      | ValidationMatches |
-
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Refresh POD Details Page While User Validates Less Than 5 PODs
     When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
@@ -610,6 +577,38 @@ Feature: POD Validation
       | HubId       | HubName       | driverName             | driverId             | address1                         | address2 | postcode | country | latitude         | longitude        | phone       |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | 01-07 North Bridge Rd, Singapore |          | 670237   | SG      | 1.37856500735532 | 103.770646512516 | 87687687687 |
 
+  Scenario: Download Validation Report
+    Given Operator loads Operator portal home page
+    And Operator go to menu Station Management Tool -> Download Validation Reports
+    When Operator selects the date time range based on below data:
+      | startDate | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
+    When Operator click "Download Report" button
+    And Verify that csv file is downloaded with filename: "Download_Validation_Report.csv"
+    Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
+      | TaskID            |
+      | JobID             |
+      | JobStatus         |
+      | JobType           |
+      | AttemptedAt       |
+      | HubID             |
+      | FailureReasonId   |
+      | DriverID          |
+      | ShipperIDs        |
+      | ParentShipperIDs  |
+      | OrderIds          |
+      | TrackingIds       |
+      | ValidatorId       |
+      | ValidatorEmail    |
+      | ValidatorValidity |
+      | ValidatorReason   |
+      | ValidationTime    |
+      | AuditorId         |
+      | AuditorEmail      |
+      | AuditorValidity   |
+      | AuditorReason     |
+      | AuditTime         |
+      | ValidationMatches |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
