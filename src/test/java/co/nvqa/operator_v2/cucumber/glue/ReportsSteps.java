@@ -2,7 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.common.model.DataEntity;
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
+//import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
@@ -60,8 +61,9 @@ public class ReportsSteps extends AbstractSteps {
   }
 
   @When("Operator generates order statuses report for created orders on Reports page")
-  public void operatorGeneratesOrderStatusesReportForCreatedOrdersOnReportsPage() {
-    List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+  public void operatorGeneratesOrderStatusesReportForCreatedOrdersOnReportsPage(List<String> trackingIds) {
+    trackingIds = resolveValues(trackingIds);
+    //List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     File csvFile = reportsPage.createFile(
         f("order_statuses_find_%s.csv", generateDateUniqueString()), trackingIds);
     reportsPage.orderStatusesUploadCsv.setValue(csvFile);
