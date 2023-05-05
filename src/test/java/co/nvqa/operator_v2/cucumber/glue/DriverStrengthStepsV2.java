@@ -210,60 +210,60 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.waitUntilTableLoaded();
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, expectedDriverInfo.getUsername());
       Map<String, String> actualDriverInfo = dsPage.driversTable.readRow(1);
-      if (StringUtils.isNotBlank(expectedDriverInfo.getId().toString())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getId().toString())) {
         Assertions.assertThat(Long.parseLong(actualDriverInfo.get("id"))).as("Id")
             .isEqualTo(expectedDriverInfo.getId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getUsername())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getUsername())) {
         Assertions.assertThat(actualDriverInfo.get("username")).as("Username")
             .isEqualTo(expectedDriverInfo.getUsername());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getDisplayName())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getDisplayName())) {
         Assertions.assertThat(actualDriverInfo.get("displayName")).as("Display Name")
             .isEqualTo(expectedDriverInfo.getDisplayName());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getFullName())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getFullName())) {
         Assertions.assertThat(actualDriverInfo.get("name")).as("Name")
             .isEqualTo(expectedDriverInfo.getFullName());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getType())) {
         Assertions.assertThat(actualDriverInfo.get("type")).as("Type")
             .isEqualTo(expectedDriverInfo.getType());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getDpmsId())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getDpmsId())) {
         Assertions.assertThat(actualDriverInfo.get("dpmsId")).as("DPMS ID")
             .isEqualTo(expectedDriverInfo.getDpmsId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getVehicleType())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getVehicleType())) {
         Assertions.assertThat(actualDriverInfo.get("vehicleType")).as("Vehicle Type")
             .isEqualTo(expectedDriverInfo.getVehicleType());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getHub())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getHub())) {
         Assertions.assertThat(actualDriverInfo.get("hub")).as("Hub Id")
             .isEqualTo(expectedDriverInfo.getHub());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneId())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneId())) {
         Assertions.assertThat(actualDriverInfo.get("zoneId")).as("Zone Id")
             .isEqualTo(expectedDriverInfo.getZoneId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMax().toString())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneMax().toString())) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMax"))).as("Zone Max")
             .isEqualTo(expectedDriverInfo.getZoneMax());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMin().toString())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getZoneMin().toString())) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMin"))).as("Zone Min")
             .isEqualTo(expectedDriverInfo.getZoneMin());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getComments())) {
         Assertions.assertThat(actualDriverInfo.get("comments")).as("Comments")
             .isEqualTo(expectedDriverInfo.getComments());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentStartDate())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getEmploymentStartDate())) {
         Assertions.assertThat(actualDriverInfo.get("employmentStartDate"))
             .as("Employment Start Date")
             .isEqualTo(expectedDriverInfo.getEmploymentStartDate());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentEndDate())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getEmploymentEndDate())) {
         Assertions.assertThat(actualDriverInfo.get("employmentEndDate")).as("Employment Start Date")
             .isEqualTo(expectedDriverInfo.getEmploymentEndDate());
       }
@@ -654,6 +654,17 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.waitUntilVisibilityOfElementLocated(dsPage.downloadFailureReasons.getWebElement());
       dsPage.downloadFailureReasons.click();
       dsPage.verifyFileDownloadedSuccessfully(resolvedFileName);
+    });
+  }
+
+  @Then("Operator verifies that success notification displayed in Driver Strength:")
+  public void operatorVerifiesThatSuccessNotificationDisplayedInDriverStrength(
+      Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String notifTitle = data.get("title");
+    String notifDesc = data.get("desc");
+    dsPage.inFrame(() -> {
+      dsPage.verifyNotificationAppear(notifTitle, notifDesc);
     });
   }
 }

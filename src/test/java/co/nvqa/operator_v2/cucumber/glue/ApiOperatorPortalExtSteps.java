@@ -287,16 +287,16 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
     CreateDriverV2Request driverCreateRequest = fromJsonCamelCase(driverCreateRequestJson,
         CreateDriverV2Request.class);
-    driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);
-    put(KEY_CREATED_DRIVER, driverCreateRequest.getDriver());
-    putInList(KEY_LIST_OF_CREATED_DRIVERS, driverCreateRequest.getDriver());
+    Driver createdDriver = getDriverClient().createDriver(driverCreateRequest);
+    put(KEY_CREATED_DRIVER, createdDriver);
+    putInList(KEY_LIST_OF_CREATED_DRIVERS, createdDriver);
 
     DriverInfo driverInfo = new DriverInfo();
-    driverInfo.fromDriver(driverCreateRequest.getDriver());
+    driverInfo.fromDriver(createdDriver);
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
-    put(KEY_CREATED_DRIVER_USERNAME, driverInfo.getUsername());
-    put(KEY_CREATED_DRIVER_ID, driverInfo.getId());
-    put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+    put(KEY_CREATED_DRIVER_USERNAME, createdDriver.getUsername());
+    put(KEY_CREATED_DRIVER_ID, createdDriver.getDriverId());
+    put(KEY_CREATED_DRIVER_UUID, createdDriver.getUuid());
   }
 
   @And("API Operator refresh drivers data")

@@ -108,6 +108,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]")
+  public PageElement notificationPopup;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]")
+  public PageElement notificationTitle;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]")
+  public PageElement notificationDesc;
 
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -244,6 +250,23 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     if (isElementVisible(selectResignedContainer)) {
       resignedFilter.click();
     }
+  }
+
+  public void verifyNotificationAppear(String notifTitle, String notifDesc) {
+    String notificationPopupXpath = "//div[contains(@class, 'ant-notification')]";
+    String notificationTitleXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]";
+    String notificationDescXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]";
+    waitUntilVisibilityOfElementLocated(notificationPopupXpath);
+    while (isElementVisible(notificationPopupXpath)) {
+      boolean isTitleMatch = getText(notificationTitleXpath).equalsIgnoreCase(notifTitle);
+      boolean isDescMatch = getText(notificationDescXpath).equalsIgnoreCase(notifDesc);
+      Assertions.assertThat(isTitleMatch).as("Title is not match")
+          .isTrue();
+      Assertions.assertThat(isDescMatch).as("Desc is not match")
+          .isTrue();
+      waitUntilInvisibilityOfElementLocated(notificationPopupXpath);
+    }
+    pause500ms();
   }
 
   /**
