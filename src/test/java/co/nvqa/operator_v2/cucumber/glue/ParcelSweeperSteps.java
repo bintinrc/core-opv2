@@ -64,53 +64,20 @@ public class ParcelSweeperSteps extends AbstractSteps {
 
   @Then("^Operator verify Zone on Parcel Sweeper page using data below:$")
   public void operatorVerifyZoneOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData) {
-    String zoneName = mapOfData.get("zoneName");
-    String zoneShortName = new String();
-    if (StringUtils.equalsIgnoreCase(zoneName, "FROM CREATED ORDER")) {
-      Order order = get(KEY_CREATED_ORDER);
-      Transaction deliveryTransaction = order.getTransactions().stream()
-          .filter(transaction -> "DELIVERY".equalsIgnoreCase(transaction.getType()))
-          .findFirst()
-          .orElseThrow(() -> new RuntimeException(
-              "Could not find DELIVERY transaction for order [" + order.getId() + "]"));
-      List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
-      Zone routingZone = zones.stream().filter(
-          zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
-          .findFirst()
-          .orElseThrow(() -> new RuntimeException(
-              "Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
-      zoneName = f("%s", routingZone.getName());
-      zoneShortName = f("%s", routingZone.getShortName());
-    }
-    String color = mapOfData.get("textColor");
+    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    String zoneName = finalMapOfData.get("zoneName");
+    String zoneShortName = finalMapOfData.get("zoneShortName");
+    String color = finalMapOfData.get("textColor");
     parcelSweeperPage.verifyZoneInfo(zoneShortName, zoneName, color);
   }
 
   @Then("^Operator verify Next Sorting Hub on Parcel Sweeper page using data below:$")
   public void operatorVerifyNextSortingHubOnParcelSweeperPageUsingDataBelow(
       Map<String, String> mapOfData) {
-    String zoneName = mapOfData.get("nextSortingHub");
-    String zoneShortName = new String();
-    String nextSortingTask = get(KEY_NEXT_SORTING_TASK);
+    final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    String nextSortingTask = finalMapOfData.get("nextSortingHub");
 
-    if (nextSortingTask.equals(null)) {
-      if (StringUtils.equalsIgnoreCase(zoneName, "FROM CREATED ORDER")) {
-        Order order = get(KEY_CREATED_ORDER);
-        Transaction deliveryTransaction = order.getTransactions().stream()
-            .filter(transaction -> "DELIVERY".equalsIgnoreCase(transaction.getType()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException(
-                "Could not find DELIVERY transaction for order [" + order.getId() + "]"));
-        List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
-        Zone routingZone = zones.stream().filter(
-            zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException(
-                "Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
-        zoneShortName = f("%s", routingZone.getShortName());
-      }
-      parcelSweeperPage.verifyNextSortingHubInfo(zoneShortName);
-    } else {
+    if (StringUtils.isNotBlank(nextSortingTask)) {
       parcelSweeperPage.verifyNextSortingHubInfo(nextSortingTask);
     }
   }
