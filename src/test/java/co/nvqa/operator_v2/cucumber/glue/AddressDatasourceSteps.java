@@ -27,6 +27,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
   private final String KEY_MUNICIPALITY = "municipality";
   private final String KEY_POSTCODE = "postcode";
   private final String KEY_DISTRICT = "district";
+  private final String KEY_WARD = "ward";
   private final String KEY_SUBDISTRICT = "subdistrict";
   private final String KEY_HUB = "hub";
   private final String KEY_ZONE = "zone";
@@ -70,6 +71,7 @@ public class AddressDatasourceSteps extends AbstractSteps {
     String municipality = data.get(KEY_MUNICIPALITY);
     String barangay = data.get(KEY_BARANGAY);
     String district = data.get(KEY_DISTRICT);
+    String ward = data.get(KEY_WARD);
     String subdistrict = data.get(KEY_SUBDISTRICT);
     String postcode = data.get(KEY_POSTCODE);
     String whitelisted = data.get(KEY_WHITELISTED);
@@ -102,6 +104,10 @@ public class AddressDatasourceSteps extends AbstractSteps {
     if (StringUtils.isNotBlank(kecamatan)) {
       addressDatasourcePage.kecamatan.setValue(kecamatan);
       addressing.setDistrict(kecamatan);
+    }
+    if (StringUtils.isNotBlank(ward)) {
+      addressDatasourcePage.kecamatan.setValue(ward);
+      addressing.setSubdistrict(ward);
     }
     if (StringUtils.isNotBlank(municipality)) {
       addressDatasourcePage.municipality.setValue(municipality);
@@ -197,6 +203,11 @@ public class AddressDatasourceSteps extends AbstractSteps {
       Assertions.assertThat(addressDatasourcePage.subdistrictAddRow.getText())
           .as("Subdistrict")
           .isEqualToIgnoringCase(data.get(KEY_SUBDISTRICT));
+    }
+    if (StringUtils.isNotBlank(data.get(KEY_WARD))) {
+      Assertions.assertThat(addressDatasourcePage.wardAddRow.getText())
+          .as("Ward")
+          .isEqualToIgnoringCase(data.get(KEY_WARD));
     }
     if (StringUtils.isNotBlank(data.get(KEY_HUB))) {
       Assertions.assertThat(addressDatasourcePage.hubAddRow.getText())
