@@ -1,15 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.CheckSquare;
-import co.nvqa.operator_v2.selenium.page.ZonesPage.AddZoneDialog;
 import co.nvqa.operator_v2.selenium.page.ZonesPage.EditZoneDialog;
 import com.epam.ta.reportportal.ws.model.Page;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.SearchContext;
