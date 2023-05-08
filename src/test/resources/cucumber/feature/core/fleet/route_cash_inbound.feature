@@ -42,8 +42,8 @@ Feature: Route Cash Inbound
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
     And DB Core - verify cod_inbounds record:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | amountCollected | 23.57                              |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}              |
+      | amountCollected | {KEY_LIST_OF_CREATED_ORDERS[1].cod.goodsAmount} |
 
 
   @DeleteOrArchiveRoute @happy-path @wipScenario
