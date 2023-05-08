@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.model.DataEntity;
 import co.nvqa.common.core.model.order.Order;
 import co.nvqa.commons.support.DateUtil;
@@ -78,7 +79,7 @@ public class ReportsSteps extends AbstractSteps {
     List<OrderStatusReportEntry> expectedData = data.stream()
         .map(entry -> new OrderStatusReportEntry(resolveKeyValues(entry)))
         .peek(o -> {
-          final List<Order> createdOrders = get(KEY_LIST_OF_CREATED_ORDERS);
+          final List<Order> createdOrders = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS);
           final Optional<Order> orderOpt = createdOrders.stream()
               .filter(co -> co.getTrackingId().equalsIgnoreCase(o.getTrackingId()))
               .findFirst();
