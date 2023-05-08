@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.core.model.order.Order;
+import co.nvqa.common.core.utils.CoreScenarioStorageKeys;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.CodInfo;
 import co.nvqa.operator_v2.selenium.page.CodReportPage;
@@ -69,7 +70,7 @@ public class CodReportSteps extends AbstractSteps {
     Map<String, String> dataTable = resolveKeyValues(dataTableRaw);
     Long orderId = Long.valueOf(dataTable.get("orderId"));
 
-    List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS, Collections.emptyList());
+    List<Order> orders = get(CoreScenarioStorageKeys.KEY_LIST_OF_CREATED_ORDERS, Collections.emptyList());
 
     Order createdOrder = orders.stream()
         .filter(order -> order.getId().equals(orderId))
