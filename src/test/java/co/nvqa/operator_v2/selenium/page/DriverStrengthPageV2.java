@@ -799,10 +799,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void waitUntilTableLoaded() {
-    String tableRowXpath = "//tr[contains(@class,'ant-table-row')][1]";
+    String tableRowXpath = "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]";
     Runnable verifyLoadedTable = () -> {
-      if (!isElementVisible(tableRowXpath)) {
-        waitUntilVisibilityOfElementLocated(findElementBy(By.xpath(tableRowXpath)));
+      if (!findElementBy(By.xpath(tableRowXpath)).isDisplayed()) {
+        pause500ms();
       }
     };
     doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
