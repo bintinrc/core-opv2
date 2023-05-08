@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -14,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -798,9 +800,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   public void waitUntilTableLoaded() {
     String tableRowXpath = "//tr[contains(@class,'ant-table-row')][1]";
-    if (!isElementVisible(tableRowXpath)) {
-      waitUntilVisibilityOfElementLocated(findElementBy(By.xpath(tableRowXpath)));
-    }
+    Runnable verifyLoadedTable = () -> {
+      if (!isElementVisible(tableRowXpath)) {
+        waitUntilVisibilityOfElementLocated(findElementBy(By.xpath(tableRowXpath)));
+      }
+    };
+    doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
   }
 
   public boolean isTableLoaded() {
