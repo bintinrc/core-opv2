@@ -37,7 +37,6 @@ Feature: Route Cash Inbound
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
       | routes     | KEY_DRIVER_ROUTES                                                                      |
     When Operator go to menu Fleet -> Route Cash Inbound
-    And Operator waits for 10000 seconds
     And Operator create new COD on Route Cash Inbound page
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
