@@ -345,7 +345,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     final String currentExpectedZone = expectedZone;
     dsPage.inFrame(() -> {
       Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+              By.xpath(
+                  "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("zoneId"));
       }
@@ -361,8 +363,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedDriverType = expectedDriverType;
     dsPage.inFrame(() -> {
-      Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      Integer totalRow = dsPage.findElementsBy(By.xpath(
+              "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("type"));
       }
@@ -379,8 +382,10 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedResigned = expected;
     dsPage.inFrame(() -> {
-      Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      int totalRow = dsPage.findElementsBy(
+              By.xpath(
+                  "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("resigned"));
       }

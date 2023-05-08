@@ -173,7 +173,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
           .isEqualTo(expectedContactDetails.getLicenseNumber());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContact())) {
-      Assertions.assertThat(actualContactDetails.getContact().replaceAll("\\s", "")).as("Contact")
+      Assertions.assertThat(actualContactDetails.getContact()).as("Contact")
           .isEqualTo(expectedContactDetails.getContact());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContactType())) {
@@ -797,7 +797,10 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void waitUntilTableLoaded() {
-    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
+    String tableRowXpath = "//tr[contains(@class,'ant-table-row')][1]";
+    if (!isElementVisible(tableRowXpath)) {
+      waitUntilVisibilityOfElementLocated(findElementBy(By.xpath(tableRowXpath)));
+    }
   }
 
   public boolean isTableLoaded() {
