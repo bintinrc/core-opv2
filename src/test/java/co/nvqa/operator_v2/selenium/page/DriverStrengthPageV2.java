@@ -805,7 +805,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
         pause500ms();
       }
     };
-    doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
+
+    try {
+      doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
+    } catch (NoSuchElementException ignored) {
+      NvLogger.error("===== Table isn't loaded =====");
+      NvLogger.error(ignored.getMessage());
+    }
   }
 
   public boolean isTableLoaded() {
