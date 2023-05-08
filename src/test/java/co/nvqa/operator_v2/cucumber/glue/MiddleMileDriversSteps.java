@@ -10,6 +10,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -680,5 +681,33 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         Integer.parseInt(keyIdx.get("idx"))).generateMiddleMileDriverWithTripData();
     mmd.setDriver();
     middleMileDriversPage.verifiesDataInViewModalIsTheSame(mmd.getDriver());
+  }
+
+  @And("Operator creates new Middle Mile Driver using below data:")
+  public void operatorCreatesNewMiddleMileDriverUsingBelowData(Map<String, String> mapOfData) {
+    Map<String, String> resolvedData = resolveKeyValues(mapOfData);
+    Driver middlemileDriver = middleMileDriversPage.createNewMiddleMileDrivers(resolvedData);
+
+    middleMileDriversPage.saveCreateDriver.click();
+
+    String driverUsername = middlemileDriver.getUsername();
+    put(KEY_CREATED_DRIVER, middlemileDriver);
+    putInList(KEY_LIST_OF_CREATED_DRIVERS, middlemileDriver);
+    put(KEY_CREATED_DRIVER_USERNAME, driverUsername);
+  }
+
+  @When("Operator clicks {string} button on Middle Mile Drivers Page")
+  public void operatorClicksButtonOnMiddleMileDriversPage(String buttonName) {
+    switch (buttonName) {
+      case "Add Driver":
+        middleMileDriversPage.clickCreateDriversButton();
+        break;
+      case "Save":
+        middleMileDriversPage.saveCreateDriver.click();
+        break;
+      case "Load Drivers":
+        middleMileDriversPage.clickLoadDriversButton();
+        break;
+    }
   }
 }

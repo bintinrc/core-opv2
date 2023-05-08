@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.cucumber.ScenarioStorage;
 import co.nvqa.common.mm.model.MiddleMileDriver;
 import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.cucumber.glue.MiddleMileDriversSteps;
 import co.nvqa.operator_v2.selenium.elements.Button;
@@ -14,11 +16,13 @@ import co.nvqa.operator_v2.selenium.elements.ant.v4.AntCalendarPicker;
 import com.google.common.collect.Comparators;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.RandomStringGenerator;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -82,11 +86,17 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String CONTACT_NUMBER_INPUT_CREATE_DRIVER_ID = "contact_number";
     private static final String LICENSE_NUMBER_INPUT_CREATE_DRIVER_ID = "license_number";
     private static final String EXPIRY_DATE_INPUT_CREATE_DRIVER_ID = "license_expiry_date";
+    private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_ID = "license_type";
     private static final String EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID = "employment_type";
     private static final String EMPLOYMENT_START_DATE_INPUT_CREATE_DRIVER_ID = "employment_start_date";
     private static final String EMPLOYMENT_END_DATE_INPUT_CREATE_DRIVER_ID = "employment_end_date";
     private static final String USERNAME_INPUT_CREATE_DRIVER_ID = "username";
     private static final String PASSWORD_INPUT_CREATE_DRIVER_ID = "password";
+    private static final String COMMENTS_INPUT_CREATE_DRIVER_ID = "comments";
+
+    private static final ZonedDateTime TODAY = DateUtil.getDate();
+    private static final DateTimeFormatter EXPIRY_DATE_FORMATTER = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
     private static final String NAME_TABLE_FILTER_ID = "name";
     private static final String USERNAME_TABLE_FILTER_ID = "username";
@@ -167,6 +177,51 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[text()='Add Driver']")
     public PageElement addDriverModalTitle;
+
+    @FindBy(xpath = "//input[@id='first_name']")
+    public PageElement createDriverForm_firstName;
+
+    @FindBy(xpath = "//input[@id='last_name']")
+    public PageElement createDriverForm_lastName;
+
+    @FindBy(xpath = "//input[@id='display_name']")
+    public PageElement createDriverForm_displayName;
+
+    @FindBy(xpath = "//input[@id='hub_id']")
+    public PageElement createDriverForm_hub;
+
+    @FindBy(xpath = "//input[@id='contact_number']")
+    public PageElement createDriverForm_contactNumber;
+
+    @FindBy(xpath = "//input[@id='license_number']")
+    public PageElement createDriverForm_licenseNumber;
+
+    @FindBy(xpath = "//input[@id='license_expiry_date']")
+    public PageElement createDriverForm_expiryDate;
+
+    @FindBy(xpath = "//input[@id='license_type']")
+    public PageElement createDriverForm_licenseType;
+
+    @FindBy(xpath = "//input[@id='employment_type']")
+    public PageElement createDriverForm_employmentType;
+
+    @FindBy(xpath = "//input[@id='employment_start_date']")
+    public PageElement createDriverForm_employmentStartDate;
+
+    @FindBy(xpath = "//input[@id='employment_end_date']")
+    public PageElement createDriverForm_employmentEndDate;
+
+    @FindBy(xpath = "//input[@id='username']")
+    public PageElement createDriverForm_username;
+
+    @FindBy(xpath = "//input[@id='password']")
+    public PageElement createDriverForm_password;
+
+    @FindBy(xpath = "//textarea[@id='comments']")
+    public PageElement createDriverForm_comments;
+
+    @FindBy(xpath = "//button[@data-testid='driver-dialog-save-button']/span")
+    public Button saveCreateDriver;
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -1018,6 +1073,88 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         }
     }
 
+    public Driver createNewMiddleMileDrivers(Map<String, String> data) {
+            Driver middleMileDriver = new Driver();
 
+            if (data.get("firstName") != null) {
+                String firstName = data.get("firstName");
+                if (firstName.equalsIgnoreCase("random")) {
+                    firstName = "FIRSTNAME" + RandomStringUtils.randomAlphabetic(5);
+                }
+                createDriverForm_firstName.sendKeys(firstName);
+                middleMileDriver.setFirstName(firstName);
+            }
 
+            if (data.get("lastName") != null) {
+                String lastName = data.get("lastName");
+                if (lastName.equalsIgnoreCase("random")) {
+                    lastName = "LASTNAME" + RandomStringUtils.randomAlphabetic(5);
+                }
+                createDriverForm_lastName.sendKeys(lastName);
+                middleMileDriver.setLastName(lastName);
+            }
+
+            if (data.get("displayName") != null) {
+                String displayName = data.get("displayName");
+                if (displayName.equalsIgnoreCase("random")) {
+                    displayName = "DISPLAY-NAME_" + RandomStringUtils.randomAlphabetic(5);
+                }
+                createDriverForm_displayName.sendKeys(displayName);
+                middleMileDriver.setDisplayName(displayName);
+            }
+
+            if (data.get("hub") != null) {
+                middleMileDriver.setHub(data.get("hub"));
+                chooseHub(middleMileDriver.getHub());
+            }
+
+            if (data.get("contactNumber") != null) {
+                middleMileDriver.setMobilePhone(data.get("contactNumber"));
+                fillcontactNumber(middleMileDriver.getMobilePhone());
+            }
+
+            if (data.get("licenseNumber") != null) {
+                middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
+                createDriverForm_licenseNumber.sendKeys(data.get("licenseNumber"));
+            }
+
+            //Expiry date in days
+            middleMileDriver.setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+            fillLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusDays(5)));
+
+            if (data.get("licenseType") != null) {
+                middleMileDriver.setLicenseType(data.get("licenseType"));
+                chooseLicenseType(data.get("licenseType"));
+            }
+
+            if (data.get("employmentType") != null) {
+                middleMileDriver.setEmploymentType(data.get("employmentType"));
+                chooseEmploymentType(data.get("employmentType"));
+            }
+
+            //Employment Start Date in today's date
+            fillEmploymentStartDate(EXPIRY_DATE_FORMATTER.format(TODAY));
+
+            //Employment End Date in days
+            fillEmploymentEndDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusDays(5)));
+
+            if (data.get("username") != null) {
+                String username = data.get("username");
+                middleMileDriver.setUsername(username);
+                if (username.equalsIgnoreCase("random")) {
+                    middleMileDriver.setUsername(middleMileDriver.getFirstName() + middleMileDriver.getLastName());
+                }
+                fillUsername(middleMileDriver.getUsername());
+            }
+
+            if (data.get("password") != null) {
+                fillPassword(data.get("password"));
+            }
+
+            if (data.get("comments") != null) {
+                middleMileDriver.setComments(data.get("comments"));
+                fillComments(middleMileDriver.getComments());
+            }
+            return middleMileDriver;
+    }
 }
