@@ -124,6 +124,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String YES = "yes";
     private static final String NO = "no";
+
+    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
+
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
     public Button loadButton;
@@ -1123,8 +1126,19 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             fillLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusDays(5)));
 
             if (data.get("licenseType") != null) {
-                middleMileDriver.setLicenseType(data.get("licenseType"));
-                chooseLicenseType(data.get("licenseType"));
+                String licenseType = data.get("licenseType");
+                middleMileDriver.setLicenseType(licenseType);
+                if (licenseType.equalsIgnoreCase("all types")) {
+                    chooseLicenseType("B");
+                    chooseLicenseType("B1");
+                    chooseLicenseType("B2");
+                    chooseLicenseType("C");
+                    chooseLicenseType("Restriction 1");
+                    chooseLicenseType("Restriction 2");
+                    chooseLicenseType("Restriction 3");
+                } else {
+                    chooseLicenseType(data.get("licenseType"));
+                }
             }
 
             if (data.get("employmentType") != null) {
@@ -1156,5 +1170,26 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 fillComments(middleMileDriver.getComments());
             }
             return middleMileDriver;
+    }
+
+    public void verifyMandatoryFieldErrorMessageMiddlemileDriverPage(String fieldName) {
+        String actualMessage = "";
+        String expectedMessage = "Please enter " + fieldName;
+        switch (fieldName) {
+            case "First Name":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "first_name")).getText();
+                break;
+            case "Display Name":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "display_name")).getText();
+                break;
+            case "Contact Number":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "contact_number")).getText();
+                break;
+            case "License Type":
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "license_type")).getText();
+                break;
+        }
+        Assertions.assertThat(actualMessage).as("Mandatory field error message is same")
+                .isEqualTo(expectedMessage);
     }
 }

@@ -687,13 +687,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
   public void operatorCreatesNewMiddleMileDriverUsingBelowData(Map<String, String> mapOfData) {
     Map<String, String> resolvedData = resolveKeyValues(mapOfData);
     Driver middlemileDriver = middleMileDriversPage.createNewMiddleMileDrivers(resolvedData);
-
-    middleMileDriversPage.saveCreateDriver.click();
-
-    String driverUsername = middlemileDriver.getUsername();
-    put(KEY_CREATED_DRIVER, middlemileDriver);
-    putInList(KEY_LIST_OF_CREATED_DRIVERS, middlemileDriver);
-    put(KEY_CREATED_DRIVER_USERNAME, driverUsername);
+    put("MIDDLE_MILE_DRIVER_TEMPORARY_FORM_DATA", middlemileDriver);
   }
 
   @When("Operator clicks {string} button on Middle Mile Drivers Page")
@@ -702,12 +696,55 @@ public class MiddleMileDriversSteps extends AbstractSteps {
       case "Add Driver":
         middleMileDriversPage.clickCreateDriversButton();
         break;
-      case "Save":
+      case "Save to Create":
         middleMileDriversPage.saveCreateDriver.click();
+
+        Driver middlemileDriver = get("MIDDLE_MILE_DRIVER_TEMPORARY_FORM_DATA");
+        String driverUsername = middlemileDriver.getUsername();
+        put(KEY_CREATED_DRIVER, middlemileDriver);
+        putInList(KEY_LIST_OF_CREATED_DRIVERS, middlemileDriver);
+        put(KEY_CREATED_DRIVER_USERNAME, driverUsername);
         break;
       case "Load Drivers":
         middleMileDriversPage.clickLoadDriversButton();
         break;
     }
+  }
+
+  @Then("Operator verifies {string} error message is shown on Middle Mile Drivers Page")
+  public void operatorVerifiesErrorMessageIsShownOnMiddleMileDriversPage(String errorMessage) {
+    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(errorMessage);
+  }
+
+  @And("Operator unchecks license type on Middle Mile Drivers Page")
+  public void operatorUnchecksLicenseTypeOnMiddleMileDriversPage() {
+    Driver middlemileDriver = get("MIDDLE_MILE_DRIVER_TEMPORARY_FORM_DATA");
+    String driverLicenseType = middlemileDriver.getLicenseType();
+
+    switch (driverLicenseType) {
+      case "B":
+        middleMileDriversPage.chooseLicenseType("B");
+        break;
+      case "B1":
+        middleMileDriversPage.chooseLicenseType("B1");
+        break;
+      case "B2":
+        middleMileDriversPage.chooseLicenseType("B2");
+        break;
+      case "C":
+        middleMileDriversPage.chooseLicenseType("C");
+        break;
+      case "Restriction 1":
+        middleMileDriversPage.chooseLicenseType("Restriction 1");
+        break;
+      case "Restriction 2":
+        middleMileDriversPage.chooseLicenseType("Restriction 2");
+        break;
+      case "Restriction 3":
+        middleMileDriversPage.chooseLicenseType("Restriction 3");
+        break;
+    }
+
+    middleMileDriversPage.saveCreateDriver.click();
   }
 }
