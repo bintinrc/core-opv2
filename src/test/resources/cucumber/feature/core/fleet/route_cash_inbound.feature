@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @wipScenarioping
   Scenario: Operator Create COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -37,13 +37,17 @@ Feature: Route Cash Inbound
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
       | routes     | KEY_DRIVER_ROUTES                                                                      |
     When Operator go to menu Fleet -> Route Cash Inbound
+    And Operator waits for 10000 seconds
     And Operator create new COD on Route Cash Inbound page
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
-    And DB Operator verify the new COD for created route is created successfully
+    And DB Core - verify cod_inbounds record:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | amountCollected | 23.57                              |
 
-  @DeleteOrArchiveRoute @happy-path
+
+  @DeleteOrArchiveRoute @happy-path @wipScenarioping
   Scenario: Operator Update COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -82,7 +86,7 @@ Feature: Route Cash Inbound
     And Operator update the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is updated successfully
 
-  @DeleteOrArchiveRoute @happy-path
+  @DeleteOrArchiveRoute @happy-path @wipScenarioping
   Scenario: Operator Delete COD on Route Cash Inbound Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -120,9 +124,11 @@ Feature: Route Cash Inbound
     When Operator go to menu Fleet -> Route Cash Inbound
     And Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
-    And DB Operator verify the COD for created route is soft deleted
+    And DB Core - verify cod_inbounds record is deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
-  @DeleteOrArchiveRoute
+
+  @DeleteOrArchiveRoute @wipScenarioping
   Scenario: Operator Fetch COD Inbound with Date Range Filter
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:
@@ -158,7 +164,7 @@ Feature: Route Cash Inbound
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
-    Then Operator check filter on Route Cash Inbound page work fine
+    And Operator check filter on Route Cash Inbound page work fine
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
