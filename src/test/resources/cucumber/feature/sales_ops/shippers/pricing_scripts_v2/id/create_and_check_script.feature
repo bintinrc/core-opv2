@@ -13,9 +13,9 @@ Feature: Pricing Scripts V2
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | Legacy          |
-      | deliveryType | STANDARD        |
-      | orderType    | NORMAL          |
-      | timeslotType | NONE            |
+      | deliveryType | Standard        |
+      | orderType    | Normal          |
+      | timeslotType | None            |
       | isRts        | <is_RTS_toggle> |
       | size         | S               |
       | weight       | 1.0             |
@@ -28,6 +28,7 @@ Feature: Pricing Scripts V2
       | insuranceFee | <insuranceFee> |
       | codFee       | <codFee>       |
       | handlingFee  | <handlingFee>  |
+      | rtsFee       | 0              |
       | comments     | <comments>     |
     And Operator close page
     And Operator validate and release Draft Script

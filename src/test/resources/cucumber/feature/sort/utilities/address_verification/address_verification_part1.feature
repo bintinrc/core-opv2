@@ -209,6 +209,6 @@ Feature: Address Verification
       | name | VERIFY ADDRESS |
     And Operator verifies Zone is "{av-ooz-zone-short-name}" on Edit Order page
 
-  @KillBrowser @ShouldAlwaysRun @WIP
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

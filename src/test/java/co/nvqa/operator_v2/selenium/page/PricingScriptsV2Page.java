@@ -24,7 +24,7 @@ import org.openqa.selenium.support.FindBy;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class PricingScriptsV2Page extends OperatorV2SimplePage {
+public class PricingScriptsV2Page extends SimpleReactPage {
 
   private final PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;
   private final TimeBoundedScriptsPage timeBoundedScriptsPage;
@@ -79,7 +79,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   private void clickCreateDraftBtn() {
-    clickNvIconTextButtonByName("Create Draft");
+    clickButtonByText("Create Draft");
   }
 
   public void checkErrorHeader(String message) {
@@ -101,7 +101,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
       searchTableDraftsByScriptName(script.getName());
       waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
-        refreshPage();
         fail("Data still not loaded");
       }
     }, String.format("Draft script found "));
@@ -125,7 +124,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
         }
       }
     }, String.format("Active script found "));
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void verifyDraftScriptIsDeleted(Script script) {
@@ -185,7 +184,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
   }
 
   public void releaseScript() {
-    pricingScriptsV2CreateEditDraftPage.clickNvIconTextButtonByNameAndWaitUntilDone(
+    pricingScriptsV2CreateEditDraftPage.clickButtonByTextAndWaitUntilDone(
         "Release Script");
     waitUntilInvisibilityOfToast("Your script has been successfully released.");
     acceptAlertDialogIfAppear();
@@ -196,9 +195,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     searchTableDraftsByScriptName(script.getName());
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Drafts Table is empty. Cannot delete script.");
-    clickActionButtonOnTableDrafts(1, ACTION_BUTTON_EDIT_ON_TABLE);
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
+  @Deprecated
   public void verifyDraftScriptIsReleased(Script script) {
     waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
     clickTabItem(TAB_ACTIVE_SCRIPTS);
@@ -207,7 +207,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     {
       searchTableActiveScriptsByScriptName(script.getName());
       if (isTableEmpty(ACTIVE_TAB_XPATH)) {
-        refreshPage();
         fail("Data still not loaded");
       }
     }, String.format("Active script found "));
@@ -285,7 +284,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     }, String.format("Active script found "), 100, 10);
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Drafts Table is empty. Cannot find script.");
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void linkShippers(Script script, Shipper shipper) {
@@ -322,9 +321,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     Assertions.assertThat(getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE))
         .isEqualTo(scriptName);
 
-    String actionButtonXpath = f("//button[@data-testid='%s']",
-        ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
-    clickActionButtonOnTable(1, actionButtonXpath);
+    clickActionButtonOnTable(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
     NvLogger.info("Waiting until Link Shippers Dialog loaded.");
     waitUntilVisibilityOfElementLocated("//div[text()='Link Shippers']");
     String searchValue = Objects.isNull(name) ? legacyId : legacyId.concat(" - ").concat(name);
@@ -376,7 +373,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
     retryIfAssertionErrorOccurred(() -> {
       searchTableActiveScriptsByScriptName(script.getName());
       if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
-//        refreshPage();
         searchTableActiveScriptsByScriptName(script.getName());
         if (!isTableEmpty(ACTIVE_TAB_XPATH)) {
           fail("Data still not loaded");
@@ -388,10 +384,10 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage {
 
   public void goToEditActiveScript(Script script) {
     clickTabItem(TAB_ACTIVE_SCRIPTS);
-//    searchTableActiveScriptsByScriptName(script.getName());
+    searchTableActiveScriptsByScriptName(script.getName());
     wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH),
         "Active Scripts Table is empty. Cannot delete script.");
-    clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE);
+    clickActionButtonOnTable(1, ACTION_BUTTON_EDIT_ON_TABLE);
   }
 
   public void goToManageTimeBoundedScript(Script script) {

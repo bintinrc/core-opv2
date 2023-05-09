@@ -1,10 +1,10 @@
-@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @EditPricingScript
+@OperatorV2 @LaunchBrowser @PricingScriptsV2 @SalesOps @EditPricingScript @CWF
 Feature: Edit Pricing Script
 
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Edit and Check Script - Legacy Order Fields - NORMAL, STANDARD (uid:f0be1f72-282c-4b41-9286-a4fd4100d449)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -32,6 +32,7 @@ Feature: Edit Pricing Script
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     Then Operator verify the script is saved successfully
@@ -64,11 +65,12 @@ Feature: Edit Pricing Script
       | insuranceFee | 0    |
       | codFee       | 0    |
       | handlingFee  | 0    |
+      | rtsFee       | 0    |
       | comments     | OK   |
     And Operator close page
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript @FailedForRTSNo @RT
+  @DeletePricingScript @FailedForRTSNo
   Scenario Outline: Edit and Check Script - Send is_RTS - Use calculate() - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -96,13 +98,14 @@ Feature: Edit Pricing Script
       | insuranceFee | 0             |
       | codFee       | 0             |
       | handlingFee  | 0             |
+      | rtsFee       | 0             |
       | comments     | OK            |
     And Operator close page
     Then Operator verify the script is saved successfully
     Examples:
-      | dataset_name | Condition  | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
-      | RTS = True   | RTS = True | Yes    | 2.16       | 0.16 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
-#      | RTS = False  | RTS = False | No     | 2.16       | 0.16 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
+      | dataset_name | Condition   | is_RTS | grandTotal | gst  | deliveryFee | hiptest-uid                              |
+      | RTS = True   | RTS = True  | Yes    | 2.16       | 0.16 | 2           | uid:e3973b32-ee9c-4cc7-8f42-f3da2f406e65 |
+      | RTS = False  | RTS = False | No     | 2.16       | 0.16 | 2           | uid:248ad447-09b5-4c52-9524-53b643c72b2e |
 
   @DeletePricingScript @HappyPath @LastModifiedDateError
   Scenario: Edit Active Script - No Syntax Error (uid:5256ee16-eda2-4963-a7c9-a129845f6b3d)
@@ -119,7 +122,7 @@ Feature: Edit Pricing Script
     Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Edit Active Script - Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -144,7 +147,7 @@ Feature: Edit Pricing Script
     Then DB Operator gets the pricing script details
     And Operator verify Active Script data is correct
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Edit Draft Script - Syntax Error (uid:4daf468e-2dc4-46cf-9a5e-2b0bda48668e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -155,7 +158,6 @@ Feature: Edit Pricing Script
     Then Operator clicks Check Syntax
     Then Operator verify error message in header with "SyntaxError"
 
-  @Pass
   Scenario: Edit Draft Script - with "const" Syntax Error (uid:4af04ce4-8f1b-4384-92b7-b87780f1ce3e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -168,7 +170,6 @@ Feature: Edit Pricing Script
       | message  | Error Message: `const` is not support in the script. |
       | response | Status: 400 Unknown                                  |
 
-  @Pass
   Scenario: Edit Active Script - with "const" Syntax Error (uid:9bc0c4db-992e-4522-b160-520116366a04)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -182,7 +183,6 @@ Feature: Edit Pricing Script
     Then Operator verify error message
       | message  | Error Message: `const` is not support in the script. |
       | response | Status: 400 Unknown                                  |
-
 
   @DeletePricingScript @LastModifiedDateError
   Scenario: Edit Active Script - Edit Script Info (uid:ba483b50-bc2c-4304-90e9-524523533323)
