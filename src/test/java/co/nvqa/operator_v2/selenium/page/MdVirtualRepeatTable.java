@@ -66,6 +66,12 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     Preconditions.checkArgument(StringUtils.isNotBlank(actionButtonLocator),
         "Unknown action [" + actionId + "]");
 
+    if (StringUtils.startsWith(actionButtonLocator, "/")) {
+      clickCustomActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator,
+          mdVirtualRepeat);
+    } else {
+      clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
+    }
   }
 
   @Override

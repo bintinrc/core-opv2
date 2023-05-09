@@ -4,7 +4,7 @@ Feature: Service Type and Service Level params
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Create Script - Include service_type and service_level - Added Successfully (uid:2cff4b8b-c704-4679-9335-8c0e44edaeee)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -29,12 +29,13 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Create Script - Include service_type and service_level - Incorrect service_type (uid:454f1a82-3194-4112-9f47-56cc087e6a64)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -59,12 +60,13 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
     Then Operator verify the script is saved successfully
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario: Create Script - Include service_type and service_level - Incorrect service_level (uid:aa172bd5-4655-4239-9e65-e48ffff429b8)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -89,6 +91,7 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0    |
       | codFee       | 0    |
       | handlingFee  | 0    |
+      | rtsFee       | 0    |
       | comments     | OK   |
     And Operator close page
     And Operator validate and release Draft Script

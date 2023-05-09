@@ -13,6 +13,10 @@ public class RunCheckParams {
   private String timeslotType;
   private String isRts;
   private String size;
+  private String firstMileType;
+  private String length;
+  private String width;
+  private String height;
   private String weight;
   private String insuredValue;
   private String codValue;
@@ -89,6 +93,38 @@ public class RunCheckParams {
 
   public void setSize(String size) {
     this.size = size;
+  }
+
+  public String getFirstMileType() {
+    return firstMileType;
+  }
+
+  public void setFirstMileType(String firstMileType) {
+    this.firstMileType = firstMileType;
+  }
+
+  public String getHeight() {
+    return height;
+  }
+
+  public void setHeight(String height) {
+    this.height = height;
+  }
+
+  public String getWidth() {
+    return width;
+  }
+
+  public void setWidth(String width) {
+    this.width = width;
+  }
+
+  public String getLength() {
+    return length;
+  }
+
+  public void setLength(String length) {
+    this.length = length;
   }
 
   public String getWeight() {

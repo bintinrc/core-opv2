@@ -5,7 +5,7 @@ Feature: Edit Pricing Script
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     And Operator changes the country to "Indonesia"
 
-  @DeletePricingScript @Pass
+  @DeletePricingScript
   Scenario Outline: Edit and Check Script - Send is_RTS - Use calculatePricing() - ID - <dataset_name> (<hiptest-uid>)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     When Operator create new Draft Script using data below:
@@ -31,6 +31,7 @@ Feature: Edit Pricing Script
       | insuranceFee | 0             |
       | codFee       | 0             |
       | handlingFee  | 0             |
+      | rtsFee       | 0             |
       | comments     | OK            |
     And Operator close page
     Then Operator verify the script is saved successfully
