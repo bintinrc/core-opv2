@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.ShipperAddressConfigurationPage;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -294,7 +295,15 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
 
   @Then("Verify that csv file is downloaded with filename: {string}")
   public void verifyThatCsvFileIsDownloadedWithFilename(String filename) {
-        shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename);
+    retryIfExpectedExceptionOccurred(
+        () ->  shipperAddressConfigurationPage.verifyThatCsvFileIsDownloadedWithFilename(filename),
+        null, LOGGER::warn, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, 3,
+        NoSuchElementException.class, NoSuchWindowException.class,
+        ElementNotInteractableException.class, ElementNotInteractableException.class,
+        TimeoutException.class, StaleElementReferenceException.class,
+        InvalidElementStateException.class, InvalidArgumentException.class,
+        NvTestRuntimeException.class);
+    takesScreenshot();
   }
 }
 

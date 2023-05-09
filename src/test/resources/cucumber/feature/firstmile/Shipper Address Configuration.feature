@@ -102,7 +102,7 @@ Feature: Shipper Address Configuration
       | Search by Shipper ID     | Shipper ID     | {shipper-v4-legacy-id}                           | legacy_shipper_id |
 
   @HappyPath
-  Scenario Outline: Download CSV of Shipper Address
+  Scenario: Download CSV of Shipper Address
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
       | shipperID                   | {shipper-v4-id}                                                                                                                                                                                  |
@@ -125,10 +125,6 @@ Feature: Shipper Address Configuration
       | Shipper ID     |
       | Latitude       |
       | Longitude      |
-
-    Examples:
-     | current_date                     |
-     | {date: 0 days next, ddMMMYYYY}   |
 
   Scenario: Download CSV of Shipper Address Template
     When Operator loads Shipper Address Configuration page

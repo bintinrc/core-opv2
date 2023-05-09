@@ -231,8 +231,8 @@ Feature: Shipper Address Configuration
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
 
     Examples:
-      | search_field | search_value                                     | column_datakey     | pickupTypeSelect | current_Date                    |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    | {date: 0 days next, ddMMMYYYY}  |
+      | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario: Download CSV of Address Pickup Type Template
     When Operator loads Shipper Address Configuration page
