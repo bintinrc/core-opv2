@@ -237,13 +237,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void clickResignedOption(String resigned) {
-    String notResignedXpath = "//div[@label='Not Resigned']";
-    String resignedXPath = "//div[@label='Resigned']";
-    String allXpath = "//div[@label='All']";
-    String selectResignedContainer = "//div[div[@label='All' or @label='Resigned' or @label='Not Resigned']]";
+    String notResignedXpath = "//div[@label='Not Resigned' and contains(@class,'ant-select-item-option')]";
+    String resignedXPath = "//div[@label='Resigned' and contains(@class,'ant-select-item-option')]";
+    String allXpath = "//div[@label='All' and contains(@class,'ant-select-item-option')]";
 
     resignedFilter.click();
-    pause500ms();
+    pause5s();
     if (resigned.equalsIgnoreCase("no") && isElementVisible(notResignedXpath)) {
       click(notResignedXpath);
     }
@@ -253,10 +252,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     if (resigned.equalsIgnoreCase("all") && isElementVisible(allXpath)) {
       click(allXpath);
     }
-
-    if (isElementVisible(selectResignedContainer)) {
-      resignedFilter.click();
-    }
+    pause5s();
   }
 
   public void verifyNotificationAppear(String notifTitle, String notifDesc) {

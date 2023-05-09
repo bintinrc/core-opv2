@@ -309,7 +309,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.refreshPage();
     Map<String, String> data = resolveKeyValues(map);
     dsPage.inFrame(() -> {
-      dsPage.loadSelection.waitUntilClickable();
+      pause5s();
       dsPage.clearSelection.click();
 
       if (data.containsKey("zones")) {
