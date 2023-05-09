@@ -130,7 +130,6 @@ Feature: Driver Strength
     When Operator go to menu Fleet -> Driver Strength
     And Operator filter driver strength using data below:
       | resigned | Yes |
-    And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "Yes" resigned
 
   @DeleteDriver
@@ -154,7 +153,6 @@ Feature: Driver Strength
       | zones       | {zone-name}        |
       | driverTypes | {driver-type-name} |
       | resigned    | Yes                |
-    And Operator wait until table loaded
     Then Operator verify driver strength is filtered by "{zone-name}" zone
     And Operator verify driver strength is filtered by "{driver-type-name}" driver type
     And Operator verify driver strength is filtered by "Yes" resigned

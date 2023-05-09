@@ -13,6 +13,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -70,9 +71,6 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   @FindBy(xpath = "//button[.='Download Failure Reasons']")
   public Button downloadFailureReasons;
-
-  @FindBy(id = "bulk-update-driver-csv")
-  public PageElement bulkUploadDrivers;
 
   @FindBy(xpath = "//button[.='Update Driver Details']")
   public Button updateDriverDetails;
@@ -229,6 +227,13 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     pause1s();
     click(LOCATOR_DELETE_BUTTON);
     waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
+  }
+
+  public void updloadFile(File absoluteFile) {
+    String inputXpath = "//div[@class='ant-space-item']/div[span[text()='Drag and drop CSV file here']]";
+    waitUntilVisibilityOfElementLocated(inputXpath);
+    dragAndDrop(absoluteFile, findElementBy(By.xpath(inputXpath)));
+    pause3s();
   }
 
   public void clickResignedOption(String resigned) {

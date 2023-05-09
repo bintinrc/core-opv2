@@ -335,7 +335,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
       takesScreenshot();
       dsPage.loadSelection();
-      pause2s();
+      pause5s();
     });
   }
 
@@ -642,7 +642,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     ClassLoader classLoader = getClass().getClassLoader();
     File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
     dsPage.inFrame(() -> {
-      dsPage.bulkUploadDrivers.sendKeys(file.getAbsolutePath());
+      dsPage.updloadFile(file.getAbsoluteFile());
     });
   }
 
