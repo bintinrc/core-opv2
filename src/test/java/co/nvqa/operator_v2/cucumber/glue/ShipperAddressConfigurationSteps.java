@@ -100,8 +100,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   }
 
   @Then("Operator verifies table is filtered {string} based on input in {string} in shipper address page")
-  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy,
-      String filterValue) {
+  public void operatorVerifiesTableIsFilteredBasedOnInputInShipperAddressPage(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
     String finalFilterValue = filterValue;
     retryIfExpectedExceptionOccurred(
