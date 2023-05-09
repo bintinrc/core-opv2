@@ -125,7 +125,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String YES = "yes";
     private static final String NO = "no";
 
-    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//input[@id='%s']/ancestor::div[@class='ant-form-item-control-input']//following-sibling::div/div[@class='ant-form-item-explain-error']";
+    private static final String MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH = "//div[@role='alert' and @class='ant-form-item-explain-error' and contains(text(), '%s')]";
 
     public static List<Driver> LIST_OF_FILTER_DRIVERS = new ArrayList<Driver>();
     @FindBy(xpath = LOAD_DRIVERS_BUTTON_XPATH)
@@ -1177,16 +1177,16 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String expectedMessage = "Please enter " + fieldName;
         switch (fieldName) {
             case "First Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "first_name")).getText();
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "First Name")).getText();
                 break;
             case "Display Name":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "display_name")).getText();
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Display Name")).getText();
                 break;
             case "Contact Number":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "contact_number")).getText();
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "Contact Number")).getText();
                 break;
             case "License Type":
-                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "license_type")).getText();
+                actualMessage = findElementByXpath(f(MIDDLE_MILE_DRIVER_FIELD_ERROR_XPATH, "License Type")).getText();
                 break;
         }
         Assertions.assertThat(actualMessage).as("Mandatory field error message is same")

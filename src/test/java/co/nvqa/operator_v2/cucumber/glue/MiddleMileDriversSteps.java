@@ -711,11 +711,6 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     }
   }
 
-  @Then("Operator verifies {string} error message is shown on Middle Mile Drivers Page")
-  public void operatorVerifiesErrorMessageIsShownOnMiddleMileDriversPage(String errorMessage) {
-    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(errorMessage);
-  }
-
   @And("Operator unchecks license type on Middle Mile Drivers Page")
   public void operatorUnchecksLicenseTypeOnMiddleMileDriversPage() {
     Driver middlemileDriver = get("MIDDLE_MILE_DRIVER_TEMPORARY_FORM_DATA");
@@ -746,5 +741,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     }
 
     middleMileDriversPage.saveCreateDriver.click();
+  }
+
+  @Then("Operator verifies {string} error message is shown on Middle Mile Drivers Page")
+  public void operatorVerifiesErrorMessageIsShownOnMiddleMileDriversPage(String fieldName) {
+    middleMileDriversPage.verifyMandatoryFieldErrorMessageMiddlemileDriverPage(fieldName);
   }
 }
