@@ -118,7 +118,7 @@ Feature: Shipper Address Configuration
       | To   | {gradle-next-1-day-dd/MM/yyyy}     |
     And Operator clicks on the load selection button
     And Operator clicks on the Download Addresses button
-    And Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_<current_date>.csv"
+    And Verify that csv file is downloaded with filename: "Downloaded Pickup Addresses_<current_Date>.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Downloaded Pickup Addresses"
       | Address ID     |
       | Pickup Address |
@@ -403,7 +403,6 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[2]}"
     Then Operator verifies table is filtered "lat_long" based on input in "1.2,100.1" in shipper address page
     Then Operator verifies that green check mark icon is shown under the Lat Long
-
 
   Scenario: Unable to Bulk Update All Shipper Addresses
     When Operator loads Shipper Address Configuration page

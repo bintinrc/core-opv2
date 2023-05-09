@@ -236,7 +236,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void verifyHeaderNamesInDownloadedCsv(String fileName, List<String> headerNames) {
     headerNames = resolveValues(headerNames);
     fileName = resolveValue(fileName);
-    pause5s();
+    pause9s();
     String downloadedCsvFile = shipperAddressConfigurationPage.getLatestDownloadedFilename(
         fileName);
     List<String> actual = shipperAddressConfigurationPage.readDownloadedFile(
@@ -245,7 +245,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     headerNames.forEach((e) -> Assertions.assertThat(headers)
         .as("Validation for Header Names in Downloaded CSV file")
         .contains(e));
-
   }
 
   @And("Operator uploads csv file: {string} by browsing files in {string} upload window")
