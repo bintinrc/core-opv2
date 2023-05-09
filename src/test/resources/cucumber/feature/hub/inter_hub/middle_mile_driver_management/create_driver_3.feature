@@ -94,6 +94,51 @@ Feature: Middle Mile Driver Management - Create Driver 3
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
+  @DeleteDriver
+  Scenario: Create Driver with Employment Type : Outsourced - Manpower Agency
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    When Operator refresh Middle Mile Driver Page
+    And Operator verifies middle mile driver management page is loaded
+    When Operator clicks "Add Driver" button on Middle Mile Drivers Page
+    And Operator creates new Middle Mile Driver using below data:
+      | firstName      | RANDOM                              |
+      | lastName       | RANDOM                              |
+      | displayName    | RANDOM                              |
+      | hub            | {local-station-1-name}              |
+      | contactNumber  | {default-phone-number-ph}           |
+      | licenseNumber  | NV 1234                             |
+      | licenseType    | {default-license-type-sg}           |
+      | employmentType | Outsourced - Manpower Agency        |
+      | vendorName     | {default-driver-manpower-agency-sg} |
+      | username       | RANDOM                              |
+      | password       | {ninja-driver-password}             |
+      | comments       | Created by Automation               |
+    When Operator clicks "Save to Create" button on Middle Mile Drivers Page
+    Then Operator verifies that the new Middle Mile Driver has been created
+
+  @DeleteDriver
+  Scenario: Create Driver with Display Name contains either Letters, Numbers, Hyphens, Underscores, and Parentheses
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    When Operator refresh Middle Mile Driver Page
+    And Operator verifies middle mile driver management page is loaded
+    When Operator clicks "Add Driver" button on Middle Mile Drivers Page
+    And Operator creates new Middle Mile Driver using below data:
+      | firstName      | RANDOM                         |
+      | lastName       | RANDOM                         |
+      | displayName    | RANDOM-CUSTOM                  |
+      | hub            | {local-station-1-name}         |
+      | contactNumber  | {default-phone-number-ph}      |
+      | licenseNumber  | NV 1234                        |
+      | licenseType    | {default-license-type-sg}      |
+      | employmentType | {default-employment-type-full} |
+      | username       | RANDOM                         |
+      | password       | {ninja-driver-password}        |
+      | comments       | Created by Automation          |
+    When Operator clicks "Save to Create" button on Middle Mile Drivers Page
+    Then Operator verifies that the new Middle Mile Driver has been created
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

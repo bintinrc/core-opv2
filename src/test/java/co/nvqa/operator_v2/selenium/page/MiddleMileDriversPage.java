@@ -1109,6 +1109,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 String displayName = data.get("displayName");
                 if (displayName.equalsIgnoreCase("random")) {
                     displayName = "DISPLAY-NAME_" + RandomStringUtils.randomAlphabetic(5);
+                } else if (displayName.equalsIgnoreCase("random-custom")) {
+                    displayName = "DISPLAY-NAME_[" + RandomStringUtils.randomAlphabetic(5)
+                            + "] (" + RandomStringUtils.randomNumeric(5) + ")";
                 }
                 createDriverForm_displayName.sendKeys(displayName);
                 middleMileDriver.setDisplayName(displayName);
