@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders
+@OperatorV2 @Core @AllOrders @PresetFilters
 Feature: All Orders - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun

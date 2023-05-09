@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders
+@OperatorV2 @Core @AllOrders @DownloadCsv @CancelMultiOrders
 Feature: All Orders
 
   @LaunchBrowser @ShouldAlwaysRun
