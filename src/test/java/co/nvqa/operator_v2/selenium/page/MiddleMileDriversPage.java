@@ -88,6 +88,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String EXPIRY_DATE_INPUT_CREATE_DRIVER_ID = "license_expiry_date";
     private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_ID = "license_type";
     private static final String EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID = "employment_type";
+    private static final String VENDOR_NAME_INPUT_CREATE_DRIVER_ID = "vendor_id";
     private static final String EMPLOYMENT_START_DATE_INPUT_CREATE_DRIVER_ID = "employment_start_date";
     private static final String EMPLOYMENT_END_DATE_INPUT_CREATE_DRIVER_ID = "employment_end_date";
     private static final String USERNAME_INPUT_CREATE_DRIVER_ID = "username";
@@ -336,6 +337,13 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, EMPLOYMENT_TYPE_INPUT_CREATE_DRIVER_ID), employmentType);
         waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, employmentType));
         click(f(SELECT_FILTER_VALUE_XPATH, employmentType));
+    }
+
+    public void chooseVendorName(String vendorName) {
+        click(f(INPUT_CREATE_DRIVER_MODAL_XPATH, VENDOR_NAME_INPUT_CREATE_DRIVER_ID));
+        sendKeys(f(INPUT_CREATE_DRIVER_MODAL_XPATH, VENDOR_NAME_INPUT_CREATE_DRIVER_ID), vendorName);
+        waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, vendorName));
+        click(f(SELECT_FILTER_VALUE_XPATH, vendorName));
     }
 
     public void fillEmploymentStartDate(String employmentStartDate) {
@@ -1142,8 +1150,20 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             }
 
             if (data.get("employmentType") != null) {
-                middleMileDriver.setEmploymentType(data.get("employmentType"));
-                chooseEmploymentType(data.get("employmentType"));
+                String employmentType = data.get("employmentType");
+                middleMileDriver.setEmploymentType(employmentType);
+                String vendorName = data.get("vendorName");
+                if (data.get("vendorName") != null) {
+                    if (employmentType.equalsIgnoreCase("Outsourced - Vendors")) {
+                        chooseEmploymentType(employmentType);
+                        chooseVendorName(vendorName);
+                    } else if (employmentType.equalsIgnoreCase("Outsourced - Manpower Agency")) {
+                        chooseEmploymentType(employmentType);
+                        chooseVendorName(vendorName);
+                    }
+                } else {
+                    chooseEmploymentType(employmentType);
+                }
             }
 
             //Employment Start Date in today's date
