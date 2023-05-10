@@ -51,27 +51,27 @@ Feature: Zones
     And Operator download Zone CSV file
     Then Operator verify Zone CSV file is downloaded successfully
 
-  @DeleteCreatedZone
+
   Scenario: Set Coordinates Polygon of Normal Zone
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    And API Sort - Operator create Addressing Zone with details:
-      | hubName | {hub-name} |
-      | hubId   | {hub-id}   |
-    And Operator click View Selected Polygons for zone id "{KEY_SORT_CREATED_ZONE.id}"
+    When Operator refresh page
+    And Operator click View Selected Polygons for zone id "{zone-id-4}"
     And Operator click Zones in zone drawing page
-    And Operator click Create Polygon in zone drawing page
     And Operator click Set Coordinates in zone drawing page
       | latitude  | {zone-latitude-3}  |
       | longitude | {zone-longitude-3} |
-    And Operator find "{KEY_SORT_CREATED_ZONE.name}" zone on Zones page
+    Given Operator go to menu Utilities -> QRCode Printing
+    When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
+    When Operator refresh page
+    And Operator find "{zone-name-4}" zone on Zones page
     Then Operator verifies zone details on Zones page:
-      | shortName | {KEY_SORT_CREATED_ZONE.shortName} |
-      | name      | {KEY_SORT_CREATED_ZONE.name}      |
-      | hubName   | {KEY_SORT_CREATED_ZONE.hubName}   |
-      | latitude  | {zone-latitude-3}            |
-      | longitude | {zone-longitude-3}           |
-      | type      | STANDARD                     |
+      | shortName | {zone-short-name-4} |
+      | name      | {zone-name-4}       |
+      | hubName   | {sbm-hub}           |
+      | latitude  | {zone-latitude-3}   |
+      | longitude | {zone-longitude-3}  |
+      | type      | STANDARD            |
 
 
   @KillBrowser @ShouldAlwaysRun

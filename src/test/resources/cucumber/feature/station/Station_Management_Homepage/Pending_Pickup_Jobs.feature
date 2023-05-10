@@ -1002,7 +1002,7 @@ Feature: Pending Pickup Jobs
     When Operator get the count from one more tile in pending pickup: "<TileName2>"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -1069,7 +1069,7 @@ Feature: Pending Pickup Jobs
     When Operator get the count from the pending pickup tile: "<TileName1>"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -1125,7 +1125,7 @@ Feature: Pending Pickup Jobs
     And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -1159,7 +1159,7 @@ Feature: Pending Pickup Jobs
     And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Operator calls pending pickup job trigger for station
@@ -1228,7 +1228,7 @@ Feature: Pending Pickup Jobs
     And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -1257,7 +1257,7 @@ Feature: Pending Pickup Jobs
       | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And API Operator calls pending pickup job trigger for station
@@ -1519,7 +1519,7 @@ Feature: Pending Pickup Jobs
     And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -1582,7 +1582,7 @@ Feature: Pending Pickup Jobs
     And DB Operator get waypoint Id from reservation id "{KEY_CREATED_RESERVATION_ID}"
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_CREATED_RESERVATION_ID}       |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
@@ -2216,7 +2216,7 @@ Feature: Pending Pickup Jobs
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And Operator waits for 80 seconds
@@ -2337,7 +2337,7 @@ Feature: Pending Pickup Jobs
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
@@ -2393,7 +2393,7 @@ Feature: Pending Pickup Jobs
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Core - Operator add reservation pick-ups to the route using data below:
+    And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     When API Station - Operator clears station cache

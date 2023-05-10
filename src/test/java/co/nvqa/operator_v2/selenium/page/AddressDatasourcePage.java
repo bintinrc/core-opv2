@@ -71,6 +71,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(xpath = "//span[contains(text(), 'Subdistrict')] /following-sibling::span")
   public PageElement subdistrictAddRow;
 
+  @FindBy(xpath = "//span[contains(text(), 'Ward')] /following-sibling::span")
+  public PageElement wardAddRow;
+
   @FindBy(xpath = "//span[contains(text(), 'Municipality')] /following-sibling::span")
   public PageElement municipalityAddRow;
 

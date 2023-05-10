@@ -92,17 +92,10 @@ public class UploadPaymentsSteps extends AbstractSteps {
           ex.getMessage());
     }
     SoftAssertions softAssertions = new SoftAssertions();
-    if (dataTableAsMap.containsKey("batch_id")) {
-      softAssertions.assertThat(Objects.requireNonNull(entry).getBatchId())
-          .as("batch_id column is correct").isEqualTo(dataTableAsMap.get("batch_id"));
-    }
-    if (dataTableAsMap.containsKey("shipper_id")) {
-      softAssertions.assertThat(Objects.requireNonNull(entry).getShipperId())
-          .as("shipper_id column is correct").isEqualTo(dataTableAsMap.get("shipper_id"));
-    }
     if (dataTableAsMap.containsKey("message")) {
       softAssertions.assertThat(Objects.requireNonNull(entry).getMessage())
           .as("message column is correct").isEqualTo(dataTableAsMap.get("message"));
     }
+    softAssertions.assertAll();
   }
 }

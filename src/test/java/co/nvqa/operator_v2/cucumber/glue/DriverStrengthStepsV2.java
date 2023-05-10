@@ -153,6 +153,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     driverInfo.fromMap(mapOfData);
     put(KEY_CREATED_DRIVER_INFO, driverInfo);
     put(KEY_UPDATED_DRIVER_FIRST_NAME, driverInfo.getFirstName());
+    put(KEY_UPDATED_DRIVER_DISPLAY_NAME, driverInfo.getDisplayName());
     dsPage.inFrame(() -> {
       dsPage.driversTable.clickActionButton(1, ACTION_EDIT);
       dsPage.editDriverDialog.fillForm(driverInfo);
@@ -425,7 +426,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
     dsPage.inFrame(() -> {
       if (!dsPage.isTableLoaded()) {
-        dsPage.click("//button[span[text()='Load Selection']]");
+        dsPage.loadSelection.click();
       }
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, driverInfo.getUsername());
       takesScreenshot();

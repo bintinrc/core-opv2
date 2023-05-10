@@ -672,7 +672,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
     public void fillForm(DriverInfo driverInfo) {
       waitUntilVisible();
-      setDisplayNameName(driverInfo.getFirstName());
+      setDisplayNameName(driverInfo.getDisplayName());
       setFirstName(driverInfo.getFirstName());
       setLastName(driverInfo.getLastName());
       setDriverLicenseNumber(driverInfo.getLicenseNumber());
