@@ -1,7 +1,7 @@
 @OperatorV2 @Route @NewFeatures @StationRoute
 Feature: Search Tracking IDs on Station Route
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -2732,7 +2732,6 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify "Start date cannot be after end date" Shipment completion time error on Station Route page
     And Operator verify Assign drivers button is disabled on Station Route page
 
-  @Debug
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Time Range Greater Than 1 Month
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:

@@ -95,6 +95,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[./label[.='Stamp ID']]//span")
   public PageElement stampId;
 
+  @FindBy(xpath = "//div[./label[.='Comments']]//div")
+  public PageElement comments;
+
   @FindBy(xpath = "//div[label[.='Latest Route ID']]/h3")
   public PageElement latestRouteId;
 
@@ -125,7 +128,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public CreateTicketDialog createTicketDialog;
 
   @FindBy(css = "md-dialog")
@@ -169,8 +172,8 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public UpdateStatusDialog updateStatusDialog;
 
-  @FindBy(css = "md-dialog")
-  private CancelOrderDialog cancelOrderDialog;
+  @FindBy(css = ".ant-modal")
+  public CancelOrderDialog cancelOrderDialog;
 
   @FindBy(css = "md-dialog")
   private EditPickupDetailsDialog editPickupDetailsDialog;
@@ -393,27 +396,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         .isEqualTo(expectedDriver.trim());
   }
 
-  public void verifyOrderSummary(Order order) {
-    Assertions.assertThat(getOrderComments()).as("Order Summary: Comments")
-        .isEqualTo(order.getComments());
-  }
-
-  public String getOrderComments() {
-    return getText("//div[@class='data-block'][label[.='Comments']]/p");
-  }
-
   public void printAirwayBill() {
     clickMenu("View/Print", "Print Airway Bill");
     waitUntilInvisibilityOfToast("Attempting to download", true);
     waitUntilInvisibilityOfToast("Downloading");
-  }
-
-  public void cancelOrder(String cancellationReason) {
-    clickMenu("Order Settings", "Cancel Order");
-    cancelOrderDialog.waitUntilVisible();
-    cancelOrderDialog.cancellationReason.setValue(cancellationReason);
-    cancelOrderDialog.cancelOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("1 order(s) cancelled");
   }
 
   public void verifyAirwayBillContentsIsCorrect(Order order) {
@@ -570,24 +556,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         .isEqualTo(deliveryTransaction.getStatus());
 
     verifyPickupAndDeliveryInfo(order);
-  }
-
-  public void verifyOrderStatus(String expectedStatus) {
-    Assertions.assertThat(status.getText()).as("Status").isEqualToIgnoringCase(expectedStatus);
-  }
-
-  public void verifyOrderGranularStatus(String expectedGranularStatus) {
-    Assertions.assertThat(granular.getText()).as("Granular Status")
-        .isEqualToIgnoringCase(expectedGranularStatus);
-  }
-
-  public void waitUntilGranularStatusChange(String expectedGranularStatus) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(60));
-    wdWait.until((WebDriver driver) -> {
-      driver.navigate().refresh();
-      String status = granular.getText().trim();
-      return status.equalsIgnoreCase(expectedGranularStatus);
-    });
   }
 
   public void verifyOrderDeliveryTitle(String expectedDeliveryTitle) {
@@ -1259,17 +1227,17 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for Cancel dialog
    */
-  public static class CancelOrderDialog extends MdDialog {
+  public static class CancelOrderDialog extends AntModal {
 
     public CancelOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='container.order.edit.cancellation-reason']")
-    public TextBox cancellationReason;
+    @FindBy(css = "input.ant-input")
+    public ForceClearTextBox cancellationReason;
 
-    @FindBy(name = "container.order.edit.cancel-order")
-    public NvApiTextButton cancelOrder;
+    @FindBy(css = "[data-testid='edit-order-testid.cancel-order.cancel-order.button']")
+    public Button cancelOrder;
   }
 
   /**

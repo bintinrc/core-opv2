@@ -29,6 +29,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -454,9 +455,11 @@ public class EditOrderV2Steps extends AbstractSteps {
     }
   }
 
-  @Then("^Operator verify order status is \"(.+)\" on Edit Order V2 page$")
+  @Then("Operator verify order status is {value} on Edit Order V2 page")
   public void operatorVerifyOrderStatusOnEditOrderPage(String expectedValue) {
-    page.verifyOrderStatus(expectedValue);
+    page.inFrame(() -> Assertions.assertThat(page.status.getText())
+        .as("Status").isEqualToIgnoringCase(expectedValue)
+    );
   }
 
   @Then("Operator verify Current priority is {value} on Edit Order V2 page")
@@ -475,9 +478,11 @@ public class EditOrderV2Steps extends AbstractSteps {
     Assertions.assertThat(actual).as("Current DNR Group").isEqualToIgnoringCase(expected);
   }
 
-  @Then("^Operator verify order granular status is \"(.+)\" on Edit Order V2 page$")
+  @Then("Operator verify order granular status is {value} on Edit Order V2 page")
   public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue) {
-    page.verifyOrderGranularStatus(expectedValue);
+    page.inFrame(() -> Assertions.assertThat(page.granular.getText())
+        .as("Granular Status").isEqualToIgnoringCase(expectedValue)
+    );
   }
 
   @Then("^Operator verify order delivery title is \"(.+)\" on Edit Order V2 page$")
@@ -553,7 +558,14 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.inFrame(() -> {
       page.editOrderStamp(finalStampId);
       Order order = get(KEY_CREATED_ORDER);
-      order.setStampId(finalStampId);
+      if (order != null) {
+        order.setStampId(finalStampId);
+      } else {
+        List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
+        if (CollectionUtils.isNotEmpty(orders)) {
+          orders.get(0).setStampId(finalStampId);
+        }
+      }
       put(KEY_STAMP_ID, finalStampId);
     });
   }
@@ -656,7 +668,12 @@ public class EditOrderV2Steps extends AbstractSteps {
   @Then("^Operator cancel order on Edit Order V2 page using data below:$")
   public void operatorCancelOrderOnEditOrderPage(Map<String, String> mapOfData) {
     String cancellationReason = mapOfData.get("cancellationReason");
-    page.cancelOrder(cancellationReason);
+    page.inFrame(() -> {
+      page.clickMenu("Order Settings", "Cancel Order");
+      page.cancelOrderDialog.waitUntilVisible();
+      page.cancelOrderDialog.cancellationReason.setValue(cancellationReason);
+      page.cancelOrderDialog.cancelOrder.click();
+    });
     put(KEY_CANCELLATION_REASON, cancellationReason);
   }
 
@@ -719,7 +736,7 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("^Operator verify order events on Edit Order V2 page using data below:$")
   public void operatorVerifyOrderEventsOnEditOrderPage(List<Map<String, String>> data) {
-    data.forEach(eventData -> {
+    page.inFrame(() -> data.forEach(eventData -> {
       OrderEvent expectedEvent = new OrderEvent(resolveKeyValues(eventData));
       OrderEvent actualEvent = page.eventsTable().readAllEntities().stream()
           .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
@@ -728,14 +745,16 @@ public class EditOrderV2Steps extends AbstractSteps {
         pause5s();
         page.refreshPage();
         actualEvent = page.eventsTable().readAllEntities().stream()
-            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
+            .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+            .findFirst()
             .orElse(null);
       }
       Assertions.assertThat(actualEvent)
-          .withFailMessage("There is no [%s] event on Edit Order V2 page", expectedEvent.getName())
+          .withFailMessage("There is no [%s] event on Edit Order V2 page",
+              expectedEvent.getName())
           .isNotNull();
       expectedEvent.compareWithActual(actualEvent);
-    });
+    }));
   }
 
   @Then("Operator verify order events are not presented on Edit Order V2 page:")
@@ -957,21 +976,22 @@ public class EditOrderV2Steps extends AbstractSteps {
   @Then("^Operator verify (.+) transaction on Edit Order V2 page using data below:$")
   public void operatorVerifyTransactionOnEditOrderPage(String transactionType,
       Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
     int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
 
-    String value = mapOfData.get("status");
-    if (StringUtils.isNotBlank(value)) {
-      TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-      Assertions.assertThat(actual.getStatus()).as(f("%s transaction status", transactionType))
-          .isEqualTo(value);
-    }
-    if (mapOfData.containsKey("routeId")) {
-      TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
-      Assertions.assertThat(actual.getRouteId()).as(f("%s transaction Route Id", transactionType))
-          .isEqualTo(StringUtils.trimToNull(mapOfData.get("routeId")));
-    }
-    takesScreenshot();
+    Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+    page.inFrame(() -> {
+      String value = finalMapOfData.get("status");
+      if (StringUtils.isNotBlank(value)) {
+        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
+        Assertions.assertThat(actual.getStatus()).as(f("%s transaction status", transactionType))
+            .isEqualTo(value);
+      }
+      if (finalMapOfData.containsKey("routeId")) {
+        TransactionInfo actual = page.transactionsTable.readEntity(rowIndex);
+        Assertions.assertThat(actual.getRouteId()).as(f("%s transaction Route Id", transactionType))
+            .isEqualTo(StringUtils.trimToNull(finalMapOfData.get("routeId")));
+      }
+    });
   }
 
   @Then("Operator verify transaction on Edit Order V2 page using data below:")
@@ -992,22 +1012,19 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator verify order summary on Edit Order V2 page using data below:")
   public void operatorVerifyOrderSummaryOnEditOrderPage(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    final Order expectedOrder = new Order();
+    final Order expectedOrder = new Order(resolveKeyValues(mapOfData));
 
-    if (mapOfData.containsKey("comments")) {
-      expectedOrder.setComments(mapOfData.get("comments"));
-    }
-
-    page.verifyOrderSummary(expectedOrder);
-    takesScreenshot();
+    page.inFrame(() -> {
+      Assertions.assertThat(page.comments.getNormalizedText()).as("Order Summary: Comments")
+          .isEqualTo(expectedOrder.getComments());
+    });
   }
 
   @Then("^Operator verify menu item \"(.+)\" > \"(.+)\" is disabled on Edit Order V2 page$")
   public void operatorVerifyMenuItemIsDisabledOnEditOrderPage(String parentMenuItem,
       String childMenuItem) {
-    Assertions.assertThat(page.isMenuItemEnabled(parentMenuItem, childMenuItem))
-        .as("%s > %s menu item is enabled", parentMenuItem, childMenuItem).isFalse();
+    page.inFrame(() -> Assertions.assertThat(page.isMenuItemEnabled(parentMenuItem, childMenuItem))
+        .as("%s > %s menu item is enabled", parentMenuItem, childMenuItem).isFalse());
   }
 
   @Then("Operator update Pickup Details on Edit Order V2 page")
@@ -1176,18 +1193,22 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator delete order on Edit Order V2 page")
   public void operatorDeleteOrder() {
-    page.menuBar.selectOption("Order settings", "Delete order");
-    page.deleteOrderDialog.waitUntilVisible();
-    page.deleteOrderDialog.password.setValue("1234567890");
-    page.deleteOrderDialog.deleteOrder.click();
+    page.inFrame(() -> {
+      page.menuBar.selectOption("Order settings", "Delete order");
+      page.deleteOrderDialog.waitUntilVisible();
+      page.deleteOrderDialog.password.setValue("1234567890");
+      page.deleteOrderDialog.deleteOrder.click();
+    });
   }
 
   @Then("Operator delete order on Edit Order V2 page with invalid password")
   public void operatorDeleteOrderInvalidPassword() {
-    page.menuBar.selectOption("Order settings", "Delete order");
-    page.deleteOrderDialog.waitUntilVisible();
-    page.deleteOrderDialog.password.setValue("wrong");
-    page.deleteOrderDialog.deleteOrder.click();
+    page.inFrame(() -> {
+      page.menuBar.selectOption("Order settings", "Delete order");
+      page.deleteOrderDialog.waitUntilVisible();
+      page.deleteOrderDialog.password.setValue("wrong");
+      page.deleteOrderDialog.deleteOrder.click();
+    });
   }
 
   @Then("Operator reschedule Pickup on Edit Order V2 page with address changes")
@@ -1240,8 +1261,7 @@ public class EditOrderV2Steps extends AbstractSteps {
       page.waitUntilLoaded();
       String fieldToValidate = finalMapOfData.get("stampId");
       if (StringUtils.isNotBlank(fieldToValidate)) {
-        Assertions.assertThat(page.stampId.getNormalizedText())
-            .as("Stamp ID")
+        Assertions.assertThat(page.stampId.getNormalizedText()).as("Stamp ID")
             .isEqualTo(fieldToValidate);
       }
     });
@@ -1610,10 +1630,11 @@ public class EditOrderV2Steps extends AbstractSteps {
     recoveryTicket.setIssueDescription(issueDescription);
     recoveryTicket.setRtsReason(rtsReason);
 
-    page.clickMenu("Order Settings", "Create Recovery Ticket");
-    page.createTicket(recoveryTicket);
-    takesScreenshot();
-    put("recoveryTicket", recoveryTicket);
+    page.inFrame(() -> {
+      page.clickMenu("Order Settings", "Create recovery ticket");
+      page.createTicket(recoveryTicket);
+      put("recoveryTicket", recoveryTicket);
+    });
   }
 
 }
