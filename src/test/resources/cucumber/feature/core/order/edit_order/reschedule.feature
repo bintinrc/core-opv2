@@ -53,7 +53,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[2].id}           |
-      | rts          | 1                                            |
+      | rts          | 0                                            |
       | fromAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
       | fromAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | fromPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
@@ -183,7 +183,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
-      | rts        | 1                                          |
+      | rts        | 0                                          |
       | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
       | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
       | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
@@ -325,7 +325,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -460,7 +460,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -575,7 +575,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts          | 1                                  |
+      | rts          | 0                                  |
       | fromAddress1 | 116 Keng Lee Rd                    |
       | fromAddress2 | 15                                 |
       | fromPostcode | 308402                             |
@@ -712,7 +712,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -972,7 +972,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
-      | rts        | 1                                          |
+      | rts        | 0                                          |
       | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
       | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
       | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
