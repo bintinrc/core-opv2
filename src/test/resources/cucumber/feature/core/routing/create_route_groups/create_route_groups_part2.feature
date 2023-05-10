@@ -6,7 +6,7 @@ Feature: Create Route Groups
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping on Create Route Groups (uid:3abb3461-9ffa-486d-b5e5-4949c87644fc)
+  Scenario: Operator Filter Route Grouping on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -39,7 +39,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
-  Scenario: Download CSV of Route Group Information on Create Route Groups (uid:4a37fbbe-4069-4327-b4fe-46af568e7026)
+  Scenario: Download CSV of Route Group Information on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -73,7 +73,7 @@ Feature: Create Route Groups
     Then Operator verify Transactions/Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping on Create Route Groups (uid:3abb3461-9ffa-486d-b5e5-4949c87644fc)
+  Scenario: Operator Filter Route Grouping on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

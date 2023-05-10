@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CRG2
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PresetFilters @CRG2
 Feature: Create Route Groups - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Create Route Groups - Preset Filters
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteFilterTemplate
-  Scenario: Operator Save A New Preset on Create Route Groups Page - All Search Filters (uid:3da5f28e-4c54-4988-9848-f8955fe15ed3)
+  Scenario: Operator Save A New Preset on Create Route Groups Page - All Search Filters
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -141,7 +141,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplate
-  Scenario: Operator Apply Filter Preset on Create Route Groups Page - All Search Filters (uid:42c4c74c-291e-4bcf-9c8e-c9348d86ff89)
+  Scenario: Operator Apply Filter Preset on Create Route Groups Page - All Search Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -201,7 +201,7 @@ Feature: Create Route Groups - Preset Filters
       | shipmentType   | AIR_HAUL       |
 
   @DeleteFilterTemplate
-  Scenario: Operator Delete Preset on Create Route Groups Page - All Search Filters (uid:411451e2-5825-4678-a1b2-c56ad91d65b7)
+  Scenario: Operator Delete Preset on Create Route Groups Page - All Search Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -239,7 +239,7 @@ Feature: Create Route Groups - Preset Filters
     And DB Operator verifies "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" filter preset is deleted
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - All Search Filters (uid:349131bc-d3e5-48b4-b0fa-249323f70073)
+  Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - All Search Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -383,7 +383,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-1-day-yyyy-MM-dd} |
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - All Search Filters (uid:58afae4b-3775-4daa-bfe9-5aceb1543986)
+  Scenario: Operator Update Existing Preset via Update Preset button on Create Route Groups Page - All Search Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates new Route Groups Filter Template using data below:
       | name                          | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -491,7 +491,7 @@ Feature: Create Route Groups - Preset Filters
       | transitDateTimeTo              | {gradle-next-0-day-yyyy-MM-dd} |
 
   @DeleteRouteGroups @DeleteFilterTemplate
-  Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset on Create Route Groups (uid:677056fa-a044-487e-8b10-f95739f8578b)
+  Scenario: Operator Add Waypoint To Existing Route Group By Selected Filter Preset on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -522,7 +522,7 @@ Feature: Create Route Groups - Preset Filters
       | deliveryType     | Sameday         |
 
   @DeleteRouteGroups @DeleteFilterTemplate
-  Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset on Create Route Groups (uid:77c4ed63-51df-4998-a131-cb5cac5de236)
+  Scenario: Operator Add Waypoint To New Route Group By Selected Filter Preset on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

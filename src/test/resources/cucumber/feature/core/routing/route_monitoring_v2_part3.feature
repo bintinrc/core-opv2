@@ -88,9 +88,9 @@ Feature: Route Monitoring V2
       | numValidFailed   | <numValidFailed>       |
       | numInvalidFailed | <numInvalidFailed>     |
     Examples:
-      | name         | failureReasonCodeId | numValidFailed | numInvalidFailed | hiptest-uid                              |
-      | Valid Fail   | 8                   | 1              | 0                | uid:795339f1-f3db-4417-9c90-5b712a22adf9 |
-      | Invalid Fail | 9                   | 0              | 1                | uid:eef28170-195e-45a1-97d7-1e99970ad1eb |
+      | name         | failureReasonCodeId | numValidFailed | numInvalidFailed |
+      | Valid Fail   | 8                   | 1              | 0                |
+      | Invalid Fail | 9                   | 0              | 1                |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Reservation

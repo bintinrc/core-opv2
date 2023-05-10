@@ -6,7 +6,7 @@ Feature: Create Route Groups
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
-  Scenario: Operator Add Transaction to Route Group on Create Route Groups (uid:f78a6a4f-cac1-40a4-a405-5fcf375abce7)
+  Scenario: Operator Add Transaction to Route Group on Create Route Groups
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -31,7 +31,7 @@ Feature: Create Route Groups
       | noRoutedReservations | 0                                   |
 
   @DeleteRouteGroups
-  Scenario: Operator Add Reservation to Route Group on Create Route Groups (uid:ac76c33c-0e18-4a3f-957c-211444d4d708)
+  Scenario: Operator Add Reservation to Route Group on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -65,7 +65,7 @@ Feature: Create Route Groups
       | noReservations       | 1                                   |
       | noRoutedReservations | 0                                   |
 
-  Scenario: Operator Filter Master Shipper on Create Route Groups (uid:2d09a2eb-314f-436f-a8bb-7bcf77cfd553)
+  Scenario: Operator Filter Master Shipper on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper set Shipper V4 using data below:
       | shipperV4ClientId     | {shipper-v4-marketplace-client-id}     |
@@ -93,7 +93,7 @@ Feature: Create Route Groups
       | status     | Pending Pickup                                           |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Routed Transaction on Create Route Groups (uid:8b96252f-32bc-49e4-9768-ad802929f298)
+  Scenario: Operator Filter Routed Transaction on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -121,7 +121,7 @@ Feature: Create Route Groups
       | startDateTime | {KEY_LIST_OF_CREATED_ORDER[1].pickupDate} 12:00:00         |
       | endDateTime   | {KEY_LIST_OF_CREATED_ORDER[1].pickupEndDate} 15:00:00      |
 
-  Scenario: Operator Filter DP Order on Create Route Groups (uid:10fe0704-11ba-41b5-8ca2-00e695092078)
+  Scenario: Operator Filter DP Order on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
