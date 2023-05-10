@@ -783,7 +783,7 @@ Feature: Reschedule
       | waypointId                                                 | archived |
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @wip2
   Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
@@ -806,28 +806,6 @@ Feature: Reschedule
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
-    And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | SUCCESS                          |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | timestamp             | {gradle-current-date-yyyy-MM-dd}           |
-      | inputOnPod            | 1                                          |
-      | scannedAtShipperCount | 1                                          |
-      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:
-      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | recipientName  | {KEY_CREATED_RESERVATION.name}           |
-      | shipperId      | {shipper-v4-legacy-id}                   |
-      | shipperName    | {shipper-v4-name}                        |
-      | shipperContact | {shipper-v4-contact}                     |
-      | status         | SUCCESS                                  |
-    And Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:

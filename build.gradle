@@ -23,6 +23,7 @@ project.ext {
             "classpath:co.nvqa.common.pricing.cucumber.glue",
             "classpath:co.nvqa.common.lighthouse.cucumber.glue",
             "classpath:co.nvqa.common.sns.cucumber.glue",
+            "classpath:co.nvqa.common.recovery.cucumber.glue",
             "classpath:co.nvqa.common.station.cucumber.glue"]
 }
 
@@ -74,6 +75,7 @@ dependencies {
     implementation "co.nvqa:common-sort:1.2.14"
     implementation "co.nvqa:commons:2.5.21"
     implementation "co.nvqa:common-shipper:1.2.5"
+    implementation "co.nvqa:common-recovery:1.2.7"
     implementation "co.nvqa:common-mm:1.2.10"
     implementation "co.nvqa:common-pricing:1.2.8"
     implementation "co.nvqa:common-lighthouse:1.1.0"

@@ -195,6 +195,8 @@ Feature: Resolve Recovery Ticket
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator create new recovery ticket on Edit Order page:
       | entrySource             | CUSTOMER COMPLAINT |
       | investigatingDepartment | Recovery           |
