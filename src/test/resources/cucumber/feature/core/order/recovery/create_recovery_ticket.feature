@@ -352,6 +352,7 @@ Feature: Create Recovery Ticket
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_DESTINATION_HUB_ID}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator waits for 10 seconds
     And API Operator sweep parcel:
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
       | hubId | {KEY_DESTINATION_HUB_ID}        |

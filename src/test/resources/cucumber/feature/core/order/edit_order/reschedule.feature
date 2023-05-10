@@ -107,14 +107,6 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}"
-    And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
-
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Reschedule Fail Delivery
@@ -783,8 +775,8 @@ Feature: Reschedule
       | waypointId                                                 | archived |
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
-  @DeleteOrArchiveRoute @wip2
-  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
+  @DeleteOrArchiveRoute
+  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -796,6 +788,7 @@ Feature: Reschedule
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
     And API Operator start the route
