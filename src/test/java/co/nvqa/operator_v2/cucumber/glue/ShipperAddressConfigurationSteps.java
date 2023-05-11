@@ -47,7 +47,7 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     Runnable selectStatus = () -> {
       shipperAddressConfigurationPage.selectAddressStatus(option);
     };
-    doWithRetry(selectStatus, "Operator selects {string} in the Address Status dropdown", 5000L, 3);
+    doWithRetry(selectStatus, "Operator select Address Status", 5000L, 3);
     takesScreenshot();
   }
 
@@ -58,18 +58,17 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     addressCreationDate = resolveKeyValues(addressCreationDate);
     String startDate = addressCreationDate.get("From");
     String endDate = addressCreationDate.get("To");
-    Runnable verifyTable = () -> {
+    Runnable selectDates = () -> {
           shipperAddressConfigurationPage.selectDateRange(startDate,
               endDate);
     };
-    doWithRetry(verifyTable, "Operator chooses start and end date", 5000L, 3);
+    doWithRetry(selectDates, "Operator chooses start and end date", 5000L, 3);
     takesScreenshot();
   }
 
   @And("Operator selects  following picktypes in the dropdown:")
   public void operatorSelectsFollowingPicktypesInTheDropdown(List<String> pickType) {
     shipperAddressConfigurationPage.selectPickupType(pickType);
-
   }
 
   @And("Operator clicks on the load selection button")
@@ -81,10 +80,10 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   public void operator_Searches_By(String filterBy, String filterValue) {
     filterValue = resolveValue(filterValue);
     String finalFilterValue = filterValue;
-    Runnable verifyTable = () -> {
+    Runnable filterColumn = () -> {
       shipperAddressConfigurationPage.filterBy(filterBy, finalFilterValue);
     };
-    doWithRetry(verifyTable, "Operator filter column", 5000L, 3);
+    doWithRetry(filterColumn, "Operator filter column", 5000L, 3);
     takesScreenshot();
   }
 
@@ -129,7 +128,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
   @And("Operator selects the picktype {string} in the dropdown")
   public void operatorSelectsThePicktypesInTheDropdown(String pickType) {
     shipperAddressConfigurationPage.pickupTypeInEditWindow.selectValueWithoutSearch(pickType);
-
   }
 
   @And("Operator clicks on the Update Addresses Lat Long button")
@@ -187,7 +185,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 
-
   @And("Operator clicks on the {string} button")
   @SuppressWarnings("unchecked")
   public void Operator_clicks_on_the_button(String buttonText) {
@@ -242,7 +239,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     shipperAddressConfigurationPage.dragAndDrop(fileName);
     shipperAddressConfigurationPage.clickSubmitFileButton(windowName, fileName);
     takesScreenshot();
-
   }
 
   @Then("Operator updates the CSV file with below data:")
@@ -256,7 +252,6 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
         System.getProperty("user.dir") + "/src/test/resources/csv/firstMile/" + fileName;
     File file = new File(Filepath);
     shipperAddressConfigurationPage.updateCSVFile(Filepath, columnIndex, rowIndex, value);
-
   }
 
   @Then("Operator verifies page url ends with {string}")
@@ -280,6 +275,3 @@ public class ShipperAddressConfigurationSteps extends AbstractSteps {
     takesScreenshot();
   }
 }
-
-
-
