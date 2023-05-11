@@ -20,7 +20,7 @@ Feature: Tag Management
       | description | {KEY_CREATED_ROUTE_TAG.description} |
 
   @DeleteRouteTags
-  Scenario: Operator Update Created Tag on Tag Management Page (uid:76073751-6e4c-4c67-9ba2-eca45cbac413)
+  Scenario: Operator Update Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
       | name        | AAA                                                                               |
@@ -38,7 +38,7 @@ Feature: Tag Management
       | description | {KEY_CREATED_ROUTE_TAG.description} |
 
   @DeleteRouteTags
-  Scenario: Operator Search Created Tag on Tag Management Page (uid:d6ab95b9-989c-4da4-b911-4671765c1815)
+  Scenario: Operator Search Created Tag on Tag Management Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route tag:
       | name        | AAA                                                                               |

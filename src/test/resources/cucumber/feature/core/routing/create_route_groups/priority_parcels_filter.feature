@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @CRG3
+@OperatorV2 @Core @Routing @RoutingJob4 @CreateRouteGroups @PriorityParcelsFilter @CRG3
 Feature: Create Route Groups - Priority Parcel Filters
 
   @LaunchBrowser @ShouldAlwaysRun

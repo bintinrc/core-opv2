@@ -376,7 +376,7 @@ Feature: Route Logs - Merge Transactions
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
       | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
-  Scenario: Operator Partial Merge Multiple Transactions of Single Route - Valid and Invalid Transactions - Partial Different Addresses
+  Scenario Outline: Operator Partial Merge Multiple Transactions of Single Route - Valid and Invalid Transactions - Partial Different Addresses
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | <generateAddress> | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -412,8 +412,8 @@ Feature: Route Logs - Merge Transactions
       | {KEY_LIST_OF_CREATED_ORDER_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_ID[3]} |
     Examples:
-      | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required | hiptest-uid                              |
-      | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              | uid:43d402e0-3439-4076-8c7a-ff2f79b4e6a3 |
+      | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
+      | Delivery         | DD   | Parcel       | to        | generateFrom    | binti@test.co | binti@test.co | +6595557073    | +6595557073    | false              |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
