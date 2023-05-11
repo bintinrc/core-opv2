@@ -1,4 +1,4 @@
-@OperatorV2 @Route @NewFeatures @StationRoute
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @AddExistingRoutesOnStationRoute
 Feature: Add To Existing Routes on Station Route
 
   @LaunchBrowser @ShouldAlwaysRun
