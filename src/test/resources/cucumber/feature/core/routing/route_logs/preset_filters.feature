@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @PresetFilters
+@OperatorV2 @Core @Routing @RouteLogs @PresetFiltersRouteLogs
 Feature: Route Logs - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun
