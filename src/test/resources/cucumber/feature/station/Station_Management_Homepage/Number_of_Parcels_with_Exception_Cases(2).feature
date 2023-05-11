@@ -124,7 +124,7 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes             | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
     When Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-3}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
@@ -171,7 +171,7 @@ Feature: Number of Parcels with Exception Cases
       | ticketNotes             | GENERATED          |
     And Operator verify ticket is created successfully on page Recovery Tickets
     When Operator go to menu Station Management Tool -> Station Management Homepage
-    And Operator selects the hub as "{hub-name-3}" and proceed
+    And Operator selects the hub as "<HubName>" and proceed
     Then Operator verifies that the count in tile: "<TileName>" has remained un-changed
     And Operator opens modal pop-up: "<ModalName>" through hamburger button for the tile: "<TileName>"
     And Operator verifies that a table is displayed with following columns:
