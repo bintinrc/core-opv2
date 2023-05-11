@@ -19,4 +19,5 @@ public class DriverAnnouncement extends DataEntity<DriverAnnouncement> {
   private Integer readCount;
   private Integer sendCount;
   private String csvUrl;
+  private String message;
 }
