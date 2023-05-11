@@ -6,7 +6,7 @@ Feature: Route Logs
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
-  Scenario: Operator Create a Single Route from Route Logs Page (uid:76362592-6316-4521-a835-dbe10a1b2f12)
+  Scenario: Operator Create a Single Route from Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd} |
@@ -29,7 +29,7 @@ Feature: Route Logs
       | tags           | {route-tag-name}                 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page (uid:82caf88b-3814-4768-ac98-8cc063346b1b)
+  Scenario: Operator Create Multiple Routes by Duplicate Current Route on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
@@ -99,7 +99,7 @@ Feature: Route Logs
     Then Operator verifies created routes are optimised successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page (uid:25552c52-3a03-4110-8b33-628b65785b37)
+  Scenario: Operator Print Passwords of Multiple Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

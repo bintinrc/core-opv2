@@ -6,7 +6,7 @@ Feature: Route Logs
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator Redirected to Route Manifest from Route Logs Page (uid:dba06f34-649b-4314-a089-7c13acde1234)
+  Scenario: Operator Redirected to Route Manifest from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -93,7 +93,7 @@ Feature: Route Logs
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Edit Route Details modal on Route Logs page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page (uid:1a53a8cd-1499-4135-9171-5435bf397469)
+  Scenario: Operator Print Multiple Routes Details With Empty Waypoints from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

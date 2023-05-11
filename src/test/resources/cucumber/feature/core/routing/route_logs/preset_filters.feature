@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs
+@OperatorV2 @Core @Routing @RouteLogs @PresetFiltersRouteLogs
 Feature: Route Logs - Preset Filters
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Route Logs - Preset Filters
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteFilterTemplate
-  Scenario: Operator Save A New Preset on Route Logs Page (uid:f259e5b1-5e98-4672-9b9f-ebf34bd3470f)
+  Scenario: Operator Save A New Preset on Route Logs Page
     Given Operator go to menu Routing -> Route Logs
     And Operator set filters on Route Logs page:
       | routeDateFrom  | {gradle-previous-1-day-dd/MM/yyyy} |
@@ -66,7 +66,7 @@ Feature: Route Logs - Preset Filters
       | zone           | {zone-name}                        |
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page (uid:d2232710-301a-4be4-ad8c-06c00507ec5b)
+  Scenario: Operator Update Existing Preset via Save Current As Preset button on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -107,7 +107,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
 
   @DeleteFilterTemplate
-  Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page (uid:be052c39-d986-4205-8b7f-c3e47005d887)
+  Scenario: Operator Update Existing Preset via Update Preset button on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
@@ -140,7 +140,7 @@ Feature: Route Logs - Preset Filters
       | archivedRoutes | true                               |
 
   @DeleteFilterTemplate
-  Scenario: Operator Delete Preset on Route Logs Page (uid:c5baeef5-610b-4f1c-af63-61206cacd78d)
+  Scenario: Operator Delete Preset on Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given  API Operator creates new Routes Filter Template using data below:
       | name            | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
