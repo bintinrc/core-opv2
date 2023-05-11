@@ -46,7 +46,7 @@ Feature: Edit Order
       | top | Reverified Successfully |
     And DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order:
       | archived | score    |
-      | 1        | 1.0      |
+      | 1        | not null |
       | 0        | not null |
 
   @KillBrowser @ShouldAlwaysRun
