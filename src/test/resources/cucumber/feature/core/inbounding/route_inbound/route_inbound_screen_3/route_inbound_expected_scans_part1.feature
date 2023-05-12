@@ -431,7 +431,7 @@ Feature: Route Inbound Expected Scans
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API DP creates a return fully integrated order in a dp "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
+    And API DP creates a return fully integrated order in a dp "{lodge-in-dp-id}" and Shipper Legacy ID = "{lodge-in-shipper-legacy-id}"
     And API Operator get reservation id of "{KEY_CREATED_ORDER_ID}" order
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Pending" on Edit Order page
@@ -474,8 +474,8 @@ Feature: Route Inbound Expected Scans
       | routeDate  | GET_FROM_CREATED_ROUTE |
     When Operator open C2C / Return Pickups dialog on Route Inbound page
     Then Operator verify Shippers Info in C2C / Return Pickups Waypoints dialog using data below:
-      | shipperName       | scanned | total |
-      | {shipper-v4-name} | 0       | 1     |
+      | shipperName             | scanned | total |
+      | {lodge-in-shipper-name} | 0       | 1     |
     When Operator click 'View orders or reservations' button for shipper #1 in C2C / Return Pickups Waypoints dialog
     Then Operator verify Orders table in C2C / Return Pickups Waypoints dialog using data below:
       | trackingId                                 | stampId                                    | location | type             | status  | cmiCount | routeInboundStatus |
@@ -484,8 +484,9 @@ Feature: Route Inbound Expected Scans
     And Operator open Reservation Pickups dialog on Route Inbound page
     Then Operator verify Non-Inbounded Orders record using data below:
       | trackingId    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | shipperName   | {shipper-v4-name}                          |
+      | shipperName   | {lodge-in-shipper-name}                    |
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]}   |
+    And Operator scan a tracking ID of created order on Route Inbound page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
