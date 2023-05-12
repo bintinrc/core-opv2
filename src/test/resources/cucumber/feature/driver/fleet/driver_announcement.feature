@@ -1,8 +1,8 @@
 @OperatorV2 @Driver @Fleet @DriverAnnouncementV2
 Feature: Driver Announcement
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Open an Announcement on Driver Announcement page
@@ -40,8 +40,26 @@ Feature: Driver Announcement
       | body          | This is an automation test |
     Then Operator verify Driver Announcement successfully sent
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+  Scenario: Operator Send New Important Normal Announcement
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator create normal Announcement on Driver Announcement page
+      | recipientType | All                        |
+      | recipient     | QA automation announcement |
+      | subject       | Automation test            |
+      | isImportant   | true                       |
+      | body          | This is an automation test |
+    Then Operator verify Driver Announcement successfully sent
+
+  Scenario: Operator Send New HTML Announcement
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator create normal Announcement on Driver Announcement page
+      | recipientType | All                                 |
+      | recipient     | QA automation announcement          |
+      | subject       | Automation test                     |
+      | isImportant   | true                                |
+      | html          | <h1>This is an automation test</h1> |
+    Then Operator verify Driver Announcement successfully sent
 
 
