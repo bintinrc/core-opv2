@@ -1,4 +1,4 @@
-@OperatorV2 @Route @NewFeatures @StationRoute
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @UploadCsvOnStationRoute
 Feature: Upload CSV on Station Route
 
   @LaunchBrowser @ShouldAlwaysRun
