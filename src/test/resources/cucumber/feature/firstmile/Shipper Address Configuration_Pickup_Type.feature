@@ -147,7 +147,6 @@ Feature: Shipper Address Configuration
     And Operator filter the column "Address ID" with "{KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[4]}"
     Then Operator verifies table is filtered "formatted_pickup_type" based on input in "Truck" in shipper address page
 
-
   Scenario Outline: Search Shipper Addresses on Pickup Type Configure Page - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
@@ -231,8 +230,8 @@ Feature: Shipper Address Configuration
       | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} |
 
     Examples:
-      | search_field | search_value                                     | column_datakey     | pickupTypeSelect | current_Date                    |
-      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    | {date: 0 days next, ddMMMYYYY}  |
+      | search_field | search_value                                     | column_datakey     | pickupTypeSelect |
+      | Address ID   | {KEY_CREATED_SHIPPER_ADDRESS_WITHOUT_LATLONG[1]} | shipper_address_id | None assigned    |
 
   Scenario: Download CSV of Address Pickup Type Template
     When Operator loads Shipper Address Configuration page
@@ -531,7 +530,7 @@ Feature: Shipper Address Configuration
     And Operator verifies that the following texts are available on the downloaded file "Update Pickup Type Failure Reasons"
       | Shipper address id 13913251 does not exist |
 
-  @HappyPath
+  @HappyPath @Debug
   Scenario Outline: Success Configure Address Pickup Type - <dataset_name>
     When Operator loads Shipper Address Configuration page
     When API Operator creates shipper address using below data:
