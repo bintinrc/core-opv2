@@ -388,7 +388,7 @@ public class ZonesSteps extends AbstractSteps {
   @When("Operator successfully upload a KML file {string}")
   public void operatorSuccessfullyUploadAKMLFile(String fileName) {
     // Retry mechanism in case the KML file is not correctly read (a.k.a. vertex = 0)
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       if (zonesSelectedPolygonsPage.sideToolbar.isDisplayed()) {
         LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
         backToPreviousPage();
@@ -540,11 +540,11 @@ public class ZonesSteps extends AbstractSteps {
   @And("Operator click View Selected Polygons for zone short name {string}")
   public void operatorClickViewSelectedPolygonsForZoneShortName(String zoneShortName) {
     zonesPage.waitUntilPageLoaded();
-    retryIfRuntimeExceptionOccurred(() -> zonesPage.inFrame(page -> {
+    doWithRetry(() -> zonesPage.inFrame(page -> {
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
       zonesPage.zonesTable.selectRow(1);
       zonesPage.viewSelectedPolygons.click();
-    }));
+    }),"Click View Selected Polygons");
 
   }
 
