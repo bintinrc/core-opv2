@@ -78,7 +78,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.filterButton.click();
       pause1s();
       addressingDownloadPage.selectPresetFilter(filterType);
@@ -286,7 +286,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on Load Address button")
   public void operatorClicksOnLoadAddressButton() {
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
           addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
       addressingDownloadPage.loadAddresses.click();
@@ -321,7 +321,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
-    retryIfRuntimeExceptionOccurred(() -> {
+
       Order createdOrder = get(KEY_ORDER_DETAILS);
 
       if (createdOrder == null) {
@@ -339,7 +339,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
       LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
       addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
-    });
+
 
   }
 
@@ -402,7 +402,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorAddsFilterToSelectedPreset(String filter) {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.filterButton.click();
       pause1s();
       addressingDownloadPage.selectPresetFilter(filterType);
