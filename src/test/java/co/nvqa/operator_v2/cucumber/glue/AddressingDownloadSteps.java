@@ -321,7 +321,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
-
+    doWithRetry(() -> {
       Order createdOrder = get(KEY_ORDER_DETAILS);
 
       if (createdOrder == null) {
@@ -339,6 +339,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
       LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
       addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+    }, "Input Order Creation Time");
 
 
   }
@@ -451,7 +452,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
         break;
 
       default:
-       Assertions.assertThat(true).as("Invalid time bracket given.").isFalse();
+        Assertions.assertThat(true).as("Invalid time bracket given.").isFalse();
     }
 
     String[] timeRangePoints = timeRange.split("-");
