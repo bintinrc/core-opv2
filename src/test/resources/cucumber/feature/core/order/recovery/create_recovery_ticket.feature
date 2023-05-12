@@ -58,8 +58,9 @@ Feature: Create Recovery Ticket
     And DB Operator verifies transaction route id is null
     And DB Operator verifies waypoint status is "PENDING"
     And DB Operator verifies waypoints.route_id & seq_no is NULL
-
     And DB Operator verifies route_monitoring_data is hard-deleted
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Recovery Ticket For Pending Reschedule Order
@@ -126,6 +127,8 @@ Feature: Create Recovery Ticket
       | type       | DD                                 |
       | status     | Pending                            |
       | routeId    | null                               |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Recovery Ticket For On Vehicle for Delivery
@@ -176,6 +179,8 @@ Feature: Create Recovery Ticket
       | type       | DD                                 |
       | status     | Pending                            |
       | routeId    | null                               |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create Recovery Ticket For Pickup Fail
@@ -234,6 +239,8 @@ Feature: Create Recovery Ticket
       | type       | PP                                 |
       | status     | Pending                            |
       | routeId    | null                               |
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Hub Inbound Scan
     Given API Shipper create V4 order using data below:
@@ -266,9 +273,8 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create and Search Recovery Ticket For Route Inbound Scan
@@ -330,9 +336,8 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create and Search Recovery Ticket For Outbound Scan
@@ -347,6 +352,7 @@ Feature: Create Recovery Ticket
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{KEY_DESTINATION_HUB_ID}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator waits for 10 seconds
     And API Operator sweep parcel:
       | scan  | {KEY_CREATED_ORDER_TRACKING_ID} |
       | hubId | {KEY_DESTINATION_HUB_ID}        |
@@ -396,9 +402,8 @@ Feature: Create Recovery Ticket
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
     And DB Operator verifies route_monitoring_data is hard-deleted
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Warehouse Sweep Scan
     Given Operator go to menu Utilities -> QRCode Printing
@@ -436,9 +441,8 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                  |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Create and Search Recovery Ticket For Driver Inbound Scan
@@ -505,9 +509,8 @@ Feature: Create Recovery Ticket
     And DB Operator verifies waypoints.route_id & seq_no is NULL
 
     And DB Operator verifies route_monitoring_data is hard-deleted
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   Scenario: Operator Create and Search Recovery Ticket For Driver Pickup Scan
     Given Operator go to menu Utilities -> QRCode Printing
@@ -558,9 +561,8 @@ Feature: Create Recovery Ticket
     And Operator verify order events on Edit order page using data below:
       | tags          | name          | description                                                                                                                                                   |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: En-route to Sorting Hub\nNew Granular Status: On Hold\n\nOld Order Status: Transit\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
-    Given Operator go to menu Recovery -> Recovery Tickets
-    Then Operator chooses Investigating Hub filter as "{hub-name}"
-    And Operator enters the tracking id and verifies that is exists
+    When API Recovery - Operator search recovery ticket:
+      | request | {"tracking_ids":["{KEY_CREATED_ORDER_TRACKING_ID}"]} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

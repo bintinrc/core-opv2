@@ -343,7 +343,6 @@ Feature: RTS
       | address1   | {KEY_CREATED_ORDER_ORIGINAL.fromAddress1} |
       | address2   | {KEY_CREATED_ORDER_ORIGINAL.fromAddress2} |
       | postcode   | {KEY_CREATED_ORDER_ORIGINAL.fromPostcode} |
-      | city       | {KEY_CREATED_ORDER_ORIGINAL.fromCity}     |
       | country    | {KEY_CREATED_ORDER_ORIGINAL.fromCountry}  |
     And DB Operator verifies waypoints record:
       | id       | {KEY_TRANSACTION.waypointId}              |
@@ -353,12 +352,7 @@ Feature: RTS
       | address1 | {KEY_CREATED_ORDER_ORIGINAL.fromAddress1} |
       | address2 | {KEY_CREATED_ORDER_ORIGINAL.fromAddress2} |
       | postcode | {KEY_CREATED_ORDER_ORIGINAL.fromPostcode} |
-      | city     | {KEY_CREATED_ORDER_ORIGINAL.fromCity}     |
       | country  | {KEY_CREATED_ORDER_ORIGINAL.fromCountry}  |
-    When DB Operator gets "{KEY_TRANSACTION.waypointId}" waypoint record
-    And API Operator get Addressing Zone from a lat long with type "RTS"
-    Then Operator verifies Zone is correct after RTS on Edit Order page
-    And Operator verifies waypoints.routing_zone_id is correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

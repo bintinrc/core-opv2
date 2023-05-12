@@ -236,7 +236,7 @@ Feature: Create Route Groups - Preset Filters
     Then Operator verifies that success react notification displayed:
       | top    | 1 filter preset deleted                         |
       | bottom | ID: {KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID} |
-    And DB Operator verifies "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" filter preset is deleted
+    And DB Lighthouse - verify preset_filters id "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_ID}" record is deleted:
 
   @DeleteFilterTemplate
   Scenario: Operator Update Existing Preset via Save Current As Preset button on Create Route Groups Page - All Search Filters

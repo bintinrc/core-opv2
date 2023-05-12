@@ -19,7 +19,7 @@ Feature: Route Logs - Preset Filters
       | Route date: {gradle-previous-1-day-yyyy-MM-dd} to {gradle-current-date-yyyy-MM-dd} |
       | Hub: (1) {hub-name}                                                                |
       | Driver: (1) {ninja-driver-name}                                                    |
-      | Archived routes: Show archived routes                                             |
+      | Archived routes: Show archived routes                                              |
     And Operator verifies Preset Name field in Save Preset dialog on Route Logs page is required
     And Operator verifies Cancel button in Save Preset dialog on Route Logs page is enabled
     And Operator verifies Save button in Save Preset dialog on Route Logs page is disabled
@@ -161,7 +161,7 @@ Feature: Route Logs - Preset Filters
     Then Operator verifies that success react notification displayed:
       | top    | 1 filter preset deleted            |
       | bottom | ID: {KEY_ROUTES_FILTERS_PRESET_ID} |
-    And DB Operator verifies "{KEY_ROUTES_FILTERS_PRESET_ID}" filter preset is deleted
+    And DB Lighthouse - verify preset_filters id "{KEY_ROUTES_FILTERS_PRESET_ID}" record is deleted:
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

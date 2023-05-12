@@ -62,9 +62,9 @@ Feature: All Orders - Preset Filters
       | masterShipperName | {shipper-v4-marketplace-legacy-id}-{shipper-v4-marketplace-name} |
 
   @DeleteFilterTemplate
-  Scenario: Operator Delete Preset on All Orders Page (uid:3dd7afce-4f6a-4620-879e-205a80dd2fff)
+  Scenario: Operator Delete Preset on All Orders Page
     Given Operator go to menu Utilities -> QRCode Printing
-    And  API Operator creates new Orders Filter Template using data below:
+    And API Operator creates new Orders Filter Template using data below:
       | name             | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
       | value.statusIds  | 2                                            |
       | value.shipperIds | {shipper-v4-legacy-id}                       |
@@ -79,7 +79,7 @@ Feature: All Orders - Preset Filters
     Then Operator verifies that warning toast displayed:
       | top    | 1 filter preset deleted                |
       | bottom | ID: {KEY_ALL_ORDERS_FILTERS_PRESET_ID} |
-    And DB Operator verifies "{KEY_ALL_ORDERS_FILTERS_PRESET_ID}" filter preset is deleted
+    And DB Lighthouse - verify preset_filters id "{KEY_ALL_ORDERS_FILTERS_PRESET_ID}" record is deleted:
 
 #    TODO DISABLED
 #  @DeleteFilterTemplate

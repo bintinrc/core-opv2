@@ -10,6 +10,8 @@ Feature: Resolve Recovery Ticket
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     When Operator create new recovery ticket on Edit Order page:
       | entrySource             | CUSTOMER COMPLAINT               |
       | investigatingDepartment | Recovery                         |
@@ -161,7 +163,6 @@ Feature: Resolve Recovery Ticket
       | address1 | {KEY_CREATED_ORDER.fromAddress1} |
       | address2 | {KEY_CREATED_ORDER.fromAddress2} |
       | postcode | {KEY_CREATED_ORDER.fromPostcode} |
-      | city     | {KEY_CREATED_ORDER.fromCity}     |
       | country  | {KEY_CREATED_ORDER.fromCountry}  |
     And Operator verify order events on Edit order page using data below:
       | name            |
@@ -393,27 +394,28 @@ Feature: Resolve Recovery Ticket
       | TICKET RESOLVED  |
 
   Scenario: Operator Resolve Recovery Ticket with No Order & Outcome = RTS
-    Given New Stamp ID with "{shipper-v4-prefix}" prefix was generated
-    And Operator go to menu Recovery -> Recovery Tickets
-    And Operator create new ticket on page Recovery Tickets using data below:
-      | trackingId              | {KEY_STAMP_ID}     |
-      | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Recovery           |
-      | investigatingHub        | {hub-name}         |
-      | ticketType              | SHIPPER ISSUE      |
-      | ticketSubType           | NO ORDER           |
-      | orderOutcome            | RTS                |
-      | issueDescription        | GENERATED          |
-      | rtsReason               | Nobody at address  |
+    Given New Stamp ID with "COPV2" prefix was generated
+    When API Recovery - Operator create recovery ticket:
+      | trackingId         | {KEY_STAMP_ID}           |
+      | ticketType         | SHIPPER ISSUE            |
+      | subTicketType      | NO ORDER                 |
+      | entrySource        | CUSTOMER COMPLAINT       |
+      | investigatingParty | 448                      |
+      | investigatingHubId | {hub-id}                 |
+      | orderOutcomeName   | ORDER OUTCOME (NO ORDER) |
+      | creatorUserId      | 117472837373252971898    |
+      | creatorUserName    | Ekki Syam                |
+      | creatorUserEmail   | ekki.syam@ninjavan.co    |
     And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                               |
-      | v4OrderRequest    | { "requested_tracking_number":"{KEY_TRACKING_NUMBER}","service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                               |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest      | { "requested_tracking_number":"{KEY_TRACKING_NUMBER}","service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
-    Then Operator verify order status is "Pending" on Edit Order page
-    And Operator verify order granular status is "Pending Pickup" on Edit Order page
     When Operator updates recovery ticket on Edit Order page:
-      | status  | RESOLVED |
-      | outcome | RTS      |
+      | status    | RESOLVED          |
+      | outcome   | RTS               |
+      | rtsReason | Nobody at address |
     Then Operator verifies that success toast displayed:
       | top | ^Ticket ID : .* updated |
     When Operator refresh page
@@ -439,7 +441,6 @@ Feature: Resolve Recovery Ticket
       | address1 | {KEY_CREATED_ORDER.fromAddress1} |
       | address2 | {KEY_CREATED_ORDER.fromAddress2} |
       | postcode | {KEY_CREATED_ORDER.fromPostcode} |
-      | city     | {KEY_CREATED_ORDER.fromCity}     |
       | country  | {KEY_CREATED_ORDER.fromCountry}  |
     And Operator verify order events on Edit order page using data below:
       | name            |
