@@ -1,10 +1,9 @@
-@OperatorV2 @CoreV2 @Shippers @CreateShipperPart2
+@OperatorV2 @CoreV2 @Shippers @CreateShipper @CWF
 Feature: Create shipper part1
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background:
+    When Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-
 
   Scenario: Create normal shipper - all field filled
     Given Operator go to menu Shipper -> All Shippers
@@ -268,7 +267,7 @@ Feature: Create shipper part1
       | Billing Address   | test address |
       | Billing Post Code | 45685        |
 
-
+  @RT
   Scenario: Create marketplace shipper - mandatory field
     Given Operator go to menu Shipper -> All Shippers
     When Operator click create new shipper button
