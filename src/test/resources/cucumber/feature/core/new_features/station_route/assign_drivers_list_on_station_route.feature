@@ -1,4 +1,4 @@
-@OperatorV2 @Route @NewFeatures @StationRoute
+@OperatorV2 @Core @Route @NewFeatures @StationRoute @AssignDriverListOnStationRoute
 Feature: Assign Drivers List on Station Route
 
   @LaunchBrowser @ShouldAlwaysRun

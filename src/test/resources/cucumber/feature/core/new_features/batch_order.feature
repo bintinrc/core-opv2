@@ -5,7 +5,7 @@ Feature: Batch Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Rollback Order - Valid Batch Id, Status = Pending Pickup (uid:411fe6b0-f984-4bda-80c2-3f4da00a97f8)
+  Scenario: Rollback Order - Valid Batch Id, Status = Pending Pickup
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
       | numberOfOrder       | 2                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -52,7 +52,7 @@ Feature: Batch Order
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute
-  Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup (uid:4802ac7b-e874-49b2-96bb-cf56451f1cae)
+  Scenario: Rollback Order - Valid Batch Id, Status = Van En-route to Pickup
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
@@ -105,7 +105,7 @@ Feature: Batch Order
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
   @DeleteOrArchiveRoute
-  Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail (uid:6daf555d-d582-4328-9f68-d04b98e6931b)
+  Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
@@ -160,7 +160,7 @@ Feature: Batch Order
       | userEmail | {operator-portal-uid}                 |
       | data      | {"shipper_id":{shipper-v4-legacy-id}} |
 
-  Scenario: Rollback Order - Valid Batch Id, Status = Staging (uid:b4cbfdac-28df-4d85-9e16-578c4d3d473c)
+  Scenario: Rollback Order - Valid Batch Id, Status = Staging
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates a batch
     And API Shipper create multiple V4 orders under batch using data below:
@@ -200,7 +200,7 @@ Feature: Batch Order
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
 
-  Scenario: Rollback Order - Invalid Batch Id (uid:d52ba19e-b344-48a5-a264-a7101450934e)
+  Scenario: Rollback Order - Invalid Batch Id
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu New Features -> Batch Order
     And Operator search for "1111" batch on Batch Orders page
@@ -208,7 +208,7 @@ Feature: Batch Order
       | top    | Network Request Error                                         |
       | bottom | ^.*Error Message: Order batch with batch id 1111 not found!.* |
 
-  Scenario: Rollback Order - Valid Batch Id, Order Not Allowed to be Deleted (uid:57cfd4b5-5631-436e-818b-5a6ff1e21830)
+  Scenario: Rollback Order - Valid Batch Id, Order Not Allowed to be Deleted
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator creates a batch
     And API Shipper create V4 order under batch using data below:

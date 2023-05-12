@@ -1,4 +1,4 @@
-@OperatorV2 @Route @NewFeatures @StationRouteKeyword @StationRoute
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @AddKeywords
 Feature: Add Keywords
 
   @LaunchBrowser @ShouldAlwaysRun
