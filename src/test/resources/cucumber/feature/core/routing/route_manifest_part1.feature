@@ -78,18 +78,13 @@ Feature: Route Manifest
       | pickupsCount       | 0                          |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Fail                       |
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-      | status      | FAIL                             |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}    |
-      | approxVolume | Less than 10 Parcels |
-    And Operator verifies reservation is finished using data below:
-      | backgroundColor | #ffc0cb |
-      | status          | FAIL    |
+    And Operator waits for 5 seconds
+    Then DB Core - verify shipper_pickup_search record:
+      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id}  |
+      | status         | FAIL                                      |
+      | waypointStatus | Fail                                      |
+      | serviceEndTime | not null                                  |
+      | failureReason  | {KEY_SELECTED_FAILURE_REASON.description} |
     And DB Operator verifies waypoint status is "FAIL"
 
   @DeleteOrArchiveRoute @happy-path
@@ -112,18 +107,12 @@ Feature: Route Manifest
       | pickupsCount       | 0                          |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Success                    |
-    When Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | shipperName | {filter-shipper-name}            |
-      | status      | SUCCESS                          |
-    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}    |
-      | approxVolume | Less than 10 Parcels |
-    And Operator verifies reservation is finished using data below:
-      | backgroundColor | #90ee90 |
-      | status          | SUCCESS |
+    And Operator waits for 5 seconds
+    Then DB Core - verify shipper_pickup_search record:
+      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | status         | SUCCESS                                  |
+      | waypointStatus | Success                                  |
+      | serviceTime    | not null                                 |
     And DB Operator verifies waypoint status is "SUCCESS"
 
   @DeleteOrArchiveRoute @happy-path
