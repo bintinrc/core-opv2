@@ -37,16 +37,16 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "[data-testid='create-route-button']")
   public Button createRoute;
 
-  @FindBy(xpath = "//button[.='Clear All Filters']")
+  @FindBy(css = "[data-testid='route-logs.clear-all-filters']")
   public Button clearAllFilters;
 
-  @FindBy(xpath = "//div[@class='ant-modal-content'][.//div[contains(.,'Create Route')]]")
+  @FindBy(xpath = "//div[@class='ant-modal-content'][.//div[contains(.,'Create route')]]")
   public CreateRouteDialog createRouteDialog;
 
-  @FindBy(xpath = "//button[.='Load Selection']")
+  @FindBy(css = "[data-testid='route-logs.load-selection']")
   public AntButton loadSelection;
 
-  @FindBy(xpath = "//button[.='Search']")
+  @FindBy(css = "[data-testid='specific-search-submit-button']")
   public Button search;
 
   @FindBy(css = "div.ant-modal")
@@ -79,10 +79,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "div.ant-modal")
   public EditTagsDialog editTagsDialog;
 
-  @FindBy(css = "input[placeholder='Search for route ID']")
+  @FindBy(css = "[data-testid='specific-search-input']")
   public TextBox routeIdInput;
 
-  @FindBy(xpath = "//button[normalize-space(.)='Apply Action']")
+  @FindBy(css = "[data-testid='apply-action']")
   public AntMenu actionsMenu;
 
   @FindBy(xpath = "//div[./label[@for='routeDate']]/div")
@@ -97,7 +97,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Zone')]]")
   public AntFilterSelect3 zoneFilter;
 
-  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Archived Routes')]]")
+  @FindBy(xpath = "//div[contains(@class,'FilterContainer')][.//div[contains(.,'Archived routes')]]")
   public AntFilterSwitch archivedRoutesFilter;
 
   @FindBy(id = "crossdock_hub")
@@ -109,7 +109,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "div.preset-select div.ant-select")
   public AntSelect3 filterPreset;
 
-  @FindBy(xpath = "//button[normalize-space(.)='Preset Actions']")
+  @FindBy(css = "[data-pa-label='Preset Actions']")
   public AntMenu presetActions;
 
   @FindBy(css = "div.ant-modal-content")
@@ -126,14 +126,14 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public RoutesTable routesTable;
 
-  public static final String ACTION_ARCHIVE_SELECTED = "Archive Selected";
-  public static final String ACTION_UNARCHIVE_SELECTED = "Unarchive Selected";
-  public static final String ACTION_BULK_EDIT_DETAILS = "Bulk Edit Details";
-  public static final String ACTION_MERGE_TRANSACTIONS_OF_SELECTED = "Merge Transactions Of Selected";
-  public static final String ACTION_OPTIMISE_SELECTED = "Optimise Selected";
-  public static final String ACTION_PRINT_PASSWORDS_OF_SELECTED = "Print Passwords Of Selected";
-  public static final String ACTION_PRINT_SELECTED = "Print Selected";
-  public static final String ACTION_DELETE_SELECTED = "Delete Selected";
+  public static final String ACTION_ARCHIVE_SELECTED = "Archive selected";
+  public static final String ACTION_UNARCHIVE_SELECTED = "Unarchive selected";
+  public static final String ACTION_BULK_EDIT_DETAILS = "Bulk edit details";
+  public static final String ACTION_MERGE_TRANSACTIONS_OF_SELECTED = "Merge transactions of selected";
+  public static final String ACTION_OPTIMISE_SELECTED = "Optimise selected";
+  public static final String ACTION_PRINT_PASSWORDS_OF_SELECTED = "Print passwords of selected";
+  public static final String ACTION_PRINT_SELECTED = "Print selected";
+  public static final String ACTION_DELETE_SELECTED = "Delete selected";
 
   public RouteLogsPage(WebDriver webDriver) {
     super(webDriver);
@@ -148,7 +148,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     String expectedStatus = f("%1$d of %1$d route(s) completed", sizeOfListOfCreateRouteParams);
     waitUntil(() -> StringUtils.equalsIgnoreCase(
         bulkRouteOptimisationDialog.optimizedRoutesStatus.getText(),
-        expectedStatus), 20000, "Did not get message: " + expectedStatus);
+        expectedStatus), 40000, "Did not get message: " + expectedStatus);
     pause2s();
 
     for (int i = 0; i < sizeOfListOfCreateRouteParams; i++) {
@@ -221,10 +221,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class EditRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Load Waypoints of Selected Route(s) Only']")
+    @FindBy(css = "[data-pa-label='Load Waypoints of Selected Route(s) Only']")
     public Button loadWpsOfSelectedRoutes;
 
-    @FindBy(xpath = ".//button[.='Load Selected Route(s) and Unrouted Waypoints']")
+    @FindBy(css = "[data-pa-label='Load Selected Route(s) and Unrouted Waypoints']")
     public Button loadSelectedRoutesAndUnroutedWps;
 
     public EditRoutesDialog(WebDriver webDriver, WebElement webElement) {
@@ -280,8 +280,11 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class ArchiveSelectedRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Archive Routes']")
+    @FindBy(css = "[data-pa-label='Archive Routes']")
     public AntButton archiveRoutes;
+
+    @FindBy(css = "[data-pa-label='Continue Archive']")
+    public AntButton continueBtn;
 
     public ArchiveSelectedRoutesDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
@@ -290,7 +293,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class UnarchiveSelectedRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Unarchive Routes']")
+    @FindBy(css = "[data-pa-label='Unarchive Routes']")
     public AntButton unarchiveRoutes;
 
     public UnarchiveSelectedRoutesDialog(WebDriver webDriver, WebElement webElement) {
@@ -324,6 +327,12 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(css = "button[data-testid='create-button']")
     public AntButton saveChanges;
 
+    @FindBy(xpath = ".//div[@class='ant-alert-message']//td[2]")
+    public List<PageElement> errors;
+
+    @FindBy(css = "[data-testid='bulk-progress-cancel.button']")
+    public AntButton cancel;
+
     public BulkEditDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
@@ -331,7 +340,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class MergeTransactionsWithinSelectedRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Merge Transactions']")
+    @FindBy(css = "[data-pa-label='Merge Transactions']")
     public AntButton mergeTransactions;
 
     public MergeTransactionsWithinSelectedRoutesDialog(WebDriver webDriver, WebElement webElement) {
@@ -420,7 +429,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class BulkRouteOptimisationDialog extends AntModal {
 
-    @FindBy(xpath = ".//div[./span[.='Optimised Routes']]/span[2]")
+    @FindBy(xpath = ".//div[./span[.='Optimised routes']]/span[2]")
     public PageElement optimizedRoutesStatus;
 
     @FindBy(xpath = "(.//div[@class='BaseTable__body'])[1]//div[@role='row']/div[@role='gridcell'][1]")
@@ -436,7 +445,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class DeleteRoutesDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Delete']")
+    @FindBy(css = "[data-pa-label='Delete']")
     public Button delete;
 
     public DeleteRoutesDialog(WebDriver webDriver, WebElement webElement) {
@@ -477,13 +486,13 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(css = "svg[data-icon='check-circle']")
     public PageElement confirmedIcon;
 
-    @FindBy(xpath = ".//button[.='Cancel']")
+    @FindBy(css = "[data-pa-label='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = ".//button[.='Save']")
+    @FindBy(css = "[data-pa-label='Save']")
     public Button save;
 
-    @FindBy(xpath = "//button[.='Update']")
+    @FindBy(css = "[data-pa-label='Update']")
     public Button update;
 
     public SavePresetDialog(WebDriver webDriver, WebElement webElement) {
@@ -512,7 +521,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
 
   public static class AddressVerifyRouteDialog extends AntModal {
 
-    @FindBy(xpath = ".//button[.='Address Verify Route']")
+    @FindBy(css = "[data-pa-label='Address Verify Route']")
     public Button addressVerifyRoute;
 
     public AddressVerifyRouteDialog(WebDriver webDriver, WebElement webElement) {
@@ -525,10 +534,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(css = "div > p")
     public List<PageElement> message;
 
-    @FindBy(xpath = ".//button[.='Cancel']")
+    @FindBy(css = "[data-pa-label='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = ".//button[.='Optimise Route']")
+    @FindBy(css = "[data-testid='ok-button']")
     public Button optimizeRoute;
 
     public OptimizeSelectedRouteDialog(WebDriver webDriver, WebElement webElement) {
@@ -541,10 +550,10 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
     @FindBy(css = "div.ant-select")
     public AntSelect3 tags;
 
-    @FindBy(xpath = ".//button[.='Cancel']")
+    @FindBy(css = "[data-pa-label='Cancel']")
     public Button cancel;
 
-    @FindBy(xpath = ".//button[.='Update Tags']")
+    @FindBy(css = "[data-testid='update-tags.ok']")
     public Button updateTags;
 
     public EditTagsDialog(WebDriver webDriver, WebElement webElement) {

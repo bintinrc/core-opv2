@@ -18,8 +18,8 @@ Feature: Check Pricing Script
       | insuredValue | 0.00     |
       | codValue     | 0.00     |
     Then Operator verify error message
-      | message  | Latitude and Longitude does not fall in a polygon |
-      | response | 400 Unknown                                       |
+      | message  | Latitude, Longitude and Billing Zones are not provided |
+      | response | 400 Unknown                                            |
 
   Scenario: Check Script Successfully without Origin/Destination Pricing Zone - SG (uid:52e2ee8b-617f-44e5-8bb6-e9e82aeaef4d)
     Given Operator go to menu Shipper -> Pricing Scripts V2
@@ -39,13 +39,13 @@ Feature: Check Pricing Script
       | originPricingZone      | empty    |
       | destinationPricingZone | empty    |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 11.235 |
-      | gst          | 0.735  |
-      | deliveryFee  | 10.5   |
-      | insuranceFee | 0      |
-      | codFee       | 0      |
-      | handlingFee  | 0      |
-      | comments     | OK     |
+      | grandTotal   | 11.34 |
+      | gst          | 0.84  |
+      | deliveryFee  | 10.5  |
+      | insuranceFee | 0     |
+      | codFee       | 0     |
+      | handlingFee  | 0     |
+      | comments     | OK    |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

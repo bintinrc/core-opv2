@@ -1,32 +1,32 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.common.utils.factory.address.AddressFactory;
 import co.nvqa.common.model.address.Address;
 import co.nvqa.common.model.address.MilkrunSettings;
-import co.nvqa.commons.model.order_create.v4.Marketplace;
 import co.nvqa.common.model.others.LatLong;
-import co.nvqa.commons.model.pricing.PricingLevers;
-import co.nvqa.operator_v2.model.shipper.DistributionPoint;
-import co.nvqa.operator_v2.model.shipper.LabelPrinter;
-import co.nvqa.operator_v2.model.shipper.Magento;
-import co.nvqa.operator_v2.model.shipper.MarketplaceBilling;
-import co.nvqa.operator_v2.model.shipper.MarketplaceDefault;
-import co.nvqa.operator_v2.model.shipper.OrderCreate;
-import co.nvqa.operator_v2.model.shipper.Pickup;
-import co.nvqa.operator_v2.model.shipper.Pricing;
-import co.nvqa.operator_v2.model.shipper.Pricing.BillingWeightEnum;
-import co.nvqa.operator_v2.model.shipper.PricingAndBillingSettings;
-import co.nvqa.operator_v2.model.shipper.Qoo10;
-import co.nvqa.operator_v2.model.shipper.Reservation;
-import co.nvqa.operator_v2.model.shipper.Return;
-import co.nvqa.operator_v2.model.shipper.ServiceTypeLevel;
-import co.nvqa.operator_v2.model.shipper.Shipper;
-import co.nvqa.operator_v2.model.shipper.ShipperBasicSettings;
-import co.nvqa.operator_v2.model.shipper.Shopify;
-import co.nvqa.operator_v2.model.shipper.SubShipperDefaultSettings;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
+import co.nvqa.common.utils.factory.address.AddressFactory;
+import co.nvqa.commons.model.order_create.v4.Marketplace;
+import co.nvqa.commons.model.pricing.PricingLevers;
+import co.nvqa.commons.model.shipper.v2.DistributionPoint;
+import co.nvqa.commons.model.shipper.v2.LabelPrinter;
+import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.MarketplaceBilling;
+import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
+import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pickup;
+import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Pricing.BillingWeightEnum;
+import co.nvqa.commons.model.shipper.v2.PricingAndBillingSettings;
+import co.nvqa.commons.model.shipper.v2.Qoo10;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.ShipperBasicSettings;
+import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.model.shipper.v2.SubShipperDefaultSettings;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.ErrorSaveDialog;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -52,7 +53,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -519,8 +519,8 @@ public class AllShippersSteps extends AbstractSteps {
         LOGGER.info("Set Start date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(
             value);
-        ZonedDateTime zdtEffectiveDate = ZonedDateTime.from(
-            DTF_NORMAL_DATE.withZone(ZoneId.systemDefault()).parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtEffectiveDate = date.atStartOfDay(ZoneId.systemDefault());
         pricing.setEffectiveDate(Date.from(zdtEffectiveDate.toInstant()));
       }
       value = data.get("endDate");
@@ -528,8 +528,8 @@ public class AllShippersSteps extends AbstractSteps {
         LOGGER.info("Set End date : {}", value);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(
             value);
-        ZonedDateTime zdtContractEndDate = ZonedDateTime.from(
-            DTF_NORMAL_DATE.withZone(ZoneId.systemDefault()).parse(value));
+        LocalDate date = LocalDate.parse(value, DTF_NORMAL_DATE);
+        ZonedDateTime zdtContractEndDate = date.atStartOfDay(ZoneId.systemDefault());
         pricing.setContractEndDate(Date.from(zdtContractEndDate.toInstant()));
       }
       value = data.get("pricingScriptName");
@@ -1918,8 +1918,8 @@ public class AllShippersSteps extends AbstractSteps {
   @And("Operator verifies the pricing lever details in the database")
   public void operatorVerifiesThePricingLeverDetails() {
     Pricing pricingProfile =
-        Objects.isNull(get(KEY_PRICING_PROFILE)) ? get(KEY_CREATED_PRICING_PROFILE_OPV2)
-            : get(KEY_PRICING_PROFILE);
+        Objects.isNull(get(KEY_CREATED_PRICING_PROFILE_OPV2)) ? get(KEY_PRICING_PROFILE_DETAILS)
+            : get(KEY_CREATED_PRICING_PROFILE_OPV2);
 
     PricingLevers pricingLeversFromDb = get(KEY_PRICING_LEVER_DETAILS);
     if (Objects.isNull(pricingProfile) || Objects.isNull(pricingLeversFromDb)) {

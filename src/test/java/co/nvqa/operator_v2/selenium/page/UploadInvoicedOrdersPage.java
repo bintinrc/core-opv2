@@ -1,63 +1,55 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import java.io.File;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
+public class UploadInvoicedOrdersPage extends SimpleReactPage<UploadInvoicedOrdersPage> {
 
-  public static final String CSV_FILENAME_PATTERN = "sample_csv";
+  public static final String CSV_FILENAME_PATTERN = "upload-invoiced-orders-template";
 
-  @FindBy(name = "Upload Invoiced Orders with CSV")
-  public NvIconTextButton uploadInvoicedOrdersButton;
+  @FindBy(xpath = "//input[@data-testid='useFileSelect-element']")
+  public PageElement browseFilesInput;
 
-  @FindBy(name = "Download sample CSV template")
-  public NvIconTextButton downloadSampleCsvButton;
+  @FindBy(css = "[data-testid='invoiced-orders-download-sample-csv-button']")
+  public PageElement downloadSampleCsvButton;
 
-  @FindBy(name = "Upload New File")
-  public NvIconTextButton uploadNewFileButton;
+  @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+  public PageElement antNotificationMessage;
 
-  @FindBy(css = "md-dialog")
-  public UploadInvoicedOrdersDialog uploadInvoicedOrdersDialog;
+  @FindBy(xpath = "//div[@class='ant-notification-notice-description']")
+  public PageElement antNotificationMessageDescription;
 
-  @FindBy(css = "md-dialog")
-  public UploadNewCsvDialog uploadNewCsvDialog;
+  @FindBy(xpath = "//iframe[contains(@src,'upload-invoiced-orders')]")
+  private PageElement pageFrame;
+
+  @FindBy(xpath = "//span[contains(@class,'ant-spin-dot-spin')]")
+  public PageElement antDotSpinner;
+
 
   public UploadInvoicedOrdersPage(WebDriver webDriver) {
     super(webDriver);
   }
 
-  public void clickUploadCsvButton() {
-    uploadInvoicedOrdersButton.click();
+  public void switchToIframe() {
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+  }
+
+  public void uploadFile(File file) {
+    browseFilesInput.sendKeys(file.getAbsolutePath());
+  }
+
+  public String getPopUpMsg() {
+    return getAntTopRightText();
+  }
+
+  public String getPopUpMsgDescription() {
+    return getAntDescription();
   }
 
   public void clickDownloadCsvButton() {
     downloadSampleCsvButton.click();
-  }
-
-
-  public void verifyUploadInvoicedOrdersDialogIsDisplayed() {
-    uploadInvoicedOrdersDialog.waitUntilVisible();
-
-    Assertions.assertThat(uploadInvoicedOrdersDialog.isDisplayed())
-        .as("Upload Invoiced Orders Dialog is not displayed").isTrue();
-  }
-
-  public void verifySuccessMsgIsDisplayed() {
-    assertTrue("Success message is not displayed", isElementVisible(
-        "//p[text()='Your upload is being processed. An email alert will be sent upon completion. Thank you!']"));
-  }
-
-  public void verifySuccessUploadNewFileIsDisplayed() {
-    Assertions.assertThat(uploadNewFileButton.isDisplayed())
-        .as("Upload New Button is not displayed").isTrue();
   }
 
   public void verifyCsvFileDownloadedSuccessfully(String expectedBody) {
@@ -65,31 +57,4 @@ public class UploadInvoicedOrdersPage extends OperatorV2SimplePage {
         expectedBody);
   }
 
-  public static class UploadInvoicedOrdersDialog extends MdDialog {
-
-    @FindBy(css = "[label='Choose']")
-    public NvButtonFilePicker chooseButton;
-    @FindBy(name = "Submit")
-    public NvButtonSave submit;
-
-    public UploadInvoicedOrdersDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-
-    public void uploadFile(File file) {
-      waitUntilVisible();
-      chooseButton.setValue(file);
-      submit.clickAndWaitUntilDone();
-    }
-  }
-
-  public static class UploadNewCsvDialog extends MdDialog {
-
-    @FindBy(xpath = "//md-dialog[contains(@aria-label,'Upload New CSVSubmit')]//button[@aria-label='Upload New File']")
-    public Button uploadNewFile;
-
-    public UploadNewCsvDialog(WebDriver webDriver, WebElement webElement) {
-      super(webDriver, webElement);
-    }
-  }
 }

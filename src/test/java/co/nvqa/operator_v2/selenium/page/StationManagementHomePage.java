@@ -42,6 +42,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String PENDING_PICKUP_TILE_VALUE_XPATH = "//*[.='%s']/following-sibling::*";
   private static final String TILE_TITLE_XPATH = "//div[@class='ant-card-body']//*[text()='%s'] | //div[contains(@class,'th')]//*[text()='%s']";
   private static final String TILE_HAMBURGER_XPATH = "(//div[contains(@class,'title')][.='%s'] | //div[contains(@class,'title')][.//*[.='%s']])/following-sibling::div//*[@role='img']";
+  private static final String PENDING_PICKUP_TILE_HAMBURGER_XPATH = "//span[text()='%s']//parent::div//following-sibling::div//*[local-name()='svg']";
   private static final String MODAL_CONTENT_XPATH = "//*[@class='ant-modal-content'][.//*[contains(text(),'%s')]]";
   private static final String MODAL_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//input";
   private static final String MODAL_TABLE_FILTER_XPATH = "//div[starts-with(@class,'VirtualTableHeader')][.//*[.='%s']]//div[contains(@class,'FilterSelect')]";
@@ -56,7 +57,7 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
   private static final String TABLE_CONTENT_BY_COLUMN_NAME = "//div[contains(@data-datakey,'%s')]//span[@class]";
   private static final String RECOVERY_TICKETS = "Recovery Tickets";
   private static final String TABLE_TRACKING_ID_XPATH = "//a[.//*[.='%s']]|//a[text()='%s']";
-  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//div[@class='icon']";
+  private static final String URGENT_TASKS_ARROW_BY_TEXT_XPATH = "//*[text()=\"%s\"]/parent::div//div[@class='icon']//span";
   private static final String TABLE_COLUMN_VALUES_BY_INDEX_CSS = "[class$='_body'] [role='gridcell']:nth-child(%d)";
   private static final String QUICK_FILTER_BY_TEXT_XPATH = "//div[text()='Quick Filters']//span[text()='%s']";
   private static final String RECORD_CHECK_BOX_BY_TRACKING_ID_XPATH = "//div[@role='row'][.//*[.='%s']]//input[@type='checkbox']";
@@ -258,13 +259,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public int getNumberFromPendingPickupTile(String tileName) {
     try {
+      pause8s();
       String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
       waitWhilePageIsLoading();
       if (pageFrame.size() > 0) {
         switchToStationHomeFrame();
       }
       waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
-      pause5s();
       WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
       String tileValue = tile.getText().replace(",", "").trim();
       tileValue = tileValue.replace("%", "").trim();
@@ -276,6 +277,30 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     } catch (Exception e) {
       LOGGER.error(e.getMessage(), e);
       return 0;
+    }
+  }
+
+  public String getTileValueAsStringFromPendingPickupTile(String tileName) {
+    String tileValue = null;
+    try {
+      String tileValueXpath = f(PENDING_PICKUP_TILE_VALUE_XPATH, tileName);
+      waitWhilePageIsLoading();
+      if (pageFrame.size() > 0) {
+        switchToStationHomeFrame();
+      }
+      waitUntilVisibilityOfElementLocated(tileValueXpath, 15);
+      pause5s();
+      WebElement tile = getWebDriver().findElement(By.xpath(tileValueXpath));
+      tileValue = tile.getText().replace(",", "").trim();
+      tileValue = tileValue.replace("%", "").trim();
+      if (tileValue.contains(" ")) {
+        tileValue = tileValue.substring(0, tileValue.indexOf(' '));
+      }
+      LOGGER.info("Tile Value from " + tileName + " is " + tileValue);
+      return tileValue;
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      return tileValue;
     }
   }
 
@@ -316,6 +341,13 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
 
   public void clickHamburgerIcon(String tileName) {
     String hamburgerXpath = f(TILE_HAMBURGER_XPATH, tileName, tileName);
+    WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
+    scrollIntoView(hamburger);
+    hamburger.click();
+  }
+
+  public void clickPendingPickupHamburgerIcon(String tileName) {
+    String hamburgerXpath = f(PENDING_PICKUP_TILE_HAMBURGER_XPATH, tileName);
     WebElement hamburger = getWebDriver().findElement(By.xpath(hamburgerXpath));
     scrollIntoView(hamburger);
     hamburger.click();
@@ -430,6 +462,18 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
       waitUntilPageLoaded();
       closeIfModalDisplay();
       int actual = getNumberFromTile(tileName);
+      return actual == expected;
+    });
+  }
+
+  public void waitUntilPendingPickupTileValueMatches(String tileName, int expected) {
+    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(90));
+    wdWait.until(driver -> {
+      LOGGER.info("Refreshing the page to reload the tile value...");
+      driver.navigate().refresh();
+      waitUntilPageLoaded();
+      closeIfModalDisplay();
+      int actual = getNumberFromPendingPickupTile(tileName);
       return actual == expected;
     });
   }
@@ -901,8 +945,15 @@ public class StationManagementHomePage extends OperatorV2SimplePage {
     if ("Time in Hub".contentEquals(columnName)) {
       List<Double> columnValue = new ArrayList<Double>();
       colData.forEach(value -> {
-        value = value.replaceAll(" days ", ".").replaceAll(" hours ", "")
-            .replaceAll(" minutes", "");
+        value = value.replaceAll(" day ", ".")
+            .replaceAll(" days ", ".")
+            .replaceAll(" hours ", "")
+            .replaceAll(" hour ", "")
+            .replaceAll(" minutes", "")
+            .replaceAll(" minute", "");
+        if (!value.contains(".")) {
+          value = "0." + value;
+        }
         columnValue.add(Double.parseDouble(value));
       });
       Assert.assertTrue(

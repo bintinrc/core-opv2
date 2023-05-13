@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound
+@OperatorV2 @Core @Inbounding @RouteInbound @CollectionSummary
 Feature: Collection Summary
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -40,7 +40,7 @@ Feature: Collection Summary
       | customType            | Delivery (Normal)                          |
 
   @DeleteOrArchiveRoute
-  Scenario: View Failed Parcels (uid:431dd316-eeee-4e5f-9d29-7a8bf072fd17)
+  Scenario: View Failed Parcels
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -59,21 +59,22 @@ Feature: Collection Summary
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
     And API Driver failed the delivery of multiple parcels
+    And API Operator get order details
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify the Route Summary Details is correct using data below:
-      | routeId     | GET_FROM_CREATED_ROUTE |
-      | driverName  | {ninja-driver-name}    |
-      | hubName     | {hub-name}             |
-      | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 0                      |
-      | wpPartial   | 0                      |
-      | wpFailed    | 2                      |
-      | wpCompleted | 0                      |
-      | wpTotal     | 2                      |
+      | routeId     | GET_FROM_CREATED_ROUTE           |
+      | driverName  | {ninja-driver-name}              |
+      | hubName     | {hub-name}                       |
+      | routeDate   | {gradle-current-date-yyyy-MM-dd} |
+      | wpPending   | 0                                |
+      | wpPartial   | 0                                |
+      | wpFailed    | 2                                |
+      | wpCompleted | 0                                |
+      | wpTotal     | 2                                |
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
@@ -112,7 +113,6 @@ Feature: Collection Summary
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    And API Operator merge route transactions
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order

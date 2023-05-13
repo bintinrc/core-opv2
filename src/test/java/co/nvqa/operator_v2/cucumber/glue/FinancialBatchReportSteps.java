@@ -31,9 +31,12 @@ public class FinancialBatchReportSteps extends AbstractSteps {
   public void operatorGeneratesFinancialBatchReportForData(Map<String, String> mapOfData) {
     mapOfData = resolveKeyValues(mapOfData);
     financialBatchReportsPage.switchTo();
+    financialBatchReportsPage.waitUntilLoaded();
     setFinancialBatchReportsData(mapOfData);
     financialBatchReportsPage.generateReportBtn.click();
     financialBatchReportsPage.verifyNoErrorsAvailable();
+    financialBatchReportsPage.waitUntilVisibilityOfNotification(
+        "Report Request submitted Successfully. ");
   }
 
   @Given("Operator select financial batch report using data below:")

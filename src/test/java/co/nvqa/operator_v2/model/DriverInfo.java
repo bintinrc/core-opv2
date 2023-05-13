@@ -80,6 +80,17 @@ public class DriverInfo extends DataEntity<DriverInfo> {
     return firstName;
   }
 
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    if ("GENERATED".equalsIgnoreCase(displayName)) {
+      displayName = "Station" + TestUtils.generateDateUniqueString();
+    }
+    this.displayName = displayName;
+  }
+
   public void setFirstName(String firstName) {
     if ("GENERATED".equalsIgnoreCase(firstName)) {
       firstName = "Driver";
@@ -93,7 +104,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setLastName(String lastName) {
     if ("GENERATED".equalsIgnoreCase(lastName)) {
-      lastName = TestUtils.generateDateUniqueString();
+      lastName = "Auto";
     }
     this.lastName = lastName;
   }
@@ -265,7 +276,7 @@ public class DriverInfo extends DataEntity<DriverInfo> {
 
   public void setPassword(String password) {
     if ("GENERATED".equalsIgnoreCase(password)) {
-      password = "D00" + TestUtils.generateDateUniqueString();
+      password = "Ninjitsu89";
     }
     this.password = password;
   }

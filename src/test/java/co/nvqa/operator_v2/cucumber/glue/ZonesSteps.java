@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common.utils.StandardTestUtils;
-import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commonsort.model.addressing.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import io.cucumber.guice.ScenarioScoped;
@@ -21,6 +21,7 @@ import org.assertj.core.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.commonsort.cucumber.KeysStorage.KEY_SORT_CREATED_ZONE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_DELETE;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.ZonesPage.ZonesTable.COLUMN_DESCRIPTION;
@@ -85,9 +86,9 @@ public class ZonesSteps extends AbstractSteps {
     zonesPage.inFrame(page -> {
       String actualRtsValue = zonesPage.zonesTable.readEntity(1).getType();
       if (RTS.equalsIgnoreCase(zoneType)) {
-       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo(RTS);
+        Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo(RTS);
       } else if (NORMAL.equalsIgnoreCase(zoneType)) {
-       Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo("STANDARD");
+        Assertions.assertThat(actualRtsValue).as("Zone Type is right").isEqualTo("STANDARD");
       }
       takesScreenshot();
     });
@@ -109,7 +110,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator update the new Zone")
   public void operatorUpdateTheNewZone() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     Zone zoneEdited = new Zone();
     zoneEdited.setName(zone.getName() + "-EDITED");
@@ -180,7 +181,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator delete the new Zone")
   public void operatorDeleteTheNewZone() {
-    Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
+   Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
       zonesPage.findZone(zone.getName());
@@ -192,16 +193,14 @@ public class ZonesSteps extends AbstractSteps {
 
   @When("Operator find {value} zone on Zones page")
   public void findZone(String zoneName) {
-    zonesPage.switchTo();
     zonesPage.inFrame(page -> {
-      zonesPage.waitUntilLoaded();
       zonesPage.findZone(zoneName);
     });
   }
 
   @Then("^Operator verify the new Zone is deleted successfully$")
   public void operatorVerifyTheNewZoneIsDeletedSuccessfully() {
-    Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_CREATED_ZONE);
+   Zone zone = containsKey(KEY_EDITED_ZONE) ? get(KEY_EDITED_ZONE) : get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       Assertions.assertThat(zonesPage.zonesTable.isTableEmpty())
@@ -211,7 +210,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator check all filters on Zones page work fine")
   public void operatorCheckAllFiltersOnZonesPageWork() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
 
     zonesPage.inFrame(page -> {
       zonesPage.waitUntilLoaded();
@@ -220,32 +219,38 @@ public class ZonesSteps extends AbstractSteps {
 
       zonesPage.zonesTable.filterByColumn(COLUMN_ID, zone.getId());
       List<String> values = zonesPage.zonesTable.readColumn(COLUMN_ID);
-     Assertions.assertThat(values).as("ID filter results").allMatch(value -> value.contains(zone.getShortName()));
+      Assertions.assertThat(values).as("ID filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_ID);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, zone.getShortName());
       values = zonesPage.zonesTable.readColumn(COLUMN_SHORT_NAME);
-     Assertions.assertThat(values).as("Short Name filter results").allMatch(value -> value.contains(zone.getShortName()));
+      Assertions.assertThat(values).as("Short Name filter results")
+          .allMatch(value -> value.contains(zone.getShortName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_SHORT_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_NAME, zone.getName());
       values = zonesPage.zonesTable.readColumn(COLUMN_NAME);
-     Assertions.assertThat(values).as("Name filter results").allMatch(value -> value.contains(zone.getName()));
+      Assertions.assertThat(values).as("Name filter results")
+          .allMatch(value -> value.contains(zone.getName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_HUB_NAME, zone.getHubName());
       values = zonesPage.zonesTable.readColumn(COLUMN_HUB_NAME);
-     Assertions.assertThat(values).as("Hub Name filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Hub Name filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_HUB_NAME);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_LATITUDE, zone.getLatitude());
       values = zonesPage.zonesTable.readColumn(COLUMN_LATITUDE);
-     Assertions.assertThat(values).as("Latitude/Longitude filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Latitude/Longitude filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_LATITUDE);
 
       zonesPage.zonesTable.filterByColumn(COLUMN_DESCRIPTION, zone.getDescription());
       values = zonesPage.zonesTable.readColumn(COLUMN_DESCRIPTION);
-     Assertions.assertThat(values).as("Description filter results").allMatch(value -> value.contains(zone.getHubName()));
+      Assertions.assertThat(values).as("Description filter results")
+          .allMatch(value -> value.contains(zone.getHubName()));
       zonesPage.zonesTable.clearColumnFilter(COLUMN_DESCRIPTION);
     });
   }
@@ -265,7 +270,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("Operator verify Zone CSV file is downloaded successfully")
   public void operatorVerifyZoneCsvFileIsDownloadSuccessfully() {
-    Zone zone = get(KEY_CREATED_ZONE);
+    Zone zone = get(KEY_SORT_CREATED_ZONE);
     zonesPage.inFrame(page -> {
       String expectedText = String.format("%s,%s,%s", zone.getShortName(), zone.getName(),
           zone.getHubName());
@@ -275,12 +280,12 @@ public class ZonesSteps extends AbstractSteps {
 
   @Then("^Operator click View Selected Polygons for zone id \"([^\"]*)\"$")
   public void operatorClickViewSelectedPolygonsForZone(String zoneId) {
-    zonesPage.inFrame(page -> {
-      zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
-      zonesPage.zonesTable.selectRow(1);
-      zonesPage.viewSelectedPolygons.click();
-      zonesSelectedPolygonsPage.waitUntilPageLoaded();
-    });
+    retryIfRuntimeExceptionOccurred(() -> zonesPage.inFrame(page -> {
+          zonesPage.zonesTable.filterByColumn(COLUMN_ID, resolveValue(zoneId));
+          zonesPage.zonesTable.selectRow(1);
+          zonesPage.viewSelectedPolygons.click();
+        })
+        , 5);
   }
 
   @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
@@ -383,7 +388,7 @@ public class ZonesSteps extends AbstractSteps {
   @When("Operator successfully upload a KML file {string}")
   public void operatorSuccessfullyUploadAKMLFile(String fileName) {
     // Retry mechanism in case the KML file is not correctly read (a.k.a. vertex = 0)
-    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+    doWithRetry(() -> {
       if (zonesSelectedPolygonsPage.sideToolbar.isDisplayed()) {
         LOGGER.info("Some elements are missing is Zone Drawing page, going back...");
         backToPreviousPage();
@@ -494,6 +499,7 @@ public class ZonesSteps extends AbstractSteps {
 
   @And("Operator click Zones in zone drawing page")
   public void operatorClickZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesPanel.zones.get(0).click());
   }
@@ -502,14 +508,17 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorClickSetCoordinatesInZoneDrawingPage(Map<String, String> data) {
     String latitude = data.get("latitude");
     String longitude = data.get("longitude");
+    zonesSelectedPolygonsPage.switchTo();
     zonesSelectedPolygonsPage.setCoordinate.click();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.clear();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.setValue(latitude);
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.clear();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.longitude.setValue(longitude);
-    zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.confirmSetCoordinate.click();
     zonesSelectedPolygonsPage.saveZoneDrawingButton.click();
+    zonesSelectedPolygonsPage.saveConfirmationDialog.waitUntilVisible();
     zonesSelectedPolygonsPage.saveConfirmationDialogSaveButton.click();
+    zonesSelectedPolygonsPage.loadingIcon.waitUntilInvisible();
   }
 
   @And("Operator click Create Polygon in zone drawing page")
@@ -528,8 +537,20 @@ public class ZonesSteps extends AbstractSteps {
     });
   }
 
+  @And("Operator click View Selected Polygons for zone short name {string}")
+  public void operatorClickViewSelectedPolygonsForZoneShortName(String zoneShortName) {
+    zonesPage.waitUntilPageLoaded();
+    doWithRetry(() -> zonesPage.inFrame(page -> {
+      zonesPage.zonesTable.filterByColumn(COLUMN_SHORT_NAME, resolveValue(zoneShortName));
+      zonesPage.zonesTable.selectRow(1);
+      zonesPage.viewSelectedPolygons.click();
+    }),"Click View Selected Polygons");
+
+  }
+
   @And("Operator click RTS Zones in zone drawing page")
   public void operatorClickRTSZonesInZoneDrawingPage() {
+    zonesSelectedPolygonsPage.switchTo();
     zonesSelectedPolygonsPage.inFrame(
         () -> zonesSelectedPolygonsPage.zonesRTSPanel.zones.get(0).click());
   }

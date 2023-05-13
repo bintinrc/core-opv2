@@ -4,11 +4,15 @@ import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingCustomerCollectOrder;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingDriverCollectOrder;
+import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.AddToRouteData;
+import co.nvqa.operator_v2.model.dp.OrderCsvData;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
@@ -16,10 +20,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -212,7 +218,8 @@ public class AllOrdersSteps extends AbstractSteps {
     allOrdersPage.selectAllShown();
     allOrdersPage.actionsMenu.selectOption(AllOrdersAction.MANUALLY_COMPLETE_SELECTED.getName());
     allOrdersPage.manuallyCompleteOrderDialog.waitUntilVisible();
-   Assertions.assertThat(        allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size()).as("Number of orders with COD").isEqualTo(data.size());
+    Assertions.assertThat(allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size())
+        .as("Number of orders with COD").isEqualTo(data.size());
     for (int i = 0; i < allOrdersPage.manuallyCompleteOrderDialog.trackingIds.size(); i++) {
       String trackingId = allOrdersPage.manuallyCompleteOrderDialog.trackingIds.get(i)
           .getNormalizedText();
@@ -246,7 +253,8 @@ public class AllOrdersSteps extends AbstractSteps {
   @When("^Operator verifies error messages in dialog on All Orders page:$")
   public void operatorVerifyErrorMessagesDialog(List<String> data) {
     data = resolveValues(data);
-   Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5)).as("Errors dialog is displayed").isTrue();
+    Assertions.assertThat(allOrdersPage.errorsDialog.waitUntilVisible(5))
+        .as("Errors dialog is displayed").isTrue();
     List<String> actual = allOrdersPage.errorsDialog.errorMessage.stream()
         .map(element -> StringUtils.normalizeSpace(element.getNormalizedText())
             .replaceAll("^\\d{1,2}\\.", ""))
@@ -353,7 +361,8 @@ public class AllOrdersSteps extends AbstractSteps {
       orderData = resolveKeyValues(orderData);
       String trackingId = StringUtils.trimToEmpty(orderData.get("trackingId"));
       String expectedRouteId = StringUtils.trimToEmpty(orderData.get("routeId"));
-     Assertions.assertThat(          allOrdersPage.addToRouteDialog.getRouteId(trackingId)).as(f("Route Id for %s order", trackingId)).isEqualTo(expectedRouteId);
+      Assertions.assertThat(allOrdersPage.addToRouteDialog.getRouteId(trackingId))
+          .as(f("Route Id for %s order", trackingId)).isEqualTo(expectedRouteId);
     });
   }
 
@@ -382,6 +391,18 @@ public class AllOrdersSteps extends AbstractSteps {
   public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo() {
     Order order = get(KEY_CREATED_ORDER);
     allOrdersPage.verifyWaybillContentsIsCorrect(order);
+  }
+
+  @Then("^Operator verify waybill for single order on All Orders page:$")
+  public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo(
+      Map<String, String> data) {
+    AirwayBill expected = new AirwayBill(resolveKeyValues(data));
+    String latestFilenameOfDownloadedPdf = allOrdersPage.getLatestDownloadedFilename(
+        "awb_" + expected.getTrackingId());
+    allOrdersPage.verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
+    AirwayBill actual = PdfUtils.getOrderInfoFromAirwayBill(
+        TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
+    expected.compareWithActual(actual);
   }
 
   @Then("^Operator verify the printed waybill for multiple orders on All Orders page contains correct info$")
@@ -861,6 +882,56 @@ public class AllOrdersSteps extends AbstractSteps {
     Assertions.assertThat(allOrdersPage.savePresetDialog.save.isEnabled())
         .as("Save button is enabled")
         .isFalse();
+  }
+
+  @When("Operator disable granular status filter for {string}")
+  public void disableGranularStatus(String granStatus) {
+    Objects.requireNonNull(allOrdersPage.disableGranStatusElement.get(granStatus)).click();
+  }
+
+  @When("Operator disable status filter for {string}")
+  public void disableStatus(String status) {
+    Objects.requireNonNull(allOrdersPage.disableStatusElement.get(status)).click();
+  }
+
+  @When("Operator press load selection button")
+  public void pressLoadSelectionButton() {
+    allOrdersPage.loadSelection.waitUntilVisible();
+    allOrdersPage.loadSelection.click();
+  }
+
+  @When("Operator fill the tracking id filter with {string}")
+  public void pressLoadSelectionButton(String trackingId) {
+    allOrdersPage.trackingIdFilter.waitUntilVisible();
+    allOrdersPage.trackingIdFilter.setValue(resolveValue(trackingId));
+  }
+
+  @When("Operator check the checkbox from created order")
+  public void checkCheckbox() {
+    allOrdersPage.buttonCheckboxOrder.waitUntilVisible();
+    allOrdersPage.buttonCheckboxOrder.click();
+  }
+
+  @When("Operator press Apply Action button")
+  public void pressApplyActionButton() {
+    allOrdersPage.buttonApplyAction.waitUntilVisible();
+    allOrdersPage.buttonApplyAction.click();
+  }
+
+  @When("Operator apply action for {string}")
+  public void pressChooseApplyAction(String action) {
+    allOrdersPage.applyActionOrder(action);
+  }
+
+  @When("Operator set the pickup date for regular pickup at {string}")
+  public void setPickupDate(String date) {
+    allOrdersPage.datePickerInput.forceClear();
+    allOrdersPage.datePickerInput.setValue(resolveValue(date));
+  }
+
+  @When("Operator press submit regular pickup button")
+  public void pressSubmitRegulatPickupButton() {
+    allOrdersPage.submit.click();
   }
 
   @When("Operator verifies Cancel button in Delete Preset dialog on All Orders page is enabled")

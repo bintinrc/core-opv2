@@ -78,7 +78,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
     addressingDownloadPage.inputPresetName.sendKeys(presetName);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.filterButton.click();
       pause1s();
       addressingDownloadPage.selectPresetFilter(filterType);
@@ -214,8 +214,8 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorVerifiesThatTheAddressDownloadTableResultIsShownUp() {
     addressingDownloadPage.addressDownloadTableResult.isDisplayed();
     addressingDownloadPage.scrollDownAddressTable();
-    if (get(KEY_LIST_OF_CREATED_ORDERS) != null) {
-      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
+    if (get(KEY_LIST_OF_CREATED_ORDER) != null) {
+      List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
       for (Order order : orders) {
         addressingDownloadPage.trackingIdUiChecking(order.getTrackingId());
         addressingDownloadPage.addressUiChecking(order.getToAddress1(), order.getToAddress2());
@@ -286,7 +286,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @When("Operator clicks on Load Address button")
   public void operatorClicksOnLoadAddressButton() {
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.waitUntilInvisibilityOfElementLocated(
           addressingDownloadPage.LOAD_ADDRESS_BUTTON_LOADING_ICON);
       addressingDownloadPage.loadAddresses.click();
@@ -321,23 +321,27 @@ public class AddressingDownloadSteps extends AbstractSteps {
 
   @And("Operator input the created order's creation time")
   public void operatorInputTheCreatedOrderSCreationTime() {
-    Order createdOrder = get(KEY_ORDER_DETAILS);
+    doWithRetry(() -> {
+      Order createdOrder = get(KEY_ORDER_DETAILS);
 
-    if (createdOrder == null) {
-      LOGGER.error("Order hasn't been created", new NullPointerException());
-      return;
-    }
+      if (createdOrder == null) {
+        LOGGER.error("Order hasn't been created", new NullPointerException());
+        return;
+      }
 
-    LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
-        createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
-    Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
-        orderCreationTimestamp, 30);
+      LocalDateTime orderCreationTimestamp = addressingDownloadPage.resolveLocalDateTime(
+          createdOrder.getCreatedAt(), addressingDownloadPage.SYS_ID);
+      Map<String, String> dateTimeRange = addressingDownloadPage.generateDateTimeRange(
+          orderCreationTimestamp, 30);
 
-    LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
-    LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
-    LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
+      LOGGER.debug("Order Tracking ID: {}", createdOrder.getTrackingId());
+      LOGGER.debug("Order Creation Time: {}", orderCreationTimestamp);
+      LOGGER.debug("Mapped Order Creation Time: {}", dateTimeRange);
 
-    addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+      addressingDownloadPage.setCreationTimeDatepicker(dateTimeRange);
+    }, "Input Order Creation Time");
+
+
   }
 
   @Then("Operator verifies that the Address Download Table Result contains all basic data")
@@ -399,7 +403,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
   public void operatorAddsFilterToSelectedPreset(String filter) {
     AddressDownloadFilteringType filterType = AddressDownloadFilteringType.fromString(filter);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       addressingDownloadPage.filterButton.click();
       pause1s();
       addressingDownloadPage.selectPresetFilter(filterType);
@@ -448,7 +452,7 @@ public class AddressingDownloadSteps extends AbstractSteps {
         break;
 
       default:
-       Assertions.assertThat(true).as("Invalid time bracket given.").isFalse();
+        Assertions.assertThat(true).as("Invalid time bracket given.").isFalse();
     }
 
     String[] timeRangePoints = timeRange.split("-");

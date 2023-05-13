@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page.mm.shipmentweight;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntButton;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.mm.AntConfirmModal;
@@ -45,6 +46,9 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
   @FindBy(css = "[data-testid='enter-new-filter-button']")
   public Button newFilterToggleButton;
 
+  @FindBy(css = "[data-testid='search-by-billing-number-button']")
+  public Button searchByBillinNumberButton;
+
   @FindBy(id = "search-by-sid_searchIds")
   public PageElement sidsTextArea;
 
@@ -59,6 +63,12 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
 
   @FindBy(css = ".ant-modal-confirm")
   public AntConfirmModal searchErrorConfirmModal;
+  
+  @FindBy(xpath = "//div[contains(@class, 'ant-form-item-explain-error')]")
+  public PageElement duplicateNamePresetFilters;
+
+  @FindBy(xpath = "//div[contains(@class, 'ant-message-custom-content ant-message-warning')]/span[2]")
+  public PageElement clearPresetFilterPopup;
 
   // new filter
   @FindBy(css = "[data-testid='preset-clear-and-close-button']")
@@ -96,6 +106,63 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
 
   @FindBy(id = "new_preset_name")
   public PageElement presetName;
+
+  @FindBy(xpath = "//div[@class=\"ant-empty-description\"]")
+  public PageElement emptyDescription;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-shipment-id']")
+  public TextBox shipmentIdSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-status']")
+  public TextBox shipmentStatusSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-destination-hub-name']")
+  public TextBox endHubSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-created-at']")
+  public TextBox shipmentCreationDateTimeSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-comments']")
+  public TextBox commentsSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-origin-hub-name']")
+  public TextBox startHubSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-shipment-type']")
+  public TextBox shipmentTypeSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-vendor-name']")
+  public TextBox vendorSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-origin-port']")
+  public TextBox originPortSearchField;
+
+  @FindBy(xpath = "//input[@data-testid='column-search-field-destination-port']")
+  public TextBox destinationPortSearchField;
+
+  @FindBy(xpath = "//button[@data-testid = 'back-to-main-button']")
+  public Button backToMain;
+
+  // Search by Billing Number section
+  @FindBy(xpath = "//div[@class='ant-modal-title' and contains(text(),'Search by Billing Number')]")
+  public PageElement headerSearchByBillingNumberPopup;
+
+  @FindBy(xpath = "//input[@data-testid = 'filter-mawb-input' and @id = 'mawb']")
+  public TextBox mawbBillingNumberInput;
+
+  @FindBy(xpath = "//input[@data-testid = 'filter-swb-input' and @id = 'swb']")
+  public TextBox swbBillingNumberInput;
+
+  @FindBy(xpath = "//button[@data-testid = 'submit-search-by-billing-number-button']")
+  public Button searchShipments;
+
+  @FindBy(xpath = "//span[@role = 'img' and @aria-label = 'close']")
+  public Button closeSearchBillingNumberPopup;
+
+  @FindBy(xpath = "//div[@class = 'ant-notification-notice-message' and contains(text(), 'Request failed with status code 404')]")
+  public PageElement errorStatusCode404;
+
+  private static final String BILLING_NUMBER_RADIO_BUTTON = "//label[@class='ant-radio-wrapper']/span[contains(text(), '%s')]";
 
   public ShipmentWeightDimensionPage(WebDriver webDriver) {
     super(webDriver);
@@ -149,7 +216,7 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
     sidsTextArea.sendKeys(shipmentId);
   }
 
-  public void fillLoadShipmentFilter(String filterName, String mawb, ZonedDateTime from,
+  public void fillLoadShipmentFilter(String filterName, ZonedDateTime from,
       ZonedDateTime to) {
     if (filterName != null) {
       presetFilterSelect.selectValue(filterName);
@@ -159,12 +226,6 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
       creationDateTimeRange.setDateRange(from, to);
     } else {
       creationDateTimeRange.clear();
-    }
-
-    if (mawb != null) {
-      mawbInput.sendKeys(mawb);
-    } else {
-      mawbInput.clear();
     }
   }
 
@@ -189,6 +250,44 @@ public class ShipmentWeightDimensionPage extends SimpleReactPage<ShipmentWeightD
           .filter(instance -> instance.value.equals(label))
           .findFirst()
           .orElse(INITIAL);
+    }
+  }
+
+  public void verifyAddNewWeightDimensionNewUI() {
+    Assertions.assertThat(header.getText()).as("is header message correct")
+            .isEqualTo("Add New Weight & Dimension");
+    Assertions.assertThat(loadShipmentHeader.getText()).as("Load Shipments Weight & Dimension is shown")
+            .isEqualTo("Load Shipments Weight & Dimension");
+    Assertions.assertThat(selectSearchFilter.getText()).as("Select Search Filter is shown")
+            .isEqualTo("Select Search Filter");
+    Assertions.assertThat(searchBySID.getText()).as("Search by SID is shown")
+            .isEqualTo("Search by SID");
+    Assertions.assertThat(loadSelectionButton.getText()).as("Load Selection is shown")
+            .isEqualTo("Load Selection");
+    Assertions.assertThat(newRecordBtn.isDisplayed()).as("is New Record button is visible")
+            .isTrue();
+    Assertions.assertThat(shipmentCounter.isDisplayed()).as("Shipment counter is shown")
+            .isTrue();
+    Assertions.assertThat(searchButton.isDisplayed()).as("Search button is shown")
+            .isTrue();
+    Assertions.assertThat(newFilterToggleButton.isDisplayed()).as("New filter toggle button is shown")
+            .isTrue();
+    Assertions.assertThat(searchByBillinNumberButton.isDisplayed()).as("Search by Billing Number button is shown")
+            .isTrue();
+    Assertions.assertThat(sidsTextArea.isDisplayed()).as("SID text area is shown")
+            .isTrue();
+  }
+
+  public void verifyShipmentWeightDimensionPagePopup(String popupName) {
+    switch (popupName) {
+      case "Search by Billing Number":
+        Assertions.assertThat(headerSearchByBillingNumberPopup.isDisplayed()).as("Search by Billing Number popup is visible")
+                .isTrue();
+        Assertions.assertThat(findElementByXpath(f(BILLING_NUMBER_RADIO_BUTTON, "MAWB")).isDisplayed()).as("MAWB on Search by Billing Number popup is visible")
+                .isTrue();
+        Assertions.assertThat(findElementByXpath(f(BILLING_NUMBER_RADIO_BUTTON, "SWB")).isDisplayed()).as("SWB on Search by Billing Number popup is visible")
+                .isTrue();
+        break;
     }
   }
 

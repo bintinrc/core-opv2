@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.common.core.model.order.Order;
 import co.nvqa.operator_v2.model.CodInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;

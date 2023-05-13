@@ -23,6 +23,11 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   private static final String PENDING_PICKUP_TABLE_SEARCH_XPATH = "//div[starts-with(@class,'ant-table-filter')][.//*[.='%s']]//input";
 
+  private static final String FILTER_BUTTON_XPATH = "//span[text()='%s']";
+
+  private static final String CLICKED_BUTTON = "//span[text()='%s' and contains(@class,'ant-tag-checkable-checked styled')]";
+  private static final String UNCLICKED_BUTTON = "//span[text()='%s' and contains(@class,'ant-tag ant-tag-checkable styled')]";
+
   public StationPendingPickupJobsPage(WebDriver webDriver) {
     super(webDriver);
   }
@@ -30,6 +35,7 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   public enum PendingPickupJobs {
     DRIVER_NAME_ROUTE_ID("station-pending-pickup-jobs_table_driver-name"),
     JOB_ID("station-pending-pickup-jobs_table_jobs-for-today_reservation-id"),
+    NO_UPCOMING_JOB("station-pending-pickup-jobs_table_jobs-for-today_no-upcoming"),
     TIMESLOT("station-pending-pickup-jobs_table_jobs-for-today_timeslot"),
     PRIORITY_LEVEL("station-pending-pickup-jobs_table_jobs-for-today_priority-level"),
     TOTAL_PARCEL_COUNT("station-pending-pickup-jobs_table_parcels-total"),
@@ -75,7 +81,13 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
   @FindBy(css = "iframe")
   private List<PageElement> pageFrame;
 
-  private void switchToFrame() {
+  @FindBy(xpath = "//div[@data-testid='station-pending-pickup-jobs_table_empty-data']")
+  private PageElement noPendingPickupRecords;
+
+  @FindBy(xpath = "//span[text()='Parcels to Pickup']/parent::div")
+  private PageElement sortParcelToPickup;
+
+  public void switchToFrame() {
     if (pageFrame.size() > 0) {
       waitUntilVisibilityOfElementLocated(pageFrame.get(0).getWebElement(), 15);
       getWebDriver().switchTo().frame(pageFrame.get(0).getWebElement());
@@ -84,7 +96,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTableAndValidateResultCount(Map<String, String> filters,
       int resultsCount) {
-    pause10s();
     switchToFrame();
     waitWhilePageIsLoading();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -98,7 +109,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
       }
     }
     waitWhilePageIsLoading();
-    pause3s();
     Assert.assertTrue(
         f("Assert that the search should have %s records as expected after applying filters",
             resultsCount),
@@ -107,7 +117,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
 
   public void applyFiltersInPendingPickupTable(Map<String, String> filters) {
     waitWhilePageIsLoading();
-    pause10s();
     switchToFrame();
     for (Map.Entry<String, String> filter : filters.entrySet()) {
       String filterColumnXpath = f(PENDING_PICKUP_TABLE_SEARCH_XPATH, filter.getKey());
@@ -118,7 +127,6 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
         filterFields.get(0).sendKeys(Keys.chord(Keys.CONTROL, "a"));
         filterFields.get(0).sendKeys(Keys.BACK_SPACE);
         filterFields.get(0).sendKeys(filter.getValue());
-        pause5s();
       }
     }
   }
@@ -127,13 +135,13 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
     waitWhilePageIsLoading();
     switchToFrame();
     if (buttonText.equalsIgnoreCase("Create Job")) {
-      createJobButton.get(0).click();
+      createJobButton.get(0).getWebElement().click();
     }
-    if (buttonText.equalsIgnoreCase("Asssign To Route")) {
-      assignToRouteButton.get(0).click();
+    if (buttonText.equalsIgnoreCase("Assign To Route")) {
+      assignToRouteButton.get(0).getWebElement().click();
     }
     if (buttonText.equalsIgnoreCase("Reassign To Route")) {
-      reAssignToRouteButton.get(0).click();
+      reAssignToRouteButton.get(0).getWebElement().click();
     }
   }
 
@@ -173,6 +181,49 @@ public class StationPendingPickupJobsPage extends OperatorV2SimplePage {
       Assertions.assertThat(assignToRouteButton.get(0).isDisplayed())
           .as("Validation for presence of Assign to Route button").isTrue();
     }
+  }
+
+  public void validateNoPendingPickupRecords() {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    Assertions.assertThat(noPendingPickupRecords.isDisplayed())
+        .as("Validation for presence of No Pending pickups").isTrue();
+  }
+
+  public void clickSortParcelsToPick() {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    sortParcelToPickup.click();
+  }
+
+  public void clickFilterButton(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String filterColumnXpath = f(FILTER_BUTTON_XPATH, buttonText);
+    getWebDriver().findElement(By.xpath(filterColumnXpath)).click();
+  }
+
+  public void validateButtonIsClicked(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String clickedButtonXpath = f(CLICKED_BUTTON, buttonText);
+    WebElement clickedButton = getWebDriver().findElement(By.xpath(clickedButtonXpath));
+    Assertions.assertThat(clickedButton.isDisplayed())
+        .as("Validation for " + buttonText + " button is clicked").isTrue();
+  }
+
+  public void validateButtonIsUnClicked(String buttonText) {
+    waitWhilePageIsLoading();
+    pause5s();
+    switchToFrame();
+    String clickedButtonXpath = f(UNCLICKED_BUTTON, buttonText);
+    WebElement clickedButton = getWebDriver().findElement(By.xpath(clickedButtonXpath));
+    Assertions.assertThat(clickedButton.isDisplayed())
+        .as("Validation for " + buttonText + "  button is unclicked").isTrue();
   }
 
 }

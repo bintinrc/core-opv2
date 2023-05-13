@@ -28,6 +28,10 @@ Feature: Shipper Pickups - Edit Reservation Details
       | shipperName  | {shipper-v4-name}                |
       | approxVolume | Less than 3 Parcels              |
       | comments     | GET_FROM_CREATED_RESERVATION     |
+    And DB Core - verify waypoints record:
+      | id       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | address1 | {KEY_LIST_OF_CREATED_ADDRESSES[2].address1}      |
+      | country  | {KEY_LIST_OF_CREATED_ADDRESSES[2].country}       |
 
   @DeleteOrArchiveRoute
   Scenario: Operator Not Allowed to Edit Attempted Reservation Address Details - Success Reservation (uid:80f2356d-5010-4291-9463-fae61a6207a1)

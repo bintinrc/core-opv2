@@ -31,8 +31,8 @@ public class ShipmentWeightDimensionTablePage extends
   @FindBy(xpath = "//button[span[contains(text(),'Sum up')]]")
   public Button sumUpButton;
 
-  @FindBy(xpath = "//button[span[contains(text(),'Update MAWB')]]")
-  public Button updateMawbButton;
+  @FindBy(xpath = "//button[span[contains(text(),'Update Billing Number')]]")
+  public Button updateBillingNumberButton;
   @FindBy(xpath = "//div[contains(@class,'ant-table-body')]//table")
   public NvTable<ShipmentWeightRow> shipmentWeightNvTable;
   @FindBy(xpath = "//div/b[contains(text(), 'Showing')]")
@@ -46,8 +46,8 @@ public class ShipmentWeightDimensionTablePage extends
   public PageElement endHubFilter;
   @FindBy(xpath = "//input[@aria-label='input-_createdAt']")
   public PageElement shipmentCreationDateTimeFilter;
-  @FindBy(xpath = "//input[@aria-label='input-_mawb']")
-  public PageElement mawbFilter;
+  @FindBy(xpath = "//input[@aria-label='input-_billing_number']")
+  public PageElement billingNumberFilter;
   @FindBy(xpath = "//input[@aria-label='input-_comments']")
   public PageElement commentsFilter;
   @FindBy(xpath = "//input[@aria-label='input-origin_hub_name']")
@@ -83,8 +83,8 @@ public class ShipmentWeightDimensionTablePage extends
       case START_HUB:
         pe = startHubFilter;
         break;
-      case MAWB:
-        pe = mawbFilter;
+      case BILLING_NUMBER:
+        pe = billingNumberFilter;
         break;
       case SHIPMENT_TYPE:
         pe = shipmentTypeFilter;
@@ -96,7 +96,7 @@ public class ShipmentWeightDimensionTablePage extends
   private String getFilterValueByColumn(Column col, Shipment shipmentData) {
     String filterValue = "";
     switch (col) {
-      case MAWB:
+      case BILLING_NUMBER:
         filterValue = shipmentData.getMawb();
         break;
       case STATUS:
@@ -148,7 +148,7 @@ public class ShipmentWeightDimensionTablePage extends
     scrollAndClear(statusFilter);
     scrollAndClear(endHubFilter);
     scrollAndClear(shipmentCreationDateTimeFilter);
-    scrollAndClear(mawbFilter);
+    scrollAndClear(billingNumberFilter);
     scrollAndClear(commentsFilter);
     scrollAndClear(startHubFilter);
     scrollAndClear(shipmentTypeFilter);
@@ -179,11 +179,14 @@ public class ShipmentWeightDimensionTablePage extends
     COMMENTS("comments"),
     CREATION_DATE("creation_date"),
     END_HUB("end_hub"),
-    MAWB("mawb"),
+    BILLING_NUMBER("billing_number"),
     SHIPMENT_ID("shipment_id"),
     SHIPMENT_TYPE("shipment_type"),
     STATUS("status"),
-    START_HUB("start_hub");
+    START_HUB("start_hub"),
+    VENDOR("vendor"),
+    ORIGIN_PORT("origin_port"),
+    DESTINATION_PORT("destination_port");
 
     private final String value;
 

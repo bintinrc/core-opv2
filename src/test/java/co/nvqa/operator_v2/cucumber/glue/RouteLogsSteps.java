@@ -10,7 +10,6 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.CreateRouteDialog.RouteDetailsForm;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable;
 import co.nvqa.operator_v2.selenium.page.ToastInfo;
-import co.nvqa.operator_v2.util.TestConstants;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -54,7 +53,6 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN
 public class RouteLogsSteps extends AbstractSteps {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RouteLogsSteps.class);
-  private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
 
   private RouteLogsPage routeLogsPage;
 
@@ -84,8 +82,9 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.createRouteDialog.waitUntilVisible();
       pause1s();
 
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
         routeDetailsForm.routeDate.setValue(newParams.getDate());
@@ -133,8 +132,9 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyInvalidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
       Assertions.assertThatExceptionOfType(NoSuchElementException.class)
           .as("Error expected for %s Driver value", value)
@@ -156,8 +156,9 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyValidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
       retryIfRuntimeExceptionOccurred(() -> routeDetailsForm.assignedDriver.selectValue(value), 5);
     });
@@ -296,6 +297,29 @@ public class RouteLogsSteps extends AbstractSteps {
         routeLogsPage.bulkEditDetailsDialog.comments.setValue(newParams.getComments());
       }
       routeLogsPage.bulkEditDetailsDialog.saveChanges.click();
+    });
+  }
+
+  @When("Operator verifies errors in Bulk Edit Details dialog on Route Logs page:")
+  public void verifyBulkEditErrors(List<String> data) {
+    routeLogsPage.inFrame(() -> {
+      List<String> expected = resolveValues(data);
+      routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
+      pause5s();
+      List<String> actual = routeLogsPage.bulkEditDetailsDialog.errors.stream()
+          .map(PageElement::getNormalizedText)
+          .collect(Collectors.toList());
+      Assertions.assertThat(actual)
+          .as("List of errors")
+          .containsExactlyInAnyOrderElementsOf(expected);
+    });
+  }
+
+  @When("Operator click Cancel in Bulk Edit Details dialog on Route Logs page")
+  public void clickBulkEditCancel() {
+    routeLogsPage.inFrame(() -> {
+      routeLogsPage.bulkEditDetailsDialog.waitUntilVisible();
+      routeLogsPage.bulkEditDetailsDialog.cancel.click();
     });
   }
 
@@ -457,7 +481,11 @@ public class RouteLogsSteps extends AbstractSteps {
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_ARCHIVE_SELECTED);
       routeLogsPage.archiveSelectedRoutesDialog.waitUntilVisible();
-      routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
+      if (routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.waitUntilVisible(1)) {
+        routeLogsPage.archiveSelectedRoutesDialog.archiveRoutes.click();
+      } else {
+        routeLogsPage.archiveSelectedRoutesDialog.continueBtn.click();
+      }
     });
     takesScreenshot();
   }
@@ -506,6 +534,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       resolveValues(routeIds).forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        pause2s();
         Assertions.assertThat(routeLogsPage.routesTable.isEmpty())
             .as("Route " + routeId + " was deleted").isTrue();
       });
@@ -517,7 +546,7 @@ public class RouteLogsSteps extends AbstractSteps {
   public void loadSelection(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
     routeLogsPage.inFrame(page -> {
-      page.waitUntilLoaded();
+      page.waitUntilLoaded(60);
       if (finalData.containsKey("routeDateFrom")) {
         page.routeDateFilter.setInterval(finalData.get("routeDateFrom"),
             finalData.get("routeDateTo"));
@@ -621,7 +650,7 @@ public class RouteLogsSteps extends AbstractSteps {
     routeLogsPage.inFrame(() -> {
       routeLogsPage.savePresetDialog.waitUntilVisible();
       Assertions.assertThat(routeLogsPage.savePresetDialog.helpText.getText())
-          .as("Preset Name error text").isEqualTo("This field is required");
+          .as("Preset Name error text").isEqualTo("Field is required");
     });
     takesScreenshot();
   }
@@ -885,6 +914,7 @@ public class RouteLogsSteps extends AbstractSteps {
   @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
   public void loadWaypointsOfSelectedRoute() {
     routeLogsPage.inFrame(() -> {
+      put(KEY_MAIN_WINDOW_HANDLE, routeLogsPage.getWebDriver().getWindowHandle());
       Long routeId = get(KEY_CREATED_ROUTE_ID);
       routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
       routeLogsPage.routesTable.clickActionButton(1, ACTION_EDIT_ROUTE);
@@ -895,7 +925,6 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @Then("Operator is redirected to this page {value}")
   public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl) {
-    redirectUrl = TestConstants.OPERATOR_PORTAL_BASE_URL + redirectUrl;
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading(redirectUrl);
   }
 
@@ -958,6 +987,7 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.routesTable.clickColumn(1, RoutesTable.COLUMN_ROUTE_ID);
     });
     routeLogsPage.switchToOtherWindowAndWaitWhileLoading("route-manifest/" + routeId);
+    pause2s();
     routeLogsPage.waitUntilPageLoaded();
     pause2s();
   }
@@ -1070,30 +1100,43 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verifies that error toast displayed:")
   public void operatorVerifyErrorToast(Map<String, String> data) {
+
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
     do {
       found = routeLogsPage.toastErrors.stream().anyMatch(toast -> {
-        String value = finalData.get("top");
-        if (StringUtils.isNotBlank(value)) {
-          if (!StringUtils.equalsIgnoreCase(value, toast.toastTop.getNormalizedText())) {
-            return false;
+        String actualTop = toast.toastTop.getNormalizedText();
+        String actualBottom = toast.toastBottom.getNormalizedText();
+        String expTop = finalData.get("top");
+        if (StringUtils.isNotBlank(expTop)) {
+          if (expTop.startsWith("^")) {
+            if (!actualTop.matches(expTop)) {
+              return false;
+            }
+          } else {
+            if (!StringUtils.equalsIgnoreCase(expTop, actualTop)) {
+              return false;
+            }
           }
         }
-        value = finalData.get("bottom");
-        if (StringUtils.isNotBlank(value)) {
-          String actual = toast.toastBottom.getNormalizedText();
-          if (value.startsWith("^")) {
-            return actual.matches(value);
+
+        String expBottom = finalData.get("bottom");
+        if (StringUtils.isNotBlank(expBottom)) {
+          LOGGER.info("Found description: " + actualBottom);
+          if (expBottom.startsWith("^")) {
+            return actualBottom.matches(expBottom);
           } else {
-            return StringUtils.equalsIgnoreCase(value, actual);
+            return StringUtils.equalsIgnoreCase(expBottom, actualBottom);
           }
         }
         return true;
       });
-    } while (!found && new Date().getTime() - start < 20000);
+    } while (!found && new Date().getTime() - start < 30000);
     Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
+    Assertions.assertThat(finalData.toString())
+        .withFailMessage("Toast is not displayed: " + finalData)
+        .isNotNull();
   }
 
   @And("Operator verifies that warning toast displayed:")
@@ -1132,6 +1175,7 @@ public class RouteLogsSteps extends AbstractSteps {
     String hubName = mapOfData.get("hubName");
 
     routeLogsPage.inFrame(() -> {
+      routeLogsPage.waitUntilLoaded(30);
       routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
       routeLogsPage.routesTable.filterByColumn(RoutesTable.COLUMN_ROUTE_ID, routeId);
       String actualRouteStatus = routeLogsPage.routesTable.getColumnText(1,

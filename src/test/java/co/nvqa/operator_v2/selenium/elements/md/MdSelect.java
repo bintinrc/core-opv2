@@ -130,7 +130,7 @@ public class MdSelect extends PageElement {
     return getAttribute("aria-owns");
   }
 
-  private void closeMenu() {
+  public void closeMenu() {
     Actions actions = new Actions(getWebDriver());
     actions.sendKeys(Keys.ESCAPE).perform();
   }

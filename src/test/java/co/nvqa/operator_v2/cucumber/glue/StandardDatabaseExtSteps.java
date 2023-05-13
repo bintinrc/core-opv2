@@ -1,5 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common.core.hibernate.EventsDao;
+import co.nvqa.common.core.model.persisted_class.events.OrderEvents;
+import co.nvqa.common.utils.StandardTestConstants;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.CodInbound;
@@ -21,16 +25,15 @@ import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.MovementEventEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
-import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.ReserveTrackingIdEntity;
+import co.nvqa.commons.model.entity.RouteMonitoringDataEntity;
+import co.nvqa.commons.model.entity.RouteWaypointEntity;
 import co.nvqa.commons.model.entity.ShipmentPathEntity;
 import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelation;
 import co.nvqa.commons.model.sort.hub.movement_trips.HubRelationSchedule;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.common.utils.StandardTestConstants;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
@@ -57,6 +60,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -92,6 +96,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   public StandardDatabaseExtSteps() {
   }
+
+  @Inject
+  private EventsDao eventsDao;
 
   @Override
   public void init() {
@@ -147,29 +154,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("DB Operator verify Jaro Scores of Delivery Transaction waypoint of created order are archived")
   public void dbOperatorVerifyJaroScoresArchived() {
-    Order order = get(KEY_ORDER_DETAILS);
-    String trackingId = order.getTrackingId();
+    retryIfAssertionErrorOccurred(() -> {
+      Order order = get(KEY_ORDER_DETAILS);
+      String trackingId = order.getTrackingId();
 
-    List<Transaction> transactions = order.getTransactions();
+      List<Transaction> transactions = order.getTransactions();
 
-    ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
-    {
-      Optional<Transaction> transactionOptional = transactions.stream()
-          .filter(t -> transactionType.equals(t.getType())).findFirst();
+      ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+      {
+        Optional<Transaction> transactionOptional = transactions.stream()
+            .filter(t -> transactionType.equals(t.getType())).findFirst();
 
-      if (transactionOptional.isPresent()) {
-        Transaction transaction = transactionOptional.get();
-        Long waypointId = transaction.getWaypointId();
-        if (waypointId != null) {
-          List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
-          Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
-          Assertions.assertThat(jaroScores.get(0).getArchived() == 1).as("jaro scores are archived")
-              .isTrue();
+        if (transactionOptional.isPresent()) {
+          Transaction transaction = transactionOptional.get();
+          Long waypointId = transaction.getWaypointId();
+
+          if (waypointId != null) {
+            List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+            Assertions.assertThat(jaroScores.size()).as("Number of jaro scores").isEqualTo(1);
+            Assertions.assertThat(jaroScores.get(0).getArchived() == 1)
+                .as("jaro scores are archived")
+                .isTrue();
+          }
+        } else {
+          fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
         }
-      } else {
-        fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-      }
-    });
+      });
+    }, "Check Db Jaro Score");
   }
 
   @Then("DB Operator verify Jaro Scores of Pickup Transaction waypoint of created order are archived")
@@ -206,6 +217,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
     List<Transaction> transactions = order.getTransactions();
 
+    List<Map<String, String>> finalData = resolveListOfMaps(data);
     ImmutableList.of(TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
     {
       Optional<Transaction> transactionOptional = transactions.stream()
@@ -216,12 +228,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long waypointId = transaction.getWaypointId();
         if (waypointId != null) {
           List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          if (jaroScores.size() != finalData.size()) {
+            pause10s();
+            jaroScores = getCoreJdbc().getJaroScores(waypointId);
+          }
           Assertions.assertThat(jaroScores.size()).as("Number of jaro scores")
-              .isEqualTo(data.size());
-          for (int i = 0; i < data.size(); i++) {
-            JaroScore expected = new JaroScore(resolveKeyValues(data.get(i)));
+              .isEqualTo(finalData.size());
+          for (int i = 0; i < finalData.size(); i++) {
+            if (StringUtils.equalsAnyIgnoreCase(finalData.get(i).get("score"), "null",
+                "not null")) {
+              finalData.get(i).remove("score");
+            }
+            JaroScore expected = new JaroScore(finalData.get(i));
             JaroScore actual = jaroScores.get(i);
-            expected.compareWithActual(actual);
+            expected.compareWithActual(actual, finalData.get(i));
           }
         }
       } else {
@@ -321,7 +341,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify order_events record for the created order for RTS:$")
   public void operatorVerifyTheLastOrderEventParamsForRTS(Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     List<String> orderEventsTypes = orderEvents.stream()
         .map(orderEvent -> String.valueOf(orderEvent.getType())).collect(
             Collectors.toList());
@@ -336,7 +356,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify the order_events record exists for the created order with type:$")
   public void operatorVerifyOrderEventExists(DataTable mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     List<Integer> types = mapOfData.asList(Integer.class);
     types.forEach(type ->
@@ -349,9 +369,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
   @Then("^DB Operator verify the order_events record:$")
   public void operatorVerifyOrderEventExists(Map<String, String> data) {
-    OrderEventEntity expected = new OrderEventEntity(resolveKeyValues(data));
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(expected.getOrderId());
-    OrderEventEntity.assertListContains(orderEvents, expected, "Order event");
+    OrderEvents expected = new OrderEvents(resolveKeyValues(data));
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(expected.getOrderId());
+    OrderEvents.assertListContains(orderEvents, expected, "Order event");
   }
 
   @Then("^DB Operator verify Pickup '17' order_events record for the created order$")
@@ -359,10 +379,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -393,10 +413,10 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     int eventType = 17;
     Long orderId = get(KEY_CREATED_ORDER_ID);
     Order order = get(KEY_CREATED_ORDER);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
 
-    OrderEventEntity event = orderEvents.stream()
+    OrderEvents event = orderEvents.stream()
         .filter(orderEventEntity -> Objects.equals(orderEventEntity.getType(), eventType))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
@@ -425,12 +445,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @Then("^DB Operator verify (-?\\d+) order_events record for the created order:$")
   public void operatorVerifyOrderEventParams(int index, Map<String, String> mapOfData) {
     Long orderId = get(KEY_CREATED_ORDER_ID);
-    List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+    List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
     assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
     if (index <= 0) {
       index = orderEvents.size() + index;
     }
-    OrderEventEntity theLastOrderEvent = orderEvents.get(index - 1);
+    OrderEvents theLastOrderEvent = orderEvents.get(index - 1);
     String value = mapOfData.get("type");
 
     if (StringUtils.isNotBlank(value)) {
@@ -444,7 +464,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     // order event is an async process, the order event may not created yet when accessing this step
     retryIfAssertionErrorOccurred(() -> {
       Long orderId = get(KEY_CREATED_ORDER_ID);
-      List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+      List<OrderEvents> orderEvents = eventsDao.getOrderEvents(orderId);
       assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
       String value = mapOfData.get("type");
       orderEvents.stream()
@@ -650,6 +670,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         .as("Waypoint with id=%s", expected.getId())
         .isNotNull();
     expected.compareWithActual(actual);
+  }
+
+  @Then("DB Operator verifies route_monitoring_data record:")
+  public void verifyRouteMonitoringData(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    long waypointId = Long.parseLong(data.get("waypointId"));
+    long routeId = Long.parseLong(data.get("routeId"));
+
+    RouteMonitoringDataEntity result = this.getCoreJdbc()
+        .getRouteMonitoringDataEntity(waypointId, routeId);
+    Assertions.assertThat(result)
+        .as("route_monitoring_data record for waypointId %s and routeId %s", waypointId, routeId)
+        .isNotNull();
   }
 
   private void assertTransaction(TransactionEntity expected, TransactionEntity actual,
@@ -992,7 +1025,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(String.valueOf(warehouseSweepRecord.get("order_id")))
         .as(f("Expected order_id in Warehouse_sweeps table"))
         .isEqualTo(String.valueOf(order.getId()));
-      put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
+    put(KEY_WAREHOUSE_SWEEPS_ID, warehouseSweepRecord.get("id"));
   }
 
   @SuppressWarnings("unchecked")
@@ -1219,26 +1252,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
   }
 
-  @SuppressWarnings("unchecked")
-  @Given("^DB Operator verifies waypoint for (Pickup|Delivery) transaction is deleted from route_waypoint table$")
-  public void dbOperatorVerifiesWaypointIsDeleted(String txnType) {
-    Order order = get(KEY_CREATED_ORDER);
-    final String waypointId = String.valueOf(order.getTransactions().stream()
-        .filter(transaction -> StringUtils.equalsIgnoreCase(transaction.getType(), txnType))
-        .findFirst().orElseThrow(() -> new IllegalArgumentException(
-            f("No %s transaction for %d order", txnType, order.getId())))
-        .getWaypointId());
-    retryIfExpectedExceptionOccurred(() ->
-    {
-      List<Map<String, Object>> waypointRecords = getCoreJdbc().getWaypointRecords(waypointId);
-
-      Assertions.assertThat(waypointRecords.size())
-          .as(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId))
-          .isEqualTo(0);
-      return waypointRecords;
-    }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);
-  }
-
   private void validatePickupInWaypointRecord(Order order, String transactionType,
       long waypointId) {
     Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
@@ -1307,18 +1320,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     Assertions.assertThat(priorityLevel)
         .as("Expected Reservation Priority Level %s but actual Priority Level %d",
             expectedPriorityLevel, priorityLevel).isEqualTo(expectedPriorityLevel);
-  }
-
-  @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
-  public void dbOperatorVerifyRouteWaypointsTable() throws SQLException, ClassNotFoundException {
-    Long reservationId = get(KEY_CREATED_RESERVATION_ID);
-    Long routeId = get(KEY_CREATED_ROUTE_ID);
-    Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
-    Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
-
-    Assertions.assertThat(routeWaypoint)
-        .as("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d",
-            reservationWaypoint, routeWaypoint).isEqualTo(reservationWaypoint);
   }
 
   @Then("^DB Operator verify the orders are deleted in order_batch_items DB$")

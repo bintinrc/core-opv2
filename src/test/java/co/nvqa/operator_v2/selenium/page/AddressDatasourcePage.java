@@ -4,7 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntNotification;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
@@ -41,6 +41,9 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   @FindBy(css = "[data-testid='form-input-latlong']")
   public TextBox latlong;
 
+  @FindBy(css = ".ant-btn-loading-icon")
+  public PageElement loadingIcon;
+
   @FindBy(css = "[data-testid='form-input-city']")
   public TextBox municipality;
 
@@ -51,7 +54,7 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
   public TextBox postcode;
 
   @FindBy(css = "[data-testid='form-input-whitelist']")
-  public AntSelect3 whitelisted;
+  public AntSelect whitelisted;
 
   @FindBy(xpath = "//span[contains(text(), 'Province')] /following-sibling::span")
   public PageElement provinceAddRow;
@@ -61,6 +64,15 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//span[contains(text(), 'Kecamatan')] /following-sibling::span")
   public PageElement kecamatanAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'District')] /following-sibling::span")
+  public PageElement districtAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'Subdistrict')] /following-sibling::span")
+  public PageElement subdistrictAddRow;
+
+  @FindBy(xpath = "//span[contains(text(), 'Ward')] /following-sibling::span")
+  public PageElement wardAddRow;
 
   @FindBy(xpath = "//span[contains(text(), 'Municipality')] /following-sibling::span")
   public PageElement municipalityAddRow;
@@ -166,6 +178,12 @@ public class AddressDatasourcePage extends SimpleReactPage<AddressDatasourcePage
 
   @FindBy(xpath = "//div[text()='Required to fill in']")
   public PageElement emptyFieldError;
+
+  @FindBy(css = "[data-testid='search-input-city']")
+  public TextBox districtTextBox;
+
+  @FindBy(css = "[data-testid='search-input-district']")
+  public TextBox subdistrictTextBox;
 
 
   public AddressDatasourcePage(WebDriver webDriver) {

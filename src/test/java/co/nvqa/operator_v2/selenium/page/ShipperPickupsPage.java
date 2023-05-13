@@ -411,7 +411,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     finishReservationDialog.selectFailureAsReason();
     finishReservationDialog.selectFailureReason(failureReason);
     if (StringUtils.isNotBlank(failureReasonDetail1)) {
-      finishReservationDialog.selectFailureReasonDetail(1, failureReasonDetail1);
+      finishReservationDialog.selectFailureReasonDetail(0, failureReasonDetail1);
     }
     finishReservationDialog.clickOnUpdateButton();
     finishReservationDialog.proceedWithFailureInConfirmationPopUp();

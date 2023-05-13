@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound
+@OperatorV2 @Core @Inbounding @RouteInbound @AddCommentSession
 Feature: Add Comment Session
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Add Comment Session
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Add Comment to a Route Inbound Session (uid:98ab3b29-59b9-4483-b17f-4aa353d727e4)
+  Scenario: Add Comment to a Route Inbound Session
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

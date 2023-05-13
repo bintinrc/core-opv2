@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.mm.AntNotice;
 import co.nvqa.operator_v2.selenium.page.AddToShipmentPage;
+import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
 import com.google.common.collect.ImmutableMap;
 import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
@@ -16,6 +18,8 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Sergey Mishanin
@@ -24,12 +28,15 @@ import org.openqa.selenium.NoSuchElementException;
 public class AddToShipmentPageSteps extends AbstractSteps {
 
   private AddToShipmentPage addToShipmentPage;
+  private ShipmentScanningPage shipmentScanningPage;
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddToShipmentPageSteps.class);
 
   public AddToShipmentPageSteps() {
   }
 
   @Override
   public void init() {
+    shipmentScanningPage = new ShipmentScanningPage(getWebDriver());
     addToShipmentPage = new AddToShipmentPage(getWebDriver());
   }
 
@@ -57,25 +64,36 @@ public class AddToShipmentPageSteps extends AbstractSteps {
   @When("^Operator select values on Add to Shipment page:$")
   public void operatorSelectValuesShipment(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
-    addToShipmentPage.inFrame(page -> {
-      page.waitUntilLoaded();
-      String value = finalData.get("originHub");
-      if (StringUtils.isNotBlank(value)) {
-        page.originHub.selectValue(value);
+    retryIfRuntimeExceptionOccurred(() -> {
+
+      try {
+        shipmentScanningPage.switchTo();
+
+        String value = finalData.get("originHub");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectHub(resolveValue(value));
+        }
+        value = finalData.get("destinationHub");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectDestinationHub(resolveValue(value));
+        }
+        value = finalData.get("shipmentType");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectShipmentType(value);
+        }
+        value = finalData.get("shipmentId");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
+          shipmentScanningPage.selectShipmentId(Long.parseLong(value));
+          shipmentScanningPage.waitUntilShipmentIdFilled(Long.parseLong(value));
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        throw new NvTestRuntimeException(ex.getCause());
       }
-      value = finalData.get("destinationHub");
-      if (StringUtils.isNotBlank(value)) {
-        page.destinationHub.selectValue(value);
-      }
-      value = finalData.get("shipmentType");
-      if (StringUtils.isNotBlank(value)) {
-        page.shipmentType.selectValueWithoutSearch(value);
-      }
-      value = finalData.get("shipmentId");
-      if (StringUtils.isNotBlank(value)) {
-        page.shipmentId.waitUntilEnabled();
-        page.shipmentId.selectValue(finalData.get("shipmentId"));
-      }
+
     });
   }
 
@@ -172,26 +190,31 @@ public class AddToShipmentPageSteps extends AbstractSteps {
   @When("^Operator set values in Create Shipment modal on Add to Shipment page:$")
   public void setCreateShipmentFields(Map<String, String> data) {
     Map<String, String> finalData = resolveKeyValues(data);
-    addToShipmentPage.inFrame(page -> {
-      page.createShipmentModal.waitUntilVisible();
-      page.createShipmentModal.originHub.waitUntilEnabled();
 
-      String value = finalData.get("originHub");
-      if (StringUtils.isNotBlank(value)) {
-        page.createShipmentModal.originHub.selectValue(value);
-      }
-      value = finalData.get("destinationHub");
-      if (StringUtils.isNotBlank(value)) {
-        page.createShipmentModal.destinationHub.selectValue(value);
+    retryIfRuntimeExceptionOccurred(() -> {
+      try {
+        shipmentScanningPage.switchTo();
 
-      }
-      value = finalData.get("shipmentType");
-      if (StringUtils.isNotBlank(value)) {
-        page.createShipmentModal.shipmentType.selectValueWithoutSearch(value);
-      }
-      value = finalData.get("comments");
-      if (StringUtils.isNotBlank(value)) {
-        page.createShipmentModal.comments.setValue(value);
+        String value = finalData.get("originHub");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectHubCreate(resolveValue(value));
+        }
+        value = finalData.get("destinationHub");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectDestinationHubCreate(resolveValue(value));
+        }
+        value = finalData.get("shipmentType");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.selectShipmentTypeCreate(value);
+        }
+        value = finalData.get("comments");
+        if (StringUtils.isNotBlank(value)) {
+          shipmentScanningPage.fillInComments(value);
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        throw new NvTestRuntimeException(ex.getCause());
       }
     });
   }

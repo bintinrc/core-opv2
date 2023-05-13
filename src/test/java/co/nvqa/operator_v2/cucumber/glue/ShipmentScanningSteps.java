@@ -56,6 +56,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.selectShipmentType(shipmentType);
         shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
         shipmentScanningPage.selectShipmentId(shipmentId);
+        shipmentScanningPage.waitUntilShipmentIdFilled(shipmentId);
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
         shipmentScanningPage.waitUntilVisibilityOfElementLocated("//div[@data-testid='add-parcel-scan-container']//span[contains(.,'"+trackingId+"')]");
@@ -73,13 +74,13 @@ public class ShipmentScanningSteps extends AbstractSteps {
     retryIfRuntimeExceptionOccurred(() ->
     {
       try {
-        pause10s();
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
             ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
             ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
         shipmentScanningPage.switchTo();
+        shipmentScanningPage.pause10s();
         shipmentScanningPage.selectHub(resolveValue(hub));
         shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
         shipmentScanningPage.selectShipmentType(shipmentType);
@@ -122,6 +123,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
   @And("Operator close the shipment which has been created")
   public void operatorCloseTheShipmentWhichHasBeenCreated() {
+    shipmentScanningPage.switchTo();
     shipmentScanningPage.closeShipment();
   }
 
@@ -216,6 +218,42 @@ public class ShipmentScanningSteps extends AbstractSteps {
     }, 10);
   }
 
+  @When("Operator add order to shipment in hub {value} to hub {value}")
+  public void operatorAddOrderToShipment(String hub, String destHub) {
+    retryIfRuntimeExceptionOccurred(() ->
+    {
+      try {
+        List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+            ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+            ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+
+        shipmentScanningPage.switchTo();
+        pause10s();
+        shipmentScanningPage.selectHub(resolveValue(hub));
+        shipmentScanningPage.selectDestinationHub(resolveValue(destHub));
+        shipmentScanningPage.selectShipmentType(shipmentType);
+        shipmentScanningPage.waitUntilElementIsClickable("//input[@id='shipment_id']");
+        shipmentScanningPage.selectShipmentId(shipmentId);
+        shipmentScanningPage.waitUntilShipmentIdFilled(shipmentId);
+        shipmentScanningPage.clickSelectShipment();
+
+        for (String trackingId : trackingIds) {
+          pause1s();
+          shipmentScanningPage.scanBarcode(trackingId);
+          shipmentScanningPage.checkAndRemoveScannedOrdersIfInvalid();
+          shipmentScanningPage.checkOrderInShipment(trackingId);
+        }
+      } catch (Throwable ex) {
+        LOGGER.error(ex.getMessage());
+        LOGGER.info("Searched element is not found, retrying after 2 seconds...");
+        navigateRefresh();
+        throw new NvTestRuntimeException(ex.getCause());
+      }
+    }, 10);
+  }
+
   @And("Operator removes the parcel from the shipment")
   public void operatorRemovesTheParcelFromTheShipment() {
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -240,8 +278,10 @@ public class ShipmentScanningSteps extends AbstractSteps {
   public void operatorRemovesAllTheParcelFromTheShipment() {
     List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
     for (String trackingId : trackingIds) {
-      pause1s();
+      pause2s();
       shipmentScanningPage.removeShipmentWithId(trackingId);
+      pause2s();
+      shipmentScanningPage.removeTrackingIdField.clear();
     }
   }
 

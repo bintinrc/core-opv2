@@ -394,8 +394,8 @@ public class EditOrderPage extends OperatorV2SimplePage {
     }
     String expectedDriver =
         route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
-    Assertions.assertThat(pickupDetailsBox.getDriver()).as("Pickup Driver")
-        .isEqualTo(expectedDriver);
+    Assertions.assertThat(pickupDetailsBox.getDriver().trim()).as("Pickup Driver")
+        .isEqualTo(expectedDriver.trim());
   }
 
   public void verifyOrderSummary(Order order) {
@@ -959,6 +959,24 @@ public class EditOrderPage extends OperatorV2SimplePage {
     String senderEmail = mapOfData.get("senderEmail");
     String pickupDate = mapOfData.get("pickupDate");
     String pickupTimeslot = mapOfData.get("pickupTimeslot");
+
+    pickupRescheduleDialog
+        .waitUntilVisibility()
+        .updateSenderName(senderName)
+        .updateSenderContact(senderContact)
+        .updateSenderEmail(senderEmail)
+        .updatePickupDate(pickupDate)
+        .updatePickupTimeslot(pickupTimeslot)
+        .clickSaveChanges();
+    pickupRescheduleDialog.confirmPickupRescheduledUpdated();
+  }
+
+  public void reschedulePickupWithAddressChanges(Map<String, String> mapOfData) {
+    String senderName = mapOfData.get("senderName");
+    String senderContact = mapOfData.get("senderContact");
+    String senderEmail = mapOfData.get("senderEmail");
+    String pickupDate = mapOfData.get("pickupDate");
+    String pickupTimeslot = mapOfData.get("pickupTimeslot");
     String country = mapOfData.get("country");
     String city = mapOfData.get("city");
     String address1 = mapOfData.get("address1");
@@ -982,7 +1000,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
     pickupRescheduleDialog.confirmPickupRescheduledUpdated();
   }
 
-  public void rescheduleDelivery(Map<String, String> mapOfData) {
+  public void rescheduleDeliveryWithAddressChange(Map<String, String> mapOfData) {
     String recipientName = mapOfData.get("recipientName");
     String recipientContact = mapOfData.get("recipientContact");
     String recipientEmail = mapOfData.get("recipientEmail");
@@ -1007,6 +1025,24 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .updateAddress1(address1)
         .updateAddress2(address2)
         .updatePostalCode(postalCode)
+        .clickSaveChanges();
+    deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
+  }
+
+  public void rescheduleDelivery(Map<String, String> mapOfData) {
+    String recipientName = mapOfData.get("recipientName");
+    String recipientContact = mapOfData.get("recipientContact");
+    String recipientEmail = mapOfData.get("recipientEmail");
+    String deliveryDate = mapOfData.get("deliveryDate");
+    String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
+
+    deliveryRescheduleDialog
+        .waitUntilVisibility()
+        .updateRecipientName(recipientName)
+        .updateRecipientContact(recipientContact)
+        .updateRecipientEmail(recipientEmail)
+        .updateDeliveryDate(deliveryDate)
+        .updateDeliveryTimeslot(deliveryTimeslot)
         .clickSaveChanges();
     deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
   }

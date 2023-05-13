@@ -194,5 +194,6 @@ public class FinancialBatchSteps extends AbstractSteps {
       financialBatchPage.setEmailAddress(mapOfData.get("emailAddress"));
     }
     financialBatchPage.requestReportBtn.click();
+    takesScreenshot();
   }
 }

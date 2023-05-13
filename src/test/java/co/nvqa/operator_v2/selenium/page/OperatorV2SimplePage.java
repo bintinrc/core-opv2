@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common.ui.page.SimpleWebPage;
+import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -371,9 +371,14 @@ public class OperatorV2SimplePage extends SimpleWebPage {
     return getToastText("//div[@class='ant-notification-notice-message']");
   }
 
+  public String getAntDescription() {
+    return getToastText("//div[@class='ant-notification-notice-description']");
+  }
+
   public String getAntTopRightText() {
     return getToastText("//div[contains(@class,'ant-notification-topRight')]");
   }
+
   public WebElement getToastBottom() {
     String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
     return waitUntilVisibilityOfElementLocated(xpathExpression);
