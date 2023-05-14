@@ -61,6 +61,8 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   @FindBy(xpath = "//button[@data-testid='linkShippers.saveBtn']/..")
   public NvApiTextButton saveBtn;
 
+  String WRITE_SCRIPT_PARAMETER = "//span[strong[text()='%s']]/parent::div/following-sibling::div//span[text()='%s']";
+
   public PricingScriptsV2Page(WebDriver webDriver) {
     super(webDriver);
     pricingScriptsV2CreateEditDraftPage = new PricingScriptsV2CreateEditDraftPage(webDriver);
@@ -178,8 +180,10 @@ public class PricingScriptsV2Page extends SimpleReactPage {
     acceptAlertDialogIfAppear();
   }
 
-  public String validateDraftAndReturnWarnings(Script script) {
-    goToEditDraftScript(script);
+  public String validateDraftAndReturnWarnings(String tabName, Script script) {
+    if (!tabName.contains("active script")) {
+      goToEditDraftScript(script);
+    }
     return pricingScriptsV2CreateEditDraftPage.validateDraftAndReturnWarnings(script);
   }
 
@@ -333,7 +337,7 @@ public class PricingScriptsV2Page extends SimpleReactPage {
   }
 
   public void clickUndoBtn(String shipperId) {
-  clickf("//span[contains(@title,'%s')]/span[contains(@class,'remove')]",shipperId);
+    clickf("//span[contains(@title,'%s')]/span[contains(@class,'remove')]", shipperId);
 //    undoBtn.click();
   }
 
@@ -508,5 +512,25 @@ public class PricingScriptsV2Page extends SimpleReactPage {
 
   public void switchToIframe() {
     switchToFrame("//iframe[@ng-style='iframeStyleObj']");
+  }
+
+  public void goToWriteScriptPage() {
+    pause2s();
+    clickCreateDraftBtn();
+    clickTabItem("Write Script");
+  }
+
+  public void verifyPresence(String field, String value) {
+    if (value == null) {
+      Assertions.assertThat(
+              findElementByXpath(f("//span[strong[text()='%s']]", field)).isDisplayed())
+          .as(f("Parameter %s present", field))
+          .isTrue();
+    } else {
+      Assertions.assertThat(
+              findElementByXpath(f(WRITE_SCRIPT_PARAMETER, field, value)).isDisplayed())
+          .as(f("Parameter %s present under %s", value, field))
+          .isTrue();
+    }
   }
 }
