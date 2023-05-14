@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs
+@OperatorV2 @Core @Routing @RouteLogs @ArchiveAndUnarchive
 Feature: Route Logs - Archive & Unarchive
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Route Logs - Archive & Unarchive
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute @happy-path
-  Scenario: Operator Archive Multiple Routes from Route Logs Page (uid:885b74a1-bcc4-48a7-a9df-fb5392e92971)
+  Scenario: Operator Archive Multiple Routes from Route Logs Page
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator create new route using data below:
@@ -28,7 +28,7 @@ Feature: Route Logs - Archive & Unarchive
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | ARCHIVED |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Unarchive Single Archived Route from Route Logs Page (uid:dd0d09ab-c2bd-4d0f-b327-51dfff8c2eb0)
+  Scenario: Operator Unarchive Single Archived Route from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -51,7 +51,7 @@ Feature: Route Logs - Archive & Unarchive
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} | IN_PROGRESS |
 
   @DeleteOrArchiveRoute @happy-path
-  Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page (uid:ca9a74b2-4a72-4939-a4d2-f49c44a192cc)
+  Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -79,7 +79,7 @@ Feature: Route Logs - Archive & Unarchive
       | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} | IN_PROGRESS |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Unarchive Single NON-archived Route from Route Logs Page (uid:157cc929-d7c5-4fff-9345-66112ee327a7)
+  Scenario: Operator Unarchive Single NON-archived Route from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -99,7 +99,7 @@ Feature: Route Logs - Archive & Unarchive
       | bottom | No valid selection      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Unarchive Multiple NON-Archived Routes from Route Logs Page (uid:d295adcf-ffa0-450a-9711-05b4b27de9cf)
+  Scenario: Operator Unarchive Multiple NON-Archived Routes from Route Logs Page
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

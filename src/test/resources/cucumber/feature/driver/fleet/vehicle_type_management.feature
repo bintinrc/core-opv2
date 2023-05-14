@@ -9,15 +9,15 @@ Feature: Vehicle Type Management
   Scenario: Create New Vehicle Type (uid:f1d38bb4-2784-4a9d-a80c-2f21b498115a)
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
-    And API Operator gets data of created Vehicle Type
+    And Operator gets new vehicle type on Vehicle type management page
     Then Operator verify vehicle type
 
   @DeleteVehicleTypes
-  Scenario: Seach Vehicle Type (uid:c91965a9-5955-4841-9949-096611ce65a9)
+  Scenario: Search Vehicle Type (uid:c91965a9-5955-4841-9949-096611ce65a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
-    And API Operator gets data of created Vehicle Type
+    And Operator gets new vehicle type on Vehicle type management page
     Then Operator verify vehicle type
 
   @DeleteVehicleTypes
@@ -25,7 +25,7 @@ Feature: Vehicle Type Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
-    And API Operator gets data of created Vehicle Type
+    And Operator gets new vehicle type on Vehicle type management page
     When Operator edit the vehicle type name
     Then Operator verify the edited vehicle type name is existed
 
@@ -34,7 +34,7 @@ Feature: Vehicle Type Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
-    And API Operator gets data of created Vehicle Type
+    And Operator gets new vehicle type on Vehicle type management page
     When Operator delete the vehicle type name
     Then Operator verify vehicle type name is deleted
 
@@ -43,7 +43,7 @@ Feature: Vehicle Type Management
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
-    And API Operator gets data of created Vehicle Type
+    And Operator gets new vehicle type on Vehicle type management page
     When Operator click on download CSV file button
     Then Operator verify the CSV file
 
