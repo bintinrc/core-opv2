@@ -4,7 +4,6 @@ Feature: Check Pricing Script
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @FailedResultDoesn'tMatch
   Scenario: Check Script Successfully - ID (uid:4ae78f1e-a1e1-4bc6-acff-33c458f5b37e)
     Given Operator go to menu Shipper -> Pricing Scripts V2
     And Operator search custom script id "{pricing-script-id}"
