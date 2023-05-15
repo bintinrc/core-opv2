@@ -611,9 +611,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     pause400ms(); // wait for the focus change
 
     // Select end day (same as start day)
-    do {
+    if(!isElementVisible(startDayPickerXpath)){
       nextMonthButton.click();
-    } while (!isElementVisible(startDayPickerXpath));
+    }
     click(startDayPickerXpath);
 
     // Select end hour
