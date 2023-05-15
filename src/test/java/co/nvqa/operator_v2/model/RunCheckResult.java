@@ -10,6 +10,8 @@ public class RunCheckResult {
   private Double codFee;
   private Double insuranceFee;
   private Double handlingFee;
+
+  private Double rtsFee;
   private Double gst;
   private String comments;
 
@@ -54,6 +56,14 @@ public class RunCheckResult {
 
   public void setHandlingFee(Double handlingFee) {
     this.handlingFee = handlingFee;
+  }
+
+  public Double getRTSFee() {
+    return rtsFee;
+  }
+
+  public void setRTSFee(Double rtsFee) {
+    this.rtsFee = rtsFee;
   }
 
   public Double getGst() {
