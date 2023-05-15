@@ -45,6 +45,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_VERIFY_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_ROUTE_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_TAGS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -356,6 +357,18 @@ public class RouteLogsSteps extends AbstractSteps {
       }
       routeLogsPage.editDetailsDialog.saveChanges.click();
     });
+  }
+
+  @When("Operator verify Edit Details button is disabled on Route Logs page")
+  public void clickCheckAssignmentIsDisabled() {
+    routeLogsPage.inFrame(() -> {
+          Long routeId = get(KEY_CREATED_ROUTE_ID);
+          routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+          assertThat(routeLogsPage.routesTable.isButtonEnabled(1, ACTION_EDIT_DETAILS))
+              .withFailMessage("Edit Details button is enabled")
+              .isFalse();
+        }
+    );
   }
 
   @When("Operator verifies address of {string} route on Route Logs page")

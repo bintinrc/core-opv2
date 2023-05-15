@@ -102,6 +102,13 @@ Feature: Route Manifest
       | transactionMode   | PICKUP                      |
       | expectedCodAmount | {KEY_CASH_ON_PICKUP_AMOUNT} |
       | driverId          | {ninja-driver-id}           |
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status | SUCCESS |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | SUCCESS |
     And Operator verify Pickup details on Edit order page using data below:
       | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
 
@@ -271,8 +278,8 @@ Feature: Route Manifest
     And Operator verify order event on Edit order page using data below:
       | name | FORCED SUCCESS |
     And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                                      |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Vehicle for Delivery\nNew Granular Status: Returned to Sender\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
+      | tags          | name          | description                                                                                                                                                                     |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: Returned to Sender\n\nOld Order Status: Transit\nNew Order Status: Completed\n\nReason: ADMIN_UPDATE_WAYPOINT |
     And Operator verify order event on Edit order page using data below:
       | name | PRICING CHANGE |
     And DB Operator verify core_qa_sg/cod_collections record is NOT created:
