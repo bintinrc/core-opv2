@@ -66,30 +66,31 @@ Feature: Driver Announcement
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
-      | file    | csv/driver_announcement_payroll_report.csv |
-      | subject | Automation test                            |
-      | body    | This is an automation test                 |
+      | file    | csv/driver_announcement_payroll_report_valid.csv |
+      | subject | Automation test                                  |
+      | body    | This is an automation test                       |
     Then Operator verify Driver Announcement successfully sent
 
   Scenario: Operator Send New Payroll Report with HTML
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
-      | file    | csv/driver_announcement_payroll_report.csv |
-      | subject | Automation test                            |
-      | html    | <h1>This is an automation test</h1>        |
+      | file    | csv/driver_announcement_payroll_report_valid.csv |
+      | subject | Automation test                                  |
+      | html    | <h1>This is an automation test</h1>              |
     Then Operator verify Driver Announcement successfully sent
 
   Scenario: Operator Send New Important Payroll Report
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
     And Operator send payroll report on Driver Announcement page
-      | file        | csv/driver_announcement_payroll_report.csv |
-      | subject     | Automation test                            |
-      | isImportant | true                                       |
-      | body        | This is an automation test                 |
+      | file        | csv/driver_announcement_payroll_report_valid.csv |
+      | subject     | Automation test                                  |
+      | isImportant | true                                             |
+      | body        | This is an automation test                       |
     Then Operator verify Driver Announcement successfully sent
 
+  @RunThis
   Scenario: Operator Unable Send New Payroll Report with Invalid CSV
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
