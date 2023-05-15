@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part2
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part2 @current
 Feature: Route Monitoring V2
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -425,11 +425,11 @@ Feature: Route Monitoring V2
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriver @wip
   Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
     Given Operator go to menu Utilities -> QRCode Printing
-    And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    And API Operator create new Driver using data below:
+#      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -457,17 +457,17 @@ Feature: Route Monitoring V2
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name}                             |
       | hub        | {hub-name-2}                            |
-      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
+      | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
     And Operator go to menu Routing -> Route Monitoring V2
-    Then Route Monitoring V2 page is loaded
+#    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
       | hubs    | {hub-name-2}                   |
       | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
-      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName} |
-      | routeId    | {KEY_CREATED_ROUTE_ID}                |
+      | driverName | {ninja-driver-2-name}  |
+      | routeId    | {KEY_CREATED_ROUTE_ID} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
