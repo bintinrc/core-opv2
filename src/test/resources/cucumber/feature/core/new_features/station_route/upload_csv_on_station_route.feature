@@ -48,10 +48,10 @@ Feature: Upload CSV on Station Route
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
     And Operator verify parcel is displayed on Station Route page:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                              |
-      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG |
-      | parcelSize | Small                                                                                                   |
-      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                        |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                     |
+      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
+      | parcelSize | Small                                                                                                          |
+      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                               |
 
   @DeleteDriver
   Scenario: Operator Allow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Valid Hub
@@ -80,15 +80,15 @@ Feature: Upload CSV on Station Route
     Then Operator verify statistics on Station Route page
     And Operator verify banner is displayed on Station Route page
     And Operator verify parcel is displayed on Station Route page:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                              |
-      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG |
-      | parcelSize | Small                                                                                                   |
-      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                        |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                     |
+      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
+      | parcelSize | Small                                                                                                          |
+      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[1].id} - {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}                               |
     And Operator verify parcel is displayed on Station Route page:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                              |
-      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} SG |
-      | parcelSize | Small                                                                                                   |
-      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[2].id} - {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}                        |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                     |
+      | address    | 998 Toa Payoh North {gradle-current-date-yyyyMMddHHmmsss} home {gradle-current-date-yyyyMMddHHmmsss} 159363 SG |
+      | parcelSize | Small                                                                                                          |
+      | driverId   | {KEY_LIST_OF_CREATED_DRIVERS[2].id} - {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}                               |
 
   @DeleteDriver
   Scenario: Operator Disallow Assign Order to Suggested Driver by Upload CSV on Station Route - Valid TIDs, Valid Driver with Invalid Hub
