@@ -20,6 +20,7 @@ Feature: Cancel Order
     And Operator verify order granular status is "On Hold" on Edit Order V2 page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit Order V2 page
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500               |
       | message    | Order is On Hold! |
 
@@ -45,31 +46,33 @@ Feature: Cancel Order
     And Operator verify order summary on Edit Order V2 page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Core - verify Pickup transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id     | {KEY_WAYPOINT_ID} |
-      | status | Pending           |
+      | id     | {KEY_CORE_TRANSACTION.waypointId} |
+      | status | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And API Core - verify Delivery transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id     | {KEY_WAYPOINT_ID} |
-      | status | Pending           |
+      | id     | {KEY_CORE_TRANSACTION.waypointId} |
+      | status | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -94,7 +97,7 @@ Feature: Cancel Order
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -121,24 +124,26 @@ Feature: Cancel Order
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - verify Pickup transaction of the order:
-      | status  | FAIL                               |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS         |
+      | status        | FAIL                               |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status  | FAIL                               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Core - verify Delivery transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id     | {KEY_WAYPOINT_ID} |
-      | status | Pending           |
+      | id     | {KEY_CORE_TRANSACTION.waypointId} |
+      | status | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
-      | status     | Pending           |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
+      | status     | Pending                           |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -177,37 +182,39 @@ Feature: Cancel Order
     And Operator verify order summary on Edit Order V2 page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Core - verify Pickup transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id      | {KEY_WAYPOINT_ID} |
-      | routeId | null              |
-      | status  | Pending           |
+      | id      | {KEY_CORE_TRANSACTION.waypointId} |
+      | routeId | null                              |
+      | status  | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
     And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_WAYPOINT_ID} |
+      | {KEY_CORE_TRANSACTION.waypointId} |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status  | CANCELLED |
       | routeId |           |
     And API Core - verify Delivery transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id      | {KEY_WAYPOINT_ID} |
-      | routeId | null              |
-      | seqNo   | null              |
-      | status  | Pending           |
+      | id      | {KEY_CORE_TRANSACTION.waypointId} |
+      | routeId | null                              |
+      | seqNo   | null                              |
+      | status  | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -219,7 +226,7 @@ Feature: Cancel Order
       | name    | PULL OUT OF ROUTE    |
       | routeId | KEY_CREATED_ROUTE_ID |
     And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_WAYPOINT_ID} |
+      | {KEY_CORE_TRANSACTION.waypointId} |
 
   Scenario: Cancel Order - Staging
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -243,22 +250,24 @@ Feature: Cancel Order
     And Operator verify order summary on Edit Order V2 page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Core - verify Pickup transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And API Core - verify Delivery transaction of the order:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | ordersListKey | KEY_LIST_OF_CREATED_ORDERS                                                         |
+      | status        | CANCELLED                                                                          |
+      | comments      | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And DB Core - verify waypoints record:
-      | id     | {KEY_WAYPOINT_ID} |
-      | status | Pending           |
+      | id     | {KEY_CORE_TRANSACTION.waypointId} |
+      | status | Pending                           |
     And DB Core - verify number of records in order_jaro_scores_v2:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | number     | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | number     | 1                                 |
     And DB Core - verify order_jaro_scores_v2 record:
-      | waypointId | {KEY_WAYPOINT_ID} |
-      | archived   | 1                 |
+      | waypointId | {KEY_CORE_TRANSACTION.waypointId} |
+      | archived   | 1                                 |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -278,8 +287,9 @@ Feature: Cancel Order
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | En-route to Sorting Hub            |
     When API Core - cancel order and check error:
-      | statusCode | 500                               |
-      | message    | Order is En-route to Sorting Hub! |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | statusCode | 500                                |
+      | message    | Order is En-route to Sorting Hub!  |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order status is "Transit" on Edit Order V2 page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
@@ -296,6 +306,7 @@ Feature: Cancel Order
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | globalInboundRequest | {"hubId":{hub-id}}                    |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                              |
       | message    | Order is Arrived at Sorting Hub! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -314,6 +325,7 @@ Feature: Cancel Order
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | On Vehicle for Delivery            |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                               |
       | message    | Order is On Vehicle for Delivery! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -332,6 +344,7 @@ Feature: Cancel Order
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Returned to Sender                 |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                          |
       | message    | Order is Returned to Sender! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -350,6 +363,7 @@ Feature: Cancel Order
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Arrived at Distribution Point      |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                                     |
       | message    | Order is Arrived at Distribution Point! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -368,6 +382,7 @@ Feature: Cancel Order
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | granularStatus | Completed                          |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                 |
       | message    | Order is Completed! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -400,6 +415,7 @@ Feature: Cancel Order
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
     When API Core - cancel order and check error:
+      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                          |
       | message    | Order is Transferred to 3PL! |
     And Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -505,7 +521,7 @@ Feature: Cancel Order
       | status | CANCELLED |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order as "KEY_TRANSACTION_AFTER"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_AFTER"
     And DB Core - verify waypoints record:
       | id       | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
@@ -519,7 +535,7 @@ Feature: Cancel Order
       | UPDATE STATUS     |
       | PULL OUT OF ROUTE |
       | CANCEL            |
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION_AFTER"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_AFTER"
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION_AFTER.waypointId} |
       | status  | Routed                             |

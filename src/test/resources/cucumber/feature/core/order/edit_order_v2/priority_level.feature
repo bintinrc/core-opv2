@@ -20,11 +20,11 @@ Feature: Priority Level
     Then Operator verifies that success react notification displayed:
       | top | Current order updated successfully |
     Then Operator verify Delivery Priority Level is "2" on Edit Order V2 page
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 2                    |
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 0                    |
@@ -73,11 +73,11 @@ Feature: Priority Level
       | top | Current order updated successfully |
     And Operator verify Current priority is "2" on Edit Order V2 page
     Then Operator verify Delivery Priority Level is "2" on Edit Order V2 page
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 2                    |
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 0                    |
@@ -120,11 +120,11 @@ Feature: Priority Level
       | top | Current order updated successfully |
     And Operator verify Current priority is "10" on Edit Order V2 page
     Then Operator verify Delivery Priority Level is "10" on Edit Order V2 page
-    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 10                   |
-    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order as "KEY_TRANSACTION"
+    And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id            | {KEY_TRANSACTION.id} |
       | priorityLevel | 0                    |

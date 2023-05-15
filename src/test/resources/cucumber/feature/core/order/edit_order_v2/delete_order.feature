@@ -98,7 +98,7 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Core - verify orders records are hard-deleted in waypoints table:
+    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -132,7 +132,7 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Core - verify orders records are hard-deleted in waypoints table:
+    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -162,7 +162,7 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Core - verify orders records are hard-deleted in waypoints table:
+    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -199,7 +199,7 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Core - verify orders records are hard-deleted in waypoints table:
+    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -232,7 +232,7 @@ Feature: Delete Order
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-    And DB Core - verify orders records are hard-deleted in waypoints table:
+    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     And DB Operator verifies orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
