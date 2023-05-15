@@ -32,7 +32,7 @@ Feature: Driver Announcement
   Scenario: Operator Send New Normal Announcement
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
-    And Operator create normal Announcement on Driver Announcement page
+    And Operator create Announcement on Driver Announcement page
       | recipientType | All                        |
       | recipient     | QA automation announcement |
       | subject       | Automation test            |
@@ -43,7 +43,7 @@ Feature: Driver Announcement
   Scenario: Operator Send New Important Normal Announcement
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
-    And Operator create normal Announcement on Driver Announcement page
+    And Operator create Announcement on Driver Announcement page
       | recipientType | All                        |
       | recipient     | QA automation announcement |
       | subject       | Automation test            |
@@ -54,7 +54,7 @@ Feature: Driver Announcement
   Scenario: Operator Send New HTML Announcement
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
-    And Operator create normal Announcement on Driver Announcement page
+    And Operator create Announcement on Driver Announcement page
       | recipientType | All                                 |
       | recipient     | QA automation announcement          |
       | subject       | Automation test                     |
@@ -62,4 +62,37 @@ Feature: Driver Announcement
       | html          | <h1>This is an automation test</h1> |
     Then Operator verify Driver Announcement successfully sent
 
+  Scenario: Operator Send New Payroll Report
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file    | csv/driver_announcement_payroll_report.csv |
+      | subject | Automation test                            |
+      | body    | This is an automation test                 |
+    Then Operator verify Driver Announcement successfully sent
 
+  Scenario: Operator Send New Payroll Report with HTML
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file    | csv/driver_announcement_payroll_report.csv |
+      | subject | Automation test                            |
+      | html    | <h1>This is an automation test</h1>        |
+    Then Operator verify Driver Announcement successfully sent
+
+  Scenario: Operator Send New Important Payroll Report
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file        | csv/driver_announcement_payroll_report.csv |
+      | subject     | Automation test                            |
+      | isImportant | true                                       |
+      | body        | This is an automation test                 |
+    Then Operator verify Driver Announcement successfully sent
+
+  Scenario: Operator Unable Send New Payroll Report with Invalid CSV
+    Given Operator loads Operator portal home page
+    And Operator go to menu Fleet -> Driver Announcement
+    And Operator send payroll report on Driver Announcement page
+      | file | csv/driver_announcement_payroll_report_invalid.csv |
+    Then Operator verify failed to upload payroll report
