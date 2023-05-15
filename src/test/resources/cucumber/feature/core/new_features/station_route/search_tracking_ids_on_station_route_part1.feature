@@ -410,12 +410,12 @@ Feature: Search Tracking IDs on Station Route
       | area           | {KEY_CREATED_ORDER.toAddress1}                        |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | {KEY_CREATED_ORDER.toAddress2}                        |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].displayName}          |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | {KEY_CREATED_ORDER.toAddress1}               |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       | {KEY_CREATED_ORDER.toAddress2}               |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
@@ -475,12 +475,12 @@ Feature: Search Tracking IDs on Station Route
       | area           | {KEY_CREATED_ORDER.toAddress1}                        |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | {KEY_CREATED_ORDER.toAddress2}                        |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].displayName}          |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | {KEY_CREATED_ORDER.toAddress1}               |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       | {KEY_CREATED_ORDER.toAddress2}               |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:

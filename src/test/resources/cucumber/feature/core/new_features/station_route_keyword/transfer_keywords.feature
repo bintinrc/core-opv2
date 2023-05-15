@@ -234,7 +234,7 @@ Feature: Transfer Keywords
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verify coverages on Transfer keywords dialog:
       | area                                       | keywords                                      | primaryDriver                                | fallbackDriver                               |
-      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
     When Operator select coverage on Transfer keywords dialog:
       | AREA {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
