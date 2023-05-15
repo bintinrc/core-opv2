@@ -13,9 +13,13 @@ public class RunCheckParams {
   private String timeslotType;
   private String isRts;
   private String size;
-  private Double weight;
-  private Double insuredValue;
-  private Double codValue;
+  private String firstMileType;
+  private String length;
+  private String width;
+  private String height;
+  private String weight;
+  private String insuredValue;
+  private String codValue;
   private String fromZone;
   private String toZone;
   private String fromL1;
@@ -91,27 +95,59 @@ public class RunCheckParams {
     this.size = size;
   }
 
-  public Double getWeight() {
+  public String getFirstMileType() {
+    return firstMileType;
+  }
+
+  public void setFirstMileType(String firstMileType) {
+    this.firstMileType = firstMileType;
+  }
+
+  public String getHeight() {
+    return height;
+  }
+
+  public void setHeight(String height) {
+    this.height = height;
+  }
+
+  public String getWidth() {
+    return width;
+  }
+
+  public void setWidth(String width) {
+    this.width = width;
+  }
+
+  public String getLength() {
+    return length;
+  }
+
+  public void setLength(String length) {
+    this.length = length;
+  }
+
+  public String getWeight() {
     return weight;
   }
 
-  public void setWeight(Double weight) {
+  public void setWeight(String weight) {
     this.weight = weight;
   }
 
-  public Double getInsuredValue() {
+  public String getInsuredValue() {
     return insuredValue;
   }
 
-  public void setInsuredValue(Double insuredValue) {
+  public void setInsuredValue(String insuredValue) {
     this.insuredValue = insuredValue;
   }
 
-  public Double getCodValue() {
+  public String getCodValue() {
     return codValue;
   }
 
-  public void setCodValue(Double codValue) {
+  public void setCodValue(String codValue) {
     this.codValue = codValue;
   }
 

@@ -12,9 +12,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -29,6 +29,7 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
@@ -42,9 +43,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -59,6 +60,7 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0     |
       | codFee       | 0     |
       | handlingFee  | 0     |
+      | rtsFee       | 0     |
       | comments     | OK    |
     And Operator close page
     And Operator validate and release Draft Script
@@ -72,9 +74,9 @@ Feature: Service Type and Service Level params
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | New      |
-      | serviceLevel | STANDARD |
+      | serviceLevel | Standard |
       | serviceType  | Parcel   |
-      | timeslotType | NONE     |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -89,6 +91,7 @@ Feature: Service Type and Service Level params
       | insuranceFee | 0    |
       | codFee       | 0    |
       | handlingFee  | 0    |
+      | rtsFee       | 0    |
       | comments     | OK   |
     And Operator close page
     And Operator validate and release Draft Script
