@@ -13,9 +13,9 @@ Feature: Import Script ByParam Function
     Then Operator verify the new Script is created successfully on Drafts
     When Operator do Run Check on specific Draft Script using this data below:
       | orderFields  | Legacy   |
-      | deliveryType | STANDARD |
-      | orderType    | NORMAL   |
-      | timeslotType | NONE     |
+      | deliveryType | Standard |
+      | orderType    | Normal   |
+      | timeslotType | None     |
       | isRts        | No       |
       | size         | S        |
       | weight       | 1.0      |
@@ -28,6 +28,7 @@ Feature: Import Script ByParam Function
       | insuranceFee | 0      |
       | codFee       | 0      |
       | handlingFee  | 0      |
+      | rtsFee       | 0      |
       | comments     | OK     |
     And Operator close page
     And Operator validate and release Draft Script
