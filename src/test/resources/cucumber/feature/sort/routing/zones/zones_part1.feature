@@ -59,25 +59,23 @@ Feature: Zones
     And Operator refresh page
     Then Operator verify the new Zone is deleted successfully
 
-  @DeleteCreatedZone
   Scenario: Set Coordinates Polygon of RTS Zone
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator go to menu "Routing" -> "Last Mile and RTS Zones"
-    When Operator creates "RTS" zone using "{hub-name}" hub
-    And Operator click View Selected Polygons for zone short name "{KEY_CREATED_ZONE.shortName}"
+    When Operator refresh page
+    And Operator click View Selected Polygons for zone id "{zone-id-5}"
     And Operator click RTS Zones in zone drawing page
-    And Operator click Create Polygon in zone drawing page
     And Operator click Set Coordinates in zone drawing page
       | latitude  | {zone-latitude-3}  |
       | longitude | {zone-longitude-3} |
-    And Operator find "{KEY_CREATED_ZONE.name}" zone on Zones page
+    And Operator find "{zone-name-5}" zone on Zones page
     Then Operator verifies zone details on Zones page:
-      | shortName | {KEY_CREATED_ZONE.shortName} |
-      | name      | {KEY_CREATED_ZONE.name}      |
-      | hubName   | {KEY_CREATED_ZONE.hubName}   |
-      | latitude  | {zone-latitude-3}            |
-      | longitude | {zone-longitude-3}           |
-      | type      | RTS                          |
+      | shortName | {zone-short-name-5} |
+      | name      | {zone-name-5}       |
+      | hubName   | {sbm-hub}           |
+      | latitude  | {zone-latitude-3}   |
+      | longitude | {zone-longitude-3}  |
+      | type      | RTS                 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
