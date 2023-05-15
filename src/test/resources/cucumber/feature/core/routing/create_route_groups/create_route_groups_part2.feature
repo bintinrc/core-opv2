@@ -6,7 +6,7 @@ Feature: Create Route Groups
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping on Create Route Groups (uid:3abb3461-9ffa-486d-b5e5-4949c87644fc)
+  Scenario: Operator Filter Route Grouping on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -39,7 +39,7 @@ Feature: Create Route Groups
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Arrived at Sorting Hub |
       | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup         |
 
-  Scenario: Download CSV of Route Group Information on Create Route Groups (uid:4a37fbbe-4069-4327-b4fe-46af568e7026)
+  Scenario: Download CSV of Route Group Information on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -73,7 +73,7 @@ Feature: Create Route Groups
     Then Operator verify Transactions/Reservations CSV file on Create Route Groups page
 
   @DeleteRouteGroups
-  Scenario: Operator Filter Route Grouping on Create Route Groups (uid:3abb3461-9ffa-486d-b5e5-4949c87644fc)
+  Scenario: Operator Filter Route Grouping on Create Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -94,6 +94,33 @@ Feature: Create Route Groups
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies results table is empty on Create Route Groups
+
+  @DeleteFilterTemplate
+  Scenario: Operator Filter Master Shipper by Apply Filter Preset on Create Route Groups Page
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Shipper set Shipper V4 using data below:
+      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
+      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator creates new Route Groups Filter Template using data below:
+      | name                   | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
+      | value.masterShipperIds | {shipper-v4-marketplace-sort-legacy-id}      |
+      | value.showTransaction  | true                                         |
+      | value.showReservation  | true                                         |
+    When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
+    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Transaction records on Create Route Groups page using data below:
+      | trackingId                                | type                 | shipper                                 | address                                                    | status         |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
+      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
+
 
   @DeleteRouteGroups
   Scenario: Operator Filter Route Grouping on Create Route Groups - Include Only Transactions
@@ -171,32 +198,6 @@ Feature: Create Route Groups
       | trackingId                                | type                 |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction |
       | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   |
-
-  @DeleteFilterTemplate
-  Scenario: Operator Filter Master Shipper by Apply Filter Preset on Create Route Groups Page
-    Given Operator go to menu Utilities -> QRCode Printing
-    And API Shipper set Shipper V4 using data below:
-      | shipperV4ClientId     | {shipper-v4-marketplace-sort-client-id}     |
-      | shipperV4ClientSecret | {shipper-v4-marketplace-sort-client-secret} |
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest    | { "service_type":"Marketplace Sort","requested_tracking_number":"RBS{{6-random-digits}}","sort":{"to_3pl":"ROADBULL"},"marketplace":{"seller_id": "seller-ABC01","seller_company_name":"ABC Shop"},"service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator creates new Route Groups Filter Template using data below:
-      | name                   | PRESET {gradle-current-date-yyyyMMddHHmmsss} |
-      | value.masterShipperIds | {shipper-v4-marketplace-sort-legacy-id}      |
-      | value.showTransaction  | true                                         |
-      | value.showReservation  | true                                         |
-    When Operator go to menu Routing -> 1. Create Route Groups
-    Then Create Route Groups page is loaded
-    And Operator selects "{KEY_CREATE_ROUTE_GROUPS_FILTERS_PRESET_NAME}" Filter Preset on Create Route Groups page
-    And Operator click Load Selection on Create Route Groups page
-    Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                                | type                 | shipper                                 | address                                                    | status         |
-      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortFromAddressString} | Pending Pickup |
-      | {KEY_LIST_OF_CREATED_ORDER[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[1].fromName} | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString}   | Pending Pickup |
-      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | PICKUP Transaction   | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} | Pending Pickup |
-      | {KEY_LIST_OF_CREATED_ORDER[2].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDER[2].fromName} | {KEY_LIST_OF_CREATED_ORDER[2].buildShortToAddressString}   | Pending Pickup |
 
   @DeleteRouteGroups
   Scenario: Operator Filter Route Grouping - Include Only Shipment

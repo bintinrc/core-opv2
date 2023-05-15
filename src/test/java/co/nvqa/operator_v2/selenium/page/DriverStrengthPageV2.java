@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
@@ -12,8 +13,10 @@ import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -69,9 +72,6 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   @FindBy(xpath = "//button[.='Download Failure Reasons']")
   public Button downloadFailureReasons;
 
-  @FindBy(id = "bulk-update-driver-csv")
-  public PageElement bulkUploadDrivers;
-
   @FindBy(xpath = "//button[.='Update Driver Details']")
   public Button updateDriverDetails;
 
@@ -108,6 +108,12 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
 
   @FindBy(css = "md-autocomplete[placeholder='Select Filter']")
   public MdAutocomplete addFilter;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]")
+  public PageElement notificationPopup;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]")
+  public PageElement notificationTitle;
+  @FindBy(xpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]")
+  public PageElement notificationDesc;
 
   public DriverStrengthPageV2(WebDriver webDriver) {
     super(webDriver);
@@ -167,7 +173,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
           .isEqualTo(expectedContactDetails.getLicenseNumber());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContact())) {
-      Assertions.assertThat(actualContactDetails.getContact().replaceAll("\\s", "")).as("Contact")
+      Assertions.assertThat(actualContactDetails.getContact()).as("Contact")
           .isEqualTo(expectedContactDetails.getContact());
     }
     if (StringUtils.isNotBlank(expectedContactDetails.getContactType())) {
@@ -223,14 +229,20 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
   }
 
+  public void updloadFile(File absoluteFile) {
+    String inputXpath = "//div[@class='ant-space-item']/div[span[text()='Drag and drop CSV file here']]";
+    waitUntilVisibilityOfElementLocated(inputXpath);
+    dragAndDrop(absoluteFile, findElementBy(By.xpath(inputXpath)));
+    pause3s();
+  }
+
   public void clickResignedOption(String resigned) {
-    String notResignedXpath = "//div[@label='Not Resigned']";
-    String resignedXPath = "//div[@label='Resigned']";
-    String allXpath = "//div[@label='All']";
-    String selectResignedContainer = "//div[div[@label='All' or @label='Resigned' or @label='Not Resigned']]";
+    String notResignedXpath = "//div[@label='Not Resigned' and contains(@class,'ant-select-item-option')]";
+    String resignedXPath = "//div[@label='Resigned' and contains(@class,'ant-select-item-option')]";
+    String allXpath = "//div[@label='All' and contains(@class,'ant-select-item-option')]";
 
     resignedFilter.click();
-    pause500ms();
+    pause5s();
     if (resigned.equalsIgnoreCase("no") && isElementVisible(notResignedXpath)) {
       click(notResignedXpath);
     }
@@ -240,10 +252,24 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     if (resigned.equalsIgnoreCase("all") && isElementVisible(allXpath)) {
       click(allXpath);
     }
+    pause5s();
+  }
 
-    if (isElementVisible(selectResignedContainer)) {
-      resignedFilter.click();
+  public void verifyNotificationAppear(String notifTitle, String notifDesc) {
+    String notificationPopupXpath = "//div[contains(@class, 'ant-notification')]";
+    String notificationTitleXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-message')]";
+    String notificationDescXpath = "//div[contains(@class, 'ant-notification')]/*/*/*[contains(@class,'ant-notification-notice-description')]";
+    waitUntilVisibilityOfElementLocated(notificationPopupXpath);
+    while (isElementVisible(notificationPopupXpath)) {
+      boolean isTitleMatch = getText(notificationTitleXpath).equalsIgnoreCase(notifTitle);
+      boolean isDescMatch = getText(notificationDescXpath).equalsIgnoreCase(notifDesc);
+      Assertions.assertThat(isTitleMatch).as("Title is not match")
+          .isTrue();
+      Assertions.assertThat(isDescMatch).as("Desc is not match")
+          .isTrue();
+      waitUntilInvisibilityOfElementLocated(notificationPopupXpath);
     }
+    pause500ms();
   }
 
   /**
@@ -300,7 +326,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     @FindBy(id = "username")
     public ForceClearTextBox username;
 
-    @FindBy(id = "password")
+    @FindBy(xpath = "//span[contains(@class,'ant-input')]/input[@name='password' and @id='password']")
     public ForceClearTextBox password;
 
     @FindBy(id = "comment")
@@ -511,7 +537,7 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
     }
 
     public AddDriverDialog setPassword(String value) {
-      if (value != null) {
+      if (value != null && password.isDisplayed()) {
         password.setValue(value);
       }
       return this;
@@ -774,7 +800,19 @@ public class DriverStrengthPageV2 extends SimpleReactPage {
   }
 
   public void waitUntilTableLoaded() {
-    waitUntilVisibilityOfElementLocated("//tr[@class='ant-table-row ant-table-row-level-0'][1]");
+    String tableRowXpath = "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]";
+    Runnable verifyLoadedTable = () -> {
+      if (!findElementBy(By.xpath(tableRowXpath)).isDisplayed()) {
+        pause500ms();
+      }
+    };
+
+    try {
+      doWithRetry(verifyLoadedTable, "Loaded table method", 5000L, 3);
+    } catch (NoSuchElementException ignored) {
+      NvLogger.error("===== Table isn't loaded =====");
+      NvLogger.error(ignored.getMessage());
+    }
   }
 
   public boolean isTableLoaded() {

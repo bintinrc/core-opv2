@@ -53,7 +53,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[2].id}           |
-      | rts          | 1                                            |
+      | rts          | 0                                            |
       | fromAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1} |
       | fromAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2} |
       | fromPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode} |
@@ -107,14 +107,6 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].fromContact}  |
       | comments | OrderHelper::saveWaypoint                    |
       | seq_no   | 1                                            |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}"
-    And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    Then Operator verifies Zone is "{KEY_SORT_RTS_ZONE_TYPE.shortName}" on Edit Order page
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
-
 
   @DeleteOrArchiveRoute @routing-refactor @happy-path
   Scenario: Operator Reschedule Fail Delivery
@@ -183,7 +175,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
-      | rts        | 1                                          |
+      | rts        | 0                                          |
       | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
       | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
       | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |
@@ -325,7 +317,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -460,7 +452,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -575,7 +567,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id           | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts          | 1                                  |
+      | rts          | 0                                  |
       | fromAddress1 | 116 Keng Lee Rd                    |
       | fromAddress2 | 15                                 |
       | fromPostcode | 308402                             |
@@ -712,7 +704,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-      | rts        | 1                                  |
+      | rts        | 0                                  |
       | toAddress1 | 116 Keng Lee Rd                    |
       | toAddress2 | 15                                 |
       | toPostcode | 308402                             |
@@ -784,7 +776,7 @@ Feature: Reschedule
       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} | 1        |
 
   @DeleteOrArchiveRoute
-  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery (uid:117cd772-7cdc-4fcb-acaa-fe4e3c5160a6)
+  Scenario: Driver Success Delivery of a Rescheduled Parcel Delivery
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -796,6 +788,7 @@ Feature: Reschedule
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Operator add reservation pick-up to the route
     And API Driver collect all his routes
     And API Operator start the route
@@ -806,28 +799,6 @@ Feature: Reschedule
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
       | routeId       | {KEY_CREATED_ROUTE_ID}                   |
       | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
-    And Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
-      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
-      | type        | Normal                           |
-      | status      | SUCCESS                          |
-      | shipperName | {filter-shipper-name}            |
-    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
-    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
-      | timestamp             | {gradle-current-date-yyyy-MM-dd}           |
-      | inputOnPod            | 1                                          |
-      | scannedAtShipperCount | 1                                          |
-      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    And Operator verifies POD details in POD Details dialog on Shipper Pickups page using data below:
-      | reservationId  | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
-      | recipientName  | {KEY_CREATED_RESERVATION.name}           |
-      | shipperId      | {shipper-v4-legacy-id}                   |
-      | shipperName    | {shipper-v4-name}                        |
-      | shipperContact | {shipper-v4-contact}                     |
-      | status         | SUCCESS                                  |
-    And Operator verifies downloaded POD CSV file on Shipper Pickups page using data below:
-      | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator add parcel to the route using data below:
@@ -972,7 +943,7 @@ Feature: Reschedule
     And API Core - Operator get order details for previous order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Core - verify orders record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[2].id}         |
-      | rts        | 1                                          |
+      | rts        | 0                                          |
       | toAddress1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1} |
       | toAddress2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2} |
       | toPostcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode} |

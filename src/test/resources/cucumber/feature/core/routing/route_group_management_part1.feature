@@ -6,7 +6,7 @@ Feature: Route Group Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups @CloseNewWindows
-  Scenario: Operator Creates Route Group (uid:1b4f68cf-074d-420d-9d61-cd690f47d02b)
+  Scenario: Operator Creates Route Group
     Given Operator go to menu Routing -> 2. Route Group Management
     When Operator create new route group on Route Groups Management page:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -23,7 +23,7 @@ Feature: Route Group Management
       | hubName              | {hub-id} - {hub-name}                                                                                        |
 
   @DeleteRouteGroups
-  Scenario: Operator Updates Route Group Details (uid:1eed4c03-b980-47b2-9816-8530890a996e)
+  Scenario: Operator Updates Route Group Details
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -49,7 +49,7 @@ Feature: Route Group Management
       | hubName              | {hub-id-2} - {hub-name-2}                                               |
 
   @DeleteRouteGroups
-  Scenario: Operator Deletes Route Group (uid:b26dcd98-2fb0-418a-8903-ffcdf911c416)
+  Scenario: Operator Deletes Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -63,7 +63,7 @@ Feature: Route Group Management
     Then Operator verify "{KEY_CREATED_ROUTE_GROUP.name}" route group was deleted on Route Group Management page
 
   @DeleteRouteGroups
-  Scenario: Delete Transactions From Route Group (uid:92fed5ab-78c7-4fc8-95d3-5ea1e19f6580)
+  Scenario: Delete Transactions From Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -84,7 +84,7 @@ Feature: Route Group Management
       | bottom | 1 Route Group Updated            |
 
   @DeleteRouteGroups
-  Scenario: Bulk Delete Route Groups (uid:de12c7a6-b147-4303-92c2-5b4f3f9bfa0f)
+  Scenario: Bulk Delete Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG1-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
@@ -104,7 +104,7 @@ Feature: Route Group Management
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
 
   @DeleteRouteGroups
-  Scenario: Delete A Route Group From Edit Route Group Modal (uid:ec48ee39-3763-4341-86a7-c243b8626028)
+  Scenario: Delete A Route Group From Edit Route Group Modal
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |

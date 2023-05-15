@@ -1,4 +1,4 @@
-@OperatorV2 @Route @NewFeatures @StationRouteKeyword @StationRoute
+@OperatorV2 @Core @Route @NewFeatures @StationRouteKeyword @StationRoute @RemoveCoverage
 Feature: Remove Coverage
 
   @LaunchBrowser @ShouldAlwaysRun

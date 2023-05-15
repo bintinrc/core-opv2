@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound
+@OperatorV2 @Core @Inbounding @RouteInbound @EndRouteInboundSession
 Feature: End Route Inbound Session
 
   @LaunchBrowser @ShouldAlwaysRun

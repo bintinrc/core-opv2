@@ -5,7 +5,7 @@ Feature: Create Route Groups - Transaction Filters
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Fail - Transaction Filters (uid:30d2add1-35fd-4152-91cd-89696fa31a75)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Fail - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -42,7 +42,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[2].buildShortFromAddressString} |
       | status     | Pickup fail                                                |
 
-  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Success - Transaction Filters (uid:a9b5e800-f2fc-4f6d-9d05-45bc7931ca76)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Success - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -71,7 +71,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Completed                                                |
 
-  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Staging - Transaction Filters (uid:9a76e1ec-aec6-4c2f-a2a7-b76a6ba0f474)
+  Scenario: Operator Filter Transaction Status on Create Route Groups - Transaction Status = Staging - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                           |
@@ -152,7 +152,7 @@ Feature: Create Route Groups - Transaction Filters
       | address    | {KEY_LIST_OF_CREATED_ORDER[1].buildShortToAddressString} |
       | status     | Pending Pickup                                           |
 
-  Scenario: Operator Filter Order DNR Group on Create Route Groups - Transaction Filters (uid:037cbbf0-9f33-4044-866e-78367d2805c7)
+  Scenario: Operator Filter Order DNR Group on Create Route Groups - Transaction Filters
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

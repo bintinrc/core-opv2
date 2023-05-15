@@ -150,7 +150,7 @@ Feature: Shipper Pickups - Preset Filters Shipper Pickup
     Then Operator verifies that warning toast displayed:
       | top    | 1 filter preset deleted                     |
       | bottom | ID: {KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID} |
-    And DB Operator verifies "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID}" filter preset is deleted
+    And DB Lighthouse - verify preset_filters id "{KEY_SHIPPER_PICKUPS_FILTERS_PRESET_ID}" record is deleted:
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

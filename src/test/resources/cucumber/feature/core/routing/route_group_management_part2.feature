@@ -6,7 +6,7 @@ Feature: Route Group Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteRouteGroups
-  Scenario: Clear Transaction of Route Groups (uid:e88279e4-1a62-4306-ae40-8ddfca8584c5)
+  Scenario: Clear Transaction of Route Groups
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -32,7 +32,7 @@ Feature: Route Group Management
     And Operator verifies "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was cleared on Route Group Management page
 
   @DeleteRouteGroups
-  Scenario: Filter Route Groups Based on Creation Date (uid:bd08ae06-107e-4b82-8863-56a0d77105d6)
+  Scenario: Filter Route Groups Based on Creation Date
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Route Group:
       | name        | ARG-{gradle-current-date-yyyyMMddHHmmsss}                                                                    |
@@ -44,7 +44,7 @@ Feature: Route Group Management
     Then Operator verifies route groups table is filtered by "^{gradle-current-date-yyyy-MM-dd}.*" date on Route Group Management page
 
   @DeleteRouteGroups
-  Scenario: Download CSV File of Transactions of a Route Group (uid:5ba4b6f7-7af1-4bf0-8e70-d7b472870676)
+  Scenario: Download CSV File of Transactions of a Route Group
     Given Operator go to menu Utilities -> QRCode Printing
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

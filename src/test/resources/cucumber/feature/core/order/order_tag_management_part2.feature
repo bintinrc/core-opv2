@@ -73,7 +73,6 @@ Feature: Order Tag Management
       | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
     Then Operator searches and selects orders created on Order Tag Management page
 
-  @DeleteOrArchiveRoute
   Scenario: Add Order Tag To Route
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -102,11 +101,11 @@ Feature: Order Tag Management
       | description | ^Tags updated from none To ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}) |
     And Operator verify order event on Edit order page using data below:
       | name | ADD TO ROUTE |
-    And DB Operator verifies tags of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
+    And DB Core - Operator verifies tags of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
       | {order-tag-id}   |
       | {order-tag-id-2} |
       | {order-tag-id-3} |
-    And DB Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
+    And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
       | orderTagIds | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
       | routeId     | {KEY_CREATED_ROUTE_ID}                           |
       | driverId    | {KEY_NINJA_DRIVER_ID}                            |
@@ -120,11 +119,11 @@ Feature: Order Tag Management
       | description | ^Tags updated from none To ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}), ({order-tag-name}\|{order-tag-name-2}\|{order-tag-name-3}) |
     And Operator verify order event on Edit order page using data below:
       | name | ADD TO ROUTE |
-    And DB Operator verifies tags of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
+    And DB Core - Operator verifies tags of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
       | {order-tag-id}   |
       | {order-tag-id-2} |
       | {order-tag-id-3} |
-    And DB Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
+    And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[2]}" order:
       | orderTagIds | {order-tag-id},{order-tag-id-2},{order-tag-id-3} |
       | routeId     | {KEY_CREATED_ROUTE_ID}                           |
       | driverId    | {KEY_NINJA_DRIVER_ID}                            |

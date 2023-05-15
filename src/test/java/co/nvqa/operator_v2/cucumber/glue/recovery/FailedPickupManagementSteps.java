@@ -131,4 +131,42 @@ public class FailedPickupManagementSteps extends AbstractSteps {
     });
   }
 
+  @When("Recovery User - reschedule failed pickup order on next day")
+  public void doRescheduleFailedDeliveryOrderOnNextDay() {
+    failedPickupManagementPage.inFrame((page) -> {
+      page.fpmTable.clickActionButton(1, FailedPickupManagementPage.FailedPickupTable.ACTION_RESCHEDULE);
+    });
+  }
+
+  @Then("Recovery User - Reschedule Selected failed pickup order on Failed Pickup orders list")
+  public void doRescheduleSelectedFailedPickupOrder() {
+    failedPickupManagementPage.inFrame(() -> {
+      failedPickupManagementPage.applyAction.click();
+      failedPickupManagementPage.rescheduleSelected.click();
+    });
+  }
+
+  @When("Recovery User - set reschedule date to {string} on Failed Pickup Management Page")
+  public void doSetRescheduleDate(String date) {
+    failedPickupManagementPage.inFrame((page) -> {
+      page.rescheduleDialog.setRescheduleDate(resolveValue(date));
+      page.rescheduleDialog.rescheduleButton.click();
+    });
+  }
+
+  @Then("Recovery User - verify CSV file downloaded after reschedule failed pickup")
+  public void verifyCsvFileDownloadedAfterReschedule() {
+    failedPickupManagementPage.inFrame(page -> {
+      final String fileName = page.getLatestDownloadedFilename(
+              failedPickupManagementPage.RESCHEDULE_CSV_FILENAME_PATTERN);
+      page.verifyFileDownloadedSuccessfully(fileName);
+    });
+  }
+
+  @When("Recovery User - Clear the TID filter on Failed Pickup Management page")
+  public void doClearTIDFilter() {
+    failedPickupManagementPage.inFrame(page -> {
+      page.fpmTable.clearTIDFilter();
+    });
+  }
 }
