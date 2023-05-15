@@ -508,7 +508,9 @@ public class ZonesSteps extends AbstractSteps {
   public void operatorClickSetCoordinatesInZoneDrawingPage(Map<String, String> data) {
     String latitude = data.get("latitude");
     String longitude = data.get("longitude");
-    zonesSelectedPolygonsPage.switchTo();
+    if (zonesPage.isElementExist("//iframe")){
+      zonesSelectedPolygonsPage.switchTo();
+    }
     zonesSelectedPolygonsPage.setCoordinate.click();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.clear();
     zonesSelectedPolygonsPage.setZoneCoordinateDialog.latitude.setValue(latitude);
