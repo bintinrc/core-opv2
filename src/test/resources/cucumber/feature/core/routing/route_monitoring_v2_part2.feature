@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part2 @current
+@OperatorV2 @Core @Routing @RoutingJob3 @RouteMonitoringV2 @RouteMonitoringV2Part2
 Feature: Route Monitoring V2
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -425,23 +425,21 @@ Feature: Route Monitoring V2
     When Operator open Invalid Failed WP modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
     And Operator check there are 1 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
-  @DeleteOrArchiveRoute @DeleteDriver @wip
+  @DeleteOrArchiveRoute @DeleteDriver
   Scenario: Show Updated Driver Name & Hub in Route Monitoring V2
     Given Operator go to menu Utilities -> QRCode Printing
-#    And API Operator create new Driver using data below:
-#      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": false, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-3-day-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id-2}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Routing -> Route Monitoring V2
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name}                     |
+      | hubs    | {hub-name-2}                   |
       | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
@@ -449,20 +447,19 @@ Feature: Route Monitoring V2
       | routeId    | {KEY_CREATED_ROUTE_ID} |
     When Operator go to menu Routing -> Route Logs
     And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+      | routeDateFrom | YESTERDAY    |
+      | routeDateTo   | TODAY        |
+      | hubName       | {hub-name-2} |
     And Operator edits details of created route using data below:
       | date       | {gradle-current-date-yyyy-MM-dd}        |
       | tags       | {route-tag-name}                        |
       | zone       | {zone-name}                             |
-      | hub        | {hub-name-2}                            |
+      | hub        | {hub-name}                              |
       | driverName | {ninja-driver-2-name}                   |
       | comments   | Route has been edited by automated test |
     And Operator go to menu Routing -> Route Monitoring V2
-#    Then Route Monitoring V2 page is loaded
     When Operator search order on Route Monitoring V2 using data below:
-      | hubs    | {hub-name-2}                   |
+      | hubs    | {hub-name}                     |
       | zones   | {zone-short-name}({zone-name}) |
       | routeId | {KEY_CREATED_ROUTE_ID}         |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
