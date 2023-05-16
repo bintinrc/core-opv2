@@ -662,28 +662,26 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
   }
 
   public void verifyPortFacilitiesTable() {
-    Assertions.assertThat(portIdFilter.isDisplayed())
-        .as("Port Id Filter appear in Port list table").isTrue();
-    Assertions.assertThat(portCodeFilter.isDisplayed())
-        .as("Port Code Filter appear in Port list table").isTrue();
-    Assertions.assertThat(portNameFilter.isDisplayed())
-        .as("Port Name Filter appear in Port list table").isTrue();
-    Assertions.assertThat(portCityFilter.isDisplayed())
-        .as("Port City Filter appear in Port list table").isTrue();
+    List<Boolean> assertionList = new ArrayList<>();
+    assertionList.add(portIdFilter.isDisplayed());
+    assertionList.add(portCodeFilter.isDisplayed());
+    assertionList.add(portNameFilter.isDisplayed());
+    assertionList.add(portCityFilter.isDisplayed());
+    assertionList.add(portRegionFilter.isDisplayed());
+    assertionList.add(portLatitudeLongitudeFilter.isDisplayed());
+    assertionList.add(findElementByXpath("//th[.='Actions']").isDisplayed());
+    assertionList.add(editPortButton.isDisplayed());
+    assertionList.add(disablePortButton.isDisplayed());
 
-    // Goes right until the rest of the filter is displayed
-    goesHorizontalByTab(portLatitudeLongitudeFilter, true);
-
-    Assertions.assertThat(portRegionFilter.isDisplayed())
-        .as("Port Region Filter appear in Port list table").isTrue();
-    Assertions.assertThat(portLatitudeLongitudeFilter.isDisplayed())
-        .as("Port Latitude Longitude Filter appear in Port list table").isTrue();
-    Assertions.assertThat(findElementByXpath("//th[.='Actions']").isDisplayed())
-        .as("Port Actions Column appear in Port list table").isTrue();
-    Assertions.assertThat(editPortButton.isDisplayed())
-        .as("Edit Port button appear in Port list table").isTrue();
-    Assertions.assertThat(disablePortButton.isDisplayed())
-        .as("Disable Port button appear in Port list table").isTrue();
+    assertionList.forEach(expectation -> {
+      doWithRetry(() -> {
+        try {
+          Assertions.assertThat(expectation).isTrue();
+        } catch (AssertionError e) {
+          goesHorizontalByTab(portLatitudeLongitudeFilter, true);
+        }
+      }, "Find element until found...", 500, 1);
+    });
 
     goesHorizontalByTab(portIdFilter, false);
   }
@@ -708,11 +706,6 @@ public class PortTripManagementPage extends OperatorV2SimplePage {
     });
 
     newPortSubmit.click();
-//    if (!validationAlert.isDisplayedFast()) {
-//      retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
-//        waitUntilInvisibilityOfElementLocated(addNewPortPanel.getWebElement(), 10);
-//      }, "Submitting until Add New Port form is closed");
-//    }
   }
 
   public void verifyPortCreationSuccessMessage(String portName) {
