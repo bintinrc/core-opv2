@@ -169,4 +169,37 @@ public class FailedPickupManagementSteps extends AbstractSteps {
       page.fpmTable.clearTIDFilter();
     });
   }
+
+  @When("Recovery User - Cancel Selected orders in Failed Pickup Management page")
+  public void cancelSelected() {
+    failedPickupManagementPage.inFrame(page -> {
+      page.applyAction.click();
+      page.cancelSelected.click();
+    });
+  }
+
+  @Then("Recovery User - verifies Cancel Selected dialog")
+  public void verifyCancelSelectedDialog(List<Map<String, String>> data) {
+    failedPickupManagementPage.inFrame(page -> {
+      List<Map<String, String>> dataTable = resolveListOfMaps(data);
+      Assertions.assertThat(page.cancelDialog.dialogTitle.getText()).isEqualTo("Cancel Selected");
+      for (int i = 0; i < dataTable.size(); i++) {
+        if (dataTable.get(i).containsKey("trackingId")) {
+          Assertions.assertThat(page.cancelDialog.trackingId.get(i).getText()).isEqualTo(dataTable.get(i).get(resolveValue("trackingId")));
+          if (dataTable.get(i).containsKey("status")) {
+            Assertions.assertThat(page.cancelDialog.status.getText()).isEqualTo(dataTable.get(i).get("status"));
+          }
+        }
+      }
+    });
+  }
+
+  @When("Recovery User - inputs cancellation reason in Cancel Selected dialog")
+  public void inputCancelReason() {
+    failedPickupManagementPage.inFrame(page -> {
+      page.cancelDialog.cancellationReason.sendKeys("automation test");
+      page.cancelDialog.cancelOrder.click();
+    });
+
+  }
 }
