@@ -1,7 +1,7 @@
 @OperatorV2 @Driver @Fleet @DriverTypeManagement
 Feature: Driver Type Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -42,7 +42,7 @@ Feature: Driver Type Management
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verify new Driver Type is deleted successfully
 
-  @DeleteDriverType @DeleteDriver
+   @DeleteDriverType @DeleteDriver
   Scenario: Can Not Delete Driver Type That Is Being Used by Driver (uid:ea7d45b6-cc32-4362-8b8c-f57743a6d453)
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Type Management
@@ -50,7 +50,7 @@ Feature: Driver Type Management
       | driverTypeName | DT-{gradle-current-date-yyyyMMddHHmmsss} |
     And Operator get new Driver Type params on Driver Type Management page
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{KEY_CREATED_DRIVER_TYPE_NAME}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"{{DRIVER_CONTACT_DETAIL}}"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+      | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{KEY_CREATED_DRIVER_TYPE_NAME}", "availability": false, "cod_limit": 1, "vehicles": [ { "active": true, "vehicleNo": "D{{TIMESTAMP}}", "vehicleType": "{vehicle-type}", "ownVehicle": false, "capacity": 1 } ], "contacts": [ { "active": true, "type": "{contact-type-name}", "details": "{{DRIVER_CONTACT_DETAIL}}" } ], "zone_preferences": [ { "latitude": {{RANDOM_LATITUDE}}, "longitude": {{RANDOM_LONGITUDE}}, "maxWaypoints": 2, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 5 } ], "max_on_demand_jobs": 2, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-current-date-yyyy-MM-dd}", "employment_end_date": null, "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": 16 } } |
     When Operator delete new Driver Type on on Driver Type Management page
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                           |

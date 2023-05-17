@@ -210,60 +210,61 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.waitUntilTableLoaded();
       dsPage.driversTable.filterByColumn(COLUMN_USERNAME, expectedDriverInfo.getUsername());
       Map<String, String> actualDriverInfo = dsPage.driversTable.readRow(1);
-      if (StringUtils.isNotBlank(expectedDriverInfo.getId().toString())) {
+      if (StringUtils.isNotEmpty(expectedDriverInfo.getId().toString())) {
         Assertions.assertThat(Long.parseLong(actualDriverInfo.get("id"))).as("Id")
             .isEqualTo(expectedDriverInfo.getId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getUsername())) {
+      if (expectedDriverInfo.getUsername() != null) {
         Assertions.assertThat(actualDriverInfo.get("username")).as("Username")
             .isEqualTo(expectedDriverInfo.getUsername());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getDisplayName())) {
+      if (expectedDriverInfo.getDisplayName() != null) {
         Assertions.assertThat(actualDriverInfo.get("displayName")).as("Display Name")
             .isEqualTo(expectedDriverInfo.getDisplayName());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getFullName())) {
+      if (expectedDriverInfo.getFullName() != null) {
         Assertions.assertThat(actualDriverInfo.get("name")).as("Name")
             .isEqualTo(expectedDriverInfo.getFullName());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getType())) {
+      if (expectedDriverInfo.getType() != null) {
         Assertions.assertThat(actualDriverInfo.get("type")).as("Type")
             .isEqualTo(expectedDriverInfo.getType());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getDpmsId())) {
+      if (expectedDriverInfo.getDpmsId() != null) {
         Assertions.assertThat(actualDriverInfo.get("dpmsId")).as("DPMS ID")
             .isEqualTo(expectedDriverInfo.getDpmsId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getVehicleType())) {
+      if (expectedDriverInfo.getVehicleType() != null) {
         Assertions.assertThat(actualDriverInfo.get("vehicleType")).as("Vehicle Type")
             .isEqualTo(expectedDriverInfo.getVehicleType());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getHub())) {
+      if (expectedDriverInfo.getHub() != null) {
         Assertions.assertThat(actualDriverInfo.get("hub")).as("Hub Id")
             .isEqualTo(expectedDriverInfo.getHub());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneId())) {
+      if (expectedDriverInfo.getZoneId() != null) {
         Assertions.assertThat(actualDriverInfo.get("zoneId")).as("Zone Id")
             .isEqualTo(expectedDriverInfo.getZoneId());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMax().toString())) {
+      if (expectedDriverInfo.getZoneMax() != null) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMax"))).as("Zone Max")
             .isEqualTo(expectedDriverInfo.getZoneMax());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getZoneMin().toString())) {
+      if (expectedDriverInfo.getZoneMin() != null) {
         Assertions.assertThat(Integer.parseInt(actualDriverInfo.get("zoneMin"))).as("Zone Min")
             .isEqualTo(expectedDriverInfo.getZoneMin());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getComments())) {
+      if (expectedDriverInfo.getComments() != null) {
         Assertions.assertThat(actualDriverInfo.get("comments")).as("Comments")
             .isEqualTo(expectedDriverInfo.getComments());
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentStartDate())) {
-        Assertions.assertThat(actualDriverInfo.get("employmentStartDate"))
+      if (expectedDriverInfo.getEmploymentStartDate() != null) {
+        Assertions.assertThat(expectedDriverInfo.getEmploymentStartDate()
+                .contains(actualDriverInfo.get("employmentStartDate")))
             .as("Employment Start Date")
-            .isEqualTo(expectedDriverInfo.getEmploymentStartDate());
+            .isTrue();
       }
-      if (StringUtils.isNotBlank(expectedDriverInfo.getEmploymentEndDate())) {
+      if (expectedDriverInfo.getEmploymentEndDate() != null) {
         Assertions.assertThat(actualDriverInfo.get("employmentEndDate")).as("Employment Start Date")
             .isEqualTo(expectedDriverInfo.getEmploymentEndDate());
       }
@@ -308,7 +309,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     dsPage.refreshPage();
     Map<String, String> data = resolveKeyValues(map);
     dsPage.inFrame(() -> {
-      dsPage.loadSelection.waitUntilClickable();
+      pause5s();
       dsPage.clearSelection.click();
 
       if (data.containsKey("zones")) {
@@ -334,7 +335,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
 
       takesScreenshot();
       dsPage.loadSelection();
-      pause2s();
+      pause5s();
     });
   }
 
@@ -344,7 +345,9 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     final String currentExpectedZone = expectedZone;
     dsPage.inFrame(() -> {
       Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+              By.xpath(
+                  "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("zoneId"));
       }
@@ -360,12 +363,13 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedDriverType = expectedDriverType;
     dsPage.inFrame(() -> {
-      Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      Integer totalRow = dsPage.findElementsBy(By.xpath(
+              "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("type"));
       }
-      
+
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
@@ -378,12 +382,14 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     List<String> rowDataTypes = new ArrayList<>();
     final String currentExpectedResigned = expected;
     dsPage.inFrame(() -> {
-      Integer totalRow = dsPage.findElementsBy(
-          By.xpath("//tr[@class=\"ant-table-row ant-table-row-level-0\"]")).size();
+      int totalRow = dsPage.findElementsBy(
+              By.xpath(
+                  "//tr[contains(@class,\"ant-table-row ant-table-row-level-0\")][td[@class='ant-table-cell']]"))
+          .size();
       for (int i = 1; i <= totalRow; i++) {
         rowDataTypes.add(dsPage.driversTable().readRow(i).get("resigned"));
       }
-      
+
       Assertions.assertThat(rowDataTypes).as("Driver Strength records list").isNotEmpty();
       Assertions.assertThat(rowDataTypes).as("Type values")
           .allSatisfy(
@@ -636,7 +642,7 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
     ClassLoader classLoader = getClass().getClassLoader();
     File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
     dsPage.inFrame(() -> {
-      dsPage.bulkUploadDrivers.sendKeys(file.getAbsolutePath());
+      dsPage.updloadFile(file.getAbsoluteFile());
     });
   }
 
@@ -654,6 +660,17 @@ public class DriverStrengthStepsV2 extends AbstractSteps {
       dsPage.waitUntilVisibilityOfElementLocated(dsPage.downloadFailureReasons.getWebElement());
       dsPage.downloadFailureReasons.click();
       dsPage.verifyFileDownloadedSuccessfully(resolvedFileName);
+    });
+  }
+
+  @Then("Operator verifies that success notification displayed in Driver Strength:")
+  public void operatorVerifiesThatSuccessNotificationDisplayedInDriverStrength(
+      Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String notifTitle = data.get("title");
+    String notifDesc = data.get("desc");
+    dsPage.inFrame(() -> {
+      dsPage.verifyNotificationAppear(notifTitle, notifDesc);
     });
   }
 }

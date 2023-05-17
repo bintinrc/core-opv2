@@ -157,6 +157,7 @@ public class DriverTypeManagementSteps extends AbstractSteps {
       driverTypeParamsObj.setDriverTypeName(driverTypeParamsData.get("driverTypeName"));
       put(KEY_DRIVER_TYPE_PARAMS, driverTypeParamsObj);
       put(KEY_DRIVER_TYPE_ID, driverTypeParamsObj.getDriverTypeId());
+      put(KEY_CREATED_DRIVER_TYPE_NAME, driverTypeParamsObj.getDriverTypeName());
     });
   }
 

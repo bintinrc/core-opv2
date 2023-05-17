@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders
+@OperatorV2 @Core @AllOrders @PullfromRoute
 Feature: All Orders - Pull From Route
 
   @LaunchBrowser @ShouldAlwaysRun

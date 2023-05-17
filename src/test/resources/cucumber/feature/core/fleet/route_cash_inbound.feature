@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Fleet @RouteCashInbound @wipFeature
+@OperatorV2 @Core @Fleet @RouteCashInbound
 Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -41,7 +41,10 @@ Feature: Route Cash Inbound
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
-    And DB Operator verify the new COD for created route is created successfully
+    And DB Core - verify cod_inbounds record:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}              |
+      | amountCollected | {KEY_LIST_OF_CREATED_ORDERS[1].cod.goodsAmount} |
+
 
   @DeleteOrArchiveRoute @happy-path
   Scenario: Operator Update COD on Route Cash Inbound Page
@@ -120,7 +123,9 @@ Feature: Route Cash Inbound
     When Operator go to menu Fleet -> Route Cash Inbound
     And Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
-    And DB Operator verify the COD for created route is soft deleted
+    And DB Core - verify cod_inbounds record is deleted:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+
 
   @DeleteOrArchiveRoute
   Scenario: Operator Fetch COD Inbound with Date Range Filter
@@ -158,11 +163,11 @@ Feature: Route Cash Inbound
       | orderId | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify the new COD on Route Cash Inbound page is created successfully
-    Then Operator check filter on Route Cash Inbound page work fine
+    And Operator check filter on Route Cash Inbound page work fine
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @DeleteOrArchiveRoute @wipScenario
+  @DeleteOrArchiveRoute
   Scenario: Operator Download and Verify Cash Inbound CSV File
     Given Operator go to menu Utilities -> QRCode Printing
     And API Order - Shipper create multiple V4 orders using data below:

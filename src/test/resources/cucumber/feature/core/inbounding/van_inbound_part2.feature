@@ -130,7 +130,7 @@ Feature: Van Inbound
       | tags          | name          | description                                                                                                        |
       | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Arrived at Sorting Hub\nNew Granular Status: On Vehicle for Delivery\n\n\nReason: START_ROUTE |
     And DB Operator verifies inbound_scans record with type "4" and correct route_id
-    And DB Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
+    And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
       | orderTagIds          | {order-tag-id},{order-tag-id-2} |
       | routeId              | {KEY_CREATED_ROUTE_ID}          |
       | driverId             | {KEY_NINJA_DRIVER_ID}           |
@@ -177,7 +177,7 @@ Feature: Van Inbound
     And Operator verify route details on Route Logs page using data below:
       | id     | {KEY_CREATED_ROUTE_ID} |
       | status | IN_PROGRESS            |
-    And DB Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
+    And DB Core - Operator verifies order_tags_search record of "{KEY_LIST_OF_CREATED_ORDER_ID[1]}" order:
       | orderTagIds          | {order-tag-id},{order-tag-id-2} |
       | routeId              | {KEY_CREATED_ROUTE_ID}          |
       | driverId             | {KEY_NINJA_DRIVER_ID}           |

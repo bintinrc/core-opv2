@@ -173,7 +173,7 @@ public class AntSelect3 extends PageElement {
 
   private String getListBoxLocator() {
     String listId = searchInput.isDisplayedFast() ?
-        searchInput.getAttribute("aria-owns") : "";
+        searchInput.getAttribute("aria-owns") : searchInput.getAttribute("aria-controls");
     return "//div[./div/div[@id='" + listId + "']]";
   }
 

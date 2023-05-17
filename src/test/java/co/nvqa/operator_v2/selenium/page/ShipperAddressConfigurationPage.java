@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntDateRangePicker;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.v4.AntSelect;
 import com.opencsv.CSVReader;
@@ -12,6 +10,9 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -25,12 +26,10 @@ import org.slf4j.LoggerFactory;
 
 public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
 
-  private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//input";
-  private static final String MODAL_TABLE_SEARCH_BY_TABLE_CHECKBOX = "//div[text()='%s']/ancestor::div[starts-with(@class,'VirtualTableHeader')]//span[@role='button']";
+  private static final String MODAL_TABLE_SEARCH_BY_TABLE_NAME_XPATH = "//div[text()='%s']/ancestor::div[starts-with(@class,'TableHeader')]//input";
+  private static final String MODAL_TABLE_SEARCH_BY_TABLE_CHECKBOX = "//div[text()='%s']/ancestor::div[starts-with(@class,'TableHeader')]//span[@role='button']";
   private static final String TABLE_FIRST_ROW_VALUE_BY_COLUMN = "//div[@class='BaseTable__row-cell' and @data-datakey='%s']//*[name()='span'or 'div']";
-  public static final String CSV_DOWNLOADED_FILENAME_PATTERN = "Downloaded Pickup Addresses";
   public static final String COLUMN_NAME = "Suggested Address URL";
-  public static final String DOWNLOADED_CSV_FILENAME = "CSV Template_Pickup Address Lat Long.csv";
   public static final String UPLOAD_ERROR_MESSAGE = "//span[text()='%s out of %s addresses']/following-sibling::span[text()=' that could not be updated.']";
   public static final String UPLOAD_SUCCESS_MESSAGE = "//span[text()='%s Shipper lat long has been updated!']";
   public static final String PICKUP_TYPE_UPDATE_SUCCESS_MESSAGE = "//span[text()='Address ID %s pickup type has been updated!']";
@@ -330,8 +329,12 @@ public class ShipperAddressConfigurationPage extends OperatorV2SimplePage {
   }
 
   public void verifyThatCsvFileIsDownloadedWithFilename(String fileName) {
+    LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("GMT+8"));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMMyyyy");
+    String formattedDate = currentDateTime.format(formatter);
+    String formatTedFilename = fileName.replaceAll("<current_Date>",formattedDate);
     String downloadedCsvFile = getLatestDownloadedFilename(
-        fileName);
+        formatTedFilename);
     Assertions.assertThat(fileName.equals(downloadedCsvFile));
  }
 }

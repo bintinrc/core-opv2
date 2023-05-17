@@ -43,7 +43,7 @@ public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
 
   private static final String LOCATOR_DATA_ROWS = "//div[@data-row-index='%s']";
 
-  private static final String LOCATOR_ROW_CHECKBOX = "//div[@data-row-index='%s']//input[@data-testid='virtual-table.checkbox_assign_order']";
+  private static final String LOCATOR_ROW_CHECKBOX = "//div[@data-row-index='%s']//input[@data-testid='checkbox_assign_order']";
 
   private static final String LOCATOR_DROP_OFF_MENU = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'') or contains(./div/text(),'')]";
 
@@ -189,7 +189,7 @@ public class DpTaggingPage extends SimpleReactPage<DpTaggingPage> {
   public void selectDateToNextDay() {
     String nextDay = dropOffDate();
     clickf(
-        "//div[@class='ant-select-item-option-content' and text()='%s']",
+        "//div[@class='ant-select-item-option-content']/span[@title='%s']",
         nextDay);
   }
 

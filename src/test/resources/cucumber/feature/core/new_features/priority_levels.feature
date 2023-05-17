@@ -5,7 +5,7 @@ Feature: Priority Levels
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Update Reservation Priority Level by CSV upload (uid:eb88c7d6-ef21-4226-9ffb-f171ce65716a)
+  Scenario: Operator Update Reservation Priority Level by CSV upload
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
