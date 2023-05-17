@@ -27,8 +27,8 @@ Feature: Remove Coverage
       | bottom | Area AREA {gradle-current-date-yyyyMMddHHmmsss}, 1 keywords deleted |
     And Operator verify coverage is not displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that sr_coverages record is not created for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that sr_area_variations record is not created for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
@@ -65,13 +65,13 @@ Feature: Remove Coverage
       | bottom | Area AREA {gradle-current-date-yyyyMMddHHmmsss}, 1 keywords deleted |
     And Operator verify coverage is not displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |

@@ -17,21 +17,21 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation  | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss}       |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}        |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}        |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}        |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -65,21 +65,21 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}            |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}       |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}          |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -113,21 +113,21 @@ Feature: Create New Coverage
       | area           | Area 2 {gradle-current-date-yyyyMMddHHmmsss}        |
       | areaVariation  | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}     |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}        |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}        |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}        |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -161,21 +161,21 @@ Feature: Create New Coverage
       | area           | Area 2 {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss}         |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}          |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA 2 {gradle-current-date-yyyyMMddHHmmsss}  |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA 2 {gradle-current-date-yyyyMMddHHmmsss}  |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA 2 {gradle-current-date-yyyyMMddHHmmsss} |
@@ -209,21 +209,21 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation  | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}     |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}        |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}        |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}        |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}      |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}    |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}    |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -249,21 +249,21 @@ Feature: Create New Coverage
     And Operator create new coverage on Station Route Keyword page:
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}    |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss} |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -301,8 +301,8 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}            |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword 3 {gradle-current-date-yyyyMMddHHmmsss}       |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}          |
     And Operator verifies that error react notification displayed:
       | top    | Status 400: Unknown                                                                                                                                                                        |
       | bottom | ^.*Error Message: More than one existing area names are found in area and areaVariation: \[\[AREA {gradle-current-date-yyyyMMddHHmmsss} AREA 2 {gradle-current-date-yyyyMMddHHmmsss}\]\].* |
@@ -326,12 +326,12 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}            |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss}         |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}          |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
@@ -339,14 +339,14 @@ Feature: Create New Coverage
       | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       |                                              |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -378,12 +378,12 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}            |
       | areaVariation  | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss}         |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}          |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}          |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}          |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}          |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
@@ -391,19 +391,19 @@ Feature: Create New Coverage
       | bottom | 1 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       |                                              |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
@@ -438,12 +438,12 @@ Feature: Create New Coverage
       | area           | Area {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation  | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | Keyword {gradle-current-date-yyyyMMddHHmmsss}       |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}        |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}        |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}        |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}        |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
@@ -451,14 +451,14 @@ Feature: Create New Coverage
       | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       |                                              |
     And DB Operator verifies that route_qa_gl/sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |

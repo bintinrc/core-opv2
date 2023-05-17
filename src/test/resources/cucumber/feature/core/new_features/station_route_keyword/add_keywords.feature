@@ -29,8 +29,8 @@ Feature: Add Keywords
       | bottom | 2 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}                                                       |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}                                                     |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}                                                     |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                                     |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                                     |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss}, KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
@@ -74,16 +74,16 @@ Feature: Add Keywords
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}                                                    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}                                                  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}                                                  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                                  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                                  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss},KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
@@ -127,8 +127,8 @@ Feature: Add Keywords
       | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
@@ -136,8 +136,8 @@ Feature: Add Keywords
       | bottom | 2 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}                                                     |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}                                                   |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}                                                   |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                                   |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                                   |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}, KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
@@ -178,16 +178,16 @@ Feature: Add Keywords
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
@@ -223,16 +223,16 @@ Feature: Add Keywords
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywordsAdded  | 1 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
@@ -273,16 +273,16 @@ Feature: Add Keywords
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywordsAdded  | 1 keyword(s) added                            |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator close New coverage created dialog
@@ -323,16 +323,16 @@ Feature: Add Keywords
       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName}  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName}  |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].getFullName} |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].getFullName} |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify there are no keywords on Add Keywords tab on Station Route Keyword page
