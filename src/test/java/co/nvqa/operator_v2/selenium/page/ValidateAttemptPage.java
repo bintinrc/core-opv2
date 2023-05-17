@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntSelect2;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect4;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -77,6 +78,15 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
 
   @FindBy(xpath = "//span[text()='OK']//parent::button")
   public PageElement okButton;
+
+  @FindBy(xpath = "//div[@data-testid='pod-validation.validate.productivity-metrics.completed-task-num']")
+  public PageElement attemptsValidatedCount;
+
+  @FindBy(xpath = "//div[text()='Status 404: Not Found']")
+  public PageElement statusCode404message;
+
+  @FindBy(xpath = "//a[@class='ant-notification-notice-close']")
+  public PageElement notificationCloseIcon;
 
 
   public ValidateAttemptPage(WebDriver webDriver) {
@@ -325,6 +335,37 @@ public class ValidateAttemptPage extends OperatorV2SimplePage {
     Assertions.assertThat(getWebDriver().findElement(By.xpath(codeXpath)).isDisplayed())
         .as(f("Validation for Code Text : %s", code))
         .isTrue();
+  }
+
+  public int getAttemptsValidatedCount() {
+    String count = attemptsValidatedCount.getText();
+    return Integer.parseInt(count);
+  }
+
+  public void validateCountValueMatches(int beforeOrder, int afterOrder, int delta) {
+    Assert.assertTrue(
+        f("Assert that current count value: %s is increased by %s from %s to ", afterOrder,
+            delta, beforeOrder),
+        afterOrder == (beforeOrder + delta));
+  }
+
+  public void validateErrorMessage(String message) {
+    String errorMessageXpath = f("//span[text()='%s']",
+        message);
+    Assertions.assertThat(getWebDriver().findElement(By.xpath(errorMessageXpath)).isDisplayed())
+        .as(f("Validation for error message : %s", message))
+        .isTrue();
+
+  }
+
+  public void validate404StatusCode() {
+    Assertions.assertThat(statusCode404message.isDisplayed())
+        .as("Validation for Code Text : statusCode 404 message")
+        .isTrue();
+  }
+
+  public void closeNotification() {
+    notificationCloseIcon.click();
   }
 
 

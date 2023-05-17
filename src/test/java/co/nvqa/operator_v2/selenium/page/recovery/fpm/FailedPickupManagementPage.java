@@ -35,6 +35,10 @@ public class FailedPickupManagementPage extends
   public PageElement rescheduleSelected;
   @FindBy(xpath = "//div[@role='dialog' and contains(@class,'ant-modal')]")
   public RescheduleDialog rescheduleDialog;
+  @FindBy(css = "[data-testid='fpm.apply-action.cancel-selected']")
+  public PageElement cancelSelected;
+  @FindBy(xpath = "//div[@role='document' and contains(@class,'ant-modal')]")
+  public CancelDialog cancelDialog;
 
   public static String KEY_SELECTED_ROWS_COUNT = "KEY_SELECTED_ROWS_COUNT";
   public static final String FPM_CSV_FILENAME_PATTERN = "failed-pickup-list.csv";
@@ -133,6 +137,26 @@ public class FailedPickupManagementPage extends
         rescheduleDate.sendKeys(value + Keys.ENTER);
       }
       return this;
+    }
+  }
+
+  public static class CancelDialog extends AntModal {
+    @FindBy(xpath = "//div[@class='ant-modal-header']")
+    public PageElement dialogTitle;
+
+    @FindBy(xpath = "//table[@data-testid='simple-table']//td[starts-with(.,'NVSG')]")
+    public List<PageElement> trackingId;
+
+    @FindBy(xpath = "//table[@data-testid='simple-table']//td[contains(.,'Pickup fail')]")
+    public PageElement status;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='ant-input']")
+    public PageElement cancellationReason;
+    @FindBy(xpath = "//button/span[.='Cancel Orders']")
+    public Button cancelOrder;
+
+    public CancelDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 }
