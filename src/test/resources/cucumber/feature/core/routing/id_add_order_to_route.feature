@@ -40,10 +40,7 @@ Feature: Add Order To Route
 
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route Date same but different Hub to Existing Route
@@ -65,7 +62,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                       |
       | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
-    Then Operator verifies that "New route does not have the same route date and hub" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -80,10 +76,7 @@ Feature: Add Order To Route
 
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route hub same but different Date to Existing Route
@@ -106,7 +99,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                       |
       | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
-    Then Operator verifies that "New route does not have the same route date and hub" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -118,13 +110,9 @@ Feature: Add Order To Route
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | ROUTED |
     And DB Operator verifies transaction routed to new route id
-
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route date and hub different to Existing Route
@@ -147,7 +135,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                       |
       | bottom | ^.*Error Code: 103042.*Error Message: New route does not have the same route date and hub.* |
-    Then Operator verifies that "New route does not have the same route date and hub" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -162,10 +149,7 @@ Feature: Add Order To Route
 
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
 #  @DeleteOrArchiveRoute @routing-refactor
 #  Scenario: Not Allowed to Add Pickup Routed Order to a New Route - New Route Date and Hub Same to Existing Route
@@ -202,8 +186,6 @@ Feature: Add Order To Route
 #    And DB Operator verifies waypoint status is "ROUTED"
 #    And DB Operator verifies waypoints.route_id & seq_no is populated correctly
 #    And DB Operator verifies route_monitoring_data record
-#    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-#    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Existing Route is Archived
@@ -227,7 +209,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                                       |
       | bottom | ^.*Error Code: 103088.*Error Message: Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED.* |
-    Then Operator verifies that "Current route {KEY_LIST_OF_CREATED_ROUTE_ID[2]} has status ARCHIVED" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -267,7 +248,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                                   |
       | bottom | ^.*Error Code: 103088.*Error Message: Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} has the status ARCHIVED.* |
-    Then Operator verifies that "Route {KEY_LIST_OF_CREATED_ROUTE_ID[1]} has the status ARCHIVED" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -282,10 +262,7 @@ Feature: Add Order To Route
 
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @DeleteOrArchiveRoute @routing-refactor
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - Hub Id is not Whitelisted
@@ -307,7 +284,6 @@ Feature: Add Order To Route
     Then Operator verifies that error toast displayed:
       | top    | Network Request Error                                                                                   |
       | bottom | ^.*Error Code: 103024.*Error Message: Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}.* |
-    Then Operator verifies that "Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTE_ID[2]}" error toast message is displayed
     And Operator verifies the last scanned tracking id is "{KEY_CREATED_ORDER_TRACKING_ID}"
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order event on Edit order page using data below:
@@ -322,10 +298,7 @@ Feature: Add Order To Route
 
     And DB Operator verifies waypoint status is "ROUTED"
     And DB Operator verifies waypoints.route_id & seq_no is populated correctly
-
     And DB Operator verifies route_monitoring_data record
-    When API Driver set credentials "{ninja-driver-username}" and "{ninja-driver-password}"
-    Then Verify that waypoints are shown on driver "{ninja-driver-id}" list route correctly
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

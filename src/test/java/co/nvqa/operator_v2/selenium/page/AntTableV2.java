@@ -95,6 +95,16 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
     return findElementByXpath(xpath).isSelected();
   }
 
+  public boolean isButtonEnabled(int rowNumber, String actionId) {
+    String actionButtonLocator = getActionButtonsLocators().get(actionId);
+    String xpath = actionButtonLocator.startsWith("/") ? f(actionButtonLocator, rowNumber)
+        : f(ACTION_BUTTON_LOCATOR_PATTERN, rowNumber, actionButtonLocator);
+    if (StringUtils.isNotBlank(tableLocator)) {
+      xpath = tableLocator + xpath;
+    }
+    return findElementByXpath(xpath).isEnabled();
+  }
+
   @Override
   protected String getTableLocator() {
     return "//div[@class='virtual-table']";

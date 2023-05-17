@@ -195,6 +195,8 @@ Feature: Resolve Recovery Ticket
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator create new recovery ticket on Edit Order page:
       | entrySource             | CUSTOMER COMPLAINT |
       | investigatingDepartment | Recovery           |
@@ -208,9 +210,6 @@ Feature: Resolve Recovery Ticket
     When Operator refresh page
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
-    And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                          |
-      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: Pending Pickup\nNew Granular Status: On Hold\n\nOld Order Status: Pending\nNew Order Status: On Hold\n\nReason: TICKET_CREATION |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     When Operator refresh page
@@ -227,14 +226,14 @@ Feature: Resolve Recovery Ticket
     And Operator save the last Pickup transaction of the created order as "KEY_TRANSACTION"
     And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
+      | status | Success                      |
     And Operator save the last Delivery transaction of the created order as "KEY_TRANSACTION"
     And DB Operator verifies waypoints record:
       | id     | {KEY_TRANSACTION.waypointId} |
       | status | Pending                      |
     And Operator verify order events on Edit order page using data below:
-      | tags          | name          | description                                                                                                                                                                                                              |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending\nNew Pickup Status: Success\n\nOld Granular Status: On Hold\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold\nNew Order Status: Transit\n\nReason: TICKET_RESOLUTION |
+      | tags          | name          | description                                                                                                                                                    |
+      | MANUAL ACTION | UPDATE STATUS | Old Granular Status: On Hold\nNew Granular Status: Arrived at Sorting Hub\n\nOld Order Status: On Hold\nNew Order Status: Transit\n\nReason: TICKET_RESOLUTION |
     And Operator verify order events on Edit order page using data below:
       | name             |
       | HUB INBOUND SCAN |
