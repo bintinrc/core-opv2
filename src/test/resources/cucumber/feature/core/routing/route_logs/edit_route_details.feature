@@ -13,23 +13,7 @@ Feature: Route Logs - Edit Route Details
       | {KEY_LIST_OF_CREATED_ROUTE_ID[1]} |
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_CREATED_ROUTE_ID}" Route ID on Route Logs page
-    And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | tags       | {route-tag-name}                        |
-      | zone       | {zone-name-2}                           |
-      | hub        | {hub-name-2}                            |
-      | driverName | {ninja-driver-2-name}                   |
-      | comments   | Route has been edited by automated test |
-    Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                    |
-      | bottom | ^.*Error Message: Route {KEY_CREATED_ROUTE_ID} is already archived !.* |
-    Then Operator verify route details on Route Logs page using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd} |
-      | id         | {KEY_CREATED_ROUTE_ID}           |
-      | status     | ARCHIVED                         |
-      | driverName | {ninja-driver-name}              |
-      | hub        | {hub-name}                       |
-      | zone       | {zone-name}                      |
+    Then Operator verify Edit Details button is disabled on Route Logs page
 
   @DeleteOrArchiveRoute
   Scenario: Do Not Allow to Bulk Edit Multiple Routes Details When Status is Archived

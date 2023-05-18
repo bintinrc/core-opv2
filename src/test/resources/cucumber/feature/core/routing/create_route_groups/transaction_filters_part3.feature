@@ -33,7 +33,6 @@ Feature: Create Route Groups - Transaction Filters
       | 9-12pm    | 09:00     | 12:00   |
       | Anytime   | 09:00     | 22:00   |
       | Day       | 09:00     | 18:00   |
-      | Night     | 18:00     | 22:00   |
 
   Scenario Outline: Operator Filter Parcel Size on Create Route Groups - Transaction Filters - Parcel Size = <parcelSize>
     Given Operator go to menu Utilities -> QRCode Printing

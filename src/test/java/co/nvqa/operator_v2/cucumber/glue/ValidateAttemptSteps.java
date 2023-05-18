@@ -186,4 +186,36 @@ public class ValidateAttemptSteps extends AbstractSteps {
     takesScreenshot();
 
   }
+
+  @When("Operator get the count from the attempts validated today")
+  public void operator_get_the_count_from_the_attempts_validated_today() {
+    int beforeCount = validateAttemptPage.getAttemptsValidatedCount();
+    put(KEY_ATTEMPTS_VALIDATED_TODAY, beforeCount);
+    takesScreenshot();
+  }
+
+  @Then("Operator verifies that the count in attempts validated today has increased by {int}")
+  public void operator_verifies_that_the_count_in_attempts_validated_today_has_increased_by(
+      Integer totOrder) {
+    pause3s();
+    int beforeOrder = Integer.parseInt(getString(KEY_ATTEMPTS_VALIDATED_TODAY));
+    int afterOrder = validateAttemptPage.getAttemptsValidatedCount();
+    validateAttemptPage.validateCountValueMatches(beforeOrder, afterOrder, totOrder);
+    takesScreenshot();
+  }
+
+  @Then("Operator validate the error code and error message {string}")
+  public void operatorValidateTheErrorCodeAndErrorMessage(String message) {
+    pause3s();
+    validateAttemptPage.validate404StatusCode();
+    validateAttemptPage.validateErrorMessage(message);
+    takesScreenshot();
+  }
+
+  @When("Operator closes the notification message")
+  public void operatorClosesTheNotificationMessage() {
+    validateAttemptPage.closeNotification();
+    takesScreenshot();
+  }
+
 }
