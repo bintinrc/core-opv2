@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.pricing.BillingReportsRequest;
-import co.nvqa.commons.model.pricing.billing.FinancialBatchReportEntry;
-import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.common.pricing.model.rest.BillingReportsRequest;
 import co.nvqa.operator_v2.selenium.page.FinancialBatchReportsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static co.nvqa.common.pricing.cucumber.glue.FinanceKeyStorage.KEY_FINANCE_BILLING_REPORT_REQUEST;
 public class FinancialBatchReportSteps extends AbstractSteps {
 
   private FinancialBatchReportsPage financialBatchReportsPage;
@@ -98,96 +96,7 @@ public class FinancialBatchReportSteps extends AbstractSteps {
       email.add(value);
       request.setEmailAddresses(email);
     }
-    put(KEY_FINANCE_REPORT_REQUEST, request);
-  }
-
-  @Then("Operator verifies the count of csv entries is {int}")
-  public void operatorVerifiesTheCountOfCsvEntriesIs(int count) {
-    List<FinancialBatchReportEntry> listOfBatchEntries = get(
-        KEY_FINANCIAL_BATCH_REPORT_CSV_BODY_ENTRIES);
-    Assertions.assertThat(listOfBatchEntries.size()).as("Count of CSV entries is correct")
-        .isEqualTo(count);
-  }
-
-  @Then("Operator verifies financial batch report data in CSV is as below")
-  public void operatorVerifiesFinancialBatchReportDataAsBelow(Map<String, String> mapOfData) {
-    mapOfData = resolveKeyValues(mapOfData);
-    List<FinancialBatchReportEntry> listOfBatchEntries = get(
-        KEY_FINANCIAL_BATCH_REPORT_CSV_BODY_ENTRIES);
-    if (Objects.isNull(listOfBatchEntries)) {
-      throw new NvTestRuntimeException("There were no financial batch report data in CSV");
-    }
-
-    FinancialBatchReportEntry financialBatchReportEntryCsv;
-    Long globalShipperID = get(KEY_SHIPPER_ID);
-    if (Objects.isNull(globalShipperID)) {
-      financialBatchReportEntryCsv = listOfBatchEntries.get(0);
-    } else {
-      financialBatchReportEntryCsv = listOfBatchEntries.stream()
-          .filter(e -> Objects.equals(e.getGlobalShipperId(), globalShipperID)).findFirst()
-          .orElseThrow(() -> new NvTestRuntimeException(
-              f("Could not find entry for shipper id : %s ", globalShipperID)));
-    }
-
-    SoftAssertions softAssertions = new SoftAssertions();
-    if (mapOfData.containsKey("globalShipperId")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getGlobalShipperId())
-          .as("Global Shipper ID is correct")
-          .hasToString(mapOfData.get("globalShipperId"));
-    }
-    if (mapOfData.containsKey("legacyShipperId")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getLegacyShipperId())
-          .as("Legacy Shipper ID is correct")
-          .hasToString(mapOfData.get("legacyShipperId"));
-    }
-    if (mapOfData.containsKey("shipperName")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getShipperName())
-          .as("Shipper Name is correct")
-          .isEqualTo(mapOfData.get("shipperName"));
-    }
-    if (mapOfData.containsKey("batchId")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getBatchId()).as("Batch Id is correct")
-          .isEqualTo(mapOfData.get("batchId"));
-    }
-    if (mapOfData.containsKey("date")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getDate()).as("Date is correct")
-          .isEqualTo(mapOfData.get("date"));
-    }
-    if (mapOfData.containsKey("totalCOD")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalCod())
-          .as("Total COD is correct")
-          .isEqualTo(mapOfData.get("totalCOD"));
-    }
-    if (mapOfData.containsKey("CODAdjustment")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getCodAdjustment())
-          .as("COD Adjustment is correct")
-          .isEqualTo(mapOfData.get("CODAdjustment"));
-    }
-    if (mapOfData.containsKey("totalAdjustedCOD")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalAdjustedCod())
-          .as("Total Adjusted COD is correct")
-          .isEqualTo(mapOfData.get("totalAdjustedCOD"));
-    }
-    if (mapOfData.containsKey("totalFees")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalFees())
-          .as("Total Fees is correct")
-          .isEqualTo(mapOfData.get("totalFees"));
-    }
-    if (mapOfData.containsKey("FeesAdjustment")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getFeesAdjustment())
-          .as("Fees Adjustment is correct")
-          .isEqualTo(mapOfData.get("FeesAdjustment"));
-    }
-    if (mapOfData.containsKey("totalAdjustedFees")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getTotalAdjustedFees())
-          .as("Total Adjusted Fees is correct")
-          .isEqualTo(mapOfData.get("totalAdjustedFees"));
-    }
-    if (mapOfData.containsKey("AmountOwingToFromShipper")) {
-      softAssertions.assertThat(financialBatchReportEntryCsv.getAmountOwingToFromShipper())
-          .as("Balance is correct").isEqualTo(mapOfData.get("AmountOwingToFromShipper"));
-    }
-    softAssertions.assertAll();
+    put(KEY_FINANCE_BILLING_REPORT_REQUEST, request);
   }
 
   @Then("Operator verifies error message {string} is displayed on Financial Batch Reports Page")
