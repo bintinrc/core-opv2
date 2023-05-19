@@ -40,6 +40,12 @@ public class StationRoutePage extends SimpleReactPage<StationRoutePage> {
   @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentDate']")
   public AntDateTimeRangePicker shipmentDate;
 
+  @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentDate.label'] + div + span")
+  public PageElement shipmentDateError;
+
+  @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentCompletionTime.label'] + div + span")
+  public PageElement shipmentCompletionTimeError;
+
   @FindBy(css = "[data-testid='create-route-groups.shipment-filters.shipmentCompletionTime']")
   public AntDateTimeRangePicker shipmentCompletionTime;
 

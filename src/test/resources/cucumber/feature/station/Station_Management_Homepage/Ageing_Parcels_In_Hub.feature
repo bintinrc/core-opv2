@@ -118,7 +118,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder @Happypath @Debug
+  @ForceSuccessOrder @Happypath
   Scenario Outline: Can Not View Parcel Inbounded More than 30 Days
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage

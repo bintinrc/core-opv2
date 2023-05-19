@@ -126,7 +126,7 @@ Feature: Pricing Levers - RTS Charge
     Given Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | isDefaultRts | true |
     Then Operator verifies country default text is displayed like below
-      | rtsCharge | Use Country Default: % RTS Fee |
+      | rtsCharge | Use Country Default: 0% RTS Fee |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
     Given Operator edits shipper "{shipper-v4-dummy-pricing-profile-rts-2-legacy-id}"
