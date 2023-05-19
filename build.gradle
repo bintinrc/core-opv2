@@ -69,7 +69,7 @@ dependencies {
     implementation "co.nvqa:common-ordercreate:1.2.3"
     implementation "co.nvqa:common-driver:1.2.16"
     implementation "co.nvqa:common-corev2:1.2.6"
-    implementation "co.nvqa:common-core:1.2.35"
+    implementation "co.nvqa:common-core:1.2.36"
     implementation "co.nvqa:common-dp:1.2.21"
     implementation "co.nvqa:common-auth:1.2.2"
     implementation "co.nvqa:common-sort:1.2.14"
