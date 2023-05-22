@@ -90,7 +90,6 @@ Feature: Driver Announcement
       | body        | This is an automation test                       |
     Then Operator verify Driver Announcement successfully sent
 
-  @RunThis
   Scenario: Operator Unable Send New Payroll Report with Invalid CSV
     Given Operator loads Operator portal home page
     And Operator go to menu Fleet -> Driver Announcement
