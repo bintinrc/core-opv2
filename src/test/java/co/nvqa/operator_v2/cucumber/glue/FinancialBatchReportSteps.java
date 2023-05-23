@@ -32,9 +32,9 @@ public class FinancialBatchReportSteps extends AbstractSteps {
     financialBatchReportsPage.waitUntilLoaded();
     setFinancialBatchReportsData(mapOfData);
     financialBatchReportsPage.generateReportBtn.click();
-    financialBatchReportsPage.waitUntilVisibilityOfNotification(
-        "Report Request submitted Successfully.");
     financialBatchReportsPage.verifyNoErrorsAvailable();
+    financialBatchReportsPage.waitUntilVisibilityOfNotification(
+        "Report Request submitted Successfully. ");
   }
 
   @Given("Operator select financial batch report using data below:")

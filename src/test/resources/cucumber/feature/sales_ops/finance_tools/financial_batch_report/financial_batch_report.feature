@@ -18,7 +18,7 @@ Feature: Financial Batch Report
       | emailAddress | {financial-batch-report-email}     |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and validates received financial batch report email
-    Then Operator verifies the financial batch report headers using data {default-financial-batch-headers}
+    Then Operator verifies the financial batch report headers using data "{default-financial-batch-headers}"
     And Operator gets the financial batch csv report entries
     Then DB Billing - Operator verifies the count of entries for all ledgers by completed local date
 
@@ -65,7 +65,7 @@ Feature: Financial Batch Report
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {KEY_SHIPPER_SHIPPER.id} ]} |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and validates received financial batch report email
-    Then Operator verifies the financial batch report headers using data {default-financial-batch-headers}
+    Then Operator verifies the financial batch report headers using data "{default-financial-batch-headers}"
     And Operator gets the financial batch csv report entries
     Then Operator verifies the count of csv entries is 1
     Then Operator verifies financial batch report data in CSV is as below
@@ -78,10 +78,7 @@ Feature: Financial Batch Report
       | totalAdjustedCOD         | 29.32                            |
       | totalFees                | 9.23                             |
       | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   @DeleteCreatedShipper
@@ -152,7 +149,7 @@ Feature: Financial Batch Report
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["ALL"], "parent_shipper_ids": [ {KEY_SHIPPER_SHIPPER.id} ]} |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and validates received financial batch report email
-    Then Operator verifies the financial batch report headers using data {default-financial-batch-headers}
+    Then Operator verifies the financial batch report headers using data "{default-financial-batch-headers}"
     And Operator gets the financial batch csv report entries
     Then Operator verifies the count of csv entries is 1
     Then Operator verifies financial batch report data in CSV is as below
@@ -165,10 +162,7 @@ Feature: Financial Batch Report
       | totalAdjustedCOD         | -5.00                            |
       | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - All Shippers (uid:39f855b2-3ac3-4bb3-9647-c00030c27eba)
@@ -204,7 +198,7 @@ Feature: Financial Batch Report
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "global_shipper_ids": [ {shipper-sop-emoji-th-vn-chars-global-id} ]} |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and validates received financial batch report email
-    Then Operator verifies the financial batch report headers using data {default-financial-batch-headers}
+    Then Operator verifies the financial batch report headers using data "{default-financial-batch-headers}"
     And Operator gets the financial batch csv report entries
     Then Operator verifies financial batch report data in CSV is as below
       | globalShipperId | {shipper-sop-emoji-th-vn-chars-global-id}                                 |
@@ -272,7 +266,7 @@ Feature: Financial Batch Report
       | {"start_date": "{gradle-current-date-yyyy-MM-dd}","end_date": "{gradle-current-date-yyyy-MM-dd}", "email_addresses": [ "{financial-batch-report-email}" ], "consolidated_options": ["SHIPPER"], "parent_shipper_ids": [ {KEY_SHIPPER_SHIPPER.id} ]} |
     And Finance Operator waits for "{financial-batch-report-email-wait-time}" seconds
     And Operator opens Gmail and validates received financial batch report email
-    Then Operator verifies the financial batch report headers using data {default-financial-batch-headers}
+    Then Operator verifies the financial batch report headers using data "{default-financial-batch-headers}"
     And Operator gets the financial batch csv report entries
     Then Operator verifies the count of csv entries is 1
     Then Operator verifies financial batch report data in CSV is as below
@@ -285,10 +279,7 @@ Feature: Financial Batch Report
       | totalAdjustedCOD         | -5.00                            |
       | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
 
   Scenario: Generate Financial Batch Report - Consolidated by "SHIPPER" - Selected By Parent Shipper - No Ledgers Found (uid:6a97e9f9-804b-4bc2-ad1d-0e8292d5ef76)
@@ -375,19 +366,16 @@ Feature: Financial Batch Report
     And Operator opens Gmail and validates received financial batch report email
     And Operator gets financial batch reports with order level details
     Then Operator verifies financial batch report data in CSV is as below
-      | globalShipperId          | {KEY_SHIPPER_SHIPPER.id}         |
-      | legacyShipperId          | {KEY_SHIPPER_SHIPPER.legacyId}   |
-      | shipperName              | {KEY_SHIPPER_SHIPPER.name}       |
+      | globalShipperId          | {KEY_SHIPPER_ID}                 |
+      | legacyShipperId          | {KEY_LEGACY_SHIPPER_ID}          |
+      | shipperName              | {KEY_CREATED_SHIPPER.name}       |
       | date                     | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
       | totalFees                | 9.40                             |
       | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.40                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -456,19 +444,16 @@ Feature: Financial Batch Report
     And Operator opens Gmail and validates received financial batch report email
     And Operator gets financial batch reports with order level details
     Then Operator verifies financial batch report data in CSV is as below
-      | globalShipperId          | {KEY_SHIPPER_SHIPPER.id}         |
-      | legacyShipperId          | {KEY_SHIPPER_SHIPPER.legacyId}   |
-      | shipperName              | {KEY_SHIPPER_SHIPPER.name}       |
+      | globalShipperId          | {KEY_SHIPPER_ID}                 |
+      | legacyShipperId          | {KEY_LEGACY_SHIPPER_ID}          |
+      | shipperName              | {KEY_CREATED_SHIPPER.name}       |
       | date                     | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 34.32                            |
       | totalAdjustedCOD         | 29.32                            |
       | totalFees                | 9.23                             |
       | FeesAdjustment           | -10.60                           |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
@@ -528,19 +513,16 @@ Feature: Financial Batch Report
     And Operator opens Gmail and validates received financial batch report email
     And Operator gets financial batch reports with order level details
     Then Operator verifies financial batch report data in CSV is as below
-      | globalShipperId          | {KEY_SHIPPER_SHIPPER.id}         |
-      | legacyShipperId          | {KEY_SHIPPER_SHIPPER.legacyId}   |
-      | shipperName              | {KEY_SHIPPER_SHIPPER.name}       |
+      | globalShipperId          | {KEY_SHIPPER_ID}                 |
+      | legacyShipperId          | {KEY_LEGACY_SHIPPER_ID}          |
+      | shipperName              | {KEY_CREATED_SHIPPER.name}       |
       | date                     | {gradle-current-date-yyyy-MM-dd} |
       | totalCOD                 | -5.00                            |
       | CODAdjustment            | 0.00                             |
       | totalAdjustedCOD         | -5.00                            |
       | totalFees                | 9.23                             |
       | FeesAdjustment           | 0.00                             |
-      | TotalAdjustedFee         | -1.46                            |
-      | TotalCODFees             | 0.05                             |
-      | CODFeesAdjustment        | 0.00                             |
-      | TotalAdjustedCODFees     | 0.05                             |
+      | TotalAdjustedFess        | -1.46                            |
       | AmountOwingToFromShipper | 4.23                             |
     Then Operator verifies extended financial batch details report data in CSV is as below
       | batchId          | notNull                                       |
