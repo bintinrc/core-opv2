@@ -54,9 +54,9 @@ Feature: Route Monitoring V2
       | routeDateTo   | TODAY     |
       | hubName       | <HubName> |
     And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
+      | date       | {gradle-current-date-yyyy-MM-dd}         |
+      | tags       | {route-tag-name}                         |
+      | zone       | {zone-name}                              |
       | hub        | <HubName>                                |
       | driverName | {KEY_CREATED_DRIVER_INFO.getDisplayName} |
       | comments   | Route has been edited by automated test  |
