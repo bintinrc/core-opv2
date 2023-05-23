@@ -256,6 +256,8 @@ public class ShipperPickupsSteps extends AbstractSteps {
     String priorityLevel = mapOfData.get("priorityLevel");
     String approxVolume = mapOfData.get("approxVolume");
     String comments = mapOfData.get("comments");
+    String readyBy = mapOfData.get("readyBy");
+    String latestBy = mapOfData.get("latestBy");
 
     if ("GET_FROM_CREATED_SHIPPER".equalsIgnoreCase(shipperName)) {
       shipperName = this.<Shipper>get(KEY_CREATED_SHIPPER).getName();
@@ -271,7 +273,7 @@ public class ShipperPickupsSteps extends AbstractSteps {
 
     shipperPickupsPage
         .verifyReservationInfo(address, shipperName, routeId, driverName, priorityLevel,
-            approxVolume, comments);
+            approxVolume, comments, readyBy, latestBy);
   }
 
   private String resolveExpectedRouteId(String routeIdParam) {
@@ -775,6 +777,36 @@ public class ShipperPickupsSteps extends AbstractSteps {
     Address newAddress = resolveValue(data.get("newAddress"));
     shipperPickupsPage.reservationsTable.searchByPickupAddress(oldAddress);
     shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
+    var value = data.get("readyByHours");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.readyByHours.setValue(value);
+    }
+    value = data.get("readyByMinutes");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.readyByMinutes.setValue(value);
+    }
+    value = data.get("readyByAmPm");
+    if (StringUtils.isNotBlank(value)) {
+      if (!StringUtils.equalsIgnoreCase(
+          shipperPickupsPage.editRouteDialog.readyByAmPm.getAttribute("aria-label"), value)) {
+        shipperPickupsPage.editRouteDialog.readyByAmPm.click();
+      }
+    }
+    value = data.get("lastByHours");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.lastByHours.setValue(value);
+    }
+    value = data.get("lastByMinutes");
+    if (StringUtils.isNotBlank(value)) {
+      shipperPickupsPage.editRouteDialog.lastByMinutes.setValue(value);
+    }
+    value = data.get("lastByAmPm");
+    if (StringUtils.isNotBlank(value)) {
+      if (!StringUtils.equalsIgnoreCase(
+          shipperPickupsPage.editRouteDialog.lastByAmPm.getAttribute("aria-label"), value)) {
+        shipperPickupsPage.editRouteDialog.lastByAmPm.click();
+      }
+    }
     shipperPickupsPage.editRouteDialog.editAddress.click();
     if (StringUtils.isNotBlank(newAddress.getAddress1())) {
       shipperPickupsPage.editRouteDialog.address1.setValue(newAddress.getAddress1());

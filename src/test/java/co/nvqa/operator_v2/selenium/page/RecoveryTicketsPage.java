@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -374,7 +375,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage {
     }
   }
 
-  public static class CreateTicketDialog extends MdDialog {
+  public static class CreateTicketDialog extends AntModal {
 
     @FindBy(id = "trackingId")
     public TextBox trackingId;

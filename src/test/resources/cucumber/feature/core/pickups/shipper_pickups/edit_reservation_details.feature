@@ -93,6 +93,43 @@ Feature: Shipper Pickups - Edit Reservation Details
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
     Then Operator verify that "Route Edit" icon is disabled for created reservation on Shipper Pickups page
 
+  Scenario: Operator Edits Premium Scheduled Reservation Time
+    Given Operator go to menu Utilities -> QRCode Printing
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "pickup_service_type": "Scheduled","pickup_service_level": "Premium","legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | {gradle-current-date-yyyy-MM-dd} |
+      | toDate      | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName | {filter-shipper-name}            |
+      | type        | Premium Scheduled                |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And Operator edit reservation address details on Edit Route Details dialog using data below:
+      | oldAddress     | KEY_LIST_OF_CREATED_ADDRESSES[1] |
+      | newAddress     | KEY_LIST_OF_CREATED_ADDRESSES[2] |
+      | readyByHours   | 10                               |
+      | readyByMinutes | 30                               |
+      | readyByAmPm    | AM                               |
+      | lastByHours    | 12                               |
+      | lastByMinutes  | 30                               |
+      | lastByAmPm     | PM                               |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | address      | KEY_LIST_OF_CREATED_ADDRESSES[2] |
+      | shipperName  | {shipper-v4-name}                |
+      | approxVolume | Less than 3 Parcels              |
+      | comments     | GET_FROM_CREATED_RESERVATION     |
+      | readyBy      | 10:30:00                         |
+      | latestBy     | 12:30:00                         |
+    And DB Core - verify waypoints record:
+      | id       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
+      | address1 | {KEY_LIST_OF_CREATED_ADDRESSES[2].address1}      |
+      | country  | {KEY_LIST_OF_CREATED_ADDRESSES[2].country}       |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

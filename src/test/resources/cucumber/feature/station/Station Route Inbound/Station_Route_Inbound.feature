@@ -141,7 +141,7 @@ Feature: Route Inbound
       | HubId       | HubName       |
       | {hub-id-20} | {hub-name-20} |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Debug
+  @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Get Route Details by Driver Name - Number of Route_Id = 1
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:

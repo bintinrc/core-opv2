@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Dimension;
@@ -10,21 +11,22 @@ import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
-import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.model.PodDetail;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.model.TransactionInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
-import co.nvqa.operator_v2.selenium.elements.md.MdMenuBar;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
@@ -36,10 +38,7 @@ import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -49,12 +48,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -71,13 +66,13 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class EditOrderPage extends OperatorV2SimplePage {
+public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
   @FindBy(id = "header")
   public PageElement header;
 
-  @FindBy(css = ".view-container md-menu-bar")
-  public MdMenuBar menuBar;
+  @FindBy(xpath = "//div[./div[contains(text(),'Actions')]]")
+  public AntMenuBar menuBar;
 
   @FindBy(css = "div[loading-message='Loading events...'] md-menu")
   public MdMenu eventsTableFilter;
@@ -91,11 +86,17 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[label[.='Zone']]/h3")
   public PageElement zone;
 
-  @FindBy(xpath = "//div[label[.='Status']]/h3")
+  @FindBy(xpath = "//div[./label[.='Status']]//span")
   public PageElement status;
 
-  @FindBy(xpath = "//div[label[.='Granular']]/h3")
+  @FindBy(xpath = "//div[./label[.='Granular']]//span")
   public PageElement granular;
+
+  @FindBy(xpath = "//div[./label[.='Stamp ID']]//span")
+  public PageElement stampId;
+
+  @FindBy(xpath = "//div[./label[.='Comments']]//div")
+  public PageElement comments;
 
   @FindBy(xpath = "//div[label[.='Latest Route ID']]/h3")
   public PageElement latestRouteId;
@@ -109,7 +110,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
   public PageElement currentDnrGroup;
 
-  @FindBy(xpath = "//div[./label[.='Current Priority']]/h3")
+  @FindBy(xpath = "//div[./label[.='Current priority']]//span")
   public PageElement currentPriority;
 
   @FindBy(xpath = "//div[./label[.='Delivery Verification Required']]/div/div")
@@ -127,7 +128,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
   public Button recoveryTicket;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public CreateTicketDialog createTicketDialog;
 
   @FindBy(css = "md-dialog")
@@ -150,7 +151,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
 
   public TransactionsTable transactionsTable;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditPriorityLevelDialog editPriorityLevelDialog;
 
   @FindBy(css = "md-dialog")
@@ -165,14 +166,14 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditOrderStampDialog editOrderStampDialog;
 
   @FindBy(css = "md-dialog")
   public UpdateStatusDialog updateStatusDialog;
 
-  @FindBy(css = "md-dialog")
-  private CancelOrderDialog cancelOrderDialog;
+  @FindBy(css = ".ant-modal")
+  public CancelOrderDialog cancelOrderDialog;
 
   @FindBy(css = "md-dialog")
   private EditPickupDetailsDialog editPickupDetailsDialog;
@@ -239,20 +240,20 @@ public class EditOrderPage extends OperatorV2SimplePage {
   @FindBy(css = "md-dialog")
   public DpDropOffSettingDialog dpDropOffSettingDialog;
 
-  private EventsTable eventsTable;
+  public EventsTable eventsTable;
   public EditDeliveryDetailsDialog editDeliveryDetailsDialog;
-  private DeleteOrderDialog deleteOrderDialog;
+  @FindBy(css = ".ant-modal")
+  public DeleteOrderDialog deleteOrderDialog;
   private PickupRescheduleDialog pickupRescheduleDialog;
   private DeliveryRescheduleDialog deliveryRescheduleDialog;
   private PodDetailsDialog podDetailsDialog;
 
-  public EditOrderPage(WebDriver webDriver) {
+  public EditOrderV2Page(WebDriver webDriver) {
     super(webDriver);
     transactionsTable = new TransactionsTable(webDriver);
     eventsTable = new EventsTable(webDriver);
     deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
     editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
-    deleteOrderDialog = new DeleteOrderDialog(webDriver);
     pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
     chatWithDriverDialog = new ChatWithDriverDialog(webDriver);
     podDetailsDialog = new PodDetailsDialog(webDriver);
@@ -271,11 +272,13 @@ public class EditOrderPage extends OperatorV2SimplePage {
   }
 
   public void openPage(long orderId) {
-    getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL,
+    getWebDriver().get(f("%s/%s/order-v2?id=%s", TestConstants.OPERATOR_PORTAL_BASE_URL,
         StandardTestConstants.NV_SYSTEM_ID.toLowerCase(), orderId));
     pause1s();
-    closeDialogIfVisible();
-    waitWhilePageIsLoading(120);
+    getWebDriver().switchTo().defaultContent();
+    pageFrame.waitUntilVisible();
+    getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    waitUntilLoaded(20, 120);
   }
 
   public void clickMenu(String parentMenuName, String childMenuName) {
@@ -308,30 +311,18 @@ public class EditOrderPage extends OperatorV2SimplePage {
     waitUntilInvisibilityOfToast("Instructions Updated", true);
   }
 
-  public void editPriorityLevel(int priorityLevel) {
-    if (!equalsIgnoreCase(currentPriority.getText(), String.valueOf(priorityLevel))) {
-      clickMenu("Order Settings", "Edit Priority Level");
-      editPriorityLevelDialog.waitUntilVisible();
-      editPriorityLevelDialog.priorityLevel.setValue(priorityLevel);
-      editPriorityLevelDialog.saveChanges.clickAndWaitUntilDone();
-      editPriorityLevelDialog.waitUntilInvisible();
-    }
-  }
-
   public void editOrderStamp(String stampId) {
     clickMenu("Order Settings", "Edit Order Stamp");
     editOrderStampDialog.waitUntilVisible();
     editOrderStampDialog.stampId.setValue(stampId);
-    editOrderStampDialog.save.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast(String.format("Stamp ID updated successfully: %s", stampId), true);
-    waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
+    editOrderStampDialog.save.click();
   }
 
   public void editOrderStampToExisting(String existingStampId, String trackingId) {
     clickMenu("Order Settings", "Edit Order Stamp");
     editOrderStampDialog.waitUntilVisible();
     editOrderStampDialog.stampId.setValue(existingStampId);
-    editOrderStampDialog.save.clickAndWaitUntilDone();
+    editOrderStampDialog.save.click();
     waitUntilInvisibilityOfToast(
         String.format("Stamp %s exists in order %s", existingStampId, trackingId), true);
     editOrderStampDialog.sendKeys(Keys.ESCAPE);
@@ -341,7 +332,7 @@ public class EditOrderPage extends OperatorV2SimplePage {
   public void removeOrderStamp() {
     clickMenu("Order Settings", "Edit Order Stamp");
     editOrderStampDialog.waitUntilVisible();
-    editOrderStampDialog.remove.clickAndWaitUntilDone();
+    editOrderStampDialog.remove.click();
     waitUntilInvisibilityOfToast("Stamp ID removed successfully", true);
   }
 
@@ -405,27 +396,10 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(expectedDriver.trim());
   }
 
-  public void verifyOrderSummary(Order order) {
-    Assertions.assertThat(getOrderComments()).as("Order Summary: Comments")
-        .isEqualTo(order.getComments());
-  }
-
-  public String getOrderComments() {
-    return getText("//div[@class='data-block'][label[.='Comments']]/p");
-  }
-
   public void printAirwayBill() {
     clickMenu("View/Print", "Print Airway Bill");
     waitUntilInvisibilityOfToast("Attempting to download", true);
     waitUntilInvisibilityOfToast("Downloading");
-  }
-
-  public void cancelOrder(String cancellationReason) {
-    clickMenu("Order Settings", "Cancel Order");
-    cancelOrderDialog.waitUntilVisible();
-    cancelOrderDialog.cancellationReason.setValue(cancellationReason);
-    cancelOrderDialog.cancelOrder.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("1 order(s) cancelled");
   }
 
   public void verifyAirwayBillContentsIsCorrect(Order order) {
@@ -582,24 +556,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
         .isEqualTo(deliveryTransaction.getStatus());
 
     verifyPickupAndDeliveryInfo(order);
-  }
-
-  public void verifyOrderStatus(String expectedStatus) {
-    Assertions.assertThat(status.getText()).as("Status").isEqualToIgnoringCase(expectedStatus);
-  }
-
-  public void verifyOrderGranularStatus(String expectedGranularStatus) {
-    Assertions.assertThat(granular.getText()).as("Granular Status")
-        .isEqualToIgnoringCase(expectedGranularStatus);
-  }
-
-  public void waitUntilGranularStatusChange(String expectedGranularStatus) {
-    WebDriverWait wdWait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(60));
-    wdWait.until((WebDriver driver) -> {
-      driver.navigate().refresh();
-      String status = granular.getText().trim();
-      return status.equalsIgnoreCase(expectedGranularStatus);
-    });
   }
 
   public void verifyOrderDeliveryTitle(String expectedDeliveryTitle) {
@@ -1054,29 +1010,28 @@ public class EditOrderPage extends OperatorV2SimplePage {
     deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
   }
 
-  public static class TransactionsTable extends NgRepeatTable<TransactionInfo> {
+  public static class TransactionsTable extends AntTableV4<TransactionInfo> {
 
     public static final String COLUMN_TYPE = "type";
 
     public TransactionsTable(WebDriver webDriver) {
       super(webDriver);
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put("serviceEndTime", "_service-end-time")
+          .put("serviceEndTime", "serviceEndTime")
           .put(COLUMN_TYPE, "type")
           .put("status", "status")
-          .put("driver", "_driver")
-          .put("routeId", "route-id")
-          .put("routeDate", "_route-date")
-          .put("dpId", "distribution-point-id")
+          .put("driver", "driverName")
+          .put("routeId", "routeId")
+          .put("routeDate", "routeDate")
+          .put("dpId", "distributionPointId")
           .put("failureReason", "failure_reason_code")
-          .put("priorityLevel", "priority-level")
+          .put("priorityLevel", "priorityLevel")
           .put("dnr", "dnr")
           .put("name", "name")
           .put("contact", "contact")
           .put("email", "email")
           .put("destinationAddress", "_address")
           .build());
-      setNgRepeat("transaction in getTableData()");
       setEntityClass(TransactionInfo.class);
     }
   }
@@ -1084,31 +1039,28 @@ public class EditOrderPage extends OperatorV2SimplePage {
   /**
    * Accessor for Events table
    */
-  public static class EventsTable extends NgRepeatTable<OrderEvent> {
+  public static class EventsTable extends AntTableV4<OrderEvent> {
 
-    public static final String NG_REPEAT = "event in getTableData()";
     public static final String DATE_TIME = "eventTime";
     public static final String EVENT_TAGS = "tags";
     public static final String EVENT_NAME = "name";
     public static final String USER_TYPE = "userType";
     public static final String USER_ID = "user";
-    public static final String SCAN_ID = "scanId";
     public static final String ROUTE_ID = "routeId";
     public static final String HUB_NAME = "hubName";
     public static final String DESCRIPTION = "description";
 
     public EventsTable(WebDriver webDriver) {
       super(webDriver);
-      setNgRepeat(NG_REPEAT);
+      setTableLocator("//div[./div/span[.='Events']]/div[contains(@class,'VirtualTable')]");
       setColumnLocators(ImmutableMap.<String, String>builder()
-          .put(DATE_TIME, "_event_time")
+          .put(DATE_TIME, "_time")
           .put(EVENT_TAGS, "_tags")
-          .put(EVENT_NAME, "name")
-          .put(USER_TYPE, "user_type")
+          .put(EVENT_NAME, "_name")
+          .put(USER_TYPE, "_userType")
           .put(USER_ID, "_user")
-          .put(SCAN_ID, "_scan_id")
-          .put(ROUTE_ID, "_route_id")
-          .put(HUB_NAME, "_hub_name")
+          .put(ROUTE_ID, "_routeId")
+          .put(HUB_NAME, "_hubName")
           .put(DESCRIPTION, "_description")
           .build());
       setEntityClass(OrderEvent.class);
@@ -1272,27 +1224,20 @@ public class EditOrderPage extends OperatorV2SimplePage {
     return deliveryDetailsBox.isNinjaCollectTagPresent();
   }
 
-  public void deleteOrder() {
-    deleteOrderDialog.waitUntilVisibility();
-    deleteOrderDialog.enterPassword();
-    deleteOrderDialog.clickDeleteOrderButton();
-    deleteOrderDialog.confirmOrderIsDeleted();
-  }
-
   /**
    * Accessor for Cancel dialog
    */
-  public static class CancelOrderDialog extends MdDialog {
+  public static class CancelOrderDialog extends AntModal {
 
     public CancelOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='container.order.edit.cancellation-reason']")
-    public TextBox cancellationReason;
+    @FindBy(css = "input.ant-input")
+    public ForceClearTextBox cancellationReason;
 
-    @FindBy(name = "container.order.edit.cancel-order")
-    public NvApiTextButton cancelOrder;
+    @FindBy(css = "[data-testid='edit-order-testid.cancel-order.cancel-order.button']")
+    public Button cancelOrder;
   }
 
   /**
@@ -1656,33 +1601,16 @@ public class EditOrderPage extends OperatorV2SimplePage {
   /**
    * Accessor for Delete Order dialog
    */
-  public static class DeleteOrderDialog extends OperatorV2SimplePage {
+  public static class DeleteOrderDialog extends AntModal {
 
-    private static final String DIALOG_TITLE = "Delete Order";
-    private static final String PASSWORD = "1234567890";
-    private static final String ENTER_PASSWORD_FIELD_ARIA_LABEL = "Password";
-    private static final String DELETE_NV_API_TEXT_BUTTON_LOCATOR = "container.order.edit.delete-order";
-    private static final String DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Order Deleted";
+    @FindBy(css = "[data-testid='edit-order-testid.delete-order.password.input']")
+    public ForceClearTextBox password;
 
-    public DeleteOrderDialog(WebDriver webDriver) {
-      super(webDriver);
-    }
+    @FindBy(css = "[data-testid='edit-order-testid.delete-order.delete-order.button']")
+    public Button deleteOrder;
 
-    public DeleteOrderDialog waitUntilVisibility() {
-      waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-      return this;
-    }
-
-    private void enterPassword() {
-      sendKeysByAriaLabel(ENTER_PASSWORD_FIELD_ARIA_LABEL, PASSWORD);
-    }
-
-    private void clickDeleteOrderButton() {
-      clickNvApiTextButtonByNameAndWaitUntilDone(DELETE_NV_API_TEXT_BUTTON_LOCATOR);
-    }
-
-    public void confirmOrderIsDeleted() {
-      waitUntilInvisibilityOfToast(DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
+    public DeleteOrderDialog(WebDriver webDriver, WebElement webElement) {
+      super(webDriver, webElement);
     }
   }
 
@@ -2002,18 +1930,21 @@ public class EditOrderPage extends OperatorV2SimplePage {
     editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
   }
 
-  public static class EditPriorityLevelDialog extends MdDialog {
+  public static class EditPriorityLevelDialog extends AntModal {
 
     public EditPriorityLevelDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(xpath = "//md-input-container[label]//input")
-    public TextBox priorityLevel;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-priority-level.delivery-priority-level.input']")
+    public ForceClearTextBox priorityLevel;
+
+    @FindBy(css = "span.ant-typography")
+    public PageElement errorMessage;
 
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-priority-level.submit-changes.button']")
+    public Button saveChanges;
   }
 
   public static class AddToRouteDialog extends MdDialog {
@@ -2085,20 +2016,20 @@ public class EditOrderPage extends OperatorV2SimplePage {
     public NvApiTextButton saveChanges;
   }
 
-  public static class EditOrderStampDialog extends MdDialog {
+  public static class EditOrderStampDialog extends AntModal {
 
     public EditOrderStampDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(id = "commons.stamp-id")
-    public TextBox stampId;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-stamp.new-stamp-id.input']")
+    public ForceClearTextBox stampId;
 
-    @FindBy(name = "commons.save")
-    public NvApiTextButton save;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-stamp.save.button']")
+    public Button save;
 
     @FindBy(name = "commons.remove")
-    public NvApiTextButton remove;
+    public Button remove;
   }
 
   public static class UpdateStatusDialog extends MdDialog {
@@ -2582,34 +2513,6 @@ public class EditOrderPage extends OperatorV2SimplePage {
     OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
     String eventTime = eventRow.getEventTime();
     return eventTime;
-  }
-
-  public void switchToOtherWindow() {
-
-    waitUntilNewWindowOrTabOpened();
-    Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-    for (String windowHandle : windowHandles) {
-      getWebDriver().switchTo().window(windowHandle);
-    }
-  }
-
-  public String getPdfText(String airwayBillPdfUrl) {
-    PDDocument pdDocument = null;
-
-    try {
-      URL url = new URL(airwayBillPdfUrl);
-      InputStream input = url.openStream();
-      BufferedInputStream fileToParse = new BufferedInputStream(input);
-      pdDocument = PDDocument.load(fileToParse);
-      PDFTextStripperByArea pdfTextStripperByArea = new PDFTextStripperByArea();
-      pdfTextStripperByArea.setSortByPosition(true);
-      PDFTextStripper tStripper = new PDFTextStripper();
-      tStripper.setLineSeparator("");
-      return tStripper.getText(pdDocument);
-    } catch (Exception ex) {
-      throw new NvTestRuntimeException(ex);
-    }
   }
 
 }
