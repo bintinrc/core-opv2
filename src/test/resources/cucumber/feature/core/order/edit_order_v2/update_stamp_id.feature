@@ -212,6 +212,46 @@ Feature: Update Stamp ID
     Then Operator verifies that error react notification displayed:
       | top | Not allowed to update order after completion. |
 
+  @CloseNewWindows
+  Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
+    Then Operator verify next order info on Edit Order V2 page:
+      | stampId | KEY_STAMP_ID |
+    And DB Core - verify order by Stamp ID:
+      | stampId    | {KEY_STAMP_ID}                        |
+      | trackingId | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID |
+      | searchLogic | contains            |
+      | searchTerm  | KEY_STAMP_ID        |
+    And Operator switch to Edit Order's window
+
+  Scenario: Remove Stamp ID
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
+    And Operator remove Stamp ID of the created order on Edit Order V2 page
+    Then Operator verify next order info on Edit Order V2 page:
+      | stampId | - |
+    When Operator go to menu Order -> All Orders
+    Then Operator can't find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID |
+      | searchLogic | contains            |
+      | searchTerm  | KEY_STAMP_ID        |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -32,7 +32,7 @@ Feature: Route Monitoring V2
   Scenario Outline: Show Updated Driver Name in Route Monitoring V2 (uid:88878587-9c53-482f-80c2-a98f4376ac0b)
     Given Operator loads Operator portal home page
     And API Operator create new Driver using data below:
-      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"+6589011608"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by Automation Test for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":<HubId>,"hub":"<HubName>","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password1","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+      | driverCreateRequest | {"first_name":"{{RANDOM_FIRST_NAME}}","last_name":"driver","display_name":"D{{TIMESTAMP}}","license_number":"D{{TIMESTAMP}}","driver_type":"{driver-type-name}","availability":false,"cod_limit":4353,"vehicles":[{"active":true,"vehicleNo":"6456345","vehicleType":"{vehicle-type-name}","ownVehicle":false,"capacity":345}],"contacts":[{"active":true,"type":"Mobile Phone","details":"+65 65745 455"}],"zone_preferences":[{"latitude":1.3597220659709373,"longitude":103.82701942695314,"maxWaypoints":6,"minWaypoints":6,"rank":1,"zoneId":3629,"cost":6}],"max_on_demand_jobs":45,"username":"Station{{TIMESTAMP}}","password":"Password1","tags":{},"employment_start_date":"{date:0 days next,YYYY-MM-dd}","employment_end_date":null,"hub_id":<HubId>,"hub":{"displayName":"<HubName>","value":<HubId>}} |
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -54,16 +54,16 @@ Feature: Route Monitoring V2
       | routeDateTo   | TODAY     |
       | hubName       | <HubName> |
     And Operator edits details of created route using data below:
-      | date       | {gradle-current-date-yyyy-MM-dd}        |
-      | tags       | {route-tag-name}                        |
-      | zone       | {zone-name}                             |
-      | hub        | <HubName>                               |
-      | driverName | {KEY_CREATED_DRIVER_INFO.getFullName}   |
-      | comments   | Route has been edited by automated test |
+      | date       | {gradle-current-date-yyyy-MM-dd}         |
+      | tags       | {route-tag-name}                         |
+      | zone       | {zone-name}                              |
+      | hub        | <HubName>                                |
+      | driverName | {KEY_CREATED_DRIVER_INFO.getDisplayName} |
+      | comments   | Route has been edited by automated test  |
     When Operator loads Operator portal Station Route Monitoring page
     And Operator selects hub "<HubName>" and click load selection
     And Operator enters routeID "{KEY_CREATED_ROUTE_ID}" in the Route filter
-    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_CREATED_DRIVER_INFO.getFullName}"
+    Then Operator verify value on Station Route Monitoring page for the "DRIVER_NAME" column is equal to "{KEY_CREATED_DRIVER_INFO.getDisplayName}"
 
 
     Examples:

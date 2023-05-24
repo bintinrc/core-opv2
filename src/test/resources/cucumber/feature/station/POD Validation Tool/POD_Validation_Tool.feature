@@ -8,7 +8,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Refresh POD Details Page While User Validates Less Than 5 PODs
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -57,10 +57,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                            |
@@ -89,7 +89,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Refresh POD Details Page While User Validates More Than 5 PODs
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -160,10 +160,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                            |
@@ -204,7 +204,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Resume Validating Remaining Task Given Filter has Less Than 5 PODs
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -253,10 +253,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                            |
@@ -287,7 +287,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Validator End Session and Unassign Task
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -314,10 +314,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -336,7 +336,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Invalidate POD using Normal Filter
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -363,19 +363,19 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on below criteria
-      | job       | Delivery Job                              |
-      | status    | Success                                   |
-      | startDate | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
-      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
-      | hub       | <HubName>                                 |
-      | driver    | <driverName>                              |
+      | job        | Delivery Job                             |
+      | status     | Success                                  |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate    | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub        | <HubName>                                |
+      | driverName | <driverName>                             |
     When Operator click "Invalid" button
     Then Operator validate "Enter Reason for invalid attempt" Modal is displayed
     When Operator selects the Invalid Attempt Reason "No Photo"
@@ -393,7 +393,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Validate POD using Normal Filter
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -420,19 +420,19 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on below criteria
-      | job       | Delivery Job                              |
-      | status    | Success                                   |
-      | startDate | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
-      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
-      | hub       | <HubName>                                 |
-      | driver    | <driverName>                              |
+      | job        | Delivery Job                             |
+      | status     | Success                                  |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate    | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub        | <HubName>                                |
+      | driverName | <driverName>                             |
     When Operator click "Valid" button
     Then DB Station - Operator verifies the following details for the tracking ID "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}" in the assignments table
       | validity        | SUCCESS |
@@ -447,7 +447,7 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Validate POD Failed Delivery Job via TID's Filter
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -474,12 +474,12 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                 |
-      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                         |
-      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "FAIL"}] |
-      | routes          | KEY_DRIVER_ROUTES                                                                  |
-      | jobAction       | FAIL                                                                               |
-      | failureReasonId | 13                                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobAction       | FAIL                                                                                                                   |
+      | failureReasonId | 13                                                                                                                     |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -514,14 +514,14 @@ Feature: POD Validation
 
   @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Validate POD Success Pickup Job via TID's Filter
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
-      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{{date: 0 days next, YYYY-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{date: 0 days next, YYYY-MM-dd}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Shipper - Operator get address details using data below:
       | shipperId | {shipper-v4-id}      |
@@ -539,13 +539,13 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                      |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
-      | jobType    | RESERVATION                                                                           |
-      | jobAction  | SUCCESS                                                                               |
-      | jobMode    | PICK_UP                                                                               |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+      | jobType    | RESERVATION                                                                                                               |
+      | jobAction  | SUCCESS                                                                                                                   |
+      | jobMode    | PICK_UP                                                                                                                   |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -574,15 +574,15 @@ Feature: POD Validation
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
 
     Examples:
-      | HubId       | HubName       | driverName             | driverId             | address1                         | address2 | postcode | country | latitude         | longitude        | phone       |
-      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | 01-07 North Bridge Rd, Singapore |          | 670237   | SG      | 1.37856500735532 | 103.770646512516 | 87687687687 |
+      | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
 
   Scenario: Download Validation Report
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Download Validation Reports
     When Operator selects the date time range based on below data:
-      | startDate | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
-      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
+      | startDate | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate   | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
     When Operator click "Download Report" button
     And Verify that csv file is downloaded with filename: "Download_Validation_Report.csv"
     Then Operator verifies header names are available in the downloaded CSV file "Download_Validation_Report"
@@ -612,7 +612,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Productivity Count
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -652,10 +652,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                            |
@@ -717,7 +717,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: Unassign POD Tasks from Validator After 3 Hours
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -744,10 +744,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -767,19 +767,19 @@ Feature: POD Validation
 
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
-  Scenario Outline: View Productivity Count
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+  Scenario Outline: Validated Task is not Appear when Filtering
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on below criteria
-      | job              | Delivery Job                              |
-      | status           | Success                                   |
-      | startDate        | {date: -1 days next, YYYY-MM-dd} 00:00:00 |
-      | endDate          | {date: 0 days next, YYYY-MM-dd} 23:59:07  |
-      | hub              | <HubName>                                 |
-      | driver           | <driverName>                              |
-      | masterShipperIds | 2121222                                   |
+      | job              | Delivery Job                             |
+      | status           | Success                                  |
+      | startDate        | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate          | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub              | <HubName>                                |
+      | driverName       | <driverName>                             |
+      | masterShipperIds | 2121222                                  |
     Then Operator validate the error code and error message "There are no matching tasks for the selected filters."
     When Operator closes the notification message
     When Operator filters the PODs based on trackingIds
@@ -793,7 +793,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Reservation POD of Normal Order with COD
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -818,13 +818,13 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                      |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
-      | jobType    | RESERVATION                                                                           |
-      | jobAction  | SUCCESS                                                                               |
-      | jobMode    | PICK_UP                                                                               |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+      | jobType    | RESERVATION                                                                                                               |
+      | jobAction  | SUCCESS                                                                                                                   |
+      | jobMode    | PICK_UP                                                                                                                   |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -841,7 +841,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Reservation POD of Normal Order without COD
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -866,13 +866,13 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                      |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
-      | jobType    | RESERVATION                                                                           |
-      | jobAction  | SUCCESS                                                                               |
-      | jobMode    | PICK_UP                                                                               |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+      | jobType    | RESERVATION                                                                                                               |
+      | jobAction  | SUCCESS                                                                                                                   |
+      | jobMode    | PICK_UP                                                                                                                   |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -889,7 +889,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Delivery POD of Normal Order with COD
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -920,7 +920,6 @@ Feature: POD Validation
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                        |
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","cod":"100", "action": "SUCCESS"}] |
       | routes     | KEY_DRIVER_ROUTES                                                                                 |
-      | cod        | 100                                                                                               |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -937,7 +936,7 @@ Feature: POD Validation
 
   @ForceSuccessOrder @ArchiveRouteCommonV2
   Scenario Outline: View Delivery POD of Normal Order without COD
-    When DB Station - Operator deletes the POD assignment record in the Assignments table by user ID "{user-id}"
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
     Given Operator loads Operator portal home page
     When API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -964,10 +963,10 @@ Feature: POD Validation
       | driverId        | <driverId>                         |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                            |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
     And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
     Then Operator is redirected to Validate Delivery or Pickup Attempt page
     When Operator filters the PODs based on trackingIds
@@ -981,6 +980,625 @@ Feature: POD Validation
     Examples:
       | HubId       | HubName       | driverName             | driverId             |
       | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
+
+  @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: View Pickup POD of Return Order with COP
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP","cash_on_delivery": 100, "is_pickup_required": true, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Shipper - Operator get address details using data below:
+      | shipperId | {shipper-v4-id}      |
+      | addressId | {shipper-address-id} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                             |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                               |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","cod":100,"action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                              |
+      | jobType    | RESERVATION                                                                                    |
+      | jobAction  | SUCCESS                                                                                        |
+      | jobMode    | PICK_UP                                                                                        |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on trackingIds
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus | SUCCESS                                    |
+      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}            |
+      | cod               | Yes                                        |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
+
+  @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: View Pickup POD of Return Order without COP
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": true, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Shipper - Operator get address details using data below:
+      | shipperId | {shipper-v4-id}      |
+      | addressId | {shipper-address-id} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                     |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                    |
+      | jobType    | RESERVATION                                                                          |
+      | jobAction  | SUCCESS                                                                              |
+      | jobMode    | PICK_UP                                                                              |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on trackingIds
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus | SUCCESS                                    |
+      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}            |
+      | cod               | No                                         |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
+
+  @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: View Delivery POD of Return Order with COP
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP","cash_on_delivery": 100, "is_pickup_required": true, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                              |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                      |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","cod":100, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                               |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on trackingIds
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus | SUCCESS                                    |
+      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}            |
+      | cod               | No                                         |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
+
+  @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: View Delivery POD of Return Order without COP
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "to": { "name": "User Auto", "phone_number": "+6597119425", "email": "user.test@ninjavan.co", "address": { "address1": "10 Coleman St", "address2": "", "country": "SG", "postcode": "179809" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": true, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "+6597119425", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                   |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                           |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                    |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on trackingIds
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus | SUCCESS                                    |
+      | attemptDateTime   | {date: 0 days next, YYYY-MM-dd}            |
+      | cod               | No                                         |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Success Delivery Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>","longitude":"<longitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job        | Delivery Job                             |
+      | status     | Success                                  |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate    | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub        | <HubName>                                |
+      | driverName | <driverName>                             |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus    | SUCCESS                                    |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | distanceFromWaypoint                       |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Failed Delivery Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>","longitude":"<longitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobAction       | FAIL                                                                                                                   |
+      | failureReasonId | 13                                                                                                                     |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job           | Delivery Job                               |
+      | status        | Fail                                       |
+      | failureReason | Delay due to unexpected traffic conditions |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
+      | hub           | <HubName>                                  |
+      | driverName    | <driverName>                               |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | failureReason        | Delay due to unexpected traffic conditions |
+      | transactionStatus    | FAIL                                       |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | Displayed                                  |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Success Pickup Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{date: 0 days next, YYYY-MM-dd}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Shipper - Operator get address details using data below:
+      | shipperId | {shipper-v4-id}      |
+      | addressId | {shipper-address-id} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                                                          |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+      | jobType    | RESERVATION                                                                                                               |
+      | jobAction  | SUCCESS                                                                                                                   |
+      | jobMode    | PICK_UP                                                                                                                   |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job        | Pickup Job                               |
+      | status     | Success                                  |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate    | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub        | <HubName>                                |
+      | driverName | <driverName>                             |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus    | SUCCESS                                    |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | Displayed                                  |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Failed Pickup Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{date: 0 days next, YYYY-MM-dd}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Shipper - Operator get address details using data below:
+      | shipperId | {shipper-v4-id}      |
+      | addressId | {shipper-address-id} |
+    And API Core - Operator create reservation using data below:
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_address_id":{shipper-address-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add reservation to route using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+      | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobMode         | PICK_UP                                                                                                                |
+      | jobAction       | FAIL                                                                                                                   |
+      | failureReasonId | 13                                                                                                                     |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job           | Pickup Job                                 |
+      | status        | Fail                                       |
+      | failureReason | Delay due to unexpected traffic conditions |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
+      | hub           | <HubName>                                  |
+      | driverName    | <driverName>                               |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | failureReason        | Delay due to unexpected traffic conditions |
+      | transactionStatus    | FAIL                                       |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | Displayed                                  |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Success Return Pickup Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": true, "pickup_date": "{date: 0 days next, YYYY-MM-dd}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+      | jobAction  | SUCCESS                                                                                                                   |
+      | jobMode    | PICK_UP                                                                                                                   |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job        | Return Pickup                            |
+      | status     | Success                                  |
+      | startDate  | {date: 0 days next, YYYY-MM-dd} 00:00:00 |
+      | endDate    | {date: 0 days next, YYYY-MM-dd} 23:59:07 |
+      | hub        | <HubName>                                |
+      | driverName | <driverName>                             |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus    | SUCCESS                                    |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | Displayed                                  |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Failed Return Pickup Job
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest      | { "service_type": "Return", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": true, "pickup_date": "{date: 0 days next, YYYY-MM-dd}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                         |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"PICKUP"} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "FAIL"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                      |
+      | jobAction       | FAIL                                                                                                                   |
+      | jobMode         | PICK_UP                                                                                                                |
+      | failureReasonId | 13                                                                                                                     |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator filters the PODs based on below criteria
+      | job           | Return Pickup                              |
+      | status        | Fail                                       |
+      | failureReason | Delay due to unexpected traffic conditions |
+      | startDate     | {date: 0 days next, YYYY-MM-dd} 00:00:00   |
+      | endDate       | {date: 0 days next, YYYY-MM-dd} 23:59:07   |
+      | hub           | <HubName>                                  |
+      | driverName    | <driverName>                               |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | failureReason        | Delay due to unexpected traffic conditions |
+      | transactionStatus    | FAIL                                       |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | Displayed                                  |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1          | address2 | postcode          | country | latitude         | longitude        | phone          |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | {pickup-address1} |          | {pickup-postcode} | SG      | 1.37856500735532 | 103.770646512516 | {pickup-phone} |
+
+  @Happypath @ForceSuccessOrder @ArchiveRouteCommonV2
+  Scenario Outline: Filter Valid Tracking IDs
+    Given Station DB - operator deletes the tasks parcel and assignments record for driver "<driverId>"
+    Given Operator loads Operator portal home page
+    When API Order - Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | v4OrderRequest      | { "service_type": "Parcel", "service_level": "Standard", "requested_tracking_number": null, "reference": { "merchant_order_number": "TEST-ZZZ-Z67867861" }, "from": { "name": "User test", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>" } }, "to": { "name": "User Auto", "phone_number": "<phone>", "email": "user.test@ninjavan.co", "address": { "address1": "<address1>", "address2": "<address2>", "country": "<country>", "postcode": "<postcode>","latitude":"<latitude>","longitude":"<longitude>" } }, "parcel_job": { "allow_doorstep_dropoff": true, "enforce_delivery_verification": false, "delivery_verification_mode": "OTP", "is_pickup_required": false, "pickup_date": "{{next-1-day-yyyy-MM-dd}}", "pickup_service_type": "Scheduled", "pickup_service_level": "Standard", "pickup_address_id": "reservation-01", "pickup_address": { "name": "Auto User", "phone_number": "<phone>", "email": "auto@gmail.com", "address": { "address1": "7 Keppel Rd #01-18/20", "address2": "", "country": "SG", "postcode": "089053" } }, "pickup_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "pickup_instructions": "Please ignore, this is for testing purposes", "delivery_start_date": "{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot": { "start_time": "09:00", "end_time": "22:00", "timezone": "Asia/Singapore" }, "delivery_instructions": "Please ignore, this is for testing purposes", "dimensions": { "weight": 10 } } } |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","inbounded_by":null,"route_id":null,"dimensions":{"width":null,"height":null,"length":null,"weight":null,"size":null},"to_reschedule":false,"to_show_shipper_info":false,"tags":[],"hub_user":null,"device_id":null} |
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                         |
+      | hubId                | {hub-id-Global}                                                                                                                                                                                                                                    |
+    And API Driver - Driver login with username "{ninja-driver-username-20}" and "{ninja-driver-password-20}"
+    When API Core - Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":<HubId> , "vehicleId":{vehicle-id}, "driverId":<driverId>} |
+    And API Core - Operator add parcel to the route using data below:
+      | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
+      | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
+    And API Driver - Driver van inbound:
+      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                     |
+      | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
+    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
+    And API Driver - Driver read routes:
+      | driverId        | <driverId>                         |
+      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Driver - Driver submit POD:
+      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                        |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                |
+      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","shipper_id":{shipper-v4-legacy-id}, "action": "SUCCESS"}] |
+      | routes     | KEY_DRIVER_ROUTES                                                                                                         |
+    And Operator go to menu Station Management Tool -> Validate Delivery or Pickup Attempt
+    Then Operator is redirected to Validate Delivery or Pickup Attempt page
+    When Operator click "Filter by Tracking IDs" button
+    Then Operator validate filterByTackingId modal
+    When Operator filters the PODs based on trackingIds
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+    Then Operator verifies the following details in the POD validate details page
+      | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
+      | transactionStatus    | SUCCESS                                    |
+      | attemptDateTime      | {date: 0 days next, YYYY-MM-dd}            |
+      | cod                  | No                                         |
+      | shipperName          | {shipper-v4-name}                          |
+      | latitude             | <latitude>                                 |
+      | longitude            | <longitude>                                |
+      | distanceFromWaypoint | distanceFromWaypoint                       |
+      | address1             | <address1>                                 |
+      | address2             | <address2>                                 |
+      | postcode             | <postcode>                                 |
+      | phone                | <phone>                                    |
+      | relationship         | -                                          |
+      | code                 | -                                          |
+
+    Examples:
+      | HubId       | HubName       | driverName             | driverId             | address1    | address2   | postcode | country | latitude         | longitude        | phone       |
+      | {hub-id-20} | {hub-name-20} | {ninja-driver-name-20} | {ninja-driver-id-20} | Station POD | Validation | 123456   | SG      | 1.29261998789502 | 103.850241824751 | +6597119425 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
