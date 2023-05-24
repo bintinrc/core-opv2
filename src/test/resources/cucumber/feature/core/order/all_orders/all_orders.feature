@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders
+@OperatorV2 @Core @AllOrders @AllOrdersPage
 Feature: All Orders
 
   @LaunchBrowser @ShouldAlwaysRun

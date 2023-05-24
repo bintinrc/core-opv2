@@ -187,7 +187,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
   }
 
   public void verifyReservationInfo(Address address, String shipperName, String routeId,
-      String driverName, String priorityLevel, String approxVolume, String comments) {
+      String driverName, String priorityLevel, String approxVolume, String comments, String readyBy, String latestBy) {
         /*
           Reload the table to make sure the table info is updated.
          */
@@ -222,6 +222,16 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
     assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, actual.getPriorityLevel());
     assertEqualsIfExpectedValueNotBlank("Approx. Volume", approxVolume, actual.getApproxVolume());
     assertEqualsIfExpectedValueNotBlank("Comments", comments, actual.getComments());
+    if (StringUtils.isNotBlank(readyBy)){
+      Assertions.assertThat(actual.getReadyBy())
+          .as("Ready By")
+          .contains(readyBy);
+    }
+    if (StringUtils.isNotBlank(latestBy)){
+      Assertions.assertThat(actual.getLatestBy())
+          .as("Latest By")
+          .contains(latestBy);
+    }
   }
 
   public void verifyReservationInfo(ReservationInfo expectedReservationInfo, Address address) {
@@ -523,6 +533,24 @@ public class ShipperPickupsPage extends OperatorV2SimplePage {
 
     @FindBy(name = "container.shipper-pickups.dialog.change-address")
     public NvIconTextButton editAddress;
+
+    @FindBy(css = "[ng-model='ctrl.data.startTime'] [ng-model='displayedHour']")
+    public TextBox readyByHours;
+
+    @FindBy(css = "[ng-model='ctrl.data.startTime'] [ng-model='displayedMinute']")
+    public TextBox readyByMinutes;
+
+    @FindBy(css = "[ng-model='ctrl.data.startTime'] [ng-click='toggleAMPM()']")
+    public Button readyByAmPm;
+
+    @FindBy(css = "[ng-model='ctrl.data.endTime'] [ng-model='displayedHour']")
+    public TextBox lastByHours;
+
+    @FindBy(css = "[ng-model='ctrl.data.endTime'] [ng-model='displayedMinute']")
+    public TextBox lastByMinutes;
+
+    @FindBy(css = "[ng-model='ctrl.data.endTime'] [ng-click='toggleAMPM()']")
+    public Button lastByAmPm;
 
     @FindBy(id = "commons.address1")
     public TextBox address1;

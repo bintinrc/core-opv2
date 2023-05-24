@@ -27,7 +27,6 @@ import co.nvqa.commons.model.entity.MovementEventEntity;
 import co.nvqa.commons.model.entity.MovementTripEventEntity;
 import co.nvqa.commons.model.entity.ReserveTrackingIdEntity;
 import co.nvqa.commons.model.entity.RouteMonitoringDataEntity;
-import co.nvqa.commons.model.entity.RouteWaypointEntity;
 import co.nvqa.commons.model.entity.ShipmentPathEntity;
 import co.nvqa.commons.model.entity.TransactionEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
@@ -1239,14 +1238,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
   @SuppressWarnings("unchecked")
   @Given("DB Operator verifies order is deleted")
   public void dbOperatorVerifiesOrderIsDeleted() {
+    String trackingId;
     Order order = get(KEY_CREATED_ORDER);
-    final String finalTrackingId = order.getTrackingId();
+    if (order != null) {
+      trackingId = order.getTrackingId();
+    } else {
+      List<co.nvqa.common.core.model.order.Order> orders = get(KEY_LIST_OF_CREATED_ORDERS);
+      if (CollectionUtils.isEmpty(orders)) {
+        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_ORDERS is empty");
+      }
+      trackingId = orders.get(orders.size() - 1).getTrackingId();
+    }
     retryIfExpectedExceptionOccurred(() ->
     {
-      List<Order> orderRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
+      List<Order> orderRecords = getCoreJdbc().getOrderByTrackingId(trackingId);
 
       Assertions.assertThat(orderRecords.size())
-          .as(f("Expected 0 record in Orders table with tracking ID %s", finalTrackingId))
+          .as(f("Expected 0 record in Orders table with tracking ID %s", trackingId))
           .isEqualTo(0);
       return orderRecords;
     }, getCurrentMethodName(), LOGGER::warn, 500, 30, AssertionError.class);

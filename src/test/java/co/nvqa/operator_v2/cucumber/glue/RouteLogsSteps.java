@@ -45,6 +45,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_VERIFY_ADDRESS;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_ROUTE_ID;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.COLUMN_TAGS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -82,8 +83,9 @@ public class RouteLogsSteps extends AbstractSteps {
       routeLogsPage.createRouteDialog.waitUntilVisible();
       pause1s();
 
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
 
       if (StringUtils.isNotBlank(newParams.getDate())) {
         routeDetailsForm.routeDate.setValue(newParams.getDate());
@@ -131,8 +133,9 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyInvalidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
       Assertions.assertThatExceptionOfType(NoSuchElementException.class)
           .as("Error expected for %s Driver value", value)
@@ -154,8 +157,9 @@ public class RouteLogsSteps extends AbstractSteps {
   public void verifyValidDriver(String value) {
     routeLogsPage.inFrame(page -> {
       page.createRouteDialog.waitUntilVisible();
-      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms.get(
-          0);
+      CreateRouteDialog.RouteDetailsForm routeDetailsForm = routeLogsPage.createRouteDialog.routeDetailsForms
+          .get(
+              0);
       routeDetailsForm.assignedDriver.waitUntilEnabled();
       retryIfRuntimeExceptionOccurred(() -> routeDetailsForm.assignedDriver.selectValue(value), 5);
     });
@@ -353,6 +357,18 @@ public class RouteLogsSteps extends AbstractSteps {
       }
       routeLogsPage.editDetailsDialog.saveChanges.click();
     });
+  }
+
+  @When("Operator verify Edit Details button is disabled on Route Logs page")
+  public void clickCheckAssignmentIsDisabled() {
+    routeLogsPage.inFrame(() -> {
+          Long routeId = get(KEY_CREATED_ROUTE_ID);
+          routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+          assertThat(routeLogsPage.routesTable.isButtonEnabled(1, ACTION_EDIT_DETAILS))
+              .withFailMessage("Edit Details button is enabled")
+              .isFalse();
+        }
+    );
   }
 
   @When("Operator verifies address of {string} route on Route Logs page")
@@ -1097,6 +1113,7 @@ public class RouteLogsSteps extends AbstractSteps {
 
   @And("Operator verifies that error toast displayed:")
   public void operatorVerifyErrorToast(Map<String, String> data) {
+
     Map<String, String> finalData = resolveKeyValues(data);
     long start = new Date().getTime();
     boolean found;
@@ -1105,20 +1122,34 @@ public class RouteLogsSteps extends AbstractSteps {
         String actualTop = toast.toastTop.getNormalizedText();
         String actualBottom = toast.toastBottom.getNormalizedText();
         String expTop = finalData.get("top");
-        String expBottom = finalData.get("bottom");
-
-        if (!(StringUtils.isNotBlank(actualTop) && !StringUtils.isNotBlank(actualBottom))) {
-          if (!(StringUtils.containsIgnoreCase(actualTop, expTop) && StringUtils.containsIgnoreCase(
-              actualBottom, expBottom))) {
-            return false;
+        if (StringUtils.isNotBlank(expTop)) {
+          if (expTop.startsWith("^")) {
+            if (!actualTop.matches(expTop)) {
+              return false;
+            }
+          } else {
+            if (!StringUtils.equalsIgnoreCase(expTop, actualTop)) {
+              return false;
+            }
           }
         }
 
+        String expBottom = finalData.get("bottom");
+        if (StringUtils.isNotBlank(expBottom)) {
+          LOGGER.info("Found description: " + actualBottom);
+          if (expBottom.startsWith("^")) {
+            return actualBottom.matches(expBottom);
+          } else {
+            return StringUtils.equalsIgnoreCase(expBottom, actualBottom);
+          }
+        }
         return true;
       });
-    } while (!found && new Date().getTime() - start < 20000);
-
+    } while (!found && new Date().getTime() - start < 30000);
     Assertions.assertThat(found).as("Toast " + finalData.toString() + " is displayed").isTrue();
+    Assertions.assertThat(finalData.toString())
+        .withFailMessage("Toast is not displayed: " + finalData)
+        .isNotNull();
   }
 
   @And("Operator verifies that warning toast displayed:")

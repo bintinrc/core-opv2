@@ -48,7 +48,7 @@ Feature: Global Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | ON HOLD - SHIPPER ISSUE |
       | rackInfo       | RECOVERY                |
-      | color          | #fa002c                |
+      | color          | #fa002c                 |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id-3}             |
       | trackingId | GET_FROM_CREATED_ORDER |
@@ -77,8 +77,8 @@ Feature: Global Inbound
       | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                         |
-      | endDate | {date: 3 days next,yyyy-MM-dd } |
+      | status  | PENDING                                              |
+      | endDate | {date: 3 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Express Service (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
@@ -96,8 +96,8 @@ Feature: Global Inbound
       | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                         |
-      | endDate | {date: 2 days next,yyyy-MM-dd } |
+      | status  | PENDING                                               |
+      | endDate | {date: 2 days next,yyyy-MM-dd ,excludedDays:[Sunday]} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Next Day Service (uid:69d8cd89-bfd3-4e1a-ad04-ece038974e99)
@@ -115,8 +115,8 @@ Feature: Global Inbound
       | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                         |
-      | endDate | {date: 1 days next,yyyy-MM-dd } |
+      | status  | PENDING                                               |
+      | endDate | {date: 1 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
 
   @CloseNewWindows
   Scenario: Inbound Parcel with change in order SLA - Same Day (uid:79a946bb-aa72-4e5e-a063-9656f8826a7b)
@@ -134,8 +134,8 @@ Feature: Global Inbound
       | color          | #f06c00                            |
     When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
-      | status  | PENDING                        |
-      | endDate | {date: 2 days next,yyyy-MM-dd} |
+      | status  | PENDING                                              |
+      | endDate | {date: 2 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
 
   @CloseNewWindows
   Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:d929ec0a-629b-4ab3-beae-47ef1fafc329)
@@ -164,14 +164,14 @@ Feature: Global Inbound
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
-      | status             | SUCCESS                        |
-      | startDate          | {date: 1 days next,yyyy-MM-dd} |
-      | endDate            | {date: 1 days next,yyyy-MM-dd} |
-      | lastServiceEndDate | {date: 0 days next,yyyy-MM-dd} |
+      | status             | SUCCESS                         |
+      | startDate          | {date: 1 days next,yyyy-MM-dd}  |
+      | endDate            | {date: 1 days next,yyyy-MM-dd}  |
+      | lastServiceEndDate | {date: 0 days next, yyyy-MM-dd} |
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                        |
-      | startDate | {date: 1 days next,yyyy-MM-dd} |
-      | endDate   | {date: 3 days next,yyyy-MM-dd} |
+      | status    | PENDING                                              |
+      | startDate | {date: 1 days next,yyyy-MM-dd}                       |
+      | endDate   | {date: 3 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |
@@ -204,9 +204,9 @@ Feature: Global Inbound
       | endDate            | {date: 1 days next,yyyy-MM-dd} |
       | lastServiceEndDate | {date: 0 days next,yyyy-MM-dd} |
     And Operator verify Delivery details on Edit order page using data below:
-      | status    | PENDING                        |
-      | startDate | {date: 1 days next,yyyy-MM-dd} |
-      | endDate   | {date: 2 days next,yyyy-MM-dd} |
+      | status    | PENDING                                              |
+      | startDate | {date: 1 days next,yyyy-MM-dd}                       |
+      | endDate   | {date: 2 days next,yyyy-MM-dd,excludedDays:[Sunday]} |
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name-3}     |

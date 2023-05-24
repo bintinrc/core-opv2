@@ -36,7 +36,10 @@ import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.EditTicketDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -46,8 +49,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -2575,6 +2582,34 @@ public class EditOrderPage extends OperatorV2SimplePage {
     OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
     String eventTime = eventRow.getEventTime();
     return eventTime;
+  }
+
+  public void switchToOtherWindow() {
+
+    waitUntilNewWindowOrTabOpened();
+    Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+    for (String windowHandle : windowHandles) {
+      getWebDriver().switchTo().window(windowHandle);
+    }
+  }
+
+  public String getPdfText(String airwayBillPdfUrl) {
+    PDDocument pdDocument = null;
+
+    try {
+      URL url = new URL(airwayBillPdfUrl);
+      InputStream input = url.openStream();
+      BufferedInputStream fileToParse = new BufferedInputStream(input);
+      pdDocument = PDDocument.load(fileToParse);
+      PDFTextStripperByArea pdfTextStripperByArea = new PDFTextStripperByArea();
+      pdfTextStripperByArea.setSortByPosition(true);
+      PDFTextStripper tStripper = new PDFTextStripper();
+      tStripper.setLineSeparator("");
+      return tStripper.getText(pdDocument);
+    } catch (Exception ex) {
+      throw new NvTestRuntimeException(ex);
+    }
   }
 
 }

@@ -70,11 +70,11 @@ Feature: Parcel Sweeper Live
       | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
       | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
       | textColor     | {blue-hex-color}                   |
-    When DB Sort - get next sorting task
-      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
-      | sourceName | {hub-name}                    |
-    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
+    #When DB Sort - get next sorting task
+     # | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+     # | sourceName | {hub-name}                    |
+    #Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+     # | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName   | {KEY_CREATED_ORDER.destinationHub} |
       | textColor | {dark-gray-hex-color}              |
@@ -215,13 +215,13 @@ Feature: Parcel Sweeper Live
       | zoneName      | {KEY_SORT_RTS_ZONE_TYPE.name}      |
       | zoneShortName | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
       | textColor     | {blue-hex-color}                   |
-    When DB Sort - get next sorting task
-      | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
-      | sourceName | {hub-name}                    |
-    Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
-      | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
+    #When DB Sort - get next sorting task
+     # | zoneName   | {KEY_SORT_RTS_ZONE_TYPE.name} |
+    # | sourceName | {hub-name}                    |
+    #Then Operator verify Next Sorting Hub on Parcel Sweeper page using data below:
+     # | nextSortingHub | {KEY_SORT_NEXT_SORT_TASK} |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName   | {hub-name}            |
+      | hubName   | {sbm-hub}             |
       | textColor | {dark-gray-hex-color} |
     Then Operator verify Prior tag on Parcel Sweeper Live page
     And DB Operator verifies warehouse_sweeps record

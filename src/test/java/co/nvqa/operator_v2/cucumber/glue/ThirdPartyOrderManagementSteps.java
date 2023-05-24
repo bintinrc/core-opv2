@@ -2,12 +2,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyOrderManagementPage;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.api.Assertions;
 
 /**
@@ -30,6 +31,14 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps {
   public void operatorUploadsNewMapping(Map<String, String> dataTableAsMap) {
     ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
     String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+    if (trackingId == null) {
+      List<String> trackingIds = get(KEY_LIST_OF_CREATED_TRACKING_IDS);
+      if (CollectionUtils.isEmpty(trackingIds)) {
+        throw new IllegalArgumentException("KEY_LIST_OF_CREATED_TRACKING_IDS is empty");
+      }
+      trackingId = trackingIds.get(0);
+    }
+
     String shipperName = dataTableAsMap.get("3plShipperName");
     String shipperId = dataTableAsMap.get("3plShipperId");
 

@@ -38,6 +38,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   @FindBy(xpath = "//div[contains(@class, 'select-preset-holder')]/button[contains(@data-testid, 'menu-button')]")
   public PageElement ellipses;
 
+  @FindBy(xpath = "//button[@class='ant-picker-header-next-btn']")
+  public PageElement nextMonthButton;
+
   @FindBy(xpath = "//li[contains(@data-testid, 'create-new-preset')]")
   public PageElement createNewPreset;
 
@@ -160,7 +163,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   private static final String PRESET_DIALOG_MULTISELECT_FILTER_DELETE = "//div[@class='multi-select']//label[contains(text(), '%s')]/following-sibling::div//span[contains(@class, 'anticon-close')]";
 
   public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
-          .ofPattern("yyyy-MM-dd_HH-mm");
+      .ofPattern("yyyy-MM-dd_HH-mm");
   // zone id should be depend on the machine, by far. Tested locally using ID, hopefully bamboo machine is in SG
   // issue is addressed in https://jira.ninjavan.co/browse/SORT-965
   private static final ZonedDateTime ZONED_DATE_TIME = DateUtil.getDate(ZoneId.of(NvCountry.SG
@@ -341,12 +344,13 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     Assertions.assertThat(isElementExist(PRESET_NOT_FOUND_XPATH)).as("Preset is Deleted").isTrue();
   }
 
-  public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders, String csvTimestamp) {
+  public void csvDownloadSuccessfullyAndContainsTrackingId(List<Order> orders,
+      String csvTimestamp) {
     String csvContainedFileName = CSV_FILENAME_FORMAT + csvTimestamp;
     LOGGER.debug("Looking for CSV with Name contained {}", csvContainedFileName);
     String csvFileName = retryIfAssertionErrorOccurred(() ->
-                    getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
-            "Getting Exact File Name");
+            getContainedFileNameDownloadedSuccessfully(csvContainedFileName),
+        "Getting Exact File Name");
 
     for (int i = 0; i < orders.size(); i++) {
       verifyFileDownloadedSuccessfully(csvFileName, orders.get(i).getTrackingId());
@@ -459,8 +463,10 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     int currentMinute = orderCreationLocalDateTime.getMinute();
     int currentHour = orderCreationLocalDateTime.getHour();
 
-    int currentMinuteFloored = ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
-    String currentMinuteFlooredAsString = currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
+    int currentMinuteFloored =
+        ((int) Math.floor((float) currentMinute / 30)) * 30; // Return 00 or 30
+    String currentMinuteFlooredAsString =
+        currentMinuteFloored == 0 ? f("0%d", currentMinuteFloored) : f("%d", currentMinuteFloored);
     String currentHourAsString = currentHour < 10 ? f("0%d", currentHour) : f("%d", currentHour);
 
     LocalTime startTime = LocalTime.parse(
@@ -501,7 +507,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
     String endMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, endMinuteVal);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       click(startTimepickerFieldXpath);
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("Start timepicker is displayed")
@@ -514,7 +520,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       click(endTimepickerFieldXpath);
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("End timepicker is displayed")
@@ -553,24 +559,26 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         startMinuteVal, endHourVal, endMinuteVal);
 
     String startYearPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_YEAR, startYearVal);
-    String startMonthPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_MONTH, startYearVal, startMonthVal);
+    String startMonthPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_MONTH, startYearVal,
+        startMonthVal);
     String startDayPickerXpath = f(CREATION_TIME_FILTER_DATEPICKER_DAY, startYearVal, startMonthVal,
         startDayVal);
     String startHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, startHourVal);
     String startMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, startMinuteVal);
     String endHourPickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_HOUR, endHourVal);
     String endMinutePickerXpath = f(CREATION_TIME_FILTER_TIMEPICKER_MINUTE, endMinuteVal);
-
     // Wait until datepicker field shows up
     waitUntilVisibilityOfElementLocated(startDatepickerFieldXpath);
 
     // Click on datepicker field
-    retryIfAssertionErrorOccurred(() -> {
-      do{click(startDatepickerFieldXpath);
-      Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
-          .as("Start datepicker is displayed")
-          .isTrue();}
-     while(!waitUntilVisibilityOfElementLocated(selectYearButtonXpath).isDisplayed()) ;
+    doWithRetry(() -> {
+      do {
+        click(startDatepickerFieldXpath);
+        Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
+            .as("Start datepicker is displayed")
+            .isTrue();
+      }
+      while (!waitUntilVisibilityOfElementLocated(selectYearButtonXpath).isDisplayed());
     }, "Clicking datepicker field until it's showing...");
 
     // Select start year
@@ -594,7 +602,7 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     // Select start minute
     click(startMinutePickerXpath);
 
-    retryIfAssertionErrorOccurred(() -> {
+    doWithRetry(() -> {
       click(endDatepickerFieldXpath);
       Assertions.assertThat(isElementExist(CREATION_TIME_FILTER_DROPDOWN))
           .as("End datepicker is displayed")
@@ -603,6 +611,9 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
     pause400ms(); // wait for the focus change
 
     // Select end day (same as start day)
+    if(!isElementVisible(startDayPickerXpath)){
+      nextMonthButton.click();
+    }
     click(startDayPickerXpath);
 
     // Select end hour
@@ -640,7 +651,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
   public boolean basicOrderDataUICheckingAndCheckForTimeLatency(Order order, Waypoint waypoint) {
     int resultsCount = getAddressDownloadResultCount();
-    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(), "Asia/Singapore");
+    LocalDateTime adjustedOCCreatedAt = resolveLocalDateTime(order.getCreatedAt(),
+        "Asia/Singapore");
 
     if (resultsCount == 0) {
       LOGGER.debug(
@@ -689,7 +701,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
 
     boolean creationTimeLatencyExists = false;
     for (int i = 0; i < resultsCount; i++) {
-      verifyChecklist.put(ORDER_TRACKING_ID_EXISTS, trackingIDEl.get(i).getText().equals(ocTrackingID));
+      verifyChecklist.put(ORDER_TRACKING_ID_EXISTS,
+          trackingIDEl.get(i).getText().equals(ocTrackingID));
 
       if (verifyChecklist.get(ORDER_TRACKING_ID_EXISTS)) {
         verifyChecklist.put(ORDER_ADDRESS_ONE_EXISTS,
@@ -714,23 +727,25 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
         verifyChecklist.put(ORDER_WAYPOINT_ID_EXISTS,
             Long.parseLong(waypointIDEl.get(i).getText()) == ocWaypoint);
         verifyChecklist.put(ORDER_POSTCODE_EXISTS, postcodeEl.get(i).getText().equals(ocPostcode));
-        verifyChecklist.put(ORDER_LATITUDE_EXISTS, Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
-        verifyChecklist.put(ORDER_LONGITUDE_EXISTS, Double.parseDouble(longitudeEl.get(i).getText()) == ocLongitude);
+        verifyChecklist.put(ORDER_LATITUDE_EXISTS,
+            Double.parseDouble(latitudeEl.get(i).getText()) == ocLatitude);
+        verifyChecklist.put(ORDER_LONGITUDE_EXISTS,
+            Double.parseDouble(longitudeEl.get(i).getText()) == ocLongitude);
 
         break;
       }
     }
 
     int verificationsPassed = verifyChecklist.entrySet()
-            .stream()
-            .filter(map -> map.getValue())
-            .collect(Collectors.toMap(map -> map.getKey(), map -> true)).size();
+        .stream()
+        .filter(map -> map.getValue())
+        .collect(Collectors.toMap(map -> map.getKey(), map -> true)).size();
 
     if (verificationsPassed < verifyChecklist.size()) {
       Map<String, Boolean> verificationFailed = verifyChecklist.entrySet()
-              .stream()
-              .filter(map -> !map.getValue())
-              .collect(Collectors.toMap(map -> map.getKey(), map -> false));
+          .stream()
+          .filter(map -> !map.getValue())
+          .collect(Collectors.toMap(map -> map.getKey(), map -> false));
 
       for (String key : verificationFailed.keySet()) {
         LOGGER.debug("{} checking result is FAILED", key);
@@ -796,7 +811,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public boolean compareUpdatedCreationTimeValue(String newValue) {
-    WebElement startDateField = findElementByXpath(f(CREATION_TIME_FILTER_DATEPICKER_FIELD, "Start"));
+    WebElement startDateField = findElementByXpath(
+        f(CREATION_TIME_FILTER_DATEPICKER_FIELD, "Start"));
     WebElement endDateField = findElementByXpath(f(CREATION_TIME_FILTER_DATEPICKER_FIELD, "End"));
 
     String startTimeValue = startDateField.getAttribute("value").split(" ")[1];
@@ -806,7 +822,8 @@ public class AddressingDownloadPage extends OperatorV2SimplePage {
   }
 
   public void scrollDownAddressTable() {
-    while (!isElementExist("//div[contains(@class, 'table-container')]/div[contains(text(), 'End of Table')]")) {
+    while (!isElementExist(
+        "//div[contains(@class, 'table-container')]/div[contains(text(), 'End of Table')]")) {
       scrollIntoView("(//tr)[last()]");
     }
   }

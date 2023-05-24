@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Inbounding @RouteInbound
+@OperatorV2 @Core @Inbounding @RouteInbound @WaypointPerformance
 Feature: Waypoint Performance
 
   @LaunchBrowser @ShouldAlwaysRun

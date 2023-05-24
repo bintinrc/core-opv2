@@ -32,7 +32,7 @@ public class SimpleReactPage<T extends SimpleReactPage> extends OperatorV2Simple
   private static final Logger LOGGER = LoggerFactory.getLogger(SimpleReactPage.class);
 
   @FindBy(tagName = "iframe")
-  private PageElement pageFrame;
+  protected PageElement pageFrame;
 
   @FindBy(css = ".ant-spin-dot")
   public PageElement spinner;
