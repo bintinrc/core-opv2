@@ -41,7 +41,7 @@ public class PricingScriptsV2CreateEditDraftPage extends SimpleReactPage {
   @FindBy(xpath = "//button[@data-testid='deleteScript.confirmBtn']")
   public PageElement buttonConfirmDelete;
 
-  @FindBy(xpath = "//span[text()='Delete Draft']")
+  @FindBy(xpath = "//span[contains(text(),'Delete')]")
   private PageElement buttonDeleteDraft;
 
   @FindBy(xpath = "//span[text()='Save Draft and Exit']")

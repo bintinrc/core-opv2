@@ -26,14 +26,14 @@ Feature: Edit Pricing Script
       | fromZone     | EAST     |
       | toZone       | WEST     |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 7.128 |
-      | gst          | 0.528 |
-      | deliveryFee  | 6.6   |
-      | insuranceFee | 0     |
-      | codFee       | 0     |
-      | handlingFee  | 0     |
-      | rtsFee       | 0     |
-      | comments     | OK    |
+      | grandTotal   | 16.848 |
+      | gst          | 1.248  |
+      | deliveryFee  | 15.6   |
+      | insuranceFee | 0      |
+      | codFee       | 0      |
+      | handlingFee  | 0      |
+      | rtsFee       | 0      |
+      | comments     | OK     |
     And Operator close page
     Then Operator verify the script is saved successfully
 

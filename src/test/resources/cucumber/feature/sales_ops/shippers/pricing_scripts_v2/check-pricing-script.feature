@@ -51,7 +51,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Pickup Params - Send Pickup Params
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "97474"
+    And Operator search custom script id "{pricing-script-id-pickup-params}"
     And Operator do Run Check on specific Active Script using this data below:
       | firstMileType | PICKUP |
       | fromZone      | EAST   |
@@ -68,7 +68,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Doesn't have Pickup Params - Send Pickup Params
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "70873"
+    And Operator search custom script id "{pricing-script-id-weight}"
     And Operator do Run Check on specific Active Script using this data below:
       | firstMileType | PICKUP |
       | weight        | 5      |
@@ -86,7 +86,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and Dimensions Calculation - Send L+W+H
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109911"
+    And Operator search custom script id "{pricing-script-id-legacy-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | orderFields  | New      |
       | serviceLevel | Next Day |
@@ -109,7 +109,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and No Dimensions Calculation - Send L+W+H
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109936"
+    And Operator search custom script id "{pricing-script-id-legacy-no-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | weight   | 3    |
       | length   | 20   |
@@ -129,7 +129,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and No Dimensions Calculation - Not Send L+W+H
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109936"
+    And Operator search custom script id "{pricing-script-id-legacy-no-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | weight   | 4    |
       | length   | 0    |
