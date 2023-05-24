@@ -478,12 +478,12 @@ Feature: Pricing Scripts V2
       | insuranceFee | 0            |
       | codFee       | 0            |
       | handlingFee  | 0            |
-      | rtsFee       | 0            |
+      | rtsFee       | <rtsFee>     |
       | comments     | OK           |
     Examples:
-      | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              |
-      | Yes   | is RTS = yes | 17.28      | 1.28 | uid:313b70a4-3803-40cd-8872-b08da89e3281 |
-      | No    | is RTS = no  | 16.2       | 1.2  | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 |
+      | isRTS | dataset_name | grandTotal | gst  | hiptest-uid                              | rtsFee |
+      | Yes   | is RTS = yes | 17.28      | 1.28 | uid:313b70a4-3803-40cd-8872-b08da89e3281 | 1      |
+      | No    | is RTS = no  | 16.2       | 1.2  | uid:60033848-ac46-4be5-bb8a-2f79c06c85c4 | 0      |
 
   Scenario: Create Draft Pricing Script Failed - Not Fill Script Name and Script Description (uid:d5a25b08-13b9-442a-bd2c-ff5077e15371)
     Given Operator go to menu Shipper -> Pricing Scripts V2

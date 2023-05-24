@@ -6,7 +6,7 @@ Feature: Check Pricing Script
 
   Scenario Outline: Check Script - VN Shopee Script
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "76108"
+    And Operator search custom script id "{pricing-script-id-Shopee-VN}"
     And Operator do Run Check on specific Active Script using this data below:
       | weight   | <weight>   |
       | fromZone | <fromZone> |

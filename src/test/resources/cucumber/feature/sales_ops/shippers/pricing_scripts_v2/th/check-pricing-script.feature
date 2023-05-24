@@ -6,7 +6,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - TH
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "71442"
+    And Operator search custom script id "{pricing-script-id-all}"
     And Operator do Run Check on specific Active Script using this data below:
       | codValue     | 500     |
       | insuredValue | 100     |
@@ -26,7 +26,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and Dimensions Calculation - Send L+W+H - TH
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109937"
+    And Operator search custom script id "{pricing-script-id-legacy-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | orderFields  | New      |
       | serviceLevel | Next Day |
@@ -49,7 +49,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and Dimensions Calculation - Not Send L+W+H - TH
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109937"
+    And Operator search custom script id "{pricing-script-id-legacy-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | orderFields  | New      |
       | serviceLevel | Next Day |
@@ -72,7 +72,7 @@ Feature: Check Pricing Script
 
   Scenario: Check Script Successfully - Pricing Script Has Legacy Params and Dimensions Calculation - Only Send Width and Height - TH
     Given Operator go to menu Shipper -> Pricing Scripts V2
-    And Operator search custom script id "109937"
+    And Operator search custom script id "{pricing-script-id-legacy-dim-threshold}"
     And Operator do Run Check on specific Active Script using this data below:
       | orderFields  | New      |
       | serviceLevel | Next Day |

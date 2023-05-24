@@ -15,16 +15,16 @@ Feature: Check Pricing Script
       | isRts                  | No           |
       | size                   | S            |
       | weight                 | 1.0          |
-      | insuredValue           | 0.00         |
-      | codValue               | 0.00         |
+      | insuredValue           | 30000.00     |
+      | codValue               | 100000.00    |
       | originPricingZone      | ID_A00007_01 |
       | destinationPricingZone | ID_B00001_01 |
     Then Operator verify the Run Check Result is correct using data below:
-      | grandTotal   | 66726 |
-      | gst          | 726   |
+      | grandTotal   | 74556 |
+      | gst          | 1056  |
       | deliveryFee  | 66000 |
-      | insuranceFee | 0     |
-      | codFee       | 0     |
+      | insuranceFee | 2500  |
+      | codFee       | 5000  |
       | handlingFee  | 0     |
       | rtsFee       | 0     |
       | comments     | OK    |
