@@ -22,6 +22,8 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
@@ -39,7 +41,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import java.io.File;
-import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
@@ -55,7 +56,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.TransactionsTable.COLUMN_TYPE;
@@ -107,22 +107,25 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[label[.='Order Type']]/p")
   public PageElement orderType;
 
+  @FindBy(xpath = "//label[text()='Delivery type']/following-sibling::div")
+  public PageElement deliveryType;
+
   @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
   public PageElement currentDnrGroup;
 
   @FindBy(xpath = "//div[./label[.='Current priority']]//span")
   public PageElement currentPriority;
 
-  @FindBy(xpath = "//div[./label[.='Delivery Verification Required']]/div/div")
+  @FindBy(xpath = "//div[./label[.='Delivery verification required']]/div/div/div")
   public PageElement deliveryVerificationType;
 
-  @FindBy(xpath = "//label[text()='Size']/following-sibling::p")
+  @FindBy(xpath = "//label[text()='Size']/following-sibling::div")
   public PageElement size;
 
-  @FindBy(xpath = "//label[text()='Weight']/following-sibling::p")
+  @FindBy(xpath = "//label[text()='Weight']/following-sibling::div")
   public PageElement weight;
 
-  @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::p")
+  @FindBy(xpath = "//label[text()='Dimensions']/following-sibling::div")
   public PageElement dimensions;
 
   @FindBy(xpath = ".//a[contains(.,'Ticket ID')]")
@@ -134,14 +137,14 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public EditTicketDialog editTicketDialog;
 
-  @FindBy(css = "[name='commons.edit']")
-  public NvIconButton deliveryVerificationTypeEdit;
+  @FindBy(css = "[data-testid='edit-order-testid.order-summary-section.dvr-field.edit.icon']")
+  public Button deliveryVerificationTypeEdit;
 
-  @FindBy(css = "nv-tag[name^='COP']")
-  public NvTag copValue;
+  @FindBy(xpath = ".//span[contains(@class,'ant-tag')][contains(.,'COP')]")
+  public PageElement copValue;
 
-  @FindBy(css = "nv-tag[name^='COD']")
-  public NvTag codValue;
+  @FindBy(xpath = ".//span[contains(@class,'ant-tag')][contains(.,'COD')]")
+  public PageElement codValue;
 
   @FindBy(css = "button[ng-click='ctrl.startChatWithDriver($event)']")
   public Button chatWithDriver;
@@ -157,10 +160,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public AddToRouteDialog addToRouteDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditOrderDetailsDialog editOrderDetailsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditInstructionsDialog editInstructionsDialog;
 
   @FindBy(css = "md-dialog")
@@ -181,10 +184,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public PullFromRouteDialog pullFromRouteDialog;
 
-  @FindBy(css = "md-dialog")
-  private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
+  @FindBy(css = ".ant-modal")
+  public EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditDeliveryVerificationRequiredDialog editDeliveryVerificationRequiredDialog;
 
   @FindBy(css = "md-dialog")
@@ -193,15 +196,15 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public EditRtsDetailsDialog editRtsDetailsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public ResumeOrderDialog resumeOrderDialog;
 
   public ChatWithDriverDialog chatWithDriverDialog;
 
-  @FindBy(id = "delivery-details")
+  @FindBy(xpath = ".//div[./div[contains(@class,'delivery-banner')]]")
   public DeliveryDetailsBox deliveryDetailsBox;
 
-  @FindBy(id = "pickup-details")
+  @FindBy(xpath = ".//div[./div[contains(@class,'pickup-banner')]]")
   public PickupDetailsBox pickupDetailsBox;
 
   @FindBy(xpath = "//label[text()='Total']/following-sibling::p")
@@ -225,7 +228,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//label[text()='GST']/following-sibling::p")
   public PageElement gst;
 
-  @FindBy(xpath = "//label[text()='Insured Value']/following-sibling::p")
+  @FindBy(xpath = "//label[text()='Insured value']/following-sibling::div")
   public PageElement insuredValue;
 
   @FindBy(xpath = "//label[text()='Billing Weight']/following-sibling::p")
@@ -289,28 +292,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     return menuBar.isOptionEnabled(parentMenuName, childMenuName);
   }
 
-  public void editOrderDetails(Order order) {
-    String parcelSize = getParcelSizeShortStringByLongString(order.getParcelSize());
-    Dimension dimension = order.getDimensions();
-
-    editOrderDetailsDialog.waitUntilVisible();
-    editOrderDetailsDialog.parcelSize.selectValue(parcelSize);
-    editOrderDetailsDialog.weight.setValue(dimension.getWeight());
-    editOrderDetailsDialog.saveChanges.clickAndWaitUntilDone();
-  }
-
-  public void editOrderInstructions(String pickupInstruction, String deliveryInstruction) {
-    editInstructionsDialog.waitUntilVisible();
-    if (pickupInstruction != null) {
-      editInstructionsDialog.pickupInstruction.setValue(pickupInstruction);
-    }
-    if (deliveryInstruction != null) {
-      editInstructionsDialog.deliveryInstruction.setValue(deliveryInstruction);
-    }
-    editInstructionsDialog.saveChanges.clickAndWaitUntilDone();
-    waitUntilInvisibilityOfToast("Instructions Updated", true);
-  }
-
   public void editOrderStamp(String stampId) {
     clickMenu("Order Settings", "Edit Order Stamp");
     editOrderStampDialog.waitUntilVisible();
@@ -327,13 +308,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         String.format("Stamp %s exists in order %s", existingStampId, trackingId), true);
     editOrderStampDialog.sendKeys(Keys.ESCAPE);
     editOrderStampDialog.waitUntilInvisible();
-  }
-
-  public void removeOrderStamp() {
-    clickMenu("Order Settings", "Edit Order Stamp");
-    editOrderStampDialog.waitUntilVisible();
-    editOrderStampDialog.remove.click();
-    waitUntilInvisibilityOfToast("Stamp ID removed successfully", true);
   }
 
   public void manuallyCompleteOrder() {
@@ -457,20 +431,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         .isEqualTo(String.valueOf(priorityLevel));
   }
 
-  public void verifyOrderInstructions(String expectedPickupInstructions,
-      String expectedDeliveryInstructions) {
-    if (expectedPickupInstructions != null) {
-      String actualPickupInstructions = pickupDetailsBox.pickupInstructions.getText();
-      Assertions.assertThat(expectedPickupInstructions).as("Pick Up Instructions")
-          .isEqualToIgnoringCase(actualPickupInstructions);
-    }
-    if (expectedDeliveryInstructions != null) {
-      String actualDeliveryInstructions = deliveryDetailsBox.deliveryInstructions.getText();
-      Assertions.assertThat(expectedDeliveryInstructions).as("Delivery Instructions")
-          .isEqualToIgnoringCase(actualDeliveryInstructions);
-    }
-  }
-
   public String confirmCompleteOrder() {
     String changeReason = f("This reason is created by automation at %s.",
         DTF_CREATED_DATE.format(ZonedDateTime.now()));
@@ -533,62 +493,9 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
         .as("Different Result Returned for event description").contains(stringContained);
   }
 
-  public void verifyOrderInfoIsCorrect(Order order) {
-    final String expectedTrackingId = order.getTrackingId();
-
-    Assertions.assertThat(trackingId.getText()).as("Tracking ID").isEqualTo(expectedTrackingId);
-    Assertions.assertThat(status.getText()).as("Status").isEqualToIgnoringCase(order.getStatus());
-    Assertions.assertThat(granular.getText()).as("Granular Status")
-        .isEqualToIgnoringCase(order.getGranularStatus().replaceFirst("_", " "));
-    Assertions.assertThat(shipperId.getText()).as("Shipper ID")
-        .contains(String.valueOf(order.getShipper().getId()));
-    Assertions.assertThat(orderType.getText()).as("Order Type").isEqualTo(order.getType());
-    Assertions.assertThat(size.getText()).as("Size").isEqualTo(order.getParcelSize());
-    Assertions.assertThat(getWeight()).as("Weight")
-        .isEqualTo(order.getWeight(), Assertions.offset(0.0));
-
-    final Transaction pickupTransaction = order.getTransactions().get(0);
-    Assertions.assertThat(pickupDetailsBox.getStatus()).as("Pickup Status")
-        .isEqualTo(pickupTransaction.getStatus());
-
-    final Transaction deliveryTransaction = order.getTransactions().get(1);
-    Assertions.assertThat(deliveryDetailsBox.getStatus()).as("Delivery Status")
-        .isEqualTo(deliveryTransaction.getStatus());
-
-    verifyPickupAndDeliveryInfo(order);
-  }
-
   public void verifyOrderDeliveryTitle(String expectedDeliveryTitle) {
     Assertions.assertThat(getDeliveryTitle()).as("Delivery Title")
         .isEqualToIgnoringCase(expectedDeliveryTitle);
-  }
-
-  public void verifyOrderDeliveryStatus(String expectedDeliveryStatus) {
-    Assertions.assertThat(deliveryDetailsBox.getStatus()).as("Delivery Status")
-        .isEqualToIgnoringCase(expectedDeliveryStatus);
-  }
-
-  public void verifyOrderIsForceSuccessedSuccessfully(Order order) {
-    String expectedTrackingId = order.getTrackingId();
-
-    Assertions.assertThat(trackingId.getText()).as("Tracking ID").isEqualTo(expectedTrackingId);
-    Assertions.assertThat(status.getText()).as("Status").isEqualToIgnoringCase("Completed");
-    Assertions.assertThat(granular.getText()).as("Granular Status")
-        .isEqualToIgnoringCase("Completed");
-
-    final Long shipperId = order.getShipper().getId();
-
-    if (shipperId != null) {
-      Assertions.assertThat(this.shipperId.getText()).as("Shipper ID")
-          .contains(String.valueOf(shipperId));
-    }
-
-    Assertions.assertThat(orderType.getText()).as("Order Type").isEqualTo(order.getType());
-    Assertions.assertThat(pickupDetailsBox.getStatus()).as("Pickup Status").isEqualTo("SUCCESS");
-    Assertions.assertThat(deliveryDetailsBox.getStatus()).as("Delivery Status")
-        .isEqualTo("SUCCESS");
-
-    verifyPickupAndDeliveryInfo(order);
   }
 
   public void verifyPickupAndDeliveryInfo(Order order) {
@@ -625,72 +532,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     }
     if (StringUtils.isNotBlank(order.getToPostcode())) {
       Assertions.assertThat(toAddress).as("To Address").contains(order.getToPostcode());
-    }
-  }
-
-  public void verifyOrderIsGlobalInboundedSuccessfully(Order order,
-      GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus,
-      List<String> expectedGranularStatus, String expectedDeliveryStatus) {
-    if (isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']")) {
-      clickNvIconTextButtonByName("container.order.edit.show-more");
-    }
-
-    String expectedTrackingId = order.getTrackingId();
-    Assertions.assertThat(trackingId.getText()).as("Tracking ID").isEqualTo(expectedTrackingId);
-
-    if (StringUtils.isNotBlank(expectedStatus)) {
-      Assertions.assertThat(status.getText())
-          .as(String.format("Status - [Tracking ID = %s]", expectedTrackingId))
-          .isEqualToIgnoringCase(expectedStatus);
-    }
-
-    if (CollectionUtils.isNotEmpty(expectedGranularStatus)) {
-      Assertions.assertThat(granular.getText())
-          .as(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId))
-          .isIn(expectedGranularStatus);
-    }
-
-    Assertions.assertThat(pickupDetailsBox.getStatus()).as("Pickup Status").isEqualTo("SUCCESS");
-
-    if (StringUtils.isNotBlank(expectedDeliveryStatus)) {
-      Assertions.assertThat(deliveryDetailsBox.getStatus()).as("Delivery Status")
-          .isEqualToIgnoringCase(expectedDeliveryStatus);
-    }
-
-    // There is an issue where after Global Inbound the new Size is not applied. KH need to fix this.
-    // Uncomment this line below if KH has fixed it.
-        /*if(globalInboundParams.getOverrideSize()!=null)
-        {
-            Assert.assertEquals("Size", getParcelSizeAsLongString(globalInboundParams.getOverrideSize()), getSize());
-        }*/
-
-    if (globalInboundParams.getOverrideWeight() != null) {
-      Assertions.assertThat(getWeight()).as("Weight")
-          .isEqualTo(globalInboundParams.getOverrideWeight());
-    }
-
-    if (globalInboundParams.getOverrideDimHeight() != null
-        && globalInboundParams.getOverrideDimWidth() != null
-        && globalInboundParams.getOverrideDimLength() != null) {
-      Dimension actualDimension = getDimension();
-      Assertions.assertThat(actualDimension.getHeight()).as("Dimension - Height")
-          .isEqualTo(globalInboundParams.getOverrideDimHeight());
-      Assertions.assertThat(actualDimension.getWidth()).as("Dimension - Width")
-          .isEqualTo(globalInboundParams.getOverrideDimWidth());
-      Assertions.assertThat(actualDimension.getLength()).as("Dimension - Length")
-          .isEqualTo(globalInboundParams.getOverrideDimLength());
-    }
-
-    if (expectedOrderCost != null) {
-      Double total = getTotal();
-      String totalAsString = null;
-
-      if (total != null) {
-        totalAsString = NO_TRAILING_ZERO_DF.format(total);
-      }
-
-      Assertions.assertThat(totalAsString).as("Cost")
-          .isEqualTo(NO_TRAILING_ZERO_DF.format(expectedOrderCost));
     }
   }
 
@@ -1245,7 +1086,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
    */
   public static class DeliveryDetailsBox extends PageElement {
 
-    @FindBy(css = "h5.nv-text-right")
+    @FindBy(xpath = "./div/span[2]")
     public PageElement status;
     @FindBy(xpath = ".//div[@class='layout-row']//h5")
     public PageElement to;
@@ -1262,7 +1103,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
     public PageElement lastServiceEnd;
-    @FindBy(xpath = ".//div[label[.='Delivery Instructions']]/p")
+    @FindBy(xpath = ".//label[.='Delivery instructions']//following-sibling::div")
     public PageElement deliveryInstructions;
     @FindBy(name = "commons.rts")
     public PageElement rtsTag;
@@ -1285,10 +1126,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
     public DeliveryDetailsBox(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
-    }
-
-    public String getStatus() {
-      return status.getText().split(":")[1].trim();
     }
 
     public String getRouteId() {
@@ -1329,7 +1166,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
    */
   public static class PickupDetailsBox extends PageElement {
 
-    @FindBy(css = "h5.nv-text-right")
+    @FindBy(xpath = "./div/span[2]")
     public PageElement status;
     @FindBy(xpath = "./div[2]/div/div/div[1]/div/div/h5")
     public PageElement from;
@@ -1345,7 +1182,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public PageElement endDateTime;
     @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
     public PageElement lastServiceEnd;
-    @FindBy(xpath = ".//div[label[.='Pick Up Instructions']]/p")
+    @FindBy(xpath = ".//label[.='Pickup instructions']//following-sibling::div")
     public PageElement pickupInstructions;
 
     private static final String ROUTE_ID_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Id']]/p";
@@ -1880,56 +1717,6 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public NvApiTextButton pullFromRoute;
   }
 
-  public void changeCopValue(Integer copValue) {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    pause1s();
-    editCashCollectionDetailsDialog.amount.click();
-    editCashCollectionDetailsDialog.amount.sendKeys(copValue);
-    editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    editOrderStampDialog.waitUntilInvisible();
-  }
-
-  public void changeCodValue(Integer codValue) {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    pause1s();
-    editCashCollectionDetailsDialog.amount.click();
-    editCashCollectionDetailsDialog.amount.sendKeys(codValue);
-    editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
-    editOrderStampDialog.waitUntilInvisible();
-  }
-
-  public void verifyCopUpdated(Integer copValue) {
-    Assertions.assertThat(this.copValue.getText()).as("COP Value")
-        .isEqualTo("COP SGD" + (copValue / 100));
-  }
-
-  public void verifyCodUpdated(Integer codValue) {
-    Assertions.assertThat(this.codValue.getText()).as("COD Value")
-        .isEqualTo("COD SGD" + (codValue / 100));
-  }
-
-  public void changeCopToggleToYes() {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    editCashCollectionDetailsDialog.copYes.click();
-  }
-
-  public void changeCopToggleToNo() {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    editCashCollectionDetailsDialog.copNo.click();
-    editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
-  }
-
-  public void changeCodToggleToYes() {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    editCashCollectionDetailsDialog.codYes.click();
-  }
-
-  public void changeCodToggleToNo() {
-    editCashCollectionDetailsDialog.waitUntilVisible();
-    editCashCollectionDetailsDialog.codNo.click();
-    editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
-  }
-
   public static class EditPriorityLevelDialog extends AntModal {
 
     public EditPriorityLevelDialog(WebDriver webDriver, WebElement webElement) {
@@ -1969,51 +1756,54 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public NvApiTextButton addToRoute;
   }
 
-  public static class EditOrderDetailsDialog extends MdDialog {
+  public static class EditOrderDetailsDialog extends AntModal {
 
     public EditOrderDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='delivery-types']")
-    public MdSelect deliveryTypes;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.delvery-type']")
+    public AntSelect3 deliveryTypes;
 
-    @FindBy(css = "md-select[id^='parcel-size']")
-    public MdSelect parcelSize;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.parcel-size']")
+    public AntSelect3 parcelSize;
 
-    @FindBy(id = "weight")
-    public TextBox weight;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.weight']")
+    public ForceClearTextBox weight;
 
-    @FindBy(id = "length")
-    public TextBox length;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.length']")
+    public ForceClearTextBox length;
 
-    @FindBy(id = "width")
-    public TextBox width;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.width']")
+    public ForceClearTextBox width;
 
-    @FindBy(id = "breadth")
-    public TextBox breadth;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.breadth']")
+    public ForceClearTextBox breadth;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details-dialogue.insured-value']")
+    public ForceClearTextBox insuredValue;
+
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-details.submit-changes.button']")
+    public Button saveChanges;
   }
 
-  public static class EditInstructionsDialog extends MdDialog {
+  public static class EditInstructionsDialog extends AntModal {
 
     public EditInstructionsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(id = "container.order.edit.pickup-instruction")
-    public TextBox pickupInstruction;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-instructions.pickup-instruction.textarea']")
+    public ForceClearTextBox pickupInstruction;
 
-    @FindBy(id = "container.order.edit.delivery-instruction")
-    public TextBox deliveryInstruction;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-instructions.delivery-instruction.textarea']")
+    public ForceClearTextBox deliveryInstruction;
 
-    @FindBy(id = "container.order.edit.order-instruction")
-    public TextBox orderInstruction;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-instructions.order-instruction.textarea']")
+    public ForceClearTextBox orderInstruction;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-instructions.save-changes.button']")
+    public Button saveChanges;
   }
 
   public static class EditOrderStampDialog extends AntModal {
@@ -2028,7 +1818,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     @FindBy(css = "[data-testid='edit-order-testid.edit-order-stamp.save.button']")
     public Button save;
 
-    @FindBy(name = "commons.remove")
+    @FindBy(css = "[data-testid='edit-order-testid.edit-order-stamp.remove.button']")
     public Button remove;
   }
 
@@ -2048,42 +1838,39 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public NvApiTextButton saveChanges;
   }
 
-  public static class EditCashCollectionDetailsDialog extends MdDialog {
+  public static class EditCashCollectionDetailsDialog extends AntModal {
 
     public EditCashCollectionDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(id = "Amount")
-    public TextBox amount;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-cash-collection-details.cop-input']")
+    public ForceClearTextBox copAmount;
 
-    @FindBy(xpath = "//div[label[@label = 'Cash on Pickup']]//button[@aria-label='Yes']")
-    public Button copYes;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-cash-collection-details.cod-input']")
+    public ForceClearTextBox codAmount;
 
-    @FindBy(xpath = "//div[label[@label = 'Cash on Pickup']]//button[@aria-label='No']")
-    public Button copNo;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-cash-collection-details.cop-switch']")
+    public AntSwitch cop;
 
-    @FindBy(xpath = "//div[label[@label = 'Cash on Delivery']]//button[@aria-label='Yes']")
-    public Button codYes;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-cash-collection-details.cod-switch']")
+    public AntSwitch cod;
 
-    @FindBy(xpath = "//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']")
-    public Button codNo;
-
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-cash-collection-details.submit-changes.button']")
+    public Button saveChanges;
   }
 
-  public static class EditDeliveryVerificationRequiredDialog extends MdDialog {
+  public static class EditDeliveryVerificationRequiredDialog extends AntModal {
 
     public EditDeliveryVerificationRequiredDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = "[id^='commons.delivery-verification-required']")
-    public MdSelect deliveryVerificationRequired;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-dvr.dvr.single-select']")
+    public AntSelect3 deliveryVerificationRequired;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-dvr.save-changes.button']")
+    public Button saveChanges;
   }
 
   /**
@@ -2151,14 +1938,14 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public TextBox postcode;
   }
 
-  public static class ResumeOrderDialog extends MdDialog {
+  public static class ResumeOrderDialog extends AntModal {
 
     public ResumeOrderDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(name = "container.order.edit.resume-order")
-    public NvApiTextButton resumeOrder;
+    @FindBy(css = "[data-testid='edit-order-testid.resume-order.resume-order.button']")
+    public Button resumeOrder;
   }
 
   public void createTicket(RecoveryTicket recoveryTicket) {

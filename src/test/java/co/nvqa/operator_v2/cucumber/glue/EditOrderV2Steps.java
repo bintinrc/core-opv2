@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.common.utils.StandardTestConstants;
 import co.nvqa.common.utils.StandardTestUtils;
 import co.nvqa.commons.model.addressing.AddressingZone;
-import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.OrderEvent;
@@ -25,12 +24,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -66,21 +63,35 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.clickMenu(parentMenuName, childMenuName);
   }
 
-  @When("Operator Edit Order Details on Edit Order V2 page")
-  public void operatorEditOrderDetailsOnEditOrderPage() {
-    Order order = get(KEY_CREATED_ORDER);
-    Order orderEdited = SerializationUtils.clone(order);
-
-    int newParcelSizeId =
-        (StandardTestUtils.getParcelSizeIdByLongString(orderEdited.getParcelSize()) + 1) % 4;
-    orderEdited.setParcelSize(StandardTestUtils.getParcelSizeAsLongString(newParcelSizeId));
-
-    Dimension dimension = orderEdited.getDimensions();
-    dimension.setWeight(Optional.ofNullable(dimension.getWeight()).orElse(0.0) + 1.0);
-
-    page.editOrderDetails(orderEdited);
-    takesScreenshot();
-    put("orderEdited", orderEdited);
+  @When("Operator Edit Order Details on Edit Order V2 page:")
+  public void operatorEditOrderDetailsOnEditOrderPage(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    page.inFrame(() -> {
+      page.editOrderDetailsDialog.waitUntilVisible();
+      if (data.containsKey("deliveryTypes")) {
+        List<String> values = splitAndNormalize(finalData.get("deliveryTypes"));
+        page.editOrderDetailsDialog.deliveryTypes.selectValues(values);
+      }
+      if (data.containsKey("size")) {
+        page.editOrderDetailsDialog.parcelSize.selectValue(finalData.get("size"));
+      }
+      if (data.containsKey("weight")) {
+        page.editOrderDetailsDialog.weight.setValue(finalData.get("weight"));
+      }
+      if (data.containsKey("length")) {
+        page.editOrderDetailsDialog.length.setValue(finalData.get("length"));
+      }
+      if (data.containsKey("width")) {
+        page.editOrderDetailsDialog.width.setValue(finalData.get("width"));
+      }
+      if (data.containsKey("breadth")) {
+        page.editOrderDetailsDialog.breadth.setValue(finalData.get("breadth"));
+      }
+      if (data.containsKey("insuredValue")) {
+        page.editOrderDetailsDialog.insuredValue.setValue(finalData.get("insuredValue"));
+      }
+      page.editOrderDetailsDialog.saveChanges.click();
+    });
   }
 
   @Then("Operator Edit Order Details on Edit Order V2 page successfully")
@@ -90,60 +101,98 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
   }
 
-  @When("Operator update order details on Edit Order V2 page:")
-  public void updateOrderDetails(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    page.clickMenu("Order Settings", "Edit Order Details");
-    page.editOrderDetailsDialog.waitUntilVisible();
-    if (data.containsKey("weight")) {
-      page.editOrderDetailsDialog.weight.setValue(data.get("weight"));
-    }
-    if (data.containsKey("size")) {
-      page.editOrderDetailsDialog.parcelSize.setValue(data.get("size"));
-    }
-    if (data.containsKey("length")) {
-      page.editOrderDetailsDialog.length.setValue(data.get("length"));
-    }
-    if (data.containsKey("width")) {
-      page.editOrderDetailsDialog.width.setValue(data.get("width"));
-    }
-    if (data.containsKey("breadth")) {
-      page.editOrderDetailsDialog.breadth.setValue(data.get("breadth"));
-    }
-    page.editOrderDetailsDialog.saveChanges.click();
+  @Then("Operator verifies order details on Edit Order V2 page:")
+  public void operatorVerifyDimensionInformation(Map<String, String> data) {
+    Map<String, String> finalData = resolveKeyValues(data);
+    SoftAssertions softAssertions = new SoftAssertions();
+    page.inFrame(() -> {
+      String expected = finalData.get("size");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.size.getText()).as("Parcel size")
+            .isEqualToIgnoringCase(expected);
+      }
+      expected = finalData.get("weight");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getWeight()).as("Parcel weight")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("length");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getLength()).as("Parcel length")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("width");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getWidth()).as("Parcel width")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("height");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.getHeighth()).as("Parcel height")
+            .isEqualTo(Double.parseDouble(expected));
+      }
+      expected = finalData.get("deliveryVerificationType");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.deliveryVerificationType.getText())
+            .as("Delivery verification required")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("insuredValue");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.insuredValue.getText())
+            .as("Insured value")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("deliveryType");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.deliveryType.getText())
+            .as("Delivery type")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("cop");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.copValue.getText())
+            .as("COP")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("cod");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.codValue.getText())
+            .as("COD")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("status");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.status.getText())
+            .as("Status")
+            .isEqualTo(expected);
+      }
+      expected = finalData.get("granularStatus");
+      if (StringUtils.isNotBlank(expected)) {
+        softAssertions.assertThat(page.granular.getText())
+            .as("Granular status")
+            .isEqualTo(expected);
+      }
+    });
+    softAssertions.assertAll();
   }
 
-  @Then("^Operator verifies dimensions information on Edit Order V2 page:$")
-  public void operatorVerifyDimensionInformation(Map<String, String> data) {
-    data = resolveKeyValues(data);
-    SoftAssertions softAssertions = new SoftAssertions();
-    String expected = data.get("size");
-    if (StringUtils.isNotBlank(expected)) {
-      softAssertions.assertThat(page.size.getText()).as("Parcel size")
-          .isEqualToIgnoringCase(expected);
-    }
-    expected = data.get("weight");
-    if (StringUtils.isNotBlank(expected)) {
-      softAssertions.assertThat(page.getWeight()).as("Parcel weight")
-          .isEqualTo(Double.parseDouble(expected));
-    }
-    expected = data.get("length");
-    if (StringUtils.isNotBlank(expected)) {
-      softAssertions.assertThat(page.getLength()).as("Parcel length")
-          .isEqualTo(Double.parseDouble(expected));
-    }
-    expected = data.get("width");
-    if (StringUtils.isNotBlank(expected)) {
-      softAssertions.assertThat(page.getWidth()).as("Parcel width")
-          .isEqualTo(Double.parseDouble(expected));
-    }
-    expected = data.get("height");
-    if (StringUtils.isNotBlank(expected)) {
-      softAssertions.assertThat(page.getHeighth()).as("Parcel height")
-          .isEqualTo(Double.parseDouble(expected));
-    }
-    takesScreenshot();
-    softAssertions.assertAll();
+  @Then("Operator verify COP icon is not displayed on Edit Order V2 page")
+  public void operatorVerifyCopNotDisplayed() {
+    page.inFrame(() ->
+        Assertions.assertThat(page.copValue.isDisplayed())
+            .withFailMessage("Unexpected COP icon is displayed")
+            .isFalse()
+    );
+  }
+
+  @Then("Operator verify COD icon is not displayed on Edit Order V2 page")
+  public void operatorVerifyCodNotDisplayed() {
+    page.inFrame(() ->
+        Assertions.assertThat(page.codValue.isDisplayed())
+            .withFailMessage("Unexpected COD icon is displayed")
+            .isFalse()
+    );
   }
 
   @Then("^Operator verifies pricing information on Edit Order V2 page:$")
@@ -283,37 +332,57 @@ public class EditOrderV2Steps extends AbstractSteps {
   @When("Operator enter Order Instructions on Edit Order V2 page:")
   public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data) {
     String pickupInstruction = data.get("pickupInstruction");
+    String deliveryInstruction = data.get("deliveryInstruction");
+    String orderInstruction = data.get("orderInstruction");
 
-    if (pickupInstruction != null) {
-      put(KEY_PICKUP_INSTRUCTION, pickupInstruction);
-    }
-
-    String deliveryInstruction = data.getOrDefault("deliveryInstruction", "");
-
-    if (deliveryInstruction != null) {
-      put(KEY_DELIVERY_INSTRUCTION, deliveryInstruction);
-    }
-
-    page.editOrderInstructions(pickupInstruction, deliveryInstruction);
+    page.inFrame(() -> {
+      page.editInstructionsDialog.waitUntilVisible();
+      if (StringUtils.isNotBlank(pickupInstruction)) {
+        if ("empty".equalsIgnoreCase(pickupInstruction)) {
+          page.editInstructionsDialog.pickupInstruction.forceClear();
+        } else {
+          page.editInstructionsDialog.pickupInstruction.setValue(pickupInstruction);
+        }
+      }
+      if (StringUtils.isNotBlank(deliveryInstruction)) {
+        if ("empty".equalsIgnoreCase(deliveryInstruction)) {
+          page.editInstructionsDialog.deliveryInstruction.forceClear();
+        } else {
+          page.editInstructionsDialog.deliveryInstruction.setValue(deliveryInstruction);
+        }
+      }
+      if (StringUtils.isNotBlank(orderInstruction)) {
+        if ("empty".equalsIgnoreCase(orderInstruction)) {
+          page.editInstructionsDialog.orderInstruction.forceClear();
+        } else {
+          page.editInstructionsDialog.orderInstruction.setValue(orderInstruction);
+        }
+      }
+      page.editInstructionsDialog.saveChanges.click();
+    });
   }
 
-  @When("Operator verify Order Instructions are updated on Edit Order V2 page")
-  public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage() {
-    Order order = get(KEY_CREATED_ORDER);
-    String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
+  @When("Operator verify Order Instructions on Edit Order V2 page:")
+  public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage(Map<String, String> data) {
+    data = resolveKeyValues(data);
 
-    if (StringUtils.isNotBlank(pickupInstruction)) {
-      pickupInstruction = order.getInstruction() + ", " + pickupInstruction;
-    }
+    String pickupInstruction = data.get("pickupInstruction");
+    String deliveryInstruction = data.get("deliveryInstruction");
 
-    String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
-
-    if (StringUtils.isNotBlank(deliveryInstruction)) {
-      deliveryInstruction = order.getInstruction() + ", " + deliveryInstruction;
-    }
-
-    page.verifyOrderInstructions(pickupInstruction, deliveryInstruction);
-    takesScreenshot();
+    SoftAssertions assertions = new SoftAssertions();
+    page.inFrame(() -> {
+      if (StringUtils.isNotBlank(pickupInstruction)) {
+        String actualPickupInstructions = page.pickupDetailsBox.pickupInstructions.getText();
+        assertions.assertThat(actualPickupInstructions).as("Pick Up Instructions")
+            .isEqualToIgnoringCase(pickupInstruction);
+      }
+      if (StringUtils.isNotBlank(deliveryInstruction)) {
+        String actualDeliveryInstructions = page.deliveryDetailsBox.deliveryInstructions.getText();
+        assertions.assertThat(actualDeliveryInstructions).as("Delivery Instructions")
+            .isEqualToIgnoringCase(deliveryInstruction);
+      }
+      assertions.assertAll();
+    });
   }
 
   @When("^Operator confirm manually complete order on Edit Order V2 page$")
@@ -358,13 +427,6 @@ public class EditOrderV2Steps extends AbstractSteps {
     takesScreenshot();
     page.manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
     page.waitUntilInvisibilityOfToast("The order has been completed", true);
-  }
-
-  @Then("Operator verify the order completed successfully on Edit Order V2 page")
-  public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage() {
-    Order order = get(KEY_CREATED_ORDER);
-    page.verifyOrderIsForceSuccessedSuccessfully(order);
-    takesScreenshot();
   }
 
   @When("^Operator change Priority Level to \"(\\d+)\" on Edit Order V2 page$")
@@ -490,11 +552,6 @@ public class EditOrderV2Steps extends AbstractSteps {
     page.verifyOrderDeliveryTitle(expectedValue);
   }
 
-  @Then("^Operator verify order delivery status is \"(.+)\" on Edit Order V2 page$")
-  public void operatorVerifyOrderDeliveryStatusOnEditOrderPage(String expectedValue) {
-    page.verifyOrderDeliveryStatus(expectedValue);
-  }
-
   @Then("^Operator verify RTS event displayed on Edit Order V2 page with following properties:$")
   public void operatorVerifyRtsEventOnEditOrderPage(Map<String, String> mapOfData) {
     Map<String, String> mapOfTokens = StandardTestUtils.createDefaultTokens();
@@ -581,7 +638,12 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @When("^Operator remove Stamp ID of the created order on Edit Order V2 page$")
   public void operatorRemoveStampIdOnEditOrderPage() {
-    page.removeOrderStamp();
+    page.inFrame(() -> {
+      page.clickMenu("Order Settings", "Edit Order Stamp");
+      page.editOrderStampDialog.waitUntilVisible();
+      page.editOrderStampDialog.remove.click();
+      page.waitUntilInvisibilityOfToast("Stamp ID removed successfully", true);
+    });
   }
 
   @When("Operator update order status on Edit Order V2 page using data below:")
@@ -594,13 +656,6 @@ public class EditOrderV2Steps extends AbstractSteps {
     value = mapOfData.get("changeReason");
     page.updateStatusDialog.changeReason.setValue(value);
     page.updateStatusDialog.saveChanges.clickAndWaitUntilDone();
-  }
-
-  @Then("Operator verify the created order info is correct on Edit Order V2 page")
-  public void operatorVerifyOrderInfoOnEditOrderPage() {
-    Order order = get(KEY_CREATED_ORDER);
-    page.verifyOrderInfoIsCorrect(order);
-    takesScreenshot();
   }
 
   @Then("^Operator verify color of order header on Edit Order V2 page is \"(.+)\"$")
@@ -722,6 +777,7 @@ public class EditOrderV2Steps extends AbstractSteps {
       if (actualEvent == null) {
         pause5s();
         page.refreshPage();
+        page.switchTo();
         actualEvent = page.eventsTable().readAllEntities().stream()
             .filter(event -> equalsIgnoreCase(event.getName(), expectedEvent.getName())).findFirst()
             .orElse(null);
@@ -770,163 +826,197 @@ public class EditOrderV2Steps extends AbstractSteps {
   }
 
   @Then("^Operator verify Delivery details on Edit Order V2 page using data below:$")
-  public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException {
-    expectedData = resolveKeyValues(expectedData);
-    expectedData = StandardTestUtils.replaceDataTableTokens(expectedData);
+  public void verifyDeliveryDetails(Map<String, String> data) throws ParseException {
+    Map<String, String> expectedData = StandardTestUtils.replaceDataTableTokens(
+        resolveKeyValues(data));
 
-    SoftAssertions assertions = new SoftAssertions();
-    if (expectedData.containsKey("status")) {
-      assertions.assertThat(page.deliveryDetailsBox.status.getText())
-          .as("Delivery Details - Status").isEqualTo(f("Status: %s", expectedData.get("status")));
-    }
-    if (expectedData.containsKey("name")) {
-      assertions.assertThat(page.deliveryDetailsBox.to.getNormalizedText())
-          .as("Delivery Details - Name")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
-    }
-    if (expectedData.containsKey("contact")) {
-      assertions.assertThat(page.deliveryDetailsBox.toContact.getNormalizedText())
-          .as("Delivery Details - Contact")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
-    }
-    if (expectedData.containsKey("email")) {
-      assertions.assertThat(page.deliveryDetailsBox.toEmail.getNormalizedText())
-          .as("Delivery Details - Email")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
-    }
-    if (expectedData.containsKey("address")) {
-      assertions.assertThat(page.deliveryDetailsBox.toAddress.getNormalizedText())
-          .as("Delivery Details - address")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
-    }
-    if (expectedData.containsKey("startDate")) {
-      String actual = page.deliveryDetailsBox.startDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-          .isInSameDayAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("startDateTime")) {
-      String actual = page.deliveryDetailsBox.startDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-          expectedData.get("startDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
-          .isInSameSecondAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("endDate")) {
-      String actual = page.deliveryDetailsBox.endDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-          .isInSameDayAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("endDateTime")) {
-      String actual = page.deliveryDetailsBox.endDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-          expectedData.get("endDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-          .isInSameSecondAs(expectedDateTime);
-    }
-    takesScreenshot();
-    assertions.assertAll();
+    page.inFrame(() -> {
+      SoftAssertions assertions = new SoftAssertions();
+      if (expectedData.containsKey("status")) {
+        assertions.assertThat(page.deliveryDetailsBox.status.getText())
+            .as("Delivery Details - Status").isEqualTo(f("Status: %s", expectedData.get("status")));
+      }
+      if (expectedData.containsKey("name")) {
+        assertions.assertThat(page.deliveryDetailsBox.to.getNormalizedText())
+            .as("Delivery Details - Name")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+      }
+      if (expectedData.containsKey("contact")) {
+        assertions.assertThat(page.deliveryDetailsBox.toContact.getNormalizedText())
+            .as("Delivery Details - Contact")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+      }
+      if (expectedData.containsKey("email")) {
+        assertions.assertThat(page.deliveryDetailsBox.toEmail.getNormalizedText())
+            .as("Delivery Details - Email")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
+      }
+      if (expectedData.containsKey("address")) {
+        assertions.assertThat(page.deliveryDetailsBox.toAddress.getNormalizedText())
+            .as("Delivery Details - address")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
+      }
+      if (expectedData.containsKey("startDate")) {
+        String actual = page.deliveryDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("startDateTime")) {
+        String actual = page.deliveryDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("startDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - Start Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDate")) {
+        String actual = page.deliveryDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDateTime")) {
+        String actual = page.deliveryDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("endDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      assertions.assertAll();
+    });
   }
 
   @Then("Operator verify Pickup details on Edit Order V2 page using data below:")
-  public void verifyPickupDetails(Map<String, String> expectedData) throws ParseException {
-    expectedData = resolveKeyValues(expectedData);
+  public void verifyPickupDetails(Map<String, String> data) throws ParseException {
+    Map<String, String> expectedData = StandardTestUtils.replaceDataTableTokens(
+        resolveKeyValues(data));
 
-    if (expectedData.containsKey("status")) {
-      Assertions.assertThat(page.pickupDetailsBox.getStatus()).as("Pickup Details - Status")
-          .isEqualTo(expectedData.get("status"));
-    }
-    if (expectedData.containsKey("name")) {
-      Assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
-          .as("Pickup Details - Name")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
-    }
-    if (expectedData.containsKey("contact")) {
-      Assertions.assertThat(page.pickupDetailsBox.fromContact.getNormalizedText())
-          .as("Pickup Details - Contact")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
-    }
-    if (expectedData.containsKey("email")) {
-      Assertions.assertThat(page.pickupDetailsBox.fromEmail.getNormalizedText())
-          .as("Delivery Details - Email")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
-    }
-    if (expectedData.containsKey("address")) {
-      Assertions.assertThat(page.pickupDetailsBox.fromAddress.getNormalizedText())
-          .as("Pickup Details - address")
-          .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
-    }
-    if (expectedData.containsKey("startDate")) {
-      String actual = page.pickupDetailsBox.startDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
-      Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
-          .isInSameDayAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("startDateTime")) {
-      String actual = page.pickupDetailsBox.startDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-          expectedData.get("startDateTime"));
-      Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
-          .isInSameSecondAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("endDate")) {
-      String actual = page.pickupDetailsBox.endDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
-      Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
-          .isInSameDayAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("endDateTime")) {
-      String actual = page.pickupDetailsBox.endDateTime.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-          expectedData.get("endDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - End Date / Time")
-          .isInSameSecondAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("lastServiceEndDate")) {
-      String actual = page.pickupDetailsBox.lastServiceEnd.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("lastServiceEndDate"));
-      Assertions.assertThat(actualDateTime).as("Pickup Details - Last Service End")
-          .isInSameDayAs(expectedDateTime);
-    }
-    if (expectedData.containsKey("lastServiceEndDateTime")) {
-      String actual = page.pickupDetailsBox.lastServiceEnd.getText();
-      Date actualDateTime = Date.from(DateUtil.getDate(actual,
-              DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
-          .toInstant());
-      Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
-          expectedData.get("lastServiceEndDateTime"));
-      Assertions.assertThat(actualDateTime).as("Delivery Details - Last Service End")
-          .isInSameSecondAs(expectedDateTime);
-    }
-    takesScreenshot();
+    page.inFrame(() -> {
+      SoftAssertions assertions = new SoftAssertions();
+      if (expectedData.containsKey("status")) {
+        assertions.assertThat(page.pickupDetailsBox.status.getText())
+            .as("Pickup Details - Status").isEqualTo(f("Status: %s", expectedData.get("status")));
+      }
+      if (expectedData.containsKey("name")) {
+        assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
+            .as("Pickup Details - Name")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("name")));
+      }
+      if (expectedData.containsKey("contact")) {
+        assertions.assertThat(page.pickupDetailsBox.from.getNormalizedText())
+            .as("Pickup Details - Contact")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("contact")));
+      }
+      if (expectedData.containsKey("email")) {
+        assertions.assertThat(page.pickupDetailsBox.fromEmail.getNormalizedText())
+            .as("Pickup Details - Email")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("email")));
+      }
+      if (expectedData.containsKey("address")) {
+        assertions.assertThat(page.pickupDetailsBox.fromAddress.getNormalizedText())
+            .as("Pickup Details - address")
+            .isEqualToIgnoringCase(StringUtils.normalizeSpace(expectedData.get("address")));
+      }
+      if (expectedData.containsKey("startDate")) {
+        String actual = page.pickupDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("startDateTime")) {
+        String actual = page.pickupDetailsBox.startDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("startDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - Start Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDate")) {
+        String actual = page.pickupDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
+            .isInSameDayAs(expectedDateTime);
+      }
+      if (expectedData.containsKey("endDateTime")) {
+        String actual = page.pickupDetailsBox.endDateTime.getText();
+        Date actualDateTime = Date.from(DateUtil.getDate(actual,
+                DateUtil.DATE_TIME_FORMATTER.withZone(
+                    ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)))
+            .toInstant());
+        Date expectedDateTime = null;
+        try {
+          expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(
+              expectedData.get("endDateTime"));
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
+        Assertions.assertThat(actualDateTime).as("Pickup Details - End Date / Time")
+            .isInSameSecondAs(expectedDateTime);
+      }
+      assertions.assertAll();
+    });
   }
 
   @Then("^Operator verify (Pickup|Delivery) \"(.+)\" order event description on Edit Order V2 page$")
@@ -1301,22 +1391,15 @@ public class EditOrderV2Steps extends AbstractSteps {
     }
   }
 
-  @Then("Operator set Delivery Verification Required to {string} on on Edit Order V2 page")
+  @Then("Operator set Delivery Verification Required to {value} on Edit Order V2 page")
   public void operatorSetDeliveryVerificationRequired(String deliveryVerificationRequired) {
-    deliveryVerificationRequired = resolveValue(deliveryVerificationRequired);
-    page.deliveryVerificationTypeEdit.click();
-    page.editDeliveryVerificationRequiredDialog.waitUntilVisible();
-    page.editDeliveryVerificationRequiredDialog.deliveryVerificationRequired.selectValue(
-        deliveryVerificationRequired);
-    page.editDeliveryVerificationRequiredDialog.saveChanges.clickAndWaitUntilDone();
-    page.waitUntilInvisibilityOfToast("Delivery Verification Required updated successfully", true);
-  }
-
-  @Then("Operator verify Delivery Verification Required is {string} on on Edit Order V2 page")
-  public void operatorVerifyDeliveryVerificationRequired(String deliveryVerificationRequired) {
-    deliveryVerificationRequired = resolveValue(deliveryVerificationRequired);
-    Assertions.assertThat(page.deliveryVerificationType.getNormalizedText())
-        .as("Delivery Verification Required").isEqualTo(deliveryVerificationRequired);
+    page.inFrame(() -> {
+      page.deliveryVerificationTypeEdit.click();
+      page.editDeliveryVerificationRequiredDialog.waitUntilVisible();
+      page.editDeliveryVerificationRequiredDialog.deliveryVerificationRequired.selectValue(
+          deliveryVerificationRequired);
+      page.editDeliveryVerificationRequiredDialog.saveChanges.click();
+    });
   }
 
   @Then("^Operator verify Latest Route ID is \"(.+)\" on Edit Order V2 page$")
@@ -1426,11 +1509,11 @@ public class EditOrderV2Steps extends AbstractSteps {
 
   @Then("Operator resume order on Edit Order V2 page")
   public void operatorResumeOrder() {
-    page.clickMenu("Order Settings", "Resume Order");
-    page.resumeOrderDialog.waitUntilVisible();
-    takesScreenshot();
-    page.resumeOrderDialog.resumeOrder.clickAndWaitUntilDone();
-    page.waitUntilInvisibilityOfToast("1 order(s) resumed", true);
+    page.inFrame(() -> {
+      page.clickMenu("Order settings", "Resume order");
+      page.resumeOrderDialog.waitUntilVisible();
+      page.resumeOrderDialog.resumeOrder.click();
+    });
   }
 
   @And("^Operator verify the tags shown on Edit Order V2 page$")
@@ -1637,4 +1720,27 @@ public class EditOrderV2Steps extends AbstractSteps {
     });
   }
 
+  @When("Operator edit cash collection details on Edit Order V2 page:")
+  public void editCashCollectionDetails(Map<String, String> data) {
+    data = resolveKeyValues(data);
+    String cop = data.get("cashOnPickup");
+    String cod = data.get("cashOnDelivery");
+    String amount = data.get("amount");
+    page.inFrame(() -> {
+      page.clickMenu("Order settings", "Edit cash collection details");
+      page.editCashCollectionDetailsDialog.waitUntilVisible();
+      page.editCashCollectionDetailsDialog.cop.setValue(
+          StringUtils.equalsAnyIgnoreCase(cop, "yes", "true"));
+      page.editCashCollectionDetailsDialog.cod.setValue(
+          StringUtils.equalsAnyIgnoreCase(cod, "yes", "true"));
+      if (StringUtils.isNotBlank(cop) && StringUtils.isNotBlank(amount)) {
+        page.editCashCollectionDetailsDialog.copAmount.setValue(amount);
+      }
+      if (StringUtils.isNotBlank(cod) && StringUtils.isNotBlank(amount)) {
+        page.editCashCollectionDetailsDialog.codAmount.setValue(amount);
+      }
+      page.editCashCollectionDetailsDialog.saveChanges.click();
+    });
+
+  }
 }
