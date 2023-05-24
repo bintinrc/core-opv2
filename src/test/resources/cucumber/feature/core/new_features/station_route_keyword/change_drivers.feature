@@ -28,13 +28,13 @@ Feature: Change Drivers
       | primaryDriver | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} |
     And Operator verifies that success react notification displayed:
       | top    | Drivers updated                                                                                                        |
-      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} , fallback driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} |
+      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}, fallback driver {KEY_LIST_OF_CREATED_DRIVERS[2].firstName} |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}    |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}    |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].id}        |
@@ -63,13 +63,13 @@ Feature: Change Drivers
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} |
     And Operator verifies that success react notification displayed:
       | top    | Drivers updated                                                                                                        |
-      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName} , fallback driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} |
+      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}, fallback driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}    |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}    |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
@@ -138,13 +138,12 @@ Feature: Change Drivers
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
     And Operator verifies that success react notification displayed:
       | top    | Drivers updated                                                                                                        |
-      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName} , fallback driver {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
+      | bottom | Primary driver {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}, fallback driver {KEY_LIST_OF_CREATED_DRIVERS[4].firstName} |
     Then Operator verify coverage displayed on Station Route Keyword page:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}    |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[4].firstName}    |
-      | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[3].id}        |

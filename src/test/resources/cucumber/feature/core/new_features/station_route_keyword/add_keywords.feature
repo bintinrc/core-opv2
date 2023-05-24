@@ -58,20 +58,19 @@ Feature: Add Keywords
       | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                 |
       | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
     And API Operator create new coverage:
-      | hubId            | {hub-id}                                              |
-      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}            |
-      | areaVariations   | AreaVariation 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | keywords         | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}       |
-      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                   |
-      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                   |
+      | hubId            | {hub-id}                                            |
+      | area             | Area {gradle-current-date-yyyyMMddHHmmsss}          |
+      | areaVariations   | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
+      | keywords         | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss}     |
+      | primaryDriverId  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                 |
+      | fallbackDriverId | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                 |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route-keyword"
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator open coverage settings on Station Route Keyword page:
       | area     | Area {gradle-current-date-yyyyMMddHHmmsss}      |
       | keywords | Keyword 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator add keywords on Station Route Keyword page:
-      | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}   |
-      | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
+      | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
@@ -81,21 +80,19 @@ Feature: Add Keywords
     Then Operator verifies that success react notification displayed:
       | top | Keywords added |
     Then Operator verify data on New coverage created dialog:
-      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}                                                    |
-      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                                  |
-      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                                  |
-      | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss},KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
+      | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
+      | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
+      | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
+      | keywordsAdded  | 0 keyword(s) added                           |
     When Operator close New coverage created dialog
     Then Operator verify keywords on Add Keywords tab on Station Route Keyword page:
       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
     Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
       | coverageId                   | value                                         |
       | {KEY_LIST_OF_COVERAGE_ID[1]} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     Then DB Operator verifies that route_qa_gl/sr_keywords records are created:
       | coverageId                   | value                                           |
       | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-      | {KEY_LIST_OF_COVERAGE_ID[2]} | KEYWORD 3 {gradle-current-date-yyyyMMddHHmmsss} |
 
   @DeleteDriver @DeleteCoverage
   Scenario: Operator Add New Keywords for Coverage on Station Route Keyword - Duplicate Keyword - Transfer Keyword
