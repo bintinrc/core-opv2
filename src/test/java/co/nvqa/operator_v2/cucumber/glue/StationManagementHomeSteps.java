@@ -98,11 +98,12 @@ public class StationManagementHomeSteps extends AbstractSteps {
   public void operator_verifies_that_the_count_in_tile_has_increased_by(String tileName,
       Integer totOrder) {
     int beforeOrder = Integer.parseInt(getString(KEY_NUMBER_OF_PARCELS_IN_HUB));
-    int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
-    takesScreenshot();
-    stationManagementHomePage.waitUntilTileValueMatches(tileName, (beforeOrder + totOrder));
-    stationManagementHomePage.closeIfModalDisplay();
-    stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+      navigateRefresh();
+      int afterOrder = stationManagementHomePage.getNumberFromTile(tileName);
+      takesScreenshot();
+      stationManagementHomePage.validateTileValueMatches(beforeOrder, afterOrder, totOrder);
+    }, "Retry until page is loaded...");
   }
 
   @Then("Operator verifies that the Total Completion Rate:{string} is equal to {int}")
