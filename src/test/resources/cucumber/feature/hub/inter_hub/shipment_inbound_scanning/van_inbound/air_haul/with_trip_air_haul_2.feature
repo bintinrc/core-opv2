@@ -5,7 +5,7 @@ Feature: Air Haul Shipment Van Inbound With Trip Scanning 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan At Transit Hub Air Haul Shipment in Shipment's Transit Hub - Van Inbound with Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -106,7 +106,7 @@ Feature: Air Haul Shipment Van Inbound With Trip Scanning 2
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | status       | Transit to Airport                 |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Cancelled Air Haul Shipment in Shipment's Transit Hub - Van Inbound with Warehouse to Airport  Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:
@@ -218,7 +218,7 @@ Feature: Air Haul Shipment Van Inbound With Trip Scanning 2
       | destHubName  | {KEY_LIST_OF_CREATED_HUBS[4].name} |
       | status       | Transit to Airport                 |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteCreatedAirports @DeleteAirportsViaAPI @CancelTrip
   Scenario: Scan Completed Air Haul Shipment in Shipment's Transit Hub - Van Inbound with Warehouse to Airport Trip
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new airport using data below:

@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Inactive and License Status Active(uid:74fe1b41-427f-4d03-b263-bf4024b3df50)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -17,7 +17,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
       | Employment Status | Inactive                                                                                                  |
       | License Status    | Active                                                                                                    |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Active and License Status Inactive(uid:8fe481c5-13db-4dc6-be5b-9a7c67cc6c93)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -29,7 +29,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
       | Employment Status | Active                                                                                                    |
       | License Status    | Inactive                                                                                                  |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Hub, Employment Status Inactive and License Status Inactive (uid:e1d54146-6e85-4b1b-884e-e7f1f9a89070)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator get info of hub details id "{hub-id}"
@@ -43,7 +43,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
       | Employment Status | Inactive                                                                                                                |
       | License Status    | Inactive                                                                                                                |
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Name (uid:f1863d5a-2151-4430-98e0-228cbfbd9853)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -53,7 +53,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "NAME_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field ID (uid:dcebd212-12c5-42e6-82fb-76e894f36d73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -63,7 +63,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "ID_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Username (uid:5975fcb7-c611-4aa3-9e01-5af1d3ea036b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
@@ -73,7 +73,7 @@ Feature: Middle Mile Driver Management - Search Driver 2
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "USERNAME_FILTER" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Hub (uid:e2590d24-9767-4daf-b9e7-148929184731)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers

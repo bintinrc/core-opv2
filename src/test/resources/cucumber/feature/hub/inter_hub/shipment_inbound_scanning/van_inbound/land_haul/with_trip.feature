@@ -5,7 +5,7 @@ Feature: Shipment Van Inbound With Trip Scanning
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Closed Shipment From Another Country to Van Inbound (uid:8064cfab-1620-425a-bb6b-38a24312d6bb)
     Given Operator go to menu Utilities -> QRCode Printing
     Given API Operator creates new Hub using data below:
@@ -81,7 +81,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | result | Closed          |
       | userId | qa@ninjavan.co  |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Invalid to Scan Transit Shipment From Another Country to Van Inbound (uid:48377ad2-c189-473c-b7f5-ac4d2a8d4183)
     Given Operator go to menu Utilities -> QRCode Printing
     And Operator change the country to "Singapore"
@@ -199,7 +199,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | result | Transit                    |
       | userId | qa@ninjavan.co             |
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver in Transit using 2 tabs (Validation at Start&End Inbound) (uid:2bae42b6-23d5-4f01-ae18-d1bf0262badd)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
@@ -311,7 +311,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
-  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Van Inbound Scan for Trip with Driver(s) in Transit using 2 tabs (Validation at End Inbound) (uid:224fb1d6-3954-413b-9655-826f204367fd)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
@@ -414,7 +414,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_CREATED_SHIPMENT_ID}" appear in trip_shipment_scans table
 
-  @DeleteShipment @ForceSuccessOrder @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+  @DeleteShipment @ForceSuccessOrder @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
   Scenario: Shipment Detected as No SLA Found
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator change the country to "Singapore"
@@ -458,7 +458,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     And Operator verifies shipment counter is "1"
 
-#  @DeleteShipment @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
+#  @DeleteShipment @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb @DeletePaths
 #  Scenario: Van Inbound with pagination
 #    Given Operator go to menu Utilities -> QRCode Printing
 #    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning

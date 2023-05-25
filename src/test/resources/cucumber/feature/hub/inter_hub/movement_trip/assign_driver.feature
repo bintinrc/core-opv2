@@ -378,7 +378,7 @@ Feature: Movement Trip - Assign Driver
     Then Operator verifies toast with message "0 driver(s) successfully assigned to the trip" is shown on movement page
 
 # need to fix this scenario to cater for common v2
-#  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriver
+#  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteDriverV2
 #  Scenario: Cannot Assign Driver via Trip Details (uid:c4f15381-7b15-469a-80ec-27aae044ca87)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given API Operator creates 2 new Hub using data below:

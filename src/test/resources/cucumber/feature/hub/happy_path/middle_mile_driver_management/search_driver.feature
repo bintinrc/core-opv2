@@ -14,7 +14,7 @@ Feature: Middle Mile Driver Management - Search Driver
     When Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
 
-  @DeleteDriver @DeleteHubsViaAPI @DeleteHubsViaDb
+  @DeleteDriverV2 @DeleteHubsViaAPI @DeleteHubsViaDb
   Scenario: Load Driver by Filter - Hub (uid:4ac4ea89-688a-4d62-9192-6f59dc8d292c)
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -37,7 +37,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field Name (uid:4bb863bc-52fe-4880-a2ac-5891dbe108e6)
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -48,7 +48,7 @@ Feature: Middle Mile Driver Management - Search Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Search Driver on Search Field ID (uid:6a4af29f-1e7c-41ed-a1f6-8257ef10a5fd)
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates

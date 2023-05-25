@@ -48,7 +48,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | comment | API automation update                      |
 
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Single Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -93,7 +93,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username}  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Multiple Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -138,7 +138,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username},{KEY_LIST_OF_CREATED_DRIVERS[2].username} |
       | comment | API automation update                                                               |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Multiple Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -183,7 +183,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username},{KEY_LIST_OF_CREATED_DRIVERS[2].username},{KEY_LIST_OF_CREATED_DRIVERS[3].username},{KEY_LIST_OF_CREATED_DRIVERS[4].username} |
       | comment | API automation update                                                                                                                                                   |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign >4 Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -228,7 +228,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username},{KEY_LIST_OF_CREATED_DRIVERS[2].username},{KEY_LIST_OF_CREATED_DRIVERS[3].username},{KEY_LIST_OF_CREATED_DRIVERS[4].username} |
       | comment | API automation update                                                                                                                                                   |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Expired License Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -274,7 +274,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username}  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Expired Employment Date Driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -320,7 +320,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username}  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Expired License Driver before Submit
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:
@@ -366,7 +366,7 @@ Feature: Airport Trip Management - Edit To From Airport Trip
       | drivers | {KEY_LIST_OF_CREATED_DRIVERS[1].username}  |
       | comment | API automation update                      |
 
-  @DeleteCreatedPorts @DeleteDriver
+  @DeleteCreatedPorts @DeleteDriverV2
   Scenario: Edit To/from Airport Trip with Assign Expired Employment Date Driver before Submit
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API MM - Operator creates new Port with data below:

@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Update Driver
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Details - Name (uid:c6c8e619-1437-4a8d-ab3e-954e9e1ad863)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -22,7 +22,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "name" on edit driver dialog with value "DRIVER EDITED NAME"
     Then DB Operator verifies driver "name" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "DRIVER EDITED NAME" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Details - Contact Number (uid:9ec5adc6-aa82-40d5-93a4-a593033154fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -39,7 +39,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "contactNumber" on edit driver dialog with value "{default-phone-number}"
     Then DB Operator verifies driver "contactNumber" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "{default-phone-number}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver Details - Hub (uid:1892577e-d469-45dc-8ad5-48cbb0ddbf2a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -56,7 +56,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "hub" on edit driver dialog with value "{hub-name-2}"
     Then DB Operator verifies driver "hub" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "{hub-id-2}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver License - License Number (uid:869dea40-d9e0-4a59-82b0-59b1f503bca5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -73,7 +73,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "licenseNumber" on edit driver dialog with value "D{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}"
     Then DB Operator verifies driver "licenseNumber" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "D{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].driverId}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver License - Expiry Date (uid:def761b9-8aca-463d-ba5c-1641915a3477)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -90,7 +90,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "licenseExpiryDate" on edit driver dialog with value "{gradle-next-3-day-yyyy-MM-dd}"
     Then DB Operator verifies driver "licenseExpiryDate" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "{gradle-next-3-day-yyyy-MM-dd}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Driver License - License Type (uid:213c5760-5212-4fd8-b0be-9806886da126)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -107,7 +107,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "licenseType" on edit driver dialog with value "Class 3"
     Then DB Operator verifies driver "licenseType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "Class 3" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Employment Details - Employment Type (uid:feb6e6ab-4c9c-408d-975b-8c4301feea5a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -124,7 +124,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "employmentType" on edit driver dialog with value "In-House - Part-Time"
     Then DB Operator verifies driver "employmentType" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "In-House - Part-Time" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Employment Details - Employment Start Date (uid:51d4a35e-8453-4c9a-9b35-3f16638b22e8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1
@@ -141,7 +141,7 @@ Feature: Middle Mile Driver Management - Update Driver
     And Operator edit "employmentStartDate" on edit driver dialog with value "{gradle-next-3-day-yyyy-MM-dd}"
     Then DB Operator verifies driver "employmentStartDate" with username "{KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1].username}" and value "{gradle-next-3-day-yyyy-MM-dd}" is updated
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Update Employment Details - Employment End Date (uid:e2b5d826-6669-46f0-8a08-b8e00dd6c51f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator refresh page v1

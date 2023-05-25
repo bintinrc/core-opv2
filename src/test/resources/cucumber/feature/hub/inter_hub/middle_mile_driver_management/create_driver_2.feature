@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is B
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -28,7 +28,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is B1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -51,7 +51,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is B2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -74,7 +74,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is C
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -97,7 +97,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is Restriction 1
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -120,7 +120,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is Restriction 2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -143,7 +143,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is Restriction 3
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"
@@ -166,7 +166,7 @@ Feature: Middle Mile Driver Management - Create Driver 2
     When Operator clicks "Save to Create" button on Middle Mile Drivers Page
     Then Operator verifies that the new Middle Mile Driver has been created
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Create Driver - PH - License Type is all types
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Philippines"

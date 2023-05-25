@@ -5,7 +5,7 @@ Feature: Middle Mile Driver Management - Search Driver
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load All Drivers (uid:fc8158aa-ed1c-4c94-866a-bb4ced22ab35)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -16,7 +16,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -30,7 +30,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Active (uid:9d52e56e-6edf-437b-ac09-5e9ef38cf683)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -44,7 +44,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Inactive (uid:723b57eb-3d0b-421b-be8b-681078759a88)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -58,7 +58,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - License Status Active (uid:dd6df1fc-da8a-49b8-9abd-6ad4d87622ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -72,7 +72,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - License Status Inactive (uid:3be300e1-e557-41f1-8dca-ba77bf01f1e9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -86,7 +86,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Inactive and License Status Inactive (uid:f926dc6b-2165-444c-9f30-c0c35fa2c7db)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
@@ -102,7 +102,7 @@ Feature: Middle Mile Driver Management - Search Driver
     Then Operator verifies Middle Mile Drivers page is showing "{KEY_MM_COUNT_OF_RETRIEVED_MIDDLE_MILE_DRIVERS}" results upon loading drivers
     Then Operator verifies driver "KEY_MM_LIST_OF_CREATED_MIDDLE_MILE_DRIVERS[1]" is shown in Middle Mile Driver page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Load Driver by Filter - Employment Status Active and License Status Active(uid:8a8df869-aa86-438d-9ad9-7e0ae0497d1b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API MM - Operator creates new Middle Mile Driver with data below:
