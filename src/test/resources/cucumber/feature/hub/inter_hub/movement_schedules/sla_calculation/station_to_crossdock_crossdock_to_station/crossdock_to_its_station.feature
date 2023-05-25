@@ -5,166 +5,118 @@ Feature: Crossdock to it's Station
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteCreatedShipment @DeleteCreatedMovementSchedules @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement Found and there is available schedule (uid:4be9aa9e-813f-4c02-8d92-5af401b4a6f4)
     Given Operator go to menu Utilities -> QRCode Printing
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | STATION   |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
-    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    When API MM - Operator creates multiple 1 new shipments with type "LAND_HAUL" from hub id "{sc-cd-hub-id-1}" to "{sc-st-hub-id-1}"
+    And API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
-    And Operator adds new relation on Movement Management page using data below:
-      | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator try adds new Station Movement Schedule on Movement Management page using data below:
-      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | crossdockHub   | {sc-cd-hub-name-1} |
+      | originHub      | {sc-cd-hub-name-1} |
+      | destinationHub | {sc-st-hub-name-1} |
       | movementType   | Land Haul                          |
-      | departureTime  | 20:15                              |
+      | departureTime  | {date: 5 minutes next, HH:mm} |
       | duration       | 1                                  |
-      | endTime        | 16:30                              |
+      | endTime        | {date: 10 minutes next, HH:mm} |
       | daysOfWeek     | all                                |
+    And API MM - Operator gets Movement Schedule from hub id "{sc-cd-hub-id-1}" to "{sc-st-hub-id-1}"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     When Operator select "Stations" tab on Movement Management page
     And Operator load schedules on Movement Management page using data below:
-      | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | originHub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | crossdockHub | {sc-cd-hub-name-1} |
+      | originHub    | {sc-cd-hub-name-1} |
+      | destinationHub    | {sc-st-hub-name-1} |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
+    When Operator inbound scan shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" "Into Van" in hub "{sc-cd-hub-name-1}" on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
+      | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | id          | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}          |
+      | origHubName | {sc-cd-hub-name-1} |
+      | destHubName | {sc-st-hub-name-1} |
       | status      | Transit                            |
-#      | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
-    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    And Operator open the shipment detail for shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page:
       | source | SHIPMENT_VAN_INBOUND(OpV2)         |
-      | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | result | Status: Transit                            |
+      | hub    | {sc-cd-hub-name-1} |
     Then Operator verify movement event on Shipment Details page:
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @DeleteShipment @CloseNewWindows @SoftDeleteCrossdockDetailsViaDb
+  @DeleteCreatedShipment @DeleteCreatedMovementSchedules @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement Found but there is no available schedule (uid:459a5ba5-3ffd-4fe4-ae77-250e77e4c1b0)
     Given Operator go to menu Utilities -> QRCode Printing
-    When API Operator create new shipment with type "LAND_HAUL" from hub id = {hub-relation-destination-hub-id} to hub id = {hub-station-id}
+    When API MM - Operator creates multiple 1 new shipments with type "LAND_HAUL" from hub id "{sc-cd-hub-id-1}" to "{sc-st-hub-id-1}"
+    And API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
-    And Operator adds new relation on Movement Management page using data below:
-      | station        | {hub-station-name}                  |
-      | crossdockHub   | {hub-relation-destination-hub-name} |
-      | stationId      | {hub-station-id}                    |
-      | crossdockHubId | {hub-relation-destination-hub-id}   |
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator put created parcel to shipment
-    Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator add to shipment in hub {hub-relation-destination-hub-name} to hub id = {hub-station-name}
-    And Operator close the shipment which has been created
-    And API Operator does the "van-inbound" scan for the shipment
+
+    And Operator try adds new Station Movement Schedule on Movement Management page using data below:
+      | crossdockHub   | {sc-cd-hub-name-1} |
+      | originHub      | {sc-cd-hub-name-1} |
+      | destinationHub | {sc-st-hub-name-1} |
+      | movementType   | Land Haul                          |
+      | departureTime  | {date: 5 minutes next, HH:mm} |
+      | duration       | 1                                  |
+      | endTime        | {date: 10 minutes next, HH:mm} |
+      | daysOfWeek     | all                                |
+    And API MM - Operator gets Movement Schedule from hub id "{sc-cd-hub-id-1}" to "{sc-st-hub-id-1}"
+    Then API MM - Operator deletes all Movement Schedules from Hub Relation "KEY_MM_LIST_OF_CREATED_HUB_RELATIONS[1]"
+    When Operator select "Stations" tab on Movement Management page
+    And Operator load schedules on Movement Management page using data below:
+      | crossdockHub | {sc-cd-hub-name-1} |
+      | originHub    | {sc-cd-hub-name-1} |
+      | destinationHub    | {sc-st-hub-name-1} |
+
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scan shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" "Into Van" in hub "{sc-cd-hub-name-1}" on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
+      | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID}           |
-      | origHubName | {hub-relation-destination-hub-name} |
-      | destHubName | {hub-station-name}                  |
+      | id          | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}           |
+      | origHubName | {sc-cd-hub-name-1} |
+      | destHubName | {sc-st-hub-name-1}                  |
       | status      | Transit                             |
-      | sla         | -                                   |
-    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    And Operator open the shipment detail for shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page:
-      | source | SHIPMENT_VAN_INBOUND(MMDA)          |
-      | result | Transit                             |
-      | hub    | {hub-relation-destination-hub-name} |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)          |
+      | result | Status: Transit                             |
+      | hub    | {sc-cd-hub-name-1} |
     Then Operator verify movement event on Shipment Details page:
       | source   | SLA_CALCULATION                                                                                                                            |
       | status   | FAILED                                                                                                                                     |
-      | comments | No path found between {hub-relation-destination-hub-name} (sg) and {hub-station-name} (sg). Please ask your manager to check the schedule. |
 
-  @DeleteHubsViaAPI @DeleteHubsViaDb @DeleteShipment @CloseNewWindows @DeletePaths
+  @DeleteCreatedShipment @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement not found (uid:9aa9d622-d1e1-41d0-9ab0-c7b960051f91)
     Given Operator go to menu Utilities -> QRCode Printing
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | STATION   |
-      | region       | JKB       |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
-    When API Operator create new shipment with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    And Operator refresh page
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator put created parcel to shipment
-    Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator add to shipment in hub {KEY_LIST_OF_CREATED_HUBS[1].name} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].name}
-    And Operator close the shipment which has been created
-    And API Operator does the "van-inbound" scan for the shipment
+    When API MM - Operator creates multiple 1 new shipments with type "LAND_HAUL" from hub id "{sc-cd-hub-id-1}" to "{sc-st-hub-id-0}"
+    And API MM - Operator closes shipments "KEY_MM_LIST_OF_CREATED_SHIPMENTS"
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scan shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" "Into Van" in hub "{sc-cd-hub-name-1}" on Shipment Inbound Scanning page
     And Operator go to menu Inter-Hub -> Shipment Management
-#    Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
-      | {KEY_CREATED_SHIPMENT_ID} |
+      | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id} |
     Then Operator verify parameters of shipment on Shipment Management page:
-      | id          | {KEY_CREATED_SHIPMENT_ID}          |
-      | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | status      | Transit                            |
-      | sla         | -                                  |
-    And Operator open the shipment detail for the created shipment on Shipment Management Page
+      | id          | {KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}           |
+      | origHubName | {sc-cd-hub-name-1} |
+      | destHubName | {sc-st-hub-name-0}                  |
+      | status      | Transit                             |
+    And Operator open the shipment detail for shipment id "{KEY_MM_LIST_OF_CREATED_SHIPMENTS[1].id}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page:
-      | source | SHIPMENT_VAN_INBOUND(MMDA)         |
-      | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | source | SHIPMENT_VAN_INBOUND(OpV2)          |
+      | result | Status: Transit                             |
+      | hub    | {sc-cd-hub-name-1} |
     Then Operator verify movement event on Shipment Details page:
-      | source   | SLA_CALCULATION                                                                                                                                           |
-      | status   | FAILED                                                                                                                                                    |
-      | comments | No path found between {KEY_LIST_OF_CREATED_HUBS[1].name} (sg) and {KEY_LIST_OF_CREATED_HUBS[2].name} (sg). Please ask your manager to check the schedule. |
+      | source   | SLA_CALCULATION                                                                                                                            |
+      | status   | FAILED                                                                                                                                     |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
