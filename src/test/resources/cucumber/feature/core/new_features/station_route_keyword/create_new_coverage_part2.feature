@@ -34,7 +34,7 @@ Feature: Create New Coverage
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
-      | bottom | 1 keywords     |
+      | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
@@ -51,15 +51,15 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that sr_keywords record is not created for "{KEY_COVERAGE_ID}" coverageId
+    And DB Route - verify that sr_keywords record is not created for "KEY_COVERAGE_ID" area
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                             |
@@ -111,12 +111,12 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
       | keywords       |                                              |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
@@ -154,7 +154,7 @@ Feature: Create New Coverage
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that success react notification displayed:
       | top    | Keywords added |
-      | bottom | 1 keywords     |
+      | bottom | 0 keywords     |
     Then Operator verify data on New coverage created dialog:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}    |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
@@ -171,15 +171,15 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that sr_keywords record is not created for "{KEY_COVERAGE_ID}" coverageId
+    And DB Route - verify that sr_keywords record is not created for "KEY_COVERAGE_ID" area
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                             |
@@ -218,7 +218,7 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
 
   @DeleteDriverV2 @DeleteCoverage
-  Scenario: OOperator Creates New Coverage on Station Route Keyword with VN Special Characters
+  Scenario: Operator Creates New Coverage on Station Route Keyword with VN Special Characters
     Given API Operator create new Driver using data below:
       | driverCreateRequest | { "first_name": "{{RANDOM_FIRST_NAME}}", "last_name": "{{RANDOM_LAST_NAME}}", "display_name": "{{RANDOM_FIRST_NAME}}", "license_number": "D{{TIMESTAMP}}", "driver_type": "{driver-type-name}", "availability": true, "cod_limit": 50000, "vehicles": [ { "active": true, "vehicleNo": "7899168", "vehicleType": "{vehicle-type-name}", "ownVehicle": false, "capacity": 10000 } ], "contacts": [ { "active": true, "type": "Mobile Phone", "details": "+65 81237890" } ], "zone_preferences": [ { "latitude": 1.3597220659709373, "longitude": 103.82701942695314, "maxWaypoints": 100, "minWaypoints": 1, "rank": 1, "zoneId": {zone-id}, "cost": 500 } ], "max_on_demand_jobs": 1, "username": "D{{TIMESTAMP}}", "password": "Ninjitsu89", "tags": {}, "employment_start_date": "{gradle-next-0-day-yyyy-MM-dd}", "employment_end_date": "{gradle-next-3-day-yyyy-MM-dd}", "hub_id": {hub-id}, "hub": { "displayName": "{hub-name}", "value": {hub-id} } } |
     Given API Operator create new Driver using data below:
@@ -227,7 +227,7 @@ Feature: Create New Coverage
     And Operator selects "{hub-name}" hub on Station Route Keyword page
     And Operator create new coverage on Station Route Keyword page:
       | area           | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}  |
-      | areaVariation  | 135 Đ NAM KỲ KHỞI NGHĨA, PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss} |
+      | areaVariation  | 135 Đ NAM KỲ KHỞI NGHĨA 2 {gradle-current-date-yyyyMMddHHmmsss} |
       | keyword        | THÀNH PHỐ HỒ CHÍ MINH VN {gradle-current-date-yyyyMMddHHmmsss}                 |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                   |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                   |
@@ -245,14 +245,14 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}                                  |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}                                  |
       | keyword        | THÀNH PHỐ HỒ CHÍ MINH VN {gradle-current-date-yyyyMMddHHmmsss}                |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                                                      |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                                           |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}                                           |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | 135 Đ NAM KỲ KHỞI NGHĨA PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss}  |
-      | areaVariation | 135 Đ NAM KỲ KHỞI NGHĨA, PHƯỜNG BẾN THÀN {gradle-current-date-yyyyMMddHHmmsss} |
+      | areaVariation | 135 Đ NAM KỲ KHỞI NGHĨA 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
     And DB Operator verifies that route_qa_gl/sr_keywords record is created:
       | coverageId | {KEY_COVERAGE_ID}                                              |
@@ -297,12 +297,12 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}  |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}  |
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
       | areaVariation | AREA 2 {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area
@@ -335,12 +335,12 @@ Feature: Create New Coverage
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss}   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName} |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator fetch coverage id for "AREA {gradle-current-date-yyyyMMddHHmmsss}" area

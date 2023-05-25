@@ -73,13 +73,13 @@ Feature: Remove Coverage
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].displayName}    |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].displayName}    |
       | keywords       | KEYWORD 2 {gradle-current-date-yyyyMMddHHmmsss} |
-    And DB Operator verifies that route_qa_gl/sr_coverages record is created:
+    And DB Route - verify that sr_coverages record is created:
       | area           | AREA {gradle-current-date-yyyyMMddHHmmsss} |
       | hubId          | {hub-id}                                   |
       | primaryDriver  | {KEY_LIST_OF_CREATED_DRIVERS[1].id}        |
       | fallbackDriver | {KEY_LIST_OF_CREATED_DRIVERS[2].id}        |
     And DB Operator verifies that sr_coverages record was deleted for "{KEY_LIST_OF_COVERAGE_ID[1]}" coverageId
-    And DB Operator verifies that route_qa_gl/sr_area_variations record is created:
+    And DB Route - verify that sr_area_variations record is created:
       | area          | AREA {gradle-current-date-yyyyMMddHHmmsss}          |
       | areaVariation | AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And DB Operator verifies that sr_keywords record is not created for "{KEY_LIST_OF_COVERAGE_ID[1]}" coverageId

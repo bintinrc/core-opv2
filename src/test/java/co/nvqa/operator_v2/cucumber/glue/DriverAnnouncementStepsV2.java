@@ -5,6 +5,7 @@ import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.File;
 import java.util.Map;
 import lombok.NoArgsConstructor;
 
@@ -44,7 +45,7 @@ public class DriverAnnouncementStepsV2 extends AbstractSteps {
     daPage.inFrame(() -> daPage.verifyUploadedCsvFileAppear());
   }
 
-  @And("Operator create normal Announcement on Driver Announcement page")
+  @And("Operator create Announcement on Driver Announcement page")
   public void operatorCreateNormalAnnouncementOnDriverAnnouncementPage(Map<String, Object> data) {
     daPage.inFrame(() -> daPage.createMultipleNormalAnnouncement(data, 1));
   }
@@ -52,5 +53,20 @@ public class DriverAnnouncementStepsV2 extends AbstractSteps {
   @Then("Operator verify Driver Announcement successfully sent")
   public void operatorVerifyDriverAnnouncementSuccessfullySent() {
     daPage.inFrame(() -> daPage.verifyAnnouncementSent());
+  }
+
+  @And("Operator send payroll report on Driver Announcement page")
+  public void operatorSendPayrollReportOnDriverAnnouncementPage(Map<String, String> data) {
+    String fileName = data.get("file");
+    ClassLoader loader = getClass().getClassLoader();
+    File file = new File(loader.getResource(fileName).getFile()).getAbsoluteFile();
+    daPage.inFrame(() -> daPage.operatorSendPayrollReport(file ,data));
+  }
+
+  @Then("Operator verify failed to upload payroll report")
+  public void operatorVerifyFailedToUploadPayrollReport() {
+    daPage.inFrame(() -> {
+      daPage.verifyFailedUploadPayrollReport();
+    });
   }
 }

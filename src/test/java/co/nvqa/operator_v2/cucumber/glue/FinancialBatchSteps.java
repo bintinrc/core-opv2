@@ -23,6 +23,15 @@ public class FinancialBatchSteps extends AbstractSteps {
     financialBatchPage = new FinancialBatchPage(getWebDriver());
   }
 
+  //  need to remove this step after all the Pricing steps are moved to commonv2
+  @Then("CV2 - Add common v1 data")
+  public void test(Map<String, String> rawParameter) {
+    final Map<String, String> testData = resolveKeyValues(rawParameter);
+    put(KEY_CREATED_ORDER_TRACKING_ID, testData.get("tracking_id"));
+    put(KEY_CREATED_ORDER_ID, Long.parseLong(testData.get("order_id")));
+    put(KEY_ORDER_DETAILS, resolveValue(rawParameter.get("order_object")));
+  }
+
 
   @When("Operator generates financial batch data as below")
   public void operatorGeneratesFinancialBatchDataAsBelow(Map<String, String> mapOfData) {
