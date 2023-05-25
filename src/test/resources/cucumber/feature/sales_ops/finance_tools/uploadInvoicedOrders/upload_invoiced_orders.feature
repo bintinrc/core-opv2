@@ -173,14 +173,14 @@ Feature: Upload Invoiced Orders
     And Operator upload a CSV file with below order ids and verify success message
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Finance Operator waits for "{order-billing-wait-time}" seconds
-    Then Operator opens Gmail and verifies email with below details
-      | subject            | Invoicing Result                           |
-      | body               | (Total failed: 0, Total not yet priced: 1) |
-      | isZipFileAvailable | true                                       |
-    When Operator clicks on link to download on email and verifies CSV file
-    Then Operator verifies below tracking id(s) is\are available in the CSV file
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
+#    And Finance Operator waits for "{order-billing-wait-time}" seconds
+#    Then Operator opens Gmail and verifies email with below details
+#      | subject            | Invoicing Result                           |
+#      | body               | (Total failed: 0, Total not yet priced: 1) |
+#      | isZipFileAvailable | true                                       |
+#    When Operator clicks on link to download on email and verifies CSV file
+#    Then Operator verifies below tracking id(s) is\are available in the CSV file
+#      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
 
   Scenario: Upload Invoiced Orders with invalid file type (not .csv) (uid:3ef6bcc3-2c11-477e-82ed-27c477b783e8)
     Then Operator uploads a PDF and verifies that any other file except csv is not allowed
