@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Keyword Partial Matched with Address - Keyword is Missing First Half
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -48,7 +48,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Keyword Partial Matched with Address - Keyword is Missing Second Half
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -91,7 +91,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Keyword Partial Matched with Address - Keyword is Missing First and Second Half
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -134,7 +134,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area, keyword) & coverage B (area) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -185,7 +185,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "SELATAN" is displayed on 1 position on Station Route page
     And Operator verify keyword match "TIMUR" is displayed on 2 position on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area, keyword) & coverage B (area, keyword) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -238,7 +238,7 @@ Feature: Search Tracking IDs on Station Route
       | TIMUR  |
       | MERUYA |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (area) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -287,7 +287,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "KEBUN" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (area, keyword) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -339,7 +339,7 @@ Feature: Search Tracking IDs on Station Route
       | empty  |
       | MERUYA |
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area) & coverage B (keyword) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
@@ -389,7 +389,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "KEBUN" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriver @DeleteCoverage @DeleteShipment
+  @DeleteDriverV2 @DeleteCoverage @DeleteShipment
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (2 area, keyword) are Match to Single Address
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     And API Shipper create V4 order using data below:
