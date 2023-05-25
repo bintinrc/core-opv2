@@ -163,7 +163,7 @@ Feature: Ageing Parcels In Hub
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
 
-  @ForceSuccessOrder @Failed
+  @ForceSuccessOrder
   Scenario Outline: Click Hyperlink of Tracking ID on Ageing Parcel in Hub
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -230,7 +230,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder @Debug
+  @ForceSuccessOrder
   Scenario Outline: View Ageing Parcel in Hub of Acknowledged SLFD Parcel
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
@@ -283,7 +283,7 @@ Feature: Ageing Parcels In Hub
       | HubName       | HubId       | TileName              | ModalName             |
       | {hub-name-18} | {hub-id-18} | Ageing parcels in hub | Ageing Parcels in Hub |
 
-  @ForceSuccessOrder @ArchiveRouteCommonV2 @Happypath @Failed
+  @ForceSuccessOrder @ArchiveRouteCommonV2 @Happypath
   Scenario Outline: Van Inbounded Ageing Parcel Disappear
     Given Operator loads Operator portal home page
     And Operator go to menu Station Management Tool -> Station Management Homepage
