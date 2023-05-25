@@ -26,7 +26,7 @@ Feature: Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_DB_FOUND_DRIVERS[1].firstName}" Driver is not shown in Create Route modal on Route Logs page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Employment End Date => Today's Date
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
@@ -36,7 +36,7 @@ Feature: Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
 
-  @DeleteDriver
+  @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Create Route if Driver Has No Employment Date
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
@@ -46,7 +46,7 @@ Feature: Route Logs
     And Operator clicks Create Route on Route Logs page
     Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Create Route modal on Route Logs page
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Employment End Date => Today's Date
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
@@ -62,7 +62,7 @@ Feature: Route Logs
     And Operator opens Edit Details dialog for route "{KEY_CREATED_ROUTE_ID}" on Route Logs page
     Then Operator verifies "{KEY_CREATED_DRIVER.firstName}" Driver is shown in Edit Route Details modal on Route Logs page
 
-  @DeleteOrArchiveRoute @DeleteDriver
+  @DeleteOrArchiveRoute @DeleteDriverV2
   Scenario: Operator Allowed To See Driver List on Update Route if Driver Has No Employment Date
     Given Operator go to menu Utilities -> QRCode Printing
     And API Operator create new Driver using data below:
