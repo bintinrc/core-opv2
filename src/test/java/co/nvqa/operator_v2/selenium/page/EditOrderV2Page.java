@@ -20,10 +20,13 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.ForceClearTextBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntDateTimeRangePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntMenuBar;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect3;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSwitch;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
@@ -83,7 +86,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(xpath = "//div[label[.='Latest Event']]/h3")
   public PageElement latestEvent;
 
-  @FindBy(xpath = "//div[label[.='Zone']]/h3")
+  @FindBy(xpath = "//div[./label[.='Zone']]//span")
   public PageElement zone;
 
   @FindBy(xpath = "//div[./label[.='Status']]//span")
@@ -178,10 +181,10 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = ".ant-modal")
   public CancelOrderDialog cancelOrderDialog;
 
-  @FindBy(css = "md-dialog")
-  private EditPickupDetailsDialog editPickupDetailsDialog;
+  @FindBy(css = ".ant-modal")
+  public EditPickupDetailsDialog editPickupDetailsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public PullFromRouteDialog pullFromRouteDialog;
 
   @FindBy(css = ".ant-modal")
@@ -193,7 +196,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   @FindBy(css = "md-dialog")
   public CancelRtsDialog cancelRtsDialog;
 
-  @FindBy(css = "md-dialog")
+  @FindBy(css = ".ant-modal")
   public EditRtsDetailsDialog editRtsDetailsDialog;
 
   @FindBy(css = ".ant-modal")
@@ -1105,7 +1108,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public PageElement lastServiceEnd;
     @FindBy(xpath = ".//label[.='Delivery instructions']//following-sibling::div")
     public PageElement deliveryInstructions;
-    @FindBy(name = "commons.rts")
+    @FindBy(xpath = ".//span[contains(@class,'ant-tag')][.='RTS']")
     public PageElement rtsTag;
 
     private static final String BOX_LOCATOR = "//div[h5[text()='Delivery Details']]";
@@ -1704,17 +1707,20 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
   /**
    * Accessor for Pull from Route Dialog
    */
-  public static class PullFromRouteDialog extends MdDialog {
+  public static class PullFromRouteDialog extends AntModal {
 
     public PullFromRouteDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
 
-    @FindBy(css = ".to-pull-checkbox > md-checkbox")
-    public MdCheckbox toPull;
+    @FindBy(css = ".ant-checkbox")
+    public AntCheckbox toPull;
 
-    @FindBy(name = "container.order.edit.pull-from-route")
-    public NvApiTextButton pullFromRoute;
+    @FindBy(xpath = ".//*[.='* Cannot be pulled due to Delivery Success']")
+    public PageElement errorHint;
+
+    @FindBy(css = "[data-testid='edit-order-testid.pull-from-route.pull-from-route.button']")
+    public Button pullFromRoute;
   }
 
   public static class EditPriorityLevelDialog extends AntModal {
@@ -1886,58 +1892,56 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
     public NvApiTextButton cancelRts;
   }
 
-  public static class EditRtsDetailsDialog extends MdDialog {
+  public static class EditRtsDetailsDialog extends AntModal {
 
     public EditRtsDetailsDialog(WebDriver webDriver, WebElement webElement) {
       super(webDriver, webElement);
     }
-
     @FindBy(css = "[text='container.order.edit.rts-hint'] p")
     public PageElement hint;
 
-    @FindBy(css = "md-select[id^='commons.reason']")
-    public MdSelect reason;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.rts-reason.single-select']")
+    public AntSelect3 reason;
 
-    @FindBy(css = "input[id^='commons.recipient-name']")
-    public TextBox recipientName;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.name.input']")
+    public ForceClearTextBox recipientName;
 
-    @FindBy(css = "input[id^='commons.recipient-contact']")
-    public TextBox recipientContact;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.contact.input']")
+    public AntTextBox recipientContact;
 
-    @FindBy(css = "input[id^='commons.recipient-email']")
-    public TextBox recipientEmail;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.email.input']")
+    public ForceClearTextBox recipientEmail;
 
-    @FindBy(css = "input[id^='container.order.edit.internal-notes']")
-    public TextBox internalNotes;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.internal-notes.input']")
+    public ForceClearTextBox internalNotes;
 
-    @FindBy(id = "commons.model.delivery-date")
-    public MdDatepicker deliveryDate;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.delivery-date.date-select']")
+    public ForceClearTextBox deliveryDate;
 
-    @FindBy(css = "md-select[id^='commons.timeslot']")
-    public MdSelect timeslot;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.timeslot.single-select']")
+    public AntSelect3 timeslot;
 
-    @FindBy(name = "container.order.edit.change-address")
-    public NvIconTextButton changeAddress;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-details.change-address.button']")
+    public Button changeAddress;
 
-    @FindBy(name = "commons.save-changes")
-    public NvApiTextButton saveChanges;
+    @FindBy(css = "[data-testid='edit-order-testid.edit-rts-details.save-changes.button']")
+    public Button saveChanges;
 
-    @FindBy(css = "[id^='commons.country']")
-    public TextBox country;
+    @FindBy(css = "[data-testid='edit-order-testid.new-address-form.country.input']")
+    public ForceClearTextBox country;
 
-    @FindBy(css = "[id^='commons.city']")
-    public TextBox city;
+    @FindBy(css = "[data-testid='edit-order-testid.new-address-form.city.input']")
+    public ForceClearTextBox city;
 
-    @FindBy(css = "[id^='commons.address1']")
-    public TextBox address1;
+    @FindBy(css = "[data-testid='edit-order-testid.new-address-form.address-1.input']")
+    public ForceClearTextBox address1;
 
-    @FindBy(css = "[id^='commons.address2']")
-    public TextBox address2;
+    @FindBy(css = "[data-testid='edit-order-testid.new-address-form.address-2.input']")
+    public ForceClearTextBox address2;
 
-    @FindBy(css = "[id^='commons.postcode']")
-    public TextBox postcode;
+    @FindBy(css = "[data-testid='edit-order-testid.new-address-form.postal-code.input']")
+    public ForceClearTextBox postcode;
   }
-
   public static class ResumeOrderDialog extends AntModal {
 
     public ResumeOrderDialog(WebDriver webDriver, WebElement webElement) {
