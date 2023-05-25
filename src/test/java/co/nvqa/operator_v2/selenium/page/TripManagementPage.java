@@ -755,7 +755,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
     verifyAddDriverUnclickable();
     assignTripModal.saveButton.click();
-    assignTripModal.waitUntilInvisible();
+    assignTripModal.saveButton.waitUntilInvisible();
   }
 
   public void clearAssignedDriver() {
@@ -776,7 +776,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 //    getWebDriver().switchTo().window(windowHandle);
 //    switchTo();
     waitUntilVisibilityOfElementLocated(DETAIL_PAGE_TRIP_ID_XPATH);
-    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH);
+    waitUntilVisibilityOfElementLocated(DETAIL_PAGE_DRIVERS_XPATH, 60);
     String actualTripId = getText(DETAIL_PAGE_TRIP_ID_XPATH);
     Assertions.assertThat(actualTripId).as("Trip ID is correct").contains(tripId);
     Assertions.assertThat(isElementVisible(DETAIL_PAGE_STATUS_XPATH, 5))
